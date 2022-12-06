@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { alpha, Box, Card, CardContent, CardActions, Container, InputBase, Stack, styled, TextField, Typography, Button , ListItem, Paper} from '@mui/material'
 import Image from "./Images/desertbg.jpg"
 import SearchIcon from "@mui/icons-material/Search"
+import Song from './database/song';
 
+
+const endUrl = "http://localhost:3000/";
 
 export default function SearchScreen() {
 
@@ -30,8 +33,20 @@ export default function SearchScreen() {
     paddingLeft: `calc(1em + ${theme.spacing(4)})`
   }));
 
-  const songs = ["Být zadupnut", "Modrá růže", "Přesýpací hodiny", "Nekonečné nebe", "Špinavé ruce", "Dvacítkovej rep"];
+  const [songs, setSongs] : [Song[], any] = useState([
+    {id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"}
+  ]);
 
+  // useEffect(()=>{
+  //   fetch(endUrl+"get")
+  //   .then((response:any)=>{
+  //     return response.json();
+  //   }).then((data: Song)=>{
+  //     //console.log(data);
+  //     setSongs(data);
+  //   })
+  // },[]);
+  
   return (
     <Box sx={{
       backgroundImage: `url(${Image})`,
@@ -53,13 +68,14 @@ export default function SearchScreen() {
 
             
             {
-              songs.map((song:string)=>{
+              songs.map((song:Song, index: number)=>{
                 return(
-                  <Paper>
+                  <Paper key={index}>
                     <Card>
                       <CardContent>
 
-                        <Typography variant='h6'>{song}</Typography>  
+                        <Typography variant='h6'>{song.id}</Typography>  
+                        <Typography variant='h6'>{song.name}</Typography>  
                         <Typography >We do not know text or melody. Create your own. </Typography>  
 
                       </CardContent>
