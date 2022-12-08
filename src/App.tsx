@@ -6,7 +6,7 @@ import SheetScreen from './Screens/SheetScreen';
 function App() {
   return (
     <SheetScreen />
-  );
+  )
 }
 
 export default App;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { alpha, Box, Card, CardContent, CardActions, Container, InputBase, Stack, styled, TextField, Typography, Button , ListItem, Paper} from '@mui/material'
 import Image from "./Images/desertbg.jpg"
 import SearchIcon from "@mui/icons-material/Search"
-import Song from './database/song';
+import Song from './database/Song';
 
 
 const endUrl = "http://localhost:3000/";
@@ -33,9 +33,7 @@ export default function SearchScreen() {
     paddingLeft: `calc(1em + ${theme.spacing(4)})`
   }));
 
-  const [songs, setSongs] : [Song[], any] = useState([
-    {id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"},{id:0, name:"baf", sheetData:"dafafa"}
-  ]);
+  const [songs, setSongs] : [Song[], any] = useState([]);
 
   // useEffect(()=>{
   //   fetch(endUrl+"get")
@@ -74,13 +72,13 @@ export default function SearchScreen() {
                     <Card>
                       <CardContent>
 
-                        <Typography variant='h6'>{song.id}</Typography>  
                         <Typography variant='h6'>{song.name}</Typography>  
+                        <Typography variant='h6'>{song.creators[0].name}</Typography>  
                         <Typography >We do not know text or melody. Create your own. </Typography>  
 
                       </CardContent>
                       <CardActions>
-                        <Button size='small'>Open sheets</Button>
+                        <Button size='small'>Open sheet</Button>
                       </CardActions>
                     </Card>
                   </Paper>
