@@ -28,10 +28,16 @@ export default function SheetComponent({ song }: { song?: Song }) {
   }
 
   let isOk = true;
-  const sections: Section[] = song.variants[0].sheet.split("{").map((partA, ia) => {
+  const sections: Section[] = song.variants[0].sheet.split("{").filter((partA, ia)=>{
+    if(ia==0&&partA==="")return 0;
+    return 1;
+  }).map((partA, ia) => {
 
     const arrA: string[] = partA.split("}");
-    if (arrA.length<2) return { name: partA }
+    
+    if (ia==0&&arrA.length<2){ //situation when it doesnt begin with {
+      arrA.splice(0, 0, "");
+    }
 
     
     if (ia!=0&&arrA.length < 2) {
@@ -76,7 +82,7 @@ export default function SheetComponent({ song }: { song?: Song }) {
 
   return (
     <Box>
-      <Box display={"flex"} flexDirection={"row"} marginBottom={"1"}>
+      <Box display={"flex"} flexDirection={"row"} marginBottom={"1"} gap={1}>
             <Box flex={1}></Box>
             <Box flex={5}>
               <Typography variant='h5'><b>{song.name}</b></Typography>
