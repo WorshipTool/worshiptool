@@ -27,3 +27,7 @@ export interface IDBAllSongData{
     variants: IDBSongVariant[]
 }
 
+export interface IDBSongArray{
+    songs: IDBSong[]
+}
+

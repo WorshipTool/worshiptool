@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, ButtonGroup, InputBase, ToggleButton, ToggleButtonGroup, Toolbar, Typography } from '@mui/material'
 import { alpha, Container } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import SheetComponent from '../Components/SheetComponent'
 import { SERVER_URL } from '../database/Constants'
 import { IDBAllSongData } from '../database/interfaces'
@@ -9,13 +10,22 @@ import Image from './../Images/islandincloudsbg.jpg'
 
 export default function SheetScreen() {
 
-    const [value, setValue] = useState<string>("1");
+    let {guid} = useParams();
+
+    if(guid===undefined){
+        return (
+            <Typography>Neplatne vstup</Typography>
+        )
+    }
+
+    const [value, setValue] = useState<string>(guid);
     const [song, setSong] = useState<Song>();
 
     const [found, setFound] = useState(true);
     const [variant, setVariant] = useState<number>();
     
 
+    
     const show = () =>{
         const url = SERVER_URL+"/songs/"+value;
         fetch(url)
@@ -30,8 +40,11 @@ export default function SheetScreen() {
                 return;
             }
 
-            const song = CreateSongFromIDBAll(data);
-            setSong(song);
+            const s = CreateSongFromIDBAll(data);
+            setSong(s);
+            
+            if(s===undefined)return;
+            if(s.variants.length>0) setVariant(0);
         })
     }
 
@@ -39,15 +52,9 @@ export default function SheetScreen() {
         setValue(event.target.value);
     }
 
-
     useEffect(()=>{
         if(found) show();
     },[]);
-
-    useEffect(()=>{ 
-        if(song===undefined)return;
-        if(song.variants.length>0) setVariant(0);
-    },[song])
 
   return (
     <>
@@ -58,9 +65,7 @@ export default function SheetScreen() {
                 </Toolbar>
             </AppBar>
             <Container maxWidth={"md"} sx={{backgroundColor: `rgba(255,255,255,1)`}} >
-                <Button onClick={show}>Zobraz</Button>
-                <InputBase placeholder='Zadej GUID...' sx={{marginTop:1, paddingLeft: 1, bgcolor: `rgba(100,100,100,0.05)`}} value={value} onChange={onValueChange}></InputBase>
-                <ButtonGroup size="small" sx={{marginLeft:1}} variant={"text"}>
+                <ButtonGroup size="small" sx={{margin:1, marginLeft:-2}} variant={"outlined"}>
                     {song&&song.variants.map((variant, index)=>{
                         return (
                             <Button onClick={()=>{

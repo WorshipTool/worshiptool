@@ -1,15 +1,19 @@
 import { Box, listItemSecondaryActionClasses, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import Song from '../database/Song';
+import LightStyle from "../SheetStyles/LightStyle"
+import ModernStyle from "../SheetStyles/ModernStyle"
+import ExperimentalStyle from "../SheetStyles/ExperimentalStyle"
+import HandWritingStyle from "../SheetStyles/HandWritingStyle"
 
-interface Segment {
+export interface Segment {
   chord?: string,
   text?: string
 }
-interface Line {
+export interface Line {
   segments: Segment[]
 }
-interface Section {
+export interface Section {
   name?: string,
   lines?: Line[]
 }
@@ -82,51 +86,6 @@ export default function SheetComponent({ song, variant}: { song?: Song, variant?
   
 
   const sections = convertSheetToSections(song.variants[variant].sheet);
-
-
-  return (
-    <Box>
-      <Box display={"flex"} flexDirection={"row"} marginBottom={"1"} gap={1}>
-            <Box flex={1}></Box>
-            <Box flex={5}>
-              <Typography variant='h5'><b>{song.name}</b></Typography>
-              {song.creators.map((creator)=>{
-                return(
-                  <Typography variant='subtitle2'><>{creator.type}</>: {creator.name}</Typography>      
-                )
-              })}
-              
-            </Box>
-      </Box>
-      {sections.map((section: Section) => {
-        return (
-          <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3}>
-            <Box flex={1}>
-              <Typography variant={"subtitle2"} marginTop={"1.5rem"} textAlign={"end"}>{section.name}{section.name==""?"":":"}</Typography>
-            </Box>
-            <Box flex={5}>
-                {section.lines&&section.lines.map((line)=>{
-                  return (
-                    <Box display={"flex"} flexDirection={"row"}>
-                      {line.segments.map((segment)=>{
-                          return(
-                            <Box display={"flex"} flexDirection={"column"}>
-                              <Box sx={{flex:1}}>
-                                {segment.chord&&<Typography sx={{paddingRight: 1}}><b>{segment.chord}</b></Typography>}
-                              </Box>
-                              
-                              <Typography sx={{flex:1}}>{segment.text}</Typography>
-                            </Box>
-                          )
-                      })}
-                    </Box>
-                  )
-                })}
-            </Box>
-          </Box>
-        )
-      })}
-    </Box>
-  )
+  return LightStyle(song, sections);
 }
 
