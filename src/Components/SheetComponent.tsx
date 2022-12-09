@@ -1,34 +1,22 @@
 import { Box, listItemSecondaryActionClasses, Stack, Typography } from '@mui/material';
-import React from 'react'
+import React, { useState } from 'react'
 import Song from '../database/Song';
 
-export default function SheetComponent({ song }: { song?: Song }) {
+interface Segment {
+  chord?: string,
+  text?: string
+}
+interface Line {
+  segments: Segment[]
+}
+interface Section {
+  name?: string,
+  lines?: Line[]
+}
 
-  if(!song){
-    return (
-      <Typography>Song not set.</Typography>
-    )
-  }
-  if(song.variants.length<1){
-    return(
-      <Typography>No variants.</Typography>
-    )
-  }
-
-  interface Segment {
-    chord?: string,
-    text?: string
-  }
-  interface Line {
-    segments: Segment[]
-  }
-  interface Section {
-    name?: string,
-    lines?: Line[]
-  }
-
+export function convertSheetToSections(sheet: string) : Section[]{
   let isOk = true;
-  const sections: Section[] = song.variants[0].sheet.split("{").filter((partA, ia)=>{
+  const sections: Section[] = sheet.split("{").filter((partA, ia)=>{
     if(ia==0&&partA==="")return 0;
     return 1;
   }).map((partA, ia) => {
@@ -71,13 +59,29 @@ export default function SheetComponent({ song }: { song?: Song }) {
     return { name: name, lines: lines }
   })
 
+  return sections;
+}
 
-  if (!isOk) {
+export default function SheetComponent({ song, variant}: { song?: Song, variant?: number }) {
+
+  if(song===undefined){
     return (
-      <Typography>Something is wrong in the song.</Typography>
+      <Typography>Song not set.</Typography>
     )
   }
+  if(song.variants.length<1){
+    return(
+      <Typography>No variants.</Typography>
+    )
+  }
+  if(variant===undefined){
+    return (
+      <Typography>Variant number is not set.</Typography>
+    )
+  }
+  
 
+  const sections = convertSheetToSections(song.variants[variant].sheet);
 
 
   return (
