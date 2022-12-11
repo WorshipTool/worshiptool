@@ -9,23 +9,15 @@ import Song, { CreateSongFromIDBAll } from '../database/Song'
 import Image from './../Images/islandincloudsbg.jpg'
 
 export default function SheetScreen() {
-
+    
     let {guid} = useParams();
 
-    if(guid===undefined){
-        return (
-            <Typography>Neplatne vstup</Typography>
-        )
-    }
-
-    const [value, setValue] = useState<string>(guid);
+    const [value, setValue] = useState<string>(guid===undefined?"":guid);
     const [song, setSong] = useState<Song>();
 
     const [found, setFound] = useState(true);
     const [variant, setVariant] = useState<number>();
-    
 
-    
     const show = () =>{
         const url = SERVER_URL+"/songs/"+value;
         fetch(url)
@@ -47,14 +39,29 @@ export default function SheetScreen() {
             if(s.variants.length>0) setVariant(0);
         })
     }
+    useEffect(()=>{
+        if(found) show();
+    },[]);
+
+
+
+    if(guid===undefined){
+        return (
+            <Typography>Neplatne vstup</Typography>
+        )
+    }
+
+    
+    
+
+    
+    
 
     const onValueChange = (event : any) =>{
         setValue(event.target.value);
     }
 
-    useEffect(()=>{
-        if(found) show();
-    },[]);
+    
 
   return (
     <>

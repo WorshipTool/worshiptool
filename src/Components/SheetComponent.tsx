@@ -86,6 +86,6 @@ export default function SheetComponent({ song, variant}: { song?: Song, variant?
   
 
   const sections = convertSheetToSections(song.variants[variant].sheet);
-  return LightStyle(song, sections);
+  return HandWritingStyle(song, sections);
 }
 
