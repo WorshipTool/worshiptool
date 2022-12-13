@@ -1,12 +1,15 @@
+import Song from "../Song/Song";
+
 export interface IDBSong{
     guid: string,
-    name: string
+    mainNameGUID:string;
 }
 
 export interface IDBSongVariant{
     guid: string,
     songGUID: string,
-    sheet: string
+    sheet: string,
+    mainNameGUID:string;
 }
 
 export interface IDBCreator{
@@ -14,20 +17,27 @@ export interface IDBCreator{
     name:string
 }
 
-export interface IDBCSLink{
+export interface IDBCSVLink{
     guid: string,
     creatorGUID: string,
     songGUID: string,
     type: string
 }
 
+export interface IDBSongName{
+    guid: string,
+    songGUID: string,
+    name: string,
+}
+
 export interface IDBAllSongData{
     song: IDBSong,
-    creators: {creator: IDBCreator, link: IDBCSLink}[],
+    names: IDBSongName[]
+    creators: IDBCSVLink[],
     variants: IDBSongVariant[]
 }
 
-export interface IDBSongArray{
-    songs: IDBSong[]
+export interface IDBSongDataArray{
+    songs: IDBAllSongData[]
 }
 

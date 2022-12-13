@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { alpha, Box, Card, CardContent, CardActions, Container, InputBase, Stack, styled, TextField, Typography, Button , ListItem, Paper} from '@mui/material'
 import Image from "./Images/desertbg.jpg"
 import SearchIcon from "@mui/icons-material/Search"
-import Song from './database/Song';
+import Song from './Data/Song/Song';
 
 
 const endUrl = "http://localhost:3000/";

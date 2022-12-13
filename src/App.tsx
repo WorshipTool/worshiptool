@@ -1,16 +1,12 @@
 import React from 'react';
-import SearchScreen from './SearchScreen';
 import './App.css';
-import SheetScreen2 from './Screens/SheetScreen2';
-import HomeScreen from './Screens/Home/HomeScreen';
 import { ThemeProvider } from '@emotion/react';
-import { blue, blueGrey, purple } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
-import AddSongScreen from './Screens/AddSong/AddSongScreen';
 import { createBrowserRouter, Route } from 'react-router-dom';
 import { Router, RouterProvider } from 'react-router';
 import NotFoundScreen from './Screens/NotFoundScreen';
 import SheetsScreen from './Screens/SheetsScreen/SheetsScreen';
+import SheetContainer from './Screens/SheetsScreen/SheetContainer';
 
 // import ReactDOM from 'react-dom';  
 // import { Route, Link, BrowserRouter as Router } from 'react-router-dom'  
@@ -34,16 +30,9 @@ function App() {
 
   const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/:guid",
     element: <SheetsScreen />,
-    errorElement: <NotFoundScreen />,
-    children: [
-      {
-        path: "song/:guid",
-        element: <SheetScreen2 />,
-        errorElement: <NotFoundScreen />,
-      }
-    ]
+    errorElement: <NotFoundScreen />
   }
 ]);
 

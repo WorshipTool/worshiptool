@@ -1,12 +1,14 @@
-import { alpha, Button, Grid, Typography, useTheme } from '@mui/material'
+import { alpha, Button, Grid, IconButton, styled, Typography, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { Box } from '@mui/system'
 import { motion, MotionConfig } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
-import Song from '../../../database/Song'
-import { SearchSongs } from '../../../DataManager'
+import React, { useCallback, useEffect, useState } from 'react'
+import Song from '../../../Data/Song/Song'
+import { searchSongs } from '../../../Data/DataManager'
 import SearchElement from './SearchElement'
 import SearchInput from './SearchInput'
+import "./SearchPanel.css"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 interface ISearchPanelProps {
   expanded: boolean,
@@ -35,48 +37,94 @@ export default function SearchPanel({expanded, setExpanded, searchValue, onSearc
 
   useEffect(()=>{
     const a = async () => {
-      setSongs(await SearchSongs())
+      setSongs(await searchSongs(searchValue))
+      console.log("baf");
     }
     a();
-  },[])
+  },[searchValue]);
+
+
+  const escFunction = useCallback((event: any) => {
+    if (event.key === "Escape") {
+      setExpanded(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
+
+  const onInputFocus = () => {
+    setExpanded(true);
+  }
+
+  const onBackClick = () => {    
+     setExpanded(false);
+  }
+
+  const onSongSelect = () => {
+    setExpanded(false);
+  }
 
   const expandedInputPadding = "20%";
 
-  return (
-    <motion.div variants={variants} initial={"collapsed"} animate={expanded?"expanded":"collapsed"} style={{flex:1,  padding: theme.spacing(2)}} >
+  const IconButtonWrapper = styled(Box)(({theme})=>({
+    display:"flex",
+    alignItems:"center",
+    padding: theme.spacing(0,2)
+}))
 
-      <Box style={{display:"flex", justifyContent:"center", position:"sticky", paddingLeft: expanded?expandedInputPadding:0, paddingRight: expanded?expandedInputPadding:0}} marginBottom={theme.spacing(2)}>
-        <SearchInput value={searchValue} onChange={onSearchChange} key={"SearchInput"}></SearchInput>
+  return (
+    <motion.div variants={variants} initial={"collapsed"} animate={expanded?"expanded":"collapsed"} style={{flex:1,  padding: theme.spacing(2), display: "flex", flexDirection:"column"}}>
+
+      <Box style={{display:"flex", justifyContent:"center", position:"sticky", paddingLeft: expanded?expandedInputPadding:0, paddingRight: expanded?expandedInputPadding:0}} marginBottom={theme.spacing(0.5)}>
+          {expanded&&
+          <IconButtonWrapper >
+            <IconButton onClick={onBackClick}>
+              <ArrowBackIcon/>
+            </IconButton>
+          </IconButtonWrapper>}
+        <SearchInput value={searchValue} onChange={onSearchChange} key={"SearchInput"} onFocus={onInputFocus}></SearchInput>
       </Box>
 
-      <Grid container spacing={3} justifyContent={"center"}>
-        {songs.map((song, index)=>{
-          return (
-            expanded?
-            <Grid item justifyContent={"center"} key={index+"_song"} xs>
-              <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
-                <SearchElement song={song}/>
-              </Box>
-            </Grid>
-            :
-            <Grid item justifyContent={"center"} key={index+"_song"} columns={1}>
-              <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
-                <SearchElement song={song}/>
-              </Box>
-            </Grid>
-          )
-        })}
+    <Box flex={1} position={"relative"}>
+      <Box sx={{overflowY:"scroll", overflowX:"hidden"}} className="hiddenScroll" position={"absolute"} top={0} bottom={0} right={0} left={0} paddingTop={theme.spacing(2.5)}>
+          <Grid id="searchGrid" container spacing={3} justifyContent={"center"}>
+            {songs.map((song, index)=>{
+              return (
+                expanded?
+                <Grid item justifyContent={"center"} key={index+"_song"} xs>
+                  <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
+                    <SearchElement song={song} onClick={onSongSelect}/>
+                  </Box>
+                </Grid>
+                : <></>
+                // <Grid item justifyContent={"center"} key={index+"_song"} columns={1}>
+                //   <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
+                //     <SearchElement song={song} onClick={onSongSelect}/>
+                //   </Box>
+                // </Grid>
+              )
+            })}
 
-        {songs.length<1&&(
-          <Grid item xs justifyContent={"center"} key={"notfoundtext"}>    
-            <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
-              <Typography>Nothing to show.</Typography>
-            </Box>      
+            {songs.length<1&&expanded&&(
+              <Grid item xs justifyContent={"center"} key={"notfoundtext"}>    
+                <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
+                  <Typography>Nothing to show.</Typography>
+                </Box>      
+                
+              </Grid>
+            )}
             
           </Grid>
-        )}
-        
-      </Grid>
+        </Box>
+      </Box>
+      
+      
       
       
 

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import React from "react"
 import {Section} from "../Components/SheetComponent"
-import Song from "../database/Song"
+import Song from "../Data/Song/Song"
 
 export default function HandWritingStyle(song:Song, sections: Section[]){
     

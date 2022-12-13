@@ -1,11 +1,16 @@
-import { Box, Grid, styled, Typography } from '@mui/material'
+import { Box, Button, Grid, styled, Typography } from '@mui/material'
 import React from 'react'
-import Song from '../../../database/Song'
+import { Link } from 'react-router-dom'
+import SheetComponent from '../../../Components/SheetComponent'
+import Song from '../../../Data/Song/Song'
+import { useSong } from '../../../Data/Song/UseSong'
 
 interface ISearchElementProps{
-    song: Song
+    song: Song,
+    onClick: any
 }
-export default function SearchElement({song}:ISearchElementProps) {
+export default function SearchElement({song, onClick}:ISearchElementProps) {
+    //const [getName] = useSong(song);
     const Border = styled(Box)(({theme})=>({
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(0.3),
@@ -19,8 +24,15 @@ export default function SearchElement({song}:ISearchElementProps) {
   return (
     <Border>
         <StyledContainer>
-            <Typography fontWeight={"bold"}>{song.name}</Typography>
-            <Typography>Tohle je text songu, je to velkej hit, ja nedokazu nemyslet na nej, bez toho abych chcip.</Typography>
+            <Box display={"flex"}>
+                <Typography fontWeight={"bold"} flex={1}>{song.name}</Typography>
+                <Link to={"/"+song.guid}>
+                    <Button onClick={onClick}>Click</Button>
+                </Link>
+            </Box>
+            {(song.variants.length >0) &&
+                <SheetComponent song={song} variant={0}></SheetComponent>
+            }
 
         </StyledContainer>
     </Border>

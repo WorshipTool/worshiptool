@@ -3,9 +3,9 @@ import InputBase from '@mui/material/InputBase'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TypeFormatFlags } from 'typescript'
-import { SERVER_URL } from '../../database/Constants'
-import { IDBAllSongData, IDBSongArray } from '../../database/interfaces'
-import Song, { CreateSongFromIDBAll } from '../../database/Song'
+import { SERVER_URL } from '../../Data/database/Constants'
+import { IDBAllSongData, IDBSongDataArray} from '../../Data/database/interfaces'
+import Song, { CreateSongFromIDBAll } from '../../Data/Song/Song'
 import AddSongScreen from '../AddSong/AddSongScreen'
 import "./HomeScreen.css"
 
@@ -45,19 +45,7 @@ export default function HomeScreen() {
     borderRadius: `0px ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0px`
   }))
 
-  const [songs, setSongs] = useState<IDBSongArray>({songs:[]});
-
-  useEffect(()=>{
-    const url = SERVER_URL+"/songs/search";
-    fetch(url)
-    .then((response:any)=>{
-
-        return response.json();
-    }).then((data: IDBSongArray)=>{
-
-        setSongs(data);
-    })
-  },[])
+  const [songs, setSongs] = useState<Song[]>([]);
 
   return (
     <Box>
@@ -78,15 +66,15 @@ export default function HomeScreen() {
         </Box>
 
         <Box display={"flex"} flexDirection={"column"} gap={1} alignItems={"center"}>
-          {songs.songs.map((song)=>{
+          {songs.map((song)=>{
             return (
               <Paper sx={{maxWidth:"300px", padding:2}} elevation={3}>
                 
                   <Typography fontWeight={"bold"}>{song.name}</Typography>      
                   
-                <Link to={"song/" + song.guid} >
+                {/* <Link to={"song/" + song} >
                   <Button>Zobraz</Button>
-                </Link>
+                </Link> */}
                     
               </Paper>
             )

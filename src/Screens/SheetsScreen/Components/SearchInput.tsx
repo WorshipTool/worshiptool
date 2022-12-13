@@ -5,10 +5,11 @@ import SearchIcon from '@mui/icons-material/Search';
 
 interface ISearchInputProps{
     value:string,
-    onChange: any
+    onChange: any,
+    onFocus?: any
 }
 
-export default function SearchInput({value, onChange}:ISearchInputProps) {
+export default function SearchInput({value, onChange, onFocus}:ISearchInputProps) {
 
 
     const SearchIconWrapper = styled(Box)(({theme})=>({
@@ -30,7 +31,7 @@ export default function SearchInput({value, onChange}:ISearchInputProps) {
             display: "flex",
             width: "100%"}}>
 
-            <InputBase value={value} onChange={onChange} placeholder='Hleďte něco najít...' key={"SearchInputBase0"} 
+            <InputBase value={value} onChange={onChange} placeholder='Hleďte něco najít...' key={"SearchInputBase0"} onFocus={onFocus}
                 sx={{
                     padding:"5px",
                     paddingLeft:"10px",

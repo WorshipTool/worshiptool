@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material"
 import { alpha, styled } from "@mui/material/styles";
 import React from "react"
 import {Section} from "../Components/SheetComponent"
-import Song from "../database/Song"
+import Song from "../Data/Song/Song"
 
 export default function ModernStyle(song:Song, sections: Section[]){
     
@@ -19,18 +19,6 @@ export default function ModernStyle(song:Song, sections: Section[]){
         const gap = 0.8;
     return (
         <Box fontFamily={font}>
-            <Box display={"flex"} flexDirection={"row"} gap={gap} sx={{marginBottom:1}}>
-                    <Box flex={1}></Box>
-                    <Box flex={5}>
-                    <Typography variant='h5' fontFamily={"inherit"}><b>{song.name}</b></Typography>
-                    {song.creators.map((creator)=>{
-                        return(
-                        <Typography variant='subtitle2' fontFamily={"inherit"}><>{creator.type}</>: {creator.name}</Typography>      
-                        )
-                    })}
-                    
-                    </Box>
-            </Box>
             {sections.map((section: Section, sectionIndex: number) => {
                 return (
                 <Box display={"flex"} flexDirection={"row"} gap={gap} marginTop={sectionIndex==0?0: 3 }>

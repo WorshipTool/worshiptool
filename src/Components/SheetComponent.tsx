@@ -1,10 +1,11 @@
 import { Box, listItemSecondaryActionClasses, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react'
-import Song from '../database/Song';
+import Song from '../Data/Song/Song';
 import LightStyle from "../SheetStyles/LightStyle"
 import ModernStyle from "../SheetStyles/ModernStyle"
 import ExperimentalStyle from "../SheetStyles/ExperimentalStyle"
 import HandWritingStyle from "../SheetStyles/HandWritingStyle"
+import NoChordStyle from '../SheetStyles/NoChordsStyle';
 
 export interface Segment {
   chord?: string,
@@ -84,8 +85,11 @@ export default function SheetComponent({ song, variant}: { song?: Song, variant?
     )
   }
   
+  // return (
+  //   <Typography>asdfasdfasdfasdf asdf asdf asdf sadfasdfffffffffffffffff asf asdfa </Typography>
+  // )
 
   const sections = convertSheetToSections(song.variants[variant].sheet);
-  return HandWritingStyle(song, sections);
+  return LightStyle(song, sections);
 }
 
