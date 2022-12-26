@@ -21,24 +21,24 @@ export default function LightStyle(song:Song, sections: Section[]){
                     
                     </Box>
             </Box>
-            {sections.map((section: Section) => {
+            {sections.map((section: Section, index) => {
                 return (
-                <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3}>
+                <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3} key={"abox"+index}>
                     <Box flex={1}>
                     <Typography variant={"subtitle2"} marginTop={"1.5rem"} textAlign={"end"} fontFamily={"inherit"}>{section.name}{section.name==""?"":":"}</Typography>
                     </Box>
                     <Box flex={5}>
-                        {section.lines&&section.lines.map((line)=>{
+                        {section.lines&&section.lines.map((line, index)=>{
                         return (
-                            <Box display={"flex"} flexDirection={"row"}>
-                            {line.segments.map((segment)=>{
+                            <Box display={"flex"} flexDirection={"row"}  key={"bbox"+index}>
+                            {line.segments.map((segment, index)=>{
                                 return(
-                                    <Box display={"flex"} flexDirection={"column"}>
-                                    <Box sx={{flex:1}}>
-                                        {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord}</b></Typography>}
-                                    </Box>
-                                    
-                                    <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>
+                                    <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
+                                        <Box sx={{flex:1}}>
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord}</b></Typography>}
+                                        </Box>
+                                        
+                                        <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>
                                     </Box>
                                 )
                             })}

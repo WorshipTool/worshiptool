@@ -7,9 +7,9 @@ import { Router, RouterProvider } from 'react-router';
 import NotFoundScreen from './Screens/NotFoundScreen';
 import SheetsScreen from './Screens/SheetsScreen/SheetsScreen';
 import SheetContainer from './Screens/SheetsScreen/SheetContainer';
+import AddSongScreen from './Screens/AddSong/AddSongScreen';
+import HomeScreen from './Screens/Home/HomeScreen';
 
-// import ReactDOM from 'react-dom';  
-// import { Route, Link, BrowserRouter as Router } from 'react-router-dom'  
 
 function App() {
 
@@ -30,9 +30,19 @@ function App() {
 
   const router = createBrowserRouter([
   {
+    path:"/",
+    element: <HomeScreen/>,
+    errorElement: <NotFoundScreen/>
+  },
+  {
     path: "/:guid",
     element: <SheetsScreen />,
     errorElement: <NotFoundScreen />
+  }, 
+  {
+    path: "/create",
+    element: <AddSongScreen/>,
+    errorElement: <NotFoundScreen/>
   }
 ]);
 

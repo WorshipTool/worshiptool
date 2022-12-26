@@ -38,7 +38,6 @@ export default function SearchPanel({expanded, setExpanded, searchValue, onSearc
   useEffect(()=>{
     const a = async () => {
       setSongs(await searchSongs(searchValue))
-      console.log("baf");
     }
     a();
   },[searchValue]);

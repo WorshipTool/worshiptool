@@ -50,37 +50,13 @@ export default function HomeScreen() {
   return (
     <Box>
       <Box sx={{backdropFilter:"blur(50px)", height: "100vh"}}>
-        <AppBar position='static'>
-          <Toolbar>
-
-          </Toolbar>
-        </AppBar>
+        
 
         <Box sx={{width:"100%"}} display={"flex"} flexDirection={"column"} alignItems={"center"}>
-          <StyledTitle variant='h2'>Najdi si to rychle</StyledTitle>
-          <Search>
-            <SearchInput placeholder='Zadej nazev, nebo autora písničky'></SearchInput>
-            <SearchButton>Hledej</SearchButton>
-          </Search>
+          <Typography>Tady nic neni.</Typography>
             
         </Box>
 
-        <Box display={"flex"} flexDirection={"column"} gap={1} alignItems={"center"}>
-          {songs.map((song)=>{
-            return (
-              <Paper sx={{maxWidth:"300px", padding:2}} elevation={3}>
-                
-                  <Typography fontWeight={"bold"}>{song.name}</Typography>      
-                  
-                {/* <Link to={"song/" + song} >
-                  <Button>Zobraz</Button>
-                </Link> */}
-                    
-              </Paper>
-            )
-          })}
-        </Box>
-        
 
       </Box>
       

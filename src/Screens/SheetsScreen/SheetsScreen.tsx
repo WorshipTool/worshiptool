@@ -1,8 +1,8 @@
-import { AppBar, Box, styled, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, styled, Toolbar, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { AnimateSharedLayout, motion, useAnimation } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
-import { Outlet, useParams } from 'react-router-dom'
+import { Link, Outlet, useParams } from 'react-router-dom'
 import { loadSongByGUID } from '../../Data/DataManager'
 import Song from '../../Data/Song/Song'
 import SearchPanel from './Components/SearchPanel'
@@ -65,6 +65,12 @@ export default function SheetsScreen() {
         <Box display={"flex"} flexDirection={"column"} height={"100%"}>
             <Bar position='sticky'>
                 <Toolbar variant='dense'>
+                    <Box sx={{flexGrow: 1}}>
+
+                    </Box>
+                    <Link to={"/create"}>
+                        <Button sx={{color:"white"}}>Add new song</Button>
+                    </Link>
                 </Toolbar>
             </Bar>
 
