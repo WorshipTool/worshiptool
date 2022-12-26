@@ -38,9 +38,9 @@ export default function AddSongScreen() {
   return (
     <Box display={"flex"} flexDirection={"column"} height={"100%"}>
 
-      <InputBase placeholder='Title' 
-        value={title} onChange={onTitleChange}></InputBase> 
-      <TextField multiline placeholder='Sheet data' sx={{flex:1}}
+      <TextField placeholder='Název písně' 
+        value={title} onChange={onTitleChange}></TextField> 
+      <TextField multiline placeholder='Akordy a text (ve správném formátu)' sx={{flex:1}}
         value={sheet} onChange={onSheetChange}></TextField>
     
       <Button onClick={PostNewSong}>

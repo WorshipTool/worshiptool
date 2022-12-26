@@ -21,7 +21,10 @@ export default function SheetsScreen() {
 
 
         (async () => {
-            if(!params.guid)return;
+            if(!params.guid){
+                setExpanded(true);
+                return;
+            };
             setSong(await loadSongByGUID(params.guid));
         })();
 
@@ -61,41 +64,98 @@ export default function SheetsScreen() {
             setExpanded(true);
     }
 
+    const print = () => {
+        window.print();
+    }
+
     return (
-        <Box display={"flex"} flexDirection={"column"} height={"100%"}>
-            <Bar position='sticky'>
-                <Toolbar variant='dense'>
-                    <Box sx={{flexGrow: 1}}>
+        <>
+            <Box flexDirection={"column"} height={"100%"}  displayPrint={"none"} sx={{display:{xs:"none", md: "flex"}}}>
+                <Bar position='sticky'>
+                    <Toolbar variant='dense'>
+                        <Box sx={{flexGrow: 1}}>
 
-                    </Box>
-                    <Link to={"/create"}>
-                        <Button sx={{color:"white"}}>Add new song</Button>
-                    </Link>
-                </Toolbar>
-            </Bar>
+                        </Box>
+                        <Link to={"/create"}>
+                            <Button sx={{color:"white"}}>Přidej novou songu</Button>
+                        </Link>
+                    </Toolbar>
+                </Bar>
 
-            <Box display={"flex"} flex={1}>
+                <Box display={"flex"} flex={1}>
 
-                
-            <RightContainer marginLeft={panelWidth} width={"100%"} height={"100%"}>
-                <SheetContainer song={song}/>
-            </RightContainer>
-                
-            <motion.div variants={variants} initial={"collapsed"} animate={animation} transition={{type:"tween", duration:0.1}}
-                    style={{flex:1,
-                        display: "flex",
-                        boxShadow: `0px 0px 3px ${grey[500]}`,
-                        position:"relative"}}>
+                    
+                <RightContainer marginLeft={panelWidth} width={"100%"} height={"100%"}>
+                    <SheetContainer song={song}/>
+
+                    <Button sx={{position: "absolute", left:0,top:0}} onClick={print}>Vytisknout</Button>
+                </RightContainer>
+                    
+                <motion.div variants={variants} initial={"collapsed"} animate={animation} transition={{type:"tween", duration:0.1}}
+                        style={{flex:1,
+                            display: "flex",
+                            boxShadow: `0px 0px 3px ${grey[500]}`,
+                            position:"relative"}}>
                     <SearchPanel expanded={searchExpanded} setExpanded={setExpanded} searchValue={searchValue} onSearchChange={onSearchChange} ></SearchPanel>
                 </motion.div>
-
                 
+
+                    
+                    
+                    
+
+                </Box>
+
                 
                 
 
             </Box>
-            
 
-        </Box>
+            <Box flexDirection={"column"} height={"100%"}  displayPrint={"none"} sx={{display:{xs:"flex", md: "none"}}}>
+                <Bar position='sticky'>
+                    <Toolbar variant='dense'>
+                        <Box sx={{flexGrow: 1}}>
+
+                        </Box>
+                        <Link to={"/create"}>
+                            <Button sx={{color:"white"}}>Přidej novou songu</Button>
+                        </Link>
+                    </Toolbar>
+                </Bar>
+
+                <Box flex={1} flexDirection={"column"}>
+
+
+                    <Box width={"100%"} height={"100%"}>
+                        <SheetContainer song={song}/>
+
+                        <Button sx={{position: "absolute", left:0,top:0}} onClick={print}>Vytisknout</Button>
+                    </Box>
+                        
+                    <Box height={"100%"} display={"flex"}>
+                        <SearchPanel expanded={searchExpanded} setExpanded={setExpanded} searchValue={searchValue} onSearchChange={onSearchChange} ></SearchPanel>
+                    </Box>
+                
+
+                    
+                    
+                    
+
+                </Box>
+
+                
+                
+
+            </Box>
+
+            <Box displayPrint={"flex"} display={"none"}>
+                <Box width={"100%"} height={"100%"}>
+
+                    <SheetContainer song={song}/>
+
+                </Box>
+            </Box>
+        </>
+        
     )
 }

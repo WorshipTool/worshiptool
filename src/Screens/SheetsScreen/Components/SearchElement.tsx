@@ -26,7 +26,7 @@ export default function SearchElement({song, onClick}:ISearchElementProps) {
             <Box display={"flex"}>
                 <Typography fontWeight={"bold"} flex={1}>{song.name}</Typography>
                 <Link to={"/"+song.guid}>
-                    <Button onClick={onClick}>Click</Button>
+                    <Button onClick={onClick}>Zobraz</Button>
                 </Link>
             </Box>
             {(song.variants.length >0) &&

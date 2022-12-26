@@ -113,7 +113,7 @@ export default function SearchPanel({expanded, setExpanded, searchValue, onSearc
             {songs.length<1&&expanded&&(
               <Grid item xs justifyContent={"center"} key={"notfoundtext"}>    
                 <Box justifyContent={"center"} alignItems={"center"} display={"flex"}>
-                  <Typography>Nothing to show.</Typography>
+                  <Typography>Nic k zobrazení...</Typography>
                 </Box>      
                 
               </Grid>
