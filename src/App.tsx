@@ -1,10 +1,9 @@
 import React from 'react';
-import SearchScreen from './SearchScreen';
-import './App.css';
+import { Typography } from '@mui/material';
 
 function App() {
   return (
-    <SearchScreen />
+    <Typography>Hey.</Typography>
   );
 }
 
