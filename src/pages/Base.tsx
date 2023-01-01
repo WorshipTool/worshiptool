@@ -1,8 +1,9 @@
 import { Box, Button, IconButton, Typography, styled, useTheme } from '@mui/material'
 import React from 'react'
 import AddIcon from '@mui/icons-material/Add';
+import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 export default function Home() {
     const theme = useTheme();
@@ -39,6 +40,10 @@ export default function Home() {
         
     }))
 
+    const StyledIconButton = styled(IconButton)(()=>({
+        color: "white"
+    }))
+
     return (
         <Container>
             <Background>
@@ -50,12 +55,21 @@ export default function Home() {
                 </IconButton>
             </SideBar>
             <SideBar position={"fixed"}>
-                <IconButton size={"small"} color={"inherit"}>
-                    <AccountCircleIcon/>
-                </IconButton>
-                <IconButton size={"small"} color={"inherit"}>
-                    <AddIcon/>
-                </IconButton>
+                <Box display={"flex"} flexDirection={"column"} gap={1}>
+                    <Link to={""}>
+                        <StyledIconButton size={"small"}>
+                            <HomeIcon/>
+                        </StyledIconButton>
+                    </Link>
+                    <StyledIconButton size={"small"}>
+                        <AccountCircleIcon/>
+                    </StyledIconButton>
+                </Box>
+                <Link to={"create"}>
+                    <StyledIconButton size={"small"}>
+                        <AddIcon/>
+                    </StyledIconButton>
+                </Link>
             </SideBar>
 
             <Outlet></Outlet>
