@@ -7,6 +7,7 @@ import {
 import Home from './pages/Home/Home';
 import "./App.css";
 import Base from './pages/Base';
+import Create from './pages/Create/Create';
 
 function App() {
   const router = createBrowserRouter([
@@ -18,6 +19,10 @@ function App() {
         {
           path: "",
           element: <Home />
+        },
+        {
+          path: "create",
+          element: <Create />
         },
       ]
     }
