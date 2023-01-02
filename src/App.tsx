@@ -8,6 +8,7 @@ import Home from './pages/Home/Home';
 import "./App.css";
 import Base from './pages/Base';
 import Create from './pages/Create/Create';
+import { createTheme } from '@mui/material';
 
 function App() {
   const router = createBrowserRouter([
@@ -27,10 +28,20 @@ function App() {
       ]
     }
   ]);
+
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        main: "#ef476f",
+      }
+    },
+  });
+  
   
     return (
-      
-      <RouterProvider router={router}/>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router}/>
+      </ThemeProvider>
     )
 }
 
