@@ -61,7 +61,8 @@ export default function Home() {
     }))
 
     const GridContainer = styled(Grid)(({})=>({
-        padding:10
+        padding:10,
+        paddingTop: 5
         
     }))
 
