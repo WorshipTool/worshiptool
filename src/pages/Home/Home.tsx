@@ -1,27 +1,38 @@
 import { Box, Grid, InputBase, TextField, Typography, styled, useTheme } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import sheepImage from '../../assets/sheepWithCircle.png'
 
 export default function Home() {
     const theme = useTheme();
 
+    const [searchValue, setSearchValue] = useState("");
+    const [searching, setSearching] = useState(false);
+
+
+    const onSearchValueChange = (event: any) => {
+        setSearching(true);
+        setSearchValue(event.target.value);
+    }   
+
+
+
     const AligningContainer = styled(Box)(({})=>({
         display: "flex",
         justifyContent:"center",
-        position: "fixed",
-        right:0,
+        position: "sticky",
+        top:0,
         [theme.breakpoints.down('md')]: {
             flexDirection:"column",
-            left:0,
         },
         [theme.breakpoints.up('md')]: {
             flexDirection:"row",
-            left:"3.5rem",
         },
+        width:"100%"
     }))
 
     const SearchContainer = styled(Box)(({})=>({
@@ -50,36 +61,43 @@ export default function Home() {
     }))
 
     const GridContainer = styled(Grid)(({})=>({
-        padding:10, 
-        [theme.breakpoints.down('md')]: {
-            marginTop:"3rem",
-        },
-        [theme.breakpoints.up('md')]: {
-            marginTop:"3rem",
-        },
+        padding:10
         
     }))
-        
 
-    const tempArr = [0,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+        
+    const tempArr = [0,1,2,3,4,5,6,7,8,9,1,2,3,4,8,6,5,7,5,4,]
 
     return (
-        <Box>
+        <Box sx={{flex:1, justifyContent:"center", height:(searching?"auto":"100vh"), alignItems:"center", display:"flex", flexDirection:"column"}}>
+
+            {!searching&&<Box sx={{alignItems:"center", justifyContent:"center", display:"flex", marginBottom:-1}}>
+                <img src={sheepImage} width={200}/>
+            </Box>}
+
             <AligningContainer>
                 <SearchContainer>
                     <SearchIcon />
-                    <SearchInput placeholder='Hledej...'></SearchInput>
+                    <SearchInput placeholder='Hledej...' onChange={onSearchValueChange} autoFocus value={searchValue}></SearchInput>
                     <MenuIcon/>
                 </SearchContainer>
             </AligningContainer>
-            
-            <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>
-                {tempArr.map((value)=>{
-                    return <SearchItem text={value+""}></SearchItem>
-                })}
-                
-                
-            </GridContainer>
+
+            {!searching&&
+                <Box sx={{height:100}}>
+                </Box>
+            }
+
+            {searching&&
+                <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>
+                    {tempArr.map((value)=>{
+                        return <SearchItem text={value+""}></SearchItem>
+                    })}
+                    
+                    
+                </GridContainer>
+            }
+       
         </Box>
     )
 }

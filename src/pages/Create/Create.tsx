@@ -110,7 +110,7 @@ export default function Create() {
                 }}}>
                 <Typography variant={"caption"} sx={{fontWeight: "300", fontSize: 13, alignItems:"center", display:"flex"}}>
                     {title}
-                    <RemoveAltIcon onClick={onRemove}/>
+                    {!posting&&<RemoveAltIcon onClick={onRemove}/>}
                 </Typography>
             </Box>
         
@@ -171,7 +171,7 @@ export default function Create() {
                                 onBlur={onAltTitleInputBlur} autoFocus/>
                         }
         
-                        {!altTitleTyping&&
+                        {!altTitleTyping&&!posting&&
                             <Button sx={{color:"black"}} size={"small"} onClick={onAddAltTitleClick}>
                                 <Typography variant="caption" sx={{alignItems:"center", display:"flex"}}>
                                     <AddIcon fontSize='inherit' sx={{marginRight:0.5}}/>

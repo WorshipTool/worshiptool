@@ -14,7 +14,7 @@ export default function Home() {
         flexDirection:"row",
     }))
     const Background = styled(Box)(({})=>({
-        backgroundColor: theme.palette.grey[300],
+        background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
         position:"fixed",
         width:"100%",
         height:"100%",
@@ -23,7 +23,7 @@ export default function Home() {
     }))
 
     const SideBar = styled(Box)(()=>({
-        backgroundColor: theme.palette.primary.dark,
+        background: `linear-gradient(68deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
         flexDirection:"column",
         justifyContent: "space-between",
         padding:"0.7rem",
