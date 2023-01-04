@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
-import AddIcon from '@mui/icons-material/Add';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import sheepImage from '../../assets/sheepWithCircle.png'
 
 export default function Home() {
@@ -12,6 +10,8 @@ export default function Home() {
 
     const [searchValue, setSearchValue] = useState("");
     const [searching, setSearching] = useState(false);
+
+    const [songGUIDs, setSongGUIDs] = useState<string[]>(["f35dc172-fa9d-472a-84c0-20ad2f82dba0"]);
 
 
     const onSearchValueChange = (event: any) => {
@@ -67,7 +67,6 @@ export default function Home() {
     }))
 
         
-    const tempArr = [0,1,2,3,4,5,6,7,8,9,1,2,3,4,8,6,5,7,5,4,]
 
     return (
         <Box sx={{flex:1, justifyContent:"center", height:(searching?"auto":"100vh"), alignItems:"center", display:"flex", flexDirection:"column"}}>
@@ -91,8 +90,8 @@ export default function Home() {
 
             {searching&&
                 <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>
-                    {tempArr.map((value)=>{
-                        return <SearchItem text={value+""}></SearchItem>
+                    {songGUIDs.map((value, index)=>{
+                        return <SearchItem guid={value} key={value}></SearchItem>
                     })}
                     
                     

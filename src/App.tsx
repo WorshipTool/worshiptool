@@ -9,6 +9,7 @@ import "./App.css";
 import Base from './pages/Base';
 import Create from './pages/Create/Create';
 import { createTheme } from '@mui/material';
+import Sheet from './pages/Sheet/Sheet';
 
 function App() {
   const router = createBrowserRouter([
@@ -25,8 +26,13 @@ function App() {
           path: "create",
           element: <Create />
         },
+        {
+          path:"song/:guid",
+          element: <Sheet/>
+        }
       ]
-    }
+    },
+    
   ]);
 
   const theme = createTheme({
