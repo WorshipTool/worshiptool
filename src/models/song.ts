@@ -7,6 +7,7 @@ export default interface song{
     }[],
     variants: {
         sheet: string,
+        sheetText: string,
         sections: section[],
         preferredTitle: string
     }[]

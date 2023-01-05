@@ -37,7 +37,9 @@ export default function SearchItem(props: {guid:string}) {
             
             
             <Typography fontWeight={"bold"}>{getName()}</Typography>
-            <Typography >{getText(0)}</Typography>
+            {getText(0).split("\n").map((line)=>{
+                return <Typography >{line}</Typography>
+            })}
             <Box display={"flex"} justifyContent={"end"} alignItems={"center"}>
                 <YouTubeIcon color={"error"} fontSize={"medium"}/>
                 <VerifiedIcon color={"success"} fontSize={"medium"}/>

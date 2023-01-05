@@ -1,8 +1,13 @@
 import { Box, Button, InputBase, Typography, styled, useTheme } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
+import { convertSongToNewSongDTO } from '../../api/dtos';
+import useFetch from '../../hooks/useFetch';
+import { getUrl_POSTNEWSONG } from '../../api/urls';
+import { useNavigate } from 'react-router-dom';
+import convertNewSongDataToSong from '../../songAPI/convertNewSongDataToSong';
 
 export default function Create() {
     const theme = useTheme();
@@ -10,6 +15,7 @@ export default function Create() {
     const [titleValue, setTitleValue] = useState("");
     const [altTitleValue, setAltTitleValue] = useState("");
     const [titles, setTitles] = useState<string[]>([]);
+    const [sheetValue, setSheetValue] = useState("");
 
     const [altTitleTyping, setAltTitleTyping] = useState(false);
 
@@ -18,6 +24,15 @@ export default function Create() {
     const sheetInputRef = useRef(null);
     const titleInputRef = useRef(null);
 
+    const navigate = useNavigate()
+    
+
+    const {post, loading:fetching} = useFetch();
+
+    useEffect(()=>{
+        if(!fetching) setPosting(fetching);
+    },[fetching])
+
 
 
     const onTitleValueChange = (event: any) => {
@@ -25,6 +40,9 @@ export default function Create() {
     }
     const onAltTitleValueChange = (event: any) => {
         setAltTitleValue(event.target.value);
+    }
+    const onSheetValueChange = (event: any) => {
+        setSheetValue(event.target.value);
     }
 
     const onAddAltTitleClick = () => {
@@ -85,6 +103,16 @@ export default function Create() {
 
     const onPostClick = () => {
         setPosting(true);
+        const dto = convertSongToNewSongDTO(
+            convertNewSongDataToSong({
+                title: titleValue, 
+                alternativeTitles: titles.length<2?[]:titles.slice(1, titles.length-1), 
+                sheet: sheetValue}));
+
+        post({url: getUrl_POSTNEWSONG(), body: dto}, (d)=> {
+
+            navigate(`/song/`+d.songGUID, { replace: false })
+        });
     }
 
 
@@ -150,9 +178,7 @@ export default function Create() {
     
                     <Box sx={{display:"flex", gap: 1}}>
     
-                        {titles.map((title, index)=>{
-                            if(index==0) return<></>
-    
+                        {titles.filter((t, index)=>index!=0).map((title, index)=>{    
                             const onRemove = () => {
                                 setTitles([
                                     ...titles.slice(0, index),
@@ -161,7 +187,7 @@ export default function Create() {
                             }
     
                             return (
-                                <AltTitle index={index} title={title} onRemove={onRemove}/>
+                                <AltTitle index={index} title={title} onRemove={onRemove} key={"title"+index}/>
                             )
                         })}
     
@@ -185,7 +211,7 @@ export default function Create() {
     
                 <Box sx={{flex:1, display:"flex", marginTop:2}}>
                     <InputBase inputRef={sheetInputRef} placeholder='Zde je místo na obsah písně' multiline 
-                        sx={{flex:1, alignItems:"start"}}/>
+                        sx={{flex:1, alignItems:"start"}} value={sheetValue} onChange={onSheetValueChange}/>
                 </Box>
     
                 

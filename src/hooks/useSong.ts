@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import song from "../models/song";
 import useFetch from "./useFetch";
-import { getUrl_GETSONGBYGUD } from "../api/urls";
+import { getUrl_GETSONGBYGUID } from "../api/urls";
 import allSongDataDTO, { convertAllSongDataDTOToSong } from "../api/dtos";
 import convertSheetToSections from "../songAPI/convertSheetToSections";
 
@@ -19,7 +19,7 @@ export default function useSong(g:string|null){
     },[fetchLoading])
 
     useEffect(()=>{
-        if(guid) fetchData(getUrl_GETSONGBYGUD(guid));
+        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)});
     },[guid])
 
     useEffect(()=>{

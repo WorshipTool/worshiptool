@@ -1,9 +1,12 @@
 import { Box, Grid, InputBase, TextField, Typography, styled, useTheme } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
 import sheepImage from '../../assets/sheepWithCircle.png'
+import useFetch from '../../hooks/useFetch';
+import { songGetQueryDTO, songGetResultDTO } from '../../api/dtos';
+import { getUrl_GETSONGSBYQUERY } from '../../api/urls';
 
 export default function Home() {
     const theme = useTheme();
@@ -11,7 +14,38 @@ export default function Home() {
     const [searchValue, setSearchValue] = useState("");
     const [searching, setSearching] = useState(false);
 
-    const [songGUIDs, setSongGUIDs] = useState<string[]>(["f35dc172-fa9d-472a-84c0-20ad2f82dba0"]);
+    const [songGUIDs, setSongGUIDs] = useState<string[]>([]);
+
+    const [recommendedSongGUIDs, setRecommendedSongGUIDs] = useState<string[]>([]);
+
+    const {fetchData} = useFetch();
+
+    useEffect(()=>{
+        if(searchValue==""){
+            setSongGUIDs([]);
+        }else{
+            const query : songGetQueryDTO = {
+                key: "search",
+                body: searchValue
+            }
+            fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : songGetResultDTO)=>{
+                setSongGUIDs(data.guids);
+            });
+        }
+        
+
+        
+    },[searchValue])
+
+    useEffect(()=>{
+        const query : songGetQueryDTO = {
+            key: "random",
+            count: 4
+        }
+        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : songGetResultDTO)=>{
+            setRecommendedSongGUIDs(data.guids);
+        });
+    },[])
 
 
     const onSearchValueChange = (event: any) => {
@@ -84,18 +118,37 @@ export default function Home() {
             </AligningContainer>
 
             {!searching&&
-                <Box sx={{height:100}}>
+                <Box sx={{height:30}}>
                 </Box>
             }
 
+
             {searching&&
-                <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>
-                    {songGUIDs.map((value, index)=>{
+                <>
+                    
+                    <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>
+                        {searchValue!=""&&songGUIDs.map((value, index)=>{
+                            return <SearchItem guid={value} key={value}></SearchItem>
+                        })}
+
+                        
+                        
+                    </GridContainer>
+    
+                    {songGUIDs.length==0&&searchValue!=""&&<Typography marginBottom={2}>Nic jsme nenašli...</Typography>}
+                </>
+            }
+            {(songGUIDs.length==0||searchValue=="")&&recommendedSongGUIDs.length>0&&
+            <Box width={"100%"}>
+                <Typography  paddingLeft={2} fontWeight={"bold"}>Nějaké nápady:</Typography>
+                <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} spacing={1}>    
+                    {recommendedSongGUIDs.map((value)=>{
                         return <SearchItem guid={value} key={value}></SearchItem>
                     })}
                     
                     
                 </GridContainer>
+            </Box>
             }
        
         </Box>

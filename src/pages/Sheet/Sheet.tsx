@@ -38,8 +38,15 @@ export default function Sheet() {
 
   return (
     <Box sx={{flex:1, display:"flex", flexDirection:"column", height: "100vh"}}>
-        <Box sx={styledContainerSX}> 
+        <Box sx={styledContainerSX} displayPrint={"none"}> 
             {song&&<DefaultStyle song={song}/>}
+        </Box>
+
+        <Box sx={{ displayPrint: "flex",
+          flex:1,
+          display:"none",
+          flexDirection: "column"}}>
+            {song&&<DefaultStyle song={song}/>} 
         </Box>
         
 
