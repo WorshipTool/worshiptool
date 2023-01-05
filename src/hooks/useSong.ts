@@ -3,6 +3,9 @@ import song from "../models/song";
 import useFetch from "./useFetch";
 import { getUrl_GETSONGBYGUD } from "../api/urls";
 import allSongDataDTO, { convertAllSongDataDTOToSong } from "../api/dtos";
+import convertSheetToSections from "../songAPI/convertSheetToSections";
+
+
 
 export default function useSong(g:string|null){
     const [guid, setGUID] = useState(g);
@@ -24,6 +27,7 @@ export default function useSong(g:string|null){
         if(d===undefined||d.song===undefined)return;
         const s = convertAllSongDataDTOToSong(d);
         setSong(s);
+
     },[data]);
 
 
@@ -36,9 +40,14 @@ export default function useSong(g:string|null){
     const getText = (part?: number): string => {
         if(song===undefined) return "undefined";
 
-        if(part===undefined) return song.variants[0].sheet;
-
-        return song.variants[0].sheet.substring(0, song.variants[0].sheet.length/5);
+        if(part===undefined){
+            return song.variants[0].sections
+                    .map((section)=>{return section.text}).join("\n");
+        };
+        if(song.variants[0].sections.length<=part)return "";
+        const t = song.variants[0].sections[part].text;
+        if(t) return t;
+        return "";
     }
 
     const getSheetData = () : string => {

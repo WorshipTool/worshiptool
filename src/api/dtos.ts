@@ -1,5 +1,6 @@
 import { isVariableDeclarationList } from "typescript";
 import song from "../models/song";
+import convertSheetToSections from "../songAPI/convertSheetToSections";
 
 export interface songDTO{
     guid: string,
@@ -59,7 +60,8 @@ export function convertAllSongDataDTOToSong(d: allSongDataDTO) : song{
         variants: data.variants.map((variant)=>{
             return {
                 preferredTitle: data.names.filter((value)=>{return value.guid==variant.mainNameGUID})[0].name,
-                sheet: variant.sheet
+                sheet: variant.sheet,
+                sections: convertSheetToSections(variant.sheet)
             }
         })
     }
