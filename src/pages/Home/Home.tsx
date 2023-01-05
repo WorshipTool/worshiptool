@@ -8,8 +8,53 @@ import useFetch from '../../hooks/useFetch';
 import { songGetQueryDTO, songGetResultDTO } from '../../api/dtos';
 import { getUrl_GETSONGSBYQUERY } from '../../api/urls';
 
+
+const AligningContainer = styled(Box)(({theme})=>({
+    display: "flex",
+    justifyContent:"center",
+    position: "sticky",
+    top:0,
+    [theme.breakpoints.down('md')]: {
+        flexDirection:"column",
+    },
+    [theme.breakpoints.up('md')]: {
+        flexDirection:"row",
+    },
+    width:"100%"
+}))
+
+const SearchContainer = styled(Box)(({theme})=>({
+    backgroundColor: theme.palette.grey[100],
+    padding: "0.5rem",
+    paddingLeft:"0.8rem",
+    paddingRight:"0.8rem",
+    borderRadius: "0.5rem",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
+    [theme.breakpoints.down('md')]: {
+        flex:1,
+    },
+    [theme.breakpoints.up('md')]: {
+        width: "50%",
+    },
+    margin: "0.5rem",
+    borderColor: theme.palette.grey[300]
+
+}))
+const SearchInput = styled(InputBase)(({theme})=>({
+    flex:1,
+    marginLeft:"0.5em"
+}))
+
+const GridContainer = styled(Grid)(({theme})=>({
+    padding:10,
+    paddingTop: 5
+    
+}))
+
 export default function Home() {
-    const theme = useTheme();
 
     const [searchValue, setSearchValue] = useState("");
     const [searching, setSearching] = useState(false);
@@ -55,50 +100,7 @@ export default function Home() {
 
 
 
-    const AligningContainer = styled(Box)(({})=>({
-        display: "flex",
-        justifyContent:"center",
-        position: "sticky",
-        top:0,
-        [theme.breakpoints.down('md')]: {
-            flexDirection:"column",
-        },
-        [theme.breakpoints.up('md')]: {
-            flexDirection:"row",
-        },
-        width:"100%"
-    }))
-
-    const SearchContainer = styled(Box)(({})=>({
-        backgroundColor: theme.palette.grey[100],
-        padding: "0.5rem",
-        paddingLeft:"0.8rem",
-        paddingRight:"0.8rem",
-        borderRadius: "0.5rem",
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center",
-        boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
-        [theme.breakpoints.down('md')]: {
-            flex:1,
-        },
-        [theme.breakpoints.up('md')]: {
-            width: "50%",
-        },
-        margin: "0.5rem",
-        borderColor: theme.palette.grey[300]
-
-    }))
-    const SearchInput = styled(InputBase)(({})=>({
-        flex:1,
-        marginLeft:"0.5em"
-    }))
-
-    const GridContainer = styled(Grid)(({})=>({
-        padding:10,
-        paddingTop: 5
-        
-    }))
+    
 
         
 
