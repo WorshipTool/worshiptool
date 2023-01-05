@@ -11,7 +11,12 @@ export default function Home() {
     const Container = styled(Box)(({})=>({
         width: "100%",
         display: "flex",
-        flexDirection:"row",
+        [theme.breakpoints.down('md')]: {
+            flexDirection:"column"
+        },
+        [theme.breakpoints.up('md')]: {
+            flexDirection:"row",
+        },
     }))
     const Background = styled(Box)(({})=>({
         background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
@@ -27,15 +32,30 @@ export default function Home() {
         flexDirection:"column",
         justifyContent: "space-between",
         padding:"0.7rem",
-        left:0,
-        top:0,
-        bottom:0,
         color:"white",
+        top:0,
         [theme.breakpoints.down('md')]: {
-            display:"none",
+            display:"flex",
+            flexDirection:"row",
+            top:0,
+            right: 0,
+            left: 0
+
         },
         [theme.breakpoints.up('md')]: {
-            display:"flex",
+            display:"flex", 
+            bottom:0,
+        },
+        
+    }))
+
+    const IconsBox = styled(Box)(()=>({
+        [theme.breakpoints.down('md')]: {
+            flexDirection:"row",
+
+        },
+        [theme.breakpoints.up('md')]: {
+            flexDirection:"column",
         },
         
     }))
@@ -49,13 +69,13 @@ export default function Home() {
             <Background>
 
             </Background>
-            <SideBar> {/*This is used for offset outlet.*/}
-                <IconButton size={"small"} color={"inherit"}>
-                    <AccountCircleIcon/>
-                </IconButton>
+            <SideBar sx={{opacity: 0}}>
+                <StyledIconButton size={"small"}>
+                    <HomeIcon/>
+                </StyledIconButton>
             </SideBar>
             <SideBar position={"fixed"}>
-                <Box display={"flex"} flexDirection={"column"} gap={1}>
+                <IconsBox display={"flex"} gap={1}>
                     <Link to={""}>
                         <StyledIconButton size={"small"}>
                             <HomeIcon/>
@@ -64,7 +84,7 @@ export default function Home() {
                     <StyledIconButton size={"small"}>
                         <AccountCircleIcon/>
                     </StyledIconButton>
-                </Box>
+                </IconsBox>
                 <Link to={"create"}>
                     <StyledIconButton size={"small"}>
                         <AddIcon/>
