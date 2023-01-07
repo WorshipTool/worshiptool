@@ -13,7 +13,7 @@ export default function SearchItem(props: {guid:string}) {
     const navigate = useNavigate()
     
     const onSongClick = () => {
-        navigate(`/song/`+props.guid, { replace: false })
+        navigate(`/song/`+props.guid, {replace: false})
     }
 
     const StyledContainer = styled(Box)(({})=>({
@@ -23,7 +23,8 @@ export default function SearchItem(props: {guid:string}) {
         "&:hover":{
             backgroundColor: theme.palette.grey[200],
             boxShadow: `0px 0px 10px ${theme.palette.grey[400]}`,
-        }
+        },
+        cursor:"pointer"
     }))
   return (
     
@@ -37,13 +38,9 @@ export default function SearchItem(props: {guid:string}) {
             
             
             <Typography fontWeight={"bold"}>{getName()}</Typography>
-            {getText(0).split("\n").map((line)=>{
-                return <Typography >{line}</Typography>
+            {getText(0).split("\n").slice(0,5).map((line)=>{
+                return <Typography noWrap>{line}</Typography>
             })}
-            <Box display={"flex"} justifyContent={"end"} alignItems={"center"}>
-                <YouTubeIcon color={"error"} fontSize={"medium"}/>
-                <VerifiedIcon color={"success"} fontSize={"medium"}/>
-            </Box>
             
         </StyledContainer>
         }

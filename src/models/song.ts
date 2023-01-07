@@ -1,28 +1,32 @@
-export default interface song{
+import chord from "../api/models/chord"
+
+export default interface Song{
     title: string,
     alternativeTitles: string[],
     creators: {
         name: string, 
         type: string
     }[],
-    variants: {
-        sheet: string,
-        sheetText: string,
-        sections: section[],
-        preferredTitle: string
-    }[]
+    variants: Variant[]
 }
 
-export interface segment {
-    chord?: string,
+export interface Variant{
+    sheet: string,
+    sheetText: string,
+    sections: Section[],
+    preferredTitle: string
+}
+
+export interface Segment {
+    chord?: chord,
     text?: string
 }
-export interface line {
-    segments: segment[],
+export interface Line {
+    segments: Segment[],
     text? : string
 }
-export interface section {
+export interface Section {
     name?: string,
-    lines?: line[],
+    lines?: Line[],
     text? : string
 }

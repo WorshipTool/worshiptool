@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import songObject, { section } from "../../../models/song";
+import songObject, { Section, Variant } from "../../../models/song";
 import React from 'react'
+import { chordToText } from "../../../api/models/chord";
 
-export default function DefaultStyle({song}:{song:songObject}){
+export default function DefaultStyle({song, variant}:{song:songObject, variant: Variant}){
 
-    const sections = song.variants[0].sections;
+    const sections = variant.sections;
     
     const font = "Roboto";
 
@@ -24,7 +25,7 @@ export default function DefaultStyle({song}:{song:songObject}){
                     
                     </Box>
             </Box>
-            {sections.map((section: section, index) => {
+            {sections.map((section: Section, index) => {
                 return (
                 <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3} key={"abox"+index}>
                     <Box width={width}>
@@ -38,7 +39,7 @@ export default function DefaultStyle({song}:{song:songObject}){
                                 return(
                                     <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
                                         <Box sx={{flex:1}}>
-                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord}</b></Typography>}
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{chordToText(segment.chord)}</b></Typography>}
                                         </Box>
                                         
                                         <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>

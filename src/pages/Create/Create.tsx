@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
-import { convertSongToNewSongDTO } from '../../api/dtos';
+import { convertSongToNewSongDTO } from '../../backend/dtos';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_POSTNEWSONG } from '../../api/urls';
+import { getUrl_POSTNEWSONG } from '../../backend/urls';
 import { useNavigate } from 'react-router-dom';
-import convertNewSongDataToSong from '../../songAPI/convertNewSongDataToSong';
+import convertNewSongDataToSong from '../../api/conversition/convertNewSongDataToSong';
 
 export default function Create() {
     const theme = useTheme();

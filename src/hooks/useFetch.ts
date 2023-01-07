@@ -5,7 +5,7 @@ export default function useFetch(){
     const [error, setError] = useState<any>();
     const [loading, setLoading] = useState(true);
 
-    const fetchData = ({url, options}:{url:string, options?:any}, after?: (d:any)=>void) => {
+    const fetchData = ({url, options}:{url:string, options?:any}, after?: (d:any, e?:any)=>void) => {
         setLoading(true);
         fetch(url, options)
         .then(response => response.json())
@@ -17,20 +17,19 @@ export default function useFetch(){
         })
         .catch((e) => {
             setError(e);
-            if(after)after(e);
+            if(after)after(undefined,e);
         });
 
     }
 
 
-    const post = ({url, body}: {url:string, body: any}, after?: (d:any)=>void) => {
+    const post = ({url, body}: {url:string, body: any}, after?: (d:any, e?:any)=>void) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         };
 
-        console.log(body);
 
         fetchData({url, options: requestOptions}, after)
     }

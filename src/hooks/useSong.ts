@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
-import song from "../models/song";
+import Song, { Variant } from "../models/song";
 import useFetch from "./useFetch";
-import { getUrl_GETSONGBYGUID } from "../api/urls";
-import allSongDataDTO, { convertAllSongDataDTOToSong } from "../api/dtos";
-import convertSheetToSections from "../songAPI/convertSheetToSections";
+import { getUrl_GETSONGBYGUID } from "../backend/urls";
+import allSongDataDTO, { convertAllSongDataDTOToSong } from "../backend/dtos";
+import convertSheetToSections from "../api/conversition/convertSheetToSections";
+import useTranspose from "../api/hooks/useTranspose";
+import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
 
 
 
 export default function useSong(g:string|null){
     const [guid, setGUID] = useState(g);
     const {fetchData, data, loading:fetchLoading} = useFetch();
-    const [song, setSong] = useState<song>();
+    const [song, setSong] = useState<Song>();
     const [loading, setLoading] = useState(true);
+
+    const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
+
+    useEffect(()=>{
+        console.log(getChord({rootNote: 'C', quality: 'maj'}))
+    },[])
 
 
     useEffect(()=>{
@@ -55,13 +63,47 @@ export default function useSong(g:string|null){
         return song.variants[0].sheet;
     }
 
+    const transpose = (semitones: number) => {
+        trans(semitones);
+    }
+
+    const getTransposedVariant = (index: number) : Variant => {
+
+        if(song===undefined)return{
+            sheet: "",
+            sheetText: "",
+            sections: [],
+            preferredTitle: ""
+    }
+
+        let transSection = song.variants[index].sections.map((section)=>{
+            if(section.lines===undefined) return {...section};
+
+            return {...section, lines: section.lines.map((line)=>{
+                return {...line, segments: line.segments.map((segment)=>{
+                    if(segment.chord===undefined) return segment;
+                    return { ...segment,
+                        chord: getChord(segment.chord)
+                    };
+                })}
+            })};
+
+        });
+
+        const transVariant = {...song.variants[index], sections: transSection};
+
+        return transVariant;
+    }
+
     return {
         setGUID,
         interface: song,
         getName: getTitle,
         getText,
         getSheetData,
-        loading
+        loading,
+        transpose,
+        getTransposedVariant
     }
 
 }
