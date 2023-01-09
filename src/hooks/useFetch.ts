@@ -1,21 +1,37 @@
 import { useState } from "react";
+import useAuth from "./auth/useAuth";
 
 export default function useFetch(){
     const [data, setData] = useState<any>();
     const [error, setError] = useState<any>();
     const [loading, setLoading] = useState(true);
 
+    const {user, getAuthHeader} = useAuth();
+
     const fetchData = ({url, options}:{url:string, options?:any}, after?: (d:any, e?:any)=>void) => {
+        const authHeader = {...getAuthHeader()};
+        let newOptions = {headers: authHeader};
+        if(options){
+            newOptions = {...options, headers: {...options.headers, ...authHeader}};
+        }
+
         setLoading(true);
-        fetch(url, options)
+        fetch(url, newOptions)
         .then(response => response.json())
         .then((usefulData) => {
-            setData(usefulData);
-            setLoading(false);
-
-            if(after)after(usefulData);
+            if(usefulData.message&&usefulData.message=="Unauthorized"){
+                setError(usefulData);
+                setLoading(false);
+                if(after)after(undefined,usefulData);
+            }else{
+                setData(usefulData);
+                setLoading(false);
+                if(after)after(usefulData);
+            }
+            
         })
         .catch((e) => {
+            setLoading(false);
             setError(e);
             if(after)after(undefined,e);
         });

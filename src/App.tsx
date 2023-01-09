@@ -10,6 +10,8 @@ import Base from './pages/Base';
 import Create from './pages/Create/Create';
 import { createTheme } from '@mui/material';
 import Sheet from './pages/Sheet/Sheet';
+import { AuthProvider } from './hooks/auth/useAuth';
+import Account from './pages/Account/Account';
 
 function App() {
   const router = createBrowserRouter([
@@ -29,6 +31,10 @@ function App() {
         {
           path:"song/:guid",
           element: <Sheet/>
+        },
+        {
+          path:"account",
+          element: <Account/>
         }
       ]
     },
@@ -46,7 +52,9 @@ function App() {
   
     return (
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router}/>
+        <AuthProvider>
+          <RouterProvider router={router}/>
+        </AuthProvider>
       </ThemeProvider>
     )
 }

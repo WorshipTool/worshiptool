@@ -4,9 +4,12 @@ import AddIcon from '@mui/icons-material/Add';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link, Outlet } from 'react-router-dom';
+import useAuth from '../hooks/auth/useAuth';
 
 export default function Home() {
     const theme = useTheme();
+
+    const {isLoggedIn} = useAuth();
 
     const Container = styled(Box)(({})=>({
         width: "100%",
@@ -81,15 +84,17 @@ export default function Home() {
                             <HomeIcon/>
                         </StyledIconButton>
                     </Link>
-                    <StyledIconButton size={"small"}>
-                        <AccountCircleIcon/>
-                    </StyledIconButton>
+                    <Link to={"account"}>
+                        <StyledIconButton size={"small"}>
+                            <AccountCircleIcon/>
+                        </StyledIconButton>
+                    </Link>                    
                 </IconsBox>
-                <Link to={"create"}>
+                {isLoggedIn()&&<Link to={"create"}>
                     <StyledIconButton size={"small"}>
                         <AddIcon/>
                     </StyledIconButton>
-                </Link>
+                </Link>}
             </SideBar>
 
             <Outlet></Outlet>

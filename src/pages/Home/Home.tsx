@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
 import sheepImage from '../../assets/sheepWithCircle.png'
 import useFetch from '../../hooks/useFetch';
-import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtos';
+import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtosSong';
 import { getUrl_GETSONGSBYQUERY } from '../../backend/urls';
 
 
