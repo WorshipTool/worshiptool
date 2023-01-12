@@ -38,8 +38,8 @@ export default function SearchItem(props: {guid:string}) {
             
             
             <Typography fontWeight={"bold"}>{getName()}</Typography>
-            {getText(0).split("\n").slice(0,5).map((line)=>{
-                return <Typography noWrap>{line}</Typography>
+            {getText(0).split("\n").slice(0,5).map((line, index)=>{
+                return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
             })}
             
         </StyledContainer>

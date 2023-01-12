@@ -17,10 +17,6 @@ export default function useSong(g:string|null){
 
     const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
 
-    useEffect(()=>{
-        console.log(getChord({rootNote: 'C', quality: 'maj'}))
-    },[])
-
 
     useEffect(()=>{
         setLoading(fetchLoading);

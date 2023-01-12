@@ -8,6 +8,7 @@ import useFetch from '../../hooks/useFetch';
 import { getUrl_POSTNEWSONG } from '../../backend/urls';
 import { useNavigate } from 'react-router-dom';
 import convertNewSongDataToSong from '../../api/conversition/convertNewSongDataToSong';
+import { RequestResult } from '../../backend/dtosRequestResult';
 
 export default function Create() {
     const theme = useTheme();
@@ -109,9 +110,13 @@ export default function Create() {
                 alternativeTitles: titles.length<2?[]:titles.slice(1, titles.length-1), 
                 sheet: sheetValue}));
 
-        post({url: getUrl_POSTNEWSONG(), body: dto}, (d)=> {
-
-            navigate(`/song/`+d.songGUID, { replace: false })
+        post({url: getUrl_POSTNEWSONG(), body: dto}, (d:RequestResult<any>|undefined)=> {
+            if(d){
+                if(d.data.songGUID){
+                    console.log("Tu jsem");
+                    navigate(`/song/`+d.data.songGUID, { replace: false })
+                }
+            }            
         });
     }
 

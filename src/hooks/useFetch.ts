@@ -29,6 +29,7 @@ export default function useFetch(){
                 setError(data);
                 setMessage(messages["Invalid Error"]);
                 setStatusCode(codes["Invalid Error"]);
+                if(after)after(undefined,data);
 
 
             }else if(data.statusCode&&data.statusCode>=400){
@@ -37,7 +38,7 @@ export default function useFetch(){
                 setMessage(data.message);
                 setStatusCode(data.statusCode);
                 setLoading(false);
-                if(after)after(undefined,data);
+                if(after)after(undefined,data.message);
 
             }else{
                 //successful fetch
@@ -63,7 +64,7 @@ export default function useFetch(){
     }
 
 
-    const post = ({url, body}: {url:string, body: any}, after?: (d:any, e?:any)=>void) => {
+    const post = ({url, body}: {url:string, body: any}, after?: (d:RequestResult<any>|undefined, e?:any)=>void) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -76,7 +77,8 @@ export default function useFetch(){
 
     return {
         fetchData, post,
-        data, error, loading
+        data, error, loading,
+        message, statusCode
     }
 
 

@@ -3,6 +3,7 @@ import User from "../../models/user";
 import useFetch from "../useFetch";
 import { loginRequestDTO, loginResultDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
 import { getUrl_LOGIN } from "../../backend/urls";
+import { RequestResult } from "../../backend/dtosRequestResult";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -52,16 +53,18 @@ export function useProvideAuth(){
             email,
             password
         }
-
         post({
             url: getUrl_LOGIN(),
             body
-        }, (result : loginResultDTO) => {
-            if(result.success){
-                setUser(loginResultDTOToUser(result));
-            }else{
-                //fail
+        }, (result : RequestResult<loginResultDTO>|undefined, e:any) => {
+            if(result){
+                if(result.data.success){
+                    setUser(loginResultDTOToUser(result.data));
+                }else{
+                    //fail
+                }
             }
+            
         })
         
 
