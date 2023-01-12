@@ -10,6 +10,13 @@ export interface LoginResultDTO{
     token: string
 }
 
+export interface SignUpRequestDTO{
+    firstName: string,
+    lastName: string,
+    email:string,
+    password:string
+}
+
 export function loginResultDTOToUser(res: LoginResultDTO):User{
     return {...res.user, token: res.token};
 }   

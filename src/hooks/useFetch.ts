@@ -31,6 +31,7 @@ export default function useFetch(){
                 setStatusCode(codes["Unknown Error"]);
                 if(after)after(RequestError);
 
+                console.log(messages["Unknown Error"]);
 
             }else if(data.statusCode&&data.statusCode>=400){
                 //Backend returned an error.
@@ -39,6 +40,8 @@ export default function useFetch(){
                 setStatusCode(data.statusCode);
                 setLoading(false);
                 if(after)after(data);
+
+                console.log(data.message);
 
             }else{
                 //successful fetch

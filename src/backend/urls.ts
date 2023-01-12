@@ -1,4 +1,4 @@
-import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL } from "./constants";
+import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL, SIGNUP_URL } from "./constants";
 import { songGetQueryDTO } from "./dtosSong";
 
 export function getUrl_GETSONGBYGUID(guid:string){
@@ -18,5 +18,10 @@ export function getUrl_POSTNEWSONG(){
 
 export function getUrl_LOGIN(){
     const generatedURL = BACKEND_URL + LOGIN_URL;
+    return generatedURL;
+}
+
+export function getUrl_SIGNUP(){
+    const generatedURL = BACKEND_URL + SIGNUP_URL;
     return generatedURL;
 }

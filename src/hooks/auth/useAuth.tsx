@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import User from "../../models/user";
 import useFetch from "../useFetch";
-import { LoginRequestDTO, LoginResultDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
-import { getUrl_LOGIN } from "../../backend/urls";
+import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
+import { getUrl_LOGIN, getUrl_SIGNUP } from "../../backend/urls";
 import { RequestResult, codes } from "../../backend/dtosRequestResult";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
     logout: () => {},
+    signup: () => {},
     isLoggedIn: () => false,
     user: undefined,
     getAuthHeader: ()=>{}
@@ -25,6 +26,7 @@ export default function useAuth(){
 interface useProvideAuthI{
     login: ({email, password}:{email:string, password:string}) => void,
     logout: () => void,
+    signup: (data:SignUpRequestDTO) => void,
     isLoggedIn: () => boolean,
     user: User|undefined,
     getAuthHeader: ()=>any
@@ -72,6 +74,18 @@ export function useProvideAuth(){
         localStorage.removeItem("user");
         
     }
+
+    const signup = (data: SignUpRequestDTO) => {
+        const body = data;
+        post({
+            url: getUrl_SIGNUP(),
+            body
+        }, (result : RequestResult<null>) => {
+            console.log(result.message);
+            
+        })
+    }
+
     const isLoggedIn = () => {
         return user!==undefined;
     }
@@ -82,7 +96,7 @@ export function useProvideAuth(){
     }
 
     return {
-        login, logout,
+        login, logout, signup,
         isLoggedIn,
         user,
         getAuthHeader

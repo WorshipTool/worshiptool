@@ -25,7 +25,5 @@ export default function convertNewSongDataToSong(data: newSongData):Song{
 
     };
 
-    console.log(s);
-
     return s;
 }
