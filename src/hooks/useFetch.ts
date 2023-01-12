@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from "./auth/useAuth";
-import { RequestResult, codes, messages } from "../backend/dtosRequestResult";
+import { RequestError, RequestResult, codes, messages } from "../backend/dtosRequestResult";
 
 
 
@@ -13,7 +13,7 @@ export default function useFetch(){
 
     const {user, getAuthHeader} = useAuth();
 
-    const fetchData = ({url, options}:{url:string, options?:any}, after?: (d:RequestResult<any>|undefined, e?:any)=>void) => {
+    const fetchData = ({url, options}:{url:string, options?:any}, after?: (d:RequestResult<any>)=>void) => {
         const authHeader = {...getAuthHeader()};
         let newOptions = {headers: authHeader};
         if(options){
@@ -27,9 +27,9 @@ export default function useFetch(){
             if(data.statusCode===undefined){
                 //Backend returned nothing, or invalid format
                 setError(data);
-                setMessage(messages["Invalid Error"]);
-                setStatusCode(codes["Invalid Error"]);
-                if(after)after(undefined,data);
+                setMessage(messages["Unknown Error"]);
+                setStatusCode(codes["Unknown Error"]);
+                if(after)after(RequestError);
 
 
             }else if(data.statusCode&&data.statusCode>=400){
@@ -38,7 +38,7 @@ export default function useFetch(){
                 setMessage(data.message);
                 setStatusCode(data.statusCode);
                 setLoading(false);
-                if(after)after(undefined,data.message);
+                if(after)after(data);
 
             }else{
                 //successful fetch
@@ -55,16 +55,16 @@ export default function useFetch(){
             setLoading(false);
             setError(e);
             setData(null);
-            setStatusCode(codes["Invalid Error"]);
-            setMessage(messages["Invalid Error"]);
+            setStatusCode(codes["Unknown Error"]);
+            setMessage(messages["Unknown Error"]);
 
-            if(after)after(undefined,e);
+            if(after)after(RequestError);
         });
 
     }
 
 
-    const post = ({url, body}: {url:string, body: any}, after?: (d:RequestResult<any>|undefined, e?:any)=>void) => {
+    const post = ({url, body}: {url:string, body: any}, after?: (d:RequestResult<any>)=>void) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

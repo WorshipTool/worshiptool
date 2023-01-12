@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import User from "../../models/user";
 import useFetch from "../useFetch";
-import { loginRequestDTO, loginResultDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
+import { LoginRequestDTO, LoginResultDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
 import { getUrl_LOGIN } from "../../backend/urls";
-import { RequestResult } from "../../backend/dtosRequestResult";
+import { RequestResult, codes } from "../../backend/dtosRequestResult";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -49,20 +49,18 @@ export function useProvideAuth(){
     },[user])
 
     const login = ({email, password}:{email:string, password:string}) => {
-        const body : loginRequestDTO = {
+        const body : LoginRequestDTO = {
             email,
             password
         }
         post({
             url: getUrl_LOGIN(),
             body
-        }, (result : RequestResult<loginResultDTO>|undefined, e:any) => {
-            if(result){
-                if(result.data.success){
-                    setUser(loginResultDTOToUser(result.data));
-                }else{
-                    //fail
-                }
+        }, (result : RequestResult<LoginResultDTO>) => {
+            if(result.statusCode==codes["Success"]){
+                setUser(loginResultDTOToUser(result.data));
+            }else{
+                console.log(result.message);
             }
             
         })

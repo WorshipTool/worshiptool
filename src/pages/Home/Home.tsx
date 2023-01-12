@@ -7,7 +7,7 @@ import sheepImage from '../../assets/sheepWithCircle.png'
 import useFetch from '../../hooks/useFetch';
 import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtosSong';
 import { getUrl_GETSONGSBYQUERY } from '../../backend/urls';
-import { RequestResult } from '../../backend/dtosRequestResult';
+import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -74,9 +74,9 @@ export default function Home() {
                 key: "search",
                 body: searchValue
             }
-            fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>|undefined, error?: any)=>{
+            fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
 
-                if(data){
+                if(isSuccess(data)){
                     setSongGUIDs(data.data.guids);
                 }
 
@@ -93,9 +93,9 @@ export default function Home() {
             key: "random",
             count: 4
         }
-        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>| undefined, error:any)=>{
+        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
 
-            if(data){
+            if(isSuccess(data)){
                 setRecommendedSongGUIDs(data.data.guids);
             }
         });

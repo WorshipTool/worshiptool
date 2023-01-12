@@ -1,19 +1,15 @@
 import User from "../models/user"
 
-export interface loginRequestDTO{
+export interface LoginRequestDTO{
     email: string,
     password: string
 }
 
-export interface loginResultDTO{
-    success: boolean,
-    user: {
-        name: string,
-        isAdmin: boolean
-    },
+export interface LoginResultDTO{
+    user: User,
     token: string
 }
 
-export function loginResultDTOToUser(res: loginResultDTO):User{
+export function loginResultDTOToUser(res: LoginResultDTO):User{
     return {...res.user, token: res.token};
 }   

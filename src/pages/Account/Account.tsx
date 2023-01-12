@@ -37,7 +37,7 @@ export default function Account() {
             <Typography>Přihlášen? {isLoggedIn()+""}</Typography>
 
 
-            {user&&<Typography>{user.name}</Typography>}
+            {user&&<Typography>{user.firstName}</Typography>}
         </Box>
     )
 }
