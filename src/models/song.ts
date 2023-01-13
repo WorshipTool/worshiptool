@@ -1,6 +1,7 @@
 import chord from "../api/models/chord"
 
 export default interface Song{
+    guid:string,
     title: string,
     alternativeTitles: string[],
     creators: {
@@ -11,7 +12,8 @@ export default interface Song{
 }
 
 export interface Variant{
-    sheet: string,
+    guid:string,
+    sheetData: string,
     sheetText: string,
     sections: Section[],
     preferredTitle: string
@@ -30,3 +32,4 @@ export interface Section {
     lines?: Line[],
     text? : string
 }
+

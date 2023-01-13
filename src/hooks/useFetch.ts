@@ -67,7 +67,7 @@ export default function useFetch(){
     }
 
 
-    const post = ({url, body}: {url:string, body: any}, after?: (d:RequestResult<any>)=>void) => {
+    const post = ({url, body}: {url:string, body?: any}, after?: (d:RequestResult<any>)=>void) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

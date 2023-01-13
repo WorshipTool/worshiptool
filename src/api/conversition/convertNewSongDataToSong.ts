@@ -11,12 +11,14 @@ export default function convertNewSongDataToSong(data: newSongData):Song{
 
     const sections = convertSheetToSections(data.sheet);
     const s: Song = {
+        guid: "",
         title: data.title,
         alternativeTitles: data.alternativeTitles,
         variants: [
             {
+                guid: "",
                 preferredTitle: data.title,
-                sheet: data.sheet,
+                sheetData: data.sheet,
                 sheetText: sections.map((s)=>s.text).join("\n"),
                 sections
             }

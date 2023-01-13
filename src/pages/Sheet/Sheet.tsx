@@ -5,12 +5,18 @@ import useSong from '../../hooks/useSong';
 import DefaultStyle from './styles/DefaultStyle';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import useAuth from '../../hooks/auth/useAuth';
+import { ROLES } from '../../models/user';
+import useFetch from '../../hooks/useFetch';
+import { getUrl_UNVERIFYVARIANT } from '../../backend/urls';
 
 export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
 
-    const {setGUID, interface:song, getTransposedVariant, transpose} = useSong(null);
+    const {setGUID, song, getTransposedVariant, transpose} = useSong(null);
+    const {user} = useAuth();
+    const {post} = useFetch();
 
     useEffect(()=>{
         if(guid) setGUID(guid);
@@ -38,6 +44,12 @@ export default function Sheet() {
       flexDirection: "column"
   }
 
+  const unverify = () => {
+    if(guid&&song){
+      post({url: getUrl_UNVERIFYVARIANT(song.variants[0].guid)});
+    }
+  }
+
   return (
     <Box sx={{flex:1, display:"flex", flexDirection:"column", height: "100vh"}}>
         
@@ -53,6 +65,9 @@ export default function Sheet() {
               }}>
                   <RemoveIcon/>
               </IconButton>
+              {user&&user.role==ROLES.Admin&&
+                <Button onClick={unverify}>Zrušit ověření</Button>
+              }
             </Box>
             {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
         </Box>

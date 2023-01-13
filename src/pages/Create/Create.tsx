@@ -113,8 +113,8 @@ export default function Create() {
         post({url: getUrl_POSTNEWSONG(), body: dto}, (d:RequestResult<any>)=> {
             console.log(d);
             if(isSuccess(d)){
-                if(d.data.songGUID){
-                    navigate(`/song/`+d.data.songGUID, { replace: false })
+                if(d.data.guid){
+                    navigate(`/song/`+d.data.guid, { replace: false })
                 }
             }            
         });

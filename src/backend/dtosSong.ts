@@ -1,72 +1,52 @@
 import { isVariableDeclarationList } from "typescript";
-import songObject from "../models/song";
+import SongObject from "../models/song";
 import convertSheetToSections from "../api/conversition/convertSheetToSections";
 
-export interface songDTO{
-    guid: string,
-    mainNameGUID:string;
+
+export interface SongDataVariantDTO{
+    guid:string,
+    prefferedTitle: string,
+    sheetData: string,
+    sheetText: string
 }
 
-export interface songVariantDTO{
-    guid: string,
-    songGUID: string,
-    sheet: string,
-    mainNameGUID:string;
-}
-
-export interface creatorDTO{
-    guid: string,
-    name:string
-}
-
-export interface CSVLinkDTO{
-    guid: string,
-    creatorGUID: string,
-    songGUID: string,
+export interface SongDataCreatorDTO{
+    name: string,
     type: string
 }
 
-export interface songNameDTO{
+export default interface AllSongDataDTO{
     guid: string,
-    songGUID: string,
-    name: string,
-}
-
-export default interface allSongDataDTO{
-    song: songDTO,
-    names: songNameDTO[]
-    creators: CSVLinkDTO[],
-    variants: songVariantDTO[]
+    mainTitle: string,
+    alternativeTitles: string[],
+    creators: SongDataCreatorDTO[],
+    variants: SongDataVariantDTO[]
 }
 
 
-export function convertAllSongDataDTOToSong(d: allSongDataDTO) : songObject{
+export function convertAllSongDataDTOToSong(d: AllSongDataDTO) : SongObject{
     const data = d;
 
-    if(data.song===undefined){
-        return {
-            title: "",
-            alternativeTitles: [],
-            creators: [],
-            variants: []
-        }
+    if(data===undefined){
+        return {} as SongObject
     }
 
 
 
     return {
-        title: data.names.filter( (name)=>{return name.guid==data.song.mainNameGUID})[0].name,
-        alternativeTitles: data.names.filter((value)=>{value.guid!=data.song.mainNameGUID})
-                                .map((name)=>{return name.name}),
-        creators: [],
+        guid: data.guid,
+        title: data.mainTitle,
+        alternativeTitles: data.alternativeTitles,
+        creators: data.creators,
         variants: data.variants.map((variant)=>{
 
-            const sections = convertSheetToSections(variant.sheet)
+            const sections = convertSheetToSections(variant.sheetData)
 
             return {
-                preferredTitle: data.names.filter((value)=>{return value.guid==variant.mainNameGUID})[0].name,
-                sheet: variant.sheet,
-                sheetText: sections.map((s)=>s.text).join("\n"),
+                guid: variant.guid,
+                preferredTitle: variant.prefferedTitle,
+                sheetData: variant.sheetData,
+                sheetText: variant.sheetText,
                 sections
             }
         })
@@ -79,16 +59,16 @@ export interface newSongDataDTO{
     sheetText: string
 }
 
-export function convertSongToNewSongDTO(song: songObject):newSongDataDTO{
+export function convertSongToNewSongDTO(song: SongObject):newSongDataDTO{
     return {
         title: song.title,
-        sheetData: song.variants[0].sheet,
+        sheetData: song.variants[0].sheetData,
         sheetText: song.variants[0].sheetText
     }
 }
 
 export interface songGetQueryDTO{
-    key: "all"|"search"|"random",
+    key: "all"|"search"|"random"|"unverified",
     body?: string,
     count?: number
 }

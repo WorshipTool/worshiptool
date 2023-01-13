@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 export default function SearchItem(props: {guid:string}) {
     const theme = useTheme();
 
-    const {interface:song, getName, getText, loading} = useSong(props.guid);
+    const {song, getName, getText, loading} = useSong(props.guid);
 
     const navigate = useNavigate()
     

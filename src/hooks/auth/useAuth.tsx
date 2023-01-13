@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import User from "../../models/user";
+import User, { ROLES } from "../../models/user";
 import useFetch from "../useFetch";
 import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
 import { getUrl_LOGIN, getUrl_SIGNUP } from "../../backend/urls";
@@ -11,7 +11,9 @@ export const authContext = createContext<useProvideAuthI>({
     signup: () => {},
     isLoggedIn: () => false,
     user: undefined,
-    getAuthHeader: ()=>{}
+    getAuthHeader: ()=>{},
+    isTrustee: ()=>false,
+    isAdmin: ()=>false
 });
 
 export const AuthProvider = ({children}:{children:any}) => {
@@ -29,7 +31,9 @@ interface useProvideAuthI{
     signup: (data:SignUpRequestDTO) => void,
     isLoggedIn: () => boolean,
     user: User|undefined,
-    getAuthHeader: ()=>any
+    getAuthHeader: ()=>any,
+    isTrustee: ()=>boolean,
+    isAdmin: ()=>boolean
 }
 
 export function useProvideAuth(){
@@ -99,6 +103,8 @@ export function useProvideAuth(){
         login, logout, signup,
         isLoggedIn,
         user,
-        getAuthHeader
+        getAuthHeader,
+        isTrustee: ()=>user!=undefined&&user.role==ROLES.Trustee,
+        isAdmin: ()=>user!=undefined&&user.role==ROLES.Admin
     }
 }

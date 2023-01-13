@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Song, { Variant } from "../models/song";
 import useFetch from "./useFetch";
 import { getUrl_GETSONGBYGUID } from "../backend/urls";
-import allSongDataDTO, { convertAllSongDataDTOToSong } from "../backend/dtosSong";
+import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../backend/dtosSong";
 import convertSheetToSections from "../api/conversition/convertSheetToSections";
 import useTranspose from "../api/hooks/useTranspose";
 import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
@@ -27,8 +27,8 @@ export default function useSong(g:string|null){
     },[guid])
 
     useEffect(()=>{
-        const d : allSongDataDTO = data;
-        if(d===undefined||d.song===undefined)return;
+        const d : AllSongDataDTO = data;
+        if(d===undefined)return;
         const s = convertAllSongDataDTOToSong(d);
         setSong(s);
 
@@ -56,7 +56,7 @@ export default function useSong(g:string|null){
 
     const getSheetData = () : string => {
         if(song===undefined) return "undefined";
-        return song.variants[0].sheet;
+        return song.variants[0].sheetData;
     }
 
     const transpose = (semitones: number) => {
@@ -65,12 +65,7 @@ export default function useSong(g:string|null){
 
     const getTransposedVariant = (index: number) : Variant => {
 
-        if(song===undefined)return{
-            sheet: "",
-            sheetText: "",
-            sections: [],
-            preferredTitle: ""
-    }
+        if(song===undefined)return {} as Variant
 
         let transSection = song.variants[index].sections.map((section)=>{
             if(section.lines===undefined) return {...section};
@@ -93,7 +88,7 @@ export default function useSong(g:string|null){
 
     return {
         setGUID,
-        interface: song,
+        song,
         getName: getTitle,
         getText,
         getSheetData,

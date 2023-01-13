@@ -1,10 +1,17 @@
-import { Box, Button, Input, InputBase, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Input, InputBase, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth'
-import { SignUpRequestDTO } from '../../backend/dtosAuth';
+import { LoginResultDTO, SignUpRequestDTO } from '../../backend/dtosAuth';
+import { ROLES } from '../../models/user';
+import Song from '../../models/song';
+import useFetch from '../../hooks/useFetch';
+import { getUrl_GETSONGSBYQUERY, getUrl_LOGIN } from '../../backend/urls';
+import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
+import SongVerify from './SongVerify';
 
 export default function Account() {
-    const {isLoggedIn,login, logout, signup, user} = useAuth();
+    const {isLoggedIn,login, logout, signup, user,
+            isTrustee, isAdmin} = useAuth();
 
     const [email, setEmail] = useState("pe.pavlin@gmail.com");
     const [password, setPassword] = useState("semice");
@@ -13,6 +20,33 @@ export default function Account() {
     const [spassword, setSPassword] = useState<string>("");
     const [sfname, setSFName] = useState<string>("");
     const [slname, setSLName] = useState<string>("");
+
+    const [temail, setTEmail] = useState("");
+    const [tpassword, setTPassword] = useState("");
+    const [token, setToken] = useState("");
+
+    const [unverifiedSongs, setUnverifiedSongs] = useState<string[]>([]);
+    const {fetchData} = useFetch();
+    const {post} = useFetch();
+
+
+    const loadUnverified = () => {
+        fetchData({url: getUrl_GETSONGSBYQUERY({
+            key: "unverified"
+        })}, (r)=>{
+            if(isSuccess(r)){
+                setUnverifiedSongs(r.data.guids);
+            }
+        });
+    }
+    useEffect(()=>{
+        if(isLoggedIn()==false||user===undefined)return;
+        if(user.role!=ROLES.Admin)return;
+
+        loadUnverified();
+
+
+    },[isLoggedIn()])
 
     
 
@@ -53,6 +87,29 @@ export default function Account() {
         }
         signup(data);
     }
+
+    const refresh = () =>{
+        loadUnverified();
+    }
+
+    const onTEmailChange = (e:any) => {
+        setTEmail(e.target.value);
+    }
+
+    const onTPasswordChange = (e:any) => {
+        setTPassword(e.target.value);
+    }
+
+    const showToken = () => {
+        post({url: getUrl_LOGIN(), body:{
+            email: temail,
+            password: tpassword
+        }},(d:RequestResult<LoginResultDTO>)=>{
+            if(isSuccess(d))
+                setToken(d.data.token);
+        })
+    }
+
     return (
         <Box padding={8}>
             {isLoggedIn()?
@@ -70,7 +127,7 @@ export default function Account() {
 
             {user&&<>
                 <Typography>{user.firstName}</Typography>
-                <Typography>{user.token}</Typography>
+                <Typography>Admin: {user.role==ROLES.Admin?"Ano":"Ne"}</Typography>
             </>}
 
             {!isLoggedIn()&&<>
@@ -85,6 +142,32 @@ export default function Account() {
             </Box>
             
             </>}
+
+            {(isTrustee()||isAdmin())&&<>
+            
+                {unverifiedSongs.map((s)=>{
+                    return (
+                        <SongVerify guid={s} key={s} afterClick={refresh}></SongVerify>
+                    )
+                })}
+
+                
+            
+            </>}
+
+            {isAdmin()&&<>
+            
+                <Divider />
+                <Typography>Získej token uživatele:</Typography>
+                <InputBase placeholder='email' value={temail} onChange={onTEmailChange}></InputBase>
+                <InputBase placeholder='password' value={tpassword} onChange={onTPasswordChange}></InputBase>
+                <Button onClick={showToken}>Získat</Button>
+                {token!=""&&<Typography>Token: {token}</Typography>}
+            
+            </>}
+
+            
+
         </Box>
     )
 }
