@@ -14,6 +14,7 @@ import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
 import TestPage from './pages/Test/TestPage';
 import Login from './pages/Login/Login';
+import SignUp from './pages/SignUp/SignUp';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -40,6 +41,11 @@ function App() {
     {
       path:"login",
       element: <Login/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
+      path:"signup",
+      element: <SignUp/>,
       errorElement: <Typography>Error.</Typography>
     },
     {

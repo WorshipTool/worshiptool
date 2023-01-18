@@ -1,9 +1,13 @@
 import React from 'react'
 
-export default function Gap() {
+interface GapProps{
+  value?: number
+}
+
+export default function Gap({value}:GapProps) {
   return (
     <div style={{
-        height:10
+        height:value?value*10:10
     }}>
         
     </div>

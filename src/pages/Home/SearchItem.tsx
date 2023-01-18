@@ -24,8 +24,7 @@ export default function SearchItem(props: {guid:string}) {
     const onSongClick = () => {
         navigate(`/song/`+props.guid, {replace: false})
     }
-
-    
+   
 
     
   return (
@@ -34,8 +33,8 @@ export default function SearchItem(props: {guid:string}) {
         {loading?
         <Box justifyContent={"center"} display={"flex"}>
             <Skeleton variant='text' width={"200"}></Skeleton>
-            {Array(4).fill(1).map(()=>{
-                return <Skeleton variant='text' width={"100%"}></Skeleton>
+            {Array(4).fill(1).map((a, index)=>{
+                return <Skeleton variant='text' width={"100%"} key={props.guid+"s"+index}></Skeleton>
             })}
         </Box>
         :

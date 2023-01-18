@@ -62,7 +62,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
     }
 
     return (
-        <TopBar>
+        <TopBar displayPrint={"none"}>
             <motion.div style={{ background:`linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                 position:"absolute",
                 left:0, right:0,

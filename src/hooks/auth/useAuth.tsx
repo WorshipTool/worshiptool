@@ -28,7 +28,7 @@ export default function useAuth(){
 interface useProvideAuthI{
     login: ({email, password}:{email:string, password:string}, after? : (r: RequestResult<any>)=>void) => void,
     logout: () => void,
-    signup: (data:SignUpRequestDTO) => void,
+    signup: (data:SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => void,
     isLoggedIn: () => boolean,
     user: User|undefined,
     getAuthHeader: ()=>any,
@@ -81,7 +81,7 @@ export function useProvideAuth(){
         
     }
 
-    const signup = (data: SignUpRequestDTO) => {
+    const signup = (data: SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => {
         const body = data;
         post({
             url: getUrl_SIGNUP(),
@@ -89,6 +89,7 @@ export function useProvideAuth(){
         }, (result : RequestResult<null>) => {
             console.log(result.message);
             
+            if(after)after(result);
         })
     }
 

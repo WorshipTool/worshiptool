@@ -70,7 +70,7 @@ export function convertSongToNewSongDTO(song: SongObject):newSongDataDTO{
 export interface songGetQueryDTO{
     key: "all"|"search"|"random"|"unverified",
     body?: string,
-    count?: number
+    page?: number
 }
 
 export interface songGetResultDTO{

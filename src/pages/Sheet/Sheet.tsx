@@ -9,6 +9,7 @@ import useAuth from '../../hooks/auth/useAuth';
 import { ROLES } from '../../models/user';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_UNVERIFYVARIANT } from '../../backend/urls';
+import Toolbar from '../../components/Toolbar';
 
 export default function Sheet() {
     const {guid} = useParams();
@@ -51,36 +52,38 @@ export default function Sheet() {
   }
 
   return (
-    <Box sx={{flex:1, display:"flex", flexDirection:"column", height: "100vh"}}>
-        
-        <Box sx={styledContainerSX} displayPrint={"none"}> 
-            <Box>
-              <IconButton onClick={()=>{
-                  transpose(1);
-              }}>
-                  <AddIcon/>
-              </IconButton>
-              <IconButton onClick={()=>{
-                  transpose(-1);
-              }}>
-                  <RemoveIcon/>
-              </IconButton>
-              {user&&user.role==ROLES.Admin&&
-                <Button onClick={unverify}>Zrušit ověření</Button>
-              }
-            </Box>
-            {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
-        </Box>
-
-        <Box sx={{ displayPrint: "flex",
-          flex:1,
-          display:"none",
-          flexDirection: "column"}}>
-            {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>} 
-        </Box>
-        
-
-    </Box>
+    <>
+      <Toolbar transparent={false}/>
+      <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
+          <Box sx={styledContainerSX} displayPrint={"none"}> 
+              <Box>
+                <IconButton onClick={()=>{
+                    transpose(1);
+                }}>
+                    <AddIcon/>
+                </IconButton>
+                <IconButton onClick={()=>{
+                    transpose(-1);
+                }}>
+                    <RemoveIcon/>
+                </IconButton>
+                {user&&user.role==ROLES.Admin&&
+                  <Button onClick={unverify}>Zrušit ověření</Button>
+                }
+              </Box>
+              {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
+          </Box>
+  
+          <Box sx={{ displayPrint: "flex",
+            flex:1,
+            display:"none",
+            flexDirection: "column"}}>
+              {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>} 
+          </Box>
+          
+  
+      </Box>
+    </>
   
   )
 }

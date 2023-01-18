@@ -7,8 +7,8 @@ export function getUrl_GETSONGBYGUID(guid:string){
 }
 
 export function getUrl_GETSONGSBYQUERY(query: songGetQueryDTO){
-    const c = query.count===undefined?1000:query.count;
-    const generatedURL = BACKEND_URL + GETSONGQUERY_URL + `?key=${query.key}&body=${query.body}&count=${c}`;
+    const p = query.page===undefined?0:query.page;
+    const generatedURL = BACKEND_URL + GETSONGQUERY_URL + `?key=${query.key}&body=${query.body}&page=${p}`;
     return generatedURL;
 }
 

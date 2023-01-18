@@ -13,9 +13,17 @@ const StyledContainer = styled(Paper)(()=>({
     margin:50
 }))
 
-export default function Login() {
-    const [email, setEmail] = useState("pe.pavlin@gmail.com");
-    const [password, setPassword] = useState("semice");
+export default function SignUp() {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [isFirstNameOk, setIsFirstNameOk] = useState(true);
+    const [firstNameMessage, setFirstNameMessage] = useState("");
+    
+    const [isLastNameOk, setIsLastNameOk] = useState(true)
+    const [lastNameMessage, setLastNameMessage] = useState("");
 
     const [isEmailOk, setIsEmailOk] = useState(true);
     const [emailMessage, setEmailMessage] = useState("");
@@ -28,7 +36,14 @@ export default function Login() {
     const theme = useTheme();
     const navigate = useNavigate();
 
-    const {login} = useAuth();
+    const {signup} = useAuth();
+
+    const onFirstNameChange = (e:any) => {
+        setFirstName(e.target.value);
+    }
+    const onLastNameChange = (e:any) => {
+        setLastName(e.target.value);
+    }
 
     const onEmailChange = (e:any) => {
         setEmail(e.target.value);
@@ -37,8 +52,25 @@ export default function Login() {
         setPassword(e.target.value);
     }
 
-    const onLoginClick = () => {
+    const onSignupClick = () => {
         let ok = true;
+        if(firstName==""){
+            setIsFirstNameOk(false);
+            setFirstNameMessage("Zadejte své křestní jméno");
+            ok=false;
+        }else{
+            setIsFirstNameOk(true);
+            setFirstNameMessage("")
+        }
+        if(lastName==""){
+            setIsLastNameOk(false);
+            setLastNameMessage("Zadejte své příjmení");
+            ok=false;
+        }else{
+            setIsLastNameOk(true);
+            setLastNameMessage("")
+        }
+
         if(email==""){
             setIsEmailOk(false);
             setEmailMessage("Zadejte email");
@@ -57,7 +89,7 @@ export default function Login() {
             setPasswordMessage("")
         }
 
-        if(ok) login({email, password},(result)=>{
+        if(ok) signup({email, password, firstName, lastName},(result)=>{
             if(isError(result)) setErrorMessage(result.message);
             else{
                 navigate("/");
@@ -72,14 +104,21 @@ export default function Login() {
             <Box flex={1} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                 <StyledContainer>
                     <Box display={"flex"} flexDirection={"row"}>
-                        <Typography variant={'h5'} fontWeight={"bold"} flex={1}>Která jsi ovce?</Typography>
+                        <Typography variant={'h5'} fontWeight={"bold"} flex={1}>Nová ovce</Typography>
                     </Box>
                     <Gap/>
                     {errorMessage!=""&&<>
                         <Typography variant='subtitle2' color={"red"}>{errorMessage}</Typography>
                         <Gap/>
                     </>}
-                    
+                    <Typography variant='subtitle2'>Křestní jméno</Typography>
+                    <TextField size="small" fullWidth value={firstName} onChange={onFirstNameChange}
+                        error={!isFirstNameOk} helperText={firstNameMessage}/>
+                    <Gap/>
+                    <Typography variant='subtitle2'>Příjmení</Typography>
+                    <TextField size="small" fullWidth value={lastName} onChange={onLastNameChange}
+                        error={!isLastNameOk} helperText={lastNameMessage}/>
+                    <Gap/>
                     <Typography variant='subtitle2'>Email</Typography>
                     <TextField size="small" fullWidth value={email} onChange={onEmailChange}
                         error={!isEmailOk} helperText={emailMessage}/>
@@ -89,14 +128,7 @@ export default function Login() {
                         error={!isPasswordOk} helperText={passwordMessage}/>
                     <Gap/>
         
-                    <Button onClick={onLoginClick}>Přihlásit se</Button>
-
-                    <Box display={"flex"} flexDirection={"row"} alignItems={"center"} justifyContent={"end"}>
-                        <Typography variant={"subtitle2"}>Nemáte ještě účet?</Typography>
-                        <Button size={"small"} onClick={()=>{
-                            navigate("/signup");
-                        }}>Vytvořte si ho</Button>
-                    </Box>
+                    <Button onClick={onSignupClick}>Vytvořit účet</Button>
                 </StyledContainer>
             </Box>
         </Box>

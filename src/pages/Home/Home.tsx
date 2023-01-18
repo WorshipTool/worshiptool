@@ -1,4 +1,4 @@
-import { Box, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -12,6 +12,9 @@ import geometryImage from '../../assets/geometry.png'
 import Toolbar from '../../components/Toolbar';
 import { ModuleDetectionKind } from 'typescript';
 import { AnimatePresence, motion } from 'framer-motion';
+import Gap from '../../components/Gap';
+import Carousel from 'react-material-ui-carousel';
+import usePagination from '../../hooks/usePagination';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -68,35 +71,65 @@ export default function Home() {
     const [isTop, setTop] = useState(true);
     const [searching, setSearching] = useState(false);
 
-    const [songGUIDs, setSongGUIDs] = useState<string[]>([]);
-
-    const [recommendedSongGUIDs, setRecommendedSongGUIDs] = useState<string[]>([]);
-
     const {fetchData} = useFetch();
+
+    const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
+
+        const query : songGetQueryDTO = {
+            key: "random",
+            page: page
+        }
+        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
+            resolve({result: data, data: data.data.guids});
+        });
+
+    });
+    const {nextPage: nextSearched, loadPage: loadSearched, data: searchedSongGUIDs, nextExists} = usePagination<string>((page, resolve)=>{
+
+        const query : songGetQueryDTO = {
+            key: "search",
+            body: searchValue,
+            page
+        }
+        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
+            resolve({result: data, data: data.data.guids});
+        });
+
+    });
+
 
     const scrollPointRef = useRef(null)
 
+    const [offsetHeight, setOffsetHeight] = useState(550);
+
+    const [showSearchedGUIDs, setShowSearchedGUIDs] = useState(false);
+
+    useEffect(()=>{
+        const onResize = () => {
+            const offset = (window.innerHeight);
+            setOffsetHeight(offset)
+        }
+
+        window.addEventListener("resize", onResize);
+
+        onResize();
+        
+        return ()=>{
+            window.removeEventListener("resize", onResize);
+        }
+        
+    },[])
+
+
     useEffect(()=>{
         if(searchValue==""){
-            setSongGUIDs([]);
+            setSearching(false);
         }else{
             if(scrollPointRef.current){
                 const s : any = scrollPointRef.current;
                 s.scrollIntoView();
             }
-            const query : songGetQueryDTO = {
-                key: "search",
-                body: searchValue
-            }
-            fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
-
-                if(isSuccess(data)){
-                    setSongGUIDs(data.data.guids);
-                    
-                }
-
-                
-            });
+            loadSearched(0, true);
         }
         
 
@@ -104,21 +137,13 @@ export default function Home() {
     },[searchValue])
 
     useEffect(()=>{
-        const query : songGetQueryDTO = {
-            key: "random",
-            count: 16
-        }
-        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
-
-            if(isSuccess(data)){
-                setRecommendedSongGUIDs(data.data.guids);
-            }
-        });
+        nextRecommended();
     },[])
 
 
     const onSearchValueChange = (event: any) => {
         setSearching(true);
+        setShowSearchedGUIDs(true);
         setSearchValue(event.target.value);
     }   
 
@@ -202,9 +227,10 @@ export default function Home() {
 
                 <div ref={scrollPointRef}></div>
 
-                <Box sx={{height:550}}></Box>
+                <Box sx={{height:offsetHeight}}></Box>
                 
-                <motion.div style={{
+                <motion.div
+                    style={{
                         left:0,right:0,
                         paddingLeft: 40, 
                         paddingRight:40         
@@ -217,12 +243,39 @@ export default function Home() {
                         type: "keyframes",
                         duration: animationDuration
                     }}>
-                    <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
-                    <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                        {recommendedSongGUIDs.slice(0,5).map((g)=>{
-                            return <SearchItem guid={g} key={g}></SearchItem>
-                        })}
-                    </GridContainer>
+                    
+
+                    {showSearchedGUIDs &&
+                        <>
+                        <Gap/>
+                        
+                            <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
+                            <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+                                {searchedSongGUIDs.map((g)=>{
+                                    return <SearchItem guid={g} key={g}></SearchItem>
+                                })}
+                            </GridContainer>
+                            {searchedSongGUIDs.length>0&&nextExists&&<>
+                                <Button onClick={()=>{nextSearched()}}>Načíst další</Button>
+                            </>}
+                        </>
+                        }
+                        
+                    <Gap/>
+                    {searchedSongGUIDs.length==0 && showSearchedGUIDs &&
+                        <Typography>Nic jsme nenašli...</Typography>}
+
+                    {showSearchedGUIDs&&<Gap value={2}/>}
+
+                    <>
+                        <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
+                        <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+                            {recommendedSongGUIDs.slice(0,4).map((g)=>{
+                                return <SearchItem guid={g} key={g}></SearchItem>
+                            })}
+                        </GridContainer>
+                    </>
+                    
                 </motion.div>
         
             </Box>
