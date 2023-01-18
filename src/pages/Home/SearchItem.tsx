@@ -1,13 +1,22 @@
-import { Box, CircularProgress, Grid, Typography,styled, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,styled, useTheme } from '@mui/material';
 import React from 'react';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import useSong from '../../hooks/useSong';
 import { useNavigate } from 'react-router-dom'
 
-export default function SearchItem(props: {guid:string}) {
-    const theme = useTheme();
+const StyledContainer = styled(Box)(({theme})=>({
+    backgroundColor: theme.palette.grey[100],
+    padding: "1rem",
+    borderRadius:"0.5rem",
+    "&:hover":{
+        backgroundColor: theme.palette.grey[200],
+        boxShadow: `0px 0px 10px ${theme.palette.grey[400]}`,
+    },
+    cursor:"pointer"
+}))
 
+export default function SearchItem(props: {guid:string}) {
     const {song, getName, getText, loading} = useSong(props.guid);
 
     const navigate = useNavigate()
@@ -16,25 +25,21 @@ export default function SearchItem(props: {guid:string}) {
         navigate(`/song/`+props.guid, {replace: false})
     }
 
-    const StyledContainer = styled(Box)(({})=>({
-        backgroundColor: theme.palette.grey[100],
-        padding: "1rem",
-        borderRadius:"0.5rem",
-        "&:hover":{
-            backgroundColor: theme.palette.grey[200],
-            boxShadow: `0px 0px 10px ${theme.palette.grey[400]}`,
-        },
-        cursor:"pointer"
-    }))
+    
+
+    
   return (
     
     <Grid item xs={1}>
         {loading?
         <Box justifyContent={"center"} display={"flex"}>
-            <CircularProgress color={"inherit"} size={32}/>
+            <Skeleton variant='text' width={"200"}></Skeleton>
+            {Array(4).fill(1).map(()=>{
+                return <Skeleton variant='text' width={"100%"}></Skeleton>
+            })}
         </Box>
         :
-        <StyledContainer onClick={onSongClick}>
+        <StyledContainer onClick={onSongClick} >
             
             
             <Typography fontWeight={"bold"}>{getName()}</Typography>

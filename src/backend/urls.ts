@@ -1,4 +1,4 @@
-import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL, SIGNUP_URL, VERIFYSONG_URL, UNVERIFYSONG_URL, DELETESONG_URL } from "./constants";
+import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL, SIGNUP_URL, VERIFYSONG_URL, UNVERIFYSONG_URL, DELETESONG_URL, GETUNVERIFIED_URL, GETLOADERUNVERIFIED_URL } from "./constants";
 import { songGetQueryDTO } from "./dtosSong";
 
 export function getUrl_GETSONGBYGUID(guid:string){
@@ -40,4 +40,11 @@ export function getUrl_UNVERIFYVARIANT(guid:string){
 export function getUrl_DELETEVARIANT(guid:string){
     const generatedURL = BACKEND_URL + DELETESONG_URL.replace(":guid", guid);
     return generatedURL;
+}
+
+export function getUrl_GETUNVERIFIEDSONGS(){
+    return BACKEND_URL+GETUNVERIFIED_URL
+}
+export function getUrl_GETLOADERUNVERIFIEDSONGS(){
+    return BACKEND_URL+GETLOADERUNVERIFIED_URL
 }

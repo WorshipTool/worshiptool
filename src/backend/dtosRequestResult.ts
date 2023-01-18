@@ -27,3 +27,6 @@ export const RequestError : RequestResult<undefined> = {
 export const isSuccess = (req: RequestResult<any>) => {
     return req.statusCode==codes["Success"];
 }
+export const isError = (req: RequestResult<any>) => {
+    return req.statusCode>=400;
+}

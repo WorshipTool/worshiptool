@@ -44,6 +44,8 @@ export default function useSong(g:string|null){
     const getText = (part?: number): string => {
         if(song===undefined) return "undefined";
 
+        if(song.variants.length==0)return "";
+
         if(part===undefined){
             return song.variants[0].sections
                     .map((section)=>{return section.text}).join("\n");
@@ -56,6 +58,7 @@ export default function useSong(g:string|null){
 
     const getSheetData = () : string => {
         if(song===undefined) return "undefined";
+        if(song.variants.length==0)return "undefined";
         return song.variants[0].sheetData;
     }
 

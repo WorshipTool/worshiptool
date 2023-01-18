@@ -1,3 +1,4 @@
+import { transposeNote } from "../hooks/useTranspose";
 import { alternativeChordQualityNames, changeToCustomName, chordQuality } from "./chordQuality";
 import { note, notes } from "./note";
 
@@ -20,12 +21,16 @@ export const textToChord = (input: string) : chord => {
         quality: 'maj'
     }
     let root : any = input.slice(0,2);
-    if(input.length<1||input.charAt(1)!='#') root = input.slice(0,1);
+    if(input.length<1||(input.charAt(1)!='#')) root = input.slice(0,1);
 
+    const bflat = input.charAt(1)=='b';
     let rootNoteTyped : note = root;
+    if(bflat){
+        rootNoteTyped = transposeNote(rootNoteTyped,-1);
+    }
 
     const letter : string = root.slice(0,1);
-    const secondPart = input.slice(root.length,input.length);
+    const secondPart = input.slice(root.length+(bflat?1:0),input.length);
 
     
     if(letter==letter.toLowerCase()){

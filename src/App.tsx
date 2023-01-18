@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider, Typography } from '@mui/material';
+import { Box, ThemeProvider, Typography, styled } from '@mui/material';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -12,47 +12,65 @@ import { createTheme } from '@mui/material';
 import Sheet from './pages/Sheet/Sheet';
 import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
+import TestPage from './pages/Test/TestPage';
+import Login from './pages/Login/Login';
+
+
+const Background = styled(Box)(({theme})=>({
+  background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
+  position:"fixed",
+  width:"100%",
+  height:"100%",
+  zIndex:-100,
+  
+}))
 
 function App() {
   const router = createBrowserRouter([
     {
+      path:"test",
+      element: <TestPage/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
       path:"/",
-      element: <Base/>,
-      errorElement: <Typography>Error.</Typography>,
-      children: [
-        {
-          path: "",
-          element: <Home />
-        },
-        {
-          path: "create",
-          element: <Create />
-        },
-        {
-          path:"song/:guid",
-          element: <Sheet/>
-        },
-        {
-          path:"account",
-          element: <Account/>
-        }
-      ]
+      element: <Home/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
+      path:"login",
+      element: <Login/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
+      path:"song/:guid",
+      element: <Sheet/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
+      path: "create",
+      element: <Create />,
+      errorElement: <Typography>Error.</Typography>
     },
     
   ]);
 
   const theme = createTheme({
     palette: {
+      primary: {
+        main: '#0085FF',
+      },
       secondary: {
-        main: "#ef476f",
+        main: "#F500AE",
       }
+
     },
   });
-  
   
     return (
       <ThemeProvider theme={theme}>
         <AuthProvider>
+          <Background/>
           <RouterProvider router={router}/>
         </AuthProvider>
       </ThemeProvider>
