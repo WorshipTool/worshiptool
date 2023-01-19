@@ -16,6 +16,7 @@ import Gap from '../../components/Gap';
 import Carousel from 'react-material-ui-carousel';
 import usePagination from '../../hooks/usePagination';
 import { useIsInViewport } from '../../hooks/useIsInViewport';
+import Masonry from '@mui/lab/Masonry';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -259,11 +260,11 @@ export default function Home() {
                             <Gap/>                        
                             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
                         
-                            <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+                            <Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                                 {searchedSongGUIDs.map((g)=>{
                                     return <SearchItem guid={g} key={g}></SearchItem>
                                 })}
-                            </GridContainer>
+                            </Masonry>
                         </>
                     }
                     <div ref={loadNextLevelRef}></div>
@@ -285,7 +286,9 @@ export default function Home() {
                         <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
                         <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                             {recommendedSongGUIDs.slice(0,4).map((g)=>{
-                                return <SearchItem guid={g} key={g}></SearchItem>
+                                return <Grid item>
+                                    <SearchItem guid={g} key={g}></SearchItem>
+                                </Grid>
                             })}
                         </GridContainer>
                     </>

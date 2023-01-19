@@ -29,7 +29,7 @@ export default function SearchItem(props: {guid:string}) {
     
   return (
     
-    <Grid item xs={1}>
+    <Box>
         {loading?
         <Box justifyContent={"center"} display={"flex"}>
             <Skeleton variant='text' width={"200"}></Skeleton>
@@ -48,6 +48,6 @@ export default function SearchItem(props: {guid:string}) {
             
         </StyledContainer>
         }
-    </Grid>
+    </Box>
   )
 }
