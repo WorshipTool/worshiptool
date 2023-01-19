@@ -1,4 +1,4 @@
-import { Box, Button, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import { isError } from '../../backend/dtosRequestResult';
@@ -24,6 +24,8 @@ export default function Login() {
     const [passwordMessage, setPasswordMessage] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
+
+    const [inProgress, setInProgress] = useState(false);
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -57,7 +59,13 @@ export default function Login() {
             setPasswordMessage("")
         }
 
-        if(ok) login({email, password},(result)=>{
+        if(ok) loginAction();
+    }
+
+    const loginAction = () => {
+        setInProgress(true);
+        login({email, password},(result)=>{
+            setInProgress(false);
             if(isError(result)) setErrorMessage(result.message);
             else{
                 navigate("/");
@@ -82,14 +90,17 @@ export default function Login() {
                     
                     <Typography variant='subtitle2'>Email</Typography>
                     <TextField size="small" fullWidth value={email} onChange={onEmailChange}
-                        error={!isEmailOk} helperText={emailMessage}/>
+                        error={!isEmailOk} helperText={emailMessage} disabled={inProgress} />
                     <Gap/>
                     <Typography variant='subtitle2'>Heslo</Typography>
                     <TextField size="small" fullWidth value={password} onChange={onPasswordChange}
-                        error={!isPasswordOk} helperText={passwordMessage}/>
+                        error={!isPasswordOk} helperText={passwordMessage} disabled={inProgress} />
                     <Gap/>
         
-                    <Button onClick={onLoginClick}>Přihlásit se</Button>
+                    <Button onClick={onLoginClick}>
+                        Přihlásit se
+                        {inProgress&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
+                    </Button>
 
                     <Box display={"flex"} flexDirection={"row"} alignItems={"center"} justifyContent={"end"}>
                         <Typography variant={"subtitle2"}>Nemáte ještě účet?</Typography>

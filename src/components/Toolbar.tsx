@@ -1,4 +1,4 @@
-import { Box, Button, Fade, Menu, MenuItem, Paper, Popper, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, Typography, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import Login from '@mui/icons-material/Login'
@@ -7,6 +7,9 @@ import useAuth from '../hooks/auth/useAuth'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import AccountMenu from './AccountMenu'
 import { useNavigate } from 'react-router-dom'
+import BlackSheep from "../assets/images/blackSheep.png"
+import WhiteSheep from "../assets/images/whiteSheep.png"
+import { Home } from '@mui/icons-material'
 
 
 const TopBar = styled(Box)(()=>({
@@ -21,7 +24,7 @@ const TopBar = styled(Box)(()=>({
 }))
 
 interface ToolbarProps{
-    transparent: boolean
+    transparent?: boolean
 }
 export default function Toolbar({transparent}:ToolbarProps) {
     const theme = useTheme();
@@ -32,6 +35,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
     const {user, isLoggedIn, logout, isAdmin} = useAuth();
 
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const handleScroll = (event:any) => {
@@ -49,6 +53,9 @@ export default function Toolbar({transparent}:ToolbarProps) {
         setLoginOpen(false);
     },[user])
 
+    const onHomeClick = () => {
+        navigate("/")
+    }
 
     const onLoginButtonClick = (event:any) => {
         navigate('/login');
@@ -66,15 +73,18 @@ export default function Toolbar({transparent}:ToolbarProps) {
             <motion.div style={{ background:`linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                 position:"absolute",
                 left:0, right:0,
-                top:0, bottom:0,
-                opacity:0
+                top:0, bottom:0
                 }}
+                initial={{opacity:transparent?0:1}}
                 animate={{opacity: transparent?0:1}}
                 transition={{ duration: 0.3 }}/>
 
             <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1}>
                 
-                <Box flex={1} color={"black"}>
+                <Box flex={1} display={"flex"} alignItems={"center"} color={"black"}>
+                    <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
+                        <Home color={"inherit"}/>
+                    </IconButton>
                 </Box>
                 <Box paddingRight={4} display={"flex"} flexDirection={"row"} alignItems={"center"} color={"black"}>
                     {isLoggedIn()&&<Typography fontWeight={100}>Přihlášen jako</Typography>}

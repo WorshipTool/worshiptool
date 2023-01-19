@@ -44,6 +44,11 @@ function App() {
       errorElement: <Typography>Error.</Typography>
     },
     {
+      path:"account",
+      element: <Account/>,
+      errorElement: <Typography>Error.</Typography>
+    },
+    {
       path:"signup",
       element: <SignUp/>,
       errorElement: <Typography>Error.</Typography>

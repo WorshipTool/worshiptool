@@ -1,5 +1,5 @@
 import { Box, Button, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { createRef, useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Gap from '../../components/Gap';
 import Carousel from 'react-material-ui-carousel';
 import usePagination from '../../hooks/usePagination';
+import { useIsInViewport } from '../../hooks/useIsInViewport';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -71,6 +72,9 @@ export default function Home() {
     const [isTop, setTop] = useState(true);
     const [searching, setSearching] = useState(false);
 
+    const loadNextLevelRef = useRef(null);
+    const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
+
     const {fetchData} = useFetch();
 
     const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
@@ -105,6 +109,12 @@ export default function Home() {
     const [showSearchedGUIDs, setShowSearchedGUIDs] = useState(false);
 
     useEffect(()=>{
+        if(nextExists){
+            nextSearched();
+        }
+    },[isInViewport])
+
+    useEffect(()=>{
         const onResize = () => {
             const offset = (window.innerHeight);
             setOffsetHeight(offset)
@@ -119,7 +129,6 @@ export default function Home() {
         }
         
     },[])
-
 
     useEffect(()=>{
         if(searchValue==""){
@@ -199,7 +208,7 @@ export default function Home() {
                          }}
                          transition={{
                             type:"keyframes",
-                            duration: 0.1
+                            duration: animationDuration/2
                          }}
                          style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column" }}>
                             <Typography variant='h4' fontWeight={"200"}>Jsi ovce?</Typography>
@@ -244,22 +253,27 @@ export default function Home() {
                         duration: animationDuration
                     }}>
                     
-
+                    
                     {showSearchedGUIDs &&
                         <>
-                        <Gap/>
-                        
+                            <Gap/>                        
                             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
+                        
                             <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                                 {searchedSongGUIDs.map((g)=>{
                                     return <SearchItem guid={g} key={g}></SearchItem>
                                 })}
                             </GridContainer>
+                        </>
+                    }
+                    <div ref={loadNextLevelRef}></div>
+                    {showSearchedGUIDs &&
+                        <>
                             {searchedSongGUIDs.length>0&&nextExists&&<>
                                 <Button onClick={()=>{nextSearched()}}>Načíst další</Button>
                             </>}
                         </>
-                        }
+                    }
                         
                     <Gap/>
                     {searchedSongGUIDs.length==0 && showSearchedGUIDs &&
