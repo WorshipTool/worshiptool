@@ -81,7 +81,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
 
             <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1}>
                 
-                <Box flex={1} display={"flex"} alignItems={"center"} color={"black"}>
+                <Box flex={1} display={"flex"} alignItems={"center"} color={transparent?"black":"white"}>
                     <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
                         <Home color={"inherit"}/>
                     </IconButton>

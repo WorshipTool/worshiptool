@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Input, InputBase, Typography } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Input, InputBase, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth'
 import { LoginResultDTO, SignUpRequestDTO } from '../../backend/dtosAuth';
@@ -10,21 +10,17 @@ import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import SongVerify from './SongVerify';
 import Toolbar from '../../components/Toolbar';
 import { useNavigate } from 'react-router-dom';
+import TabPanel from './TabPanel';
+import BasicInfo from './BasicInfo';
+import ChangePassword from './ChangePassword';
 
 export default function Account() {
     const {isLoggedIn, user,
             isTrustee, isAdmin} = useAuth();
 
-    const [temail, setTEmail] = useState("");
-    const [tpassword, setTPassword] = useState("");
-    const [token, setToken] = useState("");
-
-    const [loaderSongs, setLoaderSongs] = useState<string[]>([]);
-    const [unverifiedSongs, setUnverifiedSongs] = useState<string[]>([]);
-    const {fetchData} = useFetch();
-    const {post} = useFetch();
-
     const navigate = useNavigate();
+
+    const [tabValue, setTabValue] = useState(1);
 
     useEffect(()=>{
         if(!isLoggedIn()){
@@ -32,108 +28,37 @@ export default function Account() {
         }
     },[isLoggedIn])
 
-
-    const loadUnverified = () => {
-        fetchData({url: getUrl_GETUNVERIFIEDSONGS()}, (r)=>{
-            if(isSuccess(r)){
-                setUnverifiedSongs(r.data.guids);
-            }
-        });
+    const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
     }
 
-    const loadLoaderUnverified = () => {
-        fetchData({url: getUrl_GETLOADERUNVERIFIEDSONGS()}, (r)=>{
-            if(isSuccess(r)){
-                setLoaderSongs(r.data.guids);
-            }
-        });
-    }
-
-    useEffect(()=>{
-        if(isLoggedIn()==false||user===undefined)return;
-        if(user.role!=ROLES.Trustee&&user.role!=ROLES.Admin)return;
-        loadUnverified();
-
-        if(user.role!=ROLES.Admin)return;
-        loadLoaderUnverified();
-
-
-    },[isLoggedIn()])
-
-    
-
-    const refresh = () =>{
-        loadUnverified();
-        loadLoaderUnverified();
-    }
-
-    const onTEmailChange = (e:any) => {
-        setTEmail(e.target.value);
-    }
-
-    const onTPasswordChange = (e:any) => {
-        setTPassword(e.target.value);
-    }
-
-    const showToken = () => {
-        post({url: getUrl_LOGIN(), body:{
-            email: temail,
-            password: tpassword
-        }},(d:RequestResult<LoginResultDTO>)=>{
-            if(isSuccess(d))
-                setToken(d.data.token);
-        })
-    }
 
     return (
         <>
             <Toolbar/>
             <Box padding={8}>
                 
-                <Typography>Přihlášen? {isLoggedIn()+""}</Typography>
-    
-    
-                {user&&<>
-                    <Typography>{user.firstName}</Typography>
-                    <Typography>Admin: {user.role==ROLES.Admin?"Ano":"Ne"}</Typography>
-                </>}
-    
-               
-    
-                {(isTrustee()||isAdmin())&&<>
-                
-                    {unverifiedSongs.map((s)=>{
-                        return (
-                            <SongVerify guid={s} key={s} afterClick={refresh}></SongVerify>
-                        )
-                    })}
-    
-                    
-                
-                </>}
-    
-                {(isAdmin())&&<>
-                    {loaderSongs.length>0&&<Typography fontWeight={"bold"}>Unverified songs from loader</Typography>}
-                    {loaderSongs.slice(0,10).map((s)=>{
-                        return (
-                            <SongVerify guid={s} key={s} afterClick={refresh}></SongVerify>
-                        )
-                    })}
-    
-                    
-                
-                </>}
-    
-                {isAdmin()&&<>
-                
-                    <Divider />
-                    <Typography>Získej token uživatele:</Typography>
-                    <InputBase placeholder='email' value={temail} onChange={onTEmailChange}></InputBase>
-                    <InputBase placeholder='password' value={tpassword} onChange={onTPasswordChange}></InputBase>
-                    <Button onClick={showToken}>Získat</Button>
-                    {token!=""&&<Typography>Token: {token}</Typography>}
-                
-                </>}
+            <Box
+            sx={{ flexGrow: 1, display: 'flex'}}
+            >
+            <Tabs
+                    orientation="vertical"
+                    value={tabValue}
+                    onChange={onTabChange}                    
+                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                >
+                    <Typography variant='h6' sx={{marginBottom: 3}}>Váš účet</Typography>
+
+                    <Tab label="Informace" />
+                    <Tab label="Změnit heslo" />
+                </Tabs>
+                <TabPanel value={tabValue} index={1}>
+                    <BasicInfo/>
+                </TabPanel>
+                <TabPanel value={tabValue} index={2}>
+                    <ChangePassword/>
+                </TabPanel>
+            </Box>
     
                 
     

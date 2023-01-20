@@ -11,6 +11,7 @@ export const authContext = createContext<useProvideAuthI>({
     signup: () => {},
     isLoggedIn: () => false,
     user: undefined,
+    info: {} as User,
     getAuthHeader: ()=>{},
     isTrustee: ()=>false,
     isAdmin: ()=>false
@@ -31,6 +32,7 @@ interface useProvideAuthI{
     signup: (data:SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => void,
     isLoggedIn: () => boolean,
     user: User|undefined,
+    info: User,
     getAuthHeader: ()=>any,
     isTrustee: ()=>boolean,
     isAdmin: ()=>boolean
@@ -106,8 +108,10 @@ export function useProvideAuth(){
         login, logout, signup,
         isLoggedIn,
         user,
+        info: (user?user:({} as User)),
         getAuthHeader,
         isTrustee: ()=>user!=undefined&&user.role==ROLES.Trustee,
         isAdmin: ()=>user!=undefined&&user.role==ROLES.Admin
+
     }
 }
