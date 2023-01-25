@@ -48,6 +48,9 @@ export default function PlaylistPreview() {
         <Box>
             <Toolbar/>
             <Container>
+                {guids.length==0&&<Typography>
+                    V playlistu nemáte přidané žádné písně
+                    </Typography>}
                 {guids.map((guid)=>{
                     return <Item guid={guid}/>
                 })}
