@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { getUrl_GETLOADERUNVERIFIEDSONGS, getUrl_GETUNVERIFIEDSONGS } from '../../backend/urls';
 import useFetch from '../../hooks/useFetch';
 import { isSuccess } from '../../backend/dtosRequestResult';
 import { ROLES } from '../../models/user';
 import SongVerify from './SongVerify';
+import useSongQuery from '../../hooks/useSongQuery';
 
 export default function VerifySongPanel() {
     const {isLoggedIn, user,
@@ -22,20 +22,22 @@ export default function VerifySongPanel() {
 
 
     
+    const getUnverified = useSongQuery({key:"unverified"});
+    const getLoaderUnverified = useSongQuery({key:"loaderUnverified"});
+
     const loadUnverified = () => {
-        fetchData({url: getUrl_GETUNVERIFIEDSONGS()}, (r)=>{
+        getUnverified({}).then((r)=>{
             if(isSuccess(r)){
                 setUnverifiedSongs(r.data.guids);
             }
-        });
+        })
     }
-
     const loadLoaderUnverified = () => {
-        fetchData({url: getUrl_GETLOADERUNVERIFIEDSONGS()}, (r)=>{
+        getLoaderUnverified({}).then((r)=>{
             if(isSuccess(r)){
                 setLoaderSongs(r.data.guids);
             }
-        });
+        })
     }
 
     useEffect(()=>{

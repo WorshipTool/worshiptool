@@ -293,7 +293,7 @@ export default function Home() {
                         <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
                         <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                             {recommendedSongGUIDs.slice(0,4).map((g)=>{
-                                return <Grid item xs={1}>
+                                return <Grid item xs={1} key={"griditem_"+g}>
                                     <SearchItem guid={g} key={g}></SearchItem>
                                 </Grid>
                             })}

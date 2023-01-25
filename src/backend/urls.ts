@@ -36,10 +36,3 @@ export function getUrl_DELETEVARIANT(guid:string){
     const generatedURL = BACKEND_URL + DELETESONG_URL.replace(":guid", guid);
     return generatedURL;
 }
-
-export function getUrl_GETUNVERIFIEDSONGS(){
-    return BACKEND_URL+GETUNVERIFIED_URL
-}
-export function getUrl_GETLOADERUNVERIFIEDSONGS(){
-    return BACKEND_URL+GETLOADERUNVERIFIED_URL
-}

@@ -5,7 +5,6 @@ import useFetch from "./useFetch";
 
 interface songQueryBaseProps{
     key:string,
-    conditions:any,
     page:number
 
 }
@@ -17,8 +16,21 @@ interface searchQueryProps extends songQueryBaseProps{
 interface randomQueryProps extends songQueryBaseProps{
     key: "random"
 }
+interface allQueryProps extends songQueryBaseProps{
+    key: "all"
+}
+interface unverifiedQueryProps extends songQueryBaseProps{
+    key: "unverified"
+}
+interface loadeUnverifiedQueryProps extends songQueryBaseProps{
+    key: "loaderUnverified"
+}
 
-type useSongQueryProps = searchQueryProps|randomQueryProps;
+type useSongQueryProps = searchQueryProps|
+                            randomQueryProps|
+                            allQueryProps|
+                            unverifiedQueryProps|
+                            loadeUnverifiedQueryProps;
 
 export function getQueryUrlWithParams(query: songGetQueryDTO){
     let params = "";
@@ -28,7 +40,10 @@ export function getQueryUrlWithParams(query: songGetQueryDTO){
     const untyped : any = query;
 
     for(let i=0; i<keys.length; i++){
-        const content = untyped[keys[i]];
+        let content = (untyped[keys[i]]);
+        if(typeof(content)=="object"){
+            content = JSON.stringify(content);
+        }
 
         if(content!==undefined){
             let add = params==""?"":"&";
@@ -57,7 +72,6 @@ export default function useSongQuery(startParams:Partial<useSongQueryProps>){
         const typed : songGetQueryDTO = params;
 
         const url = getQueryUrlWithParams(typed);
-
 
         const result : RequestResult<songGetResultDTO> = await new Promise((res, reject) => {
             fetchData({url},(result)=>{
