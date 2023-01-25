@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import Home from './pages/Home/Home';
 import "./App.css";
-import Base from './pages/Base';
 import Create from './pages/Create/Create';
 import { createTheme } from '@mui/material';
 import Sheet from './pages/Sheet/Sheet';
@@ -15,6 +14,7 @@ import Account from './pages/Account/Account';
 import TestPage from './pages/Test/TestPage';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
+import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -79,12 +79,14 @@ function App() {
   });
   
     return (
-      <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <Background/>
-          <RouterProvider router={router}/>
-        </AuthProvider>
-      </ThemeProvider>
+      <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>        
+        <ThemeProvider theme={theme}>
+          <AuthProvider>      
+              <Background/>
+              <RouterProvider router={router}/>
+          </AuthProvider>
+        </ThemeProvider>
+      </SnackbarProvider>
     )
 }
 

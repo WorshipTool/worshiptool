@@ -174,9 +174,9 @@ export default function Create() {
         margin: 3
     }
     return (
-        <>
+        <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
             <Toolbar transparent={false}/>
-            <Box sx={{flex:1, display:"flex", flexDirection:"column", height: "100vh"}}>
+            <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
                 <Box sx={styledContainerSX}> 
                     <InputBase inputRef={titleInputRef} placeholder='Zadej název písně' value={titleValue} sx={titleInputSX} size={"medium"}
                         onChange={onTitleValueChange} onKeyDown={onTitleInputKeyDown} onKeyUp={onTitleInputKeyUp} onBlur={setMainTitle} autoFocus/>
@@ -234,6 +234,6 @@ export default function Create() {
                 
     
             </Box>
-        </>
+        </Box>
     )
 }

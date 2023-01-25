@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAuth from "./auth/useAuth";
 import { RequestError, RequestResult, codes, messages } from "../backend/dtosRequestResult";
+import { useSnackbar } from "notistack";
 
 
 
@@ -10,6 +11,8 @@ export default function useFetch(){
     const [message, setMessage] = useState<string>("");
     const [statusCode, setStatusCode] = useState<number>(0);
     const [loading, setLoading] = useState(true);
+
+    const {enqueueSnackbar} = useSnackbar();
 
     const {user, getAuthHeader} = useAuth();
 
@@ -55,6 +58,12 @@ export default function useFetch(){
             
         })
         .catch((e) => {
+            
+            enqueueSnackbar("Náš server mele nesmysly. Omlouváme, chvilku potrvá než to vyluštíme.",{
+                preventDuplicate:true,
+                persist:true
+            });
+
             setLoading(false);
             setError(e);
             setData(null);

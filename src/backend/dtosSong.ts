@@ -7,7 +7,9 @@ export interface SongDataVariantDTO{
     guid:string,
     prefferedTitle: string,
     sheetData: string,
-    sheetText: string
+    sheetText: string,
+    verified: boolean,
+    createdBy: string
 }
 
 export interface SongDataCreatorDTO{
@@ -47,7 +49,9 @@ export function convertAllSongDataDTOToSong(d: AllSongDataDTO) : SongObject{
                 preferredTitle: variant.prefferedTitle,
                 sheetData: variant.sheetData,
                 sheetText: variant.sheetText,
-                sections
+                sections,
+                verified: variant.verified,
+                createdBy: variant.createdBy
             }
         })
     }
@@ -69,8 +73,10 @@ export function convertSongToNewSongDTO(song: SongObject):newSongDataDTO{
 
 export interface songGetQueryDTO{
     key: "all"|"search"|"random"|"unverified",
+    searchKey?:string,
     body?: string,
-    page?: number
+    page?: number,
+    conditions: any
 }
 
 export interface songGetResultDTO{

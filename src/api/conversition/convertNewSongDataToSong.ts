@@ -20,7 +20,9 @@ export default function convertNewSongDataToSong(data: newSongData):Song{
                 preferredTitle: data.title,
                 sheetData: data.sheet,
                 sheetText: sections.map((s)=>s.text).join("\n"),
-                sections
+                sections,
+                verified: false,
+                createdBy: ""
             }
         ],
         creators: []

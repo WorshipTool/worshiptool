@@ -3,7 +3,8 @@ import User, { ROLES } from "../../models/user";
 import useFetch from "../useFetch";
 import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser } from "../../backend/dtosAuth";
 import { getUrl_LOGIN, getUrl_SIGNUP } from "../../backend/urls";
-import { RequestResult, codes } from "../../backend/dtosRequestResult";
+import { RequestResult, codes, isSuccess } from "../../backend/dtosRequestResult";
+import { useSnackbar } from "notistack";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -40,8 +41,9 @@ interface useProvideAuthI{
 
 export function useProvideAuth(){
     const [user, setUser] = useState<User>();
-
     const {post} = useFetch();
+
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(()=>{
         const u = localStorage.getItem("user");
@@ -66,6 +68,8 @@ export function useProvideAuth(){
             body
         }, (result : RequestResult<LoginResultDTO>) => {
             if(result.statusCode==codes["Success"]){
+                enqueueSnackbar(`Ahoj ${result.data.user.firstName} ${result.data.user.lastName}. Ať najdeš, po čem paseš.`);
+
                 setUser(loginResultDTOToUser(result.data));
             }else{
                 console.log(result.message);
@@ -80,7 +84,7 @@ export function useProvideAuth(){
     const logout = () => {
         setUser(undefined);
         localStorage.removeItem("user");
-        
+        enqueueSnackbar("Byl jsi odhlášen. Zase někdy!");
     }
 
     const signup = (data: SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => {
@@ -90,6 +94,9 @@ export function useProvideAuth(){
             body
         }, (result : RequestResult<null>) => {
             console.log(result.message);
+            if(isSuccess(result)){
+                enqueueSnackbar("Účet byl vytvořen. Nyní se můžeš přihlásit.");
+            }
             
             if(after)after(result);
         })

@@ -1,9 +1,10 @@
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import useSong from '../../hooks/useSong'
-import { useNavigate } from 'react-router-dom';
+import { useActionData, useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../backend/urls';
+import useAuth from '../../hooks/auth/useAuth';
 
 export interface SongVerifyProps{
     guid: string,
@@ -16,6 +17,8 @@ export default function SongVerify({guid, afterClick}:SongVerifyProps) {
     const {post} = useFetch();
 
     const navigate = useNavigate();
+
+    const {isAdmin} = useAuth();
 
     
     const [popupOpen, setPopupOpen] = useState(false);
@@ -52,7 +55,7 @@ export default function SongVerify({guid, afterClick}:SongVerifyProps) {
                     <Typography fontWeight={"bold"}>{getName()}</Typography>
                     <Button onClick={show}>Ukázat</Button>
                     <Button onClick={verify}>Ověřit</Button>
-                    <Button onClick={openDeletePopup}>Smazat</Button>
+                    {isAdmin()&&<Button onClick={openDeletePopup}>Smazat</Button>}
                     
                 </CardContent>
             </Card>}

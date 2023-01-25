@@ -16,7 +16,9 @@ export interface Variant{
     sheetData: string,
     sheetText: string,
     sections: Section[],
-    preferredTitle: string
+    preferredTitle: string,
+    verified: boolean,
+    createdBy: string
 }
 
 export interface Segment {

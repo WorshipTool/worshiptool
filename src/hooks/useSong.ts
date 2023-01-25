@@ -6,6 +6,7 @@ import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../backend/dtosSong
 import convertSheetToSections from "../api/conversition/convertSheetToSections";
 import useTranspose from "../api/hooks/useTranspose";
 import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
+import useAuth from "./auth/useAuth";
 
 
 
@@ -15,6 +16,8 @@ export default function useSong(g:string|null){
     const [song, setSong] = useState<Song>();
     const [loading, setLoading] = useState(true);
 
+    const {user, isLoggedIn} = useAuth();
+
     const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
 
 
@@ -23,7 +26,7 @@ export default function useSong(g:string|null){
     },[fetchLoading])
 
     useEffect(()=>{
-        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)});
+        reload();
     },[guid])
 
     useEffect(()=>{
@@ -34,6 +37,14 @@ export default function useSong(g:string|null){
 
     },[data]);
 
+    const reload = () => {
+        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)});
+    }
+
+    const isCreatedByMe = (variant: Variant) => {
+        if(!isLoggedIn()||user===undefined)return false;
+        return variant.createdBy==user.guid;
+    }
 
 
     const getTitle = () : string=> {
@@ -97,7 +108,9 @@ export default function useSong(g:string|null){
         getSheetData,
         loading,
         transpose,
-        getTransposedVariant
+        getTransposedVariant,
+        reload,
+        isCreatedByMe
     }
 
 }

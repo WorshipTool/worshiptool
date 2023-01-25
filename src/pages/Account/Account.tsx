@@ -5,7 +5,7 @@ import { LoginResultDTO, SignUpRequestDTO } from '../../backend/dtosAuth';
 import { ROLES } from '../../models/user';
 import Song from '../../models/song';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_GETLOADERUNVERIFIEDSONGS, getUrl_GETSONGSBYQUERY, getUrl_GETUNVERIFIEDSONGS, getUrl_LOGIN } from '../../backend/urls';
+import { getUrl_GETLOADERUNVERIFIEDSONGS, getUrl_GETUNVERIFIEDSONGS, getUrl_LOGIN } from '../../backend/urls';
 import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import SongVerify from './SongVerify';
 import Toolbar from '../../components/Toolbar';
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import TabPanel from './TabPanel';
 import BasicInfo from './BasicInfo';
 import ChangePassword from './ChangePassword';
+import VerifySongPanel from './VerifySongPanel';
 
 export default function Account() {
     const {isLoggedIn, user,
@@ -51,12 +52,17 @@ export default function Account() {
 
                     <Tab label="Informace" />
                     <Tab label="Změnit heslo" />
+                    {(isTrustee()||isAdmin())&&<Tab label="Ověřování" />}
                 </Tabs>
                 <TabPanel value={tabValue} index={1}>
                     <BasicInfo/>
                 </TabPanel>
                 <TabPanel value={tabValue} index={2}>
                     <ChangePassword/>
+                </TabPanel>
+                
+                <TabPanel value={tabValue} index={3}>
+                    <VerifySongPanel/>
                 </TabPanel>
             </Box>
     

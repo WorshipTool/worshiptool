@@ -1,4 +1,4 @@
-import { Box, Button, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Fab, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
 import React, { createRef, useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -6,7 +6,6 @@ import SearchItem from './SearchItem';
 import sheepImage from '../../assets/sheepWithCircle.png'
 import useFetch from '../../hooks/useFetch';
 import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtosSong';
-import { getUrl_GETSONGSBYQUERY } from '../../backend/urls';
 import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import geometryImage from '../../assets/geometry.png'
 import Toolbar from '../../components/Toolbar';
@@ -17,6 +16,10 @@ import Carousel from 'react-material-ui-carousel';
 import usePagination from '../../hooks/usePagination';
 import { useIsInViewport } from '../../hooks/useIsInViewport';
 import Masonry from '@mui/lab/Masonry';
+import { Add } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/auth/useAuth';
+import useSongQuery from '../../hooks/useSongQuery';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -73,39 +76,38 @@ export default function Home() {
     const [isTop, setTop] = useState(true);
     const [searching, setSearching] = useState(false);
 
+    const {isLoggedIn} = useAuth();
+
+    const navigate = useNavigate();
+
     const loadNextLevelRef = useRef(null);
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
 
     const {fetchData} = useFetch();
 
-    const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
+    const containerRef = useRef(null);
 
-        const query : songGetQueryDTO = {
-            key: "random",
-            page: page
-        }
-        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
+    const getRandomSongs = useSongQuery({key:"random"});
+
+    const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
+        getRandomSongs({page}).then((data)=>{
             resolve({result: data, data: data.data.guids});
         });
-
     });
+    const searchSongs = useSongQuery({key:"search"});
     const {nextPage: nextSearched, loadPage: loadSearched, data: searchedSongGUIDs, nextExists} = usePagination<string>((page, resolve)=>{
 
-        const query : songGetQueryDTO = {
-            key: "search",
-            body: searchValue,
-            page
-        }
-        fetchData({url: getUrl_GETSONGSBYQUERY(query)}, (data : RequestResult<songGetResultDTO>)=>{
+        searchSongs({searchKey: searchValue, page}).then((data)=>{
             resolve({result: data, data: data.data.guids});
-        });
+
+        })
 
     });
 
 
     const scrollPointRef = useRef(null)
 
-    const [offsetHeight, setOffsetHeight] = useState(550);
+    const [offsetHeight, setOffsetHeight] = useState(1000);
 
     const [showSearchedGUIDs, setShowSearchedGUIDs] = useState(false);
 
@@ -115,11 +117,13 @@ export default function Home() {
         }
     },[isInViewport])
 
-    useEffect(()=>{
-        const onResize = () => {
-            const offset = (window.innerHeight);
-            setOffsetHeight(offset)
-        }
+    const onResize = () => {
+        const min = (window.innerHeight);
+        setOffsetHeight(min);
+    }
+
+
+    useEffect(()=>{        
 
         window.addEventListener("resize", onResize);
 
@@ -157,7 +161,9 @@ export default function Home() {
         setSearchValue(event.target.value);
     }   
 
-
+    const onAddClick = () => {
+        navigate("/create");
+    }
 
 
     useEffect(() => {
@@ -182,9 +188,10 @@ export default function Home() {
     const animationDuration = 0.2;
 
     return (
-        <Box>
+        <Box >
             <Toolbar transparent={isTop}/>
             <Box sx={{flex:1, justifyContent:"center", alignItems:"start", display:"flex", flexDirection:"column"}}>
+                
                 <motion.div 
                     style={{
                         position:"fixed",
@@ -239,7 +246,7 @@ export default function Home() {
 
                 <Box sx={{height:offsetHeight}}></Box>
                 
-                <motion.div
+                <motion.div ref={containerRef}
                     style={{
                         left:0,right:0,
                         paddingLeft: 40, 
@@ -260,14 +267,14 @@ export default function Home() {
                             <Gap/>                        
                             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
                         
-                            <Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+                            {searchedSongGUIDs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                                 {searchedSongGUIDs.map((g)=>{
                                     return <SearchItem guid={g} key={g}></SearchItem>
                                 })}
-                            </Masonry>
+                            </Masonry>}
                         </>
                     }
-                    <div ref={loadNextLevelRef}></div>
+                    <div ref={loadNextLevelRef} style={{backgroundColor:"red"}}></div>
                     {showSearchedGUIDs &&
                         <>
                             {searchedSongGUIDs.length>0&&nextExists&&<>
@@ -296,6 +303,14 @@ export default function Home() {
                 </motion.div>
         
             </Box>
+            
+            {isLoggedIn()&&<Fab color="primary" aria-label="add" sx={{
+                position: "fixed",
+                right:30,
+                bottom:30
+            }} onClick={onAddClick}>
+                <Add />
+            </Fab>}
         </Box>
         
     )

@@ -6,11 +6,6 @@ export function getUrl_GETSONGBYGUID(guid:string){
     return generatedURL;
 }
 
-export function getUrl_GETSONGSBYQUERY(query: songGetQueryDTO){
-    const p = query.page===undefined?0:query.page;
-    const generatedURL = BACKEND_URL + GETSONGQUERY_URL + `?key=${query.key}&body=${query.body}&page=${p}`;
-    return generatedURL;
-}
 
 export function getUrl_POSTNEWSONG(){
     const generatedURL = BACKEND_URL + POSTNEWSONG_URL;
