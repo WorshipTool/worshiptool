@@ -18,6 +18,7 @@ const TopBar = styled(Box)(()=>({
     left:0,
     top:0,
     height: 50,
+    minHeight: 50,
     alignItems:"center",
     display:"flex",
     zIndex:10
@@ -73,11 +74,9 @@ export default function Toolbar({transparent}:ToolbarProps) {
 
     return (
         <>
-            
-            <TopBar position={"sticky"} zIndex={0}>
-
+            <TopBar  position={"sticky"} zIndex={0}>
             </TopBar>
-            <TopBar displayPrint={"none"} position={"fixed"}>
+            <TopBar  displayPrint={"none"} position={"fixed"}>
                 <motion.div style={{ background:`linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                     position:"absolute",
                     left:0, right:0,

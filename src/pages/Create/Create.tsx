@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import convertNewSongDataToSong from '../../api/conversition/convertNewSongDataToSong';
 import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import Toolbar from '../../components/Toolbar';
+import DefaultStyle from '../Sheet/styles/DefaultStyle';
+import Song, { Variant } from '../../models/song';
+import convertSheetToSections from '../../api/conversition/convertSheetToSections';
 
 export default function Create() {
     const theme = useTheme();
@@ -27,6 +30,30 @@ export default function Create() {
     const titleInputRef = useRef(null);
 
     const navigate = useNavigate()
+
+    const getSong = () : Song => {
+        return {
+            title: titleValue,
+            variants: [{
+                guid: "",
+                sheetData: sheetValue,
+                sheetText: "",
+                sections: convertSheetToSections(sheetValue),
+                preferredTitle: "",
+                createdBy: "",
+                verified: false
+            }],
+            guid: "",
+            alternativeTitles: titles,
+            creators:[]
+        };
+    }
+
+    const [song, setSong] = useState<Song>(getSong());
+
+    useEffect(()=>{
+        setSong(getSong());
+    },[titleValue, sheetValue])
     
 
     const {post, loading:fetching} = useFetch();
@@ -176,63 +203,69 @@ export default function Create() {
     return (
         <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
             <Toolbar transparent={false}/>
-            <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
-                <Box sx={styledContainerSX}> 
-                    <InputBase inputRef={titleInputRef} placeholder='Zadej název písně' value={titleValue} sx={titleInputSX} size={"medium"}
-                        onChange={onTitleValueChange} onKeyDown={onTitleInputKeyDown} onKeyUp={onTitleInputKeyUp} onBlur={setMainTitle} autoFocus/>
-        
-                    
-                    {isAltTitlesEnabled()&&(
-        
-                        <Box sx={{display:"flex", gap: 1}}>
-        
-                            {titles.filter((t, index)=>index!=0).map((title, index)=>{    
-                                const onRemove = () => {
-                                    setTitles([
-                                        ...titles.slice(0, index),
-                                        ...titles.slice(index + 1)
-                                      ]);
-                                }
-        
-                                return (
-                                    <AltTitle index={index} title={title} onRemove={onRemove} key={"title"+index}/>
-                                )
-                            })}
-        
-                            {altTitleTyping&&
-                                <InputBase placeholder='Nový podnázev' sx={{fontWeight: "300"}} size={"small"} 
-                                    onKeyDown={onAltTitleInputKeyDown} value={altTitleValue} onChange={onAltTitleValueChange} 
-                                    onBlur={onAltTitleInputBlur} autoFocus/>
-                            }
+            <Box flex={1} display={"flex"} flexDirection={"row"}>
+                <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
+                    <Box sx={styledContainerSX}> 
+                        <InputBase inputRef={titleInputRef} placeholder='Zadej název písně' value={titleValue} sx={titleInputSX} size={"medium"}
+                            onChange={onTitleValueChange} onKeyDown={onTitleInputKeyDown} onKeyUp={onTitleInputKeyUp} onBlur={setMainTitle} autoFocus/>
             
-                            {!altTitleTyping&&!posting&&
-                                <Button sx={{color:"black"}} size={"small"} onClick={onAddAltTitleClick}>
-                                    <Typography variant="caption" sx={{alignItems:"center", display:"flex"}}>
-                                        <AddIcon fontSize='inherit' sx={{marginRight:0.5}}/>
-                                        PŘIDEJ PODNÁZEV
-                                    </Typography>
-                                </Button>
-                            }   
+                        
+                        {isAltTitlesEnabled()&&(
+            
+                            <Box sx={{display:"flex", gap: 1}}>
+            
+                                {titles.filter((t, index)=>index!=0).map((title, index)=>{    
+                                    const onRemove = () => {
+                                        setTitles([
+                                            ...titles.slice(0, index),
+                                            ...titles.slice(index + 1)
+                                          ]);
+                                    }
+            
+                                    return (
+                                        <AltTitle index={index} title={title} onRemove={onRemove} key={"title"+index}/>
+                                    )
+                                })}
+            
+                                {altTitleTyping&&
+                                    <InputBase placeholder='Nový podnázev' sx={{fontWeight: "300"}} size={"small"} 
+                                        onKeyDown={onAltTitleInputKeyDown} value={altTitleValue} onChange={onAltTitleValueChange} 
+                                        onBlur={onAltTitleInputBlur} autoFocus/>
+                                }
+                
+                                {!altTitleTyping&&!posting&&
+                                    <Button sx={{color:"black"}} size={"small"} onClick={onAddAltTitleClick}>
+                                        <Typography variant="caption" sx={{alignItems:"center", display:"flex"}}>
+                                            <AddIcon fontSize='inherit' sx={{marginRight:0.5}}/>
+                                            PŘIDEJ PODNÁZEV
+                                        </Typography>
+                                    </Button>
+                                }   
+                            </Box>
+            
+                        )}
+            
+                        <Box sx={{flex:1, display:"flex", marginTop:2}}>
+                            <InputBase inputRef={sheetInputRef} placeholder='Zde je místo na obsah písně' multiline 
+                                sx={{flex:1, alignItems:"start"}} value={sheetValue} onChange={onSheetValueChange}/>
                         </Box>
-        
-                    )}
-        
-                    <Box sx={{flex:1, display:"flex", marginTop:2}}>
-                        <InputBase inputRef={sheetInputRef} placeholder='Zde je místo na obsah písně' multiline 
-                            sx={{flex:1, alignItems:"start"}} value={sheetValue} onChange={onSheetValueChange}/>
+            
+                        
                     </Box>
         
+                    <Box sx={postButtonContainerSX}>
+                        <Button variant={"contained"} color={"primary"} disabled={posting} onClick={onPostClick}> 
+                            Ověřit a přidat
+                            {posting&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
+                        </Button>
+                    </Box>
                     
+        
                 </Box>
-    
-                <Box sx={postButtonContainerSX}>
-                    <Button variant={"contained"} color={"primary"} disabled={posting} onClick={onPostClick}> 
-                        Ověřit a přidat
-                        {posting&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
-                    </Button>
+                <Box sx={{...styledContainerSX, margin:0}}>
+                    {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption">Tady uvidite ukazku...</Typography>}
+                    <DefaultStyle song={song} variant={song.variants[0]}/>
                 </Box>
-                
-    
             </Box>
         </Box>
     )
