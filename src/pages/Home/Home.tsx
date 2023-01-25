@@ -250,7 +250,8 @@ export default function Home() {
                     style={{
                         left:0,right:0,
                         paddingLeft: 40, 
-                        paddingRight:40         
+                        paddingRight:40,
+                        position: "fixed"         
                     }}
                     animate={{
                         top: isTop?"80%":170,
@@ -260,7 +261,6 @@ export default function Home() {
                         type: "keyframes",
                         duration: animationDuration
                     }}>
-                    
                     
                     {showSearchedGUIDs &&
                         <>

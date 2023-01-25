@@ -11,6 +11,7 @@ import BlackSheep from "../assets/images/blackSheep.png"
 import WhiteSheep from "../assets/images/whiteSheep.png"
 import { Build, Home } from '@mui/icons-material'
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
+import AppsIcon from '@mui/icons-material/Apps';
 
 
 const TopBar = styled(Box)(()=>({
@@ -72,6 +73,10 @@ export default function Toolbar({transparent}:ToolbarProps) {
         setAccountMenuOpen(!accountMenuOpen);
     }
 
+    const onPlaylistClick = () => {
+        navigate('/playlist');
+    }
+
     return (
         <>
             <TopBar  position={"sticky"} zIndex={0}>
@@ -94,6 +99,9 @@ export default function Toolbar({transparent}:ToolbarProps) {
                         </IconButton>
                         {isAdmin()&&<IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1}}>
                             <Build color={"inherit"}/>
+                        </IconButton>}
+                        {isLoggedIn()&&<IconButton color="inherit" sx={{marginLeft:1}}>
+                            <AppsIcon color='inherit' onClick={(onPlaylistClick)}/>
                         </IconButton>}
                     </Box>
                     <Box paddingRight={4} display={"flex"} flexDirection={"row"} alignItems={"center"} color={transparent?"black":"black"}>

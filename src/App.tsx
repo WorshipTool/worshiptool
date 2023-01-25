@@ -15,6 +15,7 @@ import TestPage from './pages/Test/TestPage';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
+import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -26,57 +27,64 @@ const Background = styled(Box)(({theme})=>({
   
 }))
 
+const router = createBrowserRouter([
+  {
+    path:"test",
+    element: <TestPage/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"/",
+    element: <Home/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"login",
+    element: <Login/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"account",
+    element: <Account/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"signup",
+    element: <SignUp/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"song/:guid",
+    element: <Sheet/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path: "create",
+    element: <Create />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path: "playlist",
+    element: <PlaylistPreview />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  
+]);
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0085FF',
+    },
+    secondary: {
+      main: "#F500AE",
+    }
+
+  },
+});
+
 function App() {
-  const router = createBrowserRouter([
-    {
-      path:"test",
-      element: <TestPage/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path:"/",
-      element: <Home/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path:"login",
-      element: <Login/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path:"account",
-      element: <Account/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path:"signup",
-      element: <SignUp/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path:"song/:guid",
-      element: <Sheet/>,
-      errorElement: <Typography>Error.</Typography>
-    },
-    {
-      path: "create",
-      element: <Create />,
-      errorElement: <Typography>Error.</Typography>
-    },
-    
-  ]);
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#0085FF',
-      },
-      secondary: {
-        main: "#F500AE",
-      }
-
-    },
-  });
+  
   
     return (
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>        

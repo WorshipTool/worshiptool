@@ -11,13 +11,15 @@ import useFetch from '../../hooks/useFetch';
 import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } from '../../backend/urls';
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
+import Playlist from './Playlist';
+
 
 export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
 
     const {setGUID, song, getTransposedVariant, transpose, reload} = useSong(null);
-    const {user, isTrustee, isAdmin} = useAuth();
+    const {user, isTrustee, isAdmin, isLoggedIn} = useAuth();
     const {post} = useFetch();
 
     const navigate = useNavigate();
@@ -72,6 +74,22 @@ export default function Sheet() {
     }
   }
 
+  const onPlaylistAddClick = () => {
+    if(guid===undefined)return;
+
+    const p = localStorage.getItem("playlist");
+    let curr : string[] = [];
+    if(p!=null) curr=JSON.parse(p);
+
+    const newArr = [
+      ...curr,
+      guid
+    ];
+
+    localStorage.setItem("playlist", JSON.stringify(newArr));
+
+  }
+
   return (
     <>
       <Toolbar transparent={false}/>
@@ -102,15 +120,16 @@ export default function Sheet() {
                 {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
             </Box>
     
-            <Box sx={{ displayPrint: "flex",
+            {<Box sx={{ displayPrint: "flex",
               flex:1,
               display:"none",
               flexDirection: "column"}}>
                 {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>} 
-            </Box>
+            </Box>}
             
     
         </Box>
+        {isLoggedIn()&&<Playlist onAdd={onPlaylistAddClick}/>}
       </Box>
     </>
   
