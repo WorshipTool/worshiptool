@@ -5,7 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import { isSuccess } from '../../backend/dtosRequestResult';
 import { ROLES } from '../../models/user';
 import SongVerify from './SongVerify';
-import useSongQuery from '../../hooks/useSongQuery';
+import useSongQuery from '../../hooks/song/useSongQuery';
 
 export default function VerifySongPanel() {
     const {isLoggedIn, user,

@@ -1,4 +1,4 @@
-import { Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, Typography, styled, useTheme } from '@mui/material'
+import { Badge, Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import Login from '@mui/icons-material/Login'
@@ -9,9 +9,10 @@ import AccountMenu from './AccountMenu'
 import { useNavigate } from 'react-router-dom'
 import BlackSheep from "../assets/images/blackSheep.png"
 import WhiteSheep from "../assets/images/whiteSheep.png"
-import { Build, Home } from '@mui/icons-material'
+import {Build, Home } from '@mui/icons-material'
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 import AppsIcon from '@mui/icons-material/Apps';
+import useStack from '../hooks/playlist/useStack'
 
 
 const TopBar = styled(Box)(()=>({
@@ -33,6 +34,8 @@ export default function Toolbar({transparent}:ToolbarProps) {
     const [loginOpen, setLoginOpen] = useState(false);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
     const [accountMenuAnchor, setAccountMenuAnchor] = useState<HTMLButtonElement | null>(null);
+
+    const {count} = useStack();
 
     const {user, isLoggedIn, logout, isAdmin} = useAuth();
 
@@ -94,26 +97,47 @@ export default function Toolbar({transparent}:ToolbarProps) {
                 <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1}>
                     
                     <Box flex={1} display={"flex"} alignItems={"center"} color={transparent?"black":"white"}>
-                        <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
-                            <Home color={"inherit"}/>
-                        </IconButton>
-                        {isAdmin()&&<IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1}}>
-                            <Build color={"inherit"}/>
-                        </IconButton>}
-                        {isLoggedIn()&&<IconButton color="inherit" sx={{marginLeft:1}}>
-                            <AppsIcon color='inherit' onClick={(onPlaylistClick)}/>
-                        </IconButton>}
+                        
+                        <Tooltip title={"Hlavní stránka"}>
+                            <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
+                                <Home color={"inherit"}/>
+                            </IconButton>
+                        </Tooltip>
+                        {isAdmin()&&
+                        <>
+                            <Tooltip title={"Testovací stránka"}>
+                                <IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1}}>
+                                    <Build color={"inherit"}/>
+                                </IconButton>
+                            </Tooltip>
+                        </>
+                        }
+                        {isLoggedIn()&&<>
+                            <Tooltip title={"Playlist"}>
+                                <IconButton color="inherit" sx={{marginLeft:1}} onClick={(onPlaylistClick)}>
+                                    <Badge badgeContent={count} color='primary'>
+                                        <AppsIcon color='inherit' />
+                                    </Badge>
+                                </IconButton>
+                            </Tooltip>
+                        </>}
                     </Box>
                     <Box paddingRight={4} display={"flex"} flexDirection={"row"} alignItems={"center"} color={transparent?"black":"black"}>
                         {isLoggedIn()&&<Typography fontWeight={100} color={"inherit"}>Přihlášen jako</Typography>}
                         {!isLoggedIn()?<>
-                            <Button endIcon={<Login/>} color={"inherit"} onClick={onLoginButtonClick}>
-                                Nejsi přihlášen
-                            </Button>
+                            <Tooltip title={"Přihlásit se"}>
+                                <Button endIcon={<Login/>} color={"inherit"} onClick={onLoginButtonClick}>
+                                    Nejsi přihlášen
+                                </Button>
+                            </Tooltip>
                         </>:<>
-                            <Button endIcon={<AccountCircle/>} color={"inherit"} onClick={onAccountButtonClick}>
-                                {user?.firstName} {user?.lastName}
-                            </Button>
+                        
+                            <Tooltip title={"Možnosti"}>
+                                <Button endIcon={<AccountCircle/>} color={"inherit"} onClick={onAccountButtonClick}>
+                                    {user?.firstName} {user?.lastName}
+                                </Button>
+                            </Tooltip>
+                            
     
                         </>}
                         

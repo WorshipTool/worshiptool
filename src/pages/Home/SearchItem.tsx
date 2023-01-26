@@ -2,7 +2,7 @@ import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,styled, useThe
 import React, { useEffect, useMemo, useState } from 'react';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import useSong from '../../hooks/useSong';
+import useSong from '../../hooks/song/useSong';
 import { useNavigate } from 'react-router-dom'
 import { Verified } from '@mui/icons-material';
 

@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import useSong from '../../hooks/useSong';
+import useSong from '../../hooks/song/useSong';
 import DefaultStyle from './styles/DefaultStyle';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,7 +11,9 @@ import useFetch from '../../hooks/useFetch';
 import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } from '../../backend/urls';
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
-import Playlist from './Playlist';
+import useStack from '../../hooks/playlist/useStack';
+import { AddBoxRounded, Print, PrintRounded } from '@mui/icons-material';
+import Gap from '../../components/Gap';
 
 
 export default function Sheet() {
@@ -24,6 +26,8 @@ export default function Sheet() {
 
     const navigate = useNavigate();
     const {enqueueSnackbar} = useSnackbar();
+
+    const {add, remove: removeFromPlaylist, contains} = useStack();
 
     useEffect(()=>{
         if(guid) setGUID(guid);
@@ -76,18 +80,16 @@ export default function Sheet() {
 
   const onPlaylistAddClick = () => {
     if(guid===undefined)return;
+    add(guid);
+  }
+  const onPlaylistRemoveClick = () => {
+    
+    if(guid===undefined)return;
+    removeFromPlaylist(guid);
+  }
 
-    const p = localStorage.getItem("playlist");
-    let curr : string[] = [];
-    if(p!=null) curr=JSON.parse(p);
-
-    const newArr = [
-      ...curr,
-      guid
-    ];
-
-    localStorage.setItem("playlist", JSON.stringify(newArr));
-
+  const onPrintClick = () => {
+    window.print();
   }
 
   return (
@@ -96,27 +98,33 @@ export default function Sheet() {
       <Box flex={1} display={"flex"} flexDirection={"row"}>
         <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
             <Box sx={styledContainerSX} displayPrint={"none"}> 
-                <Box>
-                  <IconButton onClick={()=>{
-                      transpose(1);
-                  }}>
-                      <AddIcon/>
-                  </IconButton>
-                  <IconButton onClick={()=>{
-                      transpose(-1);
-                  }}>
-                      <RemoveIcon/>
-                  </IconButton>
-                  {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
-                    <Button onClick={unverify}>Zrušit ověření</Button>
-                  }
-                  {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
-                    <>
-                      <Button onClick={verify}>Ověřit</Button>
-                      {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
-                    </>
-                  }
+                <Box display={"flex"} flexDirection={"row"}>
+                  <Box flex={1}>
+                    <IconButton onClick={()=>{
+                        transpose(1);
+                    }}>
+                        <AddIcon/>
+                    </IconButton>
+                    <IconButton onClick={()=>{
+                        transpose(-1);
+                    }}>
+                        <RemoveIcon/>
+                    </IconButton>
+                    {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
+                      <Button onClick={unverify}>Zrušit ověření</Button>
+                    }
+                    {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
+                      <>
+                        <Button onClick={verify}>Ověřit</Button>
+                        {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
+                      </>
+                    }
+                  </Box>
+  
+                    
+                  <Button endIcon={<Print/>} variant='outlined' color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
+
                 {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
             </Box>
     
@@ -129,7 +137,28 @@ export default function Sheet() {
             
     
         </Box>
-        {isLoggedIn()&&<Playlist onAdd={onPlaylistAddClick}/>}
+
+
+
+
+        <Box sx={{
+                position: "fixed",
+                bottom:30,
+                right: 30
+              }} display={"flex"} flexDirection={"column"} displayPrint={"none"}>
+
+          <Gap/>
+          {guid&&!contains(guid)?
+            <>
+              <Button onClick={onPlaylistAddClick} variant="contained">Přidat do playlistu</Button>
+            </>
+            :<>              
+                <Typography variant='subtitle2'>Tato píseň je v playlistu</Typography>
+                <Button onClick={onPlaylistRemoveClick} variant="contained">Odstranit z playlistu</Button>
+            </>}
+          </Box>
+        
+
       </Box>
     </>
   

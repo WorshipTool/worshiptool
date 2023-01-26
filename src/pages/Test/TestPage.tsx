@@ -4,7 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Link, Outlet } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Toolbar from '../../components/Toolbar';
-import useSongQuery from '../../hooks/useSongQuery';
+import useSongQuery from '../../hooks/song/useSongQuery';
 
 export default function TestPage() {
 

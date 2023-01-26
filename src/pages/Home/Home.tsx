@@ -1,4 +1,4 @@
-import { Box, Button, Fab, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
+import { Badge, Box, Button, Fab, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
 import React, { createRef, useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,7 +19,7 @@ import Masonry from '@mui/lab/Masonry';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/auth/useAuth';
-import useSongQuery from '../../hooks/useSongQuery';
+import useSongQuery from '../../hooks/song/useSongQuery';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -304,13 +304,15 @@ export default function Home() {
         
             </Box>
             
-            {isLoggedIn()&&<Fab color="primary" aria-label="add" sx={{
-                position: "fixed",
-                right:30,
-                bottom:30
-            }} onClick={onAddClick}>
-                <Add />
-            </Fab>}
+            {isLoggedIn()&&<>
+                <Fab color="primary" aria-label="add" sx={{
+                    position: "fixed",
+                    right:30,
+                    bottom:30
+                }} onClick={onAddClick}>
+                    <Add />
+                </Fab>
+            </>}
         </Box>
         
     )

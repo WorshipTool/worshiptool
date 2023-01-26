@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Song, { Variant } from "../models/song";
-import useFetch from "./useFetch";
-import { getUrl_GETSONGBYGUID } from "../backend/urls";
-import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../backend/dtosSong";
-import convertSheetToSections from "../api/conversition/convertSheetToSections";
-import useTranspose from "../api/hooks/useTranspose";
+import Song, { Variant } from "../../models/song";
+import useFetch from "../useFetch";
+import { getUrl_GETSONGBYGUID } from "../../backend/urls";
+import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../../backend/dtosSong";
+import convertSheetToSections from "../../api/conversition/convertSheetToSections";
+import useTranspose from "../../api/hooks/useTranspose";
 import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
-import useAuth from "./auth/useAuth";
+import useAuth from "../auth/useAuth";
 
 
 

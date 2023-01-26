@@ -16,6 +16,7 @@ import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import PlaylistPreview from './pages/Playlist/PlaylistPreview';
+import { StackProvider } from './hooks/playlist/useStack';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -90,8 +91,10 @@ function App() {
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>        
         <ThemeProvider theme={theme}>
           <AuthProvider>      
-              <Background/>
-              <RouterProvider router={router}/>
+              <StackProvider>
+                <Background/>
+                <RouterProvider router={router}/>
+              </StackProvider>
           </AuthProvider>
         </ThemeProvider>
       </SnackbarProvider>
