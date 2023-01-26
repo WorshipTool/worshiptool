@@ -16,6 +16,7 @@ export default function useSong(g:string|null){
     const [song, setSong] = useState<Song>();
     const [loading, setLoading] = useState(true);
 
+
     const {user, isLoggedIn} = useAuth();
 
     const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
@@ -31,14 +32,19 @@ export default function useSong(g:string|null){
 
     useEffect(()=>{
         const d : AllSongDataDTO = data;
-        if(d===undefined)return;
+        if(d===undefined){
+            setSong(undefined);
+            return;
+        }
         const s = convertAllSongDataDTOToSong(d);
         setSong(s);
 
     },[data]);
 
     const reload = () => {
-        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)});
+        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)},(r)=>{
+
+        });
     }
 
     const isCreatedByMe = (variant: Variant) => {
@@ -79,7 +85,7 @@ export default function useSong(g:string|null){
 
     const getTransposedVariant = (index: number) : Variant => {
 
-        if(song===undefined)return {} as Variant
+        if(song===undefined||song.variants.length<=index)return {} as Variant
 
         let transSection = song.variants[index].sections.map((section)=>{
             if(section.lines===undefined) return {...section};

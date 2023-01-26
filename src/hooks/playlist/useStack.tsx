@@ -35,9 +35,10 @@ export function useProvideStack():useProvideStackReturnI{
 
     const key = "playlistStack";
 
-    useEffect(()=>{
-        if(guids.length==0)return;
+    const [loaded, setLoaded] = useState(false);
 
+    useEffect(()=>{
+        if(!loaded)return;
         localStorage.setItem(key, JSON.stringify(guids));
     },[guids])
 
@@ -46,6 +47,7 @@ export function useProvideStack():useProvideStackReturnI{
         if(content==null)return;
 
         setGUIDs(JSON.parse(content));
+        setLoaded(true);
     },[])
 
     const add = (guid: string) => {

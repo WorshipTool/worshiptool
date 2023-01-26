@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Button, IconButton, Skeleton, Typography, useTheme } from '@mui/material';
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
@@ -14,13 +14,14 @@ import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
 import { AddBoxRounded, Print, PrintRounded } from '@mui/icons-material';
 import Gap from '../../components/Gap';
+import TransposePanel from './TransposePanel';
 
 
 export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
 
-    const {setGUID, song, getTransposedVariant, transpose, reload, getName} = useSong(null);
+    const {setGUID, song, getTransposedVariant, transpose, reload, getName, loading} = useSong(null);
     const {user, isTrustee, isAdmin, isLoggedIn} = useAuth();
     const {post} = useFetch();
 
@@ -101,17 +102,9 @@ export default function Sheet() {
         <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
             <Box sx={styledContainerSX} displayPrint={"none"}> 
                 <Box display={"flex"} flexDirection={"row"}>
-                  <Box flex={1}>
-                    <IconButton onClick={()=>{
-                        transpose(1);
-                    }}>
-                        <AddIcon/>
-                    </IconButton>
-                    <IconButton onClick={()=>{
-                        transpose(-1);
-                    }}>
-                        <RemoveIcon/>
-                    </IconButton>
+                  <Box flex={1} display={"flex"} flexDirection={"row"}>
+                    <TransposePanel transpose={transpose}/>
+                    <Gap vertical/>
                     {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
                       <Button onClick={unverify}>Zrušit ověření</Button>
                     }
@@ -126,8 +119,13 @@ export default function Sheet() {
                     
                   <Button endIcon={<Print/>} variant='outlined' color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
-
-                {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>}
+                <Gap value={2}/>
+                {song&&!loading?<DefaultStyle song={song} variant={getTransposedVariant(0)}/>
+                :<>
+                {Array(10).fill(0).map(()=>{
+                  return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"}></Skeleton>
+                })}
+                </>}
             </Box>
     
             {<Box sx={{ displayPrint: "flex",

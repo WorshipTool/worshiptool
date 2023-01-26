@@ -6,6 +6,10 @@ import { chordToText } from "../../../api/models/chord";
 export default function DefaultStyle({song, variant}:{song:songObject, variant: Variant}){
 
     const sections = variant.sections;
+
+    if(sections===undefined)return<>
+        <Typography variant="subtitle2">Píseň nebyla nalezena</Typography>
+    </>
     
     const font = "Roboto";
 

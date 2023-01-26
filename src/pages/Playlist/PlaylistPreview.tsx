@@ -72,13 +72,14 @@ export default function PlaylistPreview() {
     const goHome = () => {
         navigate("/")
     }
-
     return (
         <Box>
             <Toolbar/>
-            <Box display={"flex"} flexDirection={"row"}>
+            <Box display={"flex"} flexDirection={"row"}>                
+                <SidePanel/>
+                <Box width={300} displayPrint={"none"}></Box>
                 <Container flex={1}>
-                    {songGUIDs.length==0&&<Box display={"flex"} flexDirection={"column"}>
+                    {songGUIDs.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
                         <Typography variant='subtitle1'>
                             V playlistu namáš zatím jedinou píseň. 
                         </Typography>
@@ -94,8 +95,8 @@ export default function PlaylistPreview() {
                         return <Item guid={guid} key={guid}/>
                     })}
                 </Container>
-                <SidePanel/>
-                <Box width={300}></Box>
+                
+    
             </Box>
         </Box>
     )

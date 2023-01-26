@@ -10,12 +10,14 @@ import PanelItem from './PanelItem'
 
 const Container = styled(Box)(({theme})=>({
     width: 300,
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: theme.palette.grey[100],
     position:"fixed",
     bottom:0,
     top:50,
-    right:0,
-    overflowY:"scroll"
+    left:0,
+    overflowY:"auto",
+    boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
+    displayPrint: "none"
 }))
 
 
@@ -33,13 +35,15 @@ export default function SidePanel() {
         setPopupOpen(true);
     }
 
-    const onPrint = () => {
-        window.print();
-    }
+
 
     const removeAll = () => {
         setGUIDs([]);
         closePopup();
+    }
+
+    const onPrint = () => {
+        window.print();
     }
 
     return (
@@ -62,12 +66,11 @@ export default function SidePanel() {
             </Box>
             
             <Button variant="contained" sx={{
-                position:"fixed",
-                bottom: 30,
-                right: 30,
-                displayPrint:"none"
-            }} onClick={onPrint}>Vytisknout</Button>
-
+                    position:"absolute",
+                    bottom: 30,
+                    right: 30,
+                    displayPrint:"none"
+                }} onClick={onPrint}>Vytisknout</Button>
 
             <Dialog
                 open={popupOpen}
