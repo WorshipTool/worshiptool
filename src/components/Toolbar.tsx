@@ -107,7 +107,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
                         <>
                             <Tooltip title={"Testovací stránka"}>
                                 <IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1}}>
-                                    <Build color={"inherit"}/>
+                                    <Build color={"inherit"} fontSize='small'/>
                                 </IconButton>
                             </Tooltip>
                         </>

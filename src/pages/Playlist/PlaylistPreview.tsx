@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Paper, Typography, styled } from '@mui/material';
+import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
@@ -26,7 +26,7 @@ const PageBreak = () => {
 }
 
 const Item = ({guid}:{guid:string}) => {
-    const {song, getTransposedVariant, transpose} = useSong(guid);
+    const {song, getTransposedVariant, transpose, loading} = useSong(guid);
 
     const {remove, count} = useStack();
 
@@ -34,7 +34,11 @@ const Item = ({guid}:{guid:string}) => {
         remove(guid)
     }
 
-    if(song===undefined)return <Typography>Something is wrong.</Typography>
+    if(song===undefined||loading)return <>
+        <Skeleton variant='text' width={"50%"}></Skeleton>
+        {Array(10).fill(0).map(()=><Skeleton variant='text' width={Math.round(Math.random()*40)+"%"}></Skeleton>)}
+    
+    </>
     return <>
                 <Paper sx={{padding:2, marginBottom: 1, displayPrint: "none"}}>
                     <Box position={"absolute"} marginTop={-13} id={"playlistItem_"+guid}></Box>

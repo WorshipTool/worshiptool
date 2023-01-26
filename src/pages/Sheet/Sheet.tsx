@@ -20,7 +20,7 @@ export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
 
-    const {setGUID, song, getTransposedVariant, transpose, reload} = useSong(null);
+    const {setGUID, song, getTransposedVariant, transpose, reload, getName} = useSong(null);
     const {user, isTrustee, isAdmin, isLoggedIn} = useAuth();
     const {post} = useFetch();
 
@@ -59,6 +59,7 @@ export default function Sheet() {
     if(guid&&song){
       post({url: getUrl_UNVERIFYVARIANT(song.variants[0].guid)},()=>{
         reload();
+        enqueueSnackbar(`Ověření písně ${getName()} bylo zrušeno`);
       });
     }
   }
@@ -66,6 +67,7 @@ export default function Sheet() {
     if(guid&&song){
       post({url: getUrl_VERIFYVARIANT(song.variants[0].guid)},()=>{
         reload();
+        enqueueSnackbar(`Píseň ${getName()} byla ověřena.`);
       });
     }
   }
@@ -141,13 +143,12 @@ export default function Sheet() {
 
 
 
-        <Box sx={{
+        {isLoggedIn()&&<Box sx={{
                 position: "fixed",
                 bottom:30,
                 right: 30
               }} display={"flex"} flexDirection={"column"} displayPrint={"none"}>
 
-          <Gap/>
           {guid&&!contains(guid)?
             <>
               <Button onClick={onPlaylistAddClick} variant="contained">Přidat do playlistu</Button>
@@ -156,7 +157,7 @@ export default function Sheet() {
                 <Typography variant='subtitle2'>Tato píseň je v playlistu</Typography>
                 <Button onClick={onPlaylistRemoveClick} variant="contained">Odstranit z playlistu</Button>
             </>}
-          </Box>
+          </Box>}
         
 
       </Box>

@@ -68,7 +68,7 @@ export function useProvideAuth(){
             body
         }, (result : RequestResult<LoginResultDTO>) => {
             if(result.statusCode==codes["Success"]){
-                enqueueSnackbar(`Ahoj ${result.data.user.firstName} ${result.data.user.lastName}. Ať najdeš, po čem paseš.`);
+                enqueueSnackbar(`Ahoj ${result.data.user.firstName} ${result.data.user.lastName}. Ať najdeš, po čem paseš.`,);
 
                 setUser(loginResultDTOToUser(result.data));
             }else{

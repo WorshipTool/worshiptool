@@ -88,7 +88,7 @@ function App() {
   
   
     return (
-      <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>        
+      <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>
           <AuthProvider>      
               <StackProvider>
