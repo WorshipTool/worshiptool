@@ -59,7 +59,8 @@ export default function Toolbar({transparent}:ToolbarProps) {
     },[user])
 
     const onHomeClick = () => {
-        navigate("/")
+        navigate("/");
+        window.scrollTo(0, 0);
     }
     const onTestClick = () => {
         navigate("/test")

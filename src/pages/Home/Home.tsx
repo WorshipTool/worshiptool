@@ -294,7 +294,7 @@ export default function Home() {
                         <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                             {recommendedSongGUIDs.slice(0,4).map((g)=>{
                                 return <Grid item xs={1} key={"griditem_"+g}>
-                                    <SearchItem guid={g} key={g}></SearchItem>
+                                    <SearchItem guid={g} key={g} sx={{height:"7.5rem"}}></SearchItem>
                                 </Grid>
                             })}
                         </GridContainer>

@@ -19,15 +19,15 @@ const StyledContainer = styled(Box)(({theme})=>({
     borderStyle: "solid"
 }))
 
-export default function SearchItem(props: {guid:string}) {
-    const {song, getName, getText, loading, isCreatedByMe} = useSong(props.guid);
+export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
+    const {song, getName, getText, loading, isCreatedByMe} = useSong(guid);
 
     const [verified, setVerified] = useState(false);
 
     const navigate = useNavigate()
     
     const onSongClick = () => {
-        navigate(`/song/`+props.guid, {replace: false})
+        navigate(`/song/`+guid, {replace: false})
     }
 
     useEffect(()=>{
@@ -44,14 +44,14 @@ export default function SearchItem(props: {guid:string}) {
     
     <Box>
         {loading?
-        <Box justifyContent={"center"} display={"flex"}>
-            <Skeleton variant='text' width={"200"}></Skeleton>
-            {Array(4).fill(1).map((a, index)=>{
-                return <Skeleton variant='text' width={"100%"} key={props.guid+"s"+index}></Skeleton>
+        <Box justifyContent={"center"} display={"flex"} flexDirection={"column"}>
+            <Skeleton variant='text' width={"100%"}></Skeleton>
+            {Array(2).fill(1).map((a, index)=>{
+                return <Skeleton variant='text' width={Math.round(Math.random()*80)+"%"} key={guid+"s"+index}></Skeleton>
             })}
         </Box>
         :
-        <StyledContainer onClick={onSongClick} sx={{borderColor:verified?"transparent":"grey"}}>
+        <StyledContainer onClick={onSongClick} sx={{...sx,borderColor:verified?"transparent":"grey"}}>
             
             {song&&isCreatedByMe(song.variants[0])&&
                 <Typography variant="subtitle2">Vytvořeno vámi.</Typography>}
@@ -61,7 +61,7 @@ export default function SearchItem(props: {guid:string}) {
                 {!verified&&<Typography variant='caption'>Neověřeno</Typography>}
             </Box>
 
-            {getText(0).split("\n").slice(0,5).map((line, index)=>{
+            {getText(0).split("\n").slice(0,4).map((line, index)=>{
                 return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
             })}
             
