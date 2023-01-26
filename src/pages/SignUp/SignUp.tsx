@@ -1,5 +1,5 @@
 import { Box, Button, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import { isError } from '../../backend/dtosRequestResult';
 import { Close } from '@mui/icons-material';
@@ -37,6 +37,11 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     const {signup} = useAuth();
+
+    
+    useEffect(()=>{
+        document.title = "Vytvoření účtu"
+    },[])
 
     const onFirstNameChange = (e:any) => {
         setFirstName(e.target.value);

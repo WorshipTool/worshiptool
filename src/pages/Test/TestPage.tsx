@@ -11,7 +11,8 @@ export default function TestPage() {
     const getUnverified = useSongQuery({key:"all"})
 
     useEffect(()=>{
-        getUnverified({});
+        getUnverified({});        
+        document.title = "Testoiďák"
     },[])
 
     return (

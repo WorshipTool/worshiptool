@@ -37,6 +37,11 @@ export default function Sheet() {
         }
     },[]);
 
+    useEffect(()=>{
+      if(song!==undefined)      
+        document.title = getName();
+    },[getName])
+
 
     const styledContainerSX = {
       [theme.breakpoints.down('md')]: {

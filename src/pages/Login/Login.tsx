@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import { RequestResult, isError } from '../../backend/dtosRequestResult';
 import { Close } from '@mui/icons-material';
@@ -37,6 +37,10 @@ export default function Login() {
     const navigate = useNavigate();
 
     const {login} = useAuth();
+
+    useEffect(()=>{
+        document.title = "Přihlašení"
+    },[])
 
     const onEmailChange = (e:any) => {
         setEmail(e.target.value);

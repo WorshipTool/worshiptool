@@ -21,6 +21,10 @@ export default function Account() {
             navigate("/login");
         }
     },[isLoggedIn])
+    
+    useEffect(()=>{
+        document.title = "Váš účet"
+    },[])
 
     const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);

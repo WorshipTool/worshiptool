@@ -152,6 +152,7 @@ export default function Home() {
 
     useEffect(()=>{
         nextRecommended();
+        document.title = "Chval Otce"
     },[])
 
 

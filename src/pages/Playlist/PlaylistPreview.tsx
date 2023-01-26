@@ -72,6 +72,10 @@ export default function PlaylistPreview() {
     const goHome = () => {
         navigate("/")
     }
+
+    useEffect(()=>{
+        document.title = "Playlist";
+    },[])
     return (
         <Box>
             <Toolbar/>
