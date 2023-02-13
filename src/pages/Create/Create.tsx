@@ -1,20 +1,17 @@
 import { Box, Button, Divider, FormControlLabel, InputBase, Switch, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
-import { convertSongToNewSongDTO } from '../../backend/dtosSong';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_POSTNEWSONG } from '../../backend/urls';
+import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { useNavigate } from 'react-router-dom';
-import convertNewSongDataToSong from '../../api/conversition/convertNewSongDataToSong';
 import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
-import Song, { Variant } from '../../models/song';
 import convertSheetToSections from '../../api/conversition/convertSheetToSections';
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
+import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtosNewSongData';
+import Song from '../../models/song/song';
 
 const Container = styled(Box)(({theme})=>({
     width: "70%",
@@ -62,11 +59,15 @@ export default function Create() {
                 sections: convertSheetToSections(sheet),
                 preferredTitle: "",
                 createdBy: "",
-                verified: false
+                verified: false,
+                sources:[],
+                creators:[]
             }],
             guid: "",
             alternativeTitles: [title],
-            creators:[]
+            creators:[],
+            media:[],
+            tags: []
         };
     }
 
@@ -85,18 +86,18 @@ export default function Create() {
     },[fetching])
 
     const onPostClick = () => {
-        const song = getSong();
         setPosting(true);
-        const dto = convertSongToNewSongDTO(
-            convertNewSongDataToSong({
-                title: song.title, 
-                alternativeTitles: song.alternativeTitles, 
-                sheet: song.variants[0].sheetData}));
+        const dto : Partial<NewSongDataDTO> = {
+            title: title,            
+            sheetData: sheet,
+            media:[]
+        };
 
-        post({url: getUrl_POSTNEWSONG(), body: dto}, (d:RequestResult<any>)=> {
+        post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
+            console.log(d);
             if(isSuccess(d)){
-                if(d.data.guid){
-                    navigate(`/song/`+d.data.guid, { replace: false })
+                if(d.data){
+                    navigate(`/song/`+d.data.songGuid, { replace: false })
                 }
             }            
         });

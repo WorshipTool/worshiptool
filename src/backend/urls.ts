@@ -7,7 +7,7 @@ export function getUrl_GETSONGBYGUID(guid:string){
 }
 
 
-export function getUrl_POSTNEWSONG(){
+export function getUrl_ADDSONGDATA(){
     const generatedURL = BACKEND_URL + POSTNEWSONG_URL;
     return generatedURL;
 }

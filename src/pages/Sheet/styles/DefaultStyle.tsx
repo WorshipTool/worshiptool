@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import songObject, { Section, Variant } from "../../../models/song";
+import songObject, { Section, Variant } from "../../../models/song/song";
 import React from 'react'
 import { chordToText } from "../../../api/models/chord";
 
@@ -8,7 +8,7 @@ export default function DefaultStyle({song, variant}:{song:songObject, variant: 
     const sections = variant.sections;
 
     if(sections===undefined)return<>
-        <Typography variant="subtitle2">Píseň nebyla nalezena</Typography>
+        <Typography variant="subtitle2">Text a akordy nebyly nalezeny.</Typography>
     </>
     
     const font = "Roboto";
@@ -21,11 +21,6 @@ export default function DefaultStyle({song, variant}:{song:songObject, variant: 
                     <Box width={width}></Box>
                     <Box flex={10}>
                     <Typography variant='h5' fontFamily={"inherit"}><b>{song.title}</b></Typography>
-                    {song.creators.map((creator)=>{
-                        return(
-                        <Typography variant='subtitle2' fontFamily={"inherit"}><>{creator.type}</>: {creator.name}</Typography>      
-                        )
-                    })}
                     
                     </Box>
             </Box>

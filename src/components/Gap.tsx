@@ -2,14 +2,14 @@ import React from 'react'
 
 interface GapProps{
   value?: number,
-  vertical?: boolean
+  horizontal?: boolean
 }
 
-export default function Gap({value, vertical}:GapProps) {
+export default function Gap({value, horizontal}:GapProps) {
   return (
     <div style={{
-        height:!vertical?(value?value*10:10):0,
-        width:vertical?(value?value*10:10):0
+        height:!horizontal?(value?value*10:10):0,
+        width:horizontal?(value?value*10:10):0
     }}>
         
     </div>

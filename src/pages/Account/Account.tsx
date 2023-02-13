@@ -7,6 +7,7 @@ import TabPanel from './TabPanel';
 import BasicInfo from './BasicInfo';
 import ChangePassword from './ChangePassword';
 import VerifySongPanel from './VerifySongPanel';
+import AdminPanel from './AdminPanel';
 
 export default function Account() {
     const {isLoggedIn, user,
@@ -50,6 +51,7 @@ export default function Account() {
                     <Tab label="Informace" />
                     <Tab label="Změnit heslo" />
                     {(isTrustee()||isAdmin())&&<Tab label="Ověřování" />}
+                    {(isAdmin())&&<Tab label="ejdmin" />}
                 </Tabs>
                 <TabPanel value={tabValue} index={1}>
                     <BasicInfo/>
@@ -60,6 +62,9 @@ export default function Account() {
                 
                 <TabPanel value={tabValue} index={3}>
                     <VerifySongPanel/>
+                </TabPanel>
+                <TabPanel value={tabValue} index={4}>
+                    <AdminPanel/>
                 </TabPanel>
             </Box>
     

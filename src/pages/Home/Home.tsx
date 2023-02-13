@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Fab, Grid, InputBase, Skeleton, TextField, Typography, styled, useTheme } from '@mui/material'
+import { Backdrop, Badge, Box, Button, Fab, Grid, InputBase, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, styled, useTheme } from '@mui/material'
 import React, { createRef, useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -16,10 +16,12 @@ import Carousel from 'react-material-ui-carousel';
 import usePagination from '../../hooks/usePagination';
 import { useIsInViewport } from '../../hooks/useIsInViewport';
 import Masonry from '@mui/lab/Masonry';
-import { Add } from '@mui/icons-material';
+import { Add, AddAPhotoRounded, Close, Cloud, Edit, Movie, PermMedia, PlayArrow, Subscript, Subscriptions } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/auth/useAuth';
 import useSongQuery from '../../hooks/song/useSongQuery';
+import AddVideo from '../../components/AddVideo';
+import AddSource from '../../components/AddSource';
 
 
 const AligningContainer = styled(Box)(({theme})=>({
@@ -76,7 +78,7 @@ export default function Home() {
     const [isTop, setTop] = useState(true);
     const [searching, setSearching] = useState(false);
 
-    const {isLoggedIn} = useAuth();
+    const {isLoggedIn, isAdmin} = useAuth();
 
     const navigate = useNavigate();
 
@@ -88,6 +90,9 @@ export default function Home() {
     const containerRef = useRef(null);
 
     const getRandomSongs = useSongQuery({key:"random"});
+
+    const [addVideoOpen, setAddVideoOpen] = useState(false);
+    const [addSourceOpen, setAddSourceOpen] = useState(false);
 
     const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
         getRandomSongs({page}).then((data)=>{
@@ -306,13 +311,40 @@ export default function Home() {
             </Box>
             
             {isLoggedIn()&&<>
-                <Fab color="primary" aria-label="add" sx={{
-                    position: "fixed",
-                    right:30,
-                    bottom:30
-                }} onClick={onAddClick}>
-                    <Add />
-                </Fab>
+
+
+                <SpeedDial
+                    ariaLabel="SpeedDial openIcon example"
+                    sx={{ position: 'fixed', bottom: 30, right: 30 }}
+                    icon={<SpeedDialIcon openIcon={<Close />} />}>
+                        <SpeedDialAction
+                            icon={<Edit />}
+                            tooltipTitle={"Přidej text a akordy"}
+                            onClick={onAddClick}
+                            />
+                        
+                        {isAdmin()&&<SpeedDialAction
+                            icon={<Subscriptions />}
+                            tooltipTitle={"Přidej video"}
+                            onClick={()=>{setAddVideoOpen(true)}}
+                            />}
+
+                        {isAdmin()&&<SpeedDialAction
+                            icon={<Cloud />}
+                            tooltipTitle={"Přidej zdroj"}
+                            onClick={()=>{setAddSourceOpen(true)}}
+                            />}
+                        
+                </SpeedDial>
+
+
+                <AddVideo open={addVideoOpen} handleClose={()=>setAddVideoOpen(false)} afterUpload={(r)=>{
+                    navigate("/song/"+r.data.songGuid);
+                }}/>
+                <AddSource open={addSourceOpen} handleClose={()=>setAddSourceOpen(false)} afterUpload={(r)=>{
+                    navigate("/song/"+r.data.songGuid);
+                }}/>
+
             </>}
         </Box>
         

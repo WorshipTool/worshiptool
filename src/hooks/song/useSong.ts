@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Song, { Variant } from "../../models/song";
+import Song, { Variant } from "../../models/song/song";
 import useFetch from "../useFetch";
 import { getUrl_GETSONGBYGUID } from "../../backend/urls";
 import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../../backend/dtosSong";
@@ -43,7 +43,7 @@ export default function useSong(g:string|null){
 
     const reload = () => {
         if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)},(r)=>{
-
+            console.log(r);
         });
     }
 

@@ -23,7 +23,7 @@ export default function TransposePanel({transpose}:{transpose:(i:number)=>void})
   return (
     <Container>
         <Typography variant='subtitle2' fontWeight={"400"}>TRANSPOZICE</Typography>
-        <Gap vertical value={0.5}/>
+        <Gap horizontal value={0.5}/>
         <StyledButton onClick={()=>{
             transpose(1);
         }} size='small'>

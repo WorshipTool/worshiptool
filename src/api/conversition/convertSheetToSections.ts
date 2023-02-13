@@ -1,4 +1,4 @@
-import { Line, Section, Segment } from "../../models/song";
+import { Line, Section, Segment } from "../../models/song/song";
 import chord, { textToChord } from "../models/chord";
 
 

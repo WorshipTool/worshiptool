@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Skeleton, Typography, useTheme } from '@mui/material';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
 import DefaultStyle from './styles/DefaultStyle';
@@ -12,9 +12,15 @@ import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } fr
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
-import { AddBoxRounded, Print, PrintRounded } from '@mui/icons-material';
+import { AddBoxRounded, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
+import YoutubeVideo from '../../components/YoutubeVideo';
+import { MediaTypes } from '../../models/song/media';
+import AddVideo from '../../components/AddVideo';
+import { SourceTypes } from '../../models/song/source';
+import AddTag from '../../components/AddTag';
+import AddCreator from '../../components/AddCreator';
 
 
 export default function Sheet() {
@@ -29,6 +35,10 @@ export default function Sheet() {
     const {enqueueSnackbar} = useSnackbar();
 
     const {add, remove: removeFromPlaylist, contains} = useStack();
+
+    const [addVideoOpen, setAddVideoOpen] = useState(false);
+    const [addTagOpen, setAddTagOpen] = useState(false);
+    const [addCreatorOpen, setAddCreatorOpen] = useState(false);
 
     useEffect(()=>{
         if(guid) setGUID(guid);
@@ -100,6 +110,13 @@ export default function Sheet() {
     window.print();
   }
 
+  const addVideo = () => {
+    setAddVideoOpen(true);
+  }
+  const addTag = () => {
+    setAddTagOpen(true);
+  }
+
   return (
     <>
       <Toolbar transparent={false}/>
@@ -109,20 +126,31 @@ export default function Sheet() {
                 <Box display={"flex"} flexDirection={"row"}>
                   <Box flex={1} display={"flex"} flexDirection={"row"}>
                     <TransposePanel transpose={transpose}/>
-                    <Gap vertical/>
-                    {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
-                      <Button onClick={unverify}>Zrušit ověření</Button>
-                    }
-                    {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
+                    <Gap horizontal/>
+                    {song&&song.variants.length>0&&(
                       <>
-                        <Button onClick={verify}>Ověřit</Button>
-                        {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
+                        {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
+                          <Button onClick={unverify}>Zrušit ověření</Button>
+                        }
+                        {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
+                          <>
+                            <Button onClick={verify}>Ověřit</Button>
+                            {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
+                          </>
+                        }
                       </>
-                    }
+                    )}
+                    
                   </Box>
   
                     
-                  <Button endIcon={<Print/>} variant='outlined' color="primary" onClick={onPrintClick}>Tisknout</Button>
+                  {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
+                  <Gap horizontal={true}/>
+                  {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
+                  <Gap horizontal={true}/>
+                  {isAdmin()&&<Button endIcon={<Tag/>} variant='text' color="primary" onClick={addTag}>Přidat tag</Button>}
+                  <Gap horizontal={true}/>
+                  <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
                 {song&&!loading?<DefaultStyle song={song} variant={getTransposedVariant(0)}/>
@@ -130,6 +158,35 @@ export default function Sheet() {
                 {Array(10).fill(0).map(()=>{
                   return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"}></Skeleton>
                 })}
+                </>}
+
+                {isAdmin()&&song&&song.media.map((m)=>{
+                  if(m.type===MediaTypes.Youtube){
+                    return <YoutubeVideo src={m.url}></YoutubeVideo>
+                  }else{
+                    return <Typography>Našli jsme přílohu, ale nevíme jak si s ní poradit.</Typography>
+                  }
+                })}
+
+
+                {isAdmin()&&song&&song.variants&&song.variants[0]&&song.variants[0].sources&&song.variants[0].sources.length>0&&<>
+                  <Typography variant='subtitle2'>Zdroje</Typography>
+                  {song.variants[0].sources.map((s)=>{
+                    return <Typography>- {s.value}</Typography>
+                  })}
+                </>}
+
+                {isAdmin()&&song&&song.tags&&song.tags.length>0&&<>
+                  <Typography variant='subtitle2'>Tagy</Typography>
+                  {song.tags.map((s)=>{
+                    return <Typography>- {s}</Typography>
+                  })}
+                </>}
+                {isAdmin()&&song&&song.creators&&song.creators.length>0&&<>
+                  <Typography variant='subtitle2'>Autoři</Typography>
+                  {song.creators.map((s)=>{
+                    return <Typography>- {s.name}</Typography>
+                  })}
                 </>}
             </Box>
     
@@ -164,6 +221,16 @@ export default function Sheet() {
         
 
       </Box>
+
+      <AddVideo open={addVideoOpen} handleClose={()=>setAddVideoOpen(false)} songGuid={guid} afterUpload={()=>{
+        reload();
+      }}/>
+      <AddTag open={addTagOpen} handleClose={()=>setAddTagOpen(false)} songGuid={guid} afterUpload={()=>{
+        reload();
+      }}/>
+      <AddCreator open={addCreatorOpen} handleClose={()=>setAddCreatorOpen(false)} songGuid={guid} afterUpload={()=>{
+        reload();
+      }}/>
     </>
   
   )

@@ -1,14 +1,17 @@
-import chord from "../api/models/chord"
+import chord from "../../api/models/chord"
+import { Creator } from "./creator"
+import { Media } from "./media"
+import { Source } from "./source"
 
 export default interface Song{
     guid:string,
     title: string,
     alternativeTitles: string[],
-    creators: {
-        name: string, 
-        type: string
-    }[],
-    variants: Variant[]
+    creators: Creator[],
+    variants: Variant[],
+    media: Media[],
+    tags: string[]
+
 }
 
 export interface Variant{
@@ -18,7 +21,9 @@ export interface Variant{
     sections: Section[],
     preferredTitle: string,
     verified: boolean,
-    createdBy: string
+    createdBy: string,
+    sources: Source[],
+    creators: Creator[]
 }
 
 export interface Segment {

@@ -1,6 +1,9 @@
 import { isVariableDeclarationList } from "typescript";
-import SongObject from "../models/song";
+import SongObject, { Section } from "../models/song/song";
 import convertSheetToSections from "../api/conversition/convertSheetToSections";
+import { MediaTypes } from "../models/song/media";
+import { SongDataSource } from "./dtosNewSongData";
+import { CreatorType } from "../models/song/creator";
 
 
 export interface SongDataVariantDTO{
@@ -9,12 +12,19 @@ export interface SongDataVariantDTO{
     sheetData: string,
     sheetText: string,
     verified: boolean,
-    createdBy: string
+    createdBy: string,
+    sources: SongDataSource[],
+    creators: SongDataCreatorDTO[]
 }
 
 export interface SongDataCreatorDTO{
     name: string,
-    type: string
+    type: CreatorType
+}
+
+export interface SongDataMediaDTO{
+    type: MediaTypes,
+    url: string
 }
 
 export default interface AllSongDataDTO{
@@ -22,7 +32,9 @@ export default interface AllSongDataDTO{
     mainTitle: string,
     alternativeTitles: string[],
     creators: SongDataCreatorDTO[],
-    variants: SongDataVariantDTO[]
+    variants: SongDataVariantDTO[],
+    media: SongDataMediaDTO[],
+    tags: string[]
 }
 
 
@@ -40,9 +52,12 @@ export function convertAllSongDataDTOToSong(d: AllSongDataDTO) : SongObject{
         title: data.mainTitle,
         alternativeTitles: data.alternativeTitles,
         creators: data.creators,
-        variants: data.variants.map((variant)=>{
+        variants: data.variants.filter((v)=>v).map((variant)=>{
 
-            const sections = convertSheetToSections(variant.sheetData)
+
+            let sections : Section[] = [];
+            if(variant.sheetData)
+                sections = convertSheetToSections(variant.sheetData)
 
             return {
                 guid: variant.guid,
@@ -51,25 +66,16 @@ export function convertAllSongDataDTOToSong(d: AllSongDataDTO) : SongObject{
                 sheetText: variant.sheetText,
                 sections,
                 verified: variant.verified,
-                createdBy: variant.createdBy
+                createdBy: variant.createdBy,
+                sources: variant.sources,
+                creators: variant.creators
             }
-        })
+        }),
+        media: d.media,
+        tags: d.tags
     }
 }
 
-export interface newSongDataDTO{
-    title: string,
-    sheetData: string,
-    sheetText: string
-}
-
-export function convertSongToNewSongDTO(song: SongObject):newSongDataDTO{
-    return {
-        title: song.title,
-        sheetData: song.variants[0].sheetData,
-        sheetText: song.variants[0].sheetText
-    }
-}
 
 export interface songGetQueryDTO{
     key: "all"|"search"|"random"|"unverified"|"loaderUnverified",
