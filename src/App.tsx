@@ -1,57 +1,104 @@
 import React from 'react';
-import './App.css';
-import { ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material/styles';
-import { createBrowserRouter, Route } from 'react-router-dom';
-import { Router, RouterProvider } from 'react-router';
-import NotFoundScreen from './Screens/NotFoundScreen';
-import SheetsScreen from './Screens/SheetsScreen/SheetsScreen';
-import SheetContainer from './Screens/SheetsScreen/SheetContainer';
-import AddSongScreen from './Screens/AddSong/AddSongScreen';
-import HomeScreen from './Screens/Home/HomeScreen';
+import { Box, ThemeProvider, Typography, styled } from '@mui/material';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Home from './pages/Home/Home';
+import "./App.css";
+import Create from './pages/Create/Create';
+import { createTheme } from '@mui/material';
+import Sheet from './pages/Sheet/Sheet';
+import { AuthProvider } from './hooks/auth/useAuth';
+import Account from './pages/Account/Account';
+import TestPage from './pages/Test/TestPage';
+import Login from './pages/Login/Login';
+import SignUp from './pages/SignUp/SignUp';
+import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
+import PlaylistPreview from './pages/Playlist/PlaylistPreview';
+import { StackProvider } from './hooks/playlist/useStack';
 
 
-function App() {
+const Background = styled(Box)(({theme})=>({
+  background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
+  position:"fixed",
+  width:"100%",
+  height:"100%",
+  zIndex:-100,
+  
+}))
 
-  const customTheme = createTheme({
-    palette: {
-      primary: {
-        main: "#F500AE",
-      },
-      secondary: {
-        main: '#0085FF',
-      },
-      warning:{
-        main: '#FFB800'
-      }
-
-    },
-  });
-
-  const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:"/",
-    element: <SheetsScreen/>,
-    errorElement: <NotFoundScreen/>
+    path:"test",
+    element: <TestPage/>,
+    errorElement: <Typography>Error.</Typography>
   },
   {
-    path: "/:guid",
-    element: <SheetsScreen />,
-    errorElement: <NotFoundScreen />
-  }, 
+    path:"/",
+    element: <Home/>,
+    errorElement: <Typography>Error.</Typography>
+  },
   {
-    path: "/create",
-    element: <AddSongScreen/>,
-    errorElement: <NotFoundScreen/>
-  }
+    path:"login",
+    element: <Login/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"account",
+    element: <Account/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"signup",
+    element: <SignUp/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path:"song/:guid",
+    element: <Sheet/>,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path: "create",
+    element: <Create />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path: "playlist",
+    element: <PlaylistPreview />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  
 ]);
 
-  return (
-    <ThemeProvider theme={customTheme}>
-      <RouterProvider router={router}/>
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0085FF',
+    },
+    secondary: {
+      main: "#F500AE",
+    }
 
-    </ThemeProvider>
-  )
+  },
+});
+
+function App() {
+  
+  
+    return (
+      <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
+        <ThemeProvider theme={theme}>
+          <AuthProvider>      
+              <StackProvider>
+                <Background/>
+                <RouterProvider router={router}/>
+              </StackProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </SnackbarProvider>
+    )
 }
 
 export default App;
