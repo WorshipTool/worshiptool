@@ -22,22 +22,11 @@ import useAuth from '../../hooks/auth/useAuth';
 import useSongQuery from '../../hooks/song/useSongQuery';
 import AddVideo from '../../components/AddVideo';
 import AddSource from '../../components/AddSource';
+import { machine } from './machine';
+import { useMachine } from '@xstate/react';
+import SearchedSongsList from './SearchedSongsList';
+import RecommendedSongsList from './RecommendedSongsList';
 
-
-const AligningContainer = styled(Box)(({theme})=>({
-    display: "flex",
-    justifyContent:"center",
-    position: "sticky",
-    top:"4rem",
-    [theme.breakpoints.down('md')]: {
-        flexDirection:"column",
-    },
-    [theme.breakpoints.up('md')]: {
-        flexDirection:"row",
-    },
-    width:"100%",
-    backgroundColor:"blue"
-}))
 
 const SearchContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -51,76 +40,34 @@ const SearchContainer = styled(Box)(({theme})=>({
     alignItems:"center",
 
 }))
-const SearchContainerBorder = styled(Box)(({theme})=>({
-    background: `linear-gradient(100deg, ${theme.palette.primary.main},${theme.palette.warning.main}, ${theme.palette.secondary.main})`,
-    boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
-    width: "100%",
-    borderRadius: "0.6rem",
-    padding: 2
-
-}))
 const SearchInput = styled(InputBase)(({theme})=>({
     flex:1,
     marginLeft:"0.5em",
     zIndex:100
 }))
 
-const GridContainer = styled(Grid)(({theme})=>({
-    padding:10,
-    paddingTop: 5
-    
-}))
 
 
 export default function Home() {
     const theme = useTheme();
-    const [searchValue, setSearchValue] = useState("");
+
     const [isTop, setTop] = useState(true);
+    const [offsetHeight, setOffsetHeight] = useState(1000);
+    const scrollPointRef = useRef(null)
+
+    const [searchValue, setSearchValue] = useState("");
     const [searching, setSearching] = useState(false);
+    const [showSearchedList, setShowSearchedList] = useState(false);
 
     const {isLoggedIn, isAdmin} = useAuth();
 
     const navigate = useNavigate();
 
-    const loadNextLevelRef = useRef(null);
-    const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
-
-    const {fetchData} = useFetch();
-
-    const containerRef = useRef(null);
-
-    const getRandomSongs = useSongQuery({key:"random"});
-
     const [addVideoOpen, setAddVideoOpen] = useState(false);
     const [addSourceOpen, setAddSourceOpen] = useState(false);
 
-    const {nextPage: nextRecommended, data: recommendedSongGUIDs} = usePagination<string>((page, resolve)=>{
-        getRandomSongs({page}).then((data)=>{
-            resolve({result: data, data: data.data.guids});
-        });
-    });
-    const searchSongs = useSongQuery({key:"search"});
-    const {nextPage: nextSearched, loadPage: loadSearched, data: searchedSongGUIDs, nextExists} = usePagination<string>((page, resolve)=>{
 
-        searchSongs({searchKey: searchValue, page}).then((data)=>{
-            resolve({result: data, data: data.data.guids});
-
-        })
-
-    });
-
-
-    const scrollPointRef = useRef(null)
-
-    const [offsetHeight, setOffsetHeight] = useState(1000);
-
-    const [showSearchedGUIDs, setShowSearchedGUIDs] = useState(false);
-
-    useEffect(()=>{
-        if(nextExists){
-            nextSearched();
-        }
-    },[isInViewport])
+    
 
     const onResize = () => {
         const min = (window.innerHeight);
@@ -148,22 +95,16 @@ export default function Home() {
                 const s : any = scrollPointRef.current;
                 s.scrollIntoView();
             }
-            loadSearched(0, true);
         }
-        
-
-        
     },[searchValue])
 
     useEffect(()=>{
-        nextRecommended();
         document.title = "Chval Otce"
     },[])
 
-
     const onSearchValueChange = (event: any) => {
         setSearching(true);
-        setShowSearchedGUIDs(true);
+        setShowSearchedList(true);
         setSearchValue(event.target.value);
     }   
 
@@ -248,11 +189,12 @@ export default function Home() {
                 </motion.div>
                 <Box sx={{height:65}}></Box>
 
+
                 <div ref={scrollPointRef}></div>
 
                 <Box sx={{height:offsetHeight}}></Box>
                 
-                <motion.div ref={containerRef}
+                <motion.div
                     style={{
                         left:0,right:0,
                         paddingLeft: 40, 
@@ -268,43 +210,10 @@ export default function Home() {
                         duration: animationDuration
                     }}>
                     
-                    {showSearchedGUIDs &&
-                        <>
-                            <Gap/>                        
-                            <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
+                    {showSearchedList&&<SearchedSongsList searchString={searchValue}/>}
                         
-                            {searchedSongGUIDs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                                {searchedSongGUIDs.map((g)=>{
-                                    return <SearchItem guid={g} key={g}></SearchItem>
-                                })}
-                            </Masonry>}
-                        </>
-                    }
-                    <div ref={loadNextLevelRef} style={{backgroundColor:"red"}}></div>
-                    {showSearchedGUIDs &&
-                        <>
-                            {searchedSongGUIDs.length>0&&nextExists&&<>
-                                <Button onClick={()=>{nextSearched()}}>Načíst další</Button>
-                            </>}
-                        </>
-                    }
-                        
-                    <Gap/>
-                    {searchedSongGUIDs.length==0 && showSearchedGUIDs &&
-                        <Typography>Nic jsme nenašli...</Typography>}
 
-                    {showSearchedGUIDs&&<Gap value={2}/>}
-
-                    <>
-                        <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
-                        <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                            {recommendedSongGUIDs.slice(0,4).map((g)=>{
-                                return <Grid item xs={1} key={"griditem_"+g}>
-                                    <SearchItem guid={g} key={g} sx={{height:"7.5rem"}}></SearchItem>
-                                </Grid>
-                            })}
-                        </GridContainer>
-                    </>
+                    <RecommendedSongsList/>
                     
                 </motion.div>
         

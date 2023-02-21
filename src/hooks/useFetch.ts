@@ -61,7 +61,7 @@ export default function useFetch(){
             
             enqueueSnackbar("Náš server mele nesmysly. Omlouváme, chvilku potrvá než to vyluštíme.",{
                 preventDuplicate:true,
-                persist:true
+                autoHideDuration: 10000
             });
 
             setLoading(false);

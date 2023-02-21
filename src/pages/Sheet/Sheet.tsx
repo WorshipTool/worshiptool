@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, IconButton, Skeleton, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
@@ -160,34 +160,48 @@ export default function Sheet() {
                 })}
                 </>}
 
-                {isAdmin()&&song&&song.media.map((m)=>{
-                  if(m.type===MediaTypes.Youtube){
-                    return <YoutubeVideo src={m.url}></YoutubeVideo>
-                  }else{
-                    return <Typography>Našli jsme přílohu, ale nevíme jak si s ní poradit.</Typography>
-                  }
-                })}
-
-
-                {isAdmin()&&song&&song.variants&&song.variants[0]&&song.variants[0].sources&&song.variants[0].sources.length>0&&<>
-                  <Typography variant='subtitle2'>Zdroje</Typography>
-                  {song.variants[0].sources.map((s)=>{
-                    return <Typography>- {s.value}</Typography>
+                {isAdmin()&&song&&<>                
+                  {song.media.map((m)=>{
+                    if(m.type===MediaTypes.Youtube){
+                      return <YoutubeVideo src={m.url}></YoutubeVideo>
+                    }else{
+                      return <Typography>Našli jsme přílohu, ale nevíme jak si s ní poradit.</Typography>
+                    }
                   })}
+                  <Gap/>
                 </>}
 
-                {isAdmin()&&song&&song.tags&&song.tags.length>0&&<>
-                  <Typography variant='subtitle2'>Tagy</Typography>
-                  {song.tags.map((s)=>{
-                    return <Typography>- {s}</Typography>
-                  })}
-                </>}
-                {isAdmin()&&song&&song.creators&&song.creators.length>0&&<>
-                  <Typography variant='subtitle2'>Autoři</Typography>
-                  {song.creators.map((s)=>{
-                    return <Typography>- {s.name}</Typography>
-                  })}
-                </>}
+                <Box>
+  
+                  {isAdmin()&&song&&song.variants&&song.variants[0]&&song.variants[0].sources&&song.variants[0].sources.length>0&&<>
+                    <Typography variant='subtitle2'>Zdroje</Typography>
+                    <Box display={"flex"} flexDirection={"row"} gap={0.5}>
+                      {song.variants[0].sources.map((s)=>{
+                        return <>
+                          <Chip label={s.value}/>
+                        </>
+                      })}
+                    </Box >
+                    <Gap/>
+                  </>}
+                  {isAdmin()&&song&&song.tags&&song.tags.length>0&&<>
+                    <Typography variant='subtitle2'>Tagy</Typography>
+                    <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"} gap={0.5}>
+                      {song.tags.map((s)=>{
+                        return <Chip label={s}/>
+                      })}                      
+                    </Box >
+                    <Gap/>
+                  </>}
+                  {isAdmin()&&song&&song.creators&&song.creators.length>0&&<>
+                    <Typography variant='subtitle2'>Autoři</Typography>
+                    <Box display={"flex"} flexDirection={"row"} gap={0.5}>
+                      {song.creators.map((s)=>{
+                        return <Chip label={s.name}/>
+                      })}
+                    </Box >
+                  </>}
+                </Box>
             </Box>
     
             {<Box sx={{ displayPrint: "flex",

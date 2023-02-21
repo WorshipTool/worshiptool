@@ -20,7 +20,6 @@ export default function usePagination<T>( func:(page:number, resolve:(result: re
                 res(d);
             });
         });
-
         if(isSuccess(result.result)){
             const continues = result.data.length>countPerPage;
             const newData = result.data.slice(0, countPerPage);
@@ -36,7 +35,7 @@ export default function usePagination<T>( func:(page:number, resolve:(result: re
     }
 
     const nextPage = () => {
-        loadPage(lastPage+1, false);
+        return loadPage(lastPage+1, false);
     }
 
 
