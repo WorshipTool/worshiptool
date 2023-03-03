@@ -12,7 +12,7 @@ import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } fr
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
-import { AddBoxRounded, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
+import { Add, AddBoxRounded, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
@@ -143,7 +143,8 @@ export default function Sheet() {
                     
                   </Box>
   
-                    
+                  {isLoggedIn()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
+                  <Gap horizontal={true}/>
                   {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
                   <Gap horizontal={true}/>
                   {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
@@ -173,7 +174,7 @@ export default function Sheet() {
 
                 <Box>
   
-                  {isAdmin()&&song&&song.variants&&song.variants[0]&&song.variants[0].sources&&song.variants[0].sources.length>0&&<>
+                  {isAdmin()&&song?.variants?.[0]?.sources&&song.variants[0].sources.length>0&&<>
                     <Typography variant='subtitle2'>Zdroje</Typography>
                     <Box display={"flex"} flexDirection={"row"} gap={0.5}>
                       {song.variants[0].sources.map((s)=>{
@@ -184,7 +185,7 @@ export default function Sheet() {
                     </Box >
                     <Gap/>
                   </>}
-                  {isAdmin()&&song&&song.tags&&song.tags.length>0&&<>
+                  {isAdmin()&&song?.tags&&song.tags.length>0&&<>
                     <Typography variant='subtitle2'>Tagy</Typography>
                     <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"} gap={0.5}>
                       {song.tags.map((s)=>{

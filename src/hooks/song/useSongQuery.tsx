@@ -74,7 +74,7 @@ export default function useSongQuery(startParams:Partial<useSongQueryProps>){
         const url = getQueryUrlWithParams(typed);
 
         const result : RequestResult<songGetResultDTO> = await new Promise((res, reject) => {
-            fetchData({url},(result)=>{
+            fetchData<songGetResultDTO>({url},(result)=>{
                 res(result);
             })
         });

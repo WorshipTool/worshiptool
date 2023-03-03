@@ -65,6 +65,11 @@ const router = createBrowserRouter([
     errorElement: <Typography>Error.</Typography>
   },
   {
+    path: "create/:guid",
+    element: <Create />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
     path: "playlist",
     element: <PlaylistPreview />,
     errorElement: <Typography>Error.</Typography>
@@ -85,8 +90,7 @@ const theme = createTheme({
 });
 
 function App() {
-  
-  
+
     return (
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>

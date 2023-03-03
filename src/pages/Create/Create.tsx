@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
@@ -12,6 +12,7 @@ import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
 import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtosNewSongData';
 import Song from '../../models/song/song';
+import useSong from '../../hooks/song/useSong';
 
 const Container = styled(Box)(({theme})=>({
     width: "70%",
@@ -37,6 +38,11 @@ const SheetInput = styled(InputBase)(({})=>({
 }))
 
 export default function Create() {
+
+    const {guid} = useParams();
+
+    const {setGUID, getName} = useSong(guid||null);
+
     const [posting, setPosting] = useState(false);
 
     const [preview, setPreview] = useState(false);
@@ -152,9 +158,16 @@ export default function Create() {
                     
                     <Container>
 
-                        <Box display={"flex"} justifyContent={"end"} padding={1}>   
-                            <Typography display={"flex"} alignItems={"center"} variant='caption'>Náhled</Typography>                                 
-                            <Switch size='small' checked={preview} onChange={(e)=>{setPreview((p)=>!p)}}/>
+                        <Box display={"flex"}padding={1}>   
+                            <Box flex={1} display={"flex"} alignItems={"center"} >
+                                {guid&&<Typography>Parent song:</Typography>}
+                                <Gap horizontal/>
+                                {guid&&<Typography fontWeight={"bold"}>{getName()}</Typography>}
+                            </Box>
+                            <Box display={"flex"} justifyContent={"end"} padding={1}>
+                                <Typography display={"flex"} alignItems={"center"} variant='caption'>Náhled</Typography>                                 
+                                <Switch size='small' checked={preview} onChange={(e)=>{setPreview((p)=>!p)}}/>
+                            </Box>
                         </Box>
 
                         {!preview?

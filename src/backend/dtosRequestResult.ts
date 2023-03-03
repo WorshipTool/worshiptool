@@ -18,15 +18,23 @@ export interface RequestResult<T>{
     data: T
 }
 
-export const RequestError : RequestResult<undefined> = {
-    statusCode: codes["Unknown Error"],
-    message: messages["Unknown Error"],
-    data: undefined
-}
+export const RequestError : RequestResult<undefined> = formatted(undefined, codes["Unknown Error"]);
 
 export const isSuccess = (req: RequestResult<any>) => {
     return req.statusCode==codes["Success"];
 }
 export const isError = (req: RequestResult<any>) => {
     return req.statusCode>=400;
+}
+
+
+export function formatted<T>(data:T, statusCode?:number, message?:string) : RequestResult<any>{
+    return {
+        statusCode: (statusCode===undefined?0:statusCode),
+        message: (message===undefined?
+                    (statusCode===undefined?messages.Success:
+                        //@ts-ignore
+                        messages[Object.keys(codes).find(key => codes[key] === statusCode)]):message),
+        data
+    }
 }
