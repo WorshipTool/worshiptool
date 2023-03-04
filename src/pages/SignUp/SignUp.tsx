@@ -1,7 +1,7 @@
 import { Box, Button, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { isError } from '../../backend/dtosRequestResult';
+import { isRequestError } from '../../backend/dtosRequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbar';
@@ -95,7 +95,7 @@ export default function SignUp() {
         }
 
         if(ok) signup({email, password, firstName, lastName},(result)=>{
-            if(isError(result)) setErrorMessage(result.message);
+            if(isRequestError(result)) setErrorMessage(result.message);
             else{
                 navigate("/");
             }

@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { RequestResult, isError } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestError } from '../../backend/dtosRequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbar';
@@ -76,7 +76,7 @@ export default function Login() {
         setInProgress(true);
         login({email, password},(result : RequestResult<LoginResultDTO>)=>{
             setInProgress(false);
-            if(isError(result)) setErrorMessage(result.message);
+            if(isRequestError(result)) setErrorMessage(result.message);
             else{
                 navigate("/");
             }

@@ -3,7 +3,7 @@ import useYoutube from '../hooks/useYoutube';
 import { NewSongDataDTO, NewSongDataResult } from '../backend/dtosNewSongData';
 import { MediaTypes } from '../models/song/media';
 import { getUrl_ADDSONGDATA } from '../backend/urls';
-import { RequestResult, isSuccess } from '../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../backend/dtosRequestResult';
 import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 
@@ -48,7 +48,7 @@ export default function AddVideo({open, handleClose, afterUpload, songGuid}:AddV
         }
 
         post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isSuccess(d)){
+            if(isRequestSuccess(d)){
                 console.log(d);
                 //added
                 onClose();

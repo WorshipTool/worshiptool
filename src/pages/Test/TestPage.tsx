@@ -11,7 +11,7 @@ import Gap from '../../components/Gap';
 import useYoutube from '../../hooks/useYoutube';
 import { Configuration, OpenAIApi } from "openai";
 import useFetch from '../../hooks/useFetch';
-import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { MediaTypes } from '../../models/song/media';
 import { NewSongDataDTO, NewSongDataResult } from '../../backend/dtosNewSongData';
@@ -67,7 +67,7 @@ export default function TestPage() {
         }
 
         post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isSuccess(d)){
+            if(isRequestSuccess(d)){
                 navigate("/song/"+d.data.songGuid);
             }  
         });

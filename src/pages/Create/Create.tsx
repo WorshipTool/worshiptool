@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import convertSheetToSections from '../../api/conversition/convertSheetToSections';
@@ -101,7 +101,7 @@ export default function Create() {
 
         post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
             console.log(d);
-            if(isSuccess(d)){
+            if(isRequestSuccess(d)){
                 if(d.data){
                     navigate(`/song/`+d.data.songGuid, { replace: false })
                 }

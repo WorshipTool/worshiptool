@@ -1,33 +1,58 @@
 import { useEffect, useState } from "react";
-import {Result, isResult, result } from "../Result";
+import {isSuccess, result } from "../Result";
 import useFetch from '../useFetch';
 import { getUrl_GETSONGBYGUID } from "../../backend/urls";
-import { isSuccess } from '../../backend/dtosRequestResult';
 import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../../backend/dtosSong";
 import Song from "../../models/song/song";
 
+type SongIsUndefinedResult = "Song is undefined";
+type SongNotFoundResult = "Song not found";
+
 /**
  * Hook provides basic information about song. 
- * Song is chosen by guid. Please set guid at beginning, or use can use setGuid function.
- * Also, some functions can be used with song guid as parameter.
+ * Song is chosen by guid. Please set guid at beginning, or use can use setGuid function
  */
 export default function useSong(_guid?: string) {
     const [guid, setGuid] = useState(_guid);
     const [song, setSong] = useState<Song>({} as Song);
 
     const {fetchData} = useFetch();
+    const [data, setData] = useState<AllSongDataDTO>();
 
-    const getTitle = async (g?: string) : Promise<  Result<"Success"> | 
-                                                    Result<"Song not found"> |
-                                                    Result<"Song has no title">> => {
-        if(!g)g = guid;
-        if(!g)return result("Song not found");
+    useEffect(()=>{
+        reload();
+    },[guid]);
 
-        const res = await fetchData<AllSongDataDTO>({url: getUrl_GETSONGBYGUID(g)});
-        if(isSuccess(res)) return result("Success", res.data.mainTitle);
+    /**
+     * This function reloads song data from current guid. 
+     * The result is set to data state variable.
+     */
+    const reload = async () : Promise<AllSongDataDTO> => {
 
-        return result("Song has no title");
+        if(!guid) return result("Song is undefined");
+
+        const res = await fetchData<AllSongDataDTO>({url: getUrl_GETSONGBYGUID(guid)});
+        if(isSuccess(res)){
+
+            setData(res.data);
+
+            return result("Success", res.data);
+        }
+
+        return result("Error");
     }
+
+    const getTitle = () : string => {     
+        //guid not set  
+        if(!guid) return result("Song is undefined"); 
+        if(!data) return result("Song not found");
+
+        if(data.alternativeTitles?.length<1) 
+            return result("Song has no title");
+
+        return result("Success", data.alternativeTitles[0]);
+    }
+
 
 
     useEffect(()=>{
@@ -51,8 +76,3 @@ export default function useSong(_guid?: string) {
     
 }
 
-
-const {getTitle} = useSong();
-const a = async () => {
-    isResult(await getTitle("sddf"),"Song has no title")
-}

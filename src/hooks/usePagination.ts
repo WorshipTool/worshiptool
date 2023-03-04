@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RequestResult, isSuccess } from "../backend/dtosRequestResult";
+import { RequestResult, isRequestSuccess } from "../backend/dtosRequestResult";
 
 interface resultProps<T>{
     result: RequestResult<any>, 
@@ -20,7 +20,7 @@ export default function usePagination<T>( func:(page:number, resolve:(result: re
                 res(d);
             });
         });
-        if(isSuccess(result.result)){
+        if(isRequestSuccess(result.result)){
             const continues = result.data.length>countPerPage;
             const newData = result.data.slice(0, countPerPage);
             setNextExists(continues);

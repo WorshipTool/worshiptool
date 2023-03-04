@@ -5,7 +5,7 @@ import usePagination from '../../hooks/usePagination';
 import SearchItem from './SearchItem';
 import { useMachine } from '@xstate/react';
 import { machine } from './machine';
-import { isSuccess } from '../../backend/dtosRequestResult';
+import { isRequestSuccess } from '../../backend/dtosRequestResult';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -20,7 +20,7 @@ export default function RecommendedSongsList() {
         services:{
             fetchRecommendedSongs: async ()=>{
                 const res = await getRandomSongs({});
-                if(!isSuccess(res)){
+                if(!isRequestSuccess(res)){
                     throw Error(res.message);
                 }
                 const data = res.data;

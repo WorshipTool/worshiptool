@@ -20,11 +20,11 @@ export interface RequestResult<T>{
 
 export const RequestError : RequestResult<undefined> = formatted(undefined, codes["Unknown Error"]);
 
-export const isSuccess = (req: RequestResult<any>) => {
+export const isRequestSuccess = (req: RequestResult<any>) => {
     return req.statusCode==codes["Success"];
 }
-export const isError = (req: RequestResult<any>) => {
-    return req.statusCode>=400;
+export const isRequestError = (req: RequestResult<any>) => {
+    return !isRequestSuccess(req);
 }
 
 

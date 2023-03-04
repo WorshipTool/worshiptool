@@ -2,7 +2,7 @@ import { Box, Button, Divider, IconButton, Input, Paper, TextField, Typography, 
 import React, { useState } from 'react'
 import Gap from './Gap'
 import useAuth from '../hooks/auth/useAuth'
-import { isError, isSuccess } from '../backend/dtosRequestResult'
+import { isRequestError, isRequestSuccess } from '../backend/dtosRequestResult'
 import Close from '@mui/icons-material/Close'
 
 const Container = styled(Box)(()=>({
@@ -58,7 +58,7 @@ export default function LoginPopper({onClose}:LoginPopperProps) {
         }
 
         if(ok) login({email, password},(result)=>{
-            if(isError(result)) setErrorMessage(result.message);
+            if(isRequestError(result)) setErrorMessage(result.message);
         });
     }
 

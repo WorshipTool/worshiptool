@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_LOGIN } from '../../backend/urls';
-import { RequestResult, codes, isSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, codes, isRequestSuccess } from '../../backend/dtosRequestResult';
 import { LoginRequestDTO, LoginResultDTO } from '../../backend/dtosAuth';
 
 export default function AdminPanel() {
@@ -25,7 +25,7 @@ export default function AdminPanel() {
             url: getUrl_LOGIN(),
             body
         }, (result : RequestResult<LoginResultDTO>) => {
-            if(isSuccess(result)){
+            if(isRequestSuccess(result)){
                 setToken(result.data.token);
                 console.log(result.data.token);
             }

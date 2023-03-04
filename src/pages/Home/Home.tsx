@@ -6,7 +6,7 @@ import SearchItem from './SearchItem';
 import sheepImage from '../../assets/sheepWithCircle.png'
 import useFetch from '../../hooks/useFetch';
 import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtosSong';
-import { RequestResult, isSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
 import geometryImage from '../../assets/geometry.png'
 import Toolbar from '../../components/Toolbar';
 import { ModuleDetectionKind } from 'typescript';
