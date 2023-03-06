@@ -130,7 +130,7 @@ export default function SignUp() {
                     <Gap/>
                     <Typography variant='subtitle2'>Heslo</Typography>
                     <TextField size="small" fullWidth value={password} onChange={onPasswordChange}
-                        error={!isPasswordOk} helperText={passwordMessage}/>
+                        error={!isPasswordOk} helperText={passwordMessage} type='password'/>
                     <Gap/>
         
                     <Button onClick={onSignupClick}>Vytvořit účet</Button>

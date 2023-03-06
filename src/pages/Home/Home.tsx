@@ -1,31 +1,17 @@
-import { Backdrop, Badge, Box, Button, Fab, Grid, InputBase, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, styled, useTheme } from '@mui/material'
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import { Box, InputBase, SpeedDial, SpeedDialAction, SpeedDialIcon,  Typography, styled, useTheme } from '@mui/material'
+import React, {useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchItem from './SearchItem';
-import sheepImage from '../../assets/sheepWithCircle.png'
-import useFetch from '../../hooks/useFetch';
-import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtos/dtosSong';
-import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
-import geometryImage from '../../assets/geometry.png'
 import Toolbar from '../../components/Toolbar';
-import { ModuleDetectionKind } from 'typescript';
-import { AnimatePresence, motion } from 'framer-motion';
-import Gap from '../../components/Gap';
-import Carousel from 'react-material-ui-carousel';
-import usePagination from '../../hooks/usePagination';
-import { useIsInViewport } from '../../hooks/useIsInViewport';
-import Masonry from '@mui/lab/Masonry';
-import { Add, AddAPhotoRounded, Close, Cloud, Edit, Movie, PermMedia, PlayArrow, Subscript, Subscriptions } from '@mui/icons-material';
+import { motion } from 'framer-motion';
+import { Close, Cloud, Edit, Subscriptions } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/auth/useAuth';
-import useSongQuery from '../../hooks/song/useSongQuery';
 import AddVideo from '../../components/AddVideo';
 import AddSource from '../../components/AddSource';
-import { machine } from './machine';
-import { useMachine } from '@xstate/react';
 import SearchedSongsList from './SearchedSongsList';
 import RecommendedSongsList from './RecommendedSongsList';
+import { grey } from '@mui/material/colors';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -137,13 +123,16 @@ export default function Home() {
     return (
         <Box >
             <Toolbar transparent={isTop}/>
-            <Box sx={{flex:1, justifyContent:"center", alignItems:"start", display:"flex", flexDirection:"column"}}>
+            <Box sx={{flex:1, justifyContent:"center", alignItems:"start", display:"flex", flexDirection:"column",
+                [theme.breakpoints.down('sm')]: {
+                    display:"none"
+                }}}>
                 
                 <motion.div 
                     style={{
                         position:"fixed",
-                        left:"30%",
-                        right:"30%",
+                        left:"26%",
+                        right:"26%",
                         display:"flex",
                         flexDirection:"column",
                         zIndex:10
@@ -165,9 +154,9 @@ export default function Home() {
                             type:"keyframes",
                             duration: animationDuration/2
                          }}
-                         style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column" }}>
+                         style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column",}}>
                             <Typography variant='h4' fontWeight={"200"}>Jsi ovce?</Typography>
-                            <Typography variant='h2' fontWeight={"bold"}>Chval Otce</Typography>
+                            <Typography variant='h2' fontWeight={"bold"} >Chval Otce</Typography>
                         </motion.div>
 
                     <motion.div style={{
@@ -217,6 +206,32 @@ export default function Home() {
                     
                 </motion.div>
         
+            </Box>
+
+            <Box sx={{display:"none", flex:1, justifyContent:"center", alignItems:"start", flexDirection:"column",
+                [theme.breakpoints.down('sm')]: {
+                    display:"flex"
+                }}}>
+                 <Box sx={{display:"flex", width:"100%", flexDirection: "row", position:"fixed", top:45}}>
+                    <Box sx={{flex:1, margin:1}}>
+                        <SearchContainer sx={{boxShadow: "0px 4px 5px" + theme.palette.grey[400]}}>                    
+                           <SearchIcon />
+                           <SearchInput placeholder='Hledej...' onChange={onSearchValueChange} autoFocus value={searchValue}></SearchInput>
+                           <MenuIcon/>
+                        </SearchContainer>
+                    </Box>
+                 </Box>
+
+
+                 <Box sx={{height:60}}></Box>
+                <div ref={scrollPointRef}></div>
+
+
+                <Box margin={1}>
+                    {showSearchedList&&<SearchedSongsList searchString={searchValue}/>}                           
+                    
+                    <RecommendedSongsList/>
+                </Box >
             </Box>
             
             {isLoggedIn()&&<>

@@ -2,7 +2,6 @@ import { Badge, Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, To
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import Login from '@mui/icons-material/Login'
-import LoginPopper from './LoginPopper'
 import useAuth from '../hooks/auth/useAuth'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import AccountMenu from './AccountMenu'

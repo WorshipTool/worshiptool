@@ -30,15 +30,17 @@ export default function useFetch(){
     const fetchData = async <T>({url, options}:{url:string, options?:any}, after?: (d:RequestResult<T>)=>void)=>{
 
         //create options with header
-        const authHeader = {...getAuthHeader()};
-        let newOptions = {headers: authHeader};
+        const headers = {
+            ...getAuthHeader()
+        };
+        let newOptions = {headers: headers};
         if(options){
-            newOptions = {...options, headers: {...options.headers, ...authHeader}};
+            newOptions = {...options, headers: {...options.headers, ...headers}};
         }
 
         try{
             setLoading(true);
-            const response = await fetch(url, newOptions);
+            const response = await fetch(url, {...newOptions});
             const data : RequestResult<T> = await response.json();
     
             if(data.statusCode===undefined){

@@ -17,8 +17,8 @@ const StyledContainer = styled(Paper)(()=>({
 }))
 
 export default function Login() {
-    const [email, setEmail] = useState("pe.pavlin@gmail.com");
-    const [password, setPassword] = useState("semice");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const [isEmailOk, setIsEmailOk] = useState(true);
     const [emailMessage, setEmailMessage] = useState("");
@@ -104,7 +104,7 @@ export default function Login() {
                     <Gap/>
                     <Typography variant='subtitle2'>Heslo</Typography>
                     <TextField size="small" fullWidth value={password} onChange={onPasswordChange}
-                        error={!isPasswordOk} helperText={passwordMessage} disabled={inProgress} />
+                        error={!isPasswordOk} helperText={passwordMessage} disabled={inProgress} type='password'/>
                     <Gap/>
         
                     <Button onClick={onLoginClick}>
