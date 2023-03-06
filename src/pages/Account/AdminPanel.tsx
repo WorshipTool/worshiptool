@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_LOGIN } from '../../backend/urls';
-import { RequestResult, codes, isRequestSuccess } from '../../backend/dtosRequestResult';
-import { LoginRequestDTO, LoginResultDTO } from '../../backend/dtosAuth';
+import { RequestResult, codes, isRequestSuccess } from '../../backend/dtos/RequestResult';
+import { LoginRequestDTO, LoginResultDTO } from '../../backend/dtos/dtosAuth';
 
 export default function AdminPanel() {
     const [email, setEmail] = useState("");

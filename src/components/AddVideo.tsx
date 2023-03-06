@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import useYoutube from '../hooks/useYoutube';
-import { NewSongDataDTO, NewSongDataResult } from '../backend/dtosNewSongData';
+import { NewSongDataDTO, NewSongDataResult } from '../backend/dtos/dtosNewSongData';
 import { MediaTypes } from '../models/song/media';
 import { getUrl_ADDSONGDATA } from '../backend/urls';
-import { RequestResult, isRequestSuccess } from '../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../backend/dtos/RequestResult';
 import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 

@@ -1,20 +1,16 @@
 import { AppBar, Box, Button, IconButton, InputBase, Skeleton, Typography, styled, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
-import HomeIcon from '@mui/icons-material/Home';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Toolbar from '../../components/Toolbar';
-import useSongQuery from '../../hooks/song/useSongQuery';
 import YoutubeVideo from '../../components/YoutubeVideo';
 import { useSnackbar } from 'notistack';
 import Gap from '../../components/Gap';
 import useYoutube from '../../hooks/useYoutube';
-import { Configuration, OpenAIApi } from "openai";
 import useFetch from '../../hooks/useFetch';
-import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { MediaTypes } from '../../models/song/media';
-import { NewSongDataDTO, NewSongDataResult } from '../../backend/dtosNewSongData';
+import { NewSongDataDTO, NewSongDataResult } from '../../backend/dtos/dtosNewSongData';
 
 export default function TestPage() {
 

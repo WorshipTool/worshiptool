@@ -5,7 +5,7 @@ import usePagination from '../../hooks/usePagination';
 import SearchItem from './SearchItem';
 import { useMachine } from '@xstate/react';
 import { machine } from './machine';
-import { isRequestSuccess } from '../../backend/dtosRequestResult';
+import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,

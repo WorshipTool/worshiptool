@@ -5,8 +5,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchItem from './SearchItem';
 import sheepImage from '../../assets/sheepWithCircle.png'
 import useFetch from '../../hooks/useFetch';
-import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtosSong';
-import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
+import { songGetQueryDTO, songGetResultDTO } from '../../backend/dtos/dtosSong';
+import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
 import geometryImage from '../../assets/geometry.png'
 import Toolbar from '../../components/Toolbar';
 import { ModuleDetectionKind } from 'typescript';

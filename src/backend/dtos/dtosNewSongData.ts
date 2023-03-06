@@ -1,7 +1,7 @@
-import { CreatorType } from "../models/song/creator"
-import { MediaTypes } from "../models/song/media"
-import Song from "../models/song/song"
-import { SourceTypes } from "../models/song/source"
+import { CreatorType } from "../../models/song/creator"
+import { MediaTypes } from "../../models/song/media"
+import Song from "../../models/song/song"
+import { SourceTypes } from "../../models/song/source"
 
 export interface SongDataMedia{
     type: MediaTypes,

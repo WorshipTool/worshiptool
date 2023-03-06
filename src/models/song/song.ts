@@ -1,4 +1,4 @@
-import chord from "../../api/models/chord"
+import chord from "../../sheetApi/models/chord"
 import { Creator } from "./creator"
 import { Media } from "./media"
 import { Source } from "./source"

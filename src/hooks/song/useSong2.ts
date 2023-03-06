@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import {isSuccess, result } from "../Result";
 import useFetch from '../useFetch';
 import { getUrl_GETSONGBYGUID } from "../../backend/urls";
-import AllSongDataDTO, { convertAllSongDataDTOToSong } from "../../backend/dtosSong";
-import Song from "../../models/song/song";
-
-type SongIsUndefinedResult = "Song is undefined";
-type SongNotFoundResult = "Song not found";
+import AllSongDataDTO from "../../backend/dtos/dtosSong";
+import Song, { Variant } from "../../models/song/song";
+import useAuth from "../auth/useAuth";
+import { isRequestSuccess } from "../../backend/dtos/RequestResult";
 
 /**
  * Hook provides basic information about song. 
@@ -14,11 +12,16 @@ type SongNotFoundResult = "Song not found";
  */
 export default function useSong(_guid?: string) {
     const [guid, setGuid] = useState(_guid);
-    const [song, setSong] = useState<Song>({} as Song);
 
     const {fetchData} = useFetch();
     const [data, setData] = useState<AllSongDataDTO>();
 
+    const {user, isLoggedIn} = useAuth();
+
+
+    /**
+     * Reload song data
+     */
     useEffect(()=>{
         reload();
     },[guid]);
@@ -29,43 +32,33 @@ export default function useSong(_guid?: string) {
      */
     const reload = async () : Promise<AllSongDataDTO> => {
 
-        if(!guid) return result("Song is undefined");
+        if(!guid) throw("Song is undefined");
 
         const res = await fetchData<AllSongDataDTO>({url: getUrl_GETSONGBYGUID(guid)});
-        if(isSuccess(res)){
+        if(isRequestSuccess(res)){
 
             setData(res.data);
+            //convertAllSongDataDTOToSong
 
-            return result("Success", res.data);
+            return res.data;
         }
 
-        return result("Error");
+        throw("Error");
     }
 
     const getTitle = () : string => {     
         //guid not set  
-        if(!guid) return result("Song is undefined"); 
-        if(!data) return result("Song not found");
+        if(!guid) throw("Song is undefined"); 
+        if(!data) throw("Song not found");
 
-        if(data.alternativeTitles?.length<1) 
-            return result("Song has no title");
+        if(data.alternativeTitles?.length>0) 
+            return data.alternativeTitles[0];
 
-        return result("Success", data.alternativeTitles[0]);
+        throw("Song has no title");
     }
 
 
 
-    useEffect(()=>{
-        if(!guid)return;
-        
-        fetchData<AllSongDataDTO>({url: getUrl_GETSONGBYGUID(guid)}).then(async (r)=>{
-            if(isSuccess(r)){
-                const d : AllSongDataDTO = r.data;
-                const s = convertAllSongDataDTOToSong(d);
-                setSong(s);
-            }
-        })
-    },[guid]);
 
 
     return {
@@ -75,4 +68,3 @@ export default function useSong(_guid?: string) {
 
     
 }
-

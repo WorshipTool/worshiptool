@@ -4,13 +4,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isRequestSuccess } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
-import convertSheetToSections from '../../api/conversition/convertSheetToSections';
+import convertSheetToSections from '../../sheetApi/conversition/convertSheetToSections';
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
-import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtosNewSongData';
+import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';
 import Song from '../../models/song/song';
 import useSong from '../../hooks/song/useSong';
 

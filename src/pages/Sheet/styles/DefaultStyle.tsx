@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import songObject, { Section, Variant } from "../../../models/song/song";
 import React from 'react'
-import { chordToText } from "../../../api/models/chord";
+import { chordToText } from "../../../sheetApi/models/chord";
 
 export default function DefaultStyle({song, variant}:{song:songObject, variant: Variant}){
 

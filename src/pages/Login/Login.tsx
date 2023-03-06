@@ -1,14 +1,14 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { RequestResult, isRequestError } from '../../backend/dtosRequestResult';
+import { RequestResult, isRequestError } from '../../backend/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../models/user';
-import { LoginResultDTO } from '../../backend/dtosAuth';
+import { LoginResultDTO } from '../../backend/dtos/dtosAuth';
 
 const StyledContainer = styled(Paper)(()=>({
     width: "30%",

@@ -2,7 +2,7 @@ import { Box, Button, Divider, IconButton, Input, Paper, TextField, Typography, 
 import React, { useState } from 'react'
 import Gap from './Gap'
 import useAuth from '../hooks/auth/useAuth'
-import { isRequestError, isRequestSuccess } from '../backend/dtosRequestResult'
+import { isRequestError, isRequestSuccess } from '../backend/dtos/RequestResult'
 import Close from '@mui/icons-material/Close'
 
 const Container = styled(Box)(()=>({

@@ -1,6 +1,6 @@
 import { BACKEND_URL, GETSONGQUERY_URL } from "../../backend/constants";
-import { RequestResult } from "../../backend/dtosRequestResult";
-import { songGetQueryDTO, songGetResultDTO } from "../../backend/dtosSong";
+import { RequestResult } from "../../backend/dtos/RequestResult";
+import { songGetQueryDTO, songGetResultDTO } from "../../backend/dtos/dtosSong";
 import useFetch from "./../useFetch";
 
 interface songQueryBaseProps{
