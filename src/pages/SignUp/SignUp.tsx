@@ -7,10 +7,17 @@ import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbar';
 import { useNavigate } from 'react-router-dom';
 
-const StyledContainer = styled(Paper)(()=>({
+const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
     padding: 30,
-    margin:50
+    margin:50,
+    [theme.breakpoints.down("md")]:{
+        width: "50%"
+    },
+    [theme.breakpoints.down("sm")]:{
+        width: "100%",
+        margin: 10
+    }
 }))
 
 export default function SignUp() {

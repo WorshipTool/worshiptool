@@ -10,10 +10,17 @@ import { useSnackbar } from 'notistack';
 import User from '../../models/user';
 import { LoginResultDTO } from '../../backend/dtos/dtosAuth';
 
-const StyledContainer = styled(Paper)(()=>({
+const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
     padding: 30,
-    margin:50
+    margin:50,
+    [theme.breakpoints.down("md")]:{
+        width: "50%"
+    },
+    [theme.breakpoints.down("sm")]:{
+        width: "100%",
+        margin: 10
+    }
 }))
 
 export default function Login() {

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,styled, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,makeStyles,styled, useTheme } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -8,6 +8,7 @@ import { Verified } from '@mui/icons-material';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
+
     padding: "1rem",
     borderRadius:"0.5rem",
     "&:hover":{
@@ -18,6 +19,12 @@ const StyledContainer = styled(Box)(({theme})=>({
     borderWidth:1.4,
     borderStyle: "solid"
 }))
+
+const StyledBox = styled(Typography)(({theme})=>({
+    maxWidth: 'calc(100vw - 3rem)',
+    overflow: "hidden"
+}))
+
 
 export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
     const {song, getName, getText, loading, isCreatedByMe} = useSong(guid);
@@ -61,9 +68,11 @@ export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
                 {!verified&&<Typography variant='caption'>Neověřeno</Typography>}
             </Box>
 
-            {getText(0).split("\n").slice(0,4).map((line, index)=>{
-                return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
-            })}
+            <StyledBox>
+                {getText(0).split("\n").slice(0,4).map((line, index)=>{
+                    return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
+                })}
+            </StyledBox>
             
         </StyledContainer>
         }
