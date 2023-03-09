@@ -1,14 +1,31 @@
 import { Box, Button, InputBase, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_LOGIN } from '../../backend/urls';
+import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../backend/urls';
 import { RequestResult, codes, isRequestSuccess } from '../../backend/dtos/RequestResult';
 import { LoginRequestDTO, LoginResultDTO } from '../../backend/dtos/dtosAuth';
+import { songGetCountDTO } from '../../backend/dtos/dtosSong';
 
 export default function AdminPanel() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const {fetchData} = useFetch();
+
+    const [songCount, setSongCount] = useState(5);
+    useEffect(() => {
+        const interval = setInterval(async ()=>{
+
+            const r = await fetchData<songGetCountDTO>({url: getUrl_GETSONGCOUNT()});
+            setSongCount(r.data.count);
+
+        }, 5000);
+
+        return () => {
+          clearInterval(interval);
+        };
+      }, []);
 
     const [token, setToken] = useState("");
 
@@ -42,6 +59,11 @@ export default function AdminPanel() {
         {token!=""&&<Typography>
             Token in console...    
         </Typography>}
+
+
+        <Box>
+            <Typography>Aktualní počet písní: {songCount}</Typography>
+        </Box>
     </Box>
   )
 }

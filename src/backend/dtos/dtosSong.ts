@@ -46,3 +46,7 @@ export interface songGetQueryDTO{
 export interface songGetResultDTO{
     guids: string[]
 }
+
+export interface songGetCountDTO{
+    count: number
+}

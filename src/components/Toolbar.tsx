@@ -106,8 +106,11 @@ export default function Toolbar({transparent}:ToolbarProps) {
                         </Tooltip>
                         {isAdmin()&&
                         <>
-                            <Tooltip title={"Testovací stránka"}>
-                                <IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1}}>
+                            <Tooltip title={"Testovací stránka"} >
+                                <IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1,
+                                    [theme.breakpoints.down("sm")]:{
+                                        display:"none"
+                                    }}}>
                                     <Build color={"inherit"} fontSize='small'/>
                                 </IconButton>
                             </Tooltip>
@@ -124,7 +127,11 @@ export default function Toolbar({transparent}:ToolbarProps) {
                         </>}
                     </Box>
                     <Box paddingRight={4} display={"flex"} flexDirection={"row"} alignItems={"center"} color={transparent?"black":"black"}>
-                        {isLoggedIn()&&<Typography fontWeight={100} color={"inherit"}>Přihlášen jako</Typography>}
+                        {isLoggedIn()&&<Typography fontWeight={100} color={"inherit"} sx={{
+                            [theme.breakpoints.down("sm")]:{
+                                display:"none"
+                            }
+                        }}>Přihlášen jako</Typography>}
                         {!isLoggedIn()?<>
                             <Tooltip title={"Přihlásit se"}>
                                 <Button endIcon={<Login/>} color={"inherit"} onClick={onLoginButtonClick}>

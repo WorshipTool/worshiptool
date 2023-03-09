@@ -1,10 +1,7 @@
 import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,makeStyles,styled, useTheme } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import useSong from '../../hooks/song/useSong';
 import { useNavigate } from 'react-router-dom'
-import { Verified } from '@mui/icons-material';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
