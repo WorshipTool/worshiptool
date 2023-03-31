@@ -10,6 +10,7 @@ export interface SongDataVariantDTO{
     sheetText: string,
     verified: boolean,
     createdBy: string,
+    createdByLoader: boolean,
     sources: SongDataSource[],
     creators: SongDataCreatorDTO[]
 }

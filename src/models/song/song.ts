@@ -22,6 +22,7 @@ export interface Variant{
     preferredTitle: string,
     verified: boolean,
     createdBy: string,
+    createdByLoader: boolean,
     sources: Source[],
     creators: Creator[]
 }

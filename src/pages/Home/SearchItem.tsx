@@ -55,14 +55,24 @@ export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
             })}
         </Box>
         :
-        <StyledContainer onClick={onSongClick} sx={{...sx,borderColor:verified?"transparent":"grey"}}>
+        <StyledContainer onClick={onSongClick} sx={{...sx,borderColor:
+            verified || (song&&song.variants.length>0&&song.variants[0].createdByLoader)?"transparent":"grey"}}>
             
             {song&&isCreatedByMe(song.variants[0])&&
                 <Typography variant="subtitle2">Vytvořeno vámi.</Typography>}
 
             <Box display={"flex"}>
                 <Typography fontWeight={"bold"}>{getName()}</Typography>
-                {!verified&&<Typography variant='caption'>Neověřeno</Typography>}
+                {!verified?<>
+                    {song&&song.variants.length>0&&song.variants[0].createdByLoader?
+                    <Typography variant='caption'>Nalezeno automaticky</Typography>
+                    :<>
+                        <Typography variant='caption'>Neověřeno</Typography>
+                    </>}
+                </>:
+                <>
+                    
+                </>}
             </Box>
 
             <StyledBox>

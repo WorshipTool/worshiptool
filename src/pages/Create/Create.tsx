@@ -65,6 +65,7 @@ export default function Create() {
                 sections: convertSheetToSections(sheet),
                 preferredTitle: "",
                 createdBy: "",
+                createdByLoader: false,
                 verified: false,
                 sources:[],
                 creators:[]
