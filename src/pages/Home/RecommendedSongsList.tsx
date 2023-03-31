@@ -6,6 +6,8 @@ import SearchItem from './SearchItem';
 import { useMachine } from '@xstate/react';
 import { machine } from './machine';
 import { isRequestSuccess } from '../../backend/dtos/RequestResult';
+import Song from '../../models/song/song';
+import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -23,8 +25,10 @@ export default function RecommendedSongsList() {
                 if(!isRequestSuccess(res)){
                     throw Error(res.message);
                 }
-                const data = res.data;
-                return data.guids;
+                const sgs : Song[] = res.data.songs.map((data)=>{
+                    return convertAllSongDataDTOToSong(data);
+                })
+                return sgs;
             }
         }
     });
@@ -40,9 +44,9 @@ export default function RecommendedSongsList() {
             {state.matches("Error")&&<Typography>Při načítání se vyskytla chyba...</Typography>}
 
             <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                {state.context.songGuids.slice(0,4).map((g)=>{
-                    return <Grid item xs={1} key={"griditem_"+g}>
-                        <SearchItem guid={g} key={g} sx={{height:"7.5rem"}}></SearchItem>
+                {state.context.songs.slice(0,4).map((s)=>{
+                    return <Grid item xs={1} key={"griditem_"+s.guid}>
+                        <SearchItem song={s} key={s.guid} sx={{height:"7.5rem"}}></SearchItem>
                     </Grid>
                 })}
             </GridContainer>

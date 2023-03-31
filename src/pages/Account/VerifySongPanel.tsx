@@ -28,14 +28,14 @@ export default function VerifySongPanel() {
     const loadUnverified = () => {
         getUnverified({}).then((r)=>{
             if(isRequestSuccess(r)){
-                setUnverifiedSongs(r.data.guids);
+                setUnverifiedSongs(r.data.songs.map((s)=>s.guid));
             }
         })
     }
     const loadLoaderUnverified = () => {
         getLoaderUnverified({}).then((r)=>{
             if(isRequestSuccess(r)){
-                setLoaderSongs(r.data.guids);
+                setLoaderSongs(r.data.songs.map((s)=>s.guid));
             }
         })
     }

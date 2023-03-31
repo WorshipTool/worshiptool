@@ -45,7 +45,7 @@ export interface songGetQueryDTO{
 }
 
 export interface songGetResultDTO{
-    guids: string[]
+    songs: AllSongDataDTO[]
 }
 
 export interface songGetCountDTO{

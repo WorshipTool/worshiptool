@@ -22,6 +22,11 @@ export default function useSong(g:string|null){
 
     const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
 
+    useEffect(()=>{
+        if(song){
+            setGUID(song.guid);
+        }
+    },[song]);
 
     useEffect(()=>{
         setLoading(fetchLoading);
@@ -109,7 +114,7 @@ export default function useSong(g:string|null){
 
     return {
         setGUID,
-        song,
+        song, setSong,
         getName: getTitle,
         getText,
         getSheetData,

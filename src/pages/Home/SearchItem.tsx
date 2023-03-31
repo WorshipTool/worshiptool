@@ -2,6 +2,7 @@ import { Box, CircularProgress, Grid, Paper, Skeleton, Typography,makeStyles,sty
 import React, { useEffect, useMemo, useState } from 'react';
 import useSong from '../../hooks/song/useSong';
 import { useNavigate } from 'react-router-dom'
+import Song from '../../models/song/song';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -23,15 +24,15 @@ const StyledBox = styled(Typography)(({theme})=>({
 }))
 
 
-export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
-    const {song, getName, getText, loading, isCreatedByMe} = useSong(guid);
+export default function SearchItem({song:songObject,sx}: {song:Song, sx?:any}) {
+    const {song, setSong, getName, getText, loading, isCreatedByMe} = useSong(null);
 
     const [verified, setVerified] = useState(false);
 
     const navigate = useNavigate()
     
     const onSongClick = () => {
-        navigate(`/song/`+guid, {replace: false})
+        if(song) navigate(`/song/`+song.guid, {replace: false})
     }
 
     useEffect(()=>{
@@ -40,7 +41,11 @@ export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
                 setVerified(song.variants[0].verified);
             }
         }
-    },[song])
+    },[song]);
+
+    useEffect(()=>{
+        setSong(songObject);
+    },[songObject])
    
 
     
@@ -51,7 +56,7 @@ export default function SearchItem({guid,sx}: {guid:string, sx?:any}) {
         <Box justifyContent={"center"} display={"flex"} flexDirection={"column"}>
             <Skeleton variant='text' width={"100%"}></Skeleton>
             {Array(2).fill(1).map((a, index)=>{
-                return <Skeleton variant='text' width={Math.round(Math.random()*80)+"%"} key={guid+"s"+index}></Skeleton>
+                return <Skeleton variant='text' width={Math.round(Math.random()*80)+"%"} key={song?.guid+"s"+index}></Skeleton>
             })}
         </Box>
         :

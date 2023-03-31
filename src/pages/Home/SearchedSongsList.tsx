@@ -6,6 +6,8 @@ import usePagination from '../../hooks/usePagination';
 import useSongQuery from '../../hooks/song/useSongQuery';
 import { useIsInViewport } from '../../hooks/useIsInViewport';
 import Gap from '../../components/Gap';
+import Song from '../../models/song/song';
+import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
 
 interface SearchedSongsListProps{
     searchString: string
@@ -16,10 +18,13 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
 
     const searchSongs = useSongQuery({key:"search"});
-    const {nextPage: loadNext, loadPage, data: songGuids, nextExists} = usePagination<string>((page, resolve)=>{
+    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<Song>((page, resolve)=>{
 
         searchSongs({searchKey: searchString, page}).then((data)=>{
-            resolve({result: data, data: data.data.guids});
+            const sgs : Song[] = data.data.songs.map((data)=>{
+                return convertAllSongDataDTOToSong(data);
+            })
+            resolve({result: data, data: sgs});
 
         })
 
@@ -50,21 +55,21 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
         <>                       
             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
         
-            {songGuids.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                {songGuids.map((g)=>{
-                    return <SearchItem guid={g} key={g}></SearchItem>
+            {songs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+                {songs.map((song)=>{
+                    return <SearchItem song={song} key={song.guid}></SearchItem>
                 })}
             </Masonry>}
         </>
             
         <div ref={loadNextLevelRef}></div>
         <>
-            {songGuids.length>0&&nextExists&&<>
+            {songs.length>0&&nextExists&&<>
                 <Button onClick={()=>{loadNext()}}>Načíst další</Button>
             </>}
         </>
 
-        {songGuids.length<1&&<>
+        {songs.length<1&&<>
             <Typography>Nic jsme nenašli...</Typography>            
         </>}
         

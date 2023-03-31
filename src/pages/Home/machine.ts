@@ -1,5 +1,6 @@
 import { clearInterval } from "timers";
 import { assign, createMachine } from "xstate";
+import Song from "../../models/song/song";
 
 
 
@@ -9,13 +10,13 @@ createMachine({
     schema:{
         services: {} as {
             "fetchRecommendedSongs":{
-                data: string[]
+                data: Song[]
             }
         }
     },
     tsTypes:{} as import("./machine.typegen").Typegen0,
     context:{
-        songGuids: [] as string[]
+        songs: [] as Song[]
     },
     states: {
         Loading: {
@@ -46,7 +47,7 @@ createMachine({
     actions:{
         assignData: assign((context, event)=>{
             return {
-                songGuids: event.data
+                songs: event.data
             }
         })
     }
