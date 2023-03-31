@@ -1,5 +1,5 @@
 import { Box, Button, InputBase, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../backend/urls';
@@ -13,19 +13,22 @@ export default function AdminPanel() {
 
     const {fetchData} = useFetch();
 
-    const [songCount, setSongCount] = useState(5);
+    const [songCount, setSongCount] = useState<number>();
+    
+    const getCount = async ()=>{
+        const r = await fetchData<songGetCountDTO>({url: getUrl_GETSONGCOUNT()});
+        setSongCount(r.data.count);
+    }
+
     useEffect(() => {
-        const interval = setInterval(async ()=>{
-
-            const r = await fetchData<songGetCountDTO>({url: getUrl_GETSONGCOUNT()});
-            setSongCount(r.data.count);
-
-        }, 5000);
+        getCount();
+        const interval = setInterval(getCount, 1000);
 
         return () => {
           clearInterval(interval);
         };
       }, []);
+    
 
     const [token, setToken] = useState("");
 

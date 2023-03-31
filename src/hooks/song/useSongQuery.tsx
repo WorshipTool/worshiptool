@@ -27,10 +27,10 @@ interface loadeUnverifiedQueryProps extends songQueryBaseProps{
 }
 
 type useSongQueryProps = searchQueryProps|
-                            randomQueryProps|
-                            allQueryProps|
-                            unverifiedQueryProps|
-                            loadeUnverifiedQueryProps;
+                        randomQueryProps|
+                        allQueryProps|
+                        unverifiedQueryProps|
+                        loadeUnverifiedQueryProps;
 
 export function getQueryUrlWithParams(query: songGetQueryDTO){
     let params = "";
@@ -68,7 +68,13 @@ export default function useSongQuery(startParams:Partial<useSongQueryProps>){
             ...additionalParams
         }
 
+        //spaces in searchKey
+        if(_params.searchKey){
+            const searchKey : string = _params.searchKey;
+            _params.searchKey = searchKey.replace(/\s/g, '_');
+        }
         const params : useSongQueryProps = _params;
+
         const typed : songGetQueryDTO = params;
 
         const url = getQueryUrlWithParams(typed);

@@ -31,8 +31,17 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
         }
     },[isInViewport])
 
+    const [loadTimeout, setLoadTimeout] : any = useState();
+
     useEffect(()=>{
-        loadPage(0, true);
+        clearTimeout(loadTimeout);
+        const INTERVAL = 300;
+
+        const loadTimeoutId = setTimeout(()=>{
+            loadPage(0, true);            
+        },INTERVAL);
+
+        setLoadTimeout(loadTimeoutId);
     },[searchString])
 
 
