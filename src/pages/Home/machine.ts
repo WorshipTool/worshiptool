@@ -1,6 +1,7 @@
 import { clearInterval } from "timers";
 import { assign, createMachine } from "xstate";
 import Song from "../../models/song/song";
+import { SongSearchResultDTO, SearchSongDataDTO } from '../../backend/dtos/dtosSong';
 
 
 
@@ -10,13 +11,13 @@ createMachine({
     schema:{
         services: {} as {
             "fetchRecommendedSongs":{
-                data: Song[]
+                data: SearchSongDataDTO[]
             }
         }
     },
     tsTypes:{} as import("./machine.typegen").Typegen0,
     context:{
-        songs: [] as Song[]
+        songs: [] as SearchSongDataDTO[]
     },
     states: {
         Loading: {

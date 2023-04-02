@@ -9,10 +9,10 @@ interface songQueryBaseProps{
 
 }
 
-interface searchQueryProps extends songQueryBaseProps{
-    key: "search",
-    searchKey:string
-}
+// interface searchQueryProps extends songQueryBaseProps{
+//     key: "search",
+//     searchKey:string
+// }
 interface randomQueryProps extends songQueryBaseProps{
     key: "random"
 }
@@ -26,8 +26,7 @@ interface loadeUnverifiedQueryProps extends songQueryBaseProps{
     key: "loaderUnverified"
 }
 
-type useSongQueryProps = searchQueryProps|
-                        randomQueryProps|
+type useSongQueryProps = randomQueryProps|
                         allQueryProps|
                         unverifiedQueryProps|
                         loadeUnverifiedQueryProps;

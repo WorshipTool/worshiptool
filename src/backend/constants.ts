@@ -3,6 +3,7 @@ export const BACKEND_URL = "http://localhost:3300/";
 export const GETSONGBYGUID_URL = "songs/data/:guid";
 export const POSTNEWSONG_URL = "songs";
 export const GETSONGQUERY_URL = "songs";
+export const GETSONGSEARCH_URL = "songs/search";
 export const GETUNVERIFIED_URL = "songs/unverified";
 export const GETLOADERUNVERIFIED_URL = "songs/loaderunverified";
 export const VERIFYSONG_URL = "songs/variant/verify/:guid"

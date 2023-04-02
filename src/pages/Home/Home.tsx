@@ -127,7 +127,6 @@ export default function Home() {
                 [theme.breakpoints.down('sm')]: {
                     display:"none"
                 }}}>
-                
                 <motion.div 
                     style={{
                         position:"fixed",

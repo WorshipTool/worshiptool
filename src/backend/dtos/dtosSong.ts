@@ -48,6 +48,19 @@ export interface songGetResultDTO{
     songs: AllSongDataDTO[]
 }
 
+export interface SongSearchResultDTO{
+    songs: SearchSongDataDTO[]
+}
+
+export interface SearchSongDataDTO{
+    guid: string,
+    title: string,
+    sheetData: string,
+    verified: boolean,
+    createdBy: string,
+    createdByLoader: boolean
+}
+
 export interface songGetCountDTO{
     count: number
 }

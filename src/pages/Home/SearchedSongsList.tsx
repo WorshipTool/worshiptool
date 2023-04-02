@@ -8,6 +8,8 @@ import { useIsInViewport } from '../../hooks/useIsInViewport';
 import Gap from '../../components/Gap';
 import Song from '../../models/song/song';
 import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
+import useSongSearch from '../../hooks/song/useSongSearch';
+import { SearchSongDataDTO, SongSearchResultDTO } from '../../backend/dtos/dtosSong';
 
 interface SearchedSongsListProps{
     searchString: string
@@ -17,14 +19,13 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const loadNextLevelRef = useRef(null);
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
 
-    const searchSongs = useSongQuery({key:"search"});
-    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<Song>((page, resolve)=>{
+    const searchSongs = useSongSearch();
+    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<SearchSongDataDTO>((page, resolve, arr)=>{
 
         searchSongs({searchKey: searchString, page}).then((data)=>{
-            const sgs : Song[] = data.data.songs.map((data)=>{
-                return convertAllSongDataDTOToSong(data);
-            })
-            resolve({result: data, data: sgs});
+            resolve({result: data, data: data.data.songs.filter((v)=>{
+                return !arr.find((s)=>s.guid==v.guid);
+            })});
 
         })
 

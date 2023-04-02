@@ -8,6 +8,7 @@ import { machine } from './machine';
 import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Song from '../../models/song/song';
 import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
+import { SearchSongDataDTO } from '../../backend/dtos/dtosSong';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -25,8 +26,15 @@ export default function RecommendedSongsList() {
                 if(!isRequestSuccess(res)){
                     throw Error(res.message);
                 }
-                const sgs : Song[] = res.data.songs.map((data)=>{
-                    return convertAllSongDataDTOToSong(data);
+                const sgs : SearchSongDataDTO[] = res.data.songs.map((data)=>{
+                    return {
+                        guid: data.guid,
+                        title: data.mainTitle,
+                        sheetData: data.variants[0]?.sheetData,
+                        createdBy: "",
+                        createdByLoader: false,
+                        verified:true
+                    };
                 })
                 return sgs;
             }

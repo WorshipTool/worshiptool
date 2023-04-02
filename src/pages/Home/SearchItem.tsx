@@ -3,6 +3,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import useSong from '../../hooks/song/useSong';
 import { useNavigate } from 'react-router-dom'
 import Song from '../../models/song/song';
+import { SearchSongDataDTO } from '../../backend/dtos/dtosSong';
+import convertSheetToSections from '../../sheetApi/conversition/convertSheetToSections';
+import useAuth from '../../hooks/auth/useAuth';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -24,8 +27,9 @@ const StyledBox = styled(Typography)(({theme})=>({
 }))
 
 
-export default function SearchItem({song:songObject,sx}: {song:Song, sx?:any}) {
-    const {song, setSong, getName, getText, loading, isCreatedByMe} = useSong(null);
+export default function SearchItem({song,sx}: {song:SearchSongDataDTO, sx?:any}) {
+    //const {song, setSong, getName, getText, loading, isCreatedByMe} = useSong(null);
+    const {user} = useAuth();
 
     const [verified, setVerified] = useState(false);
 
@@ -36,23 +40,19 @@ export default function SearchItem({song:songObject,sx}: {song:Song, sx?:any}) {
     }
 
     useEffect(()=>{
-        if(song?.variants){
-            if(song.variants.length>0){
-                setVerified(song.variants[0].verified);
-            }
-        }
+        setVerified(song.verified);
     },[song]);
 
-    useEffect(()=>{
-        setSong(songObject);
-    },[songObject])
+    // useEffect(()=>{
+    //     setSong(songObject);
+    // },[songObject])
    
 
     
   return (
     
     <Box>
-        {loading?
+        {false?
         <Box justifyContent={"center"} display={"flex"} flexDirection={"column"}>
             <Skeleton variant='text' width={"100%"}></Skeleton>
             {Array(2).fill(1).map((a, index)=>{
@@ -61,16 +61,18 @@ export default function SearchItem({song:songObject,sx}: {song:Song, sx?:any}) {
         </Box>
         :
         <StyledContainer onClick={onSongClick} sx={{...sx,borderColor:
-            verified || (song&&song.variants.length>0&&song.variants[0].createdByLoader)?"transparent":"grey"}}>
+            verified 
+             || (song.createdByLoader)
+            ?"transparent":"grey"}}>
             
-            {song&&isCreatedByMe(song.variants[0])&&
+            {song.createdBy==user?.guid&&
                 <Typography variant="subtitle2">Vytvořeno vámi.</Typography>}
 
             <Box display={"flex"}>
-                <Typography fontWeight={"bold"}>{getName()}</Typography>
+                <Typography fontWeight={"bold"} flex={1}>{song.title}</Typography>
                 {!verified?<>
-                    {song&&song.variants.length>0&&song.variants[0].createdByLoader?
-                    <Typography variant='caption'>Nalezeno automaticky</Typography>
+                    {song.createdByLoader?
+                        <Typography variant='caption'>Nahráno programem</Typography>
                     :<>
                         <Typography variant='caption'>Neověřeno</Typography>
                     </>}
@@ -81,7 +83,7 @@ export default function SearchItem({song:songObject,sx}: {song:Song, sx?:any}) {
             </Box>
 
             <StyledBox>
-                {getText(0).split("\n").slice(0,4).map((line, index)=>{
+                {convertSheetToSections(song.sheetData)[0]?.text?.split("\n").slice(0,4).map((line, index)=>{
                     return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
                 })}
             </StyledBox>

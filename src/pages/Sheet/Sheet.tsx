@@ -178,6 +178,15 @@ export default function Sheet() {
                     <Typography variant='subtitle2'>Zdroje</Typography>
                     <Box display={"flex"} flexDirection={"row"} gap={0.5}>
                       {song.variants[0].sources.map((s)=>{
+                        if(s.type==SourceTypes.Url){
+                          
+                          const onClick = ()=>{
+                            window.open(s.value, '_blank', 'noreferrer');
+                          }
+                          return <>
+                            <Chip label={s.value} onClick={onClick} sx={{cursor: "pointer"}}/>
+                          </>
+                        }
                         return <>
                           <Chip label={s.value}/>
                         </>
