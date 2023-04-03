@@ -3,14 +3,12 @@ import { Button, CircularProgress, LinearProgress, Typography } from '@mui/mater
 import React, { useEffect, useRef, useState } from 'react'
 import SearchItem from './SearchItem';
 import usePagination from '../../hooks/usePagination';
-import useSongQuery from '../../hooks/song/useSongQuery';
 import { useIsInViewport } from '../../hooks/useIsInViewport';
 import Gap from '../../components/Gap';
-import Song from '../../models/song/song';
-import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
 import useSongSearch from '../../hooks/song/useSongSearch';
 import { SearchSongDataDTO, SongSearchResultDTO } from '../../backend/dtos/dtosSong';
 import { grey } from '@mui/material/colors';
+import normalizeSearchText from '../../utils/normalizeSearchText';
 
 interface SearchedSongsListProps{
     searchString: string
@@ -43,6 +41,8 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const loadTimeoutId = useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
 
     useEffect(()=>{
+        //if(normalizeSearchText(searchString)==="") return;
+
         clearTimeout(loadTimeoutId.current);
         const INTERVAL = 300;
         setLoading(true);
@@ -52,7 +52,7 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
         },INTERVAL);
 
         return () =>  clearTimeout(loadTimeoutId.current);
-    },[searchString])
+    },[normalizeSearchText(searchString)])
 
 
   return (
