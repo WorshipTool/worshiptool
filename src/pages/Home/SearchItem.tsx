@@ -83,7 +83,7 @@ export default function SearchItem({song,sx}: {song:SearchSongDataDTO, sx?:any})
             </Box>
 
             <StyledBox>
-                {convertSheetToSections(song.sheetData)[0]?.text?.split("\n").slice(0,4).map((line, index)=>{
+                {song.sheetData&&convertSheetToSections(song.sheetData)[0]?.text?.split("\n").slice(0,4).map((line, index)=>{
                     return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
                 })}
             </StyledBox>

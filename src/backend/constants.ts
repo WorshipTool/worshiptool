@@ -1,4 +1,4 @@
-export const BACKEND_URL = "http://localhost:3300/";
+export const BACKEND_URL = "http://chvalotce.cz:3300/";
 
 export const GETSONGBYGUID_URL = "songs/data/:guid";
 export const POSTNEWSONG_URL = "songs";
