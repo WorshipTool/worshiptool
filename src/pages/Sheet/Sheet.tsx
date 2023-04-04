@@ -143,7 +143,7 @@ export default function Sheet() {
                     
                   </Box>
   
-                  {isLoggedIn()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
+                  {isAdmin()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
                   <Gap horizontal={true}/>
                   {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
                   <Gap horizontal={true}/>
