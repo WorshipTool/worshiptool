@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Toolbar from '../../components/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
-import convertSheetToSections from '../../sheetApi/conversition/convertSheetToSections';
+import {convertSheetToSections} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
 import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';

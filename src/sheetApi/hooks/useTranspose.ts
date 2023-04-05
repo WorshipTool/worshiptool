@@ -1,6 +1,5 @@
+import { chord, note, notes } from "@pepavlin/sheet-api";
 import { useState } from "react";
-import chord from "../models/chord"
-import { note, notes } from "../models/note"
 
 export const transposeNote = (n: note, offset: number):note => {
     let index =(notes.indexOf(n) + offset) % notes.length;

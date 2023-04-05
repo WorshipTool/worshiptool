@@ -4,7 +4,7 @@ import useSong from '../../hooks/song/useSong';
 import { useNavigate } from 'react-router-dom'
 import Song from '../../models/song/song';
 import { SearchSongDataDTO } from '../../backend/dtos/dtosSong';
-import convertSheetToSections from '../../sheetApi/conversition/convertSheetToSections';
+import {convertSheetToSections} from "@pepavlin/sheet-api";
 import useAuth from '../../hooks/auth/useAuth';
 
 const StyledContainer = styled(Box)(({theme})=>({

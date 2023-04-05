@@ -1,12 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import songObject, { Section, Variant } from "../../../models/song/song";
 import React from 'react'
-import { chordToText } from "../../../sheetApi/models/chord";
+import { chordToText } from "@pepavlin/sheet-api";
 
 export default function DefaultStyle({song, variant}:{song:songObject, variant: Variant}){
 
     const sections = variant.sections;
-
+ 
     if(sections===undefined)return<>
         <Typography variant="subtitle2">Text a akordy nebyly nalezeny.</Typography>
     </>
