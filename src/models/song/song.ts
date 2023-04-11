@@ -1,4 +1,4 @@
-import { chord } from "@pepavlin/sheet-api"
+import { chordData } from "@pepavlin/sheet-api"
 import { Creator } from "./creator"
 import { Media } from "./media"
 import { Source } from "./source"
@@ -28,7 +28,7 @@ export interface Variant{
 }
 
 export interface Segment {
-    chord?: chord,
+    chord?: chordData,
     text?: string
 }
 export interface Line {

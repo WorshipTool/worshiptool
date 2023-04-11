@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import songObject, { Section, Variant } from "../../../models/song/song";
 import React from 'react'
-import { chordToText } from "@pepavlin/sheet-api";
+import { chordDataToText } from "@pepavlin/sheet-api";
 
 export default function DefaultStyle({song, variant}:{song:songObject, variant: Variant}){
 
@@ -38,7 +38,7 @@ export default function DefaultStyle({song, variant}:{song:songObject, variant: 
                                 return(
                                     <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
                                         <Box sx={{flex:1}}>
-                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{chordToText(segment.chord)}</b></Typography>}
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{chordDataToText(segment.chord)}</b></Typography>}
                                         </Box>
                                         
                                         <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>
