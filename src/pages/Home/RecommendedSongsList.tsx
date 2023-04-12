@@ -1,4 +1,4 @@
-import { Grid, Typography, styled } from '@mui/material'
+import { Backdrop, Grid, Typography, styled } from '@mui/material'
 import React, { useEffect } from 'react'
 import useSongQuery from '../../hooks/song/useSongQuery';
 import usePagination from '../../hooks/usePagination';
@@ -9,6 +9,7 @@ import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Song from '../../models/song/song';
 import convertAllSongDataDTOToSong from '../../backend/api/allSongDataDTOToSong';
 import { SearchSongDataDTO } from '../../backend/dtos/dtosSong';
+import Gap from '../../components/Gap';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -45,11 +46,18 @@ export default function RecommendedSongsList() {
 
     return (
         <div>
-            <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>
+
+            {!state.matches("Error") && <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>}
 
             {state.matches("Loading")&&<Typography>Načítání...</Typography>}
 
-            {state.matches("Error")&&<Typography>Při načítání se vyskytla chyba...</Typography>}
+            {state.matches("Error")&&<>
+            
+                {/* <Typography>Při načítání se vyskytla chyba...</Typography> */}
+                <Typography variant='h6' fontWeight={"300"}>Nefunguje spojení se serverem. </Typography>
+                <Typography fontWeight={"bold"}>Pro odstranění této chyby, zkuste v prohlížeči povolit v nastavení webu položku "nezabezpečený obsah".</Typography>
+
+            </>}
 
             <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
                 {state.context.songs.slice(0,4).map((s)=>{
