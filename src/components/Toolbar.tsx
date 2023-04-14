@@ -8,7 +8,7 @@ import AccountMenu from './AccountMenu'
 import { useNavigate } from 'react-router-dom'
 import BlackSheep from "../assets/images/blackSheep.png"
 import WhiteSheep from "../assets/images/whiteSheep.png"
-import {Build, Home } from '@mui/icons-material'
+import {Build, FormatListBulleted, Home, List, ViewList } from '@mui/icons-material'
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 import AppsIcon from '@mui/icons-material/Apps';
 import useStack from '../hooks/playlist/useStack'
@@ -77,6 +77,10 @@ export default function Toolbar({transparent}:ToolbarProps) {
         setAccountMenuOpen(!accountMenuOpen);
     }
 
+    const onListClick = () => {
+        navigate("/list");
+    }
+
     const onPlaylistClick = () => {
         navigate('/playlist');
     }
@@ -102,6 +106,11 @@ export default function Toolbar({transparent}:ToolbarProps) {
                         <Tooltip title={"Hlavní stránka"}>
                             <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
                                 <Home color={"inherit"}/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title={"Seznam písní"}>
+                            <IconButton color='inherit' onClick={onListClick} sx={{marginLeft: 1}}>
+                                <ViewList color={"inherit"}/>
                             </IconButton>
                         </Tooltip>
                         {isAdmin()&&

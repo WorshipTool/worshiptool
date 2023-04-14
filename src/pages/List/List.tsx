@@ -43,8 +43,9 @@ export default function List() {
     },[songs]);
 
     useEffect(()=>{
-        if(nextExists)
+        
         nextPage();
+        console.log("loading");
     },[songs])
     
     const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -76,7 +77,7 @@ export default function List() {
                                 <Box display={"flex"} gap={1}>
                                     <Typography fontWeight={"bold"}>{(page-1)*countPerPage + index+1}</Typography>
                                     <Divider orientation='vertical' flexItem />
-                                    <Typography fontWeight={300}>{s.title}</Typography>
+                                    <Typography fontWeight={300} noWrap>{s.title} </Typography>
                                 </Box >
                 
                             </StyledPaper>
