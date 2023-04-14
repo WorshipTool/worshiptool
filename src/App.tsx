@@ -17,6 +17,7 @@ import SignUp from './pages/SignUp/SignUp';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 import { StackProvider } from './hooks/playlist/useStack';
+import List from './pages/List/List';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -72,6 +73,11 @@ const router = createBrowserRouter([
   {
     path: "playlist",
     element: <PlaylistPreview />,
+    errorElement: <Typography>Error.</Typography>
+  },
+  {
+    path: "list",
+    element: <List />,
     errorElement: <Typography>Error.</Typography>
   },
   

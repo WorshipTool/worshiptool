@@ -61,6 +61,17 @@ export interface SearchSongDataDTO{
     createdByLoader: boolean
 }
 
+
+export interface ListSongDataDTO{
+    guid: string,
+    title: string
+}
+export interface ListResultDTO{
+    songs: ListSongDataDTO[]
+}
+
+
+
 export interface songGetCountDTO{
     count: number
 }
