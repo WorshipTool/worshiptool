@@ -12,7 +12,7 @@ import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } fr
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
-import { Add, AddBoxRounded, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
+import { Add, AddBoxRounded, CopyAll, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
@@ -143,6 +143,9 @@ export default function Sheet() {
                     
                   </Box>
   
+                  {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(0).sheetData)}}>
+                    <CopyAll/>  
+                  </IconButton>}
                   {isAdmin()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
                   <Gap horizontal={true}/>
                   {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
