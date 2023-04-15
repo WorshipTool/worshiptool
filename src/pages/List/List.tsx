@@ -59,13 +59,11 @@ export default function List() {
             <Gap value={3}/>
             <Box display={"flex"}>
                 <Typography  variant='h4' fontWeight={"bold"}>Seznam všech písní</Typography>
-                {true&&<Box flex={1} display={"flex"} sx={{
+                {nextExists&&<Box flex={1} display={"flex"} sx={{
                         alignItems:"center", 
                         justifyContent:"center"}}>
                     <Gap horizontal value={2}/>
                     <CircularProgress color='inherit' size={"2rem"} thickness={4}/>
-                    {/* <Gap horizontal/>
-                    <Typography>Načítání...</Typography> */}
                 </Box>}
             </Box >
             <Grid container columns={3} spacing={1} paddingTop={5} paddingBottom={2}>
