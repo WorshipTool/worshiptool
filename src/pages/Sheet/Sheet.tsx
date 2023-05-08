@@ -1,4 +1,4 @@
-import { Box, Button, Chip, IconButton, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, IconButton, MenuItem, Select, SelectChangeEvent, Skeleton, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
@@ -26,6 +26,8 @@ import AddCreator from '../../components/AddCreator';
 export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
+
+    const [variantID, setVariantID] = useState(0);
 
     const {setGUID, song, getTransposedVariant, transpose, reload, getName, loading} = useSong(null);
     const {user, isTrustee, isAdmin, isLoggedIn} = useAuth();
@@ -117,6 +119,10 @@ export default function Sheet() {
     setAddTagOpen(true);
   }
 
+  const onVariantSelectChange = (event: SelectChangeEvent) => {
+    setVariantID(+event.target.value)
+  }
+
   return (
     <>
       <Toolbar transparent={false}/>
@@ -138,12 +144,19 @@ export default function Sheet() {
                             {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
                           </>
                         }
+                        <Select
+                          value={variantID + ""}
+                          onChange={onVariantSelectChange}>
+                            {song.variants.map((v, index)=>{
+                              return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
+                            })}
+                        </Select>
                       </>
                     )}
                     
                   </Box>
   
-                  {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(0).sheetData)}}>
+                  {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}>
                     <CopyAll/>  
                   </IconButton>}
                   {isAdmin()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
@@ -157,7 +170,7 @@ export default function Sheet() {
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
-                {song&&!loading?<DefaultStyle song={song} variant={getTransposedVariant(0)}/>
+                {song&&!loading?<DefaultStyle song={song} variant={getTransposedVariant(variantID)}/>
                 :<>
                 {Array(10).fill(0).map(()=>{
                   return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"}></Skeleton>
@@ -177,10 +190,10 @@ export default function Sheet() {
 
                 <Box>
   
-                  {isAdmin()&&song?.variants?.[0]?.sources&&song.variants[0].sources.length>0&&<>
+                  {song?.variants?.[variantID]?.sources&&song.variants[variantID].sources.length>0&&<>
                     <Typography variant='subtitle2'>Zdroje</Typography>
                     <Box display={"flex"} flexDirection={"row"} gap={0.5}>
-                      {song.variants[0].sources.map((s)=>{
+                      {song.variants[variantID].sources.map((s)=>{
                         if(s.type==SourceTypes.Url){
                           
                           const onClick = ()=>{
@@ -221,7 +234,7 @@ export default function Sheet() {
               flex:1,
               display:"none",
               flexDirection: "column"}}>
-                {song&&<DefaultStyle song={song} variant={getTransposedVariant(0)}/>} 
+                {song&&<DefaultStyle song={song} variant={getTransposedVariant(variantID)}/>} 
             </Box>}
             
     

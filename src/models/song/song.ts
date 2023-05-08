@@ -6,7 +6,6 @@ import { Source } from "./source"
 export default interface Song{
     guid:string,
     title: string,
-    alternativeTitles: string[],
     creators: Creator[],
     variants: Variant[],
     media: Media[],
@@ -20,6 +19,7 @@ export interface Variant{
     sheetText: string,
     sections: Section[],
     preferredTitle: string,
+    titles: string[],
     verified: boolean,
     createdBy: string,
     createdByLoader: boolean,

@@ -6,6 +6,7 @@ import { CreatorType } from "../../models/song/creator";
 export interface SongDataVariantDTO{
     guid:string,
     prefferedTitle: string,
+    titles: string[],
     sheetData: string,
     sheetText: string,
     verified: boolean,
@@ -28,7 +29,6 @@ export interface SongDataMediaDTO{
 export default interface AllSongDataDTO{
     guid: string,
     mainTitle: string,
-    alternativeTitles: string[],
     creators: SongDataCreatorDTO[],
     variants: SongDataVariantDTO[],
     media: SongDataMediaDTO[],
@@ -74,4 +74,12 @@ export interface ListResultDTO{
 
 export interface songGetCountDTO{
     count: number
+}
+
+export interface SongsMergeBody{
+    guid1: string,
+    guid2: string
+}
+export interface SongsMergeResult{
+    guid: string
 }

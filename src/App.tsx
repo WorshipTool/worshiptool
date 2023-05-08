@@ -18,6 +18,7 @@ import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 import { StackProvider } from './hooks/playlist/useStack';
 import List from './pages/List/List';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -33,52 +34,52 @@ const router = createBrowserRouter([
   {
     path:"test",
     element: <TestPage/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path:"/",
     element: <Home/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path:"login",
     element: <Login/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path:"account",
     element: <Account/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path:"signup",
     element: <SignUp/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path:"song/:guid",
     element: <Sheet/>,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path: "create",
     element: <Create />,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path: "create/:guid",
     element: <Create />,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path: "playlist",
     element: <PlaylistPreview />,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   {
     path: "list",
     element: <List />,
-    errorElement: <Typography>Error.</Typography>
+    errorElement: <ErrorPage/>
   },
   
 ]);

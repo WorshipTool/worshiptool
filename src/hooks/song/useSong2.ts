@@ -51,8 +51,8 @@ export default function useSong(_guid?: string) {
         if(!guid) throw("Song is undefined"); 
         if(!data) throw("Song not found");
 
-        if(data.alternativeTitles?.length>0) 
-            return data.alternativeTitles[0];
+        // if(data.alternativeTitles?.length>0) 
+        //     return data.alternativeTitles[0];
 
         throw("Song has no title");
     }

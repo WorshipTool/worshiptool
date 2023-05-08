@@ -42,7 +42,6 @@ export default function Home() {
     const scrollPointRef = useRef(null)
 
     const [searchValue, setSearchValue] = useState("");
-    const [searching, setSearching] = useState(false);
     const [showSearchedList, setShowSearchedList] = useState(false);
 
     const {isLoggedIn, isAdmin} = useAuth();
@@ -54,6 +53,7 @@ export default function Home() {
 
 
     
+    const scrollLevel = 50;
 
     const onResize = () => {
         const min = (window.innerHeight);
@@ -75,12 +75,13 @@ export default function Home() {
 
     useEffect(()=>{
         if(searchValue==""){
-            setSearching(false);
         }else{
-            if(scrollPointRef.current){
-                const s : any = scrollPointRef.current;
-                s.scrollIntoView();
-            }
+            window.scroll({
+                top: scrollLevel*2,
+                left: 0,
+                behavior: "smooth",
+              });
+
         }
     },[searchValue])
 
@@ -89,7 +90,7 @@ export default function Home() {
     },[])
 
     const onSearchValueChange = (event: any) => {
-        setSearching(true);
+        // setSearching(true);
         setShowSearchedList(true);
         setSearchValue(event.target.value);
     }   
@@ -101,9 +102,8 @@ export default function Home() {
 
     useEffect(() => {
         const handleScroll = (event:any) => {
-            const level = 50;
             const sy = window.scrollY;
-            if(sy>level){
+            if(sy>scrollLevel){
                 setTop(false)
             }else{
                 setTop(true);
@@ -223,7 +223,7 @@ export default function Home() {
 
 
                  <Box sx={{height:60}}></Box>
-                <div ref={scrollPointRef}></div>
+                {/* <div ref={scrollPointRef}></div> */}
 
 
                 <Box margin={1}>

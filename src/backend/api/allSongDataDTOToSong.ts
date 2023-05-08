@@ -14,7 +14,6 @@ export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
     return {
         guid: data.guid,
         title: data.mainTitle,
-        alternativeTitles: data.alternativeTitles,
         creators: data.creators,
         variants: data.variants.filter((v)=>v).map((variant)=>{
 
@@ -26,6 +25,7 @@ export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
             return {
                 guid: variant.guid,
                 preferredTitle: variant.prefferedTitle,
+                titles: variant.titles,
                 sheetData: variant.sheetData,
                 sheetText: variant.sheetText,
                 sections,

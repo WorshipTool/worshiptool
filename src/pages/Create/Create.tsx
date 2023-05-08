@@ -63,7 +63,8 @@ export default function Create() {
                 sheetData: sheet,
                 sheetText: "",
                 sections: convertSheetToSections(sheet),
-                preferredTitle: "",
+                preferredTitle: title,
+                titles:[],
                 createdBy: "",
                 createdByLoader: false,
                 verified: false,
@@ -71,7 +72,6 @@ export default function Create() {
                 creators:[]
             }],
             guid: "",
-            alternativeTitles: [title],
             creators:[],
             media:[],
             tags: []
@@ -97,7 +97,8 @@ export default function Create() {
         const dto : Partial<NewSongDataDTO> = {
             title: title,            
             sheetData: sheet,
-            media:[]
+            media:[],
+            songGuid: guid
         };
 
         post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {

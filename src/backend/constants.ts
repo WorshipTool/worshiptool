@@ -13,6 +13,7 @@ export const VERIFYSONG_URL = "songs/variant/verify/:guid"
 export const UNVERIFYSONG_URL = "songs/variant/unverify/:guid"
 export const DELETESONG_URL = "songs/variant/delete/:guid"
 export const GETSONGCOUNT_URL = "songs/count";
+export const POSTMERGESONGS_URL = "songs/merge";
 
 export const LOGIN_URL = "auth/login";
 export const SIGNUP_URL = "auth/signup";

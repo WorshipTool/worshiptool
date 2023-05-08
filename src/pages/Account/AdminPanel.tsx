@@ -47,6 +47,7 @@ export default function AdminPanel() {
         }, (result : RequestResult<LoginResultDTO>) => {
             if(isRequestSuccess(result)){
                 setToken(result.data.token);
+                navigator.clipboard.writeText(result.data.token);
                 console.log(result.data.token);
             }
             
@@ -60,7 +61,7 @@ export default function AdminPanel() {
         <InputBase placeholder='Heslo' value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
         <Button onClick={showToken}>Získat token</Button>
         {token!=""&&<Typography>
-            Token in console...    
+            Token copied in clipboard...    
         </Typography>}
 
 
