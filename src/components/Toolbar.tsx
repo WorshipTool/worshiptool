@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, Tooltip, Typography, styled, useTheme } from '@mui/material'
+import { Badge, Box, Button, Fade, IconButton, Menu, MenuItem, Paper, Popper, Tooltip, Typography, styled, useTheme, Chip } from '@mui/material';
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import Login from '@mui/icons-material/Login'
@@ -12,6 +12,7 @@ import {Build, FormatListBulleted, Home, List, ViewList } from '@mui/icons-mater
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 import AppsIcon from '@mui/icons-material/Apps';
 import useStack from '../hooks/playlist/useStack'
+import useGroup from '../hooks/group/useGroup'
 
 
 const TopBar = styled(Box)(()=>({
@@ -41,6 +42,8 @@ export default function Toolbar({transparent}:ToolbarProps) {
 
     const navigate = useNavigate();
 
+    const {isGroup, name: groupName, fullName: groupFullName, baseUrl} = useGroup();
+
 
     useEffect(() => {
         const handleScroll = (event:any) => {
@@ -59,15 +62,16 @@ export default function Toolbar({transparent}:ToolbarProps) {
     },[user])
 
     const onHomeClick = () => {
-        navigate("/");
+        console.log(baseUrl+"/")
+        navigate(baseUrl+"/");
         window.scrollTo(0, 0);
     }
     const onTestClick = () => {
-        navigate("/test")
+        navigate(baseUrl+"/test")
     }
 
     const onLoginButtonClick = (event:any) => {
-        navigate('/login');
+        navigate(baseUrl+'/login');
         //setLoginPopperAnchor(event.currentTarget);
         setLoginOpen(!loginOpen);
     }
@@ -78,11 +82,11 @@ export default function Toolbar({transparent}:ToolbarProps) {
     }
 
     const onListClick = () => {
-        navigate("/list");
+        navigate(baseUrl+"/list");
     }
 
     const onPlaylistClick = () => {
-        navigate('/playlist');
+        navigate(baseUrl+'/playlist');
     }
 
     return (
@@ -101,7 +105,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
     
                 <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1}>
                     
-                    <Box flex={1} display={"flex"} alignItems={"center"} color={transparent?"black":"white"}>
+                    <Box display={"flex"} alignItems={"center"} color={transparent?"black":"white"}>
                         
                         <Tooltip title={"Hlavní stránka"}>
                             <IconButton color='inherit' onClick={onHomeClick} sx={{marginLeft: 1}}>
@@ -135,6 +139,15 @@ export default function Toolbar({transparent}:ToolbarProps) {
                             </Tooltip>
                         </>}
                     </Box>
+
+
+                    <Box flex={1} display={"flex"} alignItems={"center"} justifyContent={"center"} color={transparent?"black":"white"}>
+                        {isGroup&&<>
+                            <Chip label={groupFullName?.toUpperCase()} sx={{minWidth: 300}}/>
+                        </>}
+                    </Box>
+
+
                     <Box paddingRight={4} display={"flex"} flexDirection={"row"} alignItems={"center"} color={transparent?"black":"black"}>
                         {isLoggedIn()&&<Typography fontWeight={100} color={"inherit"} sx={{
                             [theme.breakpoints.down("sm")]:{

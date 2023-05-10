@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, ThemeProvider, Typography, styled } from '@mui/material';
 import {
+  BrowserRouter,
   createBrowserRouter,
+  Route,
   RouterProvider,
+  Routes,
+  useParams,
 } from "react-router-dom";
 import Home from './pages/Home/Home';
 import "./App.css";
@@ -19,6 +23,7 @@ import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 import { StackProvider } from './hooks/playlist/useStack';
 import List from './pages/List/List';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+import useGroup, { GroupProvider } from './hooks/group/useGroup';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -29,60 +34,6 @@ const Background = styled(Box)(({theme})=>({
   zIndex:-100,
   
 }))
-
-const router = createBrowserRouter([
-  {
-    path:"test",
-    element: <TestPage/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path:"/",
-    element: <Home/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path:"login",
-    element: <Login/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path:"account",
-    element: <Account/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path:"signup",
-    element: <SignUp/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path:"song/:guid",
-    element: <Sheet/>,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path: "create",
-    element: <Create />,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path: "create/:guid",
-    element: <Create />,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path: "playlist",
-    element: <PlaylistPreview />,
-    errorElement: <ErrorPage/>
-  },
-  {
-    path: "list",
-    element: <List />,
-    errorElement: <ErrorPage/>
-  },
-  
-]);
 
 const theme = createTheme({
   palette: {
@@ -96,16 +47,66 @@ const theme = createTheme({
   },
 });
 
+export const GroupRoutesProvider = () => {
+  const {setGroupName} = useGroup();
+  const {groupName} = useParams();
+  useEffect(() => {
+      setGroupName(groupName);
+    }, []);
+  
+  return <AppRoutes/>
+}
+
+export const NongroupRoutesProvider = () => {
+  const {setGroupName} = useGroup();
+  useEffect(() => {
+      setGroupName(undefined);
+    }, []);
+  
+  return <AppRoutes/>
+}
+
+export const NavigationProvider = () => {
+  return <BrowserRouter>
+    <Routes>
+      <Route path="group/:groupName/*" element={<GroupRoutesProvider/>}/>
+      <Route path="*" element={<NongroupRoutesProvider/>}/>
+    </Routes>
+  </BrowserRouter>
+}
+
+export const AppRoutes = () => {
+  return <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="list" element={<List/>}/>
+      <Route path="login" element={<Login/>}/>
+      <Route path="signup" element={<SignUp/>}/>
+      <Route path="account" element={<Account/>}/>
+      <Route path="song/:guid" element={<Sheet/>}/>
+      <Route path="create" element={<Create/>}/>
+      <Route path="create/:guid" element={<Create/>}/>
+      <Route path="playlist" element={<PlaylistPreview/>}/>
+      <Route path="test" element={<TestPage/>}/>
+      <Route path="*" element={<ErrorPage/>}/>
+    </Routes>
+  
+}
+
+
 function App() {
 
     return (
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>
-          <AuthProvider>      
+          <AuthProvider> 
+            <GroupProvider>
               <StackProvider>
-                <Background/>
-                <RouterProvider router={router}/>
-              </StackProvider>
+                    <Background/>
+
+                    <NavigationProvider/>
+
+                  </StackProvider>
+            </GroupProvider>
           </AuthProvider>
         </ThemeProvider>
       </SnackbarProvider>
