@@ -30,20 +30,19 @@ const StyledPanelButton = styled(Typography)(({theme})=>({
 }))
 
 
-export default function PanelItem({guid}:{guid:string}) {
+export default function PanelItem({guid, variants}:{guid:string, variants: string[]}) {
     const {getName, loading} = useSong(guid);
     
-    const {songGUIDs, setGUIDs} = useStack();
 
     const move = (dir: number) => {
-        const currIndex = songGUIDs.indexOf(guid);
+        const currIndex = variants.indexOf(guid);
         if(currIndex<0)return;
 
-        setGUIDs((arr)=>{
-            let newArr = [...arr];
-            newArr.splice(currIndex+dir, 0, newArr.splice(currIndex, 1)[0]);
-            return newArr;
-        })
+        // setVariants((arr: any)=>{
+        //     let newArr = [...arr];
+        //     newArr.splice(currIndex+dir, 0, newArr.splice(currIndex, 1)[0]);
+        //     return newArr;
+        // })
     }
 
     const onClick = () => {
@@ -59,10 +58,10 @@ export default function PanelItem({guid}:{guid:string}) {
         :<Skeleton variant='text' width={200} sx={{marginLeft:2}}></Skeleton>}
 
         <Box display={"flex"} flexDirection={"row"} height={35}>
-            {songGUIDs.indexOf(guid)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>
+            {variants.indexOf(guid)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>
                 <KeyboardArrowUp/>
             </IconButton>}
-            {songGUIDs.indexOf(guid)+1!=songGUIDs.length?
+            {variants.indexOf(guid)+1!=variants.length?
             <IconButton onClick={()=>{move(1)}} size='small' >
                 <KeyboardArrowDown/>
             </IconButton>

@@ -21,9 +21,8 @@ const Container = styled(Box)(({theme})=>({
 }))
 
 
-export default function SidePanel() {
+export default function SidePanel({guid, variants}: {guid:string, variants:string[]}) {
 
-    const {songGUIDs, setGUIDs} = useStack();  
 
     const [popupOpen, setPopupOpen] = useState(false);
 
@@ -38,7 +37,7 @@ export default function SidePanel() {
 
 
     const removeAll = () => {
-        setGUIDs([]);
+        // setGUIDs([]);
         closePopup();
     }
 
@@ -51,15 +50,15 @@ export default function SidePanel() {
             <Box margin={2}>
                 <Box display={"flex"} flexDirection={"row"}>
                     <Typography variant='h6' fontWeight={"bold"} flex={1}>Pořadí</Typography>
-                    <Button size="small" color='error' onClick={openPopup}>Odebrat vše</Button>
+                    {/* <Button size="small" color='error' onClick={openPopup}>Odebrat vše</Button> */}
                 </Box>
                 <Gap/>
-                {songGUIDs.length==0&&<>
+                {variants.length==0&&<>
                     <Typography variant='subtitle2'>V playlistu nejsou žádné písně...</Typography>
                 </>}
                 <Masonry columns={1}>
-                    {songGUIDs.map((guid)=>{
-                        return <PanelItem guid={guid} key={"order_"+guid}/>
+                    {variants.map((guid)=>{
+                        return <PanelItem guid={guid} key={"order_"+guid} variants={variants}/>
                     })}
                 </Masonry>
                 <Gap value={6}/>

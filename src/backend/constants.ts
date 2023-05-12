@@ -15,5 +15,14 @@ export const DELETESONG_URL = "songs/variant/delete/:guid"
 export const GETSONGCOUNT_URL = "songs/count";
 export const POSTMERGESONGS_URL = "songs/merge";
 
+export const GETPLAYLISTS_URL = "songs/playlists";
+export const POSTCREATEPLAYLIST_URL = "songs/playlist";
+export const POSTDELETEPLAYLIST_URL = "songs/deleteplaylist";
+export const GETSONGSINPLAYLIST_URL = "songs/playlist/:guid";
+export const POSTADDTOPLAYLIST_URL = "songs/playlist/add";
+export const POSTREMOVEFROMPLAYLIST_URL = "songs/playlist/remove";
+
+export const GETISVARIANTINPLAYLIST_URL = "songs/isinplaylist";
+
 export const LOGIN_URL = "auth/login";
 export const SIGNUP_URL = "auth/signup";

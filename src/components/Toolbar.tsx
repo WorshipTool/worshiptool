@@ -129,15 +129,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
                             </Tooltip>
                         </>
                         }
-                        {isLoggedIn()&&<>
-                            <Tooltip title={"Playlist"}>
-                                <IconButton color="inherit" sx={{marginLeft:1}} onClick={(onPlaylistClick)}>
-                                    <Badge badgeContent={count} color='primary'>
-                                        <AppsIcon color='inherit' />
-                                    </Badge>
-                                </IconButton>
-                            </Tooltip>
-                        </>}
+                        
                     </Box>
 
 

@@ -1,4 +1,4 @@
-import { Box, Button, Chip, IconButton, MenuItem, Select, SelectChangeEvent, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, SelectChangeEvent, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
@@ -8,11 +8,11 @@ import AddIcon from '@mui/icons-material/Add';
 import useAuth from '../../hooks/auth/useAuth';
 import { ROLES } from '../../models/user';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } from '../../backend/urls';
+import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../backend/urls';
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
-import { Add, AddBoxRounded, CopyAll, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
+import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
@@ -21,11 +21,17 @@ import AddVideo from '../../components/AddVideo';
 import { SourceTypes } from '../../models/song/source';
 import AddTag from '../../components/AddTag';
 import AddCreator from '../../components/AddCreator';
+import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../backend/dtos/dtosPlaylist';
+import { isRequestSuccess } from '../../backend/dtos/RequestResult';
+import Playlist from '../../models/playlist/playlist';
+import usePlaylists from '../../hooks/playlist/usePlaylists';
 
 
 export default function Sheet() {
     const {guid} = useParams();
     const theme = useTheme();
+
+    const {addVariantToPlaylist: addToPlaylist, removeVariantFromPlaylist: removeFromPlaylist} = usePlaylists();
 
     const [variantID, setVariantID] = useState(0);
 
@@ -36,18 +42,50 @@ export default function Sheet() {
     const navigate = useNavigate();
     const {enqueueSnackbar} = useSnackbar();
 
-    const {add, remove: removeFromPlaylist, contains} = useStack();
+    const [playlistsListOpen, setPlaylistsListOpen] = useState(false);
+
+    const {getPlaylistsOfUser, isVariantInPlaylist} = usePlaylists();
 
     const [addVideoOpen, setAddVideoOpen] = useState(false);
     const [addTagOpen, setAddTagOpen] = useState(false);
     const [addCreatorOpen, setAddCreatorOpen] = useState(false);
 
-    useEffect(()=>{
-        if(guid) setGUID(guid);
-        else{
+    const [playlists, setPlaylists] = useState<{guid:string, title:string}[]>([]);
+    const [isInPlaylist, setIsInPlaylist] = useState<boolean[]>([])
 
+
+    useEffect(()=>{
+        if(guid){
+          setGUID(guid);
         }
     },[]);
+
+    useEffect(()=>{
+      if(song) reloadPlaylists();
+    },[song])
+
+    const reloadPlaylists = () => {
+      console.log("baf");
+      getPlaylistsOfUser()
+      .then(async (r)=>{
+        if(isRequestSuccess(r)){
+          
+          const isArr : boolean[] = [];
+          for(let i=0; i<r.data.playlists.length; i++){
+            const playlist = r.data.playlists[i];
+            if(song){
+              const isInPlaylist = await isVariantInPlaylist(song.variants[variantID].guid,playlist.guid);
+              isArr.push(isInPlaylist);
+            }
+          }
+          setIsInPlaylist(isArr);
+            
+          setPlaylists(r.data.playlists);
+        }
+      })
+    }
+
+
 
     useEffect(()=>{
       if(song!==undefined)      
@@ -98,14 +136,38 @@ export default function Sheet() {
     }
   }
 
-  const onPlaylistAddClick = () => {
-    if(guid===undefined)return;
-    add(guid);
+  const addVariantToPlaylist = (guid:string, index: number) => {
+    const body : PostAddVariantToPlaylistBodyDTO = {
+      playlist: guid,
+      variant: song?.variants[variantID].guid || ""
+
+    }
+    addToPlaylist(body.variant, guid)
+    .then((result)=>{
+      if(isRequestSuccess(result)){
+        reloadPlaylists();
+      }else{
+        console.log(result);
+      }
+    })
+
   }
-  const onPlaylistRemoveClick = () => {
-    
-    if(guid===undefined)return;
-    removeFromPlaylist(guid);
+
+  const removeVariantFromPlaylist = (guid:string) => {
+    const body : PostAddVariantToPlaylistBodyDTO = {
+      playlist: guid,
+      variant: song?.variants[variantID].guid || ""
+
+    }
+    removeFromPlaylist(body.variant, guid)
+    .then((result)=>{
+      console.log(result);
+      if(isRequestSuccess(result)){
+        reloadPlaylists();
+      }else{
+        console.log(result);
+      }
+    })
   }
 
   const onPrintClick = () => {
@@ -249,13 +311,46 @@ export default function Sheet() {
                 right: 30
               }} display={"flex"} flexDirection={"column"} displayPrint={"none"}>
 
-          {guid&&!contains(guid)?
+          {guid?
             <>
-              <Button onClick={onPlaylistAddClick} variant="contained">Přidat do playlistu</Button>
+              <SpeedDial
+                    ariaLabel="SpeedDial openIcon example"
+                    sx={{ position: 'fixed', bottom: 30, right: 30 }}
+                    icon={<SpeedDialIcon openIcon={<Close />} />}>
+
+                      {playlists.slice(0,3).map((p, i)=>{
+
+                        const add = !isInPlaylist[i];
+                        return <SpeedDialAction
+                          icon={ add ?
+                            <PlaylistAdd /> :
+                            <CheckCircle/>
+                          }
+                          key={p.title}
+                          tooltipTitle={p.title}
+                          tooltipOpen
+                          onClick={()=>{
+                            if(add) 
+                              addVariantToPlaylist(p.guid, i)
+                            else 
+                              removeVariantFromPlaylist(p.guid)
+                          }}
+                        />
+                      })}
+
+                      <SpeedDialAction
+                          icon={ <MoreHoriz/>}
+                          key={"More"}
+                          tooltipTitle={"Další"}
+                          tooltipOpen
+                          onClick={()=>setPlaylistsListOpen(true)}
+                        />
+                        
+                        
+                        
+                </SpeedDial>
             </>
             :<>              
-                <Typography variant='subtitle2'>Tato píseň je v playlistu</Typography>
-                <Button onClick={onPlaylistRemoveClick} variant="contained">Odstranit z playlistu</Button>
             </>}
           </Box>}
         
@@ -271,6 +366,35 @@ export default function Sheet() {
       <AddCreator open={addCreatorOpen} handleClose={()=>setAddCreatorOpen(false)} songGuid={guid} afterUpload={()=>{
         reload();
       }}/>
+
+      <Dialog open={playlistsListOpen} onClose={()=>setPlaylistsListOpen(false)}>
+            <DialogTitle>Přidat do playlistu</DialogTitle>
+            <DialogContent>
+                <Box>
+                {playlists.map((p, i)=>{
+
+                  const add = !isInPlaylist[i];
+                  return <Paper sx={{marginBottom: 1}}>
+                    <Button startIcon={add ?
+                       <PlaylistAdd /> :
+                       <CheckCircle/>}
+                       fullWidth
+                       sx={{justifyContent: "start"}}
+                       onClick={()=>{
+                            if(add) 
+                              addVariantToPlaylist(p.guid, i)
+                            else 
+                              removeVariantFromPlaylist(p.guid)
+                          }}>{p.title}</Button>
+                  </Paper>
+                  })}
+                </Box>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={()=>setPlaylistsListOpen(false)}>Zavřít</Button>
+            </DialogActions>
+        </Dialog>
+
     </>
   
   )

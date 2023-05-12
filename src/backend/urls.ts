@@ -1,4 +1,5 @@
-import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL, SIGNUP_URL, VERIFYSONG_URL, UNVERIFYSONG_URL, DELETESONG_URL, GETUNVERIFIED_URL, GETLOADERUNVERIFIED_URL, GETSONGCOUNT_URL, GETSONGLIST_URL, POSTMERGESONGS_URL } from './constants';
+import { LOGIN_URL, BACKEND_URL, GETSONGBYGUID_URL, GETSONGQUERY_URL, POSTNEWSONG_URL, SIGNUP_URL, VERIFYSONG_URL, UNVERIFYSONG_URL, DELETESONG_URL, GETUNVERIFIED_URL, GETLOADERUNVERIFIED_URL, GETSONGCOUNT_URL, GETSONGLIST_URL, POSTMERGESONGS_URL, GETPLAYLISTS_URL, POSTCREATEPLAYLIST_URL, POSTADDTOPLAYLIST_URL, GETSONGSINPLAYLIST_URL, GETISVARIANTINPLAYLIST_URL, POSTREMOVEFROMPLAYLIST_URL, POSTDELETEPLAYLIST_URL } from './constants';
+import { GetSongsInPlaylistParamsDTO } from './dtos/dtosPlaylist';
 
 
 export function getUrl_GETSONGBYGUID(guid:string){
@@ -51,6 +52,37 @@ export function getUrl_POSTMERGESONGS(){
     const generatedURL = BACKEND_URL + POSTMERGESONGS_URL
     return generatedURL;
 }
+export function getUrl_GETPLAYLISTS(){
+    const generatedURL = BACKEND_URL + GETPLAYLISTS_URL;
+    return generatedURL;
+}
 
 
+export function getUrl_POSTCREATEPLAYLIST(){
+    const generatedURL = BACKEND_URL + POSTCREATEPLAYLIST_URL;
+    return generatedURL;
+}
+export function getUrl_POSTDELETEPLAYLIST(){
+    const generatedURL = BACKEND_URL + POSTDELETEPLAYLIST_URL;
+    return generatedURL;
+}
 
+export function getUrl_POSTADDTOPLAYLIST(){
+    const generatedURL = BACKEND_URL + POSTADDTOPLAYLIST_URL;
+    return generatedURL;
+}
+
+export function getUrl_POSTREMOVEFROMPLAYLIST(){
+    const generatedURL = BACKEND_URL + POSTREMOVEFROMPLAYLIST_URL;
+    return generatedURL;
+}
+
+export function getUrl_GETSONGSINPLAYLIST({guid}:GetSongsInPlaylistParamsDTO){
+    const generatedURL = BACKEND_URL + GETSONGSINPLAYLIST_URL.replace(":guid", guid);;
+    return generatedURL;
+}
+
+export function getUrl_GETISVARIANTINPLAYLIST(variantGuid:string, playlistGuid:string){
+    const generatedURL = BACKEND_URL + GETISVARIANTINPLAYLIST_URL + `?variant=${variantGuid}&playlist=${playlistGuid}`;
+    return generatedURL;
+}
