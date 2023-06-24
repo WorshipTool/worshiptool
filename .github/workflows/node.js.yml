@@ -43,5 +43,5 @@ jobs:
         key: ${{secrets.SSH_KEY}}
         passphrase: ${{ secrets.SSH_PASSWORD }}
         source: "./build"
-        target: ${{ secrets.TARGET }}
+        target: "../var/www/chvalotce"
     
