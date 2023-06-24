@@ -37,5 +37,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         source: "./build"
-        target: "/var/www/chvalotce"
+        target: ${{ secrets.TARGET }}
     
