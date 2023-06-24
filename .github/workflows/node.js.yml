@@ -39,5 +39,5 @@ jobs:
         remote: "/var/www/chvalotce"
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        privateKey: ${{secrets.SSH_KEY}}
-        passphrase: ${{secrets.SSH_PASSWORD}}
+        privateKey: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.SSH_PASSWORD }}
