@@ -37,8 +37,8 @@ jobs:
       env:
         USERNAME: ${{ secrets.USERNAME }}
         HOST: ${{ secrets.HOST }}
-        KEY: ${{ secrets.SSH_KEY }}
-        PASSPHRASE: ${{ secrets.SSH_PASSWORD }}
       with:
+        key: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.SSH_PASSWORD }}
         source: '.'
         target: '/var/www/chvalotce/'
