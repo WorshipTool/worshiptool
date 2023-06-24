@@ -33,7 +33,7 @@ jobs:
       run: npm build
       
     - name: Copy file with SSH
-      uses: garygrossgarten/github-action-scp@0.6.3
+      uses: garygrossgarten/github-action-scp@0.5.3
       with:
         local: "build/*"
         remote: "/var/www/chvalotce"
