@@ -40,5 +40,5 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
-        ssh "prijmeni.cz"
+        ssh "root@prijmeni.cz"
 
