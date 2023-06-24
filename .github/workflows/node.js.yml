@@ -40,7 +40,7 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
-        cd ..
-        ls
+        cd ../..
+        ls -R
         ssh "root@prijmeni.cz"
 
