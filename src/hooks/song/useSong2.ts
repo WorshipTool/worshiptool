@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import useFetch from '../useFetch';
 import { getUrl_GETSONGBYGUID } from "../../backend/urls";
 import AllSongDataDTO from "../../backend/dtos/dtosSong";
-import Song, { Variant } from "../../models/song/song";
 import useAuth from "../auth/useAuth";
 import { isRequestSuccess } from "../../backend/dtos/RequestResult";
 

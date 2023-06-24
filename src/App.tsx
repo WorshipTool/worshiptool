@@ -25,6 +25,8 @@ import List from './pages/List/List';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import useGroup, { GroupProvider } from './hooks/group/useGroup';
 import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
+import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
+import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -88,6 +90,7 @@ export const AppRoutes = () => {
       <Route path="create" element={<Create/>}/>
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
+      <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
       <Route path="test" element={<TestPage/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>

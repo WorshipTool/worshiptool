@@ -25,7 +25,8 @@ export interface GetSongsInPlaylistParamsDTO{
     guid: string
 }
 export interface GetSongsInPlaylistResultDTO{
-    guids: string[]
+    guids: string[],
+    title: string
 }
 
 export interface PostAddVariantToPlaylistBodyDTO{

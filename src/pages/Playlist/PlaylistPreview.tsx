@@ -18,6 +18,7 @@ import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import Playlist from '../../models/playlist/playlist';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
+import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
@@ -75,9 +76,9 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
 export default function PlaylistPreview() {
     const {guid} = useParams();
 
-
     const {playlist, variants, reload} = usePlaylist(guid||"");
 
+    const [currVariantIndex, setCurrVariantIndex] = useState(0);
 
     const navigate = useNavigate();
 
@@ -96,9 +97,11 @@ export default function PlaylistPreview() {
         <Box>
             <Toolbar/>
             <Box display={"flex"} flexDirection={"row"}>                
-                <SidePanel guid={guid||""} variants={variants}/>
+                <SidePanel title={playlist?.title||""} variants={variants} onCardsClick={()=>{
+                    navigate("/playlist/cards/"+guid);
+                }}/>
                 <Box width={300} displayPrint={"none"}></Box>
-                <Container flex={1}>
+                {<Container flex={1}>
                     {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
                         <Typography variant='subtitle1'>
                             V playlistu namáš zatím jedinou píseň. 
@@ -114,7 +117,7 @@ export default function PlaylistPreview() {
                     {variants.map((g)=>{
                         return <Item guid={g} key={g} playlist={guid||""} reload={reload}/>
                     })}
-                </Container>
+                </Container>}
                 
     
             </Box>

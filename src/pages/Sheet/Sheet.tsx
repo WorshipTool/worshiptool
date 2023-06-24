@@ -12,7 +12,7 @@ import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUr
 import Toolbar from '../../components/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
-import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
+import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Dashboard, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
@@ -218,6 +218,7 @@ export default function Sheet() {
                     
                   </Box>
   
+                  
                   {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}>
                     <CopyAll/>  
                   </IconButton>}

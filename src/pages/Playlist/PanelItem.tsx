@@ -30,7 +30,7 @@ const StyledPanelButton = styled(Typography)(({theme})=>({
 }))
 
 
-export default function PanelItem({guid, variants}:{guid:string, variants: string[]}) {
+export default function PanelItem({guid, variants, onClick}:{guid:string, variants: string[], onClick: ()=>void}) {
     const {getName, loading} = useSong(guid);
     
 
@@ -45,13 +45,6 @@ export default function PanelItem({guid, variants}:{guid:string, variants: strin
         // })
     }
 
-    const onClick = () => {
-        const el = document.getElementById("playlistItem_"+guid);
-        el?.scrollIntoView({
-            behavior: "smooth", 
-            block: "start"
-        });
-    }
 
     return <PanelItemContainer>
         {!loading?<StyledPanelButton onClick={onClick}>{getName()}</StyledPanelButton>

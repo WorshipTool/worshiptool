@@ -5,3 +5,7 @@ html, body, #root, #app, #app>div {
 body{
   overflow-y: scroll;
 }
+::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}

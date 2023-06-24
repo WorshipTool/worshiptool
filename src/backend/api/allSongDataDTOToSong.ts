@@ -1,5 +1,5 @@
-import Song, { Section } from "../../models/song/song";
-import {convertSheetToSections} from "@pepavlin/sheet-api";
+import Song from "../../models/song/song";
+import {Section, convertSheetToSections} from "@pepavlin/sheet-api";
 import AllSongDataDTO from "../dtos/dtosSong";
 
 export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{

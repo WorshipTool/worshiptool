@@ -7,7 +7,6 @@ import Playlist from '../../models/playlist/playlist';
 
 
 export default function usePlaylists(){
-    const {user} = useAuth();
     const {fetchData, post} = useFetch();
 
     const addVariantToPlaylist = async (variant: string, playlist: string) => {
@@ -62,7 +61,7 @@ export default function usePlaylists(){
         
         return formatted({
             guid:guid,
-            title:"To netusim",
+            title:result.data.title,
             variants: result.data.guids
 
         });

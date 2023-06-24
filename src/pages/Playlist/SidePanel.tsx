@@ -1,8 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography, styled } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Switch, Typography, styled } from '@mui/material'
 import React, { useState } from 'react'
 import Gap from '../../components/Gap'
 import { Masonry } from '@mui/lab'
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { Dashboard, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import useSong from '../../hooks/song/useSong'
 import useStack from '../../hooks/playlist/useStack'
 import PanelItem from './PanelItem'
@@ -21,7 +21,8 @@ const Container = styled(Box)(({theme})=>({
 }))
 
 
-export default function SidePanel({guid, variants}: {guid:string, variants:string[]}) {
+export default function SidePanel({title, variants, onCardsClick}
+            : {title:string, variants:string[], onCardsClick : ()=>void}) {
 
 
     const [popupOpen, setPopupOpen] = useState(false);
@@ -45,9 +46,20 @@ export default function SidePanel({guid, variants}: {guid:string, variants:strin
         window.print();
     }
 
+    const onPanelItemClickCall = (guid:string)=>{
+        const el = document.getElementById("playlistItem_"+guid);
+        el?.scrollIntoView({
+            behavior: "smooth", 
+            block: "start"
+        });
+    }
+
     return (
         <Container displayPrint={"none"}>
             <Box margin={2}>
+                
+                <Typography variant='h5' fontWeight={"bold"} flex={1}>{title}</Typography>
+                <Gap value={2}/>
                 <Box display={"flex"} flexDirection={"row"}>
                     <Typography variant='h6' fontWeight={"bold"} flex={1}>Pořadí</Typography>
                     {/* <Button size="small" color='error' onClick={openPopup}>Odebrat vše</Button> */}
@@ -58,18 +70,27 @@ export default function SidePanel({guid, variants}: {guid:string, variants:strin
                 </>}
                 <Masonry columns={1}>
                     {variants.map((guid)=>{
-                        return <PanelItem guid={guid} key={"order_"+guid} variants={variants}/>
+                        return <PanelItem guid={guid} key={"order_"+guid} variants={variants} onClick={()=>onPanelItemClickCall(guid)}/>
                     })}
                 </Masonry>
                 <Gap value={6}/>
             </Box>
             
-            <Button variant="contained" sx={{
+            <Box sx={{
                     position:"absolute",
                     bottom: 30,
                     right: 30,
+                    left: 30,
                     displayPrint:"none"
-                }} onClick={onPrint}>Vytisknout</Button>
+                }}
+                display={"flex"} justifyContent={"space-between"}>
+                    
+                <IconButton onClick={onCardsClick}>
+                    <Dashboard color='primary'/>
+                </IconButton>
+                <Button variant="contained"  onClick={onPrint}>Vytisknout</Button>
+
+            </Box>
 
             <Dialog
                 open={popupOpen}

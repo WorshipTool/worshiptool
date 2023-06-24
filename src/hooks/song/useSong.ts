@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import Song, { Variant } from "../../models/song/song";
+import Song from "../../models/song/song";
 import useFetch from "../useFetch";
 import { getUrl_GETSONGBYGUID } from "../../backend/urls";
 import AllSongDataDTO from "../../backend/dtos/dtosSong";
 import useTranspose from "../../sheetApi/hooks/useTranspose";
 import useAuth from "../auth/useAuth";
 import convertAllSongDataDTOToSong from "../../backend/api/allSongDataDTOToSong";
+import { Variant } from "../../models/song/variant";
 
 
 
