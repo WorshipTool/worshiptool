@@ -25,17 +25,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        
     - name: Install npm packages
       run: npm install
+      
     - name: Build an production version
       run: npm build
+      
     - name: Copy file with SSH
-      uses: appleboy/scp-action@master
+      uses: nogsantos/scp-deploy@master
       with:
+        src: ./build/*
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{secrets.SSH_KEY}}
-        passphrase: ${{ secrets.SSH_PASSWORD }}
-        source: "./build"
-        target: "../var/www/chvalotce"
-    
+        remote: "/var/www/chvalotce"
+        port: 22
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+
