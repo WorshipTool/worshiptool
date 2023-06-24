@@ -30,7 +30,7 @@ jobs:
       run: npm install
       
     - name: Build an production version
-      run: npm build
+      run: npm run build
       
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
@@ -40,6 +40,7 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
+        cd ..
         ls
         ssh "root@prijmeni.cz"
 
