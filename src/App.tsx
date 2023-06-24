@@ -15,7 +15,6 @@ import { createTheme } from '@mui/material';
 import Sheet from './pages/Sheet/Sheet';
 import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
-import TestPage from './pages/Test/TestPage';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
@@ -91,7 +90,6 @@ export const AppRoutes = () => {
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
-      <Route path="test" element={<TestPage/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   

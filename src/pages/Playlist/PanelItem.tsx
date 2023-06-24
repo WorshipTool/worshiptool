@@ -38,11 +38,6 @@ export default function PanelItem({guid, variants, onClick}:{guid:string, varian
         const currIndex = variants.indexOf(guid);
         if(currIndex<0)return;
 
-        // setVariants((arr: any)=>{
-        //     let newArr = [...arr];
-        //     newArr.splice(currIndex+dir, 0, newArr.splice(currIndex, 1)[0]);
-        //     return newArr;
-        // })
     }
 
 
@@ -50,7 +45,7 @@ export default function PanelItem({guid, variants, onClick}:{guid:string, varian
         {!loading?<StyledPanelButton onClick={onClick}>{getName()}</StyledPanelButton>
         :<Skeleton variant='text' width={200} sx={{marginLeft:2}}></Skeleton>}
 
-        <Box display={"flex"} flexDirection={"row"} height={35}>
+        {/* <Box display={"flex"} flexDirection={"row"} height={35}>
             {variants.indexOf(guid)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>
                 <KeyboardArrowUp/>
             </IconButton>}
@@ -59,6 +54,6 @@ export default function PanelItem({guid, variants, onClick}:{guid:string, varian
                 <KeyboardArrowDown/>
             </IconButton>
             :<Box width={35}></Box>}
-        </Box>
+        </Box> */}
     </PanelItemContainer>
 }
