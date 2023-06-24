@@ -107,7 +107,7 @@ function App() {
             <GroupProvider>
               <StackProvider>
                     <Background/>
-
+                    a
                     <NavigationProvider/>
 
                   </StackProvider>
