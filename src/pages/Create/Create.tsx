@@ -32,7 +32,7 @@ const TitleInput = styled(InputBase)(({theme})=>({
     fontWeight: theme.typography.fontWeightBold
 }))
 const SheetInput = styled(InputBase)(({})=>({
-    height:200,
+    minHeight:200,
     justifyContent:"start",
     alignItems:"start"
 }))

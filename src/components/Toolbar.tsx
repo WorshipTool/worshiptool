@@ -6,11 +6,7 @@ import useAuth from '../hooks/auth/useAuth'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import AccountMenu from './AccountMenu'
 import { useNavigate } from 'react-router-dom'
-import BlackSheep from "../assets/images/blackSheep.png"
-import WhiteSheep from "../assets/images/whiteSheep.png"
 import {Build, FormatListBulleted, Home, List, ViewList } from '@mui/icons-material'
-import BuildCircleIcon from '@mui/icons-material/BuildCircle';
-import AppsIcon from '@mui/icons-material/Apps';
 import useStack from '../hooks/playlist/useStack'
 import useGroup from '../hooks/group/useGroup'
 
@@ -117,18 +113,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
                                 <ViewList color={"inherit"}/>
                             </IconButton>
                         </Tooltip>
-                        {isAdmin()&&
-                        <>
-                            <Tooltip title={"Testovací stránka"} >
-                                <IconButton color='inherit' onClick={onTestClick} sx={{marginLeft: 1,
-                                    [theme.breakpoints.down("sm")]:{
-                                        display:"none"
-                                    }}}>
-                                    <Build color={"inherit"} fontSize='small'/>
-                                </IconButton>
-                            </Tooltip>
-                        </>
-                        }
+                        
                         
                     </Box>
 

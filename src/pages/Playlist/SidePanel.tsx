@@ -85,9 +85,7 @@ export default function SidePanel({title, variants, onCardsClick}
                 }}
                 display={"flex"} justifyContent={"space-between"}>
                     
-                <IconButton onClick={onCardsClick}>
-                    <Dashboard color='primary'/>
-                </IconButton>
+                <Box></Box>
                 <Button variant="contained"  onClick={onPrint}>Vytisknout</Button>
 
             </Box>
