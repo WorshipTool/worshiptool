@@ -40,7 +40,5 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
-        cd ../..
-        ls
-        ssh "root@prijmeni.cz"
+        scp -r ./* root@prijmeni.cz/var/www/chvalotce
 
