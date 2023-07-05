@@ -207,7 +207,7 @@ export default function Sheet() {
                             {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
                           </>
                         }
-                        {isAdmin() && <Select
+                        {isAdmin() && song.variants.length>1 && <Select
                           value={variantID + ""}
                           onChange={onVariantSelectChange}>
                             {song.variants.map((v, index)=>{
