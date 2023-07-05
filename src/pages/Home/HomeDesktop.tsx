@@ -131,7 +131,7 @@ export default function HomeDesktop() {
                                             type:"keyframes",
                                             duration: animationDuration/2
                                         }}
-                                        style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column",}}>
+                                        style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column", userSelect: "none"}}>
                                         <Typography variant='h4' fontWeight={"200"}>Jsi-li ovce, tak...</Typography>
                                         <Typography variant='h2' fontWeight={"bold"} >Chval Otce</Typography>
                                     </motion.div>
