@@ -1,5 +1,5 @@
 import { Typography, Box } from '@mui/material';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import Gap from '../../components/Gap';
 export const ErrorPage = () => {
     return <Box>

@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchedSongsList from './components/SearchedSongsList';
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import FloatingAddButton from './components/FloatingAddButton';
 import ContainerGrid from '../../components/ContainerGrid';
 
@@ -108,7 +108,8 @@ export default function HomeDesktop() {
                         display:"flex",
                         flexDirection:"column",
                         zIndex:10,
-                        alignItems:"center",
+                        alignItems:"center", 
+                        pointerEvents:"none"
                     }}
                     animate={{
                         top:isTop?"35%":25
@@ -120,7 +121,7 @@ export default function HomeDesktop() {
                     <ContainerGrid>
                         <Grid item xs={12}>
                             <Grid container justifyContent="center" >
-                                <Grid item xs={6}>
+                                <Grid item xs={6} sx={{pointerEvents: "auto"}}>
                                     <motion.div
                                         animate={{
                                             height: isTop?"7rem":"0",
@@ -131,12 +132,12 @@ export default function HomeDesktop() {
                                             duration: animationDuration/2
                                         }}
                                         style={{display: "flex",justifyContent:"center", marginBottom:2, flexDirection:"column",}}>
-                                        <Typography variant='h4' fontWeight={"200"}>Jsi ovce?</Typography>
+                                        <Typography variant='h4' fontWeight={"200"}>Jsi-li ovce, tak...</Typography>
                                         <Typography variant='h2' fontWeight={"bold"} >Chval Otce</Typography>
                                     </motion.div>
 
                                     <motion.div style={{
-                                            background: `linear-gradient(100deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                            background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
                                             boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
                                             width: "100%",
                                             borderRadius: "0.6rem",
