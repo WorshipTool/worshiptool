@@ -207,13 +207,13 @@ export default function Sheet() {
                             {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
                           </>
                         }
-                        <Select
+                        {isAdmin() && <Select
                           value={variantID + ""}
                           onChange={onVariantSelectChange}>
                             {song.variants.map((v, index)=>{
                               return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
                             })}
-                        </Select>
+                        </Select>}
                       </>
                     )}
                     
@@ -223,8 +223,7 @@ export default function Sheet() {
                   {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}>
                     <CopyAll/>  
                   </IconButton>}
-                  {isAdmin()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
-                  <Gap horizontal={true}/>
+                  
                   {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
                   <Gap horizontal={true}/>
                   {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
