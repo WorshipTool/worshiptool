@@ -26,6 +26,7 @@ import useGroup, { GroupProvider } from './hooks/group/useGroup';
 import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
 import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
 import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
+import Documentation from './pages/Documentation/Documentation';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -41,9 +42,10 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#0085FF',
+      dark: '#532EE7'
     },
     secondary: {
-      main: "#F500AE",
+      main: "#EBBC1E",
     }
 
   },
@@ -90,6 +92,7 @@ export const AppRoutes = () => {
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
+      <Route path='documentation' element={<Documentation/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   

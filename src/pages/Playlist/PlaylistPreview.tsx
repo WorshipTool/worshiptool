@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import useSong from '../../hooks/song/useSong';
 import useStack from '../../hooks/playlist/useStack';
