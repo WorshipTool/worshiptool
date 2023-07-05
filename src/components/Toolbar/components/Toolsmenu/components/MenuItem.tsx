@@ -5,7 +5,8 @@ import React from 'react'
 interface MenuItemProps{
     title:string,
     img: string,
-    onClick: ()=>any
+    onClick: ()=>any,
+    disabled?: boolean
 }
 
 const Container = styled(Box)(({theme})=>({
@@ -27,9 +28,13 @@ const Container = styled(Box)(({theme})=>({
     }
 }))
 
-export default function MenuItem({title, img, onClick}: MenuItemProps) {
+export default function MenuItem({title, img, onClick, disabled}: MenuItemProps) {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} sx={{
+        pointerEvents: disabled? " none": "auto",
+        filter: disabled?"grayscale(100%)":"",
+        opacity: disabled? 0.5 : 1
+    }}>
         <Box flex={1} display={"flex"} flexDirection={"column"}>
             <Box flex={1} display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{
                 filter: "drop-shadow(1px 4px 2px #00000033)"

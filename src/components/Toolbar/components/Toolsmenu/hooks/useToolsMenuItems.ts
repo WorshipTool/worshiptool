@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 interface MenuItem{
     title: string,
     image: string,
-    action: () => void
+    action: () => void,
+    disabled? : boolean
 }
 
 export default function useToolsMenuItems(){
@@ -23,7 +24,8 @@ export default function useToolsMenuItems(){
             image: "/static/assets/13ka-icon.png",
             action: ()=>{
                 navigate("/group/13ka")
-            }
+            },
+            disabled: true
         }
 
     ];

@@ -36,7 +36,7 @@ export default function ToolsMenu({open, onClose} : ToolsMenuProps) {
         <Fade in={open}>
             <Container ref={ref} sx={{display: "flex" }}>
                     {items.map((item)=>{
-                        return <MenuItem title={item.title} img={item.image} onClick={item.action}/>
+                        return <MenuItem title={item.title} img={item.image} onClick={item.action} disabled={item.disabled}/>
                     })}
             </Container>
         </Fade>
