@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchedSongsList from './components/SearchedSongsList';
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList';
+import Toolbar from '../../components/Toolbar/Toolbar';
 
 const SearchContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -41,7 +42,8 @@ export default function HomeMobile() {
     [theme.breakpoints.down('sm')]: {
         display:"flex"
     }}}>
-     <Box sx={{display:"flex", width:"100%", flexDirection: "row", position:"fixed", top:45}}>
+        <Toolbar/>
+     <Box sx={{display:"flex", width:"100%", flexDirection: "row", position:"fixed", top:56}}>
         <Box sx={{flex:1, margin:1}}>
             <SearchContainer sx={{boxShadow: "0px 4px 5px" + theme.palette.grey[400]}}>                    
                <SearchIcon />
