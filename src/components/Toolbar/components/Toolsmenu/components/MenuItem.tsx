@@ -17,11 +17,16 @@ const Container = styled(Box)(({theme})=>({
     borderRadius: 10,
     transition: "all 0.2s ease",
     backgroundColor: "transparent",
-    ':hover': {
+    '&:hover': {
         backgroundColor: "#00000011"
     },
-    ":active": {
+    "&:active": {
         backgroundColor: "#00000022"
+    },
+    "&:hover > *" : {
+        transform: "scale(102%)",
+        filter: "drop-shadow(1px 4px 2px #00000011)"
+
     },
     "&:active > *": {
         transform: "scale(96%)",
@@ -35,7 +40,9 @@ export default function MenuItem({title, img, onClick, disabled}: MenuItemProps)
         filter: disabled?"grayscale(100%)":"",
         opacity: disabled? 0.5 : 1
     }}>
-        <Box flex={1} display={"flex"} flexDirection={"column"}>
+        <Box flex={1} display={"flex"} flexDirection={"column"} sx={{
+            transition: "all 0.4s ease"
+        }}>
             <Box flex={1} display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{
                 filter: "drop-shadow(1px 4px 2px #00000033)"
             }}>

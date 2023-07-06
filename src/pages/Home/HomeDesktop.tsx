@@ -112,7 +112,7 @@ export default function HomeDesktop() {
                         pointerEvents:"none"
                     }}
                     animate={{
-                        top:isTop?"35%":25
+                        top:isTop?"35%":28
                     }}
                     transition={{
                         type:"keyframes",

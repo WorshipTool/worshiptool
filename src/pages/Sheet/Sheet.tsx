@@ -26,6 +26,7 @@ import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../ba
 import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Playlist from '../../models/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
+import ContainerGrid from '../../components/ContainerGrid';
 
 
 export default function Sheet() {
@@ -95,13 +96,9 @@ export default function Sheet() {
 
 
     const styledContainerSX = {
-      [theme.breakpoints.down('md')]: {
-        margin:0,
-      },
-      [theme.breakpoints.up('md')]: {
-          margin:3,
-      },
-      padding:3,
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+      padding:theme.spacing(3),
       backgroundColor: theme.palette.grey[100],
       borderStyle: "solid",
       borderWidth: 1,
@@ -190,8 +187,9 @@ export default function Sheet() {
     <>
       <Toolbar transparent={false}/>
       <Box flex={1} display={"flex"} flexDirection={"row"}>
-        <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
-            <Box sx={styledContainerSX} displayPrint={"none"}> 
+        <Box sx={{flex:1, display:"flex", flexDirection:"column", alignItems:"start"}}>
+          <Box display={"flex"} width={"100%"} justifyContent={"center"}>
+            <ContainerGrid sx={{...styledContainerSX, displayPrint: "none"}} direction='column'> 
                 <Box display={"flex"} flexDirection={"row"}>
                   <Box flex={1} display={"flex"} flexDirection={"row"}>
                     <TransposePanel transpose={transpose}/>
@@ -291,7 +289,9 @@ export default function Sheet() {
                     </Box >
                   </>}
                 </Box>
-            </Box>
+            </ContainerGrid>
+
+          </Box>
     
             {<Box sx={{ displayPrint: "flex",
               flex:1,
