@@ -14,7 +14,8 @@ const TopBar = styled(Box)(()=>({
     alignItems:"center",
     display:"flex",
     displayPrint:"none",
-    zIndex:10
+    zIndex:10,
+    pointerEvents: "none"
 }))
 
 interface ToolbarProps{

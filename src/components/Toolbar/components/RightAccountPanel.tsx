@@ -65,7 +65,8 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
     }
 
     const iconButtonStyle : SxProps = {
-        marginLeft: -0.25
+        marginLeft: -0.25,
+        pointerEvents: "auto"
     }
 
     const fontSize = "medium";

@@ -13,26 +13,20 @@ export const GroupProvider = ({children}:{children:any}) => {
 }
 
 interface useProvideGroupI{
-    isGroup: boolean,
-    name: string | undefined,
-    setGroupName: (a:string|undefined)=>void,
-    fullName: string | undefined,
-    baseUrl: string
+    shortName: string,
+    fullName: string,
+    urlName: string,
+    longerName: string,
+    logoUrl: string
 } 
 
 export const useProvideGroup = () : useProvideGroupI => {
-    const [groupName, setGroupName] = useState<string|undefined>();
-    const [isGroup, setIsGroup] = useState(false);
-    useEffect(()=>{
-        setIsGroup(groupName!==undefined);
-    },[groupName])
-
     return {
-        isGroup,
-        name: groupName,
-        setGroupName,
-        fullName: "CB Třináctka",
-        baseUrl: (isGroup? `/group/${groupName}`: "")
+        shortName: "CB 13ka",
+        longerName: "CB Třináctka",
+        fullName: "Církev bratrská na Praze 13",
+        urlName: "13ka",
+        logoUrl: "/static/assets/13ka-icon.png"
 
     }
 }

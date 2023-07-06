@@ -1,12 +1,11 @@
 import { Box, Button, Link, Typography, styled } from '@mui/material'
 import React, { useMemo } from 'react'
-import { ReactComponent as SvgIcon } from '../assets/icon.svg'
+import { ReactComponent as SvgIcon } from '../../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom';
 
 
 const Container = styled(Box)(({theme})=>({
     height: "100%",
-    display: "flex",
     alignItems: "center",
     justifyContent: "start",
     gap: theme.spacing(1),
@@ -21,7 +20,8 @@ const Container = styled(Box)(({theme})=>({
     },
     // pointerEvents: "none",
     cursor: "default",
-    userSelect: "none"
+    userSelect: "none",
+    pointerEvents: "auto"
 
 }))
 interface LeftWebTitleProps{
@@ -44,9 +44,9 @@ export default function LeftWebTitle({transparent}: LeftWebTitleProps) {
           });
     }
   return (
-    <Container color={color} onClick={goHomeClick}>
+    <Container color={color} onClick={goHomeClick} display={transparent? "none" : "flex"}>
         <SvgIcon fill='white' height={size}/>
-        <Typography fontWeight={900} fontSize={18}>Chvalotce</Typography>
+        <Typography fontWeight={900} fontSize={18} marginLeft={0}>Chvalotce</Typography>
     </Container>
   )
 }

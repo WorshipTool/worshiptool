@@ -25,7 +25,7 @@ export default function useToolsMenuItems(){
             action: ()=>{
                 navigate("/group/13ka")
             },
-            disabled: true
+            disabled: false
         }
 
     ];

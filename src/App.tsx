@@ -22,11 +22,11 @@ import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 import { StackProvider } from './hooks/playlist/useStack';
 import List from './pages/List/List';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
-import useGroup, { GroupProvider } from './hooks/group/useGroup';
 import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
 import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
 import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
 import Documentation from './pages/Documentation/Documentation';
+import GroupHome from './pages/GroupHome/GroupHome';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -51,31 +51,10 @@ const theme = createTheme({
   },
 });
 
-export const GroupRoutesProvider = () => {
-  const {setGroupName} = useGroup();
-  const {groupName} = useParams();
-  useEffect(() => {
-      setGroupName(groupName);
-    }, []);
-  
-  return <AppRoutes/>
-}
-
-export const NongroupRoutesProvider = () => {
-  const {setGroupName} = useGroup();
-  useEffect(() => {
-      setGroupName(undefined);
-    }, []);
-  
-  return <AppRoutes/>
-}
 
 export const NavigationProvider = () => {
   return <BrowserRouter>
-    <Routes>
-      <Route path="group/:groupName/*" element={<GroupRoutesProvider/>}/>
-      <Route path="*" element={<NongroupRoutesProvider/>}/>
-    </Routes>
+    <AppRoutes/>
   </BrowserRouter>
 }
 
@@ -93,6 +72,7 @@ export const AppRoutes = () => {
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
+      <Route path='group/:guid' element={<GroupHome/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   
@@ -105,13 +85,11 @@ function App() {
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>
           <AuthProvider> 
-            <GroupProvider>
               <StackProvider>
-                    <Background/>
-                    <NavigationProvider/>
+                  <Background/>
+                  <NavigationProvider/>
 
-                  </StackProvider>
-            </GroupProvider>
+              </StackProvider>
           </AuthProvider>
         </ThemeProvider>
       </SnackbarProvider>
