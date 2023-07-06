@@ -18,7 +18,6 @@ const Container = styled(Box)(({theme})=>({
     '&:active': {
         transform: "scale(98%)"
     },
-    // pointerEvents: "none",
     cursor: "default",
     userSelect: "none",
     pointerEvents: "auto"
@@ -50,3 +49,4 @@ export default function LeftWebTitle({transparent}: LeftWebTitleProps) {
     </Container>
   )
 }
+
