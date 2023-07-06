@@ -13,13 +13,14 @@ import ToolPanel from './ToolPanel';
 import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';
 import Song from '../../models/song/song';
 import useSong from '../../hooks/song/useSong';
+import ContainerGrid from '../../components/ContainerGrid';
 
-const Container = styled(Box)(({theme})=>({
-    width: "70%",
-    margin: theme.spacing(5),
-    display:"flex",
-    flexDirection:"column"
-}))
+// const Container = styled(Box)(({theme})=>({
+//     width: "70%",
+//     margin: theme.spacing(5),
+//     display:"flex",
+//     flexDirection:"column"
+// }))
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -158,7 +159,7 @@ export default function Create() {
             <Box flex={1} display={"flex"} flexDirection={"row"}>
                 <Box sx={{flex:1, display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}>
                     
-                    <Container>
+                    <ContainerGrid  direction='column'>
 
                         <Box display={"flex"}padding={1}>   
                             <Box flex={1} display={"flex"} alignItems={"center"} >
@@ -188,7 +189,7 @@ export default function Create() {
                             </StyledContainer>
                             :
                             <StyledContainer flexDirection={"column"}>
-                                {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption">Tady uvidite ukazku...</Typography>}
+                                {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption" sx={{color:"grey"}}>Tady uvidite ukazku...</Typography>}
                                     <DefaultStyle song={song} variant={song.variants[0]}/>
                             </StyledContainer>
                         }
@@ -202,7 +203,7 @@ export default function Create() {
                                 </Button>
                             </Tooltip>                            
                         </Box>
-                    </Container>
+                    </ContainerGrid>
         
                     
                     
