@@ -15,13 +15,6 @@ import Song from '../../models/song/song';
 import useSong from '../../hooks/song/useSong';
 import ContainerGrid from '../../components/ContainerGrid';
 
-// const Container = styled(Box)(({theme})=>({
-//     width: "70%",
-//     margin: theme.spacing(5),
-//     display:"flex",
-//     flexDirection:"column"
-// }))
-
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
     backgroundColor: theme.palette.grey[100],

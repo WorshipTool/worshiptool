@@ -194,40 +194,57 @@ export default function Sheet() {
                   <Box flex={1} display={"flex"} flexDirection={"row"}>
                     <TransposePanel transpose={transpose}/>
                     <Gap horizontal/>
-                    {song&&song.variants.length>0&&(
-                      <>
-                        {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
-                          <Button onClick={unverify}>Zrušit ověření</Button>
-                        }
-                        {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
-                          <>
-                            <Button onClick={verify}>Ověřit</Button>
-                            {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
-                          </>
-                        }
-                        {isAdmin() && song.variants.length>1 && <Select
-                          value={variantID + ""}
-                          onChange={onVariantSelectChange}>
-                            {song.variants.map((v, index)=>{
-                              return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
-                            })}
-                        </Select>}
-                      </>
-                    )}
-                    
+
+                    <Box display={"flex"} flex={1} flexDirection={"row"}sx={{
+                      [theme.breakpoints.down("md")]: {
+                        display: "none"
+                      }
+                    }}>
+                      {song&&song.variants.length>0&&(
+                        <>
+                          {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
+                            <Button onClick={unverify}>Zrušit ověření</Button>
+                          }
+                          {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
+                            <>
+                              <Button onClick={verify}>Ověřit</Button>
+                              {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
+                            </>
+                          }
+                          {isAdmin() && song.variants.length>1 && <Select
+                            value={variantID + ""}
+                            onChange={onVariantSelectChange}>
+                              {song.variants.map((v, index)=>{
+                                return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
+                              })}
+                          </Select>}
+                        </>
+                      )}
+
+                      <Box display={"flex"} flex={1} flexDirection={"row"} justifyContent={"end"}>
+                        {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}  sx={{
+                          [theme.breakpoints.down("lg")]: {
+                            display: "none"
+                          }
+                      }}>
+                          <CopyAll/>  
+                        </IconButton>}
+                        
+                        
+                        {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
+                        <Gap horizontal={true}/>
+                        {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
+                        <Gap horizontal={true}/>
+                        {isAdmin()&&<Button endIcon={<Tag/>} variant='text' color="primary" onClick={addTag}>Přidat tag</Button>}
+                        <Gap horizontal={true}/>
+
+                      </Box>
+                      
+                    </Box>
+    
+
                   </Box>
-  
-                  
-                  {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}>
-                    <CopyAll/>  
-                  </IconButton>}
-                  
-                  {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
-                  <Gap horizontal={true}/>
-                  {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
-                  <Gap horizontal={true}/>
-                  {isAdmin()&&<Button endIcon={<Tag/>} variant='text' color="primary" onClick={addTag}>Přidat tag</Button>}
-                  <Gap horizontal={true}/>
+
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
