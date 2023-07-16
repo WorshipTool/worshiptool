@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { GroupProvider } from './hooks/useGroup'
-import { Box, Grid, useTheme } from '@mui/material'
+import { Box, Grid, Typography, useTheme } from '@mui/material'
 import Toolbar from '../../components/Toolbar/Toolbar'
 import SideToolbar from '../../components/SideToolbar/SideToolbar'
 import LeftPanel from './components/LeftPanel/LeftPanel'
@@ -20,10 +20,12 @@ export default function GroupHome() {
                 <Toolbar transparent/>
                 <Box display={"flex"} flexDirection={"row"} flex={1} position={"absolute"} top={0} bottom={0} left={0} right={0}>
                     <Box display={"flex"} sx={{
-                        boxShadow: "4px 0px 8px #00000044"
                     }}>
-                        <SideToolbar component={<SideToolbarTitle/>}/>
-                        <LeftPanel/>
+                        <SideToolbar component={<SideToolbarTitle/>}>
+                            <LeftPanel/>
+                        </SideToolbar>
+
+                        
                     </Box>
                     <Box flex={1}>
                         <Box margin={3} display={"flex"} flexDirection={"column"} gap={2}>

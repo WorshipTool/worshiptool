@@ -31,10 +31,11 @@ const IconContainer = styled(Box)(({theme})=>({
 }))
 
 interface SideToolbarProps{
-    component?: ReactElement
+    component?: ReactElement,
+    children?: ReactElement
 }
 
-export default function SideToolbar({component}: SideToolbarProps) {
+export default function SideToolbar({component, children}: SideToolbarProps) {
 
     const navigate = useNavigate();
 
@@ -47,16 +48,36 @@ export default function SideToolbar({component}: SideToolbarProps) {
     }
 
     return (
-        <Container>
-            <IconContainer onClick={goHomeClick}>
-                <SvgIcon height={40} style={{
-                    filter: " drop-shadow(1px 4px 4px #00000044)"
-                }}/>
-            </IconContainer>
-            <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={4} >
-                {component}
+        <>
+            <Box display={"flex"} sx={{opacity:0}} bgcolor={"red"}>
+                    <Container/>
+                    {children}
             </Box>
-        
-        </Container>
+            <Box sx={{
+                position:"fixed",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                display:"flex",
+                flexDirection: "row",
+
+                boxShadow: "4px 0px 8px #00000044",
+            }}>
+                <Container>
+                    <IconContainer onClick={goHomeClick}>
+                        <SvgIcon height={40} style={{
+                            filter: " drop-shadow(1px 4px 4px #00000044)"
+                        }}/>
+                    </IconContainer>
+                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={4} >
+                        {component}
+                    </Box>
+                
+                </Container>
+                {children}
+            </Box>
+            
+            
+        </>
     )
 }

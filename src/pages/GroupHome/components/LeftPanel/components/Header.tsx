@@ -15,7 +15,7 @@ export default function Header() {
     
     const logoSize = 100;
     return (
-        <Tooltip title={fullName} open={true}>
+        // <Tooltip title={fullName} open={true}>
             <Container >
                 <Box display={"flex"} flexDirection={"column"} alignItems={"center"} gap={2}>
                     <Box width={logoSize} height={logoSize} display={"flex"} alignItems={"end"} justifyContent={"center"}>
@@ -30,6 +30,6 @@ export default function Header() {
                     <Typography color={"white"} variant='h6'>{longerName}</Typography>
                 </Box>
             </Container>
-        </Tooltip>
+        // </Tooltip>
     )
 }
