@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 import usePlaylists from "./usePlaylists";
-import Playlist from "../../models/playlist/playlist";
-import { isRequestSuccess } from "../../backend/dtos/RequestResult";
+import Playlist from "../../interfaces/playlist/playlist";
+import { isRequestSuccess } from "../../apis/dtos/RequestResult";
+import { VariantDTO } from "../../interfaces/variant/VariantDTO";
 
-export default function usePlaylist(guid:string){
+export default function usePlaylist(guid:string | undefined){
     const {addVariantToPlaylist, removeVariantFromPlaylist, getPlaylistByGuid} = usePlaylists();
 
     const [playlist, setPlaylist] = useState<Playlist>();
-    const [variantGuids, setVariantGuids] = useState<string[]>([]);
+    const [variants, setVariants] = useState<VariantDTO[]>([]);
 
     useEffect(()=>{
+        if(!guid)return;
         reload();
-    },[])
+    },[guid])
 
     const reload = () => {
+        if(!guid)return;
         getPlaylistByGuid(guid)
         .then((r)=>{
             if(isRequestSuccess(r)){
                 setPlaylist(r.data);
-                setVariantGuids(r.data.variants);
+                setVariants(r.data.variants);
             }
         });
     }
@@ -29,7 +32,7 @@ export default function usePlaylist(guid:string){
         addVariant,
         removeVariant,
         playlist, 
-        variants: variantGuids,
+        variants: variants,
         reload
     }
 }

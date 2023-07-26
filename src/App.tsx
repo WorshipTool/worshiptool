@@ -26,7 +26,8 @@ import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
 import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
 import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
 import Documentation from './pages/Documentation/Documentation';
-import GroupHome from './pages/GroupHome/GroupHome';
+import GroupHome from './pages/GroupHome/GroupScreen';
+import GroupScreen from './pages/GroupHome/GroupScreen';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -72,7 +73,7 @@ export const AppRoutes = () => {
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
-      <Route path='group/:guid' element={<GroupHome/>}/>
+      <Route path='group/:groupName' element={<GroupScreen/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   

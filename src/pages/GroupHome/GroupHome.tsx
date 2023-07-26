@@ -1,45 +1,29 @@
-import React, { useState } from 'react'
-import { GroupProvider } from './hooks/useGroup'
-import { Box, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
+import React from 'react'
 import Toolbar from '../../components/Toolbar/Toolbar'
-import SideToolbar from '../../components/SideToolbar/SideToolbar'
-import LeftPanel from './components/LeftPanel/LeftPanel'
-import SideToolbarTitle from './components/SideToolbarTitle'
-import SearchBar from '../../components/SearchBar/SearchBar'
-import ContainerGrid from '../../components/ContainerGrid'
-import SearchedSongsList from './components/SearchedSongsList'
+import useGroup from './hooks/useGroup';
+import SelectionList from './components/SelectionList';
+import ContainerGrid from '../../components/ContainerGrid';
+import Gap from '../../components/Gap';
+import AddToSelection from './components/AddToSelection';
 
 export default function GroupHome() {
-    const theme = useTheme()
+    const group = useGroup();
+  return (
+    <Box display={"flex"} flexDirection={"column"} height={"100vh"} alignItems={"center"}>
+        <Toolbar/>
+        <ContainerGrid >
+            <Grid item xs={12}>
+              <Gap value={4}/>
+              <Typography variant='h5' fontWeight={900}> {group.name} </Typography>
+              <Gap value={2}/>
+              <SelectionList/>
+              <Gap value={2}/>
+              <AddToSelection/>
 
-    const [searchString, setSearchString] = useState("");
+            </Grid>
+        </ContainerGrid>
 
-    return (
-        <GroupProvider>
-            <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-                <Toolbar transparent/>
-                <Box display={"flex"} flexDirection={"row"} flex={1} position={"absolute"} top={0} bottom={0} left={0} right={0}>
-                    <Box display={"flex"} sx={{
-                    }}>
-                        <SideToolbar component={<SideToolbarTitle/>}>
-                            <LeftPanel/>
-                        </SideToolbar>
-
-                        
-                    </Box>
-                    <Box flex={1}>
-                        <Box margin={3} display={"flex"} flexDirection={"column"} gap={2}>
-                            <Box sx={{
-                                width: theme.spacing(45)
-                            }}>
-                                <SearchBar value={searchString} onChange={(s)=>setSearchString(s)}/>
-                            </Box>
-                            <SearchedSongsList searchString={searchString}/>
-                        </Box>
-                    </Box>
-                </Box>
-
-            </Box>
-        </GroupProvider>
-    )
+    </Box>
+  )
 }

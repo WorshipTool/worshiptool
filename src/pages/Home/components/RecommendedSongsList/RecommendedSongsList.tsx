@@ -1,7 +1,9 @@
 import {Grid, Typography, styled } from '@mui/material'
-import SearchItem from '../SearchItem';
 import useRecommendedSongs from './hooks/useRecommendedSongs';
 import ContainerGrid from '../../../../components/ContainerGrid';
+import SongListCards from '../../../../components/songLists/SongListCards/SongListCards';
+import { useNavigate } from 'react-router-dom';
+import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -14,6 +16,11 @@ export default function RecommendedSongsList() {
     const {data, isLoading, isError, isSuccess} = useRecommendedSongs();
 
 
+    const navigate = useNavigate();
+
+    const onCardClick = (variant: VariantDTO) => {
+        navigate("/song/"+variant.songGuid)
+    }
 
     return (
         <ContainerGrid>
@@ -28,12 +35,9 @@ export default function RecommendedSongsList() {
 
             </>}
 
-            <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
-                {data.slice(0,4).map((s)=>{
-                    return <Grid item xs={1} key={"griditem_"+s.guid}>
-                        <SearchItem song={s} key={s.guid} sx={{height:"7.5rem"}}></SearchItem>
-                    </Grid>
-                })}
+            <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}}>
+                <SongListCards variants={data.slice(0,4)} onClick={onCardClick}/>
+
             </GridContainer>
 
         </ContainerGrid>

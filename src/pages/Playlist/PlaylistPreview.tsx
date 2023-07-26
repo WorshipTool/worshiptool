@@ -12,11 +12,11 @@ import ReactDOM from 'react-dom';
 import SidePanel from './SidePanel';
 import { useNavigate, useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_GETSONGSINPLAYLIST } from '../../backend/urls';
-import { GetSongsInPlaylistResultDTO } from '../../backend/dtos/dtosPlaylist';
-import { isRequestSuccess } from '../../backend/dtos/RequestResult';
+import { getUrl_GETSONGSINPLAYLIST } from '../../apis/urls';
+import { GetSongsInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { isRequestSuccess } from '../../apis/dtos/RequestResult';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
-import Playlist from '../../models/playlist/playlist';
+import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
 import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 
@@ -97,7 +97,7 @@ export default function PlaylistPreview() {
         <Box>
             <Toolbar/>
             <Box display={"flex"} flexDirection={"row"}>                
-                <SidePanel title={playlist?.title||""} variants={variants} onCardsClick={()=>{
+                <SidePanel title={playlist?.title||""} variants={variants.map((v)=>v.guid)} onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
                 <Box width={300} displayPrint={"none"}></Box>
@@ -115,7 +115,7 @@ export default function PlaylistPreview() {
                         </Box>
                     </Box>}
                     {variants.map((g)=>{
-                        return <Item guid={g} key={g} playlist={guid||""} reload={reload}/>
+                        return <Item guid={g.guid} key={g.guid} playlist={guid||""} reload={reload}/>
                     })}
                 </Container>}
                 

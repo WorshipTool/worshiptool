@@ -2,10 +2,10 @@ import { Box, Button, InputBase, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../backend/urls';
-import { RequestResult, codes, isRequestSuccess } from '../../backend/dtos/RequestResult';
-import { LoginRequestDTO, LoginResultDTO } from '../../backend/dtos/dtosAuth';
-import { songGetCountDTO } from '../../backend/dtos/dtosSong';
+import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../apis/urls';
+import { RequestResult, codes, isRequestSuccess } from '../../apis/dtos/RequestResult';
+import { LoginRequestDTO, LoginResultDTO } from '../../apis/dtos/dtosAuth';
+import { songGetCountDTO } from '../../apis/dtos/dtosSong';
 
 export default function AdminPanel() {
     const [email, setEmail] = useState("");

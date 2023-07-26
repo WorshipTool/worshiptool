@@ -2,16 +2,16 @@ import { Box, Button, Divider, FormControlLabel, InputBase, Switch, Tooltip, Typ
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_ADDSONGDATA } from '../../backend/urls';
+import { getUrl_ADDSONGDATA } from '../../apis/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
+import { RequestResult, isRequestSuccess } from '../../apis/dtos/RequestResult';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import {convertSheetToSections} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
-import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';
-import Song from '../../models/song/song';
+import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../apis/dtos/dtosNewSongData';
+import Song from '../../interfaces/song/song';
 import useSong from '../../hooks/song/useSong';
 import ContainerGrid from '../../components/ContainerGrid';
 
@@ -54,6 +54,7 @@ export default function Create() {
             title: title,
             variants: [{
                 guid: "",
+                songGuid: "",
                 sheetData: sheet,
                 sheetText: "",
                 sections: convertSheetToSections(sheet),

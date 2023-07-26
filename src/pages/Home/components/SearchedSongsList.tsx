@@ -1,15 +1,18 @@
 import { Masonry } from '@mui/lab';
 import { Button, CircularProgress, Grid, LinearProgress, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
-import SearchItem from './SearchItem';
 import usePagination from '../../../hooks/usePagination';
 import { useIsInViewport } from '../../../hooks/useIsInViewport';
 import Gap from '../../../components/Gap';
 import useSongSearch from '../../../hooks/song/useSongSearch';
-import { SearchSongDataDTO, SongSearchResultDTO } from '../../../backend/dtos/dtosSong';
+import { SearchSongDataDTO, SongSearchResultDTO } from '../../../apis/dtos/dtosSong';
 import { grey } from '@mui/material/colors';
 import normalizeSearchText from '../../../utils/normalizeSearchText';
 import ContainerGrid from '../../../components/ContainerGrid';
+import SongListCards from '../../../components/songLists/SongListCards/SongListCards';
+import { mapApiToVariant } from '../../../interfaces/variant/mapApiToVariant';
+import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
+import { useNavigate } from 'react-router-dom';
 
 interface SearchedSongsListProps{
     searchString: string
@@ -58,16 +61,18 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
 
 
     const spacing = 1;
+
+    const navigate = useNavigate();
+
+    const onCardClick = (variant: VariantDTO) => {
+        navigate("/song/"+variant.songGuid)
+    }
   return (
     <ContainerGrid direction='column'>
         <>                       
             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
         
-            {!loading&&songs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{marginLeft: -(spacing/2), width: `calc(100% + ${theme.spacing(spacing)})`}} spacing={spacing}>
-                {songs.map((song)=>{
-                    return <SearchItem song={song} key={song.guid}></SearchItem>
-                })}            
-            </Masonry>}
+            {!loading&&songs.length>0&&<SongListCards variants={songs.map(s=>mapApiToVariant(s.variant))} onClick={onCardClick}></SongListCards>}
         </>
         
         <div ref={loadNextLevelRef}></div>
