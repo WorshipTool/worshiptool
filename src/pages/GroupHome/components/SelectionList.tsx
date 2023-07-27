@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 import SearchBar from '../../../components/SearchBar/SearchBar';
@@ -19,23 +19,31 @@ export default function SelectionList() {
     }
 
     const [searchString, setSearchString] = React.useState<string>("");
+    const [stillString, setStillString] = useState<string>("");
 
     const onChange = (searchString: string) => {
       if(searchString==="") reload()
       else search(searchString);
+
+      setStillString(searchString);
     };
     
     return (
       <Box>
-        <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={onChange}/>
+          <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={onChange}/>
 
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"end"}>
-          <Box width={350}>
-            <SearchBar onChange={(s)=>setSearchString(s)}/>
+          <Box display={"flex"} flexDirection={"row"} justifyContent={"end"} position={"sticky"} top={270}
+              sx={{
+                pointerEvents:"none",
+                
+                }}>
+            <Box width={350} sx={{pointerEvents:"auto"}}>
+              <SearchBar onChange={(s)=>setSearchString(s)}/>
+            </Box>
           </Box>
-        </Box>
-        <Gap/>
+          <Gap value={3}/>
           <SongListCards variants={variants} onClick={onCardClick}/>
+          {variants.length==0&&<Typography>Nebyli nalezeny žádné písně s výrazem "{stillString}"</Typography>}
       </Box>
     )
 }

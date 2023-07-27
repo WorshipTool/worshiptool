@@ -1,7 +1,9 @@
-import { Box, InputBase, styled } from '@mui/material'
-import React from 'react'
+import { Box, InputBase, styled, useTheme } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
+import { on } from 'events';
+import OnChangeDelayer from '../ChangeDelayer';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -14,7 +16,8 @@ const SearchContainer = styled(Box)(({theme})=>({
     
     justifyContent:"center",
     alignItems:"center",
-    boxShadow: "1px 4px 4px #00000022"
+    boxShadow: "1px 4px 4px #00000022",
+    transition: "all ease 0.2s",
 
 }))
 const SearchInput = styled(InputBase)(({theme})=>({
@@ -28,14 +31,41 @@ interface SearchBarProps{
 }
 
 export default function SearchBar({value, onChange}: SearchBarProps) {
+    const inputRef = useRef();
+
+
     const onChangeHandler = (e: any) => {
-        onChange&&onChange(e.target.value);
+        onChange?.(e.target.value);
+        setEarlyFocused(false);
     }
 
+    const [earlyFocused, setEarlyFocused] = useState(false);
+
+    useEffect(()=>{
+        const onSearchBarFocus = () => {
+            // @ts-ignore
+            inputRef.current?.focus();
+            setEarlyFocused(true);
+
+            console.log("jes");
+        }
+        window.addEventListener("searchBarFocus", onSearchBarFocus)
+        return ()=>{
+            window.removeEventListener("searchBarFocus", onSearchBarFocus)
+        }
+    },[])
   return (
-    <SearchContainer>                    
+    <SearchContainer sx={{
+        ...(earlyFocused?{
+            boxShadow: `0px 2px 8px #00000055`,
+            transform: "scale(107%)"
+        }:{})
+    }}>         
+        <OnChangeDelayer value={earlyFocused} onChange={()=>setEarlyFocused(false)} delay={3000}/>           
         <SearchIcon />
-        <SearchInput placeholder='Vyhledej píseň...'  autoFocus value={value} onChange={onChangeHandler} ></SearchInput>
+        <SearchInput placeholder='Vyhledej píseň...'  autoFocus 
+                value={value} onChange={onChangeHandler} inputRef={inputRef} 
+                sx={{}}></SearchInput>
     </SearchContainer>
   )
 }

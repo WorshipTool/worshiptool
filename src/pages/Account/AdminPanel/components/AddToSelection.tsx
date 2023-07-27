@@ -26,8 +26,7 @@ export default function AddToSelection({onChange:onChangeCallback}: AddToSelecti
         await selection.addVariant(selectedVariant.guid);
         onChangeCallback?.();
 
-        navigate(url);
-        window.location.reload();
+        // window.location.reload();
     }
     const filter = (v: VariantDTO) => {
         return !selection.variants.find((s)=>s.guid===v.guid);

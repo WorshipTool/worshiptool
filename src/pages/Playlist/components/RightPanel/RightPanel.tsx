@@ -1,5 +1,5 @@
 
-import { Box, Typography, styled, useTheme } from '@mui/material'
+import { Box, Divider, Typography, styled, useTheme } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import SearchBar from '../../../../components/SearchBar/SearchBar'
 import SongSearch from '../../../../components/songLists/SongSearch/SongSearch'
@@ -36,12 +36,17 @@ export default function RightPanel({playlist}: RightPanelProps) {
     const {variants: selection} = useGroupSelection();
     const {variants} = useInnerPlaylist();
 
+    const ideaArr = useMemo(()=>{
+        return (isOn?selection.filter((s)=>!variants.map(v=>v.guid).includes(s.guid)):data);
+
+    },[data, selection, isOn, variants])
+
     const idea = useMemo(()=>{
-        const arr = (isOn?selection.filter((s)=>!variants.map(v=>v.guid).includes(s.guid)):data);
+        const arr = ideaArr;
         if(arr.length==0) return "";
         const index = Math.floor(Math.random()*(arr.length));
         return arr[index]?.preferredTitle;
-    },[data, selection, isOn, variants]);
+    },[ideaArr]);
   return (
     <>
         <Container>
@@ -52,14 +57,26 @@ export default function RightPanel({playlist}: RightPanelProps) {
                     <SearchBar onChange={(v)=>setSearchString(v)}/>
                 </Box>
                 <Gap/>
-                <SongSearch searchString={searchString} component={(v)=>{
+                <SongSearch searchString={searchString} component={(v, searchString)=>{
                     const filtered = v.filter((v)=>{
                         return !variants.find((s)=>s.guid==v.guid);
                     })
+                    if(filtered.length==0) return <>
+
+                        {searchString!==""?<>
+                            <Typography>Nic jsme nenašli...</Typography>
+                            <Gap />
+                            <Gap/>
+                        </>:<></>}
+                        <Typography fontWeight={900}>Nějaké návrhy:</Typography>
+                        <Gap value={0.5}/>
+                        <PlaylistSearchList variants={ideaArr} playlist={playlist as Playlist}/>
+                    </>
                     return <PlaylistSearchList variants={filtered} playlist={playlist as Playlist} />
                 }}/>
         
                 {idea!=""? <>
+                    
                     <Typography fontWeight={500}>Nemáte nápad? </Typography>
                     <Typography>Zkuste třeba: <i>{idea}</i></Typography>
                 </>:<>

@@ -87,6 +87,7 @@ export default function PlaylistPreview() {
     const navigate = useNavigate();
 
     const onSearchClick = () => {
+        window.dispatchEvent(new Event("searchBarFocus"))
     }
 
     useEffect(()=>{

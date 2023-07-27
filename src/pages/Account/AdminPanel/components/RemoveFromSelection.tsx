@@ -21,7 +21,7 @@ export default function RemoveFromSelection({onChange:onChangeCallback}: RemoveF
         await selection.removeVariant(selectedVariant.guid);
         onChangeCallback?.();
 
-        window.location.reload();
+        // window.location.reload();
     }
     const filter = (v: VariantDTO) => {
         return !!selection.variants.find((s)=>s.guid===v.guid);

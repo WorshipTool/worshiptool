@@ -8,6 +8,8 @@ import useAuth from '../../../hooks/auth/useAuth'
 import useGroup from '../../../hooks/group/useGroup'
 import GroupChip from './GroupChip'
 import Gap from '../../Gap'
+import usePlaylists from '../../../hooks/playlist/usePlaylists'
+import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -44,6 +46,8 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
     const navigate = useNavigate();
 
     const {isLoggedIn} = useAuth();
+
+    const {createPlaylist} = usePlaylists()
 
     const color = useMemo(()=>{
         return transparent? "black" : "white"
@@ -87,8 +91,11 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
         setAccountMenuOpen(true);
     }
 
-    const onCreatePlaylistClick = () => {
-        navigate("/account/playlists")
+    const onCreatePlaylistClick = async () => {
+        const result= await createPlaylist()
+        if(isRequestSuccess(result)){
+            navigate("/playlist/"+result.data.guid)
+        }
     }
 
     const onLoginClick = () => {
@@ -153,7 +160,8 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
                             transition: "all 0.2s ease",
                             ":hover": {
                                 transform: "scale(102%)"
-                            }
+                            },
+                            pointerEvents:"auto"
                         }} onClick={onLoginClick}>
                             Přihlásit se
                         </Button>

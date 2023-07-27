@@ -5,6 +5,7 @@ import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser
 import { getUrl_LOGIN, getUrl_SIGNUP } from "../../apis/urls";
 import { RequestResult, codes, isRequestSuccess } from "../../apis/dtos/RequestResult";
 import { useSnackbar } from "notistack";
+import useGroup from "../group/useGroup";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -44,6 +45,7 @@ export function useProvideAuth(){
     const {post} = useFetch();
 
     const {enqueueSnackbar} = useSnackbar();
+
 
     useEffect(()=>{
         const u = localStorage.getItem("user");

@@ -2,23 +2,55 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import GroupToolbarActionButton from './GroupToolbarActionButton'
 import Gap from '../../../../components/Gap'
-import { Add, Search } from '@mui/icons-material'
+import { Add, Edit, Search } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import usePlaylists from '../../../../hooks/playlist/usePlaylists'
+import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
+import { isRequestSuccess } from '../../../../apis/dtos/RequestResult'
 
 export default function QuickActions() {
+    const {createPlaylist} = usePlaylists();
+    const {turnOn, isOn, guid} = useCurrentPlaylist();
+    
+    const navigate = useNavigate();
+
+    const onCreatePlaylist = () => {
+        createPlaylist().then((r)=>{
+            if(isRequestSuccess(r)){
+                const guid = r.data.guid;
+                turnOn(guid);
+                navigate("/playlist/"+guid)
+            }
+        })
+    }
+
+    const onSearchSong = () => {
+        window.dispatchEvent(new Event("searchBarFocus"));
+    }
+
+    const onNewSong = () => {
+        navigate("/create");
+    }
+
+    const openPlaylistToEdit = () => {
+        navigate("/playlist/"+guid)
+    }
+
   return (
     <Box>
-        <Typography fontWeight={600}>Rychlé akce</Typography>
-        <Gap value={1}/>
         <Box display={"flex"} flexDirection={"row"} gap={1}>
-            <GroupToolbarActionButton label='Vytvořit playlist' main icon={<Add sx={{
+            <GroupToolbarActionButton label='Vytvořit playlist' variant="primary" icon={<Add sx={{
                 strokeWidth: 2,
-            }}/>} />
+            }}/>} onClick={onCreatePlaylist}/>
             <GroupToolbarActionButton label='Vyhledat píseň' icon={<Search  sx={{
                 strokeWidth: 1,
-            }}/>} />
+            }}/>} onClick={onSearchSong}/>
             <GroupToolbarActionButton label='Přidat novou píseň' icon={<Add  sx={{
                 strokeWidth: 2,
-            }}/>} />
+            }}/>} onClick={onNewSong}/>
+            
+            {isOn ? <GroupToolbarActionButton label='Editovat playlist' variant="secondary"
+                icon={<Edit></Edit>} onClick={openPlaylistToEdit}/> : <></>}
         </Box>
     </Box>
   )

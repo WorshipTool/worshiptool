@@ -6,6 +6,7 @@ import { Group } from "../../interfaces/group/Group";
 import { ApiGroupDto } from "../../apis/dtos/group/ApiGroupDto";
 import { mapApiToGroup } from "../../apis/dtos/group/ApiGroupMap";
 import useGroupSelection from "./useGroupSelection";
+import useAuth from "../auth/useAuth";
 
 export const groupContext = createContext<useProvideGroupI>({} as useProvideGroupI);
 
@@ -35,9 +36,16 @@ export const useProvideGroup = () : useProvideGroupI => {
 
     const [group, setGroup] = useState<Group>();
 
+    const {isLoggedIn} = useAuth();
+
     const key = "activeGroup";
 
+    useEffect(()=>{
+        turnOff();
+    },[isLoggedIn])
+
     const turnOn = (name: string) => {
+        if(!isLoggedIn()) return;
         fetchData<ApiGroupDto>({url: "/group", params: {name:name}}).then((r)=>{
             if(isRequestSuccess(r)){
                 setGroup( mapApiToGroup(r.data) );

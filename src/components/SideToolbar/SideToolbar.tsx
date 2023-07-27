@@ -1,7 +1,9 @@
-import { Box, styled } from '@mui/material'
+import { Box, IconButton, Tooltip, styled } from '@mui/material'
 import React, { ReactElement } from 'react'
 import { ReactComponent as SvgIcon } from '../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom'
+import useGroup from '../../hooks/group/useGroup'
+import { ExitToApp, ExitToAppOutlined, ExitToAppRounded, ExtensionOff, Logout } from '@mui/icons-material'
 
 const Container = styled(Box)(({theme})=>({
     width: 56,
@@ -39,12 +41,20 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
 
     const navigate = useNavigate();
 
+    const {isOn, url, turnOff} = useGroup();
+
     const goHomeClick = () => {
-        navigate("/");
+        if(isOn) navigate(url);
+        else navigate("/");
         window.scroll({
             top: 0,
             behavior: "smooth",
           });
+    }
+
+    const leave = () => {
+        turnOff();
+        if (window.location.pathname.startsWith("/group/")) navigate("/");
     }
 
     return (
@@ -69,12 +79,18 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
                             filter: " drop-shadow(1px 4px 4px #00000044)"
                         }}/>
                     </IconContainer>
-                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={4} >
+                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} >
                         {component}
+                        <Tooltip title={"Ukončit mód"} placement="right">
+                            <IconButton color='secondary' onClick={leave}>
+                                <ExitToApp/>
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 
                 </Container>
                 {children}
+                
             </Box>
             
             

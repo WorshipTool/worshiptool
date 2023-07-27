@@ -37,7 +37,7 @@ export default function usePlaylists(){
     }
 
     const createPlaylist = async (title?:string) => {
-        if(!title)title="New playlist";
+        if(!title)title="Nový playlist";
         const body : PostCreatePlaylistBodyDTO = {title}
         const result : RequestResult<PostCreatePlaylistResultDTO> = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
         return result;

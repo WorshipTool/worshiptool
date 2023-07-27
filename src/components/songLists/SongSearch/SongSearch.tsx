@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import OnChangeDelayer from '../../ChangeDelayer';
 import useSongSearch from '../../../hooks/song/useSongSearch';
 import { mapApiToVariant } from '../../../apis/dtos/variant/mapApiToVariant';
@@ -13,7 +13,7 @@ type SongSearchMethod = "all"|"group";
 interface SongSearchProps{
     searchString: string,
     method?: SongSearchMethod,
-    component: (variants: VariantDTO[])=>ReactElement
+    component: (variants: VariantDTO[], searchString: string)=>ReactElement
 }
 
 export default function SongSearch({searchString, method = "group", component } : SongSearchProps) {
@@ -21,6 +21,8 @@ export default function SongSearch({searchString, method = "group", component } 
     const {isOn} = useGroup();
     const {variants: groupVariants, search: searchInSelection} = useGroupSelection();
     const [variants, setVariants] = React.useState<VariantDTO[]>([]);
+
+    const [stillString, setStillString] = useState("");
 
 
 
@@ -37,12 +39,14 @@ export default function SongSearch({searchString, method = "group", component } 
                 setVariants(d);
               })
         }
+
+        setStillString(searchString)
         
     }
   return (
     <Box>
         <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={onChangeCallback}/>
-        {component(!isOn? variants : groupVariants)}
+        {component(!isOn? variants : groupVariants, stillString)}
     </Box>
   )
 }
