@@ -35,17 +35,26 @@ export const useProvideGroup = () : useProvideGroupI => {
 
     const [group, setGroup] = useState<Group>();
 
+    const key = "activeGroup";
 
     const turnOn = (name: string) => {
         fetchData<ApiGroupDto>({url: "/group", params: {name:name}}).then((r)=>{
             if(isRequestSuccess(r)){
                 setGroup( mapApiToGroup(r.data) );
+                localStorage.setItem(key, name);
             };
         });
     }
     const turnOff = () => {
         setGroup(undefined);
+        localStorage.removeItem(key);
     }
+
+    useEffect(()=>{
+        const activeName = localStorage.getItem(key);
+        if(!activeName) return;
+        turnOn(activeName)
+    },[])
     return {
         turnOn, turnOff, isOn : group!==undefined,
         name: group?.name || "",

@@ -23,13 +23,24 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist>{
 export const useProvidePlaylist = () : useProvidePlaylistI => {
     const [guid, setGuid] = useState<string>();
     const playlist = usePlaylist(guid);
+
+    
+    const key = "currenPlaylist";
     const turnOn = (guid:string) => {
         setGuid(guid);
+        
+        localStorage.setItem(key, guid);
     }
-
+    
     const turnOff = () => {
         setGuid(undefined);
+        localStorage.removeItem(key)
     }
+    useEffect(()=>{
+        const loadedGuid = localStorage.getItem(key);
+        if(loadedGuid==null)return;
+        setGuid(loadedGuid)
+    },[])
     return {
         isOn: guid!==undefined,
         turnOn, turnOff,

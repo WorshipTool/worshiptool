@@ -1,7 +1,7 @@
 import React from 'react'
 import { Masonry } from '@mui/lab';
 import { useTheme } from '@mui/material';
-import SearchItem from './SearchItem';
+import SearchItem from './components/SearchItem';
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 
 interface SongListCardsProps {

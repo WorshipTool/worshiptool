@@ -30,6 +30,7 @@ import GroupHome from './pages/GroupHome/GroupScreen';
 import GroupScreen from './pages/GroupHome/GroupScreen';
 import { GroupProvider } from './hooks/group/useGroup';
 import { PlaylistProvider } from './hooks/playlist/useCurrentPlaylist';
+import PlaylistScreen from './pages/Playlist/PlaylistScreen';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -72,7 +73,7 @@ export const AppRoutes = () => {
       <Route path="song/:guid" element={<Sheet/>}/>
       <Route path="create" element={<Create/>}/>
       <Route path="create/:guid" element={<Create/>}/>
-      <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
+      <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
       <Route path='group/:groupName' element={<GroupScreen/>}/>

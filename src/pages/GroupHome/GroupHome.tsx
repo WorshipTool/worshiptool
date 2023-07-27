@@ -6,21 +6,22 @@ import SelectionList from './components/SelectionList';
 import ContainerGrid from '../../components/ContainerGrid';
 import Gap from '../../components/Gap';
 import LeftGroupPanel from './components/LeftPanel/LeftGroupPanel';
+import GroupToolbar from './components/GroupToolbar/GroupToolbar';
 
 export default function GroupHome() {
     const group = useGroup();
   return (
     <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-        <Toolbar/>
-        <Box display={"flex"} flexDirection={"row"} position={"absolute"} bottom={0} top={0} left={0} right={0}>
+        <Box display={"flex"} flexDirection={"row"} position={"absolute"} bottom={0} top={0} left={0} right={0} >
             <LeftGroupPanel/>
-            <Grid container sx={{padding: 3}}marginTop={"56px"}>
+            <Box flex={1}>
+              <GroupToolbar/>
 
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <SelectionList/>
                   <Gap value={2}/>
-                </Grid>
-            </Grid>
+                </Grid> */}
+            </Box>
         </Box >
 
     </Box>

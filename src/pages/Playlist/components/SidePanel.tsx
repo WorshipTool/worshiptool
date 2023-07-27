@@ -8,6 +8,7 @@ import useStack from '../../../hooks/playlist/useStack'
 import PanelItem from '../PanelItem'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import Playlist from '../../../interfaces/playlist/playlist'
+import useInnerPlaylist from '../hooks/useInnerPlaylist'
 
 
 const Container = styled(Box)(({theme})=>({
@@ -56,7 +57,7 @@ export default function SidePanel({playlist, variants, onCardsClick}
         });
     }
 
-    const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
+    const {isOn, guid: currentPlaylistGuid} = useInnerPlaylist();
 
     return (
         <Container displayPrint={"none"}>

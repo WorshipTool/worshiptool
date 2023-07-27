@@ -1,8 +1,8 @@
 import React from 'react'
-import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
+import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import { Box, Skeleton, Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../../hooks/auth/useAuth';
+import useAuth from '../../../../hooks/auth/useAuth';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],

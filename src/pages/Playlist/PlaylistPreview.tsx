@@ -20,6 +20,8 @@ import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
 import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 import RightPanel from './components/RightPanel/RightPanel';
+import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
+import useInnerPlaylist, { InnerPlaylistProvider } from './hooks/useInnerPlaylist';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
@@ -37,11 +39,13 @@ const PageBreak = () => {
 const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>void}) => {
     const {song, getTransposedVariant, transpose, loading} = useSong(guid);
 
-    const {removeVariant, variants} = usePlaylist(playlist)
+    const {removeVariant, variants} = useInnerPlaylist();
+    const {turnOn} = useCurrentPlaylist();
 
 
     const onRemove = () => {
         if(song&&song.variants.length>0) removeVariant(song.variants[0].guid).then(()=>reload())
+        turnOn(playlist)
     }
 
     if(song===undefined||loading)return <>
@@ -75,23 +79,19 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
 }
 
 export default function PlaylistPreview() {
-    const {guid} = useParams();
 
-    const {playlist, variants, reload} = usePlaylist(guid||"");
+    const {playlist, variants, reload, guid} = useInnerPlaylist();
 
-    const [searchOpen, setSearchOpen] = useState(false);
 
 
     const navigate = useNavigate();
 
     const onSearchClick = () => {
-        setSearchOpen(true);
     }
 
     useEffect(()=>{
         document.title = "Playlist";
 
-        if(!guid) return;
 
     },[])
 
@@ -105,28 +105,26 @@ export default function PlaylistPreview() {
                 <Box width={300} displayPrint={"none"}></Box>
                 {<Container flex={1}>
                     
-                    {searchOpen? <>
-                        hledam
-                    </>:<>
-                        {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
-                            <Typography variant='subtitle1'>
-                                V playlistu namáš zatím jedinou píseň. 
-                            </Typography>
-                            <Typography variant='subtitle1'>
-                                Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
-                            </Typography>
-                            <Gap/>
-                            <Box>
-                                <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
-                            </Box>
-                        </Box>}
-                        {variants.map((g)=>{
-                            return <Item guid={g.songGuid} key={g.songGuid} playlist={guid||""} reload={reload}/>
-                        })}
-                    </>}
+                    {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
+                        <Typography variant='subtitle1'>
+                            V playlistu namáš zatím jedinou píseň. 
+                        </Typography>
+                        <Typography variant='subtitle1'>
+                            Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
+                        </Typography>
+                        <Gap/>
+                        <Box>
+                            <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
+                        </Box>
+                    </Box>}
+                    {variants.map((g)=>{
+                        return <Item guid={g.songGuid} key={g.songGuid} playlist={guid||""} reload={reload}/>
+                    })}
                     
                 </Container>}
-                <RightPanel/>
+                <Box displayPrint={"none"}>
+                    <RightPanel playlist={playlist} />
+                </Box>
                 
     
             </Box>

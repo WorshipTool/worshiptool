@@ -19,9 +19,10 @@ const TopBar = styled(Box)(()=>({
 }))
 
 interface ToolbarProps{
-    transparent?: boolean
+    transparent?: boolean,
+    white?: boolean
 }
-export default function Toolbar({transparent}:ToolbarProps) {
+export default function Toolbar({transparent, white}:ToolbarProps) {
     const theme = useTheme();
 
     return (
@@ -40,7 +41,7 @@ export default function Toolbar({transparent}:ToolbarProps) {
     
                 <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1} height={"100%"}>
                     <LeftWebTitle transparent={transparent}/>
-                    <RightAccountPanel transparent={transparent}/>
+                    <RightAccountPanel transparent={transparent&&!white}/>
                    
                 </Box>
                 

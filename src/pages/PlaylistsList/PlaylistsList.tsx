@@ -55,6 +55,8 @@ export default function () {
             }
         })
     }
+    
+    const {guid : playlistGuid, turnOn, turnOff} = useCurrentPlaylist();
 
     const onCreateClick = () => {
         setTitleDialogOpen(true);
@@ -65,13 +67,16 @@ export default function () {
         const result = await createWithName(curr.value);
         if(isRequestSuccess(result)){
             navigate("/playlist/"+result.data.guid);
+            turnOn(result.data.guid)
         }else{
             console.log("Something went wrong:", result.message);
         }
     }
 
+
     const deletePlaylist = async (guid:string) => {
         const result = await deleteByGuid(guid);
+        if(playlistGuid===guid) turnOff();
         if(isRequestSuccess(result)){
             reload();
         }else{
