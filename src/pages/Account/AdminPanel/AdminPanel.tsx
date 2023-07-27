@@ -6,6 +6,10 @@ import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../../apis/urls';
 import { RequestResult, codes, isRequestSuccess } from '../../../apis/dtos/RequestResult';
 import { LoginRequestDTO, LoginResultDTO } from '../../../apis/dtos/dtosAuth';
 import { songGetCountDTO } from '../../../apis/dtos/dtosSong';
+import useGroup from '../../../hooks/group/useGroup';
+import AddToSelection from './components/AddToSelection';
+import RemoveFromSelection from './components/RemoveFromSelection';
+import Gap from '../../../components/Gap';
 
 export default function AdminPanel() {
     const [email, setEmail] = useState("");
@@ -54,8 +58,10 @@ export default function AdminPanel() {
         })
     }
 
+    const {isOn} = useGroup();
+
   return (
-    <Box>
+    <Box >
         <Typography>Ziskej token uzivatele:</Typography>
         <InputBase placeholder='Email' value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
         <InputBase placeholder='Heslo' value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
@@ -68,6 +74,16 @@ export default function AdminPanel() {
         <Box>
             <Typography>Aktualní počet písní: {songCount}</Typography>
         </Box>
+
+        {isOn?<>
+            <Gap/>
+            <Typography variant='h6'>Spravovat playlist skupiny</Typography>
+            <AddToSelection/>
+            <RemoveFromSelection/>
+        </>:<>
+            <Typography>Skupina není aktivní</Typography>
+        </>}
+
     </Box>
   )
 }

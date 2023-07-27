@@ -7,7 +7,7 @@ import TabPanel from './TabPanel';
 import BasicInfo from './BasicInfo';
 import ChangePassword from './ChangePassword';
 import VerifySongPanel from './VerifySongPanel';
-import AdminPanel from './AdminPanel';
+import AdminPanel from './AdminPanel/AdminPanel';
 
 export default function Account() {
     const {isLoggedIn, user,
@@ -43,8 +43,9 @@ export default function Account() {
             <Tabs
                     orientation="vertical"
                     value={tabValue}
-                    onChange={onTabChange}                    
-                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                    onChange={onTabChange}     
+                                   
+                    sx={{ borderRight: 1, borderColor: 'divider'}}
                 >
                     <Typography variant='h6' sx={{marginBottom: 3}}>Váš účet</Typography>
 

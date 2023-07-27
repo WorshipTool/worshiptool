@@ -1,11 +1,13 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Switch, Typography, styled } from '@mui/material'
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Switch, Typography, styled } from '@mui/material'
 import React, { useState } from 'react'
-import Gap from '../../components/Gap'
+import Gap from '../../../components/Gap'
 import { Masonry } from '@mui/lab'
 import { Dashboard, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import useSong from '../../hooks/song/useSong'
-import useStack from '../../hooks/playlist/useStack'
-import PanelItem from './PanelItem'
+import useSong from '../../../hooks/song/useSong'
+import useStack from '../../../hooks/playlist/useStack'
+import PanelItem from '../PanelItem'
+import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
+import Playlist from '../../../interfaces/playlist/playlist'
 
 
 const Container = styled(Box)(({theme})=>({
@@ -21,8 +23,8 @@ const Container = styled(Box)(({theme})=>({
 }))
 
 
-export default function SidePanel({title, variants, onCardsClick}
-            : {title:string, variants:string[], onCardsClick : ()=>void}) {
+export default function SidePanel({playlist, variants, onCardsClick}
+            : {playlist?:Playlist, variants:string[], onCardsClick : ()=>void}) {
 
 
     const [popupOpen, setPopupOpen] = useState(false);
@@ -54,11 +56,16 @@ export default function SidePanel({title, variants, onCardsClick}
         });
     }
 
+    const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
+
     return (
         <Container displayPrint={"none"}>
             <Box margin={2}>
                 
-                <Typography variant='h5' fontWeight={"bold"} flex={1}>{title}</Typography>
+                <Box display={"flex"} flexDirection={"row"}>
+                    <Typography variant='h5' fontWeight={"bold"} flex={1}>{playlist?.title}</Typography>
+                    {isOn&& (currentPlaylistGuid == playlist?.guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
+                </Box>
                 <Gap value={2}/>
                 <Box display={"flex"} flexDirection={"row"}>
                     <Typography variant='h6' fontWeight={"bold"} flex={1}>Pořadí</Typography>

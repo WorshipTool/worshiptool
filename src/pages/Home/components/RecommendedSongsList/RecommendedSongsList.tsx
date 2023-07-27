@@ -1,9 +1,9 @@
 import {Grid, Typography, styled } from '@mui/material'
 import useRecommendedSongs from './hooks/useRecommendedSongs';
 import ContainerGrid from '../../../../components/ContainerGrid';
-import SongListCards from '../../../../components/songLists/SongListCards/SongListCards';
 import { useNavigate } from 'react-router-dom';
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
+import SongListCards from '../../../../components/songLists/SongListCards/SongListCards';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,

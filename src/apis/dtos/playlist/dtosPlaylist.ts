@@ -30,6 +30,11 @@ export interface GetSongsInPlaylistResultDTO{
     variants: ApiVariantDTO[],
     title: string
 }
+export interface SearchResultDTO{
+    guid: string,
+    variant: ApiVariantDTO
+}
+export type GetSearchInPlaylistResultDTO = SearchResultDTO[]
 
 export interface PostAddVariantToPlaylistBodyDTO{
     variant: string,

@@ -1,10 +1,13 @@
 import { AddBox, Apps, HelpOutline, Login } from '@mui/icons-material'
-import { Avatar, Box, Button, IconButton, SxProps, Theme, Tooltip, styled } from '@mui/material'
+import { Avatar, Box, Button, Chip, IconButton, SxProps, Theme, Tooltip, styled } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ToolsMenu from './Toolsmenu/ToolsMenu'
 import AccountMenu from './AccountMenu'
 import useAuth from '../../../hooks/auth/useAuth'
+import useGroup from '../../../hooks/group/useGroup'
+import GroupChip from './GroupChip'
+import Gap from '../../Gap'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -97,9 +100,13 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
     const [accountMenuAnchor, setAccountMenuAnchor] = useState<null | HTMLElement>(null);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
+    const {isOn} = useGroup();
+
+
     return (
         <>
             <Container color={color} >
+
 
                 <Tooltip title={"Dokumentace"}>
                     <IconButton color='inherit' sx={iconButtonStyle} onClick={openDocumentation}>
@@ -119,11 +126,22 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title={"Účet"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onAccountClick}>
-                            <ProfileImage size={26} sx={iconStyle}/>
-                        </IconButton>
-                    </Tooltip>
+                    {isOn? 
+                        <GroupChip avatar={
+                            <Tooltip title={"Účet"}>
+                                <IconButton color='inherit' sx={iconButtonStyle} onClick={onAccountClick}>
+                                    <ProfileImage size={26} sx={iconStyle}/>
+                                </IconButton>
+                            </Tooltip>
+                        }/>
+                    : 
+                        <Tooltip title={"Účet"}>
+                            <IconButton color='inherit' sx={iconButtonStyle} onClick={onAccountClick}>
+                                <ProfileImage size={26} sx={iconStyle}/>
+                            </IconButton>
+                        </Tooltip>
+                    }
+
                     <AccountMenu open={accountMenuOpen} onClose={()=>setAccountMenuOpen(false)} anchor={accountMenuAnchor}/>
                         
                     <ToolsMenu open={toolsOpen} onClose={()=>setToolsOpen(false)}/>

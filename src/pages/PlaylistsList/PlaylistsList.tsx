@@ -1,4 +1,4 @@
-import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
+import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
 import Toolbar from "../../components/Toolbar/Toolbar";
 import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +8,7 @@ import { isRequestSuccess, RequestResult, isRequestError } from '../../apis/dtos
 import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { Remove } from "@mui/icons-material";
+import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
 
 
 
@@ -82,13 +83,19 @@ export default function () {
         navigate("/playlist/"+guid);
 
     }   
+    const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
       
     const ListPlaylistItem = ({name, guid}:{name:string, guid:string}) => {
-        return <StyledContainer sx={{padding: 0, marginBottom:1,display:"flex", flexDirection:"row"}}>
-            <Button onClick={()=>openPlaylist(guid)} fullWidth color="warning" >{name}</Button>
+        return <StyledContainer sx={{padding: 0, marginBottom:1,display:"flex", flexDirection:"row", alignItems:"center"}}>
+            <Button onClick={()=>openPlaylist(guid)} fullWidth color="warning" >
+                {name}
+            </Button>
             <IconButton>
                 <Remove onClick={()=>deletePlaylist(guid)}/>
             </IconButton>
+            <Box position={"absolute"} marginLeft={1}>
+            {isOn&& (currentPlaylistGuid == guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
+            </Box>
         </StyledContainer>
     }
 

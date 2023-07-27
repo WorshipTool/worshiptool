@@ -1,6 +1,6 @@
 import { convertSheetToSections } from "@pepavlin/sheet-api";
-import { ApiVariantDTO } from "../../apis/dtos/variant/ApiVariantDTO";
-import { VariantDTO } from "./VariantDTO";
+import { ApiVariantDTO } from "./ApiVariantDTO";
+import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 
 export const mapApiToVariant = (api: ApiVariantDTO) : VariantDTO => {
     return {

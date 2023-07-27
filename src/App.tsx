@@ -28,6 +28,8 @@ import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
 import Documentation from './pages/Documentation/Documentation';
 import GroupHome from './pages/GroupHome/GroupScreen';
 import GroupScreen from './pages/GroupHome/GroupScreen';
+import { GroupProvider } from './hooks/group/useGroup';
+import { PlaylistProvider } from './hooks/playlist/useCurrentPlaylist';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -87,9 +89,12 @@ function App() {
         <ThemeProvider theme={theme}>
           <AuthProvider> 
               <StackProvider>
-                  <Background/>
-                  <NavigationProvider/>
-
+                  <GroupProvider>
+                    <PlaylistProvider>
+                      <Background/>
+                      <NavigationProvider/>
+                    </PlaylistProvider>
+                  </GroupProvider>
               </StackProvider>
           </AuthProvider>
         </ThemeProvider>

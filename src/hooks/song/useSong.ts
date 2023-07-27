@@ -3,7 +3,7 @@ import Song from "../../interfaces/song/song";
 import useFetch from "../useFetch";
 import { getUrl_GETSONGBYGUID } from "../../apis/urls";
 import AllSongDataDTO from "../../apis/dtos/dtosSong";
-import useTranspose from "../../sheetApi/hooks/useTranspose";
+import useTranspose from "./hooks/useTranspose";
 import useAuth from "../auth/useAuth";
 import convertAllSongDataDTOToSong from "../../apis/allSongDataDTOToSong";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";

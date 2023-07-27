@@ -1,10 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import useSong from '../../../hooks/song/useSong';
 import { Backdrop, Box, Button, Chip, CircularProgress, IconButton, Typography } from '@mui/material';
-import { Fullscreen, FullscreenExit, SwipeLeft } from '@mui/icons-material';
 import { Section, chordDataToText } from '@pepavlin/sheet-api';
-import { sectionNameToText } from '../../../utils/sectionNameToText';
+import { sectionNameToText } from '../../../tech/sectionNameToText';
 
 const sectionPart = (section: Section, fontSize: number) => {
     const lines = section.lines;

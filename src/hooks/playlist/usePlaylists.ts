@@ -1,10 +1,10 @@
-import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../apis/urls';
 import useAuth from '../auth/useAuth';
 import useFetch from '../useFetch';
 import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../apis/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/playlist';
-import { mapApiToVariant } from '../../interfaces/variant/mapApiToVariant';
+import { mapApiToVariant } from '../../apis/dtos/variant/mapApiToVariant';
 
 
 export default function usePlaylists(){
@@ -36,9 +36,10 @@ export default function usePlaylists(){
         return result;
     }
 
-    const createPlaylist = async (title:string) => {
+    const createPlaylist = async (title?:string) => {
+        if(!title)title="New playlist";
         const body : PostCreatePlaylistBodyDTO = {title}
-        const result = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
+        const result : RequestResult<PostCreatePlaylistResultDTO> = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
         return result;
     }
 
@@ -69,6 +70,10 @@ export default function usePlaylists(){
         });
     }
 
+    const searchInPlaylistByGuid = async (guid: string, searchString: string) : Promise<RequestResult<GetSearchInPlaylistResultDTO>> => {
+        return await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
+    }
+
 
     return {
         addVariantToPlaylist,
@@ -77,6 +82,7 @@ export default function usePlaylists(){
         getPlaylistsOfUser,
         createPlaylist,
         deletePlaylist,
-        getPlaylistByGuid
+        getPlaylistByGuid,
+        searchInPlaylistByGuid
     }
 }

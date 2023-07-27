@@ -9,7 +9,7 @@ import { Masonry } from '@mui/lab';
 import { grey } from '@mui/material/colors';
 import Gap from '../../components/Gap';
 import ReactDOM from 'react-dom';
-import SidePanel from './SidePanel';
+import SidePanel from './components/SidePanel';
 import { useNavigate, useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_GETSONGSINPLAYLIST } from '../../apis/urls';
@@ -19,6 +19,7 @@ import usePlaylists from '../../hooks/playlist/usePlaylists';
 import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
 import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
+import RightPanel from './components/RightPanel/RightPanel';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
@@ -78,12 +79,13 @@ export default function PlaylistPreview() {
 
     const {playlist, variants, reload} = usePlaylist(guid||"");
 
-    const [currVariantIndex, setCurrVariantIndex] = useState(0);
+    const [searchOpen, setSearchOpen] = useState(false);
+
 
     const navigate = useNavigate();
 
-    const goHome = () => {
-        navigate("/")
+    const onSearchClick = () => {
+        setSearchOpen(true);
     }
 
     useEffect(()=>{
@@ -97,27 +99,34 @@ export default function PlaylistPreview() {
         <Box>
             <Toolbar/>
             <Box display={"flex"} flexDirection={"row"}>                
-                <SidePanel title={playlist?.title||""} variants={variants.map((v)=>v.guid)} onCardsClick={()=>{
+                <SidePanel playlist={playlist} variants={variants.map((v)=>v.songGuid)} onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
                 <Box width={300} displayPrint={"none"}></Box>
                 {<Container flex={1}>
-                    {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
-                        <Typography variant='subtitle1'>
-                            V playlistu namáš zatím jedinou píseň. 
-                        </Typography>
-                        <Typography variant='subtitle1'>
-                            Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
-                        </Typography>
-                        <Gap/>
-                        <Box>
-                            <Button variant='contained' color='primary' onClick={goHome}>Hledat</Button>
-                        </Box>
-                    </Box>}
-                    {variants.map((g)=>{
-                        return <Item guid={g.guid} key={g.guid} playlist={guid||""} reload={reload}/>
-                    })}
+                    
+                    {searchOpen? <>
+                        hledam
+                    </>:<>
+                        {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
+                            <Typography variant='subtitle1'>
+                                V playlistu namáš zatím jedinou píseň. 
+                            </Typography>
+                            <Typography variant='subtitle1'>
+                                Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
+                            </Typography>
+                            <Gap/>
+                            <Box>
+                                <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
+                            </Box>
+                        </Box>}
+                        {variants.map((g)=>{
+                            return <Item guid={g.songGuid} key={g.songGuid} playlist={guid||""} reload={reload}/>
+                        })}
+                    </>}
+                    
                 </Container>}
+                <RightPanel/>
                 
     
             </Box>

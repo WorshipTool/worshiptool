@@ -2,6 +2,7 @@ import { Box, Button, Link, Typography, styled } from '@mui/material'
 import React, { useMemo } from 'react'
 import { ReactComponent as SvgIcon } from '../../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom';
+import useGroup from '../../../hooks/group/useGroup';
 
 
 const Container = styled(Box)(({theme})=>({
@@ -29,6 +30,7 @@ interface LeftWebTitleProps{
 export default function LeftWebTitle({transparent}: LeftWebTitleProps) {
     const navigate = useNavigate();
 
+    const {isOn, url} = useGroup();
 
     const color = useMemo(()=>{
         return transparent ? "transparent" : "white"
@@ -36,7 +38,8 @@ export default function LeftWebTitle({transparent}: LeftWebTitleProps) {
     const size = 40;
 
     const goHomeClick = () => {
-        navigate("/");
+        if(isOn) navigate(url);
+        else navigate("/");
         window.scroll({
             top: 0,
             behavior: "smooth",
