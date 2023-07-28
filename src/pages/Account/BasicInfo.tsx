@@ -2,7 +2,7 @@ import { Box, TextField, Typography } from '@mui/material'
 import React from 'react'
 import useAuth from '../../hooks/auth/useAuth'
 import AccountImage from '../../assets/images/account.webp'
-import { ROLES } from '../../models/user';
+import { ROLES } from '../../interfaces/user';
 import Gap from '../../components/Gap';
 
 export default function BasicInfo() {

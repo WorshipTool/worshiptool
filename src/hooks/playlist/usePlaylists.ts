@@ -1,30 +1,32 @@
-import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO } from '../../backend/dtos/dtosPlaylist';
-import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../backend/urls';
+import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../apis/urls';
 import useAuth from '../auth/useAuth';
 import useFetch from '../useFetch';
-import { RequestResult, isRequestSuccess, isRequestError, formatted } from '../../backend/dtos/RequestResult';
-import Playlist from '../../models/playlist/playlist';
+import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../apis/dtos/RequestResult';
+import Playlist from '../../interfaces/playlist/playlist';
+import { mapApiToVariant } from '../../apis/dtos/variant/mapApiToVariant';
 
 
 export default function usePlaylists(){
     const {fetchData, post} = useFetch();
 
-    const addVariantToPlaylist = async (variant: string, playlist: string) => {
+    const addVariantToPlaylist = async (variant: string | undefined, playlist: string | undefined) => {
+        if(!variant || !playlist) return formatted(null, codes['Unknown Error'], "Invalid parameters");
+
         const body : PostAddVariantToPlaylistBodyDTO = {playlist, variant};
         const result = await post({url: getUrl_POSTADDTOPLAYLIST(), body});
         return result;
     }
 
-    const removeVariantFromPlaylist = async (variant:string, playlist: string) => {
+    const removeVariantFromPlaylist = async (variant:string | undefined, playlist: string | undefined) => {
+        if(!variant || !playlist) return formatted(null, codes['Unknown Error'], "Invalid parameters");
         const body : DeleteRemoveVariantFromPlaylistBodyDTO = {playlist, variant};
         const result = await post({url: getUrl_POSTREMOVEFROMPLAYLIST(), body});
-        console.log(result);
         return result;
     }
 
     const isVariantInPlaylist = async (variant: string, playlist: string) : Promise<boolean> => {
         const result = await fetchData<boolean>({url: getUrl_GETISVARIANTINPLAYLIST(variant, playlist)});
-        // console.log(result);
         if(isRequestError(result)) return false;
         return result.data;
     }
@@ -34,9 +36,10 @@ export default function usePlaylists(){
         return result;
     }
 
-    const createPlaylist = async (title:string) => {
+    const createPlaylist = async (title?:string) => {
+        if(!title)title="Nový playlist";
         const body : PostCreatePlaylistBodyDTO = {title}
-        const result = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
+        const result : RequestResult<PostCreatePlaylistResultDTO> = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
         return result;
     }
 
@@ -49,7 +52,7 @@ export default function usePlaylists(){
     }
 
     const getSongsInPlaylist = async (guid:string) => {
-        return await fetchData<GetSongsInPlaylistResultDTO>({url: getUrl_GETSONGSINPLAYLIST({guid})})
+        return await fetchData<GetSongsInPlaylistResultDTO>({url: "/songs/playlist", params: {guid}})
         
     }
 
@@ -62,9 +65,13 @@ export default function usePlaylists(){
         return formatted({
             guid:guid,
             title:result.data.title,
-            variants: result.data.guids
+            variants: result.data.variants.map((v)=> mapApiToVariant(v))
 
         });
+    }
+
+    const searchInPlaylistByGuid = async (guid: string, searchString: string) : Promise<RequestResult<GetSearchInPlaylistResultDTO>> => {
+        return await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
     }
 
 
@@ -75,6 +82,7 @@ export default function usePlaylists(){
         getPlaylistsOfUser,
         createPlaylist,
         deletePlaylist,
-        getPlaylistByGuid
+        getPlaylistByGuid,
+        searchInPlaylistByGuid
     }
 }

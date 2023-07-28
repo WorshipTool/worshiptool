@@ -22,11 +22,15 @@ import PlaylistPreview from './pages/Playlist/PlaylistPreview';
 import { StackProvider } from './hooks/playlist/useStack';
 import List from './pages/List/List';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
-import useGroup, { GroupProvider } from './hooks/group/useGroup';
 import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
 import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
 import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
 import Documentation from './pages/Documentation/Documentation';
+import GroupHome from './pages/GroupHome/GroupScreen';
+import GroupScreen from './pages/GroupHome/GroupScreen';
+import { GroupProvider } from './hooks/group/useGroup';
+import { PlaylistProvider } from './hooks/playlist/useCurrentPlaylist';
+import PlaylistScreen from './pages/Playlist/PlaylistScreen';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -51,31 +55,10 @@ const theme = createTheme({
   },
 });
 
-export const GroupRoutesProvider = () => {
-  const {setGroupName} = useGroup();
-  const {groupName} = useParams();
-  useEffect(() => {
-      setGroupName(groupName);
-    }, []);
-  
-  return <AppRoutes/>
-}
-
-export const NongroupRoutesProvider = () => {
-  const {setGroupName} = useGroup();
-  useEffect(() => {
-      setGroupName(undefined);
-    }, []);
-  
-  return <AppRoutes/>
-}
 
 export const NavigationProvider = () => {
   return <BrowserRouter>
-    <Routes>
-      <Route path="group/:groupName/*" element={<GroupRoutesProvider/>}/>
-      <Route path="*" element={<NongroupRoutesProvider/>}/>
-    </Routes>
+    <AppRoutes/>
   </BrowserRouter>
 }
 
@@ -90,9 +73,10 @@ export const AppRoutes = () => {
       <Route path="song/:guid" element={<Sheet/>}/>
       <Route path="create" element={<Create/>}/>
       <Route path="create/:guid" element={<Create/>}/>
-      <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
+      <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
+      <Route path='group/:groupName' element={<GroupScreen/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   
@@ -105,13 +89,14 @@ function App() {
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>
           <AuthProvider> 
-            <GroupProvider>
               <StackProvider>
-                    <Background/>
-                    <NavigationProvider/>
-
-                  </StackProvider>
-            </GroupProvider>
+                  <GroupProvider>
+                    <PlaylistProvider>
+                      <Background/>
+                      <NavigationProvider/>
+                    </PlaylistProvider>
+                  </GroupProvider>
+              </StackProvider>
           </AuthProvider>
         </ThemeProvider>
       </SnackbarProvider>

@@ -2,7 +2,7 @@ import { Box, InputBase, SpeedDial, SpeedDialAction, SpeedDialIcon,  Typography,
 import React, {useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import { motion } from 'framer-motion';
 import { Close, Cloud, Edit, Subscriptions } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';

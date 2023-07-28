@@ -2,18 +2,19 @@ import { Box, Button, Divider, FormControlLabel, InputBase, Switch, Tooltip, Typ
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_ADDSONGDATA } from '../../backend/urls';
+import { getUrl_ADDSONGDATA } from '../../apis/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import { RequestResult, isRequestSuccess } from '../../apis/dtos/RequestResult';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import {convertSheetToSections} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
-import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';
-import Song from '../../models/song/song';
+import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../apis/dtos/dtosNewSongData';
+import Song from '../../interfaces/song/song';
 import useSong from '../../hooks/song/useSong';
 import ContainerGrid from '../../components/ContainerGrid';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -54,6 +55,7 @@ export default function Create() {
             title: title,
             variants: [{
                 guid: "",
+                songGuid: "",
                 sheetData: sheet,
                 sheetText: "",
                 sections: convertSheetToSections(sheet),
@@ -147,8 +149,8 @@ export default function Create() {
     )
 
     return (
-        <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-            <Toolbar transparent={false}/>
+        <AppContainer>
+            
             <Box flex={1} display={"flex"} flexDirection={"row"}>
                 <Box sx={{flex:1, display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}>
                     
@@ -203,6 +205,6 @@ export default function Create() {
         
                 </Box>
             </Box>
-        </Box>
+        </AppContainer>
     )
 }

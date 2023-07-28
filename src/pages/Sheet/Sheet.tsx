@@ -7,26 +7,27 @@ import DefaultStyle from './styles/DefaultStyle';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import useAuth from '../../hooks/auth/useAuth';
-import { ROLES } from '../../models/user';
+import { ROLES } from '../../interfaces/user';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../backend/urls';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../apis/urls';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
 import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Dashboard, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
-import { MediaTypes } from '../../models/song/media';
+import { MediaTypes } from '../../interfaces/song/media';
 import AddVideo from '../../components/AddVideo';
-import { SourceTypes } from '../../models/song/source';
+import { SourceTypes } from '../../interfaces/song/source';
 import AddTag from '../../components/AddTag';
 import AddCreator from '../../components/AddCreator';
-import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../backend/dtos/dtosPlaylist';
-import { isRequestSuccess } from '../../backend/dtos/RequestResult';
-import Playlist from '../../models/playlist/playlist';
+import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { isRequestSuccess } from '../../apis/dtos/RequestResult';
+import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 
 export default function Sheet() {
@@ -184,8 +185,7 @@ export default function Sheet() {
   }
 
   return (
-    <>
-      <Toolbar transparent={false}/>
+    <AppContainer>
       <Box flex={1} display={"flex"} flexDirection={"row"}>
         <Box sx={{flex:1, display:"flex", flexDirection:"column", alignItems:"start"}}>
           <Box display={"flex"} width={"100%"} justifyContent={"center"}>
@@ -255,7 +255,7 @@ export default function Sheet() {
                 })}
                 </>}
 
-                {isAdmin()&&song&&<>                
+                {song&&<>                
                   {song.media.map((m)=>{
                     if(m.type===MediaTypes.Youtube){
                       return <YoutubeVideo src={m.url}></YoutubeVideo>
@@ -413,7 +413,7 @@ export default function Sheet() {
             </DialogActions>
         </Dialog>
 
-    </>
+    </AppContainer>
   
   )
 }

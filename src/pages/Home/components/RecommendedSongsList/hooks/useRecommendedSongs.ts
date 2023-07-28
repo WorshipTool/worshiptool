@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import useSongQuery from "../../../../../hooks/song/useSongQuery";
-import { isRequestSuccess } from "../../../../../backend/dtos/RequestResult";
-import { SearchSongDataDTO } from "../../../../../backend/dtos/dtosSong";
+import { isRequestSuccess } from "../../../../../apis/dtos/RequestResult";
+import { SearchSongDataDTO } from "../../../../../apis/dtos/dtosSong";
+import { VariantDTO } from "../../../../../interfaces/variant/VariantDTO";
+import { mapApiToVariant } from '../../../../../apis/dtos/variant/mapApiToVariant';
 
 export default function useRecommendedSongs(){
 
-    const [data, setData] = useState<SearchSongDataDTO[]>([]);
+    const [data, setData] = useState<VariantDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -20,11 +22,7 @@ export default function useRecommendedSongs(){
         const sgs : SearchSongDataDTO[] = res.data.songs.map((data)=>{
             return {
                 guid: data.guid,
-                title: data.mainTitle,
-                sheetData: data.variants[0]?.sheetData,
-                createdBy: "",
-                createdByLoader: false,
-                verified:true
+                variant: data.variant
             };
         })
         return sgs;
@@ -33,7 +31,7 @@ export default function useRecommendedSongs(){
     useEffect(()=>{
         getData()
         .then((result)=>{
-            setData(result);
+            setData(result.map((r)=>mapApiToVariant(r.variant)));
             setLoading(false);
             setIsSuccess(true);
         })
