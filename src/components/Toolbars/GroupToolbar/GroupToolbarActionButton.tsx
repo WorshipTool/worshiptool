@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
-import { Box, Typography, styled, useTheme } from '@mui/material';
-import React from 'react'
+import { Box, Fade, Typography, styled, useTheme } from '@mui/material';
+import React, { useMemo } from 'react'
 
 const Container = styled(Box)(({theme})=>({
     width: 180,
@@ -27,12 +27,15 @@ const Container = styled(Box)(({theme})=>({
 
 interface GroupToolbarActionButtonProps {
     label?: string,
+    secondaryLabel?: string,
     icon?: React.ReactNode,
     onClick?: ()=>void,
-    variant?: "primary" | "secondary" | "white"
+    variant?: "primary" | "secondary" | "white",
+    visible?: boolean,
+    id?: number
 }
 
-export default function GroupToolbarActionButton({label = "", icon, onClick, variant = "white"}: GroupToolbarActionButtonProps) {
+export default function GroupToolbarActionButton({label = "", icon, onClick, variant = "white", visible = true, id = 0, secondaryLabel}: GroupToolbarActionButtonProps) {
     const theme = useTheme();
 
     let bg;
@@ -52,18 +55,25 @@ export default function GroupToolbarActionButton({label = "", icon, onClick, var
             break;
     }
 
+    const duration = 200
     return (
-    <Container sx={{
-        background: bg,
-        color: color,
-        stroke: color,
-    }} onClick={onClick}>
-        <Box sx={{padding: 3, paddingRight: icon?0:3}}>
-            <Typography variant='h6' fontWeight={500} sx={{userSelect:"none"}} lineHeight={1.3}>{label}</Typography>
-        </Box>
-        {icon&&<Box padding={3} display={"flex"} alignItems={"end"} justifyContent={"end"}> 
-            {icon}
-        </Box>}
-    </Container>
+        <Container sx={{
+            background: bg,
+            color: color,
+            stroke: color,
+        }} onClick={onClick}>
+            <Box sx={{padding: 3, paddingRight: icon?0:3}} lineHeight={1.3} display={"flex"} flexDirection={"column"} justifyContent={"space-between"}>
+                <Typography variant='h6' fontWeight={500} sx={{userSelect:"none"}} lineHeight={"inherit"}>{label}</Typography>
+                {secondaryLabel&&<Typography variant='subtitle2' lineHeight={"inherit"} sx={{
+                    textOverflow: "clip",
+                    overflow: "hidden",
+                    width: "80px",
+                    opacity: 0.6,
+                }} noWrap>{secondaryLabel}</Typography>}
+            </Box>
+            {icon&&<Box padding={3} display={"flex"} alignItems={"end"} justifyContent={"end"}> 
+                {icon}
+            </Box>}
+        </Container>
   )
 }

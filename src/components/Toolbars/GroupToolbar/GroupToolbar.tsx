@@ -44,12 +44,12 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
 
     return (
         <>
-            <Box maxWidth={"100%"} top={0} displayPrint={"none"} height={height}>
+            <Box maxWidth={"100%"} top={0} displayPrint={"none"} height={height} position={"relative"} zIndex={1}>
                 <Toolbar transparent white/>
 
                 <Box overflow={"hidden"} sx={{
                     position: "fixed",
-                    top:0
+                    top:0,
             
                 }}>
                     <StyledContainer sx={{
@@ -123,16 +123,17 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
                             </Box>
             
                         </Box>
-                        <Fade in={expanded} >
+                        <Fade in={expanded}>
                             <Box position={"absolute"} bottom={0} marginLeft={5} sx={{
                                 transform: "translateY(50%)",
                                 paddingLeft: "56px"
                             }}>
-                                    <QuickActions/>
+                                    <QuickActions />
                                 
                             </Box>
-
                         </Fade>
+                            
+
                 </Box>
             </Box>
         </>

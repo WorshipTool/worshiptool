@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Select, Typography } from '@mui/material'
 import React from 'react'
 import Toolbar from '../../components/Toolbars/Toolbar'
 import useGroup from '../../hooks/group/useGroup';
@@ -16,11 +16,12 @@ export default function GroupHome() {
     // const [expand, setExpand] = React.useState<boolean>(false);
   return (
     <AppContainer expandable>
-      <Box padding={5} paddingTop={0} display={"flex"} flexDirection={"column"} sx={{
+      <SelectionList/>
+      {/* <Box padding={5} paddingTop={0} display={"flex"} flexDirection={"column"} sx={{
         transition:"all 0.2s ease-in-out"
       }}>
           <SelectionList/>
-      </Box>
+      </Box> */}
     </AppContainer>
   )
 }

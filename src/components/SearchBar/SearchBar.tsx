@@ -1,4 +1,4 @@
-import { Box, InputBase, styled, useTheme } from '@mui/material'
+import { Box, InputBase, SxProps, styled, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -27,10 +27,11 @@ const SearchInput = styled(InputBase)(({theme})=>({
 
 interface SearchBarProps{
     value?: string,
-    onChange?: (value:string)=>void
+    onChange?: (value:string)=>void,
+    sx?: SxProps
 }
 
-export default function SearchBar({value, onChange}: SearchBarProps) {
+export default function SearchBar({value, onChange, sx}: SearchBarProps) {
     const inputRef = useRef();
 
 
@@ -59,9 +60,10 @@ export default function SearchBar({value, onChange}: SearchBarProps) {
         ...(earlyFocused?{
             boxShadow: `0px 2px 8px #00000055`,
             transform: "scale(107%)"
-        }:{})
+        }:{}),
+        ...sx
     }}>         
-        <OnChangeDelayer value={earlyFocused} onChange={()=>setEarlyFocused(false)} delay={3000}/>           
+        <OnChangeDelayer value={earlyFocused} onChange={()=>setEarlyFocused(false)} delay={1500}/>           
         <SearchIcon />
         <SearchInput placeholder='Vyhledej píseň...'  autoFocus 
                 value={value} onChange={onChangeHandler} inputRef={inputRef} 

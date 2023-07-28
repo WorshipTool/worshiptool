@@ -8,9 +8,13 @@ import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
 
-export default function QuickActions() {
+interface QuickActionsProps {
+    visible?: boolean
+}
+
+export default function QuickActions({visible}: QuickActionsProps) {
     const {createPlaylist} = usePlaylists();
-    const {turnOn, isOn, guid} = useCurrentPlaylist();
+    const {turnOn, isOn, guid, playlist} = useCurrentPlaylist();
     
     const navigate = useNavigate();
 
@@ -36,21 +40,23 @@ export default function QuickActions() {
         navigate("/playlist/"+guid)
     }
 
+
   return (
     <Box>
         <Box display={"flex"} flexDirection={"row"} gap={1}>
             <GroupToolbarActionButton label='Vytvořit playlist' variant="primary" icon={<Add sx={{
                 strokeWidth: 2,
-            }}/>} onClick={onCreatePlaylist}/>
+            }}/>} onClick={onCreatePlaylist} visible={visible} id={0}/>
             <GroupToolbarActionButton label='Vyhledat píseň' icon={<Search  sx={{
                 strokeWidth: 1,
-            }}/>} onClick={onSearchSong}/>
+            }}/>} onClick={onSearchSong} visible={visible} id={1}/>
             <GroupToolbarActionButton label='Přidat novou píseň' icon={<Add  sx={{
                 strokeWidth: 2,
-            }}/>} onClick={onNewSong}/>
+            }}/>} onClick={onNewSong} visible={visible} id={2}/>
             
-            {isOn ? <GroupToolbarActionButton label='Editovat playlist' variant="secondary"
-                icon={<Edit></Edit>} onClick={openPlaylistToEdit}/> : <></>}
+            {isOn ? <GroupToolbarActionButton label='Editovat playlist' secondaryLabel={playlist?.title}
+                variant="secondary"
+                icon={<Edit></Edit>} onClick={openPlaylistToEdit} visible={visible} id={3}/> : <></>}
         </Box>
     </Box>
   )

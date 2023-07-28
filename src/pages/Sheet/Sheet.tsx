@@ -255,7 +255,7 @@ export default function Sheet() {
                 })}
                 </>}
 
-                {isAdmin()&&song&&<>                
+                {song&&<>                
                   {song.media.map((m)=>{
                     if(m.type===MediaTypes.Youtube){
                       return <YoutubeVideo src={m.url}></YoutubeVideo>
