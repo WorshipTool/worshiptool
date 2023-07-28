@@ -14,13 +14,10 @@ import useInnerPlaylist from '../hooks/useInnerPlaylist'
 const Container = styled(Box)(({theme})=>({
     width: 300,
     backgroundColor: theme.palette.grey[100],
-    position:"fixed",
-    bottom:0,
-    top:50,
-    left:0,
-    overflowY:"auto",
     boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
-    displayPrint: "none"
+    height: "calc(100vh - 56px)",
+    position: "sticky",
+    top:56
 }))
 
 
@@ -57,7 +54,7 @@ export default function SidePanel({playlist, variants, onCardsClick}
         });
     }
 
-    const {isOn, guid: currentPlaylistGuid} = useInnerPlaylist();
+    const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
 
     return (
         <Container displayPrint={"none"}>
@@ -65,7 +62,7 @@ export default function SidePanel({playlist, variants, onCardsClick}
                 
                 <Box display={"flex"} flexDirection={"row"}>
                     <Typography variant='h5' fontWeight={"bold"} flex={1}>{playlist?.title}</Typography>
-                    {isOn&& (currentPlaylistGuid == playlist?.guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
+                    {isOn&& (currentPlaylistGuid === playlist?.guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
                 </Box>
                 <Gap value={2}/>
                 <Box display={"flex"} flexDirection={"row"}>

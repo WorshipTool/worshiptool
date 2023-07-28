@@ -4,7 +4,7 @@ import useAuth from '../../hooks/auth/useAuth';
 import { isRequestError } from '../../apis/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
 
 const StyledContainer = styled(Paper)(({theme})=>({

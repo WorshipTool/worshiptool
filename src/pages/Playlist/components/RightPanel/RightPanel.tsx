@@ -15,14 +15,17 @@ import useGroupSelection from '../../../../hooks/group/useGroupSelection';
 
 const Container = styled(Box)(({theme})=>({
     width: 300,
-    position:"fixed",
-    bottom:0,
-    top:56,
-    right:0,
+    // position:"relative",
+    height:"calc(100vh - 56px)",
+    // top:56,
     overflowY:"auto",
     boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
     displayPrint: "none",
-    userSelect: "none"
+    userSelect: "none",
+    pointerEvents: "auto",
+    
+    position: "sticky",
+    top:56
 }))
 
 interface RightPanelProps{
@@ -49,6 +52,7 @@ export default function RightPanel({playlist}: RightPanelProps) {
     },[ideaArr]);
   return (
     <>
+    
         <Container>
             <Box padding={1} paddingTop={0}>
                 <Box position={"sticky"} top={0} paddingTop={1} sx={{

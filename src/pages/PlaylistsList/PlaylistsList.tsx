@@ -1,5 +1,5 @@
 import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
-import Toolbar from "../../components/Toolbar/Toolbar";
+import Toolbar from "../../components/Toolbars/Toolbar";
 import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
 import useFetch from '../../hooks/useFetch';
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { Remove } from "@mui/icons-material";
 import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
+import AppContainer from "../../components/AppContainer/AppContainer";
 
 
 
@@ -105,46 +106,50 @@ export default function () {
     }
 
     return <>
-        <Toolbar/>
+        {/* <Toolbar/> */}
 
-        <Box display={"flex"} justifyContent={"center"}>
-            <Box sx={{maxWidth:500, marginTop:7}} flex={1}>
-                {result&&isRequestError(result)?<>
-                    <Typography>Při načítání nastala chyba.</Typography>
-                    <Typography>{result.message}</Typography>
-                </>:<></>}
-                <Box display={"flex"} marginBottom={3}>
-                    <Typography variant="h5" fontWeight={600} flex={1}>Moje playlisty:</Typography>
-                    <Button variant="contained" onClick={onCreateClick}>Vytvořit</Button>
+        <AppContainer>
+            <Box display={"flex"} justifyContent={"center"}>
+                <Box sx={{maxWidth:500, marginTop:7}} flex={1}>
+                    {result&&isRequestError(result)?<>
+                        <Typography>Při načítání nastala chyba.</Typography>
+                        <Typography>{result.message}</Typography>
+                    </>:<></>}
+                    <Box display={"flex"} marginBottom={3}>
+                        <Typography variant="h5" fontWeight={600} flex={1}>Moje playlisty:</Typography>
+                        <Button variant="contained" onClick={onCreateClick}>Vytvořit</Button>
+                    </Box>
+                    {playlists.map((p)=>{
+                        return <ListPlaylistItem name={p.title} guid={p.guid}/>
+                    })}
+                    {playlists.length==0&&<>
+                        <Typography>Nemáš žádný vytvořený playlist.</Typography>
+                    </>}
                 </Box>
-                {playlists.map((p)=>{
-                    return <ListPlaylistItem name={p.title} guid={p.guid}/>
-                })}
-                {playlists.length==0&&<>
-                    <Typography>Nemáš žádný vytvořený playlist.</Typography>
-                </>}
             </Box>
-        </Box>
 
-        <Dialog open={titleDialogOpen} onClose={()=>setTitleDialogOpen(false)}>
-            <DialogTitle>Vytvořit playlist</DialogTitle>
-            <DialogContent>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Název playlistu"   
-                    helperText="Zadejte název playlistu"     
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    inputRef={inputRef}
-                />
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={()=>setTitleDialogOpen(false)}>Zrušit</Button>
-            <Button onClick={createPlaylist}>Vytvořit</Button>
-            </DialogActions>
-        </Dialog>
+            <Dialog open={titleDialogOpen} onClose={()=>setTitleDialogOpen(false)}>
+                <DialogTitle>Vytvořit playlist</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Název playlistu"   
+                        helperText="Zadejte název playlistu"     
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        inputRef={inputRef}
+                    />
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={()=>setTitleDialogOpen(false)}>Zrušit</Button>
+                <Button onClick={createPlaylist}>Vytvořit</Button>
+                </DialogActions>
+            </Dialog>
+
+        </AppContainer>
+
     </>
 }

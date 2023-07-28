@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useReadme from './hooks/useReadme'
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import ContainerGrid from '../../components/ContainerGrid';
 
 export default function Documentation() {

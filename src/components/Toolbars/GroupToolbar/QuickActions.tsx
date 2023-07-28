@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 import GroupToolbarActionButton from './GroupToolbarActionButton'
-import Gap from '../../../../components/Gap'
+import Gap from '../../Gap'
 import { Add, Edit, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
-import usePlaylists from '../../../../hooks/playlist/usePlaylists'
-import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
-import { isRequestSuccess } from '../../../../apis/dtos/RequestResult'
+import usePlaylists from '../../../hooks/playlist/usePlaylists'
+import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
+import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
 
 export default function QuickActions() {
     const {createPlaylist} = usePlaylists();

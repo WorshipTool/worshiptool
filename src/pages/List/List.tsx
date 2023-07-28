@@ -1,6 +1,6 @@
 import { Typography, Box, Grid, Paper, Container, CircularProgress, Divider, Pagination, styled } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import usePagination from '../../hooks/usePagination';
 import { ListSongDataDTO, ListResultDTO } from '../../apis/dtos/dtosSong';
 import useFetch from '../../hooks/useFetch';

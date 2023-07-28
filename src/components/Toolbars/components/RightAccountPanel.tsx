@@ -112,7 +112,7 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
     return (
         <>
-            <Container color={color} >
+            <Container color={color}  >
 
 
                 <Tooltip title={"Dokumentace"}>

@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import useSong from '../../hooks/song/useSong';
 import useStack from '../../hooks/playlist/useStack';
@@ -22,6 +22,7 @@ import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 import RightPanel from './components/RightPanel/RightPanel';
 import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 import useInnerPlaylist, { InnerPlaylistProvider } from './hooks/useInnerPlaylist';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
@@ -97,16 +98,15 @@ export default function PlaylistPreview() {
     },[])
 
     return (
-        <Box>
-            <Toolbar/>
+        <AppContainer>
+            
             <Box display={"flex"} flexDirection={"row"}>                
                 <SidePanel playlist={playlist} variants={variants.map((v)=>v.songGuid)} onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
-                <Box width={300} displayPrint={"none"}></Box>
                 {<Container flex={1}>
                     
-                    {variants.length==0&&<Box display={"flex"} flexDirection={"column"}  displayPrint={"none"}>
+                    {variants.length==0&&<Box display={"flex"} flexDirection={"column"}>
                         <Typography variant='subtitle1'>
                             V playlistu namáš zatím jedinou píseň. 
                         </Typography>
@@ -123,12 +123,14 @@ export default function PlaylistPreview() {
                     })}
                     
                 </Container>}
+                
                 <Box displayPrint={"none"}>
+
                     <RightPanel playlist={playlist} />
                 </Box>
                 
     
             </Box>
-        </Box>
+        </AppContainer>
     )
 }

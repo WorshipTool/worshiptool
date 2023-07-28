@@ -1,5 +1,5 @@
 import { Box, IconButton, Tooltip, styled } from '@mui/material'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { ReactComponent as SvgIcon } from '../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom'
 import useGroup from '../../hooks/group/useGroup'
@@ -13,7 +13,13 @@ const Container = styled(Box)(({theme})=>({
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    
+
+    position:"fixed",
+    top: 0,
+    left: 0,
+    right:0,
+    bottom: 0,
+    displayPrint: "none"
 }))
 
 const IconContainer = styled(Box)(({theme})=>({
@@ -29,12 +35,12 @@ const IconContainer = styled(Box)(({theme})=>({
     },
     '&:active': {
         transform: "scale(98%)"
-    }
+    },
 }))
 
 interface SideToolbarProps{
     component?: ReactElement,
-    children?: ReactElement
+    children?: ReactElement 
 }
 
 export default function SideToolbar({component, children}: SideToolbarProps) {
@@ -57,17 +63,23 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
         if (window.location.pathname.startsWith("/group/")) navigate("/");
     }
 
+    // return <>
+    //         <Box sx={{
+    //             display:"flex",
+    //             flexDirection: "row",
+
+    //             boxShadow: "4px 0px 8px #00000044",
+    //             bgcolor:"blue"
+    //         }} displayPrint={"none"}>
+    //             <Box flex={1} bgcolor={"red"}>
+    //                 {children}
+    //             </Box>
+    //             {/* {children} */}
+    //         </Box>
+    // </>;
     return (
         <>
-            <Box display={"flex"} sx={{opacity:0}} bgcolor={"red"}>
-                    <Container/>
-                    {children}
-            </Box>
             <Box sx={{
-                position:"fixed",
-                top: 0,
-                left: 0,
-                bottom: 0,
                 display:"flex",
                 flexDirection: "row",
 
@@ -79,7 +91,7 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
                             filter: " drop-shadow(1px 4px 4px #00000044)"
                         }}/>
                     </IconContainer>
-                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} >
+                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"}>
                         {component}
                         <Tooltip title={"Ukončit mód"} placement="right">
                             <IconButton color='secondary' onClick={leave}>
@@ -89,7 +101,10 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
                     </Box>
                 
                 </Container>
-                {children}
+                <Box width={56} displayPrint={"none"}/>
+                <Box flex={1} minHeight={"100vh"}>
+                    {children}
+                </Box>
                 
             </Box>
             

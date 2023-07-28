@@ -5,7 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../apis/urls';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isRequestSuccess } from '../../apis/dtos/RequestResult';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import {convertSheetToSections} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
@@ -14,6 +14,7 @@ import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../.
 import Song from '../../interfaces/song/song';
 import useSong from '../../hooks/song/useSong';
 import ContainerGrid from '../../components/ContainerGrid';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -148,8 +149,8 @@ export default function Create() {
     )
 
     return (
-        <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-            <Toolbar transparent={false}/>
+        <AppContainer>
+            
             <Box flex={1} display={"flex"} flexDirection={"row"}>
                 <Box sx={{flex:1, display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}>
                     
@@ -204,6 +205,6 @@ export default function Create() {
         
                 </Box>
             </Box>
-        </Box>
+        </AppContainer>
     )
 }
