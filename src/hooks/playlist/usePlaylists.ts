@@ -74,6 +74,11 @@ export default function usePlaylists(){
         return await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
     }
 
+    const renamePlaylist = async (guid: string, title: string) => {
+        const result = await post({url: "/songs/playlist/rename", body: {guid, title}});
+        return result
+    }
+
 
     return {
         addVariantToPlaylist,
@@ -83,6 +88,7 @@ export default function usePlaylists(){
         createPlaylist,
         deletePlaylist,
         getPlaylistByGuid,
-        searchInPlaylistByGuid
+        searchInPlaylistByGuid,
+        renamePlaylist
     }
 }
