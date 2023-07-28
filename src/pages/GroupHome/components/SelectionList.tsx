@@ -12,9 +12,11 @@ import ContainerGrid from '../../../components/ContainerGrid';
 import OnScrollComponent from '../../../components/OnScrollComponent/OnScrollComponent';
 import { Search } from '@mui/icons-material';
 import { on } from 'events';
+import useGroup from '../../../hooks/group/useGroup';
 
 export default function SelectionList() {
     const {variants, search, reload} = useGroupSelection();
+    const {name} = useGroup();
     
     const navigate = useNavigate();
 
@@ -97,7 +99,7 @@ export default function SelectionList() {
               </Box>
               <Gap value={0.5}/>
               <SongListCards variants={variants} onClick={onCardClick}/>
-              {variants.length==0&&<Typography>Nebyli nalezeny žádné písně s výrazem "{stillString}"</Typography>}
+              {variants.length==0&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
           </Box>
         )
       }}/>
