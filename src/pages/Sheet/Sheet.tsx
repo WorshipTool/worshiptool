@@ -1,3 +1,4 @@
+
 import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, SelectChangeEvent, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
@@ -9,7 +10,7 @@ import useAuth from '../../hooks/auth/useAuth';
 import { ROLES } from '../../models/user';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../backend/urls';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
 import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Dashboard, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
@@ -25,6 +26,7 @@ import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../ba
 import { isRequestSuccess } from '../../backend/dtos/RequestResult';
 import Playlist from '../../models/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
+import ContainerGrid from '../../components/ContainerGrid';
 
 
 export default function Sheet() {
@@ -94,13 +96,9 @@ export default function Sheet() {
 
 
     const styledContainerSX = {
-      [theme.breakpoints.down('md')]: {
-        margin:0,
-      },
-      [theme.breakpoints.up('md')]: {
-          margin:3,
-      },
-      padding:3,
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+      padding:theme.spacing(3),
       backgroundColor: theme.palette.grey[100],
       borderStyle: "solid",
       borderWidth: 1,
@@ -189,47 +187,64 @@ export default function Sheet() {
     <>
       <Toolbar transparent={false}/>
       <Box flex={1} display={"flex"} flexDirection={"row"}>
-        <Box sx={{flex:1, display:"flex", flexDirection:"column"}}>
-            <Box sx={styledContainerSX} displayPrint={"none"}> 
+        <Box sx={{flex:1, display:"flex", flexDirection:"column", alignItems:"start"}}>
+          <Box display={"flex"} width={"100%"} justifyContent={"center"}>
+            <ContainerGrid sx={{...styledContainerSX, displayPrint: "none"}} direction='column'> 
                 <Box display={"flex"} flexDirection={"row"}>
                   <Box flex={1} display={"flex"} flexDirection={"row"}>
                     <TransposePanel transpose={transpose}/>
                     <Gap horizontal/>
-                    {song&&song.variants.length>0&&(
-                      <>
-                        {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
-                          <Button onClick={unverify}>Zrušit ověření</Button>
-                        }
-                        {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
-                          <>
-                            <Button onClick={verify}>Ověřit</Button>
-                            {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
-                          </>
-                        }
-                        <Select
-                          value={variantID + ""}
-                          onChange={onVariantSelectChange}>
-                            {song.variants.map((v, index)=>{
-                              return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
-                            })}
-                        </Select>
-                      </>
-                    )}
-                    
+
+                    <Box display={"flex"} flex={1} flexDirection={"row"}sx={{
+                      [theme.breakpoints.down("md")]: {
+                        display: "none"
+                      }
+                    }}>
+                      {song&&song.variants.length>0&&(
+                        <>
+                          {user&&user.role==ROLES.Admin&&song?.variants[0].verified&&
+                            <Button onClick={unverify}>Zrušit ověření</Button>
+                          }
+                          {user&&(isTrustee()||isAdmin())&&!song?.variants[0].verified&&
+                            <>
+                              <Button onClick={verify}>Ověřit</Button>
+                              {isAdmin()&&<Button onClick={remove}>Smazat</Button>}
+                            </>
+                          }
+                          {isAdmin() && song.variants.length>1 && <Select
+                            value={variantID + ""}
+                            onChange={onVariantSelectChange}>
+                              {song.variants.map((v, index)=>{
+                                return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
+                              })}
+                          </Select>}
+                        </>
+                      )}
+
+                      <Box display={"flex"} flex={1} flexDirection={"row"} justifyContent={"end"}>
+                        {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}  sx={{
+                          [theme.breakpoints.down("lg")]: {
+                            display: "none"
+                          }
+                      }}>
+                          <CopyAll/>  
+                        </IconButton>}
+                        
+                        
+                        {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
+                        <Gap horizontal={true}/>
+                        {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
+                        <Gap horizontal={true}/>
+                        {isAdmin()&&<Button endIcon={<Tag/>} variant='text' color="primary" onClick={addTag}>Přidat tag</Button>}
+                        <Gap horizontal={true}/>
+
+                      </Box>
+                      
+                    </Box>
+    
+
                   </Box>
-  
-                  
-                  {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}>
-                    <CopyAll/>  
-                  </IconButton>}
-                  {isAdmin()&&<Button endIcon={<Add/>} variant='text' color="primary" onClick={()=>navigate("/create/"+guid)}>Přidat variantu</Button>}
-                  <Gap horizontal={true}/>
-                  {isAdmin()&&<Button endIcon={<VerifiedUser/>} variant='text' color="primary" onClick={()=>setAddCreatorOpen(true)}>Přidat autora</Button>}
-                  <Gap horizontal={true}/>
-                  {isAdmin()&&<Button endIcon={<VideoFile/>} variant='text' color="primary" onClick={addVideo}>Přidat video</Button>}
-                  <Gap horizontal={true}/>
-                  {isAdmin()&&<Button endIcon={<Tag/>} variant='text' color="primary" onClick={addTag}>Přidat tag</Button>}
-                  <Gap horizontal={true}/>
+
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
@@ -291,7 +306,9 @@ export default function Sheet() {
                     </Box >
                   </>}
                 </Box>
-            </Box>
+            </ContainerGrid>
+
+          </Box>
     
             {<Box sx={{ displayPrint: "flex",
               flex:1,

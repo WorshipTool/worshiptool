@@ -15,7 +15,6 @@ import { createTheme } from '@mui/material';
 import Sheet from './pages/Sheet/Sheet';
 import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
-import TestPage from './pages/Test/TestPage';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
@@ -27,6 +26,7 @@ import useGroup, { GroupProvider } from './hooks/group/useGroup';
 import PlaylistsList from './pages/PlaylistsList/PlaylistsList';
 import SlideCard from './pages/PlaylistCards/SlideCard/SlideCard';
 import PlaylistCards from './pages/PlaylistCards/PlaylistCards';
+import Documentation from './pages/Documentation/Documentation';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -42,9 +42,10 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#0085FF',
+      dark: '#532EE7'
     },
     secondary: {
-      main: "#F500AE",
+      main: "#EBBC1E",
     }
 
   },
@@ -91,7 +92,7 @@ export const AppRoutes = () => {
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistPreview/>}/>
       <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
-      <Route path="test" element={<TestPage/>}/>
+      <Route path='documentation' element={<Documentation/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   
@@ -107,7 +108,6 @@ function App() {
             <GroupProvider>
               <StackProvider>
                     <Background/>
-                    aaa
                     <NavigationProvider/>
 
                   </StackProvider>

@@ -5,7 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../backend/urls';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isRequestSuccess } from '../../backend/dtos/RequestResult';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import {convertSheetToSections} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
@@ -13,13 +13,7 @@ import ToolPanel from './ToolPanel';
 import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../backend/dtos/dtosNewSongData';
 import Song from '../../models/song/song';
 import useSong from '../../hooks/song/useSong';
-
-const Container = styled(Box)(({theme})=>({
-    width: "70%",
-    margin: theme.spacing(5),
-    display:"flex",
-    flexDirection:"column"
-}))
+import ContainerGrid from '../../components/ContainerGrid';
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -32,7 +26,7 @@ const TitleInput = styled(InputBase)(({theme})=>({
     fontWeight: theme.typography.fontWeightBold
 }))
 const SheetInput = styled(InputBase)(({})=>({
-    height:200,
+    minHeight:200,
     justifyContent:"start",
     alignItems:"start"
 }))
@@ -158,7 +152,7 @@ export default function Create() {
             <Box flex={1} display={"flex"} flexDirection={"row"}>
                 <Box sx={{flex:1, display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}>
                     
-                    <Container>
+                    <ContainerGrid  direction='column'>
 
                         <Box display={"flex"}padding={1}>   
                             <Box flex={1} display={"flex"} alignItems={"center"} >
@@ -188,7 +182,7 @@ export default function Create() {
                             </StyledContainer>
                             :
                             <StyledContainer flexDirection={"column"}>
-                                {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption">Tady uvidite ukazku...</Typography>}
+                                {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption" sx={{color:"grey"}}>Tady uvidite ukazku...</Typography>}
                                     <DefaultStyle song={song} variant={song.variants[0]}/>
                             </StyledContainer>
                         }
@@ -202,7 +196,7 @@ export default function Create() {
                                 </Button>
                             </Tooltip>                            
                         </Box>
-                    </Container>
+                    </ContainerGrid>
         
                     
                     

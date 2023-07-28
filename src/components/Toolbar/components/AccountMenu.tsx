@@ -1,9 +1,9 @@
-import { Divider, ListItemIcon, Menu, MenuItem } from '@mui/material'
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 import React from 'react'
-import useAuth from '../hooks/auth/useAuth'
 import { click } from '@testing-library/user-event/dist/click';
 import { useNavigate } from 'react-router-dom';
-import { LibraryMusic, Logout, ManageAccounts, MusicNote } from '@mui/icons-material';
+import { AccountBalance, AccountCircle, LibraryMusic, Logout, ManageAccounts, MusicNote, Person } from '@mui/icons-material';
+import useAuth from '../../../hooks/auth/useAuth';
 
 
 interface AccountMenuProps{
@@ -13,7 +13,7 @@ interface AccountMenuProps{
 }
 
 export default function AccountMenu({anchor, open, onClose}:AccountMenuProps) {
-    const {logout} = useAuth();
+    const {logout, user} = useAuth();
     const navigate = useNavigate();
 
     const onLogoutClick = () => {
@@ -47,23 +47,14 @@ export default function AccountMenu({anchor, open, onClose}:AccountMenuProps) {
                 horizontal: 'right',
               }}
         >
-            <MenuItem onClick={onPlaylistsClick}>
-                <ListItemIcon>
-                    <MusicNote fontSize="small" sx={{color:"black"}} color='inherit'/>
-                </ListItemIcon>
-                Playlisty
-            </MenuItem>
-            <Divider/>
+            
             <MenuItem onClick={onSettingClick}>
-                {/* <ListItemIcon>
-                    <ManageAccounts fontSize="small" />
-                </ListItemIcon> */}
-                Spravovat
+                <ListItemText
+                    primary={user?.firstName + " " + user?.lastName}
+                    secondary={"Spravovat"}/>
+                
             </MenuItem>
             <MenuItem onClick={onLogoutClick}>
-                {/* <ListItemIcon>
-                    <Logout fontSize="small" />
-                </ListItemIcon> */}
                 Odhlásit se
             </MenuItem>
         </Menu>

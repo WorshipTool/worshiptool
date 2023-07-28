@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth'
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import TabPanel from './TabPanel';
 import BasicInfo from './BasicInfo';

@@ -1,5 +1,5 @@
 import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
-import Toolbar from "../../components/Toolbar";
+import Toolbar from "../../components/Toolbar/Toolbar";
 import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../backend/dtos/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
 import useFetch from '../../hooks/useFetch';

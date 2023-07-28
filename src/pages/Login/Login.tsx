@@ -4,7 +4,7 @@ import useAuth from '../../hooks/auth/useAuth';
 import { RequestResult, isRequestError } from '../../backend/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../models/user';

@@ -1,20 +1,22 @@
 import { Masonry } from '@mui/lab';
-import { Button, CircularProgress, LinearProgress, Typography } from '@mui/material'
+import { Button, CircularProgress, Grid, LinearProgress, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import SearchItem from './SearchItem';
-import usePagination from '../../hooks/usePagination';
-import { useIsInViewport } from '../../hooks/useIsInViewport';
-import Gap from '../../components/Gap';
-import useSongSearch from '../../hooks/song/useSongSearch';
-import { SearchSongDataDTO, SongSearchResultDTO } from '../../backend/dtos/dtosSong';
+import usePagination from '../../../hooks/usePagination';
+import { useIsInViewport } from '../../../hooks/useIsInViewport';
+import Gap from '../../../components/Gap';
+import useSongSearch from '../../../hooks/song/useSongSearch';
+import { SearchSongDataDTO, SongSearchResultDTO } from '../../../backend/dtos/dtosSong';
 import { grey } from '@mui/material/colors';
-import normalizeSearchText from '../../utils/normalizeSearchText';
+import normalizeSearchText from '../../../utils/normalizeSearchText';
+import ContainerGrid from '../../../components/ContainerGrid';
 
 interface SearchedSongsListProps{
     searchString: string
 }
 
 export default function SearchedSongsList({searchString} : SearchedSongsListProps) {    
+    const theme = useTheme();
     const loadNextLevelRef = useRef(null);
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
 
@@ -55,12 +57,13 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     },[normalizeSearchText(searchString)])
 
 
+    const spacing = 1;
   return (
-    <div>
+    <ContainerGrid direction='column'>
         <>                       
             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
         
-            {!loading&&songs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}} spacing={1}>
+            {!loading&&songs.length>0&&<Masonry columns={{ xs: 1, sm: 2, md: 4 }} sx={{marginLeft: -(spacing/2), width: `calc(100% + ${theme.spacing(spacing)})`}} spacing={spacing}>
                 {songs.map((song)=>{
                     return <SearchItem song={song} key={song.guid}></SearchItem>
                 })}            
@@ -85,11 +88,11 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
             <Typography>Nic jsme nenašli...</Typography>            
         </>}
         
-        
+
         <Gap/>
 
             
 
-    </div>
+    </ContainerGrid>
   )
 }
