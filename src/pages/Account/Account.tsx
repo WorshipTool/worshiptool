@@ -1,13 +1,14 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth'
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import TabPanel from './TabPanel';
 import BasicInfo from './BasicInfo';
 import ChangePassword from './ChangePassword';
 import VerifySongPanel from './VerifySongPanel';
-import AdminPanel from './AdminPanel';
+import AdminPanel from './AdminPanel/AdminPanel';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 export default function Account() {
     const {isLoggedIn, user,
@@ -33,8 +34,7 @@ export default function Account() {
 
 
     return (
-        <>
-            <Toolbar/>
+        <AppContainer>
             <Box padding={8}>
                 
             <Box
@@ -43,8 +43,9 @@ export default function Account() {
             <Tabs
                     orientation="vertical"
                     value={tabValue}
-                    onChange={onTabChange}                    
-                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                    onChange={onTabChange}     
+                                   
+                    sx={{ borderRight: 1, borderColor: 'divider'}}
                 >
                     <Typography variant='h6' sx={{marginBottom: 3}}>Váš účet</Typography>
 
@@ -71,7 +72,7 @@ export default function Account() {
                 
     
             </Box>
-        </>
+        </AppContainer>
 
     )
 }

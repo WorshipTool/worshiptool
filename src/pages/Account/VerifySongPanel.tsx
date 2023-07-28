@@ -2,8 +2,8 @@ import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
-import { isRequestSuccess } from '../../backend/dtos/RequestResult';
-import { ROLES } from '../../models/user';
+import { isRequestSuccess } from '../../apis/dtos/RequestResult';
+import { ROLES } from '../../interfaces/user';
 import SongVerify from './SongVerify';
 import useSongQuery from '../../hooks/song/useSongQuery';
 
@@ -28,7 +28,7 @@ export default function VerifySongPanel() {
     const loadUnverified = () => {
         getUnverified({}).then((r)=>{
             if(isRequestSuccess(r)){
-                setUnverifiedSongs(r.data.songs.map((s)=>s.guid));
+                setUnverifiedSongs(r.data.songs.map((s:any)=>s.guid));
             }
         })
     }

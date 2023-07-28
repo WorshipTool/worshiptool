@@ -1,6 +1,6 @@
-import { BACKEND_URL, GETSONGQUERY_URL } from "../../backend/constants";
-import { RequestResult } from "../../backend/dtos/RequestResult";
-import { songGetQueryDTO, songGetResultDTO } from "../../backend/dtos/dtosSong";
+import { BACKEND_URL, GETSONGQUERY_URL } from "../../apis/constants";
+import { RequestResult } from "../../apis/dtos/RequestResult";
+import { SearchSongDataDTO, SongSearchResultDTO, songGetQueryDTO, songGetResultDTO } from "../../apis/dtos/dtosSong";
 import useFetch from "./../useFetch";
 
 interface songQueryBaseProps{
@@ -31,36 +31,11 @@ type useSongQueryProps = randomQueryProps|
                         unverifiedQueryProps|
                         loadeUnverifiedQueryProps;
 
-export function getQueryUrlWithParams(query: songGetQueryDTO){
-    let params = "";
 
-    const keys = Object.keys(query);
-
-    const untyped : any = query;
-
-    for(let i=0; i<keys.length; i++){
-        let content = (untyped[keys[i]]);
-        if(typeof(content)=="object"){
-            content = JSON.stringify(content);
-        }
-
-        if(content!==undefined){
-            let add = params==""?"":"&";
-            add+=`${keys[i]}=${content}`;
-    
-            params+=add;
-        }
-
-    }
-
-    const generatedURL = BACKEND_URL + GETSONGQUERY_URL + `?${params}`;
-    return generatedURL;
-}
-
-export default function useSongQuery(startParams:Partial<useSongQueryProps>){
+export default function useSongQuery(startParams:Partial<useSongQueryProps>) {
     const {fetchData} = useFetch();
 
-    const getSongs = async (additionalParams:Partial<useSongQueryProps>) : Promise<RequestResult<songGetResultDTO>> => {
+    const getSongs = async (additionalParams:Partial<useSongQueryProps>) : Promise<RequestResult<SongSearchResultDTO>> => {
 
         const _params : any = {
             ...startParams,
@@ -76,13 +51,14 @@ export default function useSongQuery(startParams:Partial<useSongQueryProps>){
 
         const typed : songGetQueryDTO = params;
 
-        const url = getQueryUrlWithParams(typed);
+        const url = BACKEND_URL + GETSONGQUERY_URL;
 
-        const result : RequestResult<songGetResultDTO> = await new Promise((res, reject) => {
-            fetchData<songGetResultDTO>({url},(result)=>{
+        const result : RequestResult<SongSearchResultDTO> = await new Promise((res, reject) => {
+            fetchData<SongSearchResultDTO>({url, params: typed},(result)=>{
                 res(result);
             })
         });
+
 
         
 

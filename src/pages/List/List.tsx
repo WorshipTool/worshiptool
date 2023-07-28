@@ -1,10 +1,10 @@
 import { Typography, Box, Grid, Paper, Container, CircularProgress, Divider, Pagination, styled } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import usePagination from '../../hooks/usePagination';
-import { ListSongDataDTO, ListResultDTO } from '../../backend/dtos/dtosSong';
+import { ListSongDataDTO, ListResultDTO } from '../../apis/dtos/dtosSong';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_GETSONGLIST } from '../../backend/urls';
+import { getUrl_GETSONGLIST } from '../../apis/urls';
 import { grey } from '@mui/material/colors';
 import Gap from '../../components/Gap';
 import { useNavigate } from 'react-router-dom';

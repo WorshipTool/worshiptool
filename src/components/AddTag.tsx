@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 import useYoutube from '../hooks/useYoutube';
-import { NewSongDataDTO, NewSongDataResult } from '../backend/dtos/dtosNewSongData';
-import { MediaTypes } from '../models/song/media';
-import { getUrl_ADDSONGDATA } from '../backend/urls';
-import { RequestResult, isRequestSuccess } from '../backend/dtos/RequestResult';
+import { NewSongDataDTO, NewSongDataResult } from '../apis/dtos/dtosNewSongData';
+import { MediaTypes } from '../interfaces/song/media';
+import { getUrl_ADDSONGDATA } from '../apis/urls';
+import { RequestResult, isRequestSuccess } from '../apis/dtos/RequestResult';
 import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import { SourceTypes } from '../models/song/source';
+import { SourceTypes } from '../interfaces/song/source';
 
 interface AddTagProps{
     open: boolean,

@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import User, { ROLES } from "../../models/user";
+import User, { ROLES } from "../../interfaces/user";
 import useFetch from "../useFetch";
-import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser } from "../../backend/dtos/dtosAuth";
-import { getUrl_LOGIN, getUrl_SIGNUP } from "../../backend/urls";
-import { RequestResult, codes, isRequestSuccess } from "../../backend/dtos/RequestResult";
+import { LoginRequestDTO, LoginResultDTO, SignUpRequestDTO, loginResultDTOToUser } from "../../apis/dtos/dtosAuth";
+import { getUrl_LOGIN, getUrl_SIGNUP } from "../../apis/urls";
+import { RequestResult, codes, isRequestSuccess } from "../../apis/dtos/RequestResult";
 import { useSnackbar } from "notistack";
+import useGroup from "../group/useGroup";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -44,6 +45,7 @@ export function useProvideAuth(){
     const {post} = useFetch();
 
     const {enqueueSnackbar} = useSnackbar();
+
 
     useEffect(()=>{
         const u = localStorage.getItem("user");

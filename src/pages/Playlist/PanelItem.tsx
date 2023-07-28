@@ -43,7 +43,7 @@ export default function PanelItem({guid, variants, onClick}:{guid:string, varian
 
     return <PanelItemContainer>
         {!loading?<StyledPanelButton onClick={onClick}>{getName()}</StyledPanelButton>
-        :<Skeleton variant='text' width={200} sx={{marginLeft:2}}></Skeleton>}
+        :<Skeleton variant='text' width={200} sx={{marginLeft:2}} key={"skelet"+guid}></Skeleton>}
 
         {/* <Box display={"flex"} flexDirection={"row"} height={35}>
             {variants.indexOf(guid)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>

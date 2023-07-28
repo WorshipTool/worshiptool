@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Song from "../../models/song/song";
+import Song from "../../interfaces/song/song";
 import useFetch from "../useFetch";
-import { getUrl_GETSONGBYGUID } from "../../backend/urls";
-import AllSongDataDTO from "../../backend/dtos/dtosSong";
-import useTranspose from "../../sheetApi/hooks/useTranspose";
+import { getUrl_GETSONGBYGUID } from "../../apis/urls";
+import AllSongDataDTO from "../../apis/dtos/dtosSong";
+import useTranspose from "./hooks/useTranspose";
 import useAuth from "../auth/useAuth";
-import convertAllSongDataDTOToSong from "../../backend/api/allSongDataDTOToSong";
-import { Variant } from "../../models/song/variant";
+import convertAllSongDataDTOToSong from "../../apis/allSongDataDTOToSong";
+import { VariantDTO } from "../../interfaces/variant/VariantDTO";
 
 
 
@@ -52,7 +52,7 @@ export default function useSong(g:string|null){
         });
     }
 
-    const isCreatedByMe = (variant: Variant) => {
+    const isCreatedByMe = (variant: VariantDTO) => {
         if(!isLoggedIn()||user===undefined)return false;
         return variant.createdBy==user.guid;
     }
@@ -88,9 +88,9 @@ export default function useSong(g:string|null){
         trans(semitones);
     }
 
-    const getTransposedVariant = (index: number) : Variant => {
+    const getTransposedVariant = (index: number) : VariantDTO => {
 
-        if(song===undefined||song.variants.length<=index)return {} as Variant
+        if(song===undefined||song.variants.length<=index)return {} as VariantDTO
 
         let transSection = song.variants[index].sections.map((section)=>{
             if(section.lines===undefined) return {...section};

@@ -1,6 +1,6 @@
-import { BACKEND_URL, GETSONGQUERY_URL, GETSONGSEARCH_URL } from '../../backend/constants';
-import { RequestResult } from "../../backend/dtos/RequestResult";
-import { songGetQueryDTO, songGetResultDTO, SongSearchResultDTO } from '../../backend/dtos/dtosSong';
+import { BACKEND_URL, GETSONGQUERY_URL, GETSONGSEARCH_URL } from '../../apis/constants';
+import { RequestResult } from "../../apis/dtos/RequestResult";
+import { songGetQueryDTO, songGetResultDTO, SongSearchResultDTO } from '../../apis/dtos/dtosSong';
 import useFetch from "../useFetch";
 
 

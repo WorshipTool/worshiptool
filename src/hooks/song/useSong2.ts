@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import useFetch from '../useFetch';
-import { getUrl_GETSONGBYGUID } from "../../backend/urls";
-import AllSongDataDTO from "../../backend/dtos/dtosSong";
+import { getUrl_GETSONGBYGUID } from "../../apis/urls";
+import AllSongDataDTO from "../../apis/dtos/dtosSong";
 import useAuth from "../auth/useAuth";
-import { isRequestSuccess } from "../../backend/dtos/RequestResult";
+import { isRequestSuccess } from "../../apis/dtos/RequestResult";
 
 /**
  * Hook provides basic information about song. 

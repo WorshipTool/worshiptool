@@ -1,10 +1,10 @@
 import { Box, Button, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { isRequestError } from '../../backend/dtos/RequestResult';
+import { isRequestError } from '../../apis/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
 
 const StyledContainer = styled(Paper)(({theme})=>({

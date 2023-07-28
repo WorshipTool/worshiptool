@@ -74,7 +74,7 @@ export default function PlaylistCards() {
                     </IconButton>
                 }
             </Box>
-        <SlideCard guid={variants[currentVariant]} index={currentVariant}/>
+        <SlideCard guid={variants[currentVariant].guid} index={currentVariant}/>
     </Box>
   )
 }
