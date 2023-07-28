@@ -60,9 +60,13 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
                         transition: "height 0.2s ease",
                     }}>
                         <img src="/static/assets/13ka-title.svg" height={700} style={{
-                            transform: "rotate(-10deg) translate(80px, -90px) scale(130%)",
                             filter: `drop-shadow(0px 4px 4px #00000060) ${expanded?"blur(0px)":"blur(20px)"}`,
-                            transition: "all 0.2s ease",
+                            transition: "transform 0.2s ease, filter 0.2s ease",
+                            ...(expanded?{
+                                transform: "rotate(-10deg) translate(80px, -90px) scale(130%)",
+                            }:{
+                                transform: "rotate(-8deg) translate(80px, -90px) scale(130%)",
+                            })
                         }}/>
             
                         
