@@ -28,7 +28,7 @@ export default function VerifySongPanel() {
     const loadUnverified = () => {
         getUnverified({}).then((r)=>{
             if(isRequestSuccess(r)){
-                setUnverifiedSongs(r.data.songs.map((s)=>s.guid));
+                setUnverifiedSongs(r.data.songs.map((s:any)=>s.guid));
             }
         })
     }

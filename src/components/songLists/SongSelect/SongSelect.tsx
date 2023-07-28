@@ -26,7 +26,7 @@ export default function SongSelect({onChange, filter}: SongSelectProps) {
     const searchCallback = ()=>{
       search({searchKey: value, page: 0}).then((data)=>{
         const d = data.data.songs
-                  .map((s)=>mapApiToVariant(s.variant))
+                  .map((s:any)=>mapApiToVariant(s.variant))
                   .filter((v)=>filter?filter(v):true);
         setData(d);
         setOpen(data.data.songs.length>0);
