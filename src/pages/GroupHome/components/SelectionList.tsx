@@ -76,7 +76,7 @@ export default function SelectionList() {
                       flexDirection:"row",
                       justifyContent:"center",
                       }}>
-                  <Box width={350} sx={{pointerEvents:"auto"}}>
+                  <Box width={400} sx={{pointerEvents:"auto"}}>
                     <SearchBar onChange={(s)=>setSearchString(s)} sx={{
                     }}/>
                   </Box>
