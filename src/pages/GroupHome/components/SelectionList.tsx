@@ -32,7 +32,8 @@ export default function SelectionList() {
       <Box>
           <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={onChange}/>
 
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"end"} position={"sticky"} top={270}
+          <Gap value={2}/>
+          <Box display={"flex"} flexDirection={"row"} justifyContent={"end"} position={"sticky"} top={68}
               sx={{
                 pointerEvents:"none",
                 
@@ -41,7 +42,7 @@ export default function SelectionList() {
               <SearchBar onChange={(s)=>setSearchString(s)}/>
             </Box>
           </Box>
-          <Gap value={3}/>
+          <Gap value={2}/>
           <SongListCards variants={variants} onClick={onCardClick}/>
           {variants.length==0&&<Typography>Nebyli nalezeny žádné písně s výrazem "{stillString}"</Typography>}
       </Box>

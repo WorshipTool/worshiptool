@@ -20,24 +20,5 @@ export default function GroupHome() {
           <SelectionList/>
       </Box>
     </AppContainer>
-    // <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-    //     <Box display={"flex"} flexDirection={"row"} position={"absolute"} bottom={0} top={0} left={0} right={0} height={"100vh"} >
-    //         {/* <LeftGroupPanel/> */}
-    //         <SideToolbar/>
-    //         <Box flex={1} maxWidth={"calc(100% - 56px)"} >
-    //           <OnScrollComponent component={(expand)=>{
-    //             return <GroupToolbar expanded={expand}/>
-    //           }}/>
-    //           {/* <Button variant='contained' sx={{
-    //             position:"absolute",
-    //             left:60, bottom:4,
-    //           }} onClick={()=>setExpand((a)=>!a)}>{expand?"Zmenšit":"Zvětšit"}</Button> */}
-    //           <Box padding={5} paddingTop={0} display={"flex"} flexDirection={"column"}>
-    //               <SelectionList/>å
-    //           </Box>
-    //         </Box>
-    //     </Box >
-
-    // </Box>
   )
 }

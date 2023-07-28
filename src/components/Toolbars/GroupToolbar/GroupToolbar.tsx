@@ -28,8 +28,9 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
 
     return (
         <>
-            <Box maxWidth={"100%"} top={0} displayPrint={"none"}>
+            <Box maxWidth={"100%"} top={0} displayPrint={"none"} height={height}>
                 <Toolbar transparent white/>
+
                 <Box overflow={"hidden"} sx={{
                     position: "fixed",
                     top:0
