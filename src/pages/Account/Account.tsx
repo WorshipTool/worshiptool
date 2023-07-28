@@ -8,6 +8,7 @@ import BasicInfo from './BasicInfo';
 import ChangePassword from './ChangePassword';
 import VerifySongPanel from './VerifySongPanel';
 import AdminPanel from './AdminPanel/AdminPanel';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 export default function Account() {
     const {isLoggedIn, user,
@@ -33,8 +34,7 @@ export default function Account() {
 
 
     return (
-        <>
-            <Toolbar/>
+        <AppContainer>
             <Box padding={8}>
                 
             <Box
@@ -72,7 +72,7 @@ export default function Account() {
                 
     
             </Box>
-        </>
+        </AppContainer>
 
     )
 }

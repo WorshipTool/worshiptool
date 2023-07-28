@@ -1,8 +1,8 @@
 import { Box, IconButton, Tooltip, styled } from '@mui/material'
 import React, { ReactElement, ReactNode } from 'react'
-import { ReactComponent as SvgIcon } from '../../assets/icon.svg'
+import { ReactComponent as SvgIcon } from '../../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom'
-import useGroup from '../../hooks/group/useGroup'
+import useGroup from '../../../hooks/group/useGroup'
 import { ExitToApp, ExitToAppOutlined, ExitToAppRounded, ExtensionOff, Logout } from '@mui/icons-material'
 
 const Container = styled(Box)(({theme})=>({
@@ -19,6 +19,7 @@ const Container = styled(Box)(({theme})=>({
     left: 0,
     right:0,
     bottom: 0,
+    zIndex: -1,
     displayPrint: "none"
 }))
 
@@ -36,6 +37,7 @@ const IconContainer = styled(Box)(({theme})=>({
     '&:active': {
         transform: "scale(98%)"
     },
+    displayPrint: "none"
 }))
 
 interface SideToolbarProps{
@@ -43,7 +45,7 @@ interface SideToolbarProps{
     children?: ReactElement 
 }
 
-export default function SideToolbar({component, children}: SideToolbarProps) {
+export default function SideToolbar2({component, children}: SideToolbarProps) {
 
     const navigate = useNavigate();
 
@@ -54,7 +56,7 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
         else navigate("/");
         window.scroll({
             top: 0,
-            behavior: "smooth",
+            behavior: "auto",
           });
     }
 
@@ -81,16 +83,9 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
         <>
             <Box sx={{
                 display:"flex",
-                flexDirection: "row",
-
-                boxShadow: "4px 0px 8px #00000044",
+                flexDirection: "row"
             }}>
                 <Container>
-                    <IconContainer onClick={goHomeClick}>
-                        <SvgIcon height={40} style={{
-                            filter: " drop-shadow(1px 4px 4px #00000044)"
-                        }}/>
-                    </IconContainer>
                     <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"}>
                         {component}
                         <Tooltip title={"Ukončit mód"} placement="right">
@@ -102,7 +97,7 @@ export default function SideToolbar({component, children}: SideToolbarProps) {
                 
                 </Container>
                 <Box width={56} displayPrint={"none"}/>
-                <Box flex={1} minHeight={"100vh"}>
+                <Box flex={1} minHeight={"calc(100vh - 56px)"}>
                     {children}
                 </Box>
                 

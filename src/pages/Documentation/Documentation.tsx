@@ -4,6 +4,7 @@ import { Box, Grid, Paper, Typography } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import ContainerGrid from '../../components/ContainerGrid';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 export default function Documentation() {
     const {getRawData: fetchRawData} = useReadme();
@@ -17,8 +18,7 @@ export default function Documentation() {
     },[])
 
   return (
-    <Box>
-        <Toolbar/>
+    <AppContainer>
         <Box display={"flex"} justifyContent={"center"} padding={2}>
             <ContainerGrid sx={{justifyContent:"center"}} direction='row'>
                 <Grid item xs={12}>
@@ -35,6 +35,6 @@ export default function Documentation() {
                 </Box>
             </ContainerGrid>
         </Box>
-    </Box>
+    </AppContainer>
   )
 }

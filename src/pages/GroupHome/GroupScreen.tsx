@@ -18,7 +18,10 @@ export default function GroupScreen() {
 
     useEffect(()=>{
         if(groupName===undefined) turnOff();
-        else turnOn(groupName);
+        else{
+            turnOn(groupName);
+            document.title = "Chval Otce - " + groupName;
+        }
     },[groupName])
 
     return (

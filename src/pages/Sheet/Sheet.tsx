@@ -27,6 +27,7 @@ import { isRequestSuccess } from '../../apis/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
+import AppContainer from '../../components/AppContainer/AppContainer';
 
 
 export default function Sheet() {
@@ -184,8 +185,7 @@ export default function Sheet() {
   }
 
   return (
-    <>
-      <Toolbar transparent={false}/>
+    <AppContainer>
       <Box flex={1} display={"flex"} flexDirection={"row"}>
         <Box sx={{flex:1, display:"flex", flexDirection:"column", alignItems:"start"}}>
           <Box display={"flex"} width={"100%"} justifyContent={"center"}>
@@ -413,7 +413,7 @@ export default function Sheet() {
             </DialogActions>
         </Dialog>
 
-    </>
+    </AppContainer>
   
   )
 }
