@@ -13,7 +13,8 @@ interface usePlaylistI{
     reload: () => void,
     search: (searchString: string) => void,
     count: number,
-    guid: string
+    guid: string,
+    rename: (title: string) => void
 }
 
 export default function usePlaylist(guid:string | undefined) : usePlaylistI{
@@ -21,7 +22,8 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
         addVariantToPlaylist, 
         removeVariantFromPlaylist, 
         getPlaylistByGuid,
-        searchInPlaylistByGuid
+        searchInPlaylistByGuid,
+        renamePlaylist : renamePlaylistByGuid
     } = usePlaylists();
 
     const [playlist, setPlaylist] = useState<Playlist>();
@@ -59,9 +61,17 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
 
     const addVariant = (variant: string) => addVariantToPlaylist(variant, guid);
     const removeVariant = (variant: string) => removeVariantFromPlaylist(variant, guid);
+    const rename = (title: string) => {
+        renamePlaylistByGuid(guid||"", title).then((r)=>{
+            if(isRequestSuccess(r)){
+                reload();
+            }
+        });
+    }
     return {
         addVariant,
         removeVariant,
+        rename,
         playlist, 
         variants,
         reload,
