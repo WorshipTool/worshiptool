@@ -53,10 +53,15 @@ export default function SelectionList() {
       <OnScrollComponent component={(top)=>{
         return (
           <Box display={"flex"} flexDirection={"column"} alignItems={"center"} sx={{
-            transition:"all 0.3s ease",
+            transition:"all 0.2s ease",
+            position: "absolute",
+            right:0,
+            left: 56,
             ...(top?{
-              paddingTop: 8,
+              top: 310,
+
             }:{
+              top: 56
             }),
             minHeight: "calc(100vh - 56px + 15px)",
             paddingX: 5
@@ -89,7 +94,7 @@ export default function SelectionList() {
                 flexDirection:"row",
                 justifyContent:"end",
                 position: "relative",
-                transition:"all 0.3s ease",
+                transition:"all 0.2s ease",
                 ...(top?{
                 }:{
                   opacity: 0,
