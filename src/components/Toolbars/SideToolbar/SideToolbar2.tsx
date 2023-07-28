@@ -48,7 +48,7 @@ export default function SideToolbar2({component, children}: SideToolbarProps) {
 
     const navigate = useNavigate();
 
-    const {isOn, url, turnOff} = useGroup();
+    const {isOn, url, turnOff, name} = useGroup();
 
     const goHomeClick = () => {
         if(isOn) navigate(url);
@@ -64,38 +64,26 @@ export default function SideToolbar2({component, children}: SideToolbarProps) {
         if (window.location.pathname.startsWith("/group/")) navigate("/");
     }
 
-    // return <>
-    //         <Box sx={{
-    //             display:"flex",
-    //             flexDirection: "row",
-
-    //             boxShadow: "4px 0px 8px #00000044",
-    //             bgcolor:"blue"
-    //         }} displayPrint={"none"}>
-    //             <Box flex={1} bgcolor={"red"}>
-    //                 {children}
-    //             </Box>
-    //             {/* {children} */}
-    //         </Box>
-    // </>;
     return (
         <>
             <Box sx={{
                 display:"flex",
-                flexDirection: "row"
+                flexDirection: "row",
             }}>
-                <Container>
-                    <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"}>
-                        {component}
-                        <Tooltip title={"Ukončit mód"} placement="right">
-                            <IconButton color='secondary' onClick={leave}>
-                                <ExitToApp/>
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                
-                </Container>
-                <Box width={56} displayPrint={"none"}/>
+                <Box displayPrint={'none'}>
+                    <Container>
+                        <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"}>
+                            {component}
+                            <Tooltip title={"Opustit mód " + name} placement="right">
+                                <IconButton color='secondary' onClick={leave}>
+                                    <ExitToApp/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    
+                    </Container>
+                    <Box width={56} displayPrint={"none"}/>
+                </Box>
                 <Box flex={1} minHeight={"calc(100vh - 56px)"}>
                     {children}
                 </Box>

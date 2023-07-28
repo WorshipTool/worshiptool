@@ -40,15 +40,21 @@ export default function SearchBar({value, onChange, sx}: SearchBarProps) {
         setEarlyFocused(false);
     }
 
+    const onChangeCallback = () => {
+        setEarlyFocused(false)
+    }
+
     const [earlyFocused, setEarlyFocused] = useState(false);
 
     useEffect(()=>{
         const onSearchBarFocus = () => {
-            // @ts-ignore
-            inputRef.current?.focus();
+            // wait for animation to finish
             setEarlyFocused(true);
+            setTimeout(()=>{
+                // @ts-ignore
+                inputRef.current?.focus();
+            }, 200)
 
-            console.log("jes");
         }
         window.addEventListener("searchBarFocus", onSearchBarFocus)
         return ()=>{
@@ -63,7 +69,7 @@ export default function SearchBar({value, onChange, sx}: SearchBarProps) {
         }:{}),
         ...sx
     }}>         
-        <OnChangeDelayer value={earlyFocused} onChange={()=>setEarlyFocused(false)} delay={1500}/>           
+        <OnChangeDelayer value={earlyFocused} onChange={onChangeCallback} delay={1500}/>           
         <SearchIcon />
         <SearchInput placeholder='Vyhledej píseň...'  autoFocus 
                 value={value} onChange={onChangeHandler} inputRef={inputRef} 

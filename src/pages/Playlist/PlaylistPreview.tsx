@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Toolbar from '../../components/Toolbars/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
 import useSong from '../../hooks/song/useSong';
@@ -23,6 +23,7 @@ import RightPanel from './components/RightPanel/RightPanel';
 import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 import useInnerPlaylist, { InnerPlaylistProvider } from './hooks/useInnerPlaylist';
 import AppContainer from '../../components/AppContainer/AppContainer';
+import useAuth from '../../hooks/auth/useAuth';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
@@ -82,7 +83,14 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
 export default function PlaylistPreview() {
 
     const {playlist, variants, reload, guid} = useInnerPlaylist();
+    const {isLoggedIn, user} = useAuth()
 
+    const isOwner = useMemo(()=>{
+        if(!playlist||!user)return false;
+        if(!isLoggedIn())return false;
+        return true;
+        // return playlist.ownerGuid === user.guid;
+    },[playlist, user])
 
 
     const navigate = useNavigate();
@@ -124,10 +132,10 @@ export default function PlaylistPreview() {
                     
                 </Container>}
                 
-                <Box displayPrint={"none"}>
+                {isOwner&&<Box displayPrint={"none"}>
 
                     <RightPanel playlist={playlist} />
-                </Box>
+                </Box>}
                 
     
             </Box>

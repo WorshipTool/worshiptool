@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import usePlaylist from './usePlaylist';
+import useAuth from "../auth/useAuth";
 
 
 export const playlistContext = createContext<useProvidePlaylistI>({} as useProvidePlaylistI);
@@ -23,6 +24,12 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist>{
 export const useProvidePlaylist = () : useProvidePlaylistI => {
     const [guid, setGuid] = useState<string>();
     const playlist = usePlaylist(guid);
+
+    const {isLoggedIn} = useAuth();
+
+    useEffect(()=>{
+        if(!isLoggedIn()) turnOff();
+    },[isLoggedIn])
 
     
     const key = "currenPlaylist";

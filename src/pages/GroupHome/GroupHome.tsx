@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Select, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Toolbar from '../../components/Toolbars/Toolbar'
 import useGroup from '../../hooks/group/useGroup';
 import SelectionList from './components/SelectionList';
@@ -14,14 +14,16 @@ import AppContainer from '../../components/AppContainer/AppContainer';
 export default function GroupHome() {
     const group = useGroup();
     // const [expand, setExpand] = React.useState<boolean>(false);
+    useEffect(()=>{
+      window.scroll({
+        top:0,
+        behavior:"auto"
+      })
+    },[])
   return (
     <AppContainer expandable>
       <SelectionList/>
-      {/* <Box padding={5} paddingTop={0} display={"flex"} flexDirection={"column"} sx={{
-        transition:"all 0.2s ease-in-out"
-      }}>
-          <SelectionList/>
-      </Box> */}
+   
     </AppContainer>
   )
 }

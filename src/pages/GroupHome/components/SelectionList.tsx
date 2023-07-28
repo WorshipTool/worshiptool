@@ -1,4 +1,4 @@
-import { Box, Fade, Grid, Grow, Typography } from '@mui/material'
+import { Box, Button, Fade, Grid, Grow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
@@ -10,6 +10,8 @@ import useGroupSelection from '../../../hooks/group/useGroupSelection';
 import SongListCards from '../../../components/songLists/SongListCards/SongListCards';
 import ContainerGrid from '../../../components/ContainerGrid';
 import OnScrollComponent from '../../../components/OnScrollComponent/OnScrollComponent';
+import { Search } from '@mui/icons-material';
+import { on } from 'events';
 
 export default function SelectionList() {
     const {variants, search, reload} = useGroupSelection();
@@ -40,6 +42,10 @@ export default function SelectionList() {
         }
 
     },[])
+
+    const onSearchClick = () => {
+      window.dispatchEvent(new Event("searchBarFocus"));
+    }
     
     return (
       <OnScrollComponent component={(top)=>{
@@ -74,7 +80,22 @@ export default function SelectionList() {
                   </Box>
                 </Box>
               </Grow>
-              <Gap value={4}/>
+              <Gap value={0.5}/>
+              <Box sx={{
+                width: "100%",
+                display:"flex",
+                flexDirection:"row",
+                justifyContent:"end",
+                position: "relative",
+                transition:"all 0.3s ease",
+                ...(top?{
+                }:{
+                  opacity: 0,
+                }),
+              }}>
+                  <Button color="inherit" onClick={onSearchClick} startIcon={<Search/>}>Hledat</Button>
+              </Box>
+              <Gap value={0.5}/>
               <SongListCards variants={variants} onClick={onCardClick}/>
               {variants.length==0&&<Typography>Nebyli nalezeny žádné písně s výrazem "{stillString}"</Typography>}
           </Box>

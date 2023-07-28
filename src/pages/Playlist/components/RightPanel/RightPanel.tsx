@@ -56,7 +56,8 @@ export default function RightPanel({playlist}: RightPanelProps) {
         <Container>
             <Box padding={1} paddingTop={0}>
                 <Box position={"sticky"} top={0} paddingTop={1} sx={{
-                    // backdropFilter: "blur(20px)"
+                    // backdropFilter: "blur(20px)",
+                    zIndex: 1,
                 }}>
                     <SearchBar onChange={(v)=>setSearchString(v)}/>
                 </Box>
