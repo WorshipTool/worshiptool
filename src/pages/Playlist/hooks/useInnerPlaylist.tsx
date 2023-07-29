@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import usePlaylist from "../../../hooks/playlist/usePlaylist";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
 
@@ -22,16 +22,16 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist>{
 export const useProvideInnerPlaylist = (guid:string) : useProvidePlaylistI => {
     const playlist = usePlaylist(guid);
 
-    const {playlist: currentPlaylist, reload} = useCurrentPlaylist();
+    const currentPlaylist = useCurrentPlaylist();
 
-    useEffect(()=>{
-        if(guid!==undefined&&currentPlaylist?.guid===guid){
-            reload();
-        }
-    },[guid, currentPlaylist, playlist])
+    const same = useMemo(()=>{
+        return guid!==undefined&&currentPlaylist?.guid===guid
+    },[playlist, currentPlaylist])
+
+   
 
     return {
         isOn: guid!==undefined,
-        ...playlist
+        ...(same)?currentPlaylist:playlist
     }
 }
