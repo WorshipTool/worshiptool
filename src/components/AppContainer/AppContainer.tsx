@@ -7,19 +7,20 @@ import { Box } from '@mui/material';
 
 interface AppContainerProps {
     children?: React.ReactNode,
-    expandable?: boolean
+    expandable?: boolean,
+    header?: React.ReactNode
 }
 
-export default function AppContainer({children, expandable}: AppContainerProps) {
+export default function AppContainer({children, expandable, header}: AppContainerProps) {
     const {isOn} = useGroup();
   return (
     <Box >
         {!isOn ? <>
-            <Toolbar/>
+            <Toolbar header={header}/>
             {children}
 
         </>:<>
-            <GroupContainer expandable={expandable}>
+            <GroupContainer expandable={expandable} header={header}>
                 {children}
             </GroupContainer>
         </>}

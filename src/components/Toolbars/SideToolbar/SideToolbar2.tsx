@@ -3,7 +3,7 @@ import React, { ReactElement, ReactNode } from 'react'
 import { ReactComponent as SvgIcon } from '../../../assets/icon.svg'
 import { useNavigate } from 'react-router-dom'
 import useGroup from '../../../hooks/group/useGroup'
-import { ExitToApp, ExitToAppOutlined, ExitToAppRounded, ExtensionOff, Logout } from '@mui/icons-material'
+import { ExitToApp, ExitToAppOutlined, ExitToAppRounded, ExtensionOff, Home, Logout } from '@mui/icons-material'
 
 const Container = styled(Box)(({theme})=>({
     width: 56,
@@ -61,7 +61,8 @@ export default function SideToolbar2({component, children}: SideToolbarProps) {
 
     const leave = () => {
         turnOff();
-        if (window.location.pathname.startsWith("/group/")) navigate("/");
+        // if (window.location.pathname.startsWith("/group/")) 
+        navigate("/");
     }
 
     return (
@@ -72,11 +73,11 @@ export default function SideToolbar2({component, children}: SideToolbarProps) {
             }}>
                 <Box displayPrint={'none'}>
                     <Container>
-                        <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"}>
+                        <Box flex={1} display={'flex'} flexDirection={"column"} justifyContent={"end"} marginBottom={2} displayPrint={"none"} color={"white"}>
                             {component}
                             <Tooltip title={"Opustit mód " + name} placement="right">
-                                <IconButton color='secondary' onClick={leave}>
-                                    <ExitToApp/>
+                                <IconButton color={"inherit"} onClick={leave}>
+                                    <Home/>
                                 </IconButton>
                             </Tooltip>
                         </Box>

@@ -1,4 +1,4 @@
-import { AddBox, Apps, HelpOutline, Login } from '@mui/icons-material'
+import { AddBox, Apps, HelpOutline, Login, Search } from '@mui/icons-material'
 import { Avatar, Box, Button, Chip, IconButton, SxProps, Theme, Tooltip, styled } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +10,7 @@ import GroupChip from './GroupChip'
 import Gap from '../../Gap'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
+import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -91,10 +92,13 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
         setAccountMenuOpen(true);
     }
 
+    const {turnOn} = useCurrentPlaylist();
+
     const onCreatePlaylistClick = async () => {
         const result= await createPlaylist()
         if(isRequestSuccess(result)){
             navigate("/playlist/"+result.data.guid)
+            turnOn(result.data.guid)
         }
     }
 
@@ -102,24 +106,50 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
         navigate("/login");
     }
 
+    const {isOn, url} = useGroup();
+    const goHomeClick = () => {
+        if(isOn) navigate(url);
+        else navigate("/");
+
+        setTimeout(()=>{
+            window.scroll({
+                top: 100,
+                behavior: "auto",
+              });
+            window.dispatchEvent(new Event('searchBarFocus'));
+        }, 10);
+    }
+
     const [toolsOpen, setToolsOpen] = useState(false);
 
     const [accountMenuAnchor, setAccountMenuAnchor] = useState<null | HTMLElement>(null);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
-    const {isOn} = useGroup();
-
+    const isHome = window.location.pathname === "/";
 
     return (
         <>
             <Container color={color}  >
 
+                {isHome? <>
+                    <Tooltip title={"Dokumentace"}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={openDocumentation}>
+                            <HelpOutline sx={iconStyle} fontSize={fontSize}/>
+                        </IconButton>
+                    </Tooltip>
 
-                <Tooltip title={"Dokumentace"}>
-                    <IconButton color='inherit' sx={iconButtonStyle} onClick={openDocumentation}>
-                        <HelpOutline sx={iconStyle} fontSize={fontSize}/>
-                    </IconButton>
-                </Tooltip>
+                </>:
+                <>
+                    <Tooltip title={"Hledat"}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={goHomeClick}>
+                            <Search sx={iconStyle} fontSize={fontSize}/>
+                        </IconButton>
+                    </Tooltip>
+
+                </>}
+
+                
+
 
                 {isLoggedIn()?<>
                     <Tooltip title={"Vytvořit playlist"}>

@@ -59,8 +59,22 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
         }
     }
 
-    const addVariant = (variant: string) => addVariantToPlaylist(variant, guid);
-    const removeVariant = (variant: string) => removeVariantFromPlaylist(variant, guid);
+    const addVariant = (variant: string) => {
+       return addVariantToPlaylist(variant, guid).then((r)=>{
+            if(isRequestSuccess(r)){
+                reload();
+            }
+            return r;
+        });
+    };
+    const removeVariant = (variant: string) => {
+        return removeVariantFromPlaylist(variant, guid).then((r)=>{
+            if(isRequestSuccess(r)){
+                reload();
+            }
+            return r;
+        });
+    }
     const rename = (title: string) => {
         renamePlaylistByGuid(guid||"", title).then((r)=>{
             if(isRequestSuccess(r)){

@@ -1,4 +1,4 @@
-import { Box, Grid, InputBase, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Grid, InputBase, Typography, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,6 +8,7 @@ import RecommendedSongsList from './components/RecommendedSongsList/RecommendedS
 import Toolbar from '../../components/Toolbars/Toolbar';
 import FloatingAddButton from './components/FloatingAddButton';
 import ContainerGrid from '../../components/ContainerGrid';
+import { useNavigate } from 'react-router-dom';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -97,6 +98,12 @@ export default function HomeDesktop() {
         };
     }, []);
     
+    const navigate = useNavigate();
+    const openList = () => {
+        navigate("/list");
+    }
+
+    
   return (<>
     <Toolbar transparent={isTop}/>
 
@@ -149,7 +156,7 @@ export default function HomeDesktop() {
                                         <SearchContainer>                    
                                             <SearchIcon />
                                             <SearchInput placeholder='Hledej...' onChange={onSearchValueChange} autoFocus value={searchValue}></SearchInput>
-                                            <MenuIcon/>
+                                            
                                         </SearchContainer>
                                     </motion.div>
                                 </Grid>

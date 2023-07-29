@@ -51,6 +51,12 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
         
         reload();
     }
+
+    const navigate = useNavigate();
+
+    const open = () => {
+        navigate(`/song/${variant.songGuid}`)
+    }
     const {user} = useAuth();
     const theme = useTheme();
 
@@ -97,7 +103,8 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
             {bottomPanelOpen && 
                 <Box display={"flex"} flexDirection={"column"} >
                     <Divider/>
-                    <Button variant='text' onClick={addToPlaylist}>Přidat do playlistu</Button>
+                    <Button variant='text' onClick={open}>Otevřít</Button>
+                    <Button variant='contained' onClick={addToPlaylist}>Přidat do playlistu</Button>
                 </Box>}
             
         </StyledContainer>
