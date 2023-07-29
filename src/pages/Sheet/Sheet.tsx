@@ -28,6 +28,9 @@ import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
 import AppContainer from '../../components/AppContainer/AppContainer';
+import useGroup from '../../hooks/group/useGroup';
+import useGroupSelection from '../../hooks/group/useGroupSelection';
+import { ApiGroupDto } from '../../apis/dtos/group/ApiGroupDto';
 
 
 export default function Sheet() {
@@ -152,6 +155,27 @@ export default function Sheet() {
 
   }
 
+  const {fetch, post: postData} = useFetch();
+  const addTo13ka = async () => {
+    const result = await fetch<ApiGroupDto>({url: "/group", params:{name:"13ka"}})
+    if(isRequestSuccess(result)){
+      const res2 = await postData({url: "/songs/playlist/add", body: {
+        playlist: result.data.selection,
+        variant: song?.variants[variantID].guid || ""
+      }})
+
+      if(isRequestSuccess(res2)){
+        enqueueSnackbar("Píseň byla přidána do 13ky");
+        return;
+      }else{
+        enqueueSnackbar("\""+res2.message+"\"");
+        return;
+      }
+    }
+    enqueueSnackbar("\""+result.message+"\"");
+
+  }
+
   const removeVariantFromPlaylist = (guid:string) => {
     const body : PostAddVariantToPlaylistBodyDTO = {
       playlist: guid,
@@ -183,6 +207,9 @@ export default function Sheet() {
   const onVariantSelectChange = (event: SelectChangeEvent) => {
     setVariantID(+event.target.value)
   }
+
+  const group = useGroup();
+  const selection = useGroupSelection();
 
   return (
     <AppContainer>
@@ -222,6 +249,12 @@ export default function Sheet() {
                       )}
 
                       <Box display={"flex"} flex={1} flexDirection={"row"} justifyContent={"end"}>
+
+                          {isAdmin()&& 
+                            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                              <Button variant="contained" size='small' color='secondary' onClick={addTo13ka}>Do 13ky</Button>
+                            </Box>}
+
                         {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}  sx={{
                           [theme.breakpoints.down("lg")]: {
                             display: "none"
