@@ -49,7 +49,6 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
         turnOn(playlist.guid);
         const c = await addVariant(variant.guid)
         
-        reload();
     }
 
     const navigate = useNavigate();
