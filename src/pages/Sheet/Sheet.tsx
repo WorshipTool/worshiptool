@@ -1,6 +1,6 @@
 
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, SelectChangeEvent, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, useTheme } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import { Box, Button, ButtonGroup, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Grow, IconButton, MenuItem, Paper, Select, SelectChangeEvent, Skeleton, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography, useTheme } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
 import DefaultStyle from './styles/DefaultStyle';
@@ -23,7 +23,7 @@ import { SourceTypes } from '../../interfaces/song/source';
 import AddTag from '../../components/AddTag';
 import AddCreator from '../../components/AddCreator';
 import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../apis/dtos/playlist/dtosPlaylist';
-import { isRequestSuccess } from '../../apis/dtos/RequestResult';
+import { isRequestError, isRequestSuccess } from '../../apis/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/playlist';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
@@ -31,6 +31,7 @@ import AppContainer from '../../components/AppContainer/AppContainer';
 import useGroup from '../../hooks/group/useGroup';
 import useGroupSelection from '../../hooks/group/useGroupSelection';
 import { ApiGroupDto } from '../../apis/dtos/group/ApiGroupDto';
+import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 
 
 export default function Sheet() {
@@ -138,7 +139,7 @@ export default function Sheet() {
     }
   }
 
-  const addVariantToPlaylist = (guid:string, index: number) => {
+  const addVariantToPlaylist = (guid:string) => {
     const body : PostAddVariantToPlaylistBodyDTO = {
       playlist: guid,
       variant: song?.variants[variantID].guid || ""
@@ -227,11 +228,53 @@ export default function Sheet() {
     setVariantID(+event.target.value)
   }
 
-  const group = useGroup();
-  const selection = useGroupSelection();
+  
+  const currentPlaylist = useCurrentPlaylist();
+  const isInCurrentPlaylist = useMemo(()=>{
+    return currentPlaylist?.variants.some((v)=>v.guid===song?.variants[variantID].guid);
+  },[currentPlaylist]);
+  
+  const addToCurrentPlaylist = () => {
+    if(song){
+      currentPlaylist.addVariant(song.variants[variantID].guid).then((d)=>{
+        if(isRequestError(d)){
+          currentPlaylist.reload();
+        }
+      });
+    }
+  }
+  const removeFromCurrentPlaylist = () => {
+    if(song){
+      currentPlaylist.removeVariant(song.variants[variantID].guid).then((d)=>{
+        if(isRequestError(d)){
+          currentPlaylist.reload();
+        }
+      });
+    }
+  }
+  const openPlaylist = () => {
+    if(song){
+      navigate("/playlist/"+currentPlaylist.guid);
+    }
+  }
 
+  const {isOn} = useGroup();
   return (
-    <AppContainer>
+    <AppContainer header={
+      <Box display={"flex"} flexDirection={"row"}>
+        {currentPlaylist.isOn&&isOn&&<>
+            <ButtonGroup >
+              <Button  color='secondary' size='small' variant='contained' onClick={openPlaylist}>Otevřít playlist</Button>
+              {isInCurrentPlaylist?<>
+                <Button color='error' variant='contained' size='small' onClick={removeFromCurrentPlaylist}>Odebrat z playlistu</Button>
+              </>:<>
+                <Button color='secondary' size='small' onClick={addToCurrentPlaylist}>Přidat do playlistu</Button>
+              </>}
+            </ButtonGroup>
+        
+        </>}
+      </Box>
+    }>
       <Box flex={1} display={"flex"} flexDirection={"row"}>
         <Box sx={{flex:1, display:"flex", flexDirection:"column", alignItems:"start"}}>
           <Box display={"flex"} width={"100%"} justifyContent={"center"}>
@@ -408,7 +451,7 @@ export default function Sheet() {
                           tooltipOpen
                           onClick={()=>{
                             if(add) 
-                              addVariantToPlaylist(p.guid, i)
+                              addVariantToPlaylist(p.guid)
                             else 
                               removeVariantFromPlaylist(p.guid)
                           }}
@@ -459,7 +502,7 @@ export default function Sheet() {
                        sx={{justifyContent: "start"}}
                        onClick={()=>{
                             if(add) 
-                              addVariantToPlaylist(p.guid, i)
+                              addVariantToPlaylist(p.guid)
                             else 
                               removeVariantFromPlaylist(p.guid)
                           }}>{p.title}</Button>

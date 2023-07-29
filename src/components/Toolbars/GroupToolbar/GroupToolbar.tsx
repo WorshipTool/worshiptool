@@ -18,10 +18,11 @@ const StyledContainer = styled(Box)(({theme})=>({
 }));
 
 interface GroupToolbarProps {
-    expanded?: boolean
+    expanded?: boolean,
+    header?: React.ReactNode
 }
 
-export default function GroupToolbar({expanded}: GroupToolbarProps) {
+export default function GroupToolbar({expanded, header}: GroupToolbarProps) {
     const theme = useTheme();
     const {name} = useGroup();
 
@@ -92,7 +93,7 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
                             }),
                             transition: "all 0.2s ease",
                         }}>
-                            <Box flex={1} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                            <Box flex={1} display={"flex"} flexDirection={"row"} alignItems={"center"}>
                                 <ButtonComponent onClick={goHome}>
                                     <Box display={"flex"} flexDirection={"row"}  alignItems={"center"} gap={1} displayPrint={"none"}>
                                         <Zoom in={!expanded} timeout={200} >
@@ -109,6 +110,10 @@ export default function GroupToolbar({expanded}: GroupToolbarProps) {
                                         }}>CB Třináctka</Typography>
                                     </Box>
                                 </ButtonComponent>
+                                <Gap horizontal value={3}/>
+                                <Box>
+                                    {header}
+                                </Box>
                             </Box>
                             <Box sx={{
                                 transition: "all 0.2s ease",

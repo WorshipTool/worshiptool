@@ -1,10 +1,11 @@
-import { Box, InputBase, styled, useTheme } from '@mui/material'
+import { Box, Button, InputBase, styled, useTheme } from '@mui/material'
 import React, { useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchedSongsList from './components/SearchedSongsList';
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList';
 import Toolbar from '../../components/Toolbars/Toolbar';
+import { useNavigate } from 'react-router-dom';
 
 const SearchContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -36,6 +37,7 @@ export default function HomeMobile() {
         setSearchValue(event.target.value);
     }   
 
+
     
   return (
     <Box sx={{display:"none", flex:1, justifyContent:"center", alignItems:"start", flexDirection:"column",
@@ -48,7 +50,7 @@ export default function HomeMobile() {
             <SearchContainer sx={{boxShadow: "0px 4px 5px" + theme.palette.grey[400]}}>                    
                <SearchIcon />
                <SearchInput placeholder='Hledej...' onChange={onSearchValueChange} autoFocus value={searchValue}></SearchInput>
-               <MenuIcon/>
+               
             </SearchContainer>
         </Box>
      </Box>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import RightAccountPanel from './components/RightAccountPanel';
 import LeftWebTitle from './components/LeftWebTItle';
+import Gap from '../Gap';
 
 
 const TopBar = styled(Box)(()=>({
@@ -20,9 +21,10 @@ const TopBar = styled(Box)(()=>({
 
 interface ToolbarProps{
     transparent?: boolean,
-    white?: boolean
+    white?: boolean,
+    header?: React.ReactNode
 }
-export default function Toolbar({transparent, white}:ToolbarProps) {
+export default function Toolbar({transparent, white, header}:ToolbarProps) {
     const theme = useTheme();
 
     return (
@@ -41,6 +43,15 @@ export default function Toolbar({transparent, white}:ToolbarProps) {
     
                 <Box zIndex={0} flexDirection={"row"} display={"flex"} flex={1} height={"100%"}>
                     <LeftWebTitle transparent={transparent}/>
+                    <Gap horizontal value={3}/>
+                    <Box sx={{
+                        pointerEvents: "auto",
+                        display:"flex",
+                        flexDirection:"row",
+                        alignItems:"center",
+                    }}>
+                        {header}
+                    </Box>
                     <RightAccountPanel transparent={transparent&&!white}/>
                    
                 </Box>

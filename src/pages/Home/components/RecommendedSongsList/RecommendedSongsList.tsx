@@ -1,4 +1,4 @@
-import {Grid, Typography, styled } from '@mui/material'
+import {Box, Button, Grid, Typography, styled } from '@mui/material'
 import useRecommendedSongs from './hooks/useRecommendedSongs';
 import ContainerGrid from '../../../../components/ContainerGrid';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,10 @@ export default function RecommendedSongsList() {
         navigate("/song/"+variant.songGuid)
     }
 
+    const openList = () => {
+        navigate("/list")
+    }
+
     return (
         <ContainerGrid>
 
@@ -39,6 +43,12 @@ export default function RecommendedSongsList() {
                 <SongListCards variants={data.slice(0,4)} onClick={onCardClick}/>
 
             </GridContainer>
+
+            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                <Typography variant='subtitle2'>Nebo si vyberte ze </Typography>
+                <Button size='small' variant='text' onClick={openList}>Seznamu</Button>
+                <Typography variant='subtitle2'>všech písní ve zpěvníku</Typography>
+            </Box>
 
         </ContainerGrid>
     )

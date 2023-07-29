@@ -49,6 +49,7 @@ export default function LeftWebTitle({transparent}: LeftWebTitleProps) {
     <Container color={color} onClick={goHomeClick} display={transparent? "none" : "flex"}>
         <SvgIcon fill='white' height={size}/>
         <Typography fontWeight={900} fontSize={18} marginLeft={0}>Chvalotce</Typography>
+        
     </Container>
   )
 }

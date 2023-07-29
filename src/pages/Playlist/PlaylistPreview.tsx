@@ -50,6 +50,12 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
         turnOn(playlist)
     }
 
+    const navigate = useNavigate();
+
+    const open = () => {
+        navigate(`/song/${guid}`)
+    }
+
     if(song===undefined||loading)return <>
         <Skeleton variant='text' width={"50%"}></Skeleton>
         {Array(10).fill(0).map(()=><Skeleton variant='text' width={Math.round(Math.random()*40)+"%"}></Skeleton>)}
@@ -67,7 +73,10 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
                                 <Remove/>
                             </IconButton>
                         </Box>
-                        <Button variant='text' color='error' onClick={onRemove}>Odebrat z playlistu</Button>
+                        <Box display={"flex"} flexDirection={"row"}>
+                            <Button variant='text' color='error' onClick={onRemove}>Odebrat z playlistu</Button>
+                            <Button variant='text' onClick={open}>Otevřít</Button>
+                        </Box>
                     </Box>
                     
                     <DefaultStyle song={song} variant={getTransposedVariant(0)}/>
