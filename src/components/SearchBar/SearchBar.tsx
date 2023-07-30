@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import { on } from 'events';
 import OnChangeDelayer from '../ChangeDelayer';
+import { isMobile } from 'react-device-detect';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -33,7 +34,6 @@ interface SearchBarProps{
 
 export default function SearchBar({value, onChange, sx}: SearchBarProps) {
     const inputRef = useRef();
-
 
     const onChangeHandler = (e: any) => {
         onChange?.(e.target.value);
@@ -71,7 +71,7 @@ export default function SearchBar({value, onChange, sx}: SearchBarProps) {
     }}>         
         <OnChangeDelayer value={earlyFocused} onChange={onChangeCallback} delay={1500}/>           
         <SearchIcon />
-        <SearchInput placeholder='Vyhledej píseň...'  autoFocus 
+        <SearchInput placeholder='Vyhledej píseň...'  autoFocus={!isMobile}
                 value={value} onChange={onChangeHandler} inputRef={inputRef} 
                 sx={{}}></SearchInput>
     </SearchContainer>

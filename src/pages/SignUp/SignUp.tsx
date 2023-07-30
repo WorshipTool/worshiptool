@@ -133,7 +133,7 @@ export default function SignUp() {
                     <Gap/>
                     <Typography variant='subtitle2'>Email</Typography>
                     <TextField size="small" fullWidth value={email} onChange={onEmailChange}
-                        error={!isEmailOk} helperText={emailMessage}/>
+                        error={!isEmailOk} helperText={emailMessage} type='email'/>
                     <Gap/>
                     <Typography variant='subtitle2'>Heslo</Typography>
                     <TextField size="small" fullWidth value={password} onChange={onPasswordChange}
