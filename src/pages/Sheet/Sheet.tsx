@@ -358,7 +358,7 @@ export default function Sheet() {
                 </>}
 
                 {song&&<>                
-                  {song.media.map((m)=>{
+                  {isLoggedIn()&&song.media.map((m)=>{
                     if(m.type===MediaTypes.Youtube){
                       return <YoutubeVideo src={m.url}></YoutubeVideo>
                     }else{
