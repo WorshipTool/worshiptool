@@ -24,7 +24,7 @@ export default function RemoveFromSelection({onChange:onChangeCallback}: RemoveF
         // window.location.reload();
     }
     const filter = (v: VariantDTO) => {
-        return !!selection.variants.find((s)=>s.guid===v.guid);
+        return !!selection.items.find((s)=>s.variant.guid===v.guid);
     }
     return (
         <Box>

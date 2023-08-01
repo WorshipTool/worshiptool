@@ -3,7 +3,7 @@ import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import { Box, Button, Divider, Skeleton, Typography, styled, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../../hooks/auth/useAuth';
-import Playlist from '../../../../interfaces/playlist/playlist';
+import Playlist from '../../../../interfaces/playlist/PlaylistDTO';
 import usePlaylist from '../../../../hooks/playlist/usePlaylist';
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist';
 import { isRequestSuccess } from '../../../../apis/dtos/RequestResult';
@@ -35,9 +35,9 @@ interface SearchItemProps {
 export default function SearchItem({variant, onClick: onClickCallback, playlist}: SearchItemProps) {
     const [bottomPanelOpen, setBottomPanelOpen] = useState(false);
 
-    const {addVariant, reload, variants} = useInnerPlaylist();
+    const {addVariant, reload, items} = useInnerPlaylist();
 
-    const isInPlaylist = useMemo(()=>variants.some((v)=>v.guid==variant.guid),[variants, variant.guid]);
+    const isInPlaylist = useMemo(()=>items.some((v)=>v.variant.guid==variant.guid),[items, variant.guid]);
 
     const {turnOn} = useCurrentPlaylist();
     const onSongClick = () => {

@@ -7,8 +7,9 @@ import { ChevronLeft, ChevronRight, Fullscreen, FullscreenExit, SwipeLeft, Swipe
 
 export default function PlaylistCards() {
     const {guid} = useParams();
-
-    const {playlist, variants, reload} = usePlaylist(guid||"");
+    
+    console.log("ee", guid);
+    const {playlist, items, reload} = usePlaylist(guid||"");
 
     const [currentVariant, setCurrentVariant] = useState(0);
     
@@ -16,11 +17,12 @@ export default function PlaylistCards() {
     
     const COLOR = "white";
 
+
     const moveCurrent = (offset: number) => {
         setCurrentVariant((v)=>{
             const target = v + offset;
             if(target<0)return 0;
-            if(target>=variants.length) return variants.length-1;
+            if(target>=items.length) return items.length-1;
             return target;
         })
     }
@@ -28,13 +30,17 @@ export default function PlaylistCards() {
     const onKeyDown = (e : any) => {
         e.preventDefault();
 
-        if(e.code === "ArrowLeft"){
-            moveCurrent(-1);
-        }
-        else if (e.code === "ArrowRight"){
-            moveCurrent(1);
-        }
+        // if(e.code === "ArrowLeft"){
+        //     moveCurrent(-1);
+        // }
+        // else if (e.code === "ArrowRight"){
+        //     moveCurrent(1);
+        // }
     }
+
+    useEffect(()=>{
+        console.log("current variant", currentVariant);
+    },[currentVariant])
 
     useEffect(()=>{
 
@@ -48,14 +54,15 @@ export default function PlaylistCards() {
     useEffect(()=>{
         document.title = "Cards from playlist";
     },[])
+
   return (
     <Box>
-
+            
             <Box position={"absolute"} right={0} top={0} bgcolor={"grey"}>
                 <IconButton  color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(-1)} disabled={currentVariant==0}>
                     <ChevronLeft/>
                 </IconButton>
-                <IconButton color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(1)} disabled={currentVariant==variants.length-1}>
+                <IconButton color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(1)} disabled={currentVariant==items.length-1}>
                     <ChevronRight/>
                 </IconButton>
                 {!fullscreen?
@@ -74,7 +81,7 @@ export default function PlaylistCards() {
                     </IconButton>
                 }
             </Box>
-        <SlideCard guid={variants[currentVariant].guid} index={currentVariant}/>
+        <SlideCard guid={items[currentVariant] && items[currentVariant].variant.songGuid || ""} index={currentVariant}/>
     </Box>
   )
 }

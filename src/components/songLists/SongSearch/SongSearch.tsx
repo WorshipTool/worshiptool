@@ -19,7 +19,7 @@ interface SongSearchProps{
 export default function SongSearch({searchString, method = "group", component } : SongSearchProps) {
     const search = useSongSearch();
     const {isOn} = useGroup();
-    const {variants: groupVariants, search: searchInSelection} = useGroupSelection();
+    const {items: groupItems, search: searchInSelection} = useGroupSelection();
     const [variants, setVariants] = React.useState<VariantDTO[]>([]);
 
     const [stillString, setStillString] = useState("");
@@ -46,7 +46,7 @@ export default function SongSearch({searchString, method = "group", component } 
   return (
     <Box>
         <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={onChangeCallback}/>
-        {component(!isOn? variants : groupVariants, stillString)}
+        {component(!isOn? variants : groupItems.map(v=>v.variant), stillString)}
     </Box>
   )
 }

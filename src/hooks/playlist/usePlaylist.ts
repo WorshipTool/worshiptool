@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import usePlaylists from "./usePlaylists";
-import Playlist from "../../interfaces/playlist/playlist";
+import Playlist, { PlaylistItemDTO } from "../../interfaces/playlist/PlaylistDTO";
 import { RequestResult, isRequestSuccess } from "../../apis/dtos/RequestResult";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";
 import { mapApiToVariant } from "../../apis/dtos/variant/mapApiToVariant";
+import { mapApiToPlaylistItemDTO } from "../../apis/dtos/playlist/ApiPlaylisItemMap";
 
 interface usePlaylistI{
     addVariant: (variant: string) => Promise<RequestResult<any>>,
     removeVariant: (variant: string) => Promise<RequestResult<any>>,
     playlist: Playlist | undefined,
-    variants: VariantDTO[],
+    items: PlaylistItemDTO[],
     reload: () => void,
     search: (searchString: string) => void,
     count: number,
@@ -27,7 +28,7 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
     } = usePlaylists();
 
     const [playlist, setPlaylist] = useState<Playlist>();
-    const [variants, setVariants] = useState<VariantDTO[]>([]);
+    const [items, setItems] = useState<PlaylistItemDTO[]>([]);
 
     const [count, setCount] = useState(0);
 
@@ -42,8 +43,8 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
         .then((r)=>{
             if(isRequestSuccess(r)){
                 setPlaylist(r.data);
-                setVariants(r.data.variants);
-                setCount(r.data.variants.length)
+                setItems(r.data.items);
+                setCount(r.data.items.length)
             }
         });
     }
@@ -52,10 +53,7 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
         if(!guid)return;
         const result = await searchInPlaylistByGuid(guid, searchString);
         if(isRequestSuccess(result)){
-            setVariants(result.data.map((v)=>{
-                const m = mapApiToVariant(v.variant);
-                return m;
-            }));
+            setItems(result.data.items.map((v)=>mapApiToPlaylistItemDTO(v)));
         }
     }
 
@@ -87,7 +85,7 @@ export default function usePlaylist(guid:string | undefined) : usePlaylistI{
         removeVariant,
         rename,
         playlist, 
-        variants,
+        items,
         reload,
         search,
         count,

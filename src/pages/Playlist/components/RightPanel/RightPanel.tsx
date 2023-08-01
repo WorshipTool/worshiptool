@@ -6,7 +6,7 @@ import SongSearch from '../../../../components/songLists/SongSearch/SongSearch'
 import Gap from '../../../../components/Gap';
 import SongListCards from '../../../../components/songLists/SongListCards/SongListCards'
 import PlaylistSearchList from './PlaylistSearchList'
-import Playlist from '../../../../interfaces/playlist/playlist'
+import Playlist from '../../../../interfaces/playlist/PlaylistDTO'
 import useRecommendedSongs from '../../../Home/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import usePlaylist from '../../../../hooks/playlist/usePlaylist'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
@@ -36,13 +36,13 @@ export default function RightPanel({playlist}: RightPanelProps) {
     const [searchString, setSearchString] = useState("");
     const {data} = useRecommendedSongs();
     const {isOn} = useGroup();
-    const {variants: selection} = useGroupSelection();
-    const {variants} = useInnerPlaylist();
+    const {items: selectionItems} = useGroupSelection();
+    const {items} = useInnerPlaylist();
 
     const ideaArr = useMemo(()=>{
-        return (isOn?selection.filter((s)=>!variants.map(v=>v.guid).includes(s.guid)):data);
+        return (isOn?selectionItems.filter((s)=>!items.map(v=>v.variant.guid).includes(s.guid)).map((v)=>v.variant):data.filter((s)=>!items.map(v=>v.variant.guid).includes(s.guid)));
 
-    },[data, selection, isOn, variants])
+    },[data, selectionItems, isOn, items])
 
     const idea = useMemo(()=>{
         const arr = ideaArr;
@@ -64,7 +64,7 @@ export default function RightPanel({playlist}: RightPanelProps) {
                 <Gap/>
                 <SongSearch searchString={searchString} component={(v, searchString)=>{
                     const filtered = v.filter((v)=>{
-                        return !variants.find((s)=>s.guid==v.guid);
+                        return !items.find((s)=>s.variant.guid==v.guid);
                     })
                     if(filtered.length==0) return <>
 
@@ -85,7 +85,7 @@ export default function RightPanel({playlist}: RightPanelProps) {
                     <Typography fontWeight={500}>Nemáte nápad? </Typography>
                     <Typography>Zkuste třeba: <i>{idea}</i></Typography>
                 </>:<>
-                    <Typography>O-ou, došli nápady a písně...</Typography>
+                    <Typography>O-ou, došli nám nápady</Typography>
                 </>}
                 
             </Box>
