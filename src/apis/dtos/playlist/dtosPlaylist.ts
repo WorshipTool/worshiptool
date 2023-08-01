@@ -1,4 +1,5 @@
 import { ApiVariantDTO } from "../variant/ApiVariantDTO"
+import { ApiPlaylistItemDTO } from "./ApiPlaylistItemDTO"
 
 export interface PlaylistDataDTO{
     guid:string,
@@ -27,14 +28,19 @@ export interface GetSongsInPlaylistParamsDTO{
     guid: string
 }
 export interface GetSongsInPlaylistResultDTO{
-    variants: ApiVariantDTO[],
+    items: ApiPlaylistItemDTO[],
     title: string
 }
 export interface SearchResultDTO{
     guid: string,
     variant: ApiVariantDTO
 }
-export type GetSearchInPlaylistResultDTO = SearchResultDTO[]
+
+
+export interface GetSearchInPlaylistResultDTO{
+    guid: string,
+    items: ApiPlaylistItemDTO[]
+}
 
 export interface PostAddVariantToPlaylistBodyDTO{
     variant: string,

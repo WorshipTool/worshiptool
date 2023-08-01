@@ -16,7 +16,7 @@ import { getUrl_GETSONGSINPLAYLIST } from '../../apis/urls';
 import { GetSongsInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { isRequestSuccess } from '../../apis/dtos/RequestResult';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
-import Playlist from '../../interfaces/playlist/playlist';
+import Playlist from '../../interfaces/playlist/PlaylistDTO';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
 import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 import RightPanel from './components/RightPanel/RightPanel';
@@ -41,7 +41,7 @@ const PageBreak = () => {
 const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>void}) => {
     const {song, getTransposedVariant, transpose, loading} = useSong(guid);
 
-    const {removeVariant, variants} = useInnerPlaylist();
+    const {removeVariant, items} = useInnerPlaylist();
     const {turnOn} = useCurrentPlaylist();
 
 
@@ -84,14 +84,14 @@ const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>
                 
                 <Box display={"none"} displayPrint={"block"}>
                     <DefaultStyle song={song} variant={getTransposedVariant(0)}/>
-                    {variants.length>1&&<PageBreak/>}
+                    {items.length>1&&<PageBreak/>}
                 </Box>
             </>
 }
 
 export default function PlaylistPreview() {
 
-    const {playlist, variants, reload, guid} = useInnerPlaylist();
+    const {playlist, items, reload, guid} = useInnerPlaylist();
     const {isLoggedIn, user} = useAuth()
 
     const isOwner = useMemo(()=>{
@@ -118,12 +118,12 @@ export default function PlaylistPreview() {
         <AppContainer>
             
             <Box display={"flex"} flexDirection={"row"}>                
-                <SidePanel playlist={playlist} variants={variants.map((v)=>v.songGuid)} onCardsClick={()=>{
+                <SidePanel playlist={playlist} variants={items.map((v)=>v.variant.songGuid)} onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
                 {<Container flex={1}>
                     
-                    {variants.length==0&&<Box display={"flex"} flexDirection={"column"}>
+                    {items.length==0&&<Box display={"flex"} flexDirection={"column"}>
                         <Typography variant='subtitle1'>
                             V playlistu namáš zatím jedinou píseň. 
                         </Typography>
@@ -135,8 +135,8 @@ export default function PlaylistPreview() {
                             <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
                         </Box>
                     </Box>}
-                    {variants.map((g)=>{
-                        return <Item guid={g.songGuid} key={g.songGuid} playlist={guid||""} reload={reload}/>
+                    {items.map((g)=>{
+                        return <Item guid={g.variant.songGuid} key={g.variant.songGuid} playlist={guid||""} reload={reload}/>
                     })}
                     
                 </Container>}

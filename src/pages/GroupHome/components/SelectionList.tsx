@@ -15,7 +15,7 @@ import { on } from 'events';
 import useGroup from '../../../hooks/group/useGroup';
 
 export default function SelectionList() {
-    const {variants, search, reload} = useGroupSelection();
+    const {items, search, reload} = useGroupSelection();
     const {name} = useGroup();
     
     const navigate = useNavigate();
@@ -103,8 +103,8 @@ export default function SelectionList() {
                   <Button color="inherit" onClick={onSearchClick} startIcon={<Search/>}>Hledat</Button>
               </Box>
               <Gap value={0.5}/>
-              <SongListCards variants={variants} onClick={onCardClick}/>
-              {variants.length==0&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
+              <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick}/>
+              {items.length==0&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
           </Box>
         )
       }}/>

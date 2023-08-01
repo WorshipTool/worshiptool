@@ -74,7 +74,7 @@ export const AppRoutes = () => {
       <Route path="create" element={<Create/>}/>
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
-      <Route path="playlist/cards/:guid" element={<PlaylistCards/>}/>
+      <Route path="playlist/:guid/cards" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
       <Route path='group/:groupName' element={<GroupScreen/>}/>
       <Route path="*" element={<ErrorPage/>}/>

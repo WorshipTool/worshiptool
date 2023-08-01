@@ -24,7 +24,7 @@ import AddTag from '../../components/AddTag';
 import AddCreator from '../../components/AddCreator';
 import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { isRequestError, isRequestSuccess } from '../../apis/dtos/RequestResult';
-import Playlist from '../../interfaces/playlist/playlist';
+import Playlist from '../../interfaces/playlist/PlaylistDTO';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
 import AppContainer from '../../components/AppContainer/AppContainer';
@@ -231,7 +231,7 @@ export default function Sheet() {
   
   const currentPlaylist = useCurrentPlaylist();
   const isInCurrentPlaylist = useMemo(()=>{
-    return currentPlaylist?.variants.some((v)=>v.guid===song?.variants[variantID].guid);
+    return currentPlaylist?.items.some((v)=>v.variant.guid===song?.variants[variantID].guid);
   },[currentPlaylist]);
   
   const addToCurrentPlaylist = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import useSong from '../../../hooks/song/useSong';
 import { Backdrop, Box, Button, Chip, CircularProgress, IconButton, Typography } from '@mui/material';
 import { Section, chordDataToText } from '@pepavlin/sheet-api';
@@ -59,6 +59,8 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
     useEffect(()=>{
         setSize((s)=>s-1);
         if(!song) return;
+
+        console.log("Song changed", song);
         
         setSections(song.variants[0].sections);
         setSizeSet(false);
@@ -136,6 +138,10 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
         setGUID(guid);
     },[guid])
 
+    const loading = useMemo(()=>{
+        return sizeChanging || !sizeSet;
+    },[sizeChanging, sizeSet]);
+
     const COLOR = "white";
     
     return (
@@ -170,7 +176,7 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
             </Box>
             <Box bgcolor={"black"} position={"absolute"} left={0} top={0} right={0} bottom={0}
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                display={sizeChanging || !sizeSet? "flex" : "none"} justifyContent={"center"} alignItems={"center"}
+                display={loading? "flex" : "none"} justifyContent={"center"} alignItems={"center"}
                 >
                 <CircularProgress color="inherit" />
             </Box>

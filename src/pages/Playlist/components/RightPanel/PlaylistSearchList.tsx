@@ -3,7 +3,7 @@ import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import { Masonry } from '@mui/lab';
 import { useTheme } from '@mui/material';
 import SearchItem from './SearchItem';
-import Playlist from '../../../../interfaces/playlist/playlist';
+import Playlist from '../../../../interfaces/playlist/PlaylistDTO';
 import useRecommendedSongs from '../../../Home/components/RecommendedSongsList/hooks/useRecommendedSongs';
 
 interface PlaylistSearchListProps {

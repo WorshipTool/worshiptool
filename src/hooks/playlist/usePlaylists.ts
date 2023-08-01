@@ -3,8 +3,9 @@ import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIS
 import useAuth from '../auth/useAuth';
 import useFetch from '../useFetch';
 import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../apis/dtos/RequestResult';
-import Playlist from '../../interfaces/playlist/playlist';
+import Playlist from '../../interfaces/playlist/PlaylistDTO';
 import { mapApiToVariant } from '../../apis/dtos/variant/mapApiToVariant';
+import { mapApiToPlaylistItemDTO } from '../../apis/dtos/playlist/ApiPlaylisItemMap';
 
 
 export default function usePlaylists(){
@@ -15,6 +16,7 @@ export default function usePlaylists(){
 
         const body : PostAddVariantToPlaylistBodyDTO = {playlist, variant};
         const result = await post({url: getUrl_POSTADDTOPLAYLIST(), body});
+        console.log(result);
         return result;
     }
 
@@ -58,6 +60,7 @@ export default function usePlaylists(){
 
     const getPlaylistByGuid = async (guid: string) : Promise<RequestResult<Playlist>> => {
         const result = await getSongsInPlaylist(guid);
+
         if(isRequestError(result)){
             return formatted(null, result.statusCode, result.message);
         }
@@ -65,13 +68,14 @@ export default function usePlaylists(){
         return formatted({
             guid:guid,
             title:result.data.title,
-            variants: result.data.variants.map((v)=> mapApiToVariant(v))
+            items: result.data.items.map(item => mapApiToPlaylistItemDTO(item))
 
         });
     }
 
     const searchInPlaylistByGuid = async (guid: string, searchString: string) : Promise<RequestResult<GetSearchInPlaylistResultDTO>> => {
-        return await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
+        const result =  await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
+        return result;
     }
 
     const renamePlaylist = async (guid: string, title: string) => {
