@@ -16,26 +16,41 @@ export default function PlaylistCards() {
     
     const COLOR = "white";
 
-    // Swipe events
-    const { swipeArea, updateOptions } = SwipeEventListener({
-        swipeArea: document.querySelector('body') as HTMLElement,
-      });
-      
-    swipeArea.addEventListener('swipeRight', () => {
-        moveCurrent(-1)
-    });
+    useEffect(()=>{
+        // Swipe events
+        const { swipeArea, updateOptions } = SwipeEventListener({
+            swipeArea: document.querySelector('body') as HTMLElement,
+          });
+          
+        const right = () => {
+            moveCurrent(-1)
+        }
+        const left = () => {
+            moveCurrent(1)
+        }
+        const up = () => {
+            turnOnFullscreen();
+        }
+        const down = () => {
+            turnOffFullscreen();
+        }
+        swipeArea.addEventListener('swipeRight', right);
+    
+        swipeArea.addEventListener('swipeLeft', left);
+    
+        swipeArea.addEventListener('swipeUp', up);
+    
+        swipeArea.addEventListener('swipeDown', down);
 
-    swipeArea.addEventListener('swipeLeft', () => {
-        moveCurrent(1)
-    });
-
-    swipeArea.addEventListener('swipeUp', () => {
-        turnOnFullscreen();
-    });
-
-    swipeArea.addEventListener('swipeDown', () => {
-        turnOffFullscreen();
-    });
+        return ()=>{
+            swipeArea.removeEventListener('swipeRight', right);
+            swipeArea.removeEventListener('swipeLeft', left);
+            swipeArea.removeEventListener('swipeUp', up);
+            swipeArea.removeEventListener('swipeDown', down);
+        }
+    },[]);
+   
+    
 
 
 
