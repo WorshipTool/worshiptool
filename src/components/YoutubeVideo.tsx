@@ -11,7 +11,6 @@ export default function YoutubeVideo({src}: {src:string}) {
       return;
     }
     const emurl = getEmbedUrl(id);
-    console.log(emurl);
     setUrl(emurl);
   },[src])
 

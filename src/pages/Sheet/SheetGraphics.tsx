@@ -33,8 +33,10 @@ import useGroupSelection from '../../hooks/group/useGroupSelection';
 import { ApiGroupDto } from '../../apis/dtos/group/ApiGroupDto';
 import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 
+import {Sheet} from "@pepavlin/sheet-api"
 
-export default function Sheet() {
+
+export default function SheetGraphics() {
     const {guid} = useParams();
     const theme = useTheme();
 
@@ -42,7 +44,7 @@ export default function Sheet() {
 
     const [variantID, setVariantID] = useState(0);
 
-    const {setGUID, song, getTransposedVariant, transpose, reload, getName, loading} = useSong(null);
+    const {setGUID, song, reload, getName, loading} = useSong(null);
     const {user, isTrustee, isAdmin, isLoggedIn} = useAuth();
     const {post} = useFetch();
 
@@ -60,6 +62,28 @@ export default function Sheet() {
     const [playlists, setPlaylists] = useState<{guid:string, title:string}[]>([]);
     const [isInPlaylist, setIsInPlaylist] = useState<boolean[]>([])
 
+    const [currentSheet, setCurrentSheet] = useState<Sheet>();
+    const [currentTransposition, setCurrentTransposition] = useState<number>(0);
+
+    useEffect(()=>{
+      if(song){
+        const sheet = new Sheet(song.variants[variantID].sheetData);
+        setCurrentSheet(sheet);
+      }
+    },[variantID, song])
+
+    const transpose = (value:number) => {
+      console.log("transpose", value);
+      currentSheet?.transpose(value);
+      setCurrentTransposition((prev)=>prev+value);
+    }
+
+    useEffect(()=>{
+      if(currentSheet){
+        currentSheet.setTransposition(currentTransposition);
+      }
+    },[currentTransposition])
+
 
     useEffect(()=>{
         if(guid){
@@ -72,7 +96,6 @@ export default function Sheet() {
     },[song])
 
     const reloadPlaylists = () => {
-      console.log("baf");
       getPlaylistsOfUser()
       .then(async (r)=>{
         if(isRequestSuccess(r)){
@@ -304,7 +327,7 @@ export default function Sheet() {
                             value={variantID + ""}
                             onChange={onVariantSelectChange}>
                               {song.variants.map((v, index)=>{
-                                return <MenuItem value={index}>{v.preferredTitle || (index+"")}</MenuItem>
+                                return <MenuItem value={index} key={index}>{v.preferredTitle || (index+"")}</MenuItem>
                               })}
                           </Select>}
                         </>
@@ -324,7 +347,7 @@ export default function Sheet() {
                               <Button variant="contained" size='small' color='secondary' onClick={addTo13ka}>Do 13ky</Button>
                             </Box>}
 
-                        {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(getTransposedVariant(variantID).sheetData)}}  sx={{
+                        {isAdmin()&&<IconButton onClick={()=>{navigator.clipboard.writeText(currentSheet?.getOriginalSheetData()||"")}}  sx={{
                           [theme.breakpoints.down("lg")]: {
                             display: "none"
                           }
@@ -350,17 +373,17 @@ export default function Sheet() {
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
-                {song&&!loading?<DefaultStyle song={song} variant={getTransposedVariant(variantID)}/>
+                {song&&!loading?<DefaultStyle variantData={song.variants[variantID]} sheet={currentSheet as Sheet}/>
                 :<>
-                {Array(10).fill(0).map(()=>{
-                  return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"}></Skeleton>
+                {Array(10).fill(0).map((a,i)=>{
+                  return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"} key={"skeleton"+i}></Skeleton>
                 })}
                 </>}
 
                 {song&&<>                
                   {isLoggedIn()&&song.media.map((m)=>{
                     if(m.type===MediaTypes.Youtube){
-                      return <YoutubeVideo src={m.url}></YoutubeVideo>
+                      return <YoutubeVideo src={m.url} key={m.url}></YoutubeVideo>
                     }else{
                       return <Typography>Našli jsme přílohu, ale nevíme jak si s ní poradit.</Typography>
                     }
@@ -380,7 +403,7 @@ export default function Sheet() {
                             window.open(s.value, '_blank', 'noreferrer');
                           }
                           return <>
-                            <Chip label={s.value} onClick={onClick} sx={{cursor: "pointer"}}/>
+                            <Chip label={s.value} onClick={onClick} sx={{cursor: "pointer"}} key={s.value}/>
                           </>
                         }
                         return <>
@@ -394,7 +417,7 @@ export default function Sheet() {
                     <Typography variant='subtitle2'>Tagy</Typography>
                     <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"} gap={0.5}>
                       {song.tags.map((s)=>{
-                        return <Chip label={s}/>
+                        return <Chip label={s} key={s}/>
                       })}                      
                     </Box >
                     <Gap/>
@@ -403,7 +426,7 @@ export default function Sheet() {
                     <Typography variant='subtitle2'>Autoři</Typography>
                     <Box display={"flex"} flexDirection={"row"} gap={0.5}>
                       {song.creators.map((s)=>{
-                        return <Chip label={s.name}/>
+                        return <Chip label={s.name} key={s.name}/>
                       })}
                     </Box >
                   </>}
@@ -416,7 +439,7 @@ export default function Sheet() {
               flex:1,
               display:"none",
               flexDirection: "column"}}>
-                {song&&<DefaultStyle song={song} variant={getTransposedVariant(variantID)}/>} 
+                {song&&<DefaultStyle variantData={song.variants[variantID]} sheet={currentSheet as Sheet}/>} 
             </Box>}
             
     
@@ -446,7 +469,7 @@ export default function Sheet() {
                             <PlaylistAdd /> :
                             <CheckCircle/>
                           }
-                          key={p.title}
+                          key={p.guid}
                           tooltipTitle={p.title}
                           tooltipOpen
                           onClick={()=>{
@@ -494,7 +517,7 @@ export default function Sheet() {
                 {playlists.map((p, i)=>{
 
                   const add = !isInPlaylist[i];
-                  return <Paper sx={{marginBottom: 1}}>
+                  return <Paper sx={{marginBottom: 1}} key={p.guid + "pl"}>
                     <Button startIcon={add ?
                        <PlaylistAdd /> :
                        <CheckCircle/>}

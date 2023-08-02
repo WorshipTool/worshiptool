@@ -8,6 +8,7 @@ import usePlaylist from '../../../../hooks/playlist/usePlaylist';
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist';
 import { isRequestSuccess } from '../../../../apis/dtos/RequestResult';
 import useInnerPlaylist from '../../hooks/useInnerPlaylist';
+import { Sheet } from '@pepavlin/sheet-api';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -36,6 +37,8 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
     const [bottomPanelOpen, setBottomPanelOpen] = useState(false);
 
     const {addVariant, reload, items} = useInnerPlaylist();
+
+    const sheet = new Sheet(variant.sheetData);
 
     const isInPlaylist = useMemo(()=>items.some((v)=>v.variant.guid==variant.guid),[items, variant.guid]);
 
@@ -93,9 +96,10 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
                 </Box>
                 
                 <StyledBox>
-                    {variant.sections[0]?.text?.split("\n").slice(0,4).map((line, index)=>{
-                        return <Typography noWrap key={"SearchItemText"+index}>{line}</Typography>
+                    {sheet.getSections()[0]?.text?.split("\n").slice(0,4).map((line, index)=>{
+                        return <Typography noWrap key={"SearchItemText"+line}>{line}</Typography>
                     })}
+
                 </StyledBox>
             </Box>
 

@@ -1,8 +1,10 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import useSong from '../../../hooks/song/useSong';
 import { Backdrop, Box, Button, Chip, CircularProgress, IconButton, Typography } from '@mui/material';
-import { Section, chordDataToText } from '@pepavlin/sheet-api';
 import { sectionNameToText } from '../../../tech/sectionNameToText';
+import { Section } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
+import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
+import { Sheet } from '@pepavlin/sheet-api';
 
 const sectionPart = (section: Section, fontSize: number) => {
     const lines = section.lines;
@@ -10,7 +12,7 @@ const sectionPart = (section: Section, fontSize: number) => {
     return <Box>
         {section.name&&<>
             <Typography fontWeight={"bold"} fontSize={fontSize+2} color={"inherit"} sx={{
-                color:"#FCF300"
+                color:"red"
             }}>
                 {sectionNameToText(section.name).toUpperCase()}
             </Typography>
@@ -21,7 +23,7 @@ const sectionPart = (section: Section, fontSize: number) => {
                 return(
                     <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
                         <Box sx={{flex:1}}>
-                            {segment.chord&&<Typography sx={{paddingRight: 1, fontSize:fontSize, color: "#FCF300"}}><b>{chordDataToText(segment.chord)}</b></Typography>}
+                            {segment.chord&&<Typography sx={{paddingRight: 1, fontSize:fontSize, color: "#FCF300"}}><b>{segment.chord.toString()}</b></Typography>}
                         </Box>
                         
                         <Typography sx={{flex:1, fontSize: fontSize}}>{segment.text}</Typography>
@@ -33,12 +35,15 @@ const sectionPart = (section: Section, fontSize: number) => {
     </Box>
 }
 
-export default function SlideCard({guid, index}: {guid:string, index:number}) {
+interface SlideCardProps{
+    item: PlaylistItemDTO
+}
+
+export default function SlideCard({item}: SlideCardProps) {
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
-    const {getName, getSheetData, song, setGUID} = useSong(guid||"");
 
     const [sizeChanging, setSizeChanging] = useState(true);
 
@@ -46,7 +51,8 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
 
     const [size, setSize] = useState(20);
     const [sizeSet, setSizeSet] = useState(false);
-    const [sections, setSections] = useState<Section[]>([]);
+
+    const [sheet, setSheet] = useState<Sheet>();
 
     const lastSectionRef = useRef();
 
@@ -55,19 +61,14 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
 
     useEffect(()=>{
         setSizeChanging(true);
-    },[guid])
-    useEffect(()=>{
+
         setSize((s)=>s-1);
-        if(!song) return;
-
-        console.log("Song changed", song);
-        
-        setSections(song.variants[0].sections);
         setSizeSet(false);
+        
+        if(!item) return;
+        setSheet(new Sheet(item.variant.sheetData));
+    },[item])
 
-        setSongIndex(index);
-
-    },[song]);
 
 
     useEffect(()=>{
@@ -134,9 +135,6 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
         return () => window.removeEventListener('resize', updateSize);
     }, []);
 
-    useEffect(()=>{
-        setGUID(guid);
-    },[guid])
 
     const loading = useMemo(()=>{
         return sizeChanging || !sizeSet;
@@ -158,9 +156,9 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
             }}>
                 <Typography fontWeight={"bold"} fontSize={size+5} marginRight={2}>
                     {(songIndex+1) + ". "}
-                    {getName().toUpperCase()}
+                    {item?.variant.preferredTitle.toUpperCase()}
                 </Typography>
-                {sections?.map((section, index)=>{
+                {sheet?.getSections()?.map((section, index)=>{
                     return <Box sx={{
                         borderRadius: 2,
                         paddingTop: 4,
@@ -168,7 +166,7 @@ export default function SlideCard({guid, index}: {guid:string, index:number}) {
                         // marginLeft: 3
                         // bgcolor:"red",
                         
-                    }} ref={index===sections.length-1 ? lastSectionRef : undefined}>
+                    }} ref={index===sheet.getSections().length-1 ? lastSectionRef : undefined}>
                         {sectionPart(section, size)}
                     </Box>;
                 })}

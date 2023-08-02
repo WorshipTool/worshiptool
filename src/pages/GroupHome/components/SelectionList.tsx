@@ -104,7 +104,7 @@ export default function SelectionList() {
               </Box>
               <Gap value={0.5}/>
               <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick}/>
-              {items.length==0&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
+              {items.length==0&&stillString===""&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
           </Box>
         )
       }}/>

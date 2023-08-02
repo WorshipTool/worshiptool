@@ -1,93 +1,19 @@
 import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import Toolbar from '../../components/Toolbars/Toolbar';
-import DefaultStyle from '../Sheet/styles/DefaultStyle';
-import useSong from '../../hooks/song/useSong';
-import useStack from '../../hooks/playlist/useStack';
-import { Add, KeyboardArrowDown, KeyboardArrowUp, Remove } from '@mui/icons-material';
-import { Masonry } from '@mui/lab';
-import { grey } from '@mui/material/colors';
 import Gap from '../../components/Gap';
-import ReactDOM from 'react-dom';
-import SidePanel from './components/SidePanel';
+import SidePanel from './components/LeftPanel/SidePanel';
 import { useNavigate, useParams } from 'react-router-dom';
-import useFetch from '../../hooks/useFetch';
-import { getUrl_GETSONGSINPLAYLIST } from '../../apis/urls';
-import { GetSongsInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
-import { isRequestSuccess } from '../../apis/dtos/RequestResult';
-import usePlaylists from '../../hooks/playlist/usePlaylists';
-import Playlist from '../../interfaces/playlist/PlaylistDTO';
-import usePlaylist from '../../hooks/playlist/usePlaylist';
-import SlideCard from '../PlaylistCards/SlideCard/SlideCard';
 import RightPanel from './components/RightPanel/RightPanel';
-import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 import useInnerPlaylist, { InnerPlaylistProvider } from './hooks/useInnerPlaylist';
 import AppContainer from '../../components/AppContainer/AppContainer';
 import useAuth from '../../hooks/auth/useAuth';
+import { PlaylistItem } from './components/PlaylistItem';
 
 const Container = styled(Box)(({theme})=>({
     padding: 30
 }))
 
 
-const PageBreak = () => {
-    return <Box sx={{
-        pageBreakAfter: "always"
-    }}>
-
-    </Box>
-}
-
-const Item = ({guid, playlist,reload}:{guid:string, playlist:string,reload: ()=>void}) => {
-    const {song, getTransposedVariant, transpose, loading} = useSong(guid);
-
-    const {removeVariant, items} = useInnerPlaylist();
-    const {turnOn} = useCurrentPlaylist();
-
-
-    const onRemove = () => {
-        if(song&&song.variants.length>0) removeVariant(song.variants[0].guid).then(()=>reload())
-        turnOn(playlist)
-    }
-
-    const navigate = useNavigate();
-
-    const open = () => {
-        navigate(`/song/${guid}`)
-    }
-
-    if(song===undefined||loading)return <>
-        <Skeleton variant='text' width={"50%"}></Skeleton>
-        {Array(10).fill(0).map(()=><Skeleton variant='text' width={Math.round(Math.random()*40)+"%"}></Skeleton>)}
-    
-    </>
-    return <>
-                <Paper sx={{padding:2, marginBottom: 1, displayPrint: "none"}}>
-                    <Box position={"absolute"} marginTop={-13} id={"playlistItem_"+guid}></Box>
-                    <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
-                        <Box>
-                            <IconButton onClick={()=>{transpose(1);}}>
-                                <Add/>
-                            </IconButton>
-                            <IconButton onClick={()=>{transpose(-1);}}>
-                                <Remove/>
-                            </IconButton>
-                        </Box>
-                        <Box display={"flex"} flexDirection={"row"}>
-                            <Button variant='text' color='error' onClick={onRemove}>Odebrat z playlistu</Button>
-                            <Button variant='text' onClick={open}>Otevřít</Button>
-                        </Box>
-                    </Box>
-                    
-                    <DefaultStyle song={song} variant={getTransposedVariant(0)}/>
-                </Paper>
-                
-                <Box display={"none"} displayPrint={"block"}>
-                    <DefaultStyle song={song} variant={getTransposedVariant(0)}/>
-                    {items.length>1&&<PageBreak/>}
-                </Box>
-            </>
-}
 
 export default function PlaylistPreview() {
 
@@ -118,7 +44,7 @@ export default function PlaylistPreview() {
         <AppContainer>
             
             <Box display={"flex"} flexDirection={"row"}>                
-                <SidePanel playlist={playlist} variants={items.map((v)=>v.variant.songGuid)} onCardsClick={()=>{
+                <SidePanel onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
                 {<Container flex={1}>
@@ -135,13 +61,16 @@ export default function PlaylistPreview() {
                             <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
                         </Box>
                     </Box>}
-                    {items.map((g)=>{
-                        return <Item guid={g.variant.songGuid} key={g.variant.songGuid} playlist={guid||""} reload={reload}/>
+                    {items.map((item)=>{
+                        return <PlaylistItem item={item} key={item.guid} reload={reload}/>
                     })}
                     
                 </Container>}
                 
-                {isOwner&&<Box displayPrint={"none"}>
+                {isOwner&&<Box displayPrint={"none"} display={{
+                    md: "none",
+                    lg: "block",
+                }}>
 
                     <RightPanel playlist={playlist} />
                 </Box>}

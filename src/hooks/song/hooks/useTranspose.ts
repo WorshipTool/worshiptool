@@ -1,4 +1,5 @@
-import { chordData, transposeNote, note, notes, transposeChordData } from '@pepavlin/sheet-api';
+import { chordData } from "@pepavlin/sheet-api/lib/models/chordData";
+import { transposeChordData, transposeNote } from "@pepavlin/sheet-api/lib/utils/transpose";
 import { useState } from "react";
 
 export default function useTranspose(){

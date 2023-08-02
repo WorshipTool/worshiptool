@@ -12,7 +12,7 @@ import Home from './pages/Home/Home';
 import "./App.css";
 import Create from './pages/Create/Create';
 import { createTheme } from '@mui/material';
-import Sheet from './pages/Sheet/Sheet';
+import SheetGraphics from './pages/Sheet/SheetGraphics';
 import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
 import Login from './pages/Login/Login';
@@ -70,7 +70,7 @@ export const AppRoutes = () => {
       <Route path="signup" element={<SignUp/>}/>
       <Route path="account" element={<Account/>}/>
       <Route path="account/playlists" element={<PlaylistsList/>}/>
-      <Route path="song/:guid" element={<Sheet/>}/>
+      <Route path="song/:guid" element={<SheetGraphics/>}/>
       <Route path="create" element={<Create/>}/>
       <Route path="create/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
