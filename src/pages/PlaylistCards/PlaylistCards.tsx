@@ -17,11 +17,12 @@ export default function PlaylistCards() {
     const COLOR = "white";
 
     useEffect(()=>{
+        if(items.length === 0) return;
+
         // Swipe events
         const { swipeArea, updateOptions } = SwipeEventListener({
             swipeArea: document.querySelector('body') as HTMLElement,
           });
-          
         const right = () => {
             moveCurrent(-1)
         }
@@ -34,6 +35,16 @@ export default function PlaylistCards() {
         const down = () => {
             turnOffFullscreen();
         }
+        const remove = () => {
+            swipeArea.removeEventListener('swipeRight', right);
+            swipeArea.removeEventListener('swipeLeft', left);
+            swipeArea.removeEventListener('swipeUp', up);
+            swipeArea.removeEventListener('swipeDown', down);
+        }
+
+        remove();
+
+        
         swipeArea.addEventListener('swipeRight', right);
     
         swipeArea.addEventListener('swipeLeft', left);
@@ -42,13 +53,8 @@ export default function PlaylistCards() {
     
         swipeArea.addEventListener('swipeDown', down);
 
-        return ()=>{
-            swipeArea.removeEventListener('swipeRight', right);
-            swipeArea.removeEventListener('swipeLeft', left);
-            swipeArea.removeEventListener('swipeUp', up);
-            swipeArea.removeEventListener('swipeDown', down);
-        }
-    },[]);
+        return remove;
+    },[items]);
    
     
 
