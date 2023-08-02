@@ -6,6 +6,7 @@ import { Section } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
 import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
 import { Sheet } from '@pepavlin/sheet-api';
 import Gap from '../../../components/Gap';
+import OnChangeDelayer from '../../../components/ChangeDelayer';
 
 const sectionPart = (section: Section, fontSize: number) => {
     const lines = section.lines;
@@ -40,7 +41,7 @@ interface SlideCardProps{
     item: PlaylistItemDTO
 }
 
-export default function SlideCard({item}: SlideCardProps) {
+export default function SlideCard({item: originalItem}: SlideCardProps) {
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
@@ -61,9 +62,14 @@ export default function SlideCard({item}: SlideCardProps) {
 
     const PADDING = 40;
 
+    const [item, setItem] = useState<PlaylistItemDTO>(originalItem);
+
     useEffect(()=>{
+        setLoading(true);
+        setItem(originalItem);
+    },[originalItem])
 
-
+    const onItemChange = (item: PlaylistItemDTO) => {
         setSizeChanging(true);
 
         setSize((s)=>s-1);
@@ -72,12 +78,11 @@ export default function SlideCard({item}: SlideCardProps) {
         if(!item) return;
         setSheet(new Sheet(item.variant.sheetData));
 
-        setLoading(true);
         setTimeout(()=>{
             setLoading(false);
-        }, 1000)
+        }, 500)
+    }
 
-    },[item])
 
     useEffect(()=>{
         if(!sheet) return;
@@ -160,6 +165,7 @@ export default function SlideCard({item}: SlideCardProps) {
             color: COLOR,
             userSelect: "none",
         }}>
+            <OnChangeDelayer value={item} onChange={onItemChange}/>
             <Box display={"flex"} flexDirection={"column"} height={`calc(100vh - ${PADDING}px - ${PADDING}px)`} width={"100%"}
                 flexWrap={"wrap"} alignContent={"center"} alignItems={"stretch"} justifyContent={"center"} sx={{
                 
@@ -169,15 +175,13 @@ export default function SlideCard({item}: SlideCardProps) {
             }}>
                 <Typography fontWeight={"bold"} fontSize={size+5} marginRight={2}>
                     {(item?.order+1) + ". "}
-                    {item?.variant.preferredTitle.toUpperCase()}
+                    {item?.variant?.preferredTitle.toUpperCase()}
                 </Typography>
                 {sheet?.getSections()?.map((section, index)=>{
                     return <Box sx={{
                         borderRadius: 2,
                         paddingTop: 4,
-                        marginRight:3,
-                        // marginLeft: 3
-                        // bgcolor:"red",
+                        marginRight:3
                         
                     }} ref={index===sheet.getSections().length-1 ? lastSectionRef : undefined}>
                         {sectionPart(section, size)}
@@ -191,7 +195,7 @@ export default function SlideCard({item}: SlideCardProps) {
                 >
                 <CircularProgress color="inherit" />
                 <Gap horizontal value={2}/>
-                <Typography variant='h6'>{item?.variant.preferredTitle}</Typography>
+                <Typography variant='h6'>{item?.variant?.preferredTitle}</Typography>
             </Box>
         </Box>
     )
