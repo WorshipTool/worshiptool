@@ -97,6 +97,7 @@ export default function SlideCard({item: originalItem}: SlideCardProps) {
             setSize((s)=>s+0.5);
             return;
         }
+
         
         // Get box position (x,y) and size
         // @ts-ignore
@@ -122,6 +123,8 @@ export default function SlideCard({item: originalItem}: SlideCardProps) {
         
         const cornerIsOut : boolean = xIsOut || yIsOut;
         
+        const step = 10;
+
         if(cornerIsOut){
             setSizeSet(false);
             setSizeChanging(true);
@@ -131,9 +134,9 @@ export default function SlideCard({item: originalItem}: SlideCardProps) {
         if(sizeSet) return;
         
         if(!cornerIsOut){
-            setSize((s)=>s+1);
+            setSize((s)=>s+step);
         }else{
-            setSize((s)=>s-1);
+            setSize((s)=>s-step);
             setSizeSet(true);
         }
 
