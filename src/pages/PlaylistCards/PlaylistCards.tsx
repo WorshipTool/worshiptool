@@ -22,11 +22,11 @@ export default function PlaylistCards() {
       });
       
     swipeArea.addEventListener('swipeRight', () => {
-        moveCurrent(1)
+        moveCurrent(-1)
     });
 
     swipeArea.addEventListener('swipeLeft', () => {
-        moveCurrent(-1)
+        moveCurrent(1)
     });
 
     swipeArea.addEventListener('swipeUp', () => {

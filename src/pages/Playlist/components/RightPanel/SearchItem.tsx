@@ -72,10 +72,9 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
             })}
         </Box>
         :
-        <StyledContainer onClick={onSongClick} sx={{borderColor:
-            variant.verified 
-             || (variant.createdByLoader)
-            ?"transparent":"grey"}}>
+        <StyledContainer onClick={onSongClick} sx={{
+            borderColor:variant.verified  || (variant.createdByLoader)?"transparent":"grey"
+        }}>
             
             <Box padding={"1rem"}>
                 {variant.createdBy==user?.guid&&
