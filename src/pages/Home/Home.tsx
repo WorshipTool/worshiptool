@@ -15,6 +15,7 @@ import { grey } from '@mui/material/colors';
 import FloatingAddButton from './components/FloatingAddButton';
 import HomeDesktop from './HomeDesktop';
 import HomeMobile from './HomeMobile';
+import useGroup from '../../hooks/group/useGroup';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -43,7 +44,7 @@ export default function Home() {
     const [searchValue, setSearchValue] = useState("");
     const [showSearchedList, setShowSearchedList] = useState(false);
     
-    
+    const {turnOff} = useGroup();    
     const scrollLevel = 50;
     
     /**
@@ -51,6 +52,7 @@ export default function Home() {
      */
     useEffect(()=>{
         document.title = "Chval Otce"
+        turnOff();
     },[])
 
     
@@ -66,12 +68,6 @@ export default function Home() {
 
         }
     },[searchValue])
-
-
-    const onSearchValueChange = (event: any) => {
-        setShowSearchedList(true);
-        setSearchValue(event.target.value);
-    }   
 
 
 

@@ -5,6 +5,7 @@ import { sectionNameToText } from '../../../tech/sectionNameToText';
 import { Section } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
 import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
 import { Sheet } from '@pepavlin/sheet-api';
+import Gap from '../../../components/Gap';
 
 const sectionPart = (section: Section, fontSize: number) => {
     const lines = section.lines;
@@ -74,7 +75,7 @@ export default function SlideCard({item}: SlideCardProps) {
         setLoading(true);
         setTimeout(()=>{
             setLoading(false);
-        }, 500)
+        }, 1000)
 
     },[item])
 
@@ -151,7 +152,8 @@ export default function SlideCard({item}: SlideCardProps) {
     return (
         <Box display={"flex"} flexDirection={"column"} flex={1} sx={{
             bgcolor: "#000",
-            color: COLOR
+            color: COLOR,
+            userSelect: "none",
         }}>
             <Box display={"flex"} flexDirection={"column"} height={`calc(100vh - ${PADDING}px - ${PADDING}px)`} width={"100%"}
                 flexWrap={"wrap"} alignContent={"center"} alignItems={"stretch"} justifyContent={"center"} sx={{
@@ -161,7 +163,7 @@ export default function SlideCard({item}: SlideCardProps) {
 
             }}>
                 <Typography fontWeight={"bold"} fontSize={size+5} marginRight={2}>
-                    {(songIndex+1) + ". "}
+                    {(item?.order+1) + ". "}
                     {item?.variant.preferredTitle.toUpperCase()}
                 </Typography>
                 {sheet?.getSections()?.map((section, index)=>{
@@ -183,6 +185,8 @@ export default function SlideCard({item}: SlideCardProps) {
                 display={loading? "flex" : "none"} justifyContent={"center"} alignItems={"center"}
                 >
                 <CircularProgress color="inherit" />
+                <Gap horizontal value={2}/>
+                <Typography variant='h6'>{item?.variant.preferredTitle}</Typography>
             </Box>
         </Box>
     )
