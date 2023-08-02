@@ -28,7 +28,7 @@ export default function SidePanel({onCardsClick}
 
 
     const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
-    const {rename, playlist, items} = useInnerPlaylist();
+    const {rename, playlist, items, guid: playlistGuid} = useInnerPlaylist();
 
     const {isOn: isGroupOn} = useGroup();
 
@@ -67,7 +67,7 @@ export default function SidePanel({onCardsClick}
     }
 
     const openCards = () => {
-        navigate("/playlist/"+currentPlaylistGuid+"/cards");
+        navigate("/playlist/"+playlistGuid+"/cards");
     }
 
     const inputRef = React.useRef<HTMLInputElement>(null);

@@ -56,17 +56,26 @@ export default function SlideCard({item}: SlideCardProps) {
 
     const lastSectionRef = useRef();
 
+    const [loading, setLoading] = useState(true);
 
     const PADDING = 40;
 
     useEffect(()=>{
+
+
         setSizeChanging(true);
 
         setSize((s)=>s-1);
         setSizeSet(false);
-        
+
         if(!item) return;
         setSheet(new Sheet(item.variant.sheetData));
+
+        setLoading(true);
+        setTimeout(()=>{
+            setLoading(false);
+        }, 500)
+
     },[item])
 
 
@@ -136,10 +145,7 @@ export default function SlideCard({item}: SlideCardProps) {
     }, []);
 
 
-    const loading = useMemo(()=>{
-        return sizeChanging || !sizeSet;
-    },[sizeChanging, sizeSet]);
-
+    
     const COLOR = "white";
     
     return (
