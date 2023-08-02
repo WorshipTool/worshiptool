@@ -79,6 +79,11 @@ export default function SlideCard({item}: SlideCardProps) {
 
     },[item])
 
+    useEffect(()=>{
+        if(!sheet) return;
+        sheet.setKey(item.toneKey);
+    },[sheet]);
+
 
 
     useEffect(()=>{
