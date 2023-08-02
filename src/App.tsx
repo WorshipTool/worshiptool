@@ -56,11 +56,6 @@ const theme = createTheme({
 });
 
 
-export const NavigationProvider = () => {
-  return <BrowserRouter>
-    <AppRoutes/>
-  </BrowserRouter>
-}
 
 export const AppRoutes = () => {
   return <Routes>
@@ -88,16 +83,18 @@ function App() {
     return (
       <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
         <ThemeProvider theme={theme}>
-          <AuthProvider> 
-              <StackProvider>
-                  <GroupProvider>
-                    <PlaylistProvider>
-                      <Background/>
-                      <NavigationProvider/>
-                    </PlaylistProvider>
-                  </GroupProvider>
-              </StackProvider>
-          </AuthProvider>
+          <BrowserRouter>
+            <AuthProvider> 
+                <StackProvider>
+                    <GroupProvider>
+                      <PlaylistProvider>
+                        <Background/>
+                        <AppRoutes/>
+                      </PlaylistProvider>
+                    </GroupProvider>
+                </StackProvider>
+            </AuthProvider>
+          </BrowserRouter>
         </ThemeProvider>
       </SnackbarProvider>
     )

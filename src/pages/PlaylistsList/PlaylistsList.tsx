@@ -120,7 +120,7 @@ export default function () {
                         <Button variant="contained" onClick={onCreateClick}>Vytvořit</Button>
                     </Box>
                     {playlists.map((p)=>{
-                        return <ListPlaylistItem name={p.title} guid={p.guid}/>
+                        return <ListPlaylistItem name={p.title} guid={p.guid} key={p.guid}/>
                     })}
                     {playlists.length==0&&<>
                         <Typography>Nemáš žádný vytvořený playlist.</Typography>

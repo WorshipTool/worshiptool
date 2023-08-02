@@ -12,6 +12,7 @@ export default function GroupScreen() {
     const navigate = useNavigate();
 
     useEffect(()=>{
+        if(localStorage.getItem("user")) return;
         if(!isLoggedIn()) navigate("/")
     },[isLoggedIn])
 

@@ -1,20 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import usePlaylist from '../../hooks/playlist/usePlaylist';
 import { Box, IconButton } from '@mui/material';
 import SlideCard from './SlideCard/SlideCard';
 import { ChevronLeft, ChevronRight, Fullscreen, FullscreenExit, SwipeLeft, SwipeRight, SwitchLeft } from '@mui/icons-material';
+import { SwipeEventListener } from "swipe-event-listener"
 
 export default function PlaylistCards() {
     const {guid} = useParams();
-    
-    const {playlist, items, reload} = usePlaylist(guid||"");
+    const {items} = usePlaylist(guid);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     
     const [fullscreen, setFullscreen] = useState(false);
     
     const COLOR = "white";
+
+    // Swipe events
+    const { swipeArea, updateOptions } = SwipeEventListener({
+        swipeArea: document.querySelector('body') as HTMLElement,
+      });
+      
+    swipeArea.addEventListener('swipeRight', () => {
+        moveCurrent(1)
+    });
+
+    swipeArea.addEventListener('swipeLeft', () => {
+        moveCurrent(-1)
+    });
+
+    swipeArea.addEventListener('swipeUp', () => {
+        turnOnFullscreen();
+    });
+
+    swipeArea.addEventListener('swipeDown', () => {
+        turnOffFullscreen();
+    });
+
 
 
     const moveCurrent = (offset: number) => {
@@ -24,17 +46,29 @@ export default function PlaylistCards() {
             if(target>=items.length) return items.length-1;
             return target;
         })
-    }
+    };
 
     const onKeyDown = (e : any) => {
         e.preventDefault();
 
-        // if(e.code === "ArrowLeft"){
-        //     moveCurrent(-1);
-        // }
-        // else if (e.code === "ArrowRight"){
-        //     moveCurrent(1);
-        // }
+        console.log(e.code);
+
+        if(e.code === "ArrowLeft" || e.code === "KeyA"){
+            moveCurrent(-1);
+        }
+        else if (e.code === "ArrowRight" || e.code === "Space" || e.code === "KeyD"){
+            moveCurrent(1);
+        }
+    }
+
+    const turnOnFullscreen = () => {
+        document.body.requestFullscreen();
+        setFullscreen(true);
+    }
+
+    const turnOffFullscreen = () => {
+        document.exitFullscreen();
+        setFullscreen(false);
     }
 
 
@@ -45,7 +79,8 @@ export default function PlaylistCards() {
             document.removeEventListener("keydown", onKeyDown);
         }
 
-    },[]);
+    },[items]);
+
     
     useEffect(()=>{
         document.title = "Cards from playlist";
@@ -62,17 +97,11 @@ export default function PlaylistCards() {
                     <ChevronRight/>
                 </IconButton>
                 {!fullscreen?
-                    <IconButton onClick={()=>{
-                        document.body.requestFullscreen()
-                        setFullscreen(true);
-                        }}>
+                    <IconButton onClick={()=>{turnOnFullscreen()}}>
                         <Fullscreen color='inherit' sx={{color: COLOR}}/>
                     </IconButton>
                 :
-                    <IconButton onClick={()=>{
-                        document.exitFullscreen();
-                        setFullscreen(false);
-                        }}>
+                    <IconButton onClick={()=>{turnOffFullscreen()}}>
                         <FullscreenExit color='inherit' sx={{color: COLOR}}/>
                     </IconButton>
                 }

@@ -153,9 +153,9 @@ export default function SidePanel({onCardsClick}
                 }}
                 display={"flex"} justifyContent={"space-between"} >
                     
-                {isGroupOn&&items.length>0?<Box  sx={{pointerEvents:"auto"}}>
+                {items.length>0?<Box  sx={{pointerEvents:"auto"}}>
                     <Button variant='contained' startIcon={<Dashboard/>} onClick={openCards}
-                        color='secondary'>
+                        color={isGroupOn?"secondary": "primary"}>
                         Karty
                     </Button>
 

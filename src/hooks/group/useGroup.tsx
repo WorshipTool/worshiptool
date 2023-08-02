@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "../useFetch";
 import { isRequestSuccess } from "../../apis/dtos/RequestResult";
 import { Group } from "../../interfaces/group/Group";
@@ -38,11 +38,10 @@ export const useProvideGroup = () : useProvideGroupI => {
 
     const {isLoggedIn} = useAuth();
 
+    const navigate = useNavigate();
+
     const key = "activeGroup";
 
-    useEffect(()=>{
-        turnOff();
-    },[isLoggedIn])
 
     const turnOn = (name: string) => {
         if(!isLoggedIn()) return;
@@ -59,10 +58,24 @@ export const useProvideGroup = () : useProvideGroupI => {
     }
 
     useEffect(()=>{
+        const u = localStorage.getItem("user");
+        if(!u){ 
+            turnOff();
+            navigate("/");
+        }
+    },[])
+
+    useEffect(()=>{
+
+        
+
+        if(!isLoggedIn()) return;
         const activeName = localStorage.getItem(key);
+        console.log("activeName", activeName)
         if(!activeName) return;
         turnOn(activeName)
-    },[])
+    },[isLoggedIn])
+
     return {
         turnOn, turnOff, isOn : group!==undefined,
         name: group?.name || "",
