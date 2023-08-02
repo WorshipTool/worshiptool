@@ -1,12 +1,23 @@
 import { Box, Typography } from "@mui/material";
 import songObject from "../../../interfaces/song/song";
-import React from 'react'
-import { Section, chordDataToText } from "@pepavlin/sheet-api";
+import React, { useMemo } from 'react'
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
+import { Chord, Sheet } from "@pepavlin/sheet-api";
 
-export default function DefaultStyle({song, variant}:{song:songObject, variant: VariantDTO}){
+interface DefaultStyleProps{
+    variantData?: VariantDTO,
+    title? :string,
+    sheet: Sheet
+}
 
-    const sections = variant.sections;
+export default function DefaultStyle({variantData, sheet, title: titleString}:DefaultStyleProps){
+
+    const title = titleString?titleString:variantData?.preferredTitle||undefined;
+
+    const sections = useMemo(()=>{
+        if(sheet===undefined)return [];
+        return sheet.getSections();
+    },[sheet])
  
     if(sections===undefined)return<>
         <Typography variant="subtitle2">Text a akordy nebyly nalezeny.</Typography>
@@ -21,11 +32,11 @@ export default function DefaultStyle({song, variant}:{song:songObject, variant: 
             <Box display={"flex"} flexDirection={"row"} gap={1} sx={{marginBottom:1}}>
                     <Box width={width}></Box>
                     <Box flex={10}>
-                    <Typography variant='h5' fontFamily={"inherit"}><b>{song.title}</b></Typography>
+                    <Typography variant='h5' fontFamily={"inherit"}><b>{title}</b></Typography>
                     
                     </Box>
             </Box>
-            {sections.map((section: Section, index) => {
+            {sections.map((section, index) => {
                 return (
                 <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3} key={"abox"+index}>
                     <Box width={width}>
@@ -39,7 +50,7 @@ export default function DefaultStyle({song, variant}:{song:songObject, variant: 
                                 return(
                                     <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
                                         <Box sx={{flex:1}}>
-                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{chordDataToText(segment.chord)}</b></Typography>}
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord.toString()}</b></Typography>}
                                         </Box>
                                         
                                         <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>

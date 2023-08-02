@@ -1,5 +1,5 @@
+import { Sheet } from "@pepavlin/sheet-api";
 import Song from "../interfaces/song/song";
-import {Section, convertSheetToSections} from "@pepavlin/sheet-api";
 import AllSongDataDTO from "./dtos/dtosSong";
 
 export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
@@ -18,9 +18,9 @@ export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
         variants: data.variants.filter((v)=>v).map((variant)=>{
 
 
-            let sections : Section[] = [];
-            if(variant.sheetData)
-                sections = convertSheetToSections(variant.sheetData)
+            const sheet = new Sheet(variant.sheetData);
+            let sections = sheet.getSections();
+      
 
             return {
                 guid: variant.guid,

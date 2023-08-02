@@ -51,3 +51,13 @@ export interface DeleteRemoveVariantFromPlaylistBodyDTO{
     variant: string,
     playlist: string
 }
+
+export interface ApiReorderPlaylistItemDTO{
+    guid: string,
+    order: number
+}
+
+export interface PostReorderPlaylistBodyDTO{
+    items: ApiReorderPlaylistItemDTO[]
+    guid:string
+}

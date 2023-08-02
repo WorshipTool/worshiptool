@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isRequestSuccess } from '../../apis/dtos/RequestResult';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import DefaultStyle from '../Sheet/styles/DefaultStyle';
-import {convertSheetToSections} from "@pepavlin/sheet-api";
+import {Sheet} from "@pepavlin/sheet-api";
 import Gap from '../../components/Gap';
 import ToolPanel from './ToolPanel';
 import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../apis/dtos/dtosNewSongData';
@@ -46,40 +46,42 @@ export default function Create() {
     const titleInputRef :any = useRef(null);
 
     const [title, setTitle] = useState("");
-    const [sheet, setSheet] = useState("");
+    const [sheetData, setSheetData] = useState("");
 
     const navigate = useNavigate()
 
-    const getSong = () : Song => {
-        return {
-            title: title,
-            variants: [{
-                guid: "",
-                songGuid: "",
-                sheetData: sheet,
-                sheetText: "",
-                sections: convertSheetToSections(sheet),
-                preferredTitle: title,
-                titles:[],
-                createdBy: "",
-                createdByLoader: false,
-                verified: false,
-                sources:[],
-                creators:[]
-            }],
-            guid: "",
-            creators:[],
-            media:[],
-            tags: []
-        };
-    }
+    // const getSong = () : Song => {
+    //     return {
+    //         title: title,
+    //         variants: [{
+    //             guid: "",
+    //             songGuid: "",
+    //             sheetData: sheetData,
+    //             sheetText: "",
+    //             sections: convertSheetToSections(sheetData),
+    //             preferredTitle: title,
+    //             titles:[],
+    //             createdBy: "",
+    //             createdByLoader: false,
+    //             verified: false,
+    //             sources:[],
+    //             creators:[]
+    //         }],
+    //         guid: "",
+    //         creators:[],
+    //         media:[],
+    //         tags: []
+    //     };
+    // }
 
-    const [song, setSong] = useState<Song>(getSong());
+    // const [song, setSong] = useState<Song>(getSong());
+
+    const [sheet, setSheet] = useState<Sheet>(new Sheet(sheetData));
 
 
-    useEffect(()=>{
-        setSong(getSong());
-    },[title, sheet])
+    // useEffect(()=>{
+    //     setSong(getSong());
+    // },[title, sheetData])
     
 
     const {post, loading:fetching} = useFetch();
@@ -92,7 +94,7 @@ export default function Create() {
         setPosting(true);
         const dto : Partial<NewSongDataDTO> = {
             title: title,            
-            sheetData: sheet,
+            sheetData: sheetData,
             media:[],
             songGuid: guid
         };
@@ -113,7 +115,7 @@ export default function Create() {
         let cursorPosition = target.selectionStart
         let textBeforeCursorPosition = target.value.substring(0, cursorPosition)
         let textAfterCursorPosition = target.value.substring(cursorPosition, target.value.length)
-        setSheet(textBeforeCursorPosition + textToInsert + textAfterCursorPosition);
+        setSheetData(textBeforeCursorPosition + textToInsert + textAfterCursorPosition);
         target.focus();
     }
 
@@ -123,7 +125,7 @@ export default function Create() {
         let cursorPosition = target.selectionStart
         let textBeforeCursorPosition = target.value.substring(0, cursorPosition)
         let textAfterCursorPosition = target.value.substring(cursorPosition, target.value.length)
-        setSheet(textBeforeCursorPosition + textToInsert + textAfterCursorPosition);
+        setSheetData(textBeforeCursorPosition + textToInsert + textAfterCursorPosition);
         target.focus();
     }
 
@@ -145,7 +147,7 @@ export default function Create() {
                     newSection("B");
                 }
               }
-        },[song]
+        },[]
     )
 
     return (
@@ -176,7 +178,7 @@ export default function Create() {
                                             value={title} onChange={(e)=>{setTitle(e.target.value)}}/>
     
                                         <SheetInput placeholder='Zde je místo pro obsah písně...' inputRef={sheetInputRef} multiline
-                                            value={sheet} onChange={(e)=>{setSheet(e.target.value)}} onKeyDown={keysHandler}/>
+                                            value={sheetData} onChange={(e)=>{setSheetData(e.target.value)}} onKeyDown={keysHandler}/>
                                    </Box>
 
                                    <ToolPanel onNewSection={newSection} onNewChord={newChord}/>
@@ -184,15 +186,15 @@ export default function Create() {
                             </StyledContainer>
                             :
                             <StyledContainer flexDirection={"column"}>
-                                {(song.title==""&&song.variants[0].sections.length==0)&&<Typography variant="caption" sx={{color:"grey"}}>Tady uvidite ukazku...</Typography>}
-                                    <DefaultStyle song={song} variant={song.variants[0]}/>
+                                {(title==""&&sheet.getSections().length==0)&&<Typography variant="caption" sx={{color:"grey"}}>Tady uvidite ukazku...</Typography>}
+                                    <DefaultStyle title={title} sheet={sheet}/>
                             </StyledContainer>
                         }
 
                         <Gap/>
                         <Box display={"flex"} justifyContent={"start"}>
                             <Tooltip title={"Přidat"}>
-                                <Button variant={"contained"} color={"primary"} disabled={posting||(song.title==""||song.variants[0].sheetData=="")} onClick={onPostClick}> 
+                                <Button variant={"contained"} color={"primary"} disabled={posting||(title==""||sheetData=="")} onClick={onPostClick}> 
                                     Ověřit a přidat
                                     {posting&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
                                 </Button>

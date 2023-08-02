@@ -88,28 +88,6 @@ export default function useSong(g:string|null){
         trans(semitones);
     }
 
-    const getTransposedVariant = (index: number) : VariantDTO => {
-
-        if(song===undefined||song.variants.length<=index)return {} as VariantDTO
-
-        let transSection = song.variants[index].sections.map((section)=>{
-            if(section.lines===undefined) return {...section};
-
-            return {...section, lines: section.lines.map((line)=>{
-                return {...line, segments: line.segments.map((segment)=>{
-                    if(segment.chord===undefined) return segment;
-                    return { ...segment,
-                        chord: getChord(segment.chord)
-                    };
-                })}
-            })};
-
-        });
-
-        const transVariant = {...song.variants[index], sections: transSection};
-
-        return transVariant;
-    }
 
     return {
         setGUID,
@@ -119,7 +97,6 @@ export default function useSong(g:string|null){
         getSheetData,
         loading,
         transpose,
-        getTransposedVariant,
         reload,
         isCreatedByMe
     }

@@ -1,4 +1,4 @@
-import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO, ApiReorderPlaylistItemDTO } from '../../apis/dtos/playlist/dtosPlaylist';
 import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../apis/urls';
 import useAuth from '../auth/useAuth';
 import useFetch from '../useFetch';
@@ -6,6 +6,7 @@ import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } fro
 import Playlist from '../../interfaces/playlist/PlaylistDTO';
 import { mapApiToVariant } from '../../apis/dtos/variant/mapApiToVariant';
 import { mapApiToPlaylistItemDTO } from '../../apis/dtos/playlist/ApiPlaylisItemMap';
+import { Chord } from '@pepavlin/sheet-api';
 
 
 export default function usePlaylists(){
@@ -83,6 +84,16 @@ export default function usePlaylists(){
         return result
     }
 
+    const reorderPlaylist = async (guid: string, items: ApiReorderPlaylistItemDTO[]) => {
+        const result = await post({url: "/songs/playlist/reorder", body: {guid, items}});
+        return result;
+    }
+
+    const setKeyChordOfItem = async (guid: string, keyChord: Chord) => {
+        const result = await post({url: "/songs/playlist/item/transpose", body: {guid, key: keyChord.toString()}});
+        return result;
+    }
+
 
     return {
         addVariantToPlaylist,
@@ -93,6 +104,8 @@ export default function usePlaylists(){
         deletePlaylist,
         getPlaylistByGuid,
         searchInPlaylistByGuid,
-        renamePlaylist
+        renamePlaylist,
+        reorderPlaylist,
+        setKeyChordOfItem
     }
 }

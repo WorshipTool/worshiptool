@@ -1,6 +1,6 @@
-import { Section } from "@pepavlin/sheet-api";
 import { Source } from "../song/source";
 import { Creator } from "../song/creator";
+import { Section } from "@pepavlin/sheet-api/lib/sheetApi/conversition/song";
 
 export interface VariantDTO{
     guid:string,

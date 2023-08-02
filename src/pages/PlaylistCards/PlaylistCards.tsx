@@ -8,10 +8,9 @@ import { ChevronLeft, ChevronRight, Fullscreen, FullscreenExit, SwipeLeft, Swipe
 export default function PlaylistCards() {
     const {guid} = useParams();
     
-    console.log("ee", guid);
     const {playlist, items, reload} = usePlaylist(guid||"");
 
-    const [currentVariant, setCurrentVariant] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
     
     const [fullscreen, setFullscreen] = useState(false);
     
@@ -19,7 +18,7 @@ export default function PlaylistCards() {
 
 
     const moveCurrent = (offset: number) => {
-        setCurrentVariant((v)=>{
+        setCurrentIndex((v)=>{
             const target = v + offset;
             if(target<0)return 0;
             if(target>=items.length) return items.length-1;
@@ -38,9 +37,6 @@ export default function PlaylistCards() {
         // }
     }
 
-    useEffect(()=>{
-        console.log("current variant", currentVariant);
-    },[currentVariant])
 
     useEffect(()=>{
 
@@ -59,10 +55,10 @@ export default function PlaylistCards() {
     <Box>
             
             <Box position={"absolute"} right={0} top={0} bgcolor={"grey"}>
-                <IconButton  color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(-1)} disabled={currentVariant==0}>
+                <IconButton  color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(-1)} disabled={currentIndex==0}>
                     <ChevronLeft/>
                 </IconButton>
-                <IconButton color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(1)} disabled={currentVariant==items.length-1}>
+                <IconButton color='inherit' sx={{color: COLOR}} onClick={()=>moveCurrent(1)} disabled={currentIndex==items.length-1}>
                     <ChevronRight/>
                 </IconButton>
                 {!fullscreen?
@@ -81,7 +77,7 @@ export default function PlaylistCards() {
                     </IconButton>
                 }
             </Box>
-        <SlideCard guid={items[currentVariant] && items[currentVariant].variant.songGuid || ""} index={currentVariant}/>
+        <SlideCard item={items[currentIndex]}/>
     </Box>
   )
 }
