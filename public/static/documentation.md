@@ -18,7 +18,7 @@ Nutno dodat, že **v současné době nelze již po registraci změnit zadané �
 ### Horní lišta
 Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi aplikace. Při kliknutí na logo v levém rohu se vždy vrátíte zpět domů na hlavní stránku. Proto, pokud se v aplikaci ztratíte, stačí kliknout na logo a jste doma.
 
-V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. 
+V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku namísto tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
 
 ### Domací stránka
 Hlavní stránka aplikace slouží k vyhledávání mezi všemi písníčkami, které se stihly nahrát do databáze. Jedná se o písničky ze všech denominacích, všech témat. Může se tedy stát, že naleznete dvě písně, které budou totožné, ovšem jiného překladu nebo zápisu.
