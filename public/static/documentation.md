@@ -8,7 +8,7 @@ Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledáv�
 > **V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na pe.pavlin@gmail.com**
 
 ## Nepřihlášený uživatel
-
+Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
 
 ### Domací stránka
 Hlavní stránka aplikace slouží k vyhledávání mezi všemi písníčkami, které se stihly nahrát do databáze. Jedná se o písničky ze všech denominacích, všech témat. Může se tedy stát, že naleznete dvě písně, které budou totožné, ovšem jiného překladu nebo zápisu.
@@ -28,7 +28,6 @@ Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi apli
 V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku namísto tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
 
 ### Přihlášení a registrace
-Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
 Pro získání dalších možností se musí uživatel zaregistrovat a přihlásit. 
 
 #### Registrace
