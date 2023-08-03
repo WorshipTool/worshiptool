@@ -50,38 +50,12 @@ export default function Create() {
 
     const navigate = useNavigate()
 
-    // const getSong = () : Song => {
-    //     return {
-    //         title: title,
-    //         variants: [{
-    //             guid: "",
-    //             songGuid: "",
-    //             sheetData: sheetData,
-    //             sheetText: "",
-    //             sections: convertSheetToSections(sheetData),
-    //             preferredTitle: title,
-    //             titles:[],
-    //             createdBy: "",
-    //             createdByLoader: false,
-    //             verified: false,
-    //             sources:[],
-    //             creators:[]
-    //         }],
-    //         guid: "",
-    //         creators:[],
-    //         media:[],
-    //         tags: []
-    //     };
-    // }
-
-    // const [song, setSong] = useState<Song>(getSong());
-
     const [sheet, setSheet] = useState<Sheet>(new Sheet(sheetData));
 
 
-    // useEffect(()=>{
-    //     setSong(getSong());
-    // },[title, sheetData])
+    useEffect(()=>{
+        setSheet(new Sheet(sheetData));
+    },[sheetData])
     
 
     const {post, loading:fetching} = useFetch();

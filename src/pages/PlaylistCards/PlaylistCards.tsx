@@ -5,10 +5,11 @@ import { Box, IconButton } from '@mui/material';
 import SlideCard from './SlideCard/SlideCard';
 import { ChevronLeft, ChevronRight, Fullscreen, FullscreenExit, SwipeLeft, SwipeRight, SwitchLeft } from '@mui/icons-material';
 import { SwipeEventListener } from "swipe-event-listener"
+import { doc } from 'prettier';
 
 export default function PlaylistCards() {
     const {guid} = useParams();
-    const {items} = usePlaylist(guid);
+    const {items, playlist} = usePlaylist(guid);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     
@@ -104,8 +105,9 @@ export default function PlaylistCards() {
 
     
     useEffect(()=>{
-        document.title = "Cards from playlist";
-    },[])
+        if(!playlist) document.title = "Prezentace";
+        else document.title = playlist.title + " - Prezentace";
+    },[playlist])
 
   return (
     <Box>
