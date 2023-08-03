@@ -2,16 +2,13 @@
 
 ## Úvod
 Tato webová aplikace vznikla jako pomůcka pro vedoucí chval. V současné době je určená pro používání ve sboru Církve bratrské na Praze 13.
+
 Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledávání a rychlé tvoření playlistů.
 
-V případě nalezení jakékoliv chyby, nebo v případě jakéhokoliv dotazu, napište prosím na pe.pavlin@gmail.com
+V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na pe.pavlin@gmail.com
 
 ## Nepřihlášený uživatel
 
-### Horní lišta
-Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi aplikace. Při kliknutí na logo v levém rohu se vždy vrátíte zpět domů na hlavní stránku. Proto, pokud se v aplikaci ztratíte, stačí kliknout na logo a jste doma.
-
-V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku namísto tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
 
 ### Domací stránka
 Hlavní stránka aplikace slouží k vyhledávání mezi všemi písníčkami, které se stihly nahrát do databáze. Jedná se o písničky ze všech denominacích, všech témat. Může se tedy stát, že naleznete dvě písně, které budou totožné, ovšem jiného překladu nebo zápisu.
@@ -25,6 +22,11 @@ Pokud byste chtěli seznam všech písní v aplikaci, sjeďte na hlavní obrazov
 Tato stránka zobrazuje píseň s jejími akordy, obsahuje možnost tranzpozice a další možné akce pro uživatele.
 Kliknutím na tlačítko tisknout, lze píseň vytisknout na papíře, nebo stáhnout jako pdf.
 
+### Horní lišta
+Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi aplikace. Při kliknutí na logo v levém rohu se vždy vrátíte zpět domů na hlavní stránku. Proto, pokud se v aplikaci ztratíte, stačí kliknout na logo a jste doma.
+
+V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku namísto tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
+
 ### Přihlášení a registrace
 Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
 Pro získání dalších možností se musí uživatel zaregistrovat a přihlásit. 
@@ -32,6 +34,7 @@ Pro získání dalších možností se musí uživatel zaregistrovat a přihlás
 #### Registrace
 Zaregistrovat se lze pomocí kliknutí na tlačítko "Přihlásit se" v pravém horním rohu a poté kliknutím na "Vytvořit účet".
 Nutno dodat, že **v současné době nelze již po registraci změnit zadané údaje**, a proto si dejte pozor na to, co zadáváte. Zapamatujte si to.
+
 
 ## Přihlašený uživatel
 ### Horní lišta
