@@ -44,7 +44,30 @@ Tlačítkem "+" lze rychle vytvořit nový playlist.
 Tlačítkem "Nástroje" se zobrazí nabídka nástrojů, které může uživatel použít. Nyní obsahuje "Playlisty", což zobrazí seznam všech vašich playlistů a tlačítko "13ka", což zapne tzv. mód 13ka. V tomto módě lze snadno vyhledávat mezi písněmi, které se hrajou na 13ce a tvořit z nich playlist.
 
 Při kliknutí na ikonu uživatele se rozbalí nabídka s možností odhlašení nebo spravování účtu (v současné době nelze na stránce účtu vůbec nic dělat)
-  
+
+
+### Stránka Přidat píseň
+Na hlavní stránce aplikace, muže uživatel pomocí plovoucího tlačítka "+" v pravém dolním rohu, vytvořit novou píseň. 
+
+Na této stránce lze do zpěvníku přidat novou píseň. Po vyplnění názvu, napište do obsahu text a akordy v požadovaném formátu.
+Pro náhlednutí zformátované písně, klikněte na přepínač "Náhled"
+
+#### Formát
+Obsah písně zadavejte v následujícím formátu: 
+1. Akordy pište do hranatých závorek přímo do textu. Akord může mít jakýkoliv zapis a může být jakkoliv moc rozšířený a složítý.
+2. Oddělte sloky, bridge a refrény, pomocí složených závorek, kde do nich napišete "V" pro sloku, "B" pro bridge, "R" pro refrén a "I" pro intro. Sekce i číslujte, tedy např. "V2" pro druhou sloku, "R1" pro první refrén atd.
+3. Do textu nepište žádné své poznámky.
+
+##### Příklad
+```
+{V1}[Em]Pána chval, [C7/G]duše má,
+[G]ó duše má
+...
+
+{R1}[Cmaj7]Svítáním, no[Em7/9/G]vý
+...
+```
+
 
 ### Stránka písně
 Uživatel má možnost přidat píseň do playlistu pomocí kulátého plovoucího tlačítka v pravém dolním rohu obrazovky.
