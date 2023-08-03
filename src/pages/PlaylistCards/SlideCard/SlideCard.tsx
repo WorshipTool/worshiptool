@@ -38,10 +38,11 @@ const sectionPart = (section: Section, fontSize: number) => {
 }
 
 interface SlideCardProps{
-    item: PlaylistItemDTO
+    item: PlaylistItemDTO,
+    order: number,
 }
 
-export default function SlideCard({item: originalItem}: SlideCardProps) {
+export default function SlideCard({item: originalItem, order}: SlideCardProps) {
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
@@ -123,7 +124,7 @@ export default function SlideCard({item: originalItem}: SlideCardProps) {
         
         const cornerIsOut : boolean = xIsOut || yIsOut;
         
-        const step = 10;
+        const step = 2;
 
         if(cornerIsOut){
             setSizeSet(false);
@@ -177,7 +178,7 @@ export default function SlideCard({item: originalItem}: SlideCardProps) {
 
             }}>
                 <Typography fontWeight={"bold"} fontSize={size+5} marginRight={2}>
-                    {(item?.order+1) + ". "}
+                    {(order+1) + ". "}
                     {item?.variant?.preferredTitle.toUpperCase()}
                 </Typography>
                 {sheet?.getSections()?.map((section, index)=>{

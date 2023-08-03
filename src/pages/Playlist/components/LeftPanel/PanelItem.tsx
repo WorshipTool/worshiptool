@@ -57,7 +57,7 @@ export default function PanelItem({item, onClick}:PanelItemProps) {
             <Typography sx={{
                 padding:"9px",
                 paddingLeft:"14px"
-            }} fontWeight={900}>{items.indexOf(item)+1}.</Typography>
+            }} fontWeight={900}>{item.order+1}.</Typography>
             <StyledPanelButton onClick={onClick}>{item.variant.preferredTitle}</StyledPanelButton>
         </>
         :<Skeleton variant='text' width={200} sx={{marginLeft:2}} key={"skelet"+item.guid}></Skeleton>}

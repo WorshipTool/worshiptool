@@ -129,7 +129,7 @@ export default function PlaylistCards() {
                     </IconButton>
                 }
             </Box>
-        <SlideCard item={items[currentIndex]}/>
+        <SlideCard item={items[currentIndex]} order={currentIndex}/>
     </Box>
   )
 }
