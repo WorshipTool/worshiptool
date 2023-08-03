@@ -35,10 +35,11 @@ export default function PlaylistPreview() {
     }
 
     useEffect(()=>{
-        document.title = "Playlist";
+        if(playlist?.title) document.title = playlist?.title;
+        else document.title = "Playlist";
 
 
-    },[])
+    },[playlist?.title])
 
     return (
         <AppContainer>
