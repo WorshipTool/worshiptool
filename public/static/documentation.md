@@ -5,7 +5,7 @@ Tato webová aplikace vznikla jako pomůcka pro vedoucí chval. V současné dob
 
 Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledávání a rychlé tvoření playlistů.
 
-V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na pe.pavlin@gmail.com
+> **V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na pe.pavlin@gmail.com**
 
 ## Nepřihlášený uživatel
 
@@ -77,4 +77,30 @@ V případě, že nebylo během vyhledávání nic nalezeno, aplikace vám nabí
 #### Sdílení
 Pro sdílení playlistu zkopírujte url-adresu stránky. Uživatel, kterému url poskytnete, bude mít možnost playlist otevřít, ale nebude mít možnost ho jakkoliv upravovat. Sice má možnost jednotlivé písně transponovat, ale tato změna se neuloží.
 
+### Mód 13ka
+Tento mód slouží pro možnost vyhledávání jen mezi skupinou písniček, co se hrajou na Třináctce. Slouží také pro rychlejší tvoření playlistu. Uživatel nemůže přidat píseň do seznamu 13ky, může z těchto písní pouze tvořit playlisty. Pokud byste chtěli přidat nějakou píseň do oběhu, pošlete mi její odkaz na můj email.
+
+#### Hlavní stránka
+Po zapnutí tohoto módu je uživatel přesměrován na hlavní stránku "Třináctka", kde lze procházet seznam všech písní 13ky. 
+
+Hlavní stránka dále obsahuje několik rychlých akcí, včetně "Vytvořit playlist" nebo "Přidat novou píseň".
+Akce "Přidat novou píseň" vás přesměruje na stránku "Přidat píseň", kde můžete vytvořit ručně píseň, napsat k ní text a akordy, a poté jí vložit do libovolného playlistu. Tato akce nepřidává píseň skupiny 13ka. 
+
+Tlačítek "Vyhledat píseň", resp. "Hledat", lze přistoupit k vyhledávácímu poli. Vyhledávání funguje stejně jako v předchozích situacích. Automaticky. Vyhledává se jen mezi písněmi 13ky.
+
+V případě, že jste vytvořili nový playlist, aplikace vám umožňuje pomocí akce "Editovat playlist" rychle a přímo otevřít.
+
+#### Stránka písně
+Při zapnutém módu, lze také po rozkliknutí nějaké písně, tlačítky v horním panelu "Přidat do playlistu", resp. "Odebrat z playlistu" rychle přidat, resp. odebrat otevřenou píseň do vytvořeného playlistu.
+
+Pomocí "Otevřít playlist" skočíte do vámi upravováného playlistu.
+
+#### Stránka playlistu
+V rámci módu se na stránce playlistu nevyhledává mezi všemi písněmi, ale jen mezi písněmi skupiny 13ka.
+
+#### Horní panel
+Při aktivním módů se kliknutím na levou ikonu nevratí zpět domů, ale na hlavní stránku 13ky.
+
+#### Vypnutí módu
+Tento mód zůstane zaplý. Musíte ho ručně vypnout. To lze buď pomocí křížku v pravém horním rohu, nebo pomocí tlačítka s ikonou Domů v levém dolním rohu.
 
