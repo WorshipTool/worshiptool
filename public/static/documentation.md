@@ -43,10 +43,34 @@ Tlačítkem "Nástroje" se zobrazí nabídka nástrojů, které může uživatel
 Při kliknutí na ikonu uživatele se rozbalí nabídka s možností odhlašení nebo spravování účtu (v současné době nelze na stránce účtu vůbec nic dělat)
   
 
-## Stránka písně
+### Stránka písně
 Uživatel má možnost přidat píseň do playlistu pomocí kulátého plovoucího tlačítka v pravém dolním rohu obrazovky.
 Při najetí myší na tlačítko se rozbalí nabídka s vašimi playlisty. Kliknutím na playlist přidáte nebo odeberete danou píseň. Pro zobrazení všech playlistů, klikněte v nabídce na možnost "Další"
 
+Přihlašený uživatel má také ten bonus, že u některých písní najde **videa**.
 
+### Stránka playlistu
+Tato stránka představuje váš playlist. Při jakékoliv změně se změna automaticky uloží.
+Uprostřed stránky se zobrazují jednotlivé přidané písně včetně jejich názvu, textu a akordů. Pomocí tlačítek "+" a "-", lze píseň transponovat. 
+Tlačítkem "Odebrat z playlistu" lze píseň odstranit a pomocí "Otevřít"- no, zkrátka otevřít stránku písně 
+
+#### Levý panel
+V levém rohu stránky lze upravit název playlistu pomocí kliknutí na text názvu nebo tlačítko s ikonou pera.
+
+Levý panel také ukazuje pořádí přidaných písní, které lze šipičkami jednoduše měnit. Chvilku může trvat než se změna projeví.
+Při kliknutí na píseň v seznamu "Pořádí" stránka přejede na danou píseň.
+
+##### Karty a tisknutí
+Playlist lze vyexportovat pomocí tlačítka "Vytisknout", přičemž každá píseň se zobrazí na své vlastní stránce.
+A pro zobrazení playlistu ve formě prezentace slouží tlačítko "Karty". Prezentace je vhodná pro zobrazení na tabletu.
+
+#### Pravý panel
+Pro přidání písně přímo na této stránce slouží pravý panel. Pro vyhledání písně stačí opět zadat třeba část textu hledané písně do vyhledávacího pole. Vyhledávání začne automaticky. Po kliknutí na vyhledanou píseň se zobrazí tlačítka "Přidat do playlistu" nebo "Zobrazit".
+
+V případě, že nebylo během vyhledávání nic nalezeno, aplikace vám nabízí nějaké návrhy.
+
+
+#### Sdílení
+Pro sdílení playlistu zkopírujte url-adresu stránky. Uživatel, kterému url poskytnete, bude mít možnost playlist otevřít, ale nebude mít možnost ho jakkoliv upravovat. Sice má možnost jednotlivé písně transponovat, ale tato změna se neuloží.
 
 
