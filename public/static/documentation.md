@@ -2,18 +2,11 @@
 
 ## Úvod
 Tato webová aplikace vznikla jako pomůcka pro vedoucí chval. V současné době je určená pro používání ve sboru Církve bratrské na Praze 13.
+Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledávání a rychlé tvoření playlistů.
 
 V případě nalezení jakékoliv chyby, nebo v případě jakéhokoliv dotazu, napište prosím na pe.pavlin@gmail.com
 
 ## Nepřihlášený uživatel
-
-### Přihlášení a registrace
-Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
-Pro získání dalších možností se musí uživatel zaregistrovat a přihlásit. 
-
-#### Registrace
-Zaregistrovat se lze pomocí kliknutí na tlačítko "Přihlásit se" v pravém horním rohu a poté kliknutím na "Vytvořit účet".
-Nutno dodat, že **v současné době nelze již po registraci změnit zadané údaje**, a proto si dejte pozor na to, co zadáváte. Zapamatujte si to.
 
 ### Horní lišta
 Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi aplikace. Při kliknutí na logo v levém rohu se vždy vrátíte zpět domů na hlavní stránku. Proto, pokud se v aplikaci ztratíte, stačí kliknout na logo a jste doma.
@@ -31,6 +24,14 @@ Pokud byste chtěli seznam všech písní v aplikaci, sjeďte na hlavní obrazov
 ### Stránka písně
 Tato stránka zobrazuje píseň s jejími akordy, obsahuje možnost tranzpozice a další možné akce pro uživatele.
 Kliknutím na tlačítko tisknout, lze píseň vytisknout na papíře, nebo stáhnout jako pdf.
+
+### Přihlášení a registrace
+Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
+Pro získání dalších možností se musí uživatel zaregistrovat a přihlásit. 
+
+#### Registrace
+Zaregistrovat se lze pomocí kliknutí na tlačítko "Přihlásit se" v pravém horním rohu a poté kliknutím na "Vytvořit účet".
+Nutno dodat, že **v současné době nelze již po registraci změnit zadané údaje**, a proto si dejte pozor na to, co zadáváte. Zapamatujte si to.
 
 ## Přihlašený uživatel
 ### Horní lišta
