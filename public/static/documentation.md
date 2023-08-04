@@ -11,9 +11,9 @@ Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledáv�
 Nepřihlášený uživatel nemá mnoho možností, může jen vyhledávat, transponovat a tisknout.
 
 ### Domací stránka
-Hlavní stránka aplikace slouží k vyhledávání mezi všemi písníčkami, které se stihly nahrát do databáze. Jedná se o písničky ze všech denominacích, všech témat. Může se tedy stát, že naleznete dvě písně, které budou totožné, ovšem jiného překladu nebo zápisu.
+Hlavní stránka aplikace slouží k vyhledávání mezi všemi písníčkami, které jsem zatím našel na internetu. Jedná se o písničky ze všech denominací, všech témat. Může se tedy stát, že naleznete dvě písně, které budou totožné, ovšem jiného překladu nebo zápisu.
 
-Pro vyhledávání stačí do vyhledávácího pole uprostřed obrazovky zadat například část názvu písně, kterou se snažíte najít. Vyhledávání začne automaticky, bez kliknutí na tlačítko. Vyhledávací algoritmus hledá jak mezi nazvy písní, tak i mezi jejich texty.
+Pro vyhledávání stačí do vyhledávácího pole uprostřed obrazovky zadat například část názvu písně, kterou se snažíte najít. Vyhledávání začne automaticky, nemusíte klikat na žádné tlačítko. Vyhledávací algoritmus hledá jak mezi názvy písní, tak i mezi jejich texty.
 Pro otevření písně, stačí kliknout na vyhledanou položku.
 
 Pokud byste chtěli seznam všech písní v aplikaci, sjeďte na hlavní obrazovce až úplně dolů a klikněte na tlačítko "SEZNAMU"
@@ -25,7 +25,7 @@ Kliknutím na tlačítko tisknout, lze píseň vytisknout na papíře, nebo stá
 ### Horní lišta
 Horní lišta slouží jako hlavní rozcestník mezi jednotlívými častmi aplikace. Při kliknutí na logo v levém rohu se vždy vrátíte zpět domů na hlavní stránku. Proto, pokud se v aplikaci ztratíte, stačí kliknout na logo a jste doma.
 
-V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku namísto tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
+V pravém rohu najdete tlačítko pro zobrazení dokumentace a druhé pro přihlášení. Mimo hlavní stránku místo tlačítka dokumentace naleznete tlačítko "Hledat". To vám umožní rychle vyhledávat mezi písněmi.
 
 ### Přihlášení a registrace
 Pro získání dalších možností se musí uživatel zaregistrovat a přihlásit. 
@@ -124,5 +124,5 @@ V rámci módu se na stránce playlistu nevyhledává mezi všemi písněmi, ale
 Při aktivním módů se kliknutím na levou ikonu nevratí zpět domů, ale na hlavní stránku 13ky.
 
 #### Vypnutí módu
-Tento mód zůstane zaplý. Musíte ho ručně vypnout. To lze buď pomocí křížku v pravém horním rohu, nebo pomocí tlačítka s ikonou Domů v levém dolním rohu.
+Mód zůstane zaplý, dokud ho ručně nevypnete. To lze buď pomocí křížku v pravém horním rohu, nebo pomocí tlačítka s ikonou Domů v levém dolním rohu.
 
