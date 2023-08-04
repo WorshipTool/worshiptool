@@ -124,5 +124,5 @@ V rámci módu se na stránce playlistu nevyhledává mezi všemi písněmi, ale
 Při aktivním módů se kliknutím na levou ikonu nevratí zpět domů, ale na hlavní stránku 13ky.
 
 #### Vypnutí módu
-Tento mód zůstane zaplý. Musíte ho ručně vypnout. To lze buď pomocí křížku v pravém horním rohu, nebo pomocí tlačítka s ikonou Domů v levém dolním rohu.
+Mód zůstane zaplý, dokud ho ručně nevypnete. To lze buď pomocí křížku v pravém horním rohu, nebo pomocí tlačítka s ikonou Domů v levém dolním rohu.
 
