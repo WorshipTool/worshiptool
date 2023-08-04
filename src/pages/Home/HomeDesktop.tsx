@@ -201,7 +201,7 @@ export default function HomeDesktop() {
         
             </Box>
 
-            <FloatingAddButton/>
+            <FloatingAddButton extended={!isTop}/>
         </>
   )
 }
