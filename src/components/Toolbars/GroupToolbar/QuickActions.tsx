@@ -50,7 +50,7 @@ export default function QuickActions({visible}: QuickActionsProps) {
             <GroupToolbarActionButton label='Vyhledat píseň' icon={<Search  sx={{
                 strokeWidth: 1,
             }}/>} onClick={onSearchSong} visible={visible} id={1}/>
-            <GroupToolbarActionButton label='Přidat novou píseň' icon={<Add  sx={{
+            <GroupToolbarActionButton label='Vytvořit novou píseň' icon={<Add  sx={{
                 strokeWidth: 2,
             }}/>} onClick={onNewSong} visible={visible} id={2}/>
             
