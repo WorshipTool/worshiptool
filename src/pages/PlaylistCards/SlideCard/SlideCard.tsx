@@ -42,7 +42,7 @@ interface SlideCardProps{
     order: number,
 }
 
-export default function SlideCard({item: originalItem, order}: SlideCardProps) {
+export default function SlideCard({item: originalItem, order: originalOrder}: SlideCardProps) {
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
@@ -64,11 +64,13 @@ export default function SlideCard({item: originalItem, order}: SlideCardProps) {
     const PADDING = 40;
 
     const [item, setItem] = useState<PlaylistItemDTO>(originalItem);
+    const [order, setOrder] = useState<number>(originalOrder);
 
     useEffect(()=>{
         setLoading(true);
         setItem(originalItem);
-    },[originalItem])
+        setOrder(originalOrder);
+    },[originalItem, originalOrder])
 
     const onItemChange = (item: PlaylistItemDTO) => {
         setSizeChanging(true);
@@ -93,6 +95,10 @@ export default function SlideCard({item: originalItem, order}: SlideCardProps) {
 
 
     useEffect(()=>{
+        console.log(size);
+
+        if(!sheet) return;
+
         if(!lastSectionRef?.current){
             // Make a loop
             setSize((s)=>s+0.5);
@@ -141,7 +147,7 @@ export default function SlideCard({item: originalItem, order}: SlideCardProps) {
             setSizeSet(true);
         }
 
-    },[lastSectionRef, size, sizeSet]);
+    },[lastSectionRef, size, sizeSet, sheet]);
 
 
 
@@ -169,7 +175,7 @@ export default function SlideCard({item: originalItem, order}: SlideCardProps) {
             color: COLOR,
             userSelect: "none",
         }}>
-            <OnChangeDelayer value={item} onChange={onItemChange}/>
+            <OnChangeDelayer value={item} onChange={onItemChange} delay={1000}/>
             <Box display={"flex"} flexDirection={"column"} height={`calc(100vh - ${PADDING}px - ${PADDING}px)`} width={"100%"}
                 flexWrap={"wrap"} alignContent={"center"} alignItems={"stretch"} justifyContent={"center"} sx={{
                 
