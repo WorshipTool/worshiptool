@@ -66,6 +66,7 @@ export default function usePlaylist(guid:string | undefined){
         if(!guid)return;
         const result = await searchInPlaylistByGuid(guid, searchString);
         if(isRequestSuccess(result)){
+
             setItems(result.data.items.map((v)=>mapApiToPlaylistItemDTO(v)));
         }
     }

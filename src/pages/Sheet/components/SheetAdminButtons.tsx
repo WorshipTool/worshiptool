@@ -109,13 +109,13 @@ export default function SheetAdminButtons({sheet, song, reload}: AddToPlaylistBu
             </Menu>
 
             
-            <AddVideo open={addVideoOpen} handleClose={()=>setAddVideoOpen(false)} songGuid={song.guid} afterUpload={()=>{
+            <AddVideo open={addVideoOpen} handleClose={()=>setAddVideoOpen(false)} songGuid={song?.guid} afterUpload={()=>{
                 reload();
             }}/>
-            <AddTag open={addTagOpen} handleClose={()=>setAddTagOpen(false)} songGuid={song.guid} afterUpload={()=>{
+            <AddTag open={addTagOpen} handleClose={()=>setAddTagOpen(false)} songGuid={song?.guid} afterUpload={()=>{
                 reload();
             }}/>
-            <AddCreator open={addCreatorOpen} handleClose={()=>setAddCreatorOpen(false)} songGuid={song.guid} afterUpload={()=>{
+            <AddCreator open={addCreatorOpen} handleClose={()=>setAddCreatorOpen(false)} songGuid={song?.guid} afterUpload={()=>{
                 reload();
             }}/>
         </div>
