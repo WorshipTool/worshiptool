@@ -10,6 +10,7 @@ import AddTag from '../../../components/AddTag';
 import AddCreator from '../../../components/AddCreator';
 import { Sheet } from '@pepavlin/sheet-api';
 import Song from '../../../interfaces/song/song';
+import { useSnackbar } from 'notistack';
 
 interface AddToPlaylistButtonProps {
     sheet: Sheet,
@@ -32,6 +33,7 @@ export default function SheetAdminButtons({sheet, song, reload}: AddToPlaylistBu
         setAnchorEl(null);
     }
 
+    const {enqueueSnackbar} = useSnackbar()
 
     const [addVideoOpen, setAddVideoOpen] = useState(false);
     const [addTagOpen, setAddTagOpen] = useState(false);
@@ -39,7 +41,8 @@ export default function SheetAdminButtons({sheet, song, reload}: AddToPlaylistBu
 
 
     const onCopyClick = () => {
-        // navigator.clipboard.writeText(currentSheet?.getOriginalSheetData()||"")
+        navigator.clipboard.writeText(sheet?.getOriginalSheetData()||"")
+        enqueueSnackbar("Data písně byla zkopírována do schránky")
     }
 
     const addCreator = () =>{

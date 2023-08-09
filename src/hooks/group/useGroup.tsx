@@ -71,7 +71,6 @@ export const useProvideGroup = () : useProvideGroupI => {
 
         if(!isLoggedIn()) return;
         const activeName = localStorage.getItem(key);
-        console.log("activeName", activeName)
         if(!activeName) return;
         turnOn(activeName)
     },[isLoggedIn])
