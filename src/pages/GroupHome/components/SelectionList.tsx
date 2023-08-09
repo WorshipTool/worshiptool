@@ -27,11 +27,14 @@ export default function SelectionList() {
     const [searchString, setSearchString] = React.useState<string>("");
     const [stillString, setStillString] = useState<string>("");
 
-    const onChange = (searchString: string) => {
+    const onChange = async (searchString: string) => {
+      setStillString(searchString);
+
       if(searchString==="") reload()
       else search(searchString);
 
-      setStillString(searchString);
+      
+
     };
 
     useEffect(()=>{
