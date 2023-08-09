@@ -302,7 +302,7 @@ export default function SheetGraphics() {
                   </Box>
 
                   
-                  <AddToPlaylistButton variant={song?.variants[variantID] as VariantDTO}/>
+                  {isLoggedIn()&&<AddToPlaylistButton variant={song?.variants[variantID] as VariantDTO}/>}
                   <Gap horizontal={true}/>
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
