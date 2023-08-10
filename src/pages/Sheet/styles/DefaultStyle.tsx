@@ -12,7 +12,9 @@ interface DefaultStyleProps{
 
 export default function DefaultStyle({variantData, sheet, title: titleString}:DefaultStyleProps){
 
-    const title = titleString?titleString:variantData?.preferredTitle||undefined;
+    const title = useMemo(()=>{
+        return titleString?titleString:variantData?.preferredTitle||undefined;
+    },[titleString, variantData])
 
     const sections = useMemo(()=>{
         if(sheet===undefined)return [];
