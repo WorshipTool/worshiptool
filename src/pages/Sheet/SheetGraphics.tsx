@@ -55,13 +55,6 @@ export default function SheetGraphics() {
     const navigate = useNavigate();
     const {enqueueSnackbar} = useSnackbar();
 
-    const [playlistsListOpen, setPlaylistsListOpen] = useState(false);
-
-
-    const [addVideoOpen, setAddVideoOpen] = useState(false);
-    const [addTagOpen, setAddTagOpen] = useState(false);
-    const [addCreatorOpen, setAddCreatorOpen] = useState(false);
-
 
     const [currentSheet, setCurrentSheet] = useState<Sheet>();
     const [currentTransposition, setCurrentTransposition] = useState<number>(0);
@@ -307,7 +300,7 @@ export default function SheetGraphics() {
                   <Button endIcon={<Print/>} variant="outlined" color="primary" onClick={onPrintClick}>Tisknout</Button>
                 </Box>
                 <Gap value={2}/>
-                {song&&!loading?<DefaultStyle variantData={song.variants[variantID]} sheet={currentSheet as Sheet}/>
+                {song&&!loading?<DefaultStyle title={getName()} sheet={currentSheet as Sheet}/>
                 :<>
                 {Array(10).fill(0).map((a,i)=>{
                   return <Skeleton variant={"text"} width={Math.round(Math.random()*50)+"%"} key={"skeleton"+i}></Skeleton>
