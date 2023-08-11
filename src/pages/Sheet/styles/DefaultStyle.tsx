@@ -39,10 +39,14 @@ export default function DefaultStyle({variantData, sheet, title: titleString}:De
                     </Box>
             </Box>
             {sections.map((section, index) => {
+
+                const firstLineHasChord = section.lines
+                    &&section.lines[0].segments.reduce((acc, segment)=>acc||segment.chord!==undefined, false);
+
                 return (
                 <Box display={"flex"} flexDirection={"row"} gap={1} marginBottom={3} key={"abox"+index}>
                     <Box width={width}>
-                        <Typography variant={"subtitle2"} marginTop={"1.5rem"} textAlign={"end"} fontFamily={"inherit"}>{section.name}{section.name==""?"":":"}</Typography>
+                        <Typography variant={"subtitle2"} marginTop={firstLineHasChord?3.3:0.3} textAlign={"end"} fontFamily={"inherit"}>{section.name}{section.name==""?"":":"}</Typography>
                     </Box>
                     <Box flex={10}>
                         {section.lines&&section.lines.map((line, index)=>{
