@@ -11,6 +11,7 @@ import Gap from '../../Gap'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
+import { isMobile, isTablet } from 'react-device-detect'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -153,12 +154,12 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
                 {isLoggedIn()?<>
                     <Tooltip title={"Vytvořit playlist"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreatePlaylistClick}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreatePlaylistClick} disabled={isMobile && !isTablet}>
                             <AddBox  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Nástroje"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onToolsMenuClick}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onToolsMenuClick} >
                             <Apps  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>

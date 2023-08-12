@@ -1,4 +1,6 @@
+import { isTablet, isMobile } from "react-device-detect";
 import { useNavigate } from "react-router-dom";
+
 
 interface MenuItem{
     title: string,
@@ -17,7 +19,8 @@ export default function useToolsMenuItems(){
             action: ()=>{
                 navigate("/account/playlists")
 
-            }
+            },
+            disabled: isMobile && !isTablet,
         },
         {
             title: "13ka",
@@ -25,7 +28,7 @@ export default function useToolsMenuItems(){
             action: ()=>{
                 navigate("/group/13ka")
             },
-            disabled: false
+            disabled: isMobile && !isTablet,
         }
 
     ];

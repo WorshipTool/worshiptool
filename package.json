@@ -27,6 +27,7 @@
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",
     "react-material-ui-carousel": "^3.4.2",
+    "react-native-device-info": "^10.8.0",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.0",
     "react-scroll-motion": "^0.3.2",
