@@ -70,8 +70,8 @@ Obsah písně zadavejte v následujícím formátu:
 
 
 ### Stránka písně
-Uživatel má možnost přidat píseň do playlistu pomocí kulátého plovoucího tlačítka v pravém dolním rohu obrazovky.
-Při najetí myší na tlačítko se rozbalí nabídka s vašimi playlisty. Kliknutím na playlist přidáte nebo odeberete danou píseň. Pro zobrazení všech playlistů, klikněte v nabídce na možnost "Další"
+Uživatel má možnost přidat píseň do playlistu pomocí tlačítka "Přidat do" vedle "Tisknout"
+Po kliknutí se rozbalí nabídka s vašimi playlisty. Kliknutím na playlist přidáte nebo odeberete danou píseň. Pro zobrazení všech playlistů, klikněte v nabídce na možnost "Další"
 
 Přihlašený uživatel má také ten bonus, že u některých písní najde **videa**.
 
