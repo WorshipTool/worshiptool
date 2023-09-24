@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../interfaces/user';
 import { LoginResultDTO } from '../../apis/dtos/dtosAuth';
+import FacebookLogin from 'react-facebook-login';
 
 const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
@@ -90,7 +91,6 @@ export default function Login() {
         });
     }
 
-
     return (
         <Box>
             <Toolbar transparent={false}/>
@@ -104,6 +104,7 @@ export default function Login() {
                         <Typography variant='subtitle2' color={"red"}>{errorMessage}</Typography>
                         <Gap/>
                     </>}
+
                     
                     <Typography variant='subtitle2'>Email</Typography>
                     <TextField size="small" fullWidth value={email} onChange={onEmailChange}
