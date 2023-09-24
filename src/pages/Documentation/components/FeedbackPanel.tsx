@@ -1,4 +1,4 @@
-import { Box, Button, InputAdornment, TextField, Typography } from '@mui/material'
+import { Box, Button, InputAdornment, Paper, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Gap from '../../../components/Gap'
 import { Feedback, Try } from '@mui/icons-material';
@@ -41,26 +41,49 @@ export default function FeedbackPanel() {
 
         <Gap value={3}/>
         {!sent ? (
-            <Box display={'flex'} flexDirection={"row"}>
+            <Paper sx={{
+                backgroundColor: "white",
+                padding: 2,
+                paddingX: 2,
+                marginX:4,
+                // borderRadius: 1,
+                display:"flex",
+                flexDirection: "column",
+                borderColor: "primary.light",
+                borderWidth: 2,
+                borderStyle: "solid"
+            }}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center"
+                
+                }}>
+                    <Try /> 
+                    <Gap value={1} horizontal/>
+                    <Typography variant="h6">
+                        
+                    Zpětná vazba
+                    </Typography>
+                </Box>
+                <Typography variant="body2">
+                    Napište nám, co bychom měli zlepšit, co se vám líbí, co vám chybí...
+                </Typography>
+                <Gap value={2}/>
                 <TextField id="outlined-basic" label="Chcete nám něco sdělit?" variant="outlined" multiline
                     value={message} onChange={onMessageChange} sx={{
-                        flex: 1,
-                        bgcolor:"white"
-                    }} InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Try />
-                          </InputAdornment>
-                        ),
-                      }} disabled={sending}/>
-                <Gap horizontal/>
-                <Box display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                        flex: 1
+                    }} 
+                    size='small'
+                    disabled={sending}/>
+                <Gap />
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"end"} >
                     <LoadingButton variant="contained" color="primary" size="medium" onClick={send}
                         loading={sending}>
                         Odeslat
                     </LoadingButton>
                 </Box>
-            </Box>
+            </Paper>
         ) : (
             <>
                 <Typography>
