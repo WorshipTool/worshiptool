@@ -26,3 +26,5 @@ export const GETISVARIANTINPLAYLIST_URL = "/songs/isinplaylist";
 
 export const LOGIN_URL = "/auth/login";
 export const SIGNUP_URL = "/auth/signup";
+
+export const POSTSENDFEEDBACK_URL = "/sendfeedback";

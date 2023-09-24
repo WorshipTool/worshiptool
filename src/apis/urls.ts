@@ -86,3 +86,8 @@ export function getUrl_GETISVARIANTINPLAYLIST(variantGuid:string, playlistGuid:s
     const generatedURL = BACKEND_URL + GETISVARIANTINPLAYLIST_URL + `?variant=${variantGuid}&playlist=${playlistGuid}`;
     return generatedURL;
 }
+
+export function getUrl(relativeUrl:string){
+    const generatedURL = BACKEND_URL + relativeUrl;
+    return generatedURL;
+}
