@@ -42,7 +42,6 @@ export default function Home() {
     const theme = useTheme();
     
     const [searchValue, setSearchValue] = useState("");
-    const [showSearchedList, setShowSearchedList] = useState(false);
     
     const {turnOff} = useGroup();    
     const scrollLevel = 50;
@@ -87,7 +86,6 @@ export default function Home() {
             }}>
                 <HomeMobile/>
             </Box>
-
         </Box>
         
     )

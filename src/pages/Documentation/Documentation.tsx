@@ -5,6 +5,9 @@ import ReactMarkdown from 'react-markdown';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import ContainerGrid from '../../components/ContainerGrid';
 import AppContainer from '../../components/AppContainer/AppContainer';
+import { Feedback } from '@mui/icons-material';
+import FeedbackPanel from './components/FeedbackPanel';
+import Gap from '../../components/Gap';
 
 export default function Documentation() {
     const {getRawData: fetchRawData} = useReadme();
@@ -22,6 +25,10 @@ export default function Documentation() {
         <Box display={"flex"} justifyContent={"center"} padding={2}>
             <ContainerGrid sx={{justifyContent:"center"}} direction='row'>
                 <Grid item xs={12}>
+                    <FeedbackPanel />
+                    <Typography variant='h6'>
+                        Dokumentace
+                    </Typography>
                     <Paper sx={{
                         padding:4
                     }}>
