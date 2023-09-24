@@ -2,18 +2,36 @@ import { Box, Button, InputAdornment, TextField, Typography } from '@mui/materia
 import React from 'react'
 import Gap from '../../../components/Gap'
 import { Feedback, Try } from '@mui/icons-material';
+import useFetch from '../../../hooks/useFetch';
+import { getUrl } from '../../../apis/urls';
+import { POSTSENDFEEDBACK_URL } from '../../../apis/constants';
+import { PostSendMessageDTO } from '../../../apis/dtos/feedbackDtos';
+import useAuth from '../../../hooks/auth/useAuth';
+import { LoadingButton } from '@mui/lab';
 
 export default function FeedbackPanel() {
     const [message, setMessage] = React.useState("");
     const [sent, setSent] = React.useState(false);
+    const [sending, setSending] = React.useState(false);
+
+    const {post} = useFetch();
+    const {user, isLoggedIn} = useAuth()
 
     const onMessageChange = (e:any) => {
         setMessage(e.target.value);
     }
 
     const send = () => {
-        setSent(true);
+        setSending(true);
 
+        const body: PostSendMessageDTO = {
+            message: message.replaceAll("\n", "\\n"),
+            userName: isLoggedIn() ? user?.firstName + " " + user?.lastName : undefined
+        }
+        post({url: getUrl(POSTSENDFEEDBACK_URL), body}).then((result)=>{
+            setSent(true);
+            setSending(false);
+        });
     }
   return (
     <Box sx={{
@@ -34,10 +52,13 @@ export default function FeedbackPanel() {
                             <Try />
                           </InputAdornment>
                         ),
-                      }}/>
+                      }} disabled={sending}/>
                 <Gap horizontal/>
                 <Box display={"flex"} flexDirection={"column"} justifyContent={"center"}>
-                    <Button variant="contained" color="primary" size="medium" onClick={send}>Odeslat</Button>
+                    <LoadingButton variant="contained" color="primary" size="medium" onClick={send}
+                        loading={sending}>
+                        Odeslat
+                    </LoadingButton>
                 </Box>
             </Box>
         ) : (
