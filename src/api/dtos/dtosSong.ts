@@ -80,3 +80,14 @@ export interface SongsMergeBody{
 export interface SongsMergeResult{
     guid: string
 }
+
+export interface PostParseImageBody{
+    file: string
+}
+
+export interface PostParseImageResultDTO{
+    sheets: {
+        title:string,
+        data:string
+    }[]
+}

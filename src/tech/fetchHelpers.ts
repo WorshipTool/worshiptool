@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "../api/constants";
 
-export const fetchData = (params: FetchParams) => {
+export const fetchData = (params: FetchParams, stringifyBody = true) => {
     const paramsAddition = params.params ? Object.keys(params.params).map(key => key + '=' + params.params[key]).join('&') : undefined;
     let url = params.url;
     if(paramsAddition) url += "?" + paramsAddition;
@@ -13,7 +13,7 @@ export const fetchData = (params: FetchParams) => {
 
 
     const newOptions = {
-        ...params.options, body: JSON.stringify(params.body)
+        ...params.options, body: stringifyBody ? JSON.stringify(params.body) : params.body
     }
     return fetch(url, newOptions)
 } 
@@ -28,5 +28,5 @@ export interface FetchParams{
 interface RequestOptions{
     method: string;
     headers: any;
-    body: string;
+    body: string | FormData;
 }

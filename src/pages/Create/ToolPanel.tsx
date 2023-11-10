@@ -18,6 +18,7 @@ interface ToolPaneProps{
 export default function ToolPanel({onNewSection, onNewChord}:ToolPaneProps) {
   return (
     <Container>
+        
         <Typography variant='subtitle2'>Označ sekci:</Typography>
 
         <ButtonGroup variant="outlined" orientation='horizontal'>
