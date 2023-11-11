@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../interfaces/user';
 import { LoginResultDTO } from '../../apis/dtos/dtosAuth';
-import FacebookLogin from 'react-facebook-login';
+import GoogleLoginButton from './components/GoogleLoginButton';
 
 const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
@@ -120,11 +120,21 @@ export default function Login() {
                         {inProgress&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
                     </Button>
 
+
                     <Box display={"flex"} flexDirection={"row"} alignItems={"center"} justifyContent={"end"}>
                         <Typography variant={"subtitle2"}>Nemáte ještě účet?</Typography>
                         <Button size={"small"} onClick={()=>{
                             navigate("/signup");
                         }}>Vytvořte si ho</Button>
+                    </Box>
+                    <Gap value={2}/>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "end",
+                    }}>
+                        <GoogleLoginButton/>
                     </Box>
                 </StyledContainer>
             </Box>

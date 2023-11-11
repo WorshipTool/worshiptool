@@ -20,3 +20,10 @@ export interface SignUpRequestDTO{
 export function loginResultDTOToUser(res: LoginResultDTO):User{
     return {...res.user, token: res.token};
 }   
+
+export interface PostLoginGoogleDto {
+    userToken: string;
+    email: string;
+    firstName: string;
+    lastName: string
+}

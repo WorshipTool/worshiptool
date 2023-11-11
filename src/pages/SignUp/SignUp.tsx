@@ -6,6 +6,7 @@ import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
+import GoogleLoginButton from '../Login/components/GoogleLoginButton';
 
 const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
@@ -141,6 +142,17 @@ export default function SignUp() {
                     <Gap/>
         
                     <Button onClick={onSignupClick}>Vytvořit účet</Button>
+
+                    
+                    <Gap value={2}/>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "end",
+                    }}>
+                        <GoogleLoginButton/>
+                    </Box>
                 </StyledContainer>
             </Box>
         </Box>
