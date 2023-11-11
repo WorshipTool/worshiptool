@@ -31,6 +31,7 @@ import GroupScreen from './pages/GroupHome/GroupScreen';
 import { GroupProvider } from './hooks/group/useGroup';
 import { PlaylistProvider } from './hooks/playlist/useCurrentPlaylist';
 import PlaylistScreen from './pages/Playlist/PlaylistScreen';
+import {GoogleOAuthProvider} from "@react-oauth/google"
 
 
 const Background = styled(Box)(({theme})=>({
@@ -81,22 +82,27 @@ export const AppRoutes = () => {
 function App() {
 
     return (
-      <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
-        <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <AuthProvider> 
-                <StackProvider>
-                    <GroupProvider>
-                      <PlaylistProvider>
-                        <Background/>
-                        <AppRoutes/>
-                      </PlaylistProvider>
-                    </GroupProvider>
-                </StackProvider>
-            </AuthProvider>
-          </BrowserRouter>
-        </ThemeProvider>
-      </SnackbarProvider>
+      <GoogleOAuthProvider clientId='736869166999-nckrpcdmab26hkp7s1cjbgdfu51igac9.apps.googleusercontent.com'>
+
+        <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <AuthProvider> 
+                  <StackProvider>
+                      <GroupProvider>
+                        <PlaylistProvider>
+                          <Background/>
+                          <AppRoutes/>
+                        </PlaylistProvider>
+                      </GroupProvider>
+                  </StackProvider>
+              </AuthProvider>
+            </BrowserRouter>
+          </ThemeProvider>
+        </SnackbarProvider>
+        
+    </GoogleOAuthProvider>
+
     )
 }
 
