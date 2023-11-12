@@ -11,15 +11,7 @@ export default function GoogleLoginButton() {
     const {login, signup, loginWithGoogle} = useAuth();
     const navigate = useNavigate();
     const onSuccess = (credentialResponse: CredentialResponse) => {
-        console.log(credentialResponse)
-        const decoded : any = jwtDecode(credentialResponse.credential || "")
-        console.log(decoded)
-        loginWithGoogle({
-            userToken: decoded.sub,
-            email: decoded.email,
-            firstName: decoded.given_name,
-            lastName: decoded.family_name,
-        }, (r)=>{
+        loginWithGoogle(credentialResponse, (r)=>{
           if(isRequestSuccess(r)){
             navigate("/")
           }
