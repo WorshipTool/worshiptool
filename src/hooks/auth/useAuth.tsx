@@ -7,6 +7,8 @@ import { RequestResult, codes, isRequestSuccess } from "../../apis/dtos/RequestR
 import { useSnackbar } from "notistack";
 import useGroup from "../group/useGroup";
 import { LOGIN_GOOGLE_URL } from "../../apis/constants";
+import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -32,7 +34,7 @@ export default function useAuth(){
 
 interface useProvideAuthI{
     login: ({email, password}:{email:string, password:string}, after? : (r: RequestResult<any>)=>void) => void,
-    loginWithGoogle: (data: PostLoginGoogleDto, after? : (r: RequestResult<any>)=>void) => void,
+    loginWithGoogle: (data: CredentialResponse, after? : (r: RequestResult<any>)=>void) => void,
     logout: () => void,
     signup: (data:SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => void,
     isLoggedIn: () => boolean,
@@ -49,11 +51,20 @@ export function useProvideAuth(){
 
     const {enqueueSnackbar} = useSnackbar();
 
+    const [googleShouldLogin, setGoogleShouldLogin] = useState<boolean>(false);
+    const autoGoogleLogin = useGoogleOneTapLogin({
+        disabled: !googleShouldLogin,
+        onSuccess: (credentialResponse: CredentialResponse) => {
+            loginWithGoogle(credentialResponse);
+        }
+    });
 
     useEffect(()=>{
         const u = localStorage.getItem("user");
         if(u!=null){
             setUser(JSON.parse(u));
+        }else{
+            setGoogleShouldLogin(true);
         }
     },[]);
 
@@ -110,7 +121,15 @@ export function useProvideAuth(){
         })
     }
 
-    const loginWithGoogle = (data: PostLoginGoogleDto, after? : (r: RequestResult<any>)=>void) => {
+    const loginWithGoogle = (response: CredentialResponse, after? : (r: RequestResult<any>)=>void) => {
+        const decoded : any = jwtDecode(response.credential || "")
+        const data = {
+            userToken: decoded.sub,
+            email: decoded.email,
+            firstName: decoded.given_name,
+            lastName: decoded.family_name,
+        };
+
         post({
             url: getUrl(LOGIN_GOOGLE_URL),
             body: data
