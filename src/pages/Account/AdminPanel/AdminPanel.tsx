@@ -2,10 +2,10 @@ import { Box, Button, InputBase, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import useAuth from '../../../hooks/auth/useAuth';
 import useFetch from '../../../hooks/useFetch';
-import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../../apis/urls';
-import { RequestResult, codes, isRequestSuccess } from '../../../apis/dtos/RequestResult';
-import { LoginRequestDTO, LoginResultDTO } from '../../../apis/dtos/dtosAuth';
-import { songGetCountDTO } from '../../../apis/dtos/dtosSong';
+import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../../api/urls';
+import { RequestResult, codes, isRequestSuccess } from '../../../api/dtos/RequestResult';
+import { LoginRequestDTO, LoginResultDTO } from '../../../api/dtos/dtosAuth';
+import { songGetCountDTO } from '../../../api/dtos/dtosSong';
 import useGroup from '../../../hooks/group/useGroup';
 import AddToSelection from './components/AddToSelection';
 import RemoveFromSelection from './components/RemoveFromSelection';

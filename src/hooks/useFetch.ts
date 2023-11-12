@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from "./auth/useAuth";
-import { RequestError, RequestResult, codes, formatted, messages } from "../apis/dtos/RequestResult";
+import { RequestError, RequestResult, codes, formatted, messages } from "../api/dtos/RequestResult";
 import { useSnackbar } from "notistack";
 import { FetchParams, fetchData as fetchDataFunction } from "../tech/fetchHelpers";
 

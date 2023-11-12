@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import useAuth from '../../hooks/auth/useAuth';
 import { ROLES } from '../../interfaces/user';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../apis/urls';
+import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../api/urls';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import { useSnackbar } from 'notistack';
 import useStack from '../../hooks/playlist/useStack';
@@ -22,15 +22,15 @@ import AddVideo from '../../components/AddVideo';
 import { SourceTypes } from '../../interfaces/song/source';
 import AddTag from '../../components/AddTag';
 import AddCreator from '../../components/AddCreator';
-import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../apis/dtos/playlist/dtosPlaylist';
-import { isRequestError, isRequestSuccess } from '../../apis/dtos/RequestResult';
+import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../api/dtos/playlist/dtosPlaylist';
+import { isRequestError, isRequestSuccess } from '../../api/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/PlaylistDTO';
 import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
 import AppContainer from '../../components/AppContainer/AppContainer';
 import useGroup from '../../hooks/group/useGroup';
 import useGroupSelection from '../../hooks/group/useGroupSelection';
-import { ApiGroupDto } from '../../apis/dtos/group/ApiGroupDto';
+import { ApiGroupDto } from '../../api/dtos/group/ApiGroupDto';
 import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 
 import {Sheet} from "@pepavlin/sheet-api"

@@ -3,9 +3,9 @@ import React from 'react'
 import Gap from '../../../components/Gap'
 import { Feedback, Try } from '@mui/icons-material';
 import useFetch from '../../../hooks/useFetch';
-import { getUrl } from '../../../apis/urls';
-import { POSTSENDFEEDBACK_URL } from '../../../apis/constants';
-import { PostSendMessageDTO } from '../../../apis/dtos/feedbackDtos';
+import { getUrl } from '../../../api/urls';
+import { POSTSENDFEEDBACK_URL } from '../../../api/constants';
+import { PostSendMessageDTO } from '../../../api/dtos/feedbackDtos';
 import useAuth from '../../../hooks/auth/useAuth';
 import { LoadingButton } from '@mui/lab';
 

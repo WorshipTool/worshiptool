@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "../useFetch";
-import { isRequestSuccess } from "../../apis/dtos/RequestResult";
+import { isRequestSuccess } from "../../api/dtos/RequestResult";
 import { Group } from "../../interfaces/group/Group";
-import { ApiGroupDto } from "../../apis/dtos/group/ApiGroupDto";
-import { mapApiToGroup } from "../../apis/dtos/group/ApiGroupMap";
+import { ApiGroupDto } from "../../api/dtos/group/ApiGroupDto";
+import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
 import useGroupSelection from "./useGroupSelection";
 import useAuth from "../auth/useAuth";
 

@@ -9,7 +9,7 @@ import useGroup from '../../../hooks/group/useGroup'
 import GroupChip from './GroupChip'
 import Gap from '../../Gap'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
+import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import { isMobile, isTablet } from 'react-device-detect'
 

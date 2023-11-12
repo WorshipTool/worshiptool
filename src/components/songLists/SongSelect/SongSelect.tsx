@@ -3,7 +3,7 @@ import { VariantDTO } from '../../../interfaces/variant/VariantDTO'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import { Box, Button, InputBase, TextField, Typography } from '@mui/material';
 import normalizeSearchText from '../../../tech/normalizeSearchText';
-import { mapApiToVariant } from '../../../apis/dtos/variant/mapApiToVariant';
+import { mapApiToVariant } from '../../../api/dtos/variant/mapApiToVariant';
 import OnChangeDelayer from '../../ChangeDelayer';
 import SongListCards from '../SongListCards/SongListCards';
 

@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../apis/constants";
+import { BACKEND_URL } from "../api/constants";
 
 export const fetchData = (params: FetchParams) => {
     const paramsAddition = params.params ? Object.keys(params.params).map(key => key + '=' + params.params[key]).join('&') : undefined;

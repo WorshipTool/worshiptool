@@ -1,10 +1,10 @@
 import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
 import Toolbar from "../../components/Toolbars/Toolbar";
-import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../apis/dtos/playlist/dtosPlaylist';
+import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../api/dtos/playlist/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
 import useFetch from '../../hooks/useFetch';
-import { getUrl_GETPLAYLISTS, getUrl_POSTCREATEPLAYLIST } from '../../apis/urls';
-import { isRequestSuccess, RequestResult, isRequestError } from '../../apis/dtos/RequestResult';
+import { getUrl_GETPLAYLISTS, getUrl_POSTCREATEPLAYLIST } from '../../api/urls';
+import { isRequestSuccess, RequestResult, isRequestError } from '../../api/dtos/RequestResult';
 import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { Remove } from "@mui/icons-material";

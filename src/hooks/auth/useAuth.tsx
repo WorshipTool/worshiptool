@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import User, { ROLES } from "../../interfaces/user";
 import useFetch from "../useFetch";
-import { LoginRequestDTO, LoginResultDTO, PostLoginGoogleDto, SignUpRequestDTO, loginResultDTOToUser } from '../../apis/dtos/dtosAuth';
-import { getUrl, getUrl_LOGIN, getUrl_SIGNUP } from "../../apis/urls";
-import { RequestResult, codes, isRequestSuccess } from "../../apis/dtos/RequestResult";
+import { LoginRequestDTO, LoginResultDTO, PostLoginGoogleDto, SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth';
+import { getUrl, getUrl_LOGIN, getUrl_SIGNUP } from "../../api/urls";
+import { RequestResult, codes, isRequestSuccess } from "../../api/dtos/RequestResult";
 import { useSnackbar } from "notistack";
 import useGroup from "../group/useGroup";
-import { LOGIN_GOOGLE_URL } from "../../apis/constants";
+import { LOGIN_GOOGLE_URL } from "../../api/constants";
 import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 

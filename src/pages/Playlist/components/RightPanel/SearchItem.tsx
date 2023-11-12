@@ -6,7 +6,7 @@ import useAuth from '../../../../hooks/auth/useAuth';
 import Playlist from '../../../../interfaces/playlist/PlaylistDTO';
 import usePlaylist from '../../../../hooks/playlist/usePlaylist';
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist';
-import { isRequestSuccess } from '../../../../apis/dtos/RequestResult';
+import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import useInnerPlaylist from '../../hooks/useInnerPlaylist';
 import { Sheet } from '@pepavlin/sheet-api';
 

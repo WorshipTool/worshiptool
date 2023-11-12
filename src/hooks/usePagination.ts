@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RequestResult, isRequestSuccess } from "../apis/dtos/RequestResult";
+import { RequestResult, isRequestSuccess } from "../api/dtos/RequestResult";
 
 interface resultProps<T>{
     result: RequestResult<any>, 

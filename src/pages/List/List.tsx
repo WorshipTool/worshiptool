@@ -2,9 +2,9 @@ import { Typography, Box, Grid, Paper, Container, CircularProgress, Divider, Pag
 import React, { useEffect, useState } from 'react'
 import Toolbar from '../../components/Toolbars/Toolbar';
 import usePagination from '../../hooks/usePagination';
-import { ListSongDataDTO, ListResultDTO } from '../../apis/dtos/dtosSong';
+import { ListSongDataDTO, ListResultDTO } from '../../api/dtos/dtosSong';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_GETSONGLIST } from '../../apis/urls';
+import { getUrl_GETSONGLIST } from '../../api/urls';
 import { grey } from '@mui/material/colors';
 import Gap from '../../components/Gap';
 import { useNavigate } from 'react-router-dom';

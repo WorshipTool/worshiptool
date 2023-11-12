@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import useFetch from '../../hooks/useFetch';
-import { isRequestSuccess } from '../../apis/dtos/RequestResult';
+import { isRequestSuccess } from '../../api/dtos/RequestResult';
 import { ROLES } from '../../interfaces/user';
 import SongVerify from './SongVerify';
 import useSongQuery from '../../hooks/song/useSongQuery';
