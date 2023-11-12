@@ -95,10 +95,10 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
     const {turnOn} = useCurrentPlaylist();
 
-    const onCreatePlaylistClick = async () => {
+    const onCreateSongClick = async () => {
         const result= await createPlaylist()
         if(isRequestSuccess(result)){
-            navigate("/playlist/"+result.data.guid)
+            navigate("/add")
             turnOn(result.data.guid)
         }
     }
@@ -153,8 +153,8 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
 
                 {isLoggedIn()?<>
-                    <Tooltip title={"Vytvořit playlist"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreatePlaylistClick} disabled={isMobile && !isTablet}>
+                    <Tooltip title={"Přidat novou píseň"}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={isMobile && !isTablet}>
                             <AddBox  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>

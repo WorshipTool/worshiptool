@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import useImport from '../hooks/useImport'
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult';
+import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import { LoadingButton } from '@mui/lab';
 import { CloudUpload, FileUpload, Upload, UploadFile } from '@mui/icons-material';
 

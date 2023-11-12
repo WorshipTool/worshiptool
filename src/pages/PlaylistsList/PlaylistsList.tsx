@@ -60,12 +60,12 @@ export default function () {
     const {guid : playlistGuid, turnOn, turnOff} = useCurrentPlaylist();
 
     const onCreateClick = () => {
-        setTitleDialogOpen(true);
+        createPlaylist();
     }
 
     const createPlaylist = async () => {
         const curr : any = inputRef.current;
-        const result = await createWithName(curr.value);
+        const result = await createWithName("Nový playlist " + playlists.length);
         if(isRequestSuccess(result)){
             navigate("/playlist/"+result.data.guid);
             turnOn(result.data.guid)

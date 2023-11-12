@@ -1,4 +1,4 @@
-import { Close, Edit } from '@mui/icons-material'
+import { Add, Close, Edit } from '@mui/icons-material'
 import { Box, Fab, SpeedDial, SpeedDialAction, SpeedDialIcon, Tooltip } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -13,7 +13,7 @@ export default function FloatingAddButton({extended}: FloatingAddButtonProps) {
     const navigate = useNavigate();
 
     const onClickAddSong = useCallback(()=>{
-        navigate("/create");
+        navigate("/add");
     },[]);
 
 
@@ -21,7 +21,7 @@ export default function FloatingAddButton({extended}: FloatingAddButtonProps) {
     const titleWidth = "90px"
     return (
         <div>
-            {isLoggedIn()&&<Tooltip title={"Napsat novou píseň"}
+            {isLoggedIn()&&<Tooltip title={"Přidat novou píseň"}
                 placement='left'>
                 <Fab sx={{ position: 'fixed', bottom: 30, right: 30,
                     transition,
@@ -34,7 +34,7 @@ export default function FloatingAddButton({extended}: FloatingAddButtonProps) {
                     color='primary'
                     onClick={onClickAddSong}
                     variant={extended?"extended":"circular"}>
-                    <Edit sx={{
+                    <Add sx={{
                         position:"absolute",
                         transition,
                         ...extended?{
@@ -43,7 +43,7 @@ export default function FloatingAddButton({extended}: FloatingAddButtonProps) {
                             mr: 0,
                         }
                     }}/>
-                    <Edit sx={{opacity:0}}/>
+                    <Add sx={{opacity:0}}/>
                     <Box sx={{
                         transition,
                         overflowWrap: "none",
