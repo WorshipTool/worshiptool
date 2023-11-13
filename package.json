@@ -28,7 +28,6 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
-    "react-drag-drop-files": "^2.3.10",
     "react-markdown": "^8.0.7",
     "react-material-ui-carousel": "^3.4.2",
     "react-native-device-info": "^10.8.0",
