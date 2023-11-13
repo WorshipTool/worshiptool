@@ -5,23 +5,19 @@ import SheetGraphics from '../../../../Sheet/SheetGraphics';
 import DefaultStyle from '../../../../Sheet/styles/DefaultStyle';
 import { Sheet } from '@pepavlin/sheet-api';
 import { Box } from '@mui/material';
+import UploadSheetEditable from './UploadSheetEditable';
+import { EasySheet } from '../Upload';
 
 interface SheetListPreviewProps {
-    sheets: {
-        title: string,
-        data: string,
-    }[]
+    sheets: EasySheet[],
+    onChange: (sheets: EasySheet[]) => void,
 }
 
 export default function SheetListPreview(props: SheetListPreviewProps) {
-    const [sheets, setSheets] = React.useState<Sheet[]>([]);
+    const [sheets, setSheets] = React.useState<EasySheet[]>(props.sheets);
 
     useEffect(()=>{
-        const sheets = props.sheets.map((sheetData)=>{
-            const sheet = new Sheet(sheetData.data);
-            return sheet;
-        })
-        setSheets(sheets);
+        setSheets(props.sheets);
     }, [props.sheets])
 
   return (
@@ -32,8 +28,17 @@ export default function SheetListPreview(props: SheetListPreviewProps) {
     }}>
         {sheets.map((sheet, index)=>{
             return (
-                <div key={"sheet"+index}>
-                    <DefaultStyle sheet={sheet} title={props.sheets[index].title}></DefaultStyle>
+                <div key={"sheet"+sheet.randomHash}>
+                    <UploadSheetEditable title={sheet.title} data={sheet.data} onDelete={()=>{
+                        const newSheets = [...props.sheets];
+                        newSheets.splice(index, 1);
+                        props.onChange(newSheets);
+                    }} onChange={(title, data)=>{
+                        const newSheets = [...props.sheets];
+                        newSheets[index].title = title;
+                        newSheets[index].data = data
+                        props.onChange(newSheets);
+                    }} originalFile={sheet.originalFile}></UploadSheetEditable>
                 </div>
             )
         })}

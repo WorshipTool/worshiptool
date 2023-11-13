@@ -61,6 +61,7 @@ export default function SheetGraphics() {
 
     useEffect(()=>{
       if(song){
+        console.log(song)
         const sheet = new Sheet(song.variants[variantID].sheetData);
         setCurrentSheet(sheet);
       }

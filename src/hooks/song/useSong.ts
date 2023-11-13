@@ -48,7 +48,6 @@ export default function useSong(g:string|null){
 
     const reload = () => {
         if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)},(r)=>{
-            //console.log(r);
         });
     }
 
