@@ -3,7 +3,6 @@ import { Box, Button, CircularProgress, Paper, Typography, SxProps } from '@mui/
 import React, { useRef } from 'react'
 import Gap from '../../../../../../components/Gap'
 import useImport from '../../../../Write/hooks/useImport';
-import {FileUploader} from "react-drag-drop-files"
 import DragAndDrop from './components/DragAndDrop';
 
 interface UploadPanelProps {
