@@ -23,7 +23,7 @@ export default function AddMenu() {
             }}>
                 <AddMenuItem title='Nahrát soubor' icon={<UploadFile fontSize='inherit'/>} onClick={()=>{
                     navigate("/add/upload")
-                }}/>
+                }} disabled/>
                 
                 <AddMenuItem title='Sepsat ručně' icon={<Edit fontSize='inherit'/>} iconSize={40} onClick={()=>{
                     navigate("/add/write")

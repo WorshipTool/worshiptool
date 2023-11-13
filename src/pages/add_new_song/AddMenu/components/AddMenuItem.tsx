@@ -7,22 +7,27 @@ interface AddMenuItemProps {
     onClick?: ()=>void,
     icon?: React.ReactNode,
     iconSize?: number,
+    disabled?: boolean
 }
 
 export default function AddMenuItem(props: AddMenuItemProps) {
     const size = 200;
   
     return (
-    <div onClick={props.onClick}>
+    <div onClick={()=>{
+        if(props.disabled) return;
+        props?.onClick?.()
+
+    }}>
         <Paper sx={{
             width: size,
             height: size,
-            "&:hover":{
+            "&:hover": props.disabled ? {} : {
                 backgroundColor: "rgba(255,255,255,0.4)",
                 transform: "scale(1.02)"
             },
             transition: "all 0.2s ease-in-out",
-              
+            opacity: props.disabled ? 0.5 : 1,
         }}>
             <Box sx={{
                 width: "100%",
@@ -31,6 +36,7 @@ export default function AddMenuItem(props: AddMenuItemProps) {
                 flexDirection:"column",
                 alignItems:"center",
                 justifyContent:"center",
+
             }}>
                 <Box sx={{
                     fontSize: props.iconSize || 60,
