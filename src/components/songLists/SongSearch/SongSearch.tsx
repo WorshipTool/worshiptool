@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React, { ReactElement, useState } from 'react'
 import OnChangeDelayer from '../../ChangeDelayer';
 import useSongSearch from '../../../hooks/song/useSongSearch';
-import { mapApiToVariant } from '../../../apis/dtos/variant/mapApiToVariant';
+import { mapApiToVariant } from '../../../api/dtos/variant/mapApiToVariant';
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 import useGroup from '../../../hooks/group/useGroup';
 import useGroupSelection from '../../../hooks/group/useGroupSelection';

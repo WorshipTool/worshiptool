@@ -9,7 +9,7 @@ import useGroup from '../../../hooks/group/useGroup'
 import GroupChip from './GroupChip'
 import Gap from '../../Gap'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
+import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import { isMobile, isTablet } from 'react-device-detect'
 
@@ -95,10 +95,10 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
     const {turnOn} = useCurrentPlaylist();
 
-    const onCreatePlaylistClick = async () => {
+    const onCreateSongClick = async () => {
         const result= await createPlaylist()
         if(isRequestSuccess(result)){
-            navigate("/playlist/"+result.data.guid)
+            navigate("/add")
             turnOn(result.data.guid)
         }
     }
@@ -153,8 +153,8 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
 
                 {isLoggedIn()?<>
-                    <Tooltip title={"Vytvořit playlist"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreatePlaylistClick} disabled={isMobile && !isTablet}>
+                    <Tooltip title={"Přidat novou píseň"}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={isMobile && !isTablet}>
                             <AddBox  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>

@@ -1,14 +1,14 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { RequestResult, isRequestError } from '../../apis/dtos/RequestResult';
+import { RequestResult, isRequestError } from '../../api/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../interfaces/user';
-import { LoginResultDTO } from '../../apis/dtos/dtosAuth';
+import { LoginResultDTO } from '../../api/dtos/dtosAuth';
 import GoogleLoginButton from './components/GoogleLoginButton';
 
 const StyledContainer = styled(Paper)(({theme})=>({

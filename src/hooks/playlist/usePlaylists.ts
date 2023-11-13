@@ -1,11 +1,11 @@
-import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO, ApiReorderPlaylistItemDTO } from '../../apis/dtos/playlist/dtosPlaylist';
-import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../apis/urls';
+import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO, ApiReorderPlaylistItemDTO } from '../../api/dtos/playlist/dtosPlaylist';
+import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../api/urls';
 import useAuth from '../auth/useAuth';
 import useFetch from '../useFetch';
-import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../apis/dtos/RequestResult';
+import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../api/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/PlaylistDTO';
-import { mapApiToVariant } from '../../apis/dtos/variant/mapApiToVariant';
-import { mapApiToPlaylistItemDTO } from '../../apis/dtos/playlist/ApiPlaylisItemMap';
+import { mapApiToVariant } from '../../api/dtos/variant/mapApiToVariant';
+import { mapApiToPlaylistItemDTO } from '../../api/dtos/playlist/ApiPlaylisItemMap';
 import { Chord } from '@pepavlin/sheet-api';
 
 

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import usePlaylists from "./usePlaylists";
 import Playlist, { PlaylistItemDTO } from "../../interfaces/playlist/PlaylistDTO";
-import { RequestResult, isRequestSuccess } from "../../apis/dtos/RequestResult";
+import { RequestResult, isRequestSuccess } from "../../api/dtos/RequestResult";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";
-import { mapApiToVariant } from "../../apis/dtos/variant/mapApiToVariant";
-import { mapApiToPlaylistItemDTO } from "../../apis/dtos/playlist/ApiPlaylisItemMap";
-import { ApiPlaylistItemDTO } from "../../apis/dtos/playlist/ApiPlaylistItemDTO";
-import { ApiReorderPlaylistItemDTO } from "../../apis/dtos/playlist/dtosPlaylist";
+import { mapApiToVariant } from "../../api/dtos/variant/mapApiToVariant";
+import { mapApiToPlaylistItemDTO } from "../../api/dtos/playlist/ApiPlaylisItemMap";
+import { ApiPlaylistItemDTO } from "../../api/dtos/playlist/ApiPlaylistItemDTO";
+import { ApiReorderPlaylistItemDTO } from "../../api/dtos/playlist/dtosPlaylist";
 import { Chord } from "@pepavlin/sheet-api";
 import useAuth from "../auth/useAuth";
 

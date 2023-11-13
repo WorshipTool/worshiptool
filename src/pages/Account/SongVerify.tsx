@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import useSong from '../../hooks/song/useSong'
 import { useActionData, useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
-import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../apis/urls';
+import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../api/urls';
 import useAuth from '../../hooks/auth/useAuth';
 
 export interface SongVerifyProps{

@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Tooltip, Typography, styled } from '@mui/material'
 import React from 'react'
-import Gap from '../../components/Gap'
+import Gap from '../../../components/Gap'
 
 const Container = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[200],
@@ -18,6 +18,7 @@ interface ToolPaneProps{
 export default function ToolPanel({onNewSection, onNewChord}:ToolPaneProps) {
   return (
     <Container>
+        
         <Typography variant='subtitle2'>Označ sekci:</Typography>
 
         <ButtonGroup variant="outlined" orientation='horizontal'>

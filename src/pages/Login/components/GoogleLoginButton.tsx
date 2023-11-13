@@ -4,7 +4,7 @@ import {jwtDecode} from "jwt-decode"
 import axios from "axios"
 import useAuth from '../../../hooks/auth/useAuth'
 import { useNavigate } from 'react-router-dom'
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
+import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 
 export default function GoogleLoginButton() {
 

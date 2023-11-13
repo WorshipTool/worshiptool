@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Home from './pages/Home/Home';
 import "./App.css";
-import Create from './pages/Create/Create';
+import Create from './pages/add_new_song/Write/Create';
 import { createTheme } from '@mui/material';
 import SheetGraphics from './pages/Sheet/SheetGraphics';
 import { AuthProvider } from './hooks/auth/useAuth';
@@ -32,6 +32,8 @@ import { GroupProvider } from './hooks/group/useGroup';
 import { PlaylistProvider } from './hooks/playlist/useCurrentPlaylist';
 import PlaylistScreen from './pages/Playlist/PlaylistScreen';
 import {GoogleOAuthProvider} from "@react-oauth/google"
+import AddMenu from './pages/add_new_song/AddMenu/AddMenu';
+import Upload from './pages/add_new_song/AddMenu/Upload/Upload';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -67,8 +69,10 @@ export const AppRoutes = () => {
       <Route path="account" element={<Account/>}/>
       <Route path="account/playlists" element={<PlaylistsList/>}/>
       <Route path="song/:guid" element={<SheetGraphics/>}/>
-      <Route path="create" element={<Create/>}/>
-      <Route path="create/:guid" element={<Create/>}/>
+      <Route path="add" element={<AddMenu/>}/>
+      <Route path="add/upload" element={<Upload/>}/>
+      <Route path="add/write" element={<Create/>}/>
+      <Route path="add/write/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
       <Route path="playlist/:guid/cards" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>

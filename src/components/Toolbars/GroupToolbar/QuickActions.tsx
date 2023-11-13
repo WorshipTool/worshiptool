@@ -6,7 +6,7 @@ import { Add, Edit, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult'
+import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 
 interface QuickActionsProps {
     visible?: boolean

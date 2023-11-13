@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Song from "../../interfaces/song/song";
 import useFetch from "../useFetch";
-import { getUrl_GETSONGBYGUID } from "../../apis/urls";
-import AllSongDataDTO from "../../apis/dtos/dtosSong";
+import { getUrl_GETSONGBYGUID } from "../../api/urls";
+import AllSongDataDTO from "../../api/dtos/dtosSong";
 import useTranspose from "./hooks/useTranspose";
 import useAuth from "../auth/useAuth";
-import convertAllSongDataDTOToSong from "../../apis/allSongDataDTOToSong";
+import convertAllSongDataDTOToSong from "../../api/allSongDataDTOToSong";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";
 
 
@@ -48,7 +48,6 @@ export default function useSong(g:string|null){
 
     const reload = () => {
         if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)},(r)=>{
-            //console.log(r);
         });
     }
 

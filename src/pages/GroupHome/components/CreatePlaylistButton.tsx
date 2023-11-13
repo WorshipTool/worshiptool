@@ -2,7 +2,7 @@ import { Box, Typography, styled } from '@mui/material'
 import React from 'react'
 import usePlaylist from '../../../hooks/playlist/usePlaylist'
 import usePlaylists from '../../../hooks/playlist/usePlaylists';
-import { isRequestSuccess } from '../../../apis/dtos/RequestResult';
+import { isRequestSuccess } from '../../../api/dtos/RequestResult';
 import { useNavigate } from 'react-router-dom';
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist';
 

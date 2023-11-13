@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import useSongQuery from "../../../../../hooks/song/useSongQuery";
-import { isRequestSuccess } from "../../../../../apis/dtos/RequestResult";
-import { SearchSongDataDTO } from "../../../../../apis/dtos/dtosSong";
+import { isRequestSuccess } from "../../../../../api/dtos/RequestResult";
+import { SearchSongDataDTO } from "../../../../../api/dtos/dtosSong";
 import { VariantDTO } from "../../../../../interfaces/variant/VariantDTO";
-import { mapApiToVariant } from '../../../../../apis/dtos/variant/mapApiToVariant';
+import { mapApiToVariant } from '../../../../../api/dtos/variant/mapApiToVariant';
 
 export default function useRecommendedSongs(){
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from "./auth/useAuth";
-import { RequestError, RequestResult, codes, formatted, messages } from "../apis/dtos/RequestResult";
+import { RequestError, RequestResult, codes, formatted, messages } from "../api/dtos/RequestResult";
 import { useSnackbar } from "notistack";
 import { FetchParams, fetchData as fetchDataFunction } from "../tech/fetchHelpers";
 
@@ -18,7 +18,9 @@ export default function useFetch(){
     const post = async (params: FetchParams, after?: (d:RequestResult<any>)=>void) => {
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(params.body)
         };
 
@@ -26,7 +28,26 @@ export default function useFetch(){
         return await fetchData({...params, options: requestOptions}, after)
     }
 
+    interface PostFormDataParams extends FetchParams{
+        body: FormData
+    }
+    const postFormData = async (params: PostFormDataParams, after?: (d:RequestResult<any>)=>void) => {
+
+        const requestOptions = {
+            method: 'POST',
+            body: params.body
+        };
+
+
+
+
+        return await _fetchData({...params, options: requestOptions}, after, false)
+    }
+
     const fetchData = async <T>(params: FetchParams, after?: (d:RequestResult<T>)=>void)=>{
+        return _fetchData<T>(params, after);
+    }
+    const _fetchData = async <T>(params: FetchParams, after?: (d:RequestResult<T>)=>void, stringifyBody = true)=>{
 
         //create options with header
         const headers = {
@@ -39,7 +60,7 @@ export default function useFetch(){
 
         try{
             setLoading(true);
-            const response = await fetchDataFunction({...params, options: newOptions});
+            const response = await fetchDataFunction({...params, options: newOptions},stringifyBody);
             const data : RequestResult<T> = await response.json();
     
             if(data.statusCode===undefined){
@@ -94,6 +115,7 @@ export default function useFetch(){
     return {
         fetchData: fetchData, post,
         fetch: fetchData,
+        postFormData,
         data, error, loading,
         message, statusCode
     }

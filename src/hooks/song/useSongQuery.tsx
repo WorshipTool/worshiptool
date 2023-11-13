@@ -1,6 +1,6 @@
-import { BACKEND_URL, GETSONGQUERY_URL } from "../../apis/constants";
-import { RequestResult } from "../../apis/dtos/RequestResult";
-import { SearchSongDataDTO, SongSearchResultDTO, songGetQueryDTO, songGetResultDTO } from "../../apis/dtos/dtosSong";
+import { BACKEND_URL, GETSONGQUERY_URL } from "../../api/constants";
+import { RequestResult } from "../../api/dtos/RequestResult";
+import { SearchSongDataDTO, SongSearchResultDTO, songGetQueryDTO, songGetResultDTO } from "../../api/dtos/dtosSong";
 import useFetch from "./../useFetch";
 
 interface songQueryBaseProps{

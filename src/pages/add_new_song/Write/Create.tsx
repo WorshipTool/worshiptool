@@ -1,20 +1,21 @@
 import { Box, Button, Divider, FormControlLabel, InputBase, Switch, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
-import useFetch from '../../hooks/useFetch';
-import { getUrl_ADDSONGDATA } from '../../apis/urls';
+import useFetch from '../../../hooks/useFetch';
+import { getUrl_ADDSONGDATA } from '../../../api/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isRequestSuccess } from '../../apis/dtos/RequestResult';
-import Toolbar from '../../components/Toolbars/Toolbar';
-import DefaultStyle from '../Sheet/styles/DefaultStyle';
+import { RequestResult, isRequestSuccess } from '../../../api/dtos/RequestResult';
+import Toolbar from '../../../components/Toolbars/Toolbar';
+import DefaultStyle from '../../Sheet/styles/DefaultStyle';
 import {Sheet} from "@pepavlin/sheet-api";
-import Gap from '../../components/Gap';
+import Gap from '../../../components/Gap';
 import ToolPanel from './ToolPanel';
-import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../apis/dtos/dtosNewSongData';
-import Song from '../../interfaces/song/song';
-import useSong from '../../hooks/song/useSong';
-import ContainerGrid from '../../components/ContainerGrid';
-import AppContainer from '../../components/AppContainer/AppContainer';
+import { NewSongDataDTO, NewSongDataResult, convertSongToNewSongDTO } from '../../../api/dtos/dtosNewSongData';
+import Song from '../../../interfaces/song/song';
+import useSong from '../../../hooks/song/useSong';
+import ContainerGrid from '../../../components/ContainerGrid';
+import AppContainer from '../../../components/AppContainer/AppContainer';
+import ImportButton from './components/ImportButton';
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -124,6 +125,11 @@ export default function Create() {
         },[]
     )
 
+    const onImport = (title:string, data:string) => {
+        setTitle(title);
+        setSheetData(data);
+    }
+
     return (
         <AppContainer>
             
@@ -132,13 +138,16 @@ export default function Create() {
                     
                     <ContainerGrid  direction='column'>
 
-                        <Box display={"flex"}padding={1}>   
+                        <Box display={"flex"} padding={1} paddingLeft={0}>   
                             <Box flex={1} display={"flex"} alignItems={"center"} >
+                                
+                                {/* <ImportButton onLoad={onImport}/> */}
                                 {guid&&<Typography>Parent song:</Typography>}
                                 <Gap horizontal/>
                                 {guid&&<Typography fontWeight={"bold"}>{getName()}</Typography>}
                             </Box>
                             <Box display={"flex"} justifyContent={"end"} padding={1}>
+                                    
                                 <Typography display={"flex"} alignItems={"center"} variant='caption'>Náhled</Typography>                                 
                                 <Switch size='small' checked={preview} onChange={(e)=>{setPreview((p)=>!p)}}/>
                             </Box>
@@ -167,12 +176,15 @@ export default function Create() {
 
                         <Gap/>
                         <Box display={"flex"} justifyContent={"start"}>
-                            <Tooltip title={"Přidat"}>
-                                <Button variant={"contained"} color={"primary"} disabled={posting||(title==""||sheetData=="")} onClick={onPostClick}> 
-                                    Ověřit a přidat
-                                    {posting&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
-                                </Button>
-                            </Tooltip>                            
+                            <Box flex={1}>
+                                <Tooltip title={"Přidat"}>
+                                    <Button variant={"contained"} color={"primary"} disabled={posting||(title==""||sheetData=="")} onClick={onPostClick}> 
+                                        Vytvořit {"(neveřejně)"}
+                                        {posting&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
+                                    </Button>
+                                </Tooltip>
+                            </Box>
+                                                  
                         </Box>
                     </ContainerGrid>
         
