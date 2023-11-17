@@ -41,7 +41,8 @@ jobs:
     - name: Copy file with SSH
       run: | 
         scp -r build/* root@prijmeni.cz:/var/www/chvalotce
-    - name: Deploy Stage
+        
+    - name: Send message to Messenger
       uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://chvalotce.cz/sendmessage'
