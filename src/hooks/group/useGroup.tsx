@@ -57,13 +57,13 @@ export const useProvideGroup = () : useProvideGroupI => {
         localStorage.removeItem(key);
     }
 
-    useEffect(()=>{
-        const u = localStorage.getItem("user");
-        if(!u){ 
-            turnOff();
-            navigate("/");
-        }
-    },[])
+    // useEffect(()=>{
+    //     const u = localStorage.getItem("user");
+    //     if(!u){ 
+    //         turnOff();
+    //         navigate("/");
+    //     }
+    // },[])
 
     useEffect(()=>{
 

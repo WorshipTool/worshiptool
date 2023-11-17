@@ -9,6 +9,7 @@ import useGroup from "../group/useGroup";
 import { LOGIN_GOOGLE_URL } from "../../api/constants";
 import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export const authContext = createContext<useProvideAuthI>({
     login: () => {},
@@ -50,6 +51,7 @@ export function useProvideAuth(){
     const {post} = useFetch();
 
     const {enqueueSnackbar} = useSnackbar();
+    const navigate = useNavigate();
 
     const [googleShouldLogin, setGoogleShouldLogin] = useState<boolean>(false);
     const autoGoogleLogin = useGoogleOneTapLogin({
@@ -104,6 +106,7 @@ export function useProvideAuth(){
         setUser(undefined);
         localStorage.removeItem("user");
         enqueueSnackbar("Byl jsi odhlášen. Zase někdy!");
+        navigate("/")
     }
 
     const signup = (data: SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => {

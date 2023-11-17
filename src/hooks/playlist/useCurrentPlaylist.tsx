@@ -32,7 +32,7 @@ export const useProvidePlaylist = () : useProvidePlaylistI => {
     },[isLoggedIn])
 
     
-    const key = "currenPlaylist";
+    const key = "currentPlaylist";
     const turnOn = (guid:string) => {
         setGuid(guid);
         
