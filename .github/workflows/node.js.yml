@@ -43,8 +43,11 @@ jobs:
         scp -r build/* root@prijmeni.cz:/var/www/chvalotce
         
     - name: Send message to Messenger
-      uses: dkershner6/post-api-call-action@v1
+      uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://chvalotce.cz/api/sendmessage'
-        headers: '{"Content-Type": "application/x-www-form-urlencoded"}'
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
         data: '{"message": "Nová verze frontendu byla právě nasazena."}'
+        timeout: 30000
+        preventFailureOnNoResponse: true
