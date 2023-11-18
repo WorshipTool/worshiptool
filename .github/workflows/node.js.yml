@@ -45,6 +45,6 @@ jobs:
     - name: Send message to Messenger
       uses: dkershner6/post-api-call-action@v1
       with:
-        url: 'https://chvalotce.cz/sendmessage'
+        url: 'https://chvalotce.cz/api/sendmessage'
         headers: '{"Content-Type": "application/x-www-form-urlencoded"}'
         data: '{"message": "Nová verze frontendu byla právě nasazena."}'
