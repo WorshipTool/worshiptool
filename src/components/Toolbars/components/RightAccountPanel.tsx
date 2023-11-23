@@ -12,6 +12,7 @@ import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import { isMobile, isTablet } from 'react-device-detect'
+import UploadFileInput from '../../../pages/add_new_song/AddMenu/Upload/components/UploadFileInput'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -94,12 +95,13 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
     }
 
     const {turnOn} = useCurrentPlaylist();
+    const uploadInputRef = React.useRef<HTMLInputElement>(null);
 
     const onCreateSongClick = async () => {
-        const result= await createPlaylist()
-        if(isRequestSuccess(result)){
+        if(isMobile && !isTablet ){
+            uploadInputRef.current?.click();
+        }else{
             navigate("/add")
-            turnOn(result.data.guid)
         }
     }
 
@@ -131,7 +133,10 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
     return (
         <>
             <Container color={color}  >
-
+                <UploadFileInput onUpload={(files)=>{
+                    navigate("/add/upload/parse", {state: {files: files}})
+                }} inputRef={uploadInputRef}/>
+                
                 {isHome? <>
                     <Tooltip title={"Dokumentace"}>
                         <IconButton color='inherit' sx={iconButtonStyle} onClick={openDocumentation}>
@@ -154,7 +159,7 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
                 {isLoggedIn()?<>
                     <Tooltip title={"Přidat novou píseň"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={isMobile && !isTablet}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={false}>
                             <AddBox  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>
