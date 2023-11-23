@@ -28,7 +28,6 @@ export default function UploadedSongLink(props: UploadedSongLinkProps) {
           "&:hover":{
               backgroundColor: "#d0d0d0",
           },
-          width: 400
       }}>
           <Button onClick={open}>Otevřít</Button>
           <Typography variant='subtitle2' flex={1}>{props.title}</Typography>
