@@ -2,7 +2,7 @@ import React from 'react'
 import AppContainer from '../../../components/AppContainer/AppContainer'
 import AddMenuItem from './components/AddMenuItem'
 import { Box, Typography } from '@mui/material'
-import { Add, Edit, UploadFile } from '@mui/icons-material'
+import { Add, Camera, Edit, UploadFile } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
 export default function AddMenu() {
@@ -23,11 +23,13 @@ export default function AddMenu() {
             }}>
                 <AddMenuItem title='Nahrát soubor' icon={<UploadFile fontSize='inherit'/>} onClick={()=>{
                     navigate("/add/upload")
-                }} disabled/>
+                }}/>
                 
                 <AddMenuItem title='Sepsat ručně' icon={<Edit fontSize='inherit'/>} iconSize={40} onClick={()=>{
                     navigate("/add/write")
                 }}/>
+
+
             </Box>
         </Box>
     </AppContainer>

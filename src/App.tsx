@@ -34,6 +34,7 @@ import PlaylistScreen from './pages/Playlist/PlaylistScreen';
 import {GoogleOAuthProvider} from "@react-oauth/google"
 import AddMenu from './pages/add_new_song/AddMenu/AddMenu';
 import Upload from './pages/add_new_song/AddMenu/Upload/Upload';
+import Parse from './pages/add_new_song/AddMenu/Upload/components/Parse/Parse';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -71,6 +72,7 @@ export const AppRoutes = () => {
       <Route path="song/:guid" element={<SheetGraphics/>}/>
       <Route path="add" element={<AddMenu/>}/>
       <Route path="add/upload" element={<Upload/>}/>
+      <Route path="add/upload/parse" element={<Parse/>}/>
       <Route path="add/write" element={<Create/>}/>
       <Route path="add/write/:guid" element={<Create/>}/>
       <Route path="playlist/:guid" element={<PlaylistScreen/>}/>
