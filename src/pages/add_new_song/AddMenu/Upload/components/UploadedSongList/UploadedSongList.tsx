@@ -14,7 +14,9 @@ interface UploadedSongListProps {
 export default function UploadedSongList(props: UploadedSongListProps) {
 
   return (
-    <Box>
+    <Box sx={{
+        padding: 2
+    }}>
         <Typography variant='h5'>
             Nahrané písně
         </Typography>
