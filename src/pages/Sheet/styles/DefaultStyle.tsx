@@ -27,15 +27,17 @@ export default function DefaultStyle({variantData, sheet, title: titleString}:De
     
     const font = "Roboto";
 
-    const width = "2rem"
+    const width = "1rem"
 
     return (
-        <Box fontFamily={font}>
+        <Box fontFamily={font} sx={{
+            width: 300,
+            scrollbarX: "auto",
+        }}>
             <Box display={"flex"} flexDirection={"row"} gap={1} sx={{marginBottom:1}}>
                     <Box width={width}></Box>
                     <Box flex={10}>
-                    <Typography variant='h5' fontFamily={"inherit"}><b>{title}</b></Typography>
-                    
+                        <Typography variant='h5' fontFamily={"inherit"}><b>{title}</b></Typography>
                     </Box>
             </Box>
             {sections.map((section, index) => {

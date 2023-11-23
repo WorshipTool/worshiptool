@@ -29,10 +29,10 @@ export default function UploadSheetEditable(props: UploadSheetEditableProps) {
   return (
     <Paper sx={{
         padding: 2,
-        width: 500,
         marginBottom: 2,
     }}>
-        <Box>
+        <Box sx={{
+        }}>
             <Box sx={{
                 display:"flex",
                 flexDirection:"row",

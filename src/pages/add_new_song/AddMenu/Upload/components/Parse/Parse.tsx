@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import AppContainer from '../../../../../../components/AppContainer/AppContainer';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { EasySheet } from '../../Upload';
 import { isRequestSuccess } from '../../../../../../api/dtos/RequestResult';
-import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Typography, useTheme } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 import Gap from '../../../../../../components/Gap';
 import SheetListPreview from '../SheetListPreview';
@@ -47,6 +47,7 @@ export default function Parse() {
 
     const {post, loading:fetching} = useFetch();
     const upload = useImport();
+    const navigate = useNavigate();
 
     const startParsing = async (files: File[]) => {
         setLoading(true);
@@ -132,109 +133,158 @@ export default function Parse() {
         }
     },[])
 
+    const theme = useTheme();
+
     return (
         <AppContainer>
             <Box sx={{
-            width: "100%",
-            height: 500,
-            display:"flex",
-            flexDirection:"column",
-            alignItems:"center",
-            paddingTop: 5,
-        
-        }}>
-            {!loading ? <Box sx={{
-            }}>
-                {!uploaded ? <>
-                    {!uploading ? <>
-                        
-                        <Box sx={{
-                            display:"flex",
-                            flexDirection:"row",
-                            justifyContent:"space-between",
-                            alignItems:"center",
-                        }}>
-                            <Box>
-                                
-                                <Typography variant='subtitle2'>Zkontrolujte, zda bylo vše správně načteno...</Typography>
-                            </Box>
-                            <Box>
-                                <Button variant='contained' size='large' endIcon={<CloudUpload/>} onClick={uploadSheets}>
-                                     <Typography variant='button'>Ano, vše je pořádku</Typography>
-                                </Button>
-                    
-                            </Box>
-                            
-                        </Box>
-                        <Gap/>
-                        <SheetListPreview sheets={sheets} onChange={(sheets)=>{
-                            setSheets(sheets);
-                            if(sheets.length===0){
-                                setParsed(false);
-                            }
-                        }}/>
-                    </> : <>
-                        <Box sx={{
-                            height: 200,
-                            display:"flex",
-                            flexDirection:"column",
-                            justifyContent:"end",
-                        }}>
-                            <CircularProgress/>
-                            <Gap/>
-                            <Typography variant='subtitle2'>{uploadingMessage}</Typography>
-                        </Box>
-                    </>}
-                </> : <>
-                    <UploadedSongList songs={uploadedSongs}/>
-                    <Gap/>
-                    <Box sx={{
-                        display:"flex",
-                        flexDirection:"row",
-                        justifyContent:"end",
-                    }}>
-                        <Button variant='contained' onClick={()=>{
-                            setParsed(false);
-                            setUploaded(false);
-                        }}>Nahrát další</Button>
-                    </Box>
-                    <Gap value={2}/>
-                    
-                </>}
-            </Box> : <Box sx={{
-                width: "100%",
-                height: "100%",
                 display:"flex",
-                justifyContent:"center",
-                alignItems:"center"
+                flexDirection:"column",
+                alignItems:"center",
+                paddingTop: 5,
+            
             }}>
-                <Paper sx={{
-                    width: 360,
-                    height: 330,
-                    borderRadius: 5,
+                {!loading ? <Box sx={{
+                    width: "100%",
+                    height: "100%",
                     display:"flex",
                     flexDirection:"column",
                     justifyContent:"center",
-                    alignItems:"center",
-                    userSelect:"none",
-                    bgcolor: "grey.100",
-                    border: "0px solid"
+                    alignItems:"center"
                 }}>
-
-                    <Box sx={{
-                        display: "block"
+                    {!uploaded ? <>
+                        {!uploading ? <>
+                            
+                            
+                            {sheets.length > 0 
+                                ? <Box sx={{
+                                    display:"flex",
+                                    flexDirection:"column",
+                                    justifyContent:"center",
+                                    padding:2
+                                }}> 
+                                    <Box sx={{
+                                        display:"flex",
+                                        justifyContent:"space-between",
+                                        alignItems:"center",
+                                    }}>
+                                        <Box flex={1}>
+                                            <Typography variant='subtitle2'>Zkontrolujte, zda bylo vše správně načteno...</Typography>
+                                        </Box>
+                                        <Gap horizontal/>
+                                        <Box sx={{
+                                            [theme.breakpoints.down("md")]:{
+                                                display:"none"
+                                            }
+                                        }}>
+                                            <Button variant='contained' size='large' endIcon={<CloudUpload/>} onClick={uploadSheets}>
+                                                <Typography variant='button'>Ano, vše je v pořádku</Typography>
+                                            </Button>
+                                
+                                        </Box>
+                                        <Box sx={{
+                                            [theme.breakpoints.up("md")]:{
+                                                display:"none"
+                                            },
+                                            display:"flex",
+                                            flexDirection:"row",
+                                            justifyContent:"end",
+                                            alignItems:"center",
+                                        }} flex={1}>
+                                            <Button variant='contained' size='large' onClick={uploadSheets}>
+                                                <Typography variant='button'>Vše v pořádku</Typography>
+                                            </Button>
+                                
+                                        </Box>
+                                        
+                                    </Box>
+                                    <Gap/>
+                                    <SheetListPreview sheets={sheets} onChange={(sheets)=>{
+                                        setSheets(sheets);
+                                        if(sheets.length===0){
+                                            setParsed(false);
+                                        }
+                                    }}/>
+                                </Box>
+                                : <> 
+                                    <Box sx={{
+                                        display:"flex",
+                                        flexDirection:"column",
+                                        justifyContent:"center",
+                                        alignItems:"center",
+                                    }}>
+                                        <Typography variant='subtitle2'>Nenašli jsme žádné písně.</Typography>
+                                        <Gap value={2}/>
+                                        <Button variant='contained' size='large' endIcon={<CloudUpload/>} onClick={()=>{
+                                            navigate("/add/upload")
+                                        }}>
+                                            <Typography variant='button'>Zkusit jinou fotku</Typography>
+                                        </Button>
+                                    </Box>
+                                </>
+                            }
+                            
+                        </> : <>
+                            <Box sx={{
+                                height: 200,
+                                display:"flex",
+                                flexDirection:"column",
+                                justifyContent:"end",
+                            }}>
+                                <CircularProgress/>
+                                <Gap/>
+                                <Typography variant='subtitle2'>{uploadingMessage}</Typography>
+                            </Box>
+                        </>}
+                    </> : <>
+                        <UploadedSongList songs={uploadedSongs}/>
+                        <Gap/>
+                        <Box sx={{
+                            display:"flex",
+                            flexDirection:"row",
+                            justifyContent:"end",
+                        }}>
+                            <Button variant='contained' onClick={()=>{
+                                navigate("/add/upload")
+                            }}>Nahrát další</Button>
+                        </Box>
+                        <Gap value={2}/>
+                        
+                    </>}
+                </Box> : <Box sx={{
+                    width: "100%",
+                    height: "100%",
+                    display:"flex",
+                    justifyContent:"center",
+                    alignItems:"center"
+                }}>
+                    <Paper sx={{
+                        width: 360,
+                        height: 330,
+                        borderRadius: 5,
+                        display:"flex",
+                        flexDirection:"column",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        userSelect:"none",
+                        bgcolor: "grey.100",
+                        border: "0px solid"
                     }}>
-                        <CircularProgress />
-                    </Box>
 
-                    {loading && <Box>
-                        <Gap value={4}/>
-                        <Typography>{loadingMessage || "Nahrávání"}</Typography>
-                    </Box>}
-                    
-                </Paper>
-            </Box>
-            }
+                        <Box sx={{
+                            display: "block"
+                        }}>
+                            <CircularProgress />
+                        </Box>
+
+                        {loading && <Box>
+                            <Gap value={4}/>
+                            <Typography>{loadingMessage || "Nahrávání"}</Typography>
+                        </Box>}
+                        
+                    </Paper>
+                </Box>
+                }
 
         </Box>
             
