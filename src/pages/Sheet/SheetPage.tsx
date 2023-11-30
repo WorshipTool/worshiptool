@@ -60,11 +60,11 @@ export default function SheetPage() {
     <AppContainer>
         <Box sx={{
             display:"flex",
+            displayPrint: "none",
             flexDirection: 'column',
             alignItems: 'center',
         }}>
             <ContainerGrid sx={{
-            
                 marginTop: 2,
                 marginBottom: 2,
                 padding:3,
@@ -81,7 +81,10 @@ export default function SheetPage() {
                     <TopPanel 
                         transpose={transpose} 
                         variant={song?.variants[variantID]} 
-                        reloadSong={reload}/>}
+                        reloadSong={reload}
+                        sheet={currentSheet as Sheet}
+                        song={song}
+                        />}
                 
                 <Gap value={2}/>
 
@@ -90,6 +93,11 @@ export default function SheetPage() {
                 </>}
                 
             </ContainerGrid>
+        </Box>
+        <Box displayPrint={"block"} display={"none"}>
+            {currentSheet && <>
+                <SheetDisplay sheet={currentSheet} title={title} variant={"default"}/>
+            </>}
         </Box>
     </AppContainer>
   )

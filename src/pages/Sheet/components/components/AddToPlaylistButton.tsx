@@ -112,6 +112,13 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                 'aria-labelledby': 'basic-button',
                 }}
             >
+                {playlists.length===0&&<>
+                    <MenuItem disabled>
+                        <ListItemText>
+                            Nemáte žádné playlisty
+                        </ListItemText>
+                    </MenuItem>
+                </>}
                 {playlists.slice(0,maxItems).map((p, i)=>{
                     const add = !isInPlaylist[i];
                     return <MenuItem key={p.guid + "pl"} onClick={()=>{
