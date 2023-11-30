@@ -9,6 +9,7 @@ import { Box, useTheme } from '@mui/material';
 import TopPanel from './components/TopPanel';
 import Gap from '../../components/Gap';
 import { VariantDTO } from '../../interfaces/variant/VariantDTO';
+import ToolbarHeaderSheetPage from './components/ToolbarHeaderSheetPage';
 
 
 const styledContainerSX = {
@@ -57,7 +58,9 @@ export default function SheetPage() {
     }
 
   return (
-    <AppContainer>
+    <AppContainer header={
+        <ToolbarHeaderSheetPage variant={song?.variants[variantID] as VariantDTO}/>
+    }>
         <Box sx={{
             display:"flex",
             displayPrint: "none",
