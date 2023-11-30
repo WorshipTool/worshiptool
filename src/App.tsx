@@ -36,6 +36,7 @@ import AddMenu from './pages/add_new_song/AddMenu/AddMenu';
 import Upload from './pages/add_new_song/AddMenu/Upload/Upload';
 import Parse from './pages/add_new_song/AddMenu/Upload/components/Parse/Parse';
 import MySongsList from './pages/MySongsList/MySongsList';
+import SheetPage from './pages/Sheet/SheetPage';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -71,7 +72,7 @@ export const AppRoutes = () => {
       <Route path="account" element={<Account/>}/>
       <Route path="account/playlists" element={<PlaylistsList/>}/>
       <Route path="account/songs" element={<MySongsList/>}/>
-      <Route path="song/:guid" element={<SheetGraphics/>}/>
+      <Route path="song/:guid" element={<SheetPage/>}/>
       <Route path="add" element={<AddMenu/>}/>
       <Route path="add/upload" element={<Upload/>}/>
       <Route path="add/upload/parse" element={<Parse/>}/>

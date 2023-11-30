@@ -1,10 +1,10 @@
 import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import usePlaylists from '../../../hooks/playlist/usePlaylists';
-import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
-import { isRequestSuccess } from '../../../api/dtos/RequestResult';
-import { PostAddVariantToPlaylistBodyDTO } from '../../../api/dtos/playlist/dtosPlaylist';
+import usePlaylists from '../../../../hooks/playlist/usePlaylists';
+import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
+import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
+import { PostAddVariantToPlaylistBodyDTO } from '../../../../api/dtos/playlist/dtosPlaylist';
 
 interface AddToPlaylistButtonProps {
     variant: VariantDTO

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import SongListCards from '../../../../../components/songLists/SongListCards/SongListCards'
 import { VariantDTO } from '../../../../../interfaces/variant/VariantDTO';
 import SheetGraphics from '../../../../Sheet/SheetGraphics';
-import DefaultStyle from '../../../../Sheet/styles/DefaultStyle';
+import DefaultStyle from '../../../../../components/SheetDisplay/styles/DefaultStyle';
 import { Sheet } from '@pepavlin/sheet-api';
 import { Box } from '@mui/material';
 import UploadSheetEditable from './UploadSheetEditable';

@@ -3,6 +3,7 @@ import songObject from "../../../interfaces/song/song";
 import React, { useMemo } from 'react'
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { Chord, Sheet } from "@pepavlin/sheet-api";
+import { SheetStyleComponentType } from "./config";
 
 interface DefaultStyleProps{
     variantData?: VariantDTO,
@@ -10,7 +11,7 @@ interface DefaultStyleProps{
     sheet: Sheet
 }
 
-export default function DefaultStyle({variantData, sheet, title: titleString}:DefaultStyleProps){
+const DefaultStyle : SheetStyleComponentType = ({variantData, sheet, title: titleString}:DefaultStyleProps) => {
 
     const title = useMemo(()=>{
         return titleString?titleString:variantData?.preferredTitle||undefined;
@@ -75,3 +76,5 @@ export default function DefaultStyle({variantData, sheet, title: titleString}:De
         </Box>
     )
 }
+
+export default DefaultStyle;

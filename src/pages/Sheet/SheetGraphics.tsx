@@ -3,42 +3,30 @@ import { Box, Button, ButtonGroup, Chip, Dialog, DialogActions, DialogContent, D
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useSong from '../../hooks/song/useSong';
-import DefaultStyle from './styles/DefaultStyle';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
+import DefaultStyle from '../../components/SheetDisplay/styles/DefaultStyle';
 import useAuth from '../../hooks/auth/useAuth';
 import { ROLES } from '../../interfaces/user';
 import useFetch from '../../hooks/useFetch';
 import { getUrl_ADDSONGDATA, getUrl_DELETEVARIANT, getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT, getUrl_POSTADDTOPLAYLIST } from '../../api/urls';
-import Toolbar from '../../components/Toolbars/Toolbar';
 import { useSnackbar } from 'notistack';
-import useStack from '../../hooks/playlist/useStack';
-import { Add, AddBoxRounded, Check, CheckCircle, Close, CopyAll, Dashboard, Edit, LibraryMusic, MoreHoriz, MoreVert, PlaylistAdd, PlaylistAddCheck, PlaylistAddCircle, Print, PrintRounded, Tag, VerifiedUser, VideoFile } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import TransposePanel from './TransposePanel';
 import YoutubeVideo from '../../components/YoutubeVideo';
 import { MediaTypes } from '../../interfaces/song/media';
-import AddVideo from '../../components/AddVideo';
 import { SourceTypes } from '../../interfaces/song/source';
-import AddTag from '../../components/AddTag';
-import AddCreator from '../../components/AddCreator';
-import { GetPlaylistsResultDTO, PostAddVariantToPlaylistBodyDTO } from '../../api/dtos/playlist/dtosPlaylist';
 import { isRequestError, isRequestSuccess } from '../../api/dtos/RequestResult';
-import Playlist from '../../interfaces/playlist/PlaylistDTO';
-import usePlaylists from '../../hooks/playlist/usePlaylists';
 import ContainerGrid from '../../components/ContainerGrid';
 import AppContainer from '../../components/AppContainer/AppContainer';
 import useGroup from '../../hooks/group/useGroup';
-import useGroupSelection from '../../hooks/group/useGroupSelection';
 import { ApiGroupDto } from '../../api/dtos/group/ApiGroupDto';
 import useCurrentPlaylist from '../../hooks/playlist/useCurrentPlaylist';
 
 import {Sheet} from "@pepavlin/sheet-api"
-import AddToPlaylistButton from './components/AddToPlaylistButton';
+import AddToPlaylistButton from './components/components/AddToPlaylistButton';
 import { VariantDTO } from '../../interfaces/variant/VariantDTO';
-import SheetAdminButton from './components/SheetAdminButtons';
-import SheetAdminButtons from './components/SheetAdminButtons';
+import SheetAdminButtons from './components/components/SheetAdminButtons';
 import Song from '../../interfaces/song/song';
+import { Print } from '@mui/icons-material';
 
 
 export default function SheetGraphics() {
@@ -367,7 +355,7 @@ export default function SheetGraphics() {
               flex:1,
               display:"none",
               flexDirection: "column"}}>
-                {song&&<DefaultStyle variantData={song.variants[variantID]} sheet={currentSheet as Sheet}/>} 
+                {song&&<DefaultStyle title={song.variants[variantID]?.preferredTitle} sheet={currentSheet as Sheet}/>} 
             </Box>}
             
     
