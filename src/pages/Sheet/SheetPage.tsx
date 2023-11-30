@@ -87,6 +87,8 @@ export default function SheetPage() {
                         reloadSong={reload}
                         sheet={currentSheet as Sheet}
                         song={song}
+                        variantIndex={variantID}
+                        onChangeVariant={setVariantID}
                         />}
                 
                 <Gap value={2}/>

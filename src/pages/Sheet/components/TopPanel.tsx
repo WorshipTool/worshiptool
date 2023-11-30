@@ -10,13 +10,16 @@ import Song from '../../../interfaces/song/song'
 import AddToPlaylistButton from './components/AddToPlaylistButton'
 import PrintButton from './components/PrintButton'
 import Buttons13ka from './components/Buttons13ka'
+import ChangeVariant from './components/ChangeVariant'
 
 interface TopPanelProps {
     transpose: (i:number)=>void,
     variant: VariantDTO,
     reloadSong: ()=>void,
     sheet: Sheet,
-    song: Song
+    song: Song,
+    variantIndex: number
+    onChangeVariant: (i:number)=>void
 }
 
 export default function TopPanel(props: TopPanelProps) {
@@ -30,6 +33,14 @@ export default function TopPanel(props: TopPanelProps) {
             gap: 1,
         }}>
             <TransposePanel transpose={props.transpose}/>
+
+            {isAdmin()&&props.song.variants.length>1&&<>
+                <ChangeVariant 
+                    index={props.variantIndex}
+                    onChange={props.onChangeVariant}
+                    variants={props.song.variants}/>
+            </>}
+
             {(isAdmin()||isTrustee())&&<>
                 <VerifyButton variant={props.variant} reloadSong={props.reloadSong}/>
             </>}
