@@ -23,6 +23,14 @@ export default function useToolsMenuItems(){
             disabled: isMobile && !isTablet,
         },
         {
+            title: "Moje",
+            image: "https://cdn-icons-png.flaticon.com/512/10627/10627120.png",
+            action: ()=>{
+                navigate("/account/songs")
+            },
+            disabled: isMobile && !isTablet,
+        },
+        {
             title: "13ka",
             image: "/static/assets/13ka-icon.png",
             action: ()=>{

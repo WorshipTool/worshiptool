@@ -91,3 +91,7 @@ export interface PostParseImageResultDTO{
         data:string
     }[]
 }
+
+export interface GetUserSongListResultDTO{
+    variants: ApiVariantDTO[]
+}
