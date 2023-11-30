@@ -1,13 +1,13 @@
 import React from 'react'
 import AppContainer from '../../components/AppContainer/AppContainer'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import useMySongs from './hooks/useMySongs'
 import MySongItem from './components/MySongItem';
 import Gap from '../../components/Gap';
 import { useNavigate } from 'react-router-dom';
 
 export default function MySongsList() {
-    const {variants} = useMySongs();
+    const {variants, loaded} = useMySongs();
     const navigate = useNavigate();
   return (
     <AppContainer>
@@ -23,11 +23,29 @@ export default function MySongsList() {
             }}>
                 <Typography  variant="h5" fontWeight={600} >Moje písně:</Typography>
                 <Gap value={2}/>
-                {variants.map((variant, index)=>{
-                    return <MySongItem variant={variant} index={index} key={`mysong${variant.guid}`} onClick={()=>{
-                        if(variant.songGuid) navigate("/song/"+variant.songGuid);
-                    }}></MySongItem>
-                })}
+                {!loaded ? 
+                    <CircularProgress/> 
+                :
+                    <>
+                        {variants.map((variant, index)=>{
+                            return <MySongItem variant={variant} index={index} key={`mysong${variant.guid}`} onClick={()=>{
+                                if(variant.songGuid) navigate("/song/"+variant.songGuid);
+                            }}></MySongItem>
+                        })}
+
+                        {variants.length==0&&<Box sx={{
+                            display:"flex",
+                            flexDirection:"row",
+                            alignItems:"center",
+                            gap: 2
+                        }}>
+                            <Typography>Nemáš žádné vytvořené písně.</Typography>
+                            <Button onClick={()=>{
+                                navigate("/add");
+                            }} variant='contained'>Vytvořit</Button>
+                        </Box>}
+                    </>
+                }
             </Box>
         </Box>
     </AppContainer>
