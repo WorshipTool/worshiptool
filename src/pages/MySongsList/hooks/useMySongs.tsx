@@ -10,7 +10,8 @@ import { isRequestSuccess } from "../../../api/dtos/RequestResult";
 import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
 
 interface IUseMySongs{
-    variants: VariantDTO[]
+    variants: VariantDTO[],
+    loaded: boolean,
 }
 
 export default function useMySongs() : IUseMySongs{
@@ -18,12 +19,12 @@ export default function useMySongs() : IUseMySongs{
     const [variants, setVariants] = useState<VariantDTO[]>([]);
 
     const {fetchData} = useFetch();
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(()=>{
         if(!isLoggedIn()) return;
         fetchData<GetUserSongListResultDTO>({url: getUrl(GETUSERSONGLIST_URL)})
         .then((result)=>{
-            console.log(result)
             if(isRequestSuccess(result)){
                 const v = (result.data.variants.map((variant)=>{
                     return mapApiToVariant(variant);
@@ -32,9 +33,12 @@ export default function useMySongs() : IUseMySongs{
                 setVariants(v);
             }
 
+            setLoaded(true);
+
         })
     },[isLoggedIn])
     return {
-        variants: variants
+        variants: variants,
+        loaded: loaded,
     }
 }
