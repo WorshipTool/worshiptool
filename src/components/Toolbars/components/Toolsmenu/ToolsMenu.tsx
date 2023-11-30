@@ -16,7 +16,7 @@ const Container = styled(Box)(({theme})=>({
     borderRadius: theme.spacing(1),
     color: "black",
     boxShadow: "0px 1px 6px 2px #00000044",
-    gap: theme.spacing(1),
+    gap: theme.spacing(0),
     padding: theme.spacing(2)
 }))
 

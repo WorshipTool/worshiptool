@@ -35,6 +35,7 @@ import {GoogleOAuthProvider} from "@react-oauth/google"
 import AddMenu from './pages/add_new_song/AddMenu/AddMenu';
 import Upload from './pages/add_new_song/AddMenu/Upload/Upload';
 import Parse from './pages/add_new_song/AddMenu/Upload/components/Parse/Parse';
+import MySongsList from './pages/MySongsList/MySongsList';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -69,6 +70,7 @@ export const AppRoutes = () => {
       <Route path="signup" element={<SignUp/>}/>
       <Route path="account" element={<Account/>}/>
       <Route path="account/playlists" element={<PlaylistsList/>}/>
+      <Route path="account/songs" element={<MySongsList/>}/>
       <Route path="song/:guid" element={<SheetGraphics/>}/>
       <Route path="add" element={<AddMenu/>}/>
       <Route path="add/upload" element={<Upload/>}/>

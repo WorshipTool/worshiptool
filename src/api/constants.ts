@@ -22,6 +22,7 @@ export const GETSONGSINPLAYLIST_URL = "/songs/playlist/:guid";
 export const POSTADDTOPLAYLIST_URL = "/songs/playlist/add";
 export const POSTREMOVEFROMPLAYLIST_URL = "/songs/playlist/remove";
 export const POSTPARSEIMAGE_URL = "/songs/parse";
+export const GETUSERSONGLIST_URL = "/songs/mysongs";
 
 export const GETISVARIANTINPLAYLIST_URL = "/songs/isinplaylist";
 

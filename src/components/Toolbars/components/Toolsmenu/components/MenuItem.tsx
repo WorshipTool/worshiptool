@@ -38,7 +38,8 @@ export default function MenuItem({title, img, onClick, disabled}: MenuItemProps)
     <Container onClick={onClick} sx={{
         pointerEvents: disabled? " none": "auto",
         filter: disabled?"grayscale(100%)":"",
-        opacity: disabled? 0.5 : 1
+        opacity: disabled? 0.5 : 1,
+        userSelect: "none"
     }}>
         <Box flex={1} display={"flex"} flexDirection={"column"} sx={{
             transition: "all 0.4s ease"
@@ -55,7 +56,8 @@ export default function MenuItem({title, img, onClick, disabled}: MenuItemProps)
             <Typography display={"flex"} alignItems={"end"} justifyContent={"center"} 
                 variant='body2'
                 sx={{
-                    userSelect: "none"
+                    userSelect: "none",
+                    pointerEvents: "none",
                 }}>{title}</Typography>
         </Box>
     </Container>
