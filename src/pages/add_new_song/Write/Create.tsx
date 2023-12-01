@@ -6,7 +6,7 @@ import { getUrl_ADDSONGDATA } from '../../../api/urls';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RequestResult, isRequestSuccess } from '../../../api/dtos/RequestResult';
 import Toolbar from '../../../components/Toolbars/Toolbar';
-import DefaultStyle from '../../Sheet/styles/DefaultStyle';
+import DefaultStyle from '../../../components/SheetDisplay/styles/DefaultStyle';
 import {Sheet} from "@pepavlin/sheet-api";
 import Gap from '../../../components/Gap';
 import ToolPanel from './ToolPanel';

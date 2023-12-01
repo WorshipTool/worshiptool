@@ -5,7 +5,7 @@ import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, IconButton, Paper, Skeleton } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
-import DefaultStyle from '../../Sheet/styles/DefaultStyle';
+import DefaultStyle from '../../../components/SheetDisplay/styles/DefaultStyle';
 import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
 
 import {Sheet} from "@pepavlin/sheet-api"
@@ -93,11 +93,11 @@ export const PlaylistItem = ({item,reload}:PlaylistItemProps) => {
                         </Box>
                     </Box>
                     
-                    <DefaultStyle sheet={sheet} variantData={item.variant}/>
+                    <DefaultStyle sheet={sheet} title={item.variant.preferredTitle}/>
                 </Paper>
                 
                 <Box display={"none"} displayPrint={"block"}>
-                    <DefaultStyle sheet={sheet} variantData={item.variant}/>
+                    <DefaultStyle sheet={sheet}  title={item.variant.preferredTitle}/>
                     {items.length>1&&<PageBreak/>}
                 </Box>
             </>

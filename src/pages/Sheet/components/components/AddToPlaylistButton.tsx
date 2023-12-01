@@ -1,10 +1,10 @@
 import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import usePlaylists from '../../../hooks/playlist/usePlaylists';
-import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
-import { isRequestSuccess } from '../../../api/dtos/RequestResult';
-import { PostAddVariantToPlaylistBodyDTO } from '../../../api/dtos/playlist/dtosPlaylist';
+import usePlaylists from '../../../../hooks/playlist/usePlaylists';
+import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
+import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
+import { PostAddVariantToPlaylistBodyDTO } from '../../../../api/dtos/playlist/dtosPlaylist';
 
 interface AddToPlaylistButtonProps {
     variant: VariantDTO
@@ -101,7 +101,7 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                 variant='contained'
                 endIcon={<KeyboardArrowDown />}
                 >
-                Přidat do
+                Přidat do playlistu
             </Button>
             <Menu
                 id="basic-menu"
@@ -112,6 +112,13 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                 'aria-labelledby': 'basic-button',
                 }}
             >
+                {playlists.length===0&&<>
+                    <MenuItem disabled>
+                        <ListItemText>
+                            Nemáte žádné playlisty
+                        </ListItemText>
+                    </MenuItem>
+                </>}
                 {playlists.slice(0,maxItems).map((p, i)=>{
                     const add = !isInPlaylist[i];
                     return <MenuItem key={p.guid + "pl"} onClick={()=>{

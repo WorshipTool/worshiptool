@@ -1,24 +1,26 @@
 import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz, CopyAll, VideoFile, Tag, VerifiedUser } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import usePlaylists from '../../../hooks/playlist/usePlaylists';
-import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
-import { isRequestSuccess } from '../../../api/dtos/RequestResult';
-import { PostAddVariantToPlaylistBodyDTO } from '../../../api/dtos/playlist/dtosPlaylist';
-import AddVideo from '../../../components/AddVideo';
-import AddTag from '../../../components/AddTag';
-import AddCreator from '../../../components/AddCreator';
+import usePlaylists from '../../../../hooks/playlist/usePlaylists';
+import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
+import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
+import { PostAddVariantToPlaylistBodyDTO } from '../../../../api/dtos/playlist/dtosPlaylist';
+import AddVideo from '../../../../components/AddVideo';
+import AddTag from '../../../../components/AddTag';
+import AddCreator from '../../../../components/AddCreator';
 import { Sheet } from '@pepavlin/sheet-api';
-import Song from '../../../interfaces/song/song';
+import Song from '../../../../interfaces/song/song';
 import { useSnackbar } from 'notistack';
+import Buttons13ka from './Buttons13ka';
 
 interface AddToPlaylistButtonProps {
     sheet: Sheet,
     song: Song,
-    reload: () => void
+    reload: () => void,
+    variant: VariantDTO
 }
 
-export default function SheetAdminButtons({sheet, song, reload}: AddToPlaylistButtonProps) {
+export default function SheetAdminButtons({sheet, song, reload, variant}: AddToPlaylistButtonProps) {
     const [open, setOpen] = React.useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -81,6 +83,8 @@ export default function SheetAdminButtons({sheet, song, reload}: AddToPlaylistBu
                 'aria-labelledby': 'basic-button',
                 }}
             >
+                <Buttons13ka variant={variant}/>
+
                 <MenuItem onClick={onCopyClick}>
                     <ListItemIcon>
                         <CopyAll fontSize="small" />

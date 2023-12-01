@@ -1,6 +1,6 @@
 import { Sheet } from '@pepavlin/sheet-api';
 import React, { useMemo, useState } from 'react'
-import DefaultStyle from '../../../../Sheet/styles/DefaultStyle';
+import DefaultStyle from '../../../../../components/SheetDisplay/styles/DefaultStyle';
 import { Box, Button, InputBase, Paper, Switch, Typography, styled } from '@mui/material';
 
 interface UploadSheetEditableProps {
