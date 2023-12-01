@@ -95,3 +95,9 @@ export interface PostParseImageResultDTO{
 export interface GetUserSongListResultDTO{
     variants: ApiVariantDTO[]
 }
+
+export interface PostEditVariantBody{
+    guid: string,
+    sheetData: string,
+    title: string
+}

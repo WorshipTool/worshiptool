@@ -10,6 +10,7 @@ import TopPanel from './components/TopPanel';
 import Gap from '../../components/Gap';
 import { VariantDTO } from '../../interfaces/variant/VariantDTO';
 import ToolbarHeaderSheetPage from './components/ToolbarHeaderSheetPage';
+import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel';
 
 
 const styledContainerSX = {
@@ -21,13 +22,20 @@ export default function SheetPage() {
     const [variantID, setVariantID] = useState(0);
     const [currentSheet, setCurrentSheet] = useState<Sheet>();
 
+    const [inEditMode, setInEditMode] = useState(false);
+
     const [justNumber, setJustNumber] = useState(0);
 
     const theme = useTheme();
 
+    const [editedTitle, setEditedTitle] = useState("");
+
     const title = useMemo(()=>{
-        return song?.variants[variantID]?.preferredTitle || getName()
-    },[song?.variants, getName()])
+        if(editedTitle!="") return editedTitle;
+        return song?.variants[variantID]?.preferredTitle
+            || song?.variants[variantID]?.titles?.[0] 
+            || getName();
+    },[song?.variants, editedTitle])
 
     
     useEffect(()=>{
@@ -36,7 +44,6 @@ export default function SheetPage() {
 
     useEffect(()=>{
         if(song){
-            console.log(song)
           const sheet = new Sheet(song.variants[variantID].sheetData);
           setCurrentSheet(sheet);
         }
@@ -55,6 +62,14 @@ export default function SheetPage() {
             currentSheet.transpose(value);
             rerender();
         }
+    }
+
+    const onEditClick = async (editable: boolean) => {
+        setEditedTitle(title);
+        setInEditMode(editable);
+
+
+        
     }
 
   return (
@@ -85,18 +100,31 @@ export default function SheetPage() {
                         transpose={transpose} 
                         variant={song?.variants[variantID]} 
                         reloadSong={reload}
+                        title={title}
+                        editedTitle={editedTitle}
                         sheet={currentSheet as Sheet}
                         song={song}
                         variantIndex={variantID}
                         onChangeVariant={setVariantID}
+                        onEditClick={onEditClick}
+                        isInEditMode={inEditMode}
                         />}
                 
                 <Gap value={2}/>
 
                 {currentSheet && <>
-                    <SheetDisplay sheet={currentSheet} title={title} variant={"default"}/>
+                    <SheetDisplay 
+                        sheet={currentSheet} 
+                        title={title} 
+                        variant={"default"}
+                        editMode={inEditMode}
+                        onChange={(sheet, title)=>{
+                            setCurrentSheet(new Sheet(sheet));
+                            setEditedTitle(title);
+                        }}/>
                 </>}
                 
+                {!inEditMode&&song&&<AdditionalSongInfoPanel song={song} variant={song.variants[variantID]}/>}
             </ContainerGrid>
         </Box>
         <Box displayPrint={"block"} display={"none"}>

@@ -14,6 +14,7 @@ export const UNVERIFYSONG_URL = "/songs/variant/unverify/:guid"
 export const DELETESONG_URL = "/songs/variant/delete/:guid"
 export const GETSONGCOUNT_URL = "/songs/count";
 export const POSTMERGESONGS_URL = "/songs/merge";
+export const POSTEDITVARIANT_URL = "/songs/edit";
 
 export const GETPLAYLISTS_URL = "/songs/playlists";
 export const POSTCREATEPLAYLIST_URL = "/songs/playlist";
