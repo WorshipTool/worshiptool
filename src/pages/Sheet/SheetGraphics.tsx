@@ -271,7 +271,12 @@ export default function SheetGraphics() {
 
                           {isAdmin()&&<>
                             <Gap horizontal={true}/>
-                            <SheetAdminButtons sheet={currentSheet as Sheet} song={song as Song} reload={reload}/>
+                            <SheetAdminButtons 
+                                sheet={currentSheet as Sheet} 
+                                song={song as Song} 
+                                reload={reload} 
+                                variant={song?.variants[variantID] as VariantDTO}/>
+                                
                             <Gap horizontal={true}/>
                           </>}
 

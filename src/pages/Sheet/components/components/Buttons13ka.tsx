@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup } from '@mui/material'
+import { Box, Button, ButtonGroup, CircularProgress, Divider, ListItemIcon, ListItemText, MenuItem } from '@mui/material'
 import React from 'react'
 import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import { ApiGroupDto } from '../../../../api/dtos/group/ApiGroupDto';
@@ -6,7 +6,7 @@ import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import useFetch from '../../../../hooks/useFetch';
 import Gap from '../../../../components/Gap';
 import { LoadingButton } from '@mui/lab';
-import { Workspaces } from '@mui/icons-material';
+import { Work, Workspaces } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 
 interface Buttons13kaProps {
@@ -62,35 +62,42 @@ export default function Buttons13ka(props: Buttons13kaProps) {
 
     }
 
+    interface CustomButtonProps {
+        title:string,
+        onClick: () => void,
+        loading?: boolean
+    }
+
+    const CustomButton = (props: CustomButtonProps) => {
+        return <MenuItem
+            onClick={props.onClick}
+            disabled={loading}>
+            <ListItemIcon>
+                {!loading?<>
+                    <Workspaces color='secondary'/>
+                </>:<>
+                    <CircularProgress size={20} color='secondary'/>
+                </>}
+            </ListItemIcon>
+            <ListItemText 
+                primary={props.title}/>
+        </MenuItem>
+    }
   
   return (
-    <Box sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-    }}>
-        <ButtonGroup size="medium">
-            <LoadingButton 
-                variant="contained" 
-                color='secondary' 
+    <>
+            <CustomButton
+                title='Odebrat ze 13ky'
                 onClick={removeFrom13ka}
-                loading={loading}
-                startIcon={<Workspaces/>}
-                loadingPosition='start'>
-                    Odebrat ze 13ky
-            </LoadingButton>
+                loading={loading}/>
+
             
-            
-            <LoadingButton 
-                variant="contained" 
-                color='secondary' 
+            <CustomButton
+                title='Přidat 13ky'
                 onClick={addTo13ka}
-                loading={loading}
-                startIcon={<Workspaces/>}
-                loadingPosition='start'>
-                    Do 13ky
-            </LoadingButton>
-        </ButtonGroup>
-    </Box>
+                loading={loading}/>
+
+            <Divider/>
+    </>
   )
 }

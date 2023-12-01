@@ -30,6 +30,7 @@ export default function TopPanel(props: TopPanelProps) {
         <Box sx={{
             display: "flex",
             flexDirection: "row",
+            alignItems: "center",
             gap: 1,
         }}>
             <TransposePanel transpose={props.transpose}/>
@@ -47,12 +48,13 @@ export default function TopPanel(props: TopPanelProps) {
 
             <Box flex={1}/>
 
-            {isAdmin()&&<>
-                <Buttons13ka variant={props.variant}/>
-            </>}
             
             {isAdmin()&&<>
-                <SheetAdminButtons sheet={props.sheet} song={props.song} reload={props.reloadSong}/>
+                <SheetAdminButtons 
+                    sheet={props.sheet} 
+                    song={props.song} 
+                    reload={props.reloadSong}
+                    variant={props.variant}/>
             </>}
 
             {isLoggedIn()&&<>

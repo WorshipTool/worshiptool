@@ -1,5 +1,5 @@
 import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import usePlaylists from '../../../../hooks/playlist/usePlaylists';
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
@@ -101,7 +101,7 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                 variant='contained'
                 endIcon={<KeyboardArrowDown />}
                 >
-                Přidat do
+                Přidat do playlistu
             </Button>
             <Menu
                 id="basic-menu"
