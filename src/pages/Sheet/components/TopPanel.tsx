@@ -116,7 +116,7 @@ export default function TopPanel(props: TopPanelProps) {
                 
                     <Box flex={1}/>
                 
-                    {isOwner||(isAdmin()&&props.variant.createdByLoader)&&<>
+                    {(isOwner||(isAdmin()&&props.variant.createdByLoader))&&<>
                         <EditButton 
                             onClick={onEditClick} 
                             inEditMode={props.isInEditMode} 
