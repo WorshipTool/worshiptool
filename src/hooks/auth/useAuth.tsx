@@ -21,7 +21,8 @@ export const authContext = createContext<useProvideAuthI>({
     info: {} as User,
     getAuthHeader: ()=>{},
     isTrustee: ()=>false,
-    isAdmin: ()=>false
+    isAdmin: ()=>false,
+    loading: false
 });
 
 export const AuthProvider = ({children}:{children:any}) => {
@@ -43,7 +44,8 @@ interface useProvideAuthI{
     info: User,
     getAuthHeader: ()=>any,
     isTrustee: ()=>boolean,
-    isAdmin: ()=>boolean
+    isAdmin: ()=>boolean,
+    loading: boolean
 }
 
 export function useProvideAuth(){
@@ -52,6 +54,8 @@ export function useProvideAuth(){
 
     const {enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [googleShouldLogin, setGoogleShouldLogin] = useState<boolean>(false);
     const autoGoogleLogin = useGoogleOneTapLogin({
@@ -65,6 +69,7 @@ export function useProvideAuth(){
         const u = localStorage.getItem("user");
         if(u!=null){
             setUser(JSON.parse(u));
+            setLoading(false);
         }else{
             setGoogleShouldLogin(true);
         }
@@ -77,6 +82,8 @@ export function useProvideAuth(){
     },[user])
 
     const login = ({email, password}:{email:string, password:string}, after? : (r: RequestResult<any>)=>void) => {
+        setLoading(true);
+        
         const body : LoginRequestDTO = {
             email,
             password
@@ -92,7 +99,7 @@ export function useProvideAuth(){
             }
 
             if(after)after(result);
-            
+            setLoading(false);
         })
         
 
@@ -103,13 +110,16 @@ export function useProvideAuth(){
         setUser(user);
     }
     const logout = () => {
+        setLoading(false);
         setUser(undefined);
         localStorage.removeItem("user");
         enqueueSnackbar("Byl jsi odhlášen. Zase někdy!");
         navigate("/")
+        setLoading(false);
     }
 
     const signup = (data: SignUpRequestDTO, after? : (r: RequestResult<any>)=>void) => {
+        setLoading(true);
         const body = data;
         post({
             url: getUrl_SIGNUP(),
@@ -119,12 +129,14 @@ export function useProvideAuth(){
             if(isRequestSuccess(result)){
                 enqueueSnackbar("Účet byl vytvořen. Nyní se můžeš přihlásit.");
             }
-            
             if(after)after(result);
+            setLoading(false);
         })
     }
 
     const loginWithGoogle = (response: CredentialResponse, after? : (r: RequestResult<any>)=>void) => {
+        setLoading(true);
+
         const decoded : any = jwtDecode(response.credential || "")
         const data = {
             userToken: decoded.sub,
@@ -132,7 +144,6 @@ export function useProvideAuth(){
             firstName: decoded.given_name,
             lastName: decoded.family_name,
         };
-
         post({
             url: getUrl(LOGIN_GOOGLE_URL),
             body: data
@@ -144,6 +155,7 @@ export function useProvideAuth(){
             }
 
             if(after)after(result);
+            setLoading(false);
         })
     }
 
@@ -163,7 +175,8 @@ export function useProvideAuth(){
         info: (user?user:({} as User)),
         getAuthHeader,
         isTrustee: ()=>user!=undefined&&user.role==ROLES.Trustee,
-        isAdmin: ()=>user!=undefined&&user.role==ROLES.Admin
+        isAdmin: ()=>user!=undefined&&user.role==ROLES.Admin,
+        loading
 
     }
 }

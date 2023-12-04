@@ -7,7 +7,7 @@ import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 import SheetAdminButtons from './components/SheetAdminButtons'
 import { Sheet } from '@pepavlin/sheet-api'
 import Song from '../../../interfaces/song/song'
-import AddToPlaylistButton from './components/AddToPlaylistButton'
+import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
 import PrintButton from './components/PrintButton'
 import Buttons13ka from './components/Buttons13ka'
 import ChangeVariant from './components/ChangeVariant'

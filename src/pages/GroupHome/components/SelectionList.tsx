@@ -1,4 +1,4 @@
-import { Box, Button, Fade, Grid, Grow, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Fade, Grid, Grow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
@@ -15,13 +15,15 @@ import { on } from 'events';
 import useGroup from '../../../hooks/group/useGroup';
 
 export default function SelectionList() {
-    const {items, search, reload} = useGroupSelection();
+    const {items, search, reload, loading} = useGroupSelection();
     const {name} = useGroup();
     
     const navigate = useNavigate();
 
     const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid)
+        navigate("/song/"+variant.songGuid, {state:{
+            title: variant.preferredTitle
+        }})
     }
 
     const [searchString, setSearchString] = React.useState<string>("");
@@ -106,8 +108,23 @@ export default function SelectionList() {
                   <Button color="inherit" onClick={onSearchClick} startIcon={<Search/>}>Hledat</Button>
               </Box>
               <Gap value={0.5}/>
-              <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick}/>
-              {items.length==0&&stillString!==""&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
+
+              {loading? <Box sx={{
+                  display:"flex",
+                  flexDirection: "row",
+                  justifyContent: "start",
+                  alignItems: "start",
+                  flex:1,
+                  color: "black"
+              }}>
+                  <Typography>Načítání...</Typography>
+                  <Gap value={2} horizontal/>
+                  <CircularProgress size={"2rem"} color='inherit'/>
+              </Box>:<>
+                  <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick}/>
+                  {items.length==0&&stillString!==""&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
+              </>}
+
           </Box>
         )
       }}/>

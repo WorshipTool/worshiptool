@@ -1,5 +1,5 @@
-import { Masonry } from '@mui/lab';
-import { Button, CircularProgress, Grid, LinearProgress, Typography, useTheme } from '@mui/material'
+import { LoadingButton, Masonry } from '@mui/lab';
+import { Box, Button, CircularProgress, Grid, LinearProgress, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import usePagination from '../../../hooks/usePagination';
 import { useIsInViewport } from '../../../hooks/useIsInViewport';
@@ -14,10 +14,12 @@ import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 import { useNavigate } from 'react-router-dom';
 import OnChangeDelayer from '../../../components/ChangeDelayer';
 import SongListCards from '../../../components/songLists/SongListCards/SongListCards';
+import { Downloading, Sync } from '@mui/icons-material';
 
 interface SearchedSongsListProps{
     searchString: string
 }
+const controller = new AbortController();
 
 export default function SearchedSongsList({searchString} : SearchedSongsListProps) {    
     const theme = useTheme();
@@ -25,11 +27,16 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [nextLoading, setNextLoading] = useState<boolean>(false);
+    const [enableLoadNext, setEnableLoadNext] = useState<boolean>(false);
 
     const searchSongs = useSongSearch();
     const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<SearchSongDataDTO>((page, resolve, arr)=>{
-        searchSongs({searchKey: searchString, page}).then((data)=>{
+        controller.abort();
+        searchSongs({searchKey: searchString, page, signal: controller.signal}).then((data)=>{
+            console.log("found")   
             setLoading(false);
+            setNextLoading(false);
             resolve({result: data, data: data.data.songs.filter((v)=>{
                 return !arr.find((s)=>s.guid==v.guid);
             })});
@@ -39,25 +46,39 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     });
 
     useEffect(()=>{
+        setEnableLoadNext(false);
+        setLoading(true);
+    },[searchString])
+
+    useEffect(()=>{
+        if(!enableLoadNext) return;
+        if(!isInViewport) return;
         if(songs.length>0&&nextExists){
+            setNextLoading(true);
             loadNext();
         }
     },[isInViewport])
-
-    const loadTimeoutId = useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
-
-
-    const spacing = 1;
+ 
 
     const navigate = useNavigate();
 
     const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid)
+        navigate("/song/"+variant.songGuid, {state:{
+            title: variant.preferredTitle 
+        }})
     }
+
+
   return (
     <ContainerGrid direction='column'>
 
-        <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={()=>loadPage(0, true)}/>
+        <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={()=>{
+            setLoading(true);
+            loadPage(0, true).then(()=>{
+                setEnableLoadNext(true);
+            })
+            console.log("searching")   
+        }}/>
 
         <>                       
             <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
@@ -75,7 +96,20 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
 
         <>
             {!loading&&songs.length>0&&nextExists&&<>
-                <Button onClick={()=>{loadNext()}}>Načíst další</Button>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}>
+                    <LoadingButton 
+                        loading={nextLoading}
+                        loadingPosition='start'
+                        onClick={()=>{loadNext()}}
+                        startIcon={<Sync/>}>
+                        Načíst další
+                    </LoadingButton>
+                </Box>
             </>}
         </>
 

@@ -1,9 +1,10 @@
-import {Box, Button, Grid, Typography, styled } from '@mui/material'
+import {Box, Button, CircularProgress, Grid, Typography, styled } from '@mui/material'
 import useRecommendedSongs from './hooks/useRecommendedSongs';
 import ContainerGrid from '../../../../components/ContainerGrid';
 import { useNavigate } from 'react-router-dom';
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import SongListCards from '../../../../components/songLists/SongListCards/SongListCards';
+import Gap from '../../../../components/Gap';
 
 const GridContainer = styled(Grid)(({theme})=>({
     padding:10,
@@ -19,7 +20,9 @@ export default function RecommendedSongsList() {
     const navigate = useNavigate();
 
     const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid)
+        navigate("/song/"+variant.songGuid, {state:{
+            title: variant.preferredTitle
+        }})
     }
 
     const openList = () => {
@@ -31,7 +34,16 @@ export default function RecommendedSongsList() {
 
             {isSuccess && <Typography fontWeight={"bold"}>Nějaký nápad:</Typography>}
 
-            {isLoading&&<Typography>Načítání...</Typography>}
+            {isLoading&&<Box sx={{
+                display:"flex",
+                flexDirection:"row",
+                alignItems:"center",
+                color: "black",
+            }}>
+                <Typography>Načítání nápadů...</Typography>
+                <Gap value={2} horizontal/>
+                <CircularProgress size={"1.5rem"} color='inherit'/>
+            </Box>}
 
             {isError&&<>
             

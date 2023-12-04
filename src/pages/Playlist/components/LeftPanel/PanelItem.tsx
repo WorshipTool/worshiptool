@@ -1,7 +1,7 @@
 import React from 'react'
 import useSong from '../../../../hooks/song/useSong';
 import useStack from '../../../../hooks/playlist/useStack';
-import { Box, IconButton, Skeleton, Typography, styled } from '@mui/material';
+import { Box, CircularProgress, IconButton, Skeleton, Typography, styled } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { PlaylistItemDTO } from '../../../../interfaces/playlist/PlaylistDTO';
 import useInnerPlaylist from '../../hooks/useInnerPlaylist';
@@ -34,20 +34,27 @@ const StyledPanelButton = styled(Typography)(({theme})=>({
 
 interface PanelItemProps {
     item: PlaylistItemDTO,
-    onClick: ()=>void
+    onClick: ()=>void,
+    setMoving?: (moving: boolean)=>void,
+    moving?: boolean,
 }
 
-export default function PanelItem({item, onClick}:PanelItemProps) {
+export default function PanelItem({item, onClick, setMoving: sm, moving:someIsMoving}:PanelItemProps) {
     const {loading, items, reorder} = useInnerPlaylist();
 
+    const [moving, setMoving] = React.useState(false);
 
     const move = (offset: number) => {
+        setMoving(true);
+        sm?.(true);
         const itemToSwap = items[items.indexOf(item)+offset];
-
         reorder([
             {guid: item.guid, order: itemToSwap.order},
             {guid: itemToSwap.guid, order: item.order}
-        ])
+        ]).then(()=>{
+            setMoving(false);
+            sm?.(false);
+        })
 
     }
 
@@ -63,14 +70,25 @@ export default function PanelItem({item, onClick}:PanelItemProps) {
         :<Skeleton variant='text' width={200} sx={{marginLeft:2}} key={"skelet"+item.guid}></Skeleton>}
 
         <Box display={"flex"} flexDirection={"row"} height={35}>
-            {items.indexOf(item)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>
-                <KeyboardArrowUp/>
-            </IconButton>}
-            {items.indexOf(item)+1!=items.length?
-            <IconButton onClick={()=>{move(1)}} size='small' >
-                <KeyboardArrowDown/>
-            </IconButton>
-            :<Box width={35}></Box>}
+
+            {moving?<IconButton>
+                <CircularProgress color='inherit' size={"1rem"}/>
+            </IconButton>:<>
+                {someIsMoving?<>
+                
+                </>:<>
+                    {items.indexOf(item)!=0&&<IconButton  onClick={()=>{move(-1)}} size='small'>
+                        <KeyboardArrowUp/>
+                    </IconButton>}
+                    {items.indexOf(item)+1!=items.length?
+                    <IconButton onClick={()=>{move(1)}} size='small' >
+                        <KeyboardArrowDown/>
+                    </IconButton>
+                    :<Box width={35}></Box>}
+
+                </>}
+            </>}
+
         </Box>
     </PanelItemContainer>
 }

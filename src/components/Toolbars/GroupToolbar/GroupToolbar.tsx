@@ -68,7 +68,8 @@ export default function GroupToolbar({expanded, header}: GroupToolbarProps) {
                             }:{
                                 transform: "rotate(-8deg) translate(80px, -90px) scale(130%)",
                             })
-                        }}/>
+                        }}>
+                        </img>
             
                         
                     </StyledContainer>

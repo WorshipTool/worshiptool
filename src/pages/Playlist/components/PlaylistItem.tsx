@@ -3,13 +3,14 @@ import useSong from '../../../hooks/song/useSong';
 import useInnerPlaylist from '../hooks/useInnerPlaylist';
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, IconButton, Paper, Skeleton } from '@mui/material';
+import { Box, Button, Chip, IconButton, Paper, Skeleton, Typography } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import DefaultStyle from '../../../components/SheetDisplay/styles/DefaultStyle';
 import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
 
 import {Sheet} from "@pepavlin/sheet-api"
 import useAuth from '../../../hooks/auth/useAuth';
+import { LoadingButton } from '@mui/lab';
 
 
 
@@ -36,29 +37,37 @@ export const PlaylistItem = ({item,reload}:PlaylistItemProps) => {
 
     const {user, isLoggedIn} = useAuth();
 
+    const [removing, setRemoving] = React.useState(false);
+    const [saving, setSaving] = React.useState(0);
 
     const onRemove = async () => {
+        setRemoving(true);
         const result = await removeVariant(item.variant.guid)
-        
+        setRemoving(false);
 
         turnOn(playlistGuid)
     }
 
-    const transpose = (value: number) => {
+    const transpose = async (value: number) => {
+        setSaving((s)=>s+1);
         sheet.transpose(value);
         rerender();
 
         if(isOwner){
             const c = sheet.getKeyChord()
-            if(c) setItemsKeyChord(item, c)
+            if(c) await setItemsKeyChord(item, c)
         }
+        setSaving((s)=>s-1);
+
 
     }
 
     const navigate = useNavigate();
 
     const open = () => {
-        navigate(`/song/${item.variant.songGuid}`)
+        navigate(`/song/${item.variant.songGuid}`, {state:{
+            title: item.variant.preferredTitle
+        }})
     }
 
     const rerender = () => {
@@ -78,6 +87,8 @@ export const PlaylistItem = ({item,reload}:PlaylistItemProps) => {
     return <>
                 <Paper sx={{padding:2, marginBottom: 1, displayPrint: "none"}}>
                     <Box position={"absolute"} marginTop={-13} id={"playlistItem_"+item.guid}></Box>
+                    
+
                     <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
                         {isOwner?<Box>
                             <IconButton onClick={()=>{transpose(1);}}>
@@ -87,8 +98,25 @@ export const PlaylistItem = ({item,reload}:PlaylistItemProps) => {
                                 <Remove/>
                             </IconButton>
                         </Box>:<Box/>}
+
+                        {saving>0&&<Box sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "start",
+                            paddingLeft: 1
+                        }} flex={1}>
+                            <Typography variant='subtitle2'>Ukládání...</Typography>
+                        </Box>}
+
                         <Box display={"flex"} flexDirection={"row"}>
-                            {isOwner&&<Button variant='text' color='error' onClick={onRemove}>Odebrat z playlistu</Button>}
+                            {isOwner&&<LoadingButton
+                                loading={removing} 
+                                variant='text' 
+                                color='error' 
+                                onClick={onRemove}>
+                                    Odebrat z playlistu
+                            </LoadingButton>}
                             <Button variant='text' onClick={open}>Otevřít</Button>
                         </Box>
                     </Box>

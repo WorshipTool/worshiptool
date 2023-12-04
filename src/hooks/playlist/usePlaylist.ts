@@ -51,7 +51,7 @@ export default function usePlaylist(guid:string | undefined){
 
     const reload = () => {
         if(!guid)return;
-        getPlaylistByGuid(guid)
+        return getPlaylistByGuid(guid)
         .then((r)=>{
             if(isRequestSuccess(r)){
                 setPlaylist(r.data);
@@ -79,34 +79,35 @@ export default function usePlaylist(guid:string | undefined){
             return r;
         });
     };
-    const removeVariant = (variant: string) => {
-        return removeVariantFromPlaylist(variant, guid).then((r)=>{
-            if(isRequestSuccess(r)){
-                reload();
-            }
-            return r;
-        });
+    const removeVariant = async (variant: string) => {
+        const r = await removeVariantFromPlaylist(variant, guid)
+        if(isRequestSuccess(r)){
+            await reload();
+        }
+        return r;
     }
     const rename = (title: string) => {
-        renamePlaylistByGuid(guid||"", title).then((r)=>{
+        return renamePlaylistByGuid(guid||"", title).then((r)=>{
             if(isRequestSuccess(r)){
                 reload();
             }
         });
     }
 
-    const reorder = (items: ApiReorderPlaylistItemDTO[]) => {
-        reorderPlaylist(guid||"", items).then((r)=>{
-            if(isRequestSuccess(r)){
-                reload();
-            }else{
-                console.error(r);
-            }
-        });
+    const reorder = async (items: ApiReorderPlaylistItemDTO[]) => {
+        const r = await reorderPlaylist(guid||"", items)
+
+        if(isRequestSuccess(r)){
+            await reload();
+        }else{
+            console.error(r);
+        }
+
+        return r;
     }
 
     const setItemsKeyChord = (item: PlaylistItemDTO, keyChord: Chord) => {
-        setKeyChordOfItem(item.guid, keyChord);
+        return setKeyChordOfItem(item.guid, keyChord);
         
     }
 

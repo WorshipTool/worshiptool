@@ -1,4 +1,4 @@
-import { Box, Button, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
 import { isRequestError } from '../../api/dtos/RequestResult';
@@ -41,6 +41,9 @@ export default function SignUp() {
 
     const [errorMessage, setErrorMessage] = useState("");
 
+
+    const [inProgress, setInProgress] = useState(false);
+
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -66,6 +69,8 @@ export default function SignUp() {
     }
 
     const onSignupClick = () => {
+        setInProgress(true);
+
         let ok = true;
         if(firstName==""){
             setIsFirstNameOk(false);
@@ -102,12 +107,20 @@ export default function SignUp() {
             setPasswordMessage("")
         }
 
-        if(ok) signup({email, password, firstName, lastName},(result)=>{
-            if(isRequestError(result)) setErrorMessage(result.message);
-            else{
-                navigate("/");
-            }
-        });
+        if(ok){
+            signup({email, password, firstName, lastName},(result)=>{
+               if(isRequestError(result)) setErrorMessage(result.message);
+               else{
+                   navigate("/");
+               }
+               setInProgress(false);
+           })
+        }else{
+            setInProgress(false);
+
+        }
+
+        
     }
 
 
@@ -141,7 +154,10 @@ export default function SignUp() {
                         error={!isPasswordOk} helperText={passwordMessage} type='password'/>
                     <Gap/>
         
-                    <Button onClick={onSignupClick}>Vytvořit účet</Button>
+                    <Button onClick={onSignupClick}>
+                        Vytvořit účet
+                        {inProgress&& <CircularProgress color={"inherit"} size={16} sx={{marginLeft:1}}/> }
+                    </Button>
 
                     
                     <Gap value={2}/>
