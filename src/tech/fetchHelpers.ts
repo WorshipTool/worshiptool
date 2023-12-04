@@ -13,7 +13,8 @@ export const fetchData = (params: FetchParams, stringifyBody = true) => {
 
 
     const newOptions = {
-        ...params.options, body: stringifyBody ? JSON.stringify(params.body) : params.body
+        ...params.options, body: stringifyBody ? JSON.stringify(params.body) : params.body,
+        signal: params.signal
     }
     return fetch(url, newOptions)
 } 
@@ -23,6 +24,7 @@ export interface FetchParams{
     options?: Partial<RequestOptions>;
     body?: any,
     params?: any,
+    signal?: AbortSignal    
 }
 
 interface RequestOptions{

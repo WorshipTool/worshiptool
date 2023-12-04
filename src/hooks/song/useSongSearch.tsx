@@ -7,7 +7,8 @@ import useFetch from "../useFetch";
 type useSongSearchProps = {
     key: "search",
     searchKey:string,
-    page: number
+    page: number,
+    signal: AbortSignal
 }
 
 
