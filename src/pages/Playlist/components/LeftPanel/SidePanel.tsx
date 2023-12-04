@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, InputBase, Switch, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, InputBase, Switch, Typography, styled, useTheme } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist';
 import useInnerPlaylist from '../../hooks/useInnerPlaylist';
@@ -28,13 +28,17 @@ export default function SidePanel({onCardsClick}
 
 
     const {isOn, guid: currentPlaylistGuid} = useCurrentPlaylist();
-    const {rename, playlist, items, guid: playlistGuid} = useInnerPlaylist();
+    const {rename, playlist, items, guid: playlistGuid, loading} = useInnerPlaylist();
 
     const {isOn: isGroupOn} = useGroup();
 
     const [title, setTitle] = useState<string>("");
 
     const {isLoggedIn, user} = useAuth();
+
+    const [saving, setSaving] = useState(0);
+
+    const [someIsMoving, setSomeIsMoving] = useState(false);
 
     const isOwner = useMemo(()=>isLoggedIn(), [isLoggedIn]);
 
@@ -78,91 +82,124 @@ export default function SidePanel({onCardsClick}
 
     const theme = useTheme();
 
+    const doRename = async () => {
+        setSaving((s)=>s+1);
+        await rename(title);
+        setSaving((s)=>s-1);
+    }
 
     return (
         <Container displayPrint={"none"}>
-            <OnChangeDelayer value={title} onChange={()=>{
-                if(!isOwner) return;
-                if(title!==playlist?.title&&title!=="") rename(title);
-            }} delay={800}/>
-            <Box margin={2}  maxHeight={`calc(100vh - ${theme.spacing(4)} - 56px)`} display={"flex"} flexDirection={"column"}>
-                
-                <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                    {isOwner?
-                        <Box display={"flex"} flexDirection={"row"} alignItems={"center"} sx={{
-                            borderRadius: 2,
-                            marginRight:1,
-                        }}>
-                            <InputBase value={title} onChange={onTitleChange} sx={{
-                                fontWeight: "bold",
-                                fontSize: "1.4rem",
-                                "&.Mui-focused": {
-                                    backgroundColor: "white",
-                                    paddingLeft:1,
-                                    borderRadius: 2,
-                                }
-                            }} placeholder='Název playlistu' inputRef={inputRef}/>
-                            <Gap horizontal/>
-                            <IconButton onClick={focusTitle}>
-                                <Edit/>
-                            </IconButton>
-                        </Box>
-                        :
-                        <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+
+            {loading?<Box sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "start",
+                justifyContent: "center",
+                height: "100%",
+                paddingTop: 5
+            }}>
+                <Typography>Načítám playlist...</Typography>
+                <Gap value={1} horizontal/>
+                <CircularProgress size={"2rem"}/>
+                                
+            </Box>:<>
+                <OnChangeDelayer value={title} onChange={()=>{
+                    if(!isOwner) return;
+                    if(title!==playlist?.title&&title!==""){
+                        doRename();
+                    }
+                }} delay={800}/>
+                <Box margin={2}  maxHeight={`calc(100vh - ${theme.spacing(4)} - 56px)`} display={"flex"} flexDirection={"column"}>
+                    <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                        {isOwner?
+                            <Box display={"flex"} flexDirection={"row"} alignItems={"center"} sx={{
+                                borderRadius: 2,
+                                marginRight:1,
+                            }}>
+                                <InputBase value={title} onChange={onTitleChange} sx={{
+                                    fontWeight: "bold",
+                                    fontSize: "1.4rem",
+                                    "&.Mui-focused": {
+                                        backgroundColor: "white",
+                                        paddingLeft:1,
+                                        borderRadius: 2,
+                                    }
+                                }} placeholder='Název playlistu' inputRef={inputRef}/>
+                                <Gap horizontal/>
+                                {saving>0?<>
+                                    <Typography variant='subtitle2'>Ukládání...</Typography>
+                                </>:<>
+                                    <IconButton onClick={focusTitle}>
+                                        <Edit/>
+                                    </IconButton>
+                                </>}
+
+                            </Box>
+                            :
+                            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                                
+                                <Typography sx={{
+                                    fontWeight: "bold",
+                                    fontSize: "1.4rem",
+                                }} >{title}</Typography>
                             
-                            <Typography sx={{
-                                fontWeight: "bold",
-                                fontSize: "1.4rem",
-                            }} >{title}</Typography>
+                            </Box>}
+                        {isOn&& (currentPlaylistGuid === playlist?.guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
+                    </Box>
+                    <Gap value={2}/>
+                    <Box display={"flex"} flexDirection={"row"}>
+                        <Typography variant='h6' fontWeight={"bold"} flex={1}>Pořadí</Typography>
+                    </Box>
+                    <Gap/>
+                    {items.length==0&&<>
+                        <Typography variant='subtitle2'>V playlistu nejsou žádné písně...</Typography>
+                    </>}
+                <Box  flex={1} display={"flex"} flexDirection={"column"} alignItems={"center"} bgcolor={theme.palette.grey[100]} sx={{
+                        "&::-webkit-scrollbar": {
+                            display: "auto",
+                        },
+                        paddingTop: 1,
+                        paddingBottom: 8,
+                        overflowY: "auto"
+                }}>
                         
-                        </Box>}
-                    {isOn&& (currentPlaylistGuid === playlist?.guid) ? <Chip label={"Aktivní"} size='small' color='secondary'/> : <></>}
+                        <Masonry columns={1} >
+                            {items.map((item)=>{
+                                return <PanelItem 
+                                    setMoving={setSomeIsMoving}
+                                    moving={someIsMoving}
+                                    item={item} 
+                                    key={"order_"+item.guid} 
+                                    onClick={()=>onPanelItemClickCall(item.guid)}/>
+                            })}
+                        </Masonry>
                 </Box>
-                <Gap value={2}/>
-                <Box display={"flex"} flexDirection={"row"}>
-                    <Typography variant='h6' fontWeight={"bold"} flex={1}>Pořadí</Typography>
                 </Box>
-                <Gap/>
-                {items.length==0&&<>
-                    <Typography variant='subtitle2'>V playlistu nejsou žádné písně...</Typography>
-                </>}
-               <Box  flex={1} display={"flex"} flexDirection={"column"} alignItems={"center"} bgcolor={theme.palette.grey[100]} sx={{
-                     "&::-webkit-scrollbar": {
-                        display: "auto",
-                    },
-                    paddingTop: 1,
-                    paddingBottom: 8,
-                    overflowY: "auto"
-               }}>
-                    
-                    <Masonry columns={1} >
-                        {items.map((item)=>{
-                            return <PanelItem item={item} key={"order_"+item.guid} onClick={()=>onPanelItemClickCall(item.guid)}/>
-                        })}
-                    </Masonry>
-               </Box>
-            </Box>
+                
+                <Box sx={{
+                        position:"absolute",
+                        bottom: 30,
+                        right: 30,
+                        left: 30,
+                        displayPrint:"none",
+                        pointerEvents:"none"
+                    }}
+                    display={"flex"} justifyContent={"space-between"} >
+                        
+                    {items.length>0?<Box  sx={{pointerEvents:"auto"}}>
+                        <Button variant='contained' startIcon={<Dashboard/>} onClick={openCards}
+                            color={isGroupOn?"secondary": "primary"}>
+                            Karty
+                        </Button>
+
+                    </Box>:<Box/>}
+                    <Button variant="contained"  onClick={onPrint} sx={{pointerEvents:"auto"}}>Vytisknout</Button>
+
+                </Box>
             
-            <Box sx={{
-                    position:"absolute",
-                    bottom: 30,
-                    right: 30,
-                    left: 30,
-                    displayPrint:"none",
-                    pointerEvents:"none"
-                }}
-                display={"flex"} justifyContent={"space-between"} >
-                    
-                {items.length>0?<Box  sx={{pointerEvents:"auto"}}>
-                    <Button variant='contained' startIcon={<Dashboard/>} onClick={openCards}
-                        color={isGroupOn?"secondary": "primary"}>
-                        Karty
-                    </Button>
+            </>}
 
-                </Box>:<Box/>}
-                <Button variant="contained"  onClick={onPrint} sx={{pointerEvents:"auto"}}>Vytisknout</Button>
-
-            </Box>
 
 
         </Container>

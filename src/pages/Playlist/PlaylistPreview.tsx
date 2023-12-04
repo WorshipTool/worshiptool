@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Paper, Skeleton, Typography, styled } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, LinearProgress, Paper, Skeleton, Typography, styled } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Gap from '../../components/Gap';
 import SidePanel from './components/LeftPanel/SidePanel';
@@ -17,7 +17,7 @@ const Container = styled(Box)(({theme})=>({
 
 export default function PlaylistPreview() {
 
-    const {playlist, items, reload, guid} = useInnerPlaylist();
+    const {playlist, items, reload, guid, loading} = useInnerPlaylist();
     const {isLoggedIn, user} = useAuth()
 
     const isOwner = useMemo(()=>{
@@ -48,33 +48,48 @@ export default function PlaylistPreview() {
                 <SidePanel onCardsClick={()=>{
                     navigate("/playlist/cards/"+guid);
                 }}/>
-                {<Container flex={1}>
-                    
-                    {items.length==0&&<Box display={"flex"} flexDirection={"column"}>
-                        <Typography variant='subtitle1'>
-                            V playlistu namáš zatím jedinou píseň. 
-                        </Typography>
-                        <Typography variant='subtitle1'>
-                            Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
-                        </Typography>
-                        <Gap/>
-                        <Box>
-                            <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
-                        </Box>
-                    </Box>}
-                    {items.map((item)=>{
-                        return <PlaylistItem item={item} key={item.guid} reload={reload}/>
-                    })}
-                    
-                </Container>}
-                
-                {isOwner&&<Box displayPrint={"none"} display={{
-                    md: "none",
-                    lg: "block",
-                }}>
 
-                    <RightPanel playlist={playlist} />
-                </Box>}
+                {loading?<Box sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 2
+                }}>
+                    <LinearProgress sx={{
+                        flex: 1
+                    }} color='inherit'/>
+                </Box>:<>
+                    {<Container flex={1}>
+                        
+                        {items.length==0&&<Box display={"flex"} flexDirection={"column"}>
+                            <Typography variant='subtitle1'>
+                                V playlistu namáš zatím jedinou píseň. 
+                            </Typography>
+                            <Typography variant='subtitle1'>
+                                Aby jsi mohl přidat píseň do playlistu, je třeba nejdřív nějakou najít...
+                            </Typography>
+                            <Gap/>
+                            <Box>
+                                <Button variant='contained' color='primary' onClick={onSearchClick}>Hledat</Button>
+                            </Box>
+                        </Box>}
+                        {items.map((item)=>{
+                            return <PlaylistItem item={item} key={item.guid} reload={reload}/>
+                        })}
+                        
+                    </Container>}
+                    
+                    {isOwner&&<Box displayPrint={"none"} display={{
+                        md: "none",
+                        lg: "block",
+                    }}>
+
+                        <RightPanel playlist={playlist} />
+                    </Box>}
+                </>}
                 
     
             </Box>
