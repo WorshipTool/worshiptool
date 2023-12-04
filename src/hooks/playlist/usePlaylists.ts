@@ -10,7 +10,7 @@ import { Chord } from '@pepavlin/sheet-api';
 
 
 export default function usePlaylists(){
-    const {fetchData, post} = useFetch();
+    const {fetchData, post, loading} = useFetch();
 
     const addVariantToPlaylist = async (variant: string | undefined, playlist: string | undefined) => {
         if(!variant || !playlist) return formatted(null, codes['Unknown Error'], "Invalid parameters");
@@ -106,6 +106,7 @@ export default function usePlaylists(){
         searchInPlaylistByGuid,
         renamePlaylist,
         reorderPlaylist,
-        setKeyChordOfItem
+        setKeyChordOfItem,
+        loading
     }
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
+import { Box, Button, Card, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
 import Toolbar from "../../components/Toolbars/Toolbar";
 import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../api/dtos/playlist/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
@@ -7,9 +7,11 @@ import { getUrl_GETPLAYLISTS, getUrl_POSTCREATEPLAYLIST } from '../../api/urls';
 import { isRequestSuccess, RequestResult, isRequestError } from '../../api/dtos/RequestResult';
 import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
-import { Remove } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
 import AppContainer from "../../components/AppContainer/AppContainer";
+import Gap from "../../components/Gap";
+import { LoadingButton } from "@mui/lab";
 
 
 
@@ -37,15 +39,21 @@ export default function () {
 
     const [titleDialogOpen, setTitleDialogOpen] = useState(false);
 
-    const {fetchData, post} = useFetch()
 
-    const {getPlaylistsOfUser, createPlaylist: createWithName, deletePlaylist: deleteByGuid} = usePlaylists();
-
+    const {getPlaylistsOfUser, createPlaylist: createWithName, deletePlaylist: deleteByGuid, loading} = usePlaylists();
+    const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
+    const [createLoading, setCreateLoading] = useState(false);
+
     useEffect(()=>{
-        reload();
+        reload()
     },[]);
+
+    useEffect(()=>{
+        if(loaded) return;
+        if(!loading) setLoaded(true);
+    },[loading])
 
     const reload = () =>{
         getPlaylistsOfUser()
@@ -60,6 +68,7 @@ export default function () {
     const {guid : playlistGuid, turnOn, turnOff} = useCurrentPlaylist();
 
     const onCreateClick = () => {
+        setCreateLoading(true);
         createPlaylist();
     }
 
@@ -71,7 +80,9 @@ export default function () {
             turnOn(result.data.guid)
         }else{
             console.log("Something went wrong:", result.message);
+            setCreateLoading(false);
         }
+
     }
 
 
@@ -106,7 +117,6 @@ export default function () {
     }
 
     return <>
-        {/* <Toolbar/> */}
 
         <AppContainer>
             <Box display={"flex"} justifyContent={"center"}>
@@ -117,14 +127,41 @@ export default function () {
                     </>:<></>}
                     <Box display={"flex"} marginBottom={3}>
                         <Typography variant="h5" fontWeight={600} flex={1}>Moje playlisty:</Typography>
-                        <Button variant="contained" onClick={onCreateClick}>Vytvořit</Button>
+
+                        <LoadingButton 
+                            loading={createLoading}
+                            loadingPosition="start"
+                            startIcon={<Add/>}
+                            variant="contained" 
+                            onClick={onCreateClick}>
+                            Vytvořit
+                        </LoadingButton>
+
                     </Box>
-                    {playlists.map((p)=>{
-                        return <ListPlaylistItem name={p.title} guid={p.guid} key={p.guid}/>
-                    })}
-                    {playlists.length==0&&<>
-                        <Typography>Nemáš žádný vytvořený playlist.</Typography>
+                    {!loaded? <Box sx={{
+                        display:"flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flex:1,
+                        color: "black"
+                    }}>
+                        <Typography>Načítání playlistů...</Typography>
+                        <Gap horizontal/>
+                        <CircularProgress size={"2rem"} color="inherit"/>
+                    </Box>:<>
+                        
+                        {playlists.map((p)=>{
+                            return <ListPlaylistItem name={p.title} guid={p.guid} key={p.guid}/>
+                        })}
+
+                        
+                        {playlists.length==0&&<>
+                            <Typography>Nemáš žádný vytvořený playlist.</Typography>
+                        </>}
                     </>}
+
+
                 </Box>
             </Box>
 
