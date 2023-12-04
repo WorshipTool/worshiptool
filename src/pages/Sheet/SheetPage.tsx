@@ -53,7 +53,7 @@ export default function SheetPage() {
       },[variantID, song])
 
     useEffect(()=>{     
-        document.title = title
+        document.title = title || "Píseň"
     },[title])
 
     const rerender = () => {

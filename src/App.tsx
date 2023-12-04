@@ -12,7 +12,6 @@ import Home from './pages/Home/Home';
 import "./App.css";
 import Create from './pages/add_new_song/Write/Create';
 import { createTheme } from '@mui/material';
-import SheetGraphics from './pages/Sheet/SheetGraphics';
 import { AuthProvider } from './hooks/auth/useAuth';
 import Account from './pages/Account/Account';
 import Login from './pages/Login/Login';
