@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import GroupToolbarActionButton from './GroupToolbarActionButton'
 import Gap from '../../Gap'
 import { Add, Edit, Search } from '@mui/icons-material'
@@ -18,13 +18,19 @@ export default function QuickActions({visible}: QuickActionsProps) {
     
     const navigate = useNavigate();
 
+    const [createSongLoading, setCreateSongLoading] = useState(false);
+    const [createPlaylistLoading, setCreatePlaylistLoading] = useState(false);
+
     const onCreatePlaylist = () => {
+        setCreatePlaylistLoading(true);
         createPlaylist().then((r)=>{
             if(isRequestSuccess(r)){
                 const guid = r.data.guid;
                 turnOn(guid);
                 navigate("/playlist/"+guid)
             }
+            setCreatePlaylistLoading(false);
+
         })
     }
 
@@ -33,7 +39,9 @@ export default function QuickActions({visible}: QuickActionsProps) {
     }
 
     const onNewSong = () => {
-        navigate("/create");
+        setCreateSongLoading(true)
+        navigate("/add");
+        setCreateSongLoading(false)
     }
 
     const openPlaylistToEdit = () => {
@@ -46,13 +54,13 @@ export default function QuickActions({visible}: QuickActionsProps) {
         <Box display={"flex"} flexDirection={"row"} gap={1}>
             <GroupToolbarActionButton label='Vytvořit playlist' variant="primary" icon={<Add sx={{
                 strokeWidth: 2,
-            }}/>} onClick={onCreatePlaylist} visible={visible} id={0}/>
+            }}/>} onClick={onCreatePlaylist} visible={visible} id={0} loading={createPlaylistLoading}/>
             <GroupToolbarActionButton label='Vyhledat píseň' icon={<Search  sx={{
                 strokeWidth: 1,
             }}/>} onClick={onSearchSong} visible={visible} id={1}/>
             <GroupToolbarActionButton label='Vytvořit novou píseň' icon={<Add  sx={{
                 strokeWidth: 2,
-            }}/>} onClick={onNewSong} visible={visible} id={2}/>
+            }}/>} onClick={onNewSong} visible={visible} id={2} loading={createSongLoading}/>
             
             {isOn ? <GroupToolbarActionButton label='Editovat playlist' secondaryLabel={playlist?.title}
                 variant="secondary"
