@@ -13,6 +13,7 @@ import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
 import { isMobile, isTablet } from 'react-device-detect'
 import UploadFileInput from '../../../pages/add_new_song/AddMenu/Upload/components/UploadFileInput'
+import { LoadingButton } from '@mui/lab'
 
 const Container = styled(Box)(({theme})=>({
     flex: 1,
@@ -48,7 +49,7 @@ interface RightAccountPanelProps{
 export default function RightAccountPanel({transparent}: RightAccountPanelProps) {
     const navigate = useNavigate();
 
-    const {isLoggedIn} = useAuth();
+    const {isLoggedIn, loading} = useAuth();
 
     const {createPlaylist} = usePlaylists()
 
@@ -190,17 +191,21 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
                     <ToolsMenu open={toolsOpen} onClose={()=>setToolsOpen(false)}/>
                 </>:<>
                     <Tooltip title={"Příhlásit se"}>
-                        <Button  variant='text' color='inherit' endIcon={
-                            <Login sx={iconStyle} fontSize={fontSize}/>
-                        } sx={{
-                            transition: "all 0.2s ease",
-                            ":hover": {
-                                transform: "scale(102%)"
-                            },
-                            pointerEvents:"auto"
-                        }} onClick={onLoginClick}>
+                        <LoadingButton  variant='text' color='inherit' endIcon={
+                                <Login sx={iconStyle} fontSize={fontSize}/>
+                            } sx={{
+                                transition: "all 0.2s ease",
+                                ":hover": {
+                                    transform: "scale(102%)"
+                                },
+                                pointerEvents:"auto"
+                            }} 
+                            onClick={onLoginClick}
+                            loading={loading}
+                            loadingPosition='end'
+                            >
                             Přihlásit se
-                        </Button>
+                        </LoadingButton>
                     </Tooltip>
                 </>
                 }
