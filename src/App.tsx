@@ -37,6 +37,7 @@ import Upload from './pages/add_new_song/AddMenu/Upload/Upload';
 import Parse from './pages/add_new_song/AddMenu/Upload/components/Parse/Parse';
 import MySongsList from './pages/MySongsList/MySongsList';
 import SheetPage from './pages/Sheet/SheetPage';
+import Snowfall from 'react-snowfall';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -87,30 +88,31 @@ export const AppRoutes = () => {
   
 }
 
-
 function App() {
 
     return (
-      <GoogleOAuthProvider clientId='736869166999-nckrpcdmab26hkp7s1cjbgdfu51igac9.apps.googleusercontent.com'>
-
-        <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
-          <ThemeProvider theme={theme}>
-            <BrowserRouter>
-              <AuthProvider> 
-                  <StackProvider>
-                      <GroupProvider>
-                        <PlaylistProvider>
-                          <Background/>
-                          <AppRoutes/>
-                        </PlaylistProvider>
-                      </GroupProvider>
-                  </StackProvider>
-              </AuthProvider>
-            </BrowserRouter>
-          </ThemeProvider>
-        </SnackbarProvider>
+      <div>
+        <GoogleOAuthProvider clientId='736869166999-nckrpcdmab26hkp7s1cjbgdfu51igac9.apps.googleusercontent.com'>
         
-    </GoogleOAuthProvider>
+          <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={3000}>        
+            <ThemeProvider theme={theme}>
+              <BrowserRouter>
+                <AuthProvider> 
+                    <StackProvider>
+                        <GroupProvider>
+                          <PlaylistProvider>
+                            <Background/>
+                            <AppRoutes/>
+                          </PlaylistProvider>
+                        </GroupProvider>
+                    </StackProvider>
+                </AuthProvider>
+              </BrowserRouter>
+            </ThemeProvider>
+          </SnackbarProvider>
+          
+        </GoogleOAuthProvider>
+      </div>
 
     )
 }

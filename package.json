@@ -34,6 +34,7 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.0",
     "react-scroll-motion": "^0.3.2",
+    "react-snowfall": "^1.2.1",
     "swipe-event-listener": "^1.2.1",
     "swiped-events": "^1.1.7",
     "typescript": "^4.9.3",
