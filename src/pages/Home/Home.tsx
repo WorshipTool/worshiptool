@@ -16,6 +16,8 @@ import FloatingAddButton from './components/FloatingAddButton';
 import HomeDesktop from './HomeDesktop';
 import HomeMobile from './HomeMobile';
 import useGroup from '../../hooks/group/useGroup';
+import Snowfall from 'react-snowfall';
+import Snow from '../../components/Snow';
 
 
 const SearchContainer = styled(Box)(({theme})=>({
@@ -86,6 +88,8 @@ export default function Home() {
             }}>
                 <HomeMobile/>
             </Box>
+
+            <Snow/>
         </Box>
         
     )
