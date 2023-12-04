@@ -23,9 +23,18 @@ export default function MySongsList() {
             }}>
                 <Typography  variant="h5" fontWeight={600} >Moje písně:</Typography>
                 <Gap value={2}/>
-                {!loaded ? 
-                    <CircularProgress/> 
-                :
+                {!loaded ? <Box sx={{
+                    display:"flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex:1,
+                    color: "black"
+                }}>
+                    <Typography>Načítání...</Typography>
+                    <Gap value={2} horizontal/>
+                    <CircularProgress size={"2rem"} color='inherit'/> 
+                </Box>:
                     <>
                         {variants.map((variant, index)=>{
                             return <MySongItem variant={variant} index={index} key={`mysong${variant.guid}`} onClick={()=>{
