@@ -52,7 +52,9 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const navigate = useNavigate();
 
     const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid)
+        navigate("/song/"+variant.songGuid, {state:{
+            title: variant.preferredTitle 
+        }})
     }
   return (
     <ContainerGrid direction='column'>

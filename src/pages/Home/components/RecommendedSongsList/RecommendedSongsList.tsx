@@ -19,7 +19,9 @@ export default function RecommendedSongsList() {
     const navigate = useNavigate();
 
     const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid)
+        navigate("/song/"+variant.songGuid, {state:{
+            title: variant.preferredTitle
+        }})
     }
 
     const openList = () => {
