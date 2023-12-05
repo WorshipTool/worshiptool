@@ -1,8 +1,9 @@
 import { Sheet } from "@pepavlin/sheet-api";
 import DefaultStyle from "./DefaultStyle";
 import ExperimentalStyle from "./ExperimentalStyle";
+import ModernStyle from "./ModernStyle";
 
-export type SheetStyle = "default"|"experimental";
+export type SheetStyle = "default"|"experimental"| "modern";
 export interface SheetStyleComponentProps{
     sheet: Sheet,
     title?: string
@@ -12,5 +13,6 @@ export type SheetStyleComponentType = (props: SheetStyleComponentProps) => JSX.E
 
 export const sheetStyles : {[style in SheetStyle]:SheetStyleComponentType}  = {
     ["default"] : DefaultStyle,
-    ["experimental"]: ExperimentalStyle
+    ["experimental"]: ExperimentalStyle,
+    ["modern"]: ModernStyle
 }
