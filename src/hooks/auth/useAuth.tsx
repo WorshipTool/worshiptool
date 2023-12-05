@@ -69,10 +69,11 @@ export function useProvideAuth(){
         const u = localStorage.getItem("user");
         if(u!=null){
             setUser(JSON.parse(u));
-            setLoading(false);
         }else{
             setGoogleShouldLogin(true);
         }
+        
+        setLoading(false);
     },[]);
 
     useEffect(()=>{
