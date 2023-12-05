@@ -4,41 +4,18 @@ import React, { useMemo } from 'react'
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { Chord, Sheet } from "@pepavlin/sheet-api";
 import { SheetStyleComponentType } from "./config";
-import { Segment } from "@pepavlin/sheet-api/lib/sheetApi/conversition/song";
 
-const chordHeight = "1.5em";
-const SegmentComponent = ({segment}: {segment: Segment}) => {
-
-    const words = useMemo(()=>{
-        return segment.text?.split(/(\s+)/)||[];
-    },[segment])
-
-    return <>
-        {words.map((word, index)=>{
-
-            return <Box>
-                {index == 0 ? <>
-                    <Typography sx={{paddingRight: 1, height: chordHeight}} fontFamily={"inherit"}>
-                        <b>
-                            {segment.chord?.toString()}
-                        </b>
-                    </Typography>
-                </>:<>
-                    <Box sx={{height: chordHeight}}/>
-                </>}
-
-                <Typography sx={{flex:1}} fontFamily={"inherit"}>{word}</Typography>
-            </Box>
-        })}
-    </>
-
+interface DefaultStyleProps{
+    variantData?: VariantDTO,
+    title? :string,
+    sheet: Sheet
 }
 
-const DefaultStyle : SheetStyleComponentType = ({sheet, title: titleString}) => {
+const DefaultStyle : SheetStyleComponentType = ({variantData, sheet, title: titleString}:DefaultStyleProps) => {
 
     const title = useMemo(()=>{
-        return titleString||undefined;
-    },[titleString])
+        return titleString?titleString:variantData?.preferredTitle||undefined;
+    },[titleString, variantData])
 
     const sections = useMemo(()=>{
         if(sheet===undefined)return [];
@@ -55,6 +32,8 @@ const DefaultStyle : SheetStyleComponentType = ({sheet, title: titleString}) => 
 
     return (
         <Box fontFamily={font} sx={{
+            width: 300,
+            scrollbarX: "auto",
         }}>
             <Box display={"flex"} flexDirection={"row"} gap={1} sx={{marginBottom:1}}>
                     <Box width={width}></Box>
@@ -75,13 +54,17 @@ const DefaultStyle : SheetStyleComponentType = ({sheet, title: titleString}) => 
                     <Box flex={10}>
                         {section.lines&&section.lines.map((line, index)=>{
                         return (
-                            <Box key={"bbox"+index} sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                flexWrap: "wrap",
-                            }}>
+                            <Box display={"flex"} flexDirection={"row"}  key={"bbox"+index}>
                             {line.segments.map((segment, index)=>{
-                                return <SegmentComponent segment={segment}   key={"cbox"+index}/>
+                                return(
+                                    <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
+                                        <Box sx={{flex:1}}>
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord.toString()}</b></Typography>}
+                                        </Box>
+                                        
+                                        <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>
+                                    </Box>
+                                )
                             })}
                             </Box>
                         )
