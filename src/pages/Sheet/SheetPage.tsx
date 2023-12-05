@@ -96,7 +96,10 @@ export default function SheetPage() {
                 borderRadius: 1,
                 flex:1,
                 display:"flex",
-                flexDirection: "column"
+                flexDirection: "column",
+                [theme.breakpoints.down("sm")]:{
+                    marginTop: 0,
+                }
             }}  >
 
                 {loading?<Box sx={{

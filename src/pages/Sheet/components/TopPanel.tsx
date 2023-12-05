@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import TransposePanel from '../TransposePanel'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import useAuth from '../../../hooks/auth/useAuth'
 import VerifyButton from './components/VerifyButton'
 import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
@@ -80,6 +80,8 @@ export default function TopPanel(props: TopPanelProps) {
 
 
     }
+
+    const theme = useTheme();
         
     return (
         <Box sx={{
@@ -103,39 +105,59 @@ export default function TopPanel(props: TopPanelProps) {
                 
                     <TransposePanel transpose={props.transpose}/>
                 
-                    {isAdmin()&&props.song.variants.length>1&&<>
+                    {isAdmin()&&props.song.variants.length>1&&<Box sx={{
+                        [theme.breakpoints.down("md")]:{
+                            display: "none"
+                        }
+                    }}>
                         <ChangeVariant 
                             index={props.variantIndex}
                             onChange={props.onChangeVariant}
                             variants={props.song.variants}/>
-                    </>}
+                    </Box>}
                 
-                    {(isAdmin()||isTrustee())&&!saving&&<>
+                    {(isAdmin()||isTrustee())&&!saving&&<Box sx={{
+                        [theme.breakpoints.down("md")]:{
+                            display: "none"
+                        }
+                    }}>
                         <VerifyButton variant={props.variant} reloadSong={props.reloadSong}/>
-                    </>}
+                    </Box>}
                 
                     <Box flex={1}/>
                 
-                    {(isOwner||(isAdmin()&&props.variant.createdByLoader))&&<>
+                    {(isOwner||(isAdmin()&&props.variant.createdByLoader))&&<Box sx={{
+                        [theme.breakpoints.down("md")]:{
+                            display: "none"
+                        }
+                    }}>
                         <EditButton 
                             onClick={onEditClick} 
                             inEditMode={props.isInEditMode} 
                             loading={saving}
                             sheetData={props.sheet?.getOriginalSheetData()||""}
                             title={props.editedTitle}/>
-                    </>}
+                    </Box>}
                     
-                    {isAdmin()&&<>
+                    {isAdmin()&&<Box sx={{
+                        [theme.breakpoints.down("lg")]:{
+                            display: "none"
+                        }
+                    }}>
                         <SheetAdminButtons 
                             sheet={props.sheet} 
                             song={props.song} 
                             reload={props.reloadSong}
                             variant={props.variant}/>
-                    </>}
+                    </Box>}
                 
-                    {isLoggedIn()&&<>
+                    {isLoggedIn()&&<Box sx={{
+                        [theme.breakpoints.down("md")]:{
+                            display: "none"
+                        }
+                    }}>
                         <AddToPlaylistButton variant={props.variant}/>
-                    </>}
+                    </Box>}
                 
                     <PrintButton/>
             </>}

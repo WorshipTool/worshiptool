@@ -1,5 +1,5 @@
-import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz } from '@mui/icons-material';
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography } from '@mui/material'
+import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz, AddBox, AddCircle, PlaylistAddCircle } from '@mui/icons-material';
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import usePlaylists from '../../../../../hooks/playlist/usePlaylists';
 import { VariantDTO } from '../../../../../interfaces/variant/VariantDTO';
@@ -57,6 +57,7 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
         })
       }
 
+    const theme = useTheme();
     const maxItems = 4;
       
     return (
@@ -64,10 +65,23 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
             <Button
                 onClick={handleClick}
                 variant='contained'
-                endIcon={<KeyboardArrowDown />}
+                endIcon={<KeyboardArrowDown />} 
+                sx={{
+                    [theme.breakpoints.down("md")]:{
+                        display: "none"
+                    }
+                }}
                 >
                 Přidat do playlistu
             </Button>
+
+            <IconButton sx={{
+                [theme.breakpoints.up("md")]:{
+                    display: "none"
+                }
+            }} onClick={handleClick} color='primary'>
+                <PlaylistAddCircle/>
+            </IconButton>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
