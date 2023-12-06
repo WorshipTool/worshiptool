@@ -21,8 +21,6 @@ export const ErrorPage = () => {
         </Box>
 
         
-        <Snow/>
-        
     </Box>
 };
 

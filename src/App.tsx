@@ -37,6 +37,7 @@ import Parse from './pages/add_new_song/AddMenu/Upload/components/Parse/Parse';
 import MySongsList from './pages/MySongsList/MySongsList';
 import SheetPage from './pages/Sheet/SheetPage';
 import Snowfall from 'react-snowfall';
+import Snow from './components/Snow';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -111,6 +112,8 @@ function App() {
           </SnackbarProvider>
           
         </GoogleOAuthProvider>
+        
+        <Snow/>
       </div>
 
     )
