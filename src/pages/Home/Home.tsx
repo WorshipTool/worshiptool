@@ -89,7 +89,6 @@ export default function Home() {
                 <HomeMobile/>
             </Box>
 
-            <Snow/>
         </Box>
         
     )
