@@ -19,7 +19,6 @@ export default function useRecommendedSongs(){
         if(!isRequestSuccess(res)){
             throw Error(res.message);
         }
-        console.log("Recommended: ", res.data);
         const sgs : SearchSongDataDTO[] = res.data.songs.map((data)=>{
             return {
                 guid: data.guid,
