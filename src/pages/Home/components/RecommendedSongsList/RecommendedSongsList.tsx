@@ -52,7 +52,7 @@ export default function RecommendedSongsList() {
             </>}
 
             <GridContainer container columns={{ xs: 1, sm: 2, md: 4 }} sx={{padding:0}}>
-                <SongListCards variants={data/*.slice(0,4)*/} onClick={onCardClick}/>
+                <SongListCards variants={data.slice(0,4)} onClick={onCardClick}/>
 
             </GridContainer>
 
