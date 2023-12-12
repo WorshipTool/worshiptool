@@ -1,9 +1,9 @@
 import { Box, TextField, Typography } from '@mui/material'
 import React from 'react'
-import useAuth from '../../hooks/auth/useAuth'
-import AccountImage from '../../assets/images/account.webp'
-import { ROLES } from '../../interfaces/user';
-import Gap from '../../components/Gap';
+import useAuth from '../../../hooks/auth/useAuth'
+import AccountImage from '../../../assets/images/account.webp'
+import { ROLES } from '../../../interfaces/user';
+import Gap from '../../../components/Gap';
 
 export default function BasicInfo() {
     const {info} = useAuth();
@@ -14,7 +14,12 @@ export default function BasicInfo() {
             <img src={AccountImage} width={70} height={70} style={{opacity: 0.3}}/>
             <Box marginLeft={3} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
                 <Typography variant='h6'>{info.firstName} {info.lastName}</Typography>
-                <Typography>{ROLES[info.role]}</Typography>
+                <Typography>{
+                    info.role === ROLES.Admin?"Admin" 
+                    : info.role === ROLES.Trustee?"Trustee"
+                    : info.role === ROLES.User ? "Uživatel"
+                    : ROLES[info.role]
+                }</Typography>
             </Box>
         </Box>
 
