@@ -55,12 +55,12 @@ export default function AddMenuItem(props: AddMenuItemProps) {
                     textAlign:"center",
                     userSelect:"none",
                 }}>{props.title}</Typography>
-                {/* <Gap value={1}/> */}
                 <Typography variant="body2" sx={{
                     textAlign:"center",
                     userSelect:"none",
-                    paddingX: 2
-                }}>{props.subtitle}</Typography>
+                    paddingX: 3,
+                    lineHeight: 1.2,
+                }} color={"grey"}>{props.subtitle}</Typography>
             </Box>
         </Paper>
     </div>
