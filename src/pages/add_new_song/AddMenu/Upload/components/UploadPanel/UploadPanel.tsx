@@ -56,6 +56,7 @@ export default function UploadPanel(props: UploadPanelProps) {
                     justifyContent:"center",
                     alignItems:"center",
                 }}>
+                    <Gap value={3}/>
                     {!draggingOver ? <Box sx={{
                             fontSize: 60,
                             display:"flex",
@@ -97,8 +98,23 @@ export default function UploadPanel(props: UploadPanelProps) {
                     <Button variant='contained' onClick={openFilePicker} sx={{
                         display: draggingOver? "none" : "block"
                     }}>Vybrat soubory</Button>
+
+                    
                 </Box>
 
+                <Box  sx={{
+                    bgcolor: "grey.200",
+                    padding: 1,
+                    borderRadius: 1,
+                    display: draggingOver? "none" : "flex",
+                    alignItems:"center",
+                    justifyContent:"center",
+                    marginTop: 3,
+                }} width={200}>
+                    <Typography variant='body2' color={"grey"}>
+                        Formáty: png, jpg, jpeg
+                    </Typography>
+                </Box>
                 
             </Paper>
             <UploadFileInput inputRef={inputRef} onUpload={(files)=>uploadFiles(files)}/>

@@ -21,11 +21,17 @@ export default function AddMenu() {
                 flexDirection:"row",
                 gap: 5,
             }}>
-                <AddMenuItem title='Nahrát soubor' icon={<UploadFile fontSize='inherit'/>} onClick={()=>{
+                <AddMenuItem 
+                    title='Nahrát soubor' 
+                    subtitle="Automaticky převeďte píseň z obrázku"
+                    icon={<UploadFile fontSize='inherit'/>} onClick={()=>{
                     navigate("/add/upload")
                 }}/>
                 
-                <AddMenuItem title='Sepsat ručně' icon={<Edit fontSize='inherit'/>} iconSize={40} onClick={()=>{
+                <AddMenuItem 
+                    title='Sepsat ručně' 
+                    // subtitle='Použijte editor pro psaní textu písně'
+                    icon={<Edit fontSize='inherit'/>} iconSize={40} onClick={()=>{
                     navigate("/add/write")
                 }}/>
 

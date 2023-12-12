@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import React from 'react'
 
 interface TabPanelProps {
@@ -19,9 +19,9 @@ export default function TabPanel(props: TabPanelProps) {
         {...other}
       >
         {value === index && (
-          <Box sx={{ paddingLeft: 15, paddingTop:2 }}>
+          <Card sx={{padding:2, marginLeft: 2 }}>
            {children}
-          </Box>
+          </Card>
         )}
       </div>
     );

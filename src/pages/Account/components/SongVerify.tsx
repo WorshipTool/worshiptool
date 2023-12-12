@@ -1,10 +1,10 @@
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import useSong from '../../hooks/song/useSong'
+import useSong from '../../../hooks/song/useSong'
 import { useActionData, useNavigate } from 'react-router-dom';
-import useFetch from '../../hooks/useFetch';
-import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../api/urls';
-import useAuth from '../../hooks/auth/useAuth';
+import useFetch from '../../../hooks/useFetch';
+import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../../api/urls';
+import useAuth from '../../../hooks/auth/useAuth';
 
 export interface SongVerifyProps{
     guid: string,

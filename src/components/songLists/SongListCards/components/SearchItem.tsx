@@ -25,9 +25,14 @@ const StyledBox = styled(Typography)(({theme})=>({
 
 interface SearchItemProps {
     variant: VariantDTO;
-    onClick?: (variant: VariantDTO)=>void
+    onClick?: (variant: VariantDTO)=>void,
+    border?: boolean
 }
-export default function SearchItem({variant, onClick}: SearchItemProps) {
+export default function SearchItem({
+    variant, 
+    onClick, 
+    border = true
+    }: SearchItemProps) {
     const onSongClick = () => {
         onClick?.(variant);
     }
@@ -44,9 +49,10 @@ export default function SearchItem({variant, onClick}: SearchItemProps) {
         </Box>
         :
         <StyledContainer onClick={onSongClick} sx={{borderColor:
-            variant.verified 
-             || (variant.createdByLoader)
-            ?"transparent":"grey"}}>
+            border
+             &&!variant.verified 
+             && variant.createdBy==user?.guid
+            ?"grey":"transparent"}}>
             
             {variant.createdBy==user?.guid&&
                 <Typography variant="subtitle2">Vytvořeno vámi.</Typography>}
@@ -57,7 +63,7 @@ export default function SearchItem({variant, onClick}: SearchItemProps) {
                     {variant.createdByLoader?
                         <Typography variant='caption'>Nahráno programem</Typography>
                     :<>
-                        <Typography variant='caption'>Neověřeno</Typography>
+                        <Typography variant='caption'>Neveřejné</Typography>
                     </>}
                 </>:
                 <>
