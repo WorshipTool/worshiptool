@@ -121,7 +121,7 @@ export default function SelectionList() {
                   <Gap value={2} horizontal/>
                   <CircularProgress size={"2rem"} color='inherit'/>
               </Box>:<>
-                  <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick}/>
+                  <SongListCards variants={items.map(v=>v.variant)} onClick={onCardClick} itemBorder={false}/>
                   {items.length==0&&stillString!==""&&<Typography>Ve skupině {name} nebyly nalezeny žádné písně s výrazem "{stillString}"</Typography>}
               </>}
 

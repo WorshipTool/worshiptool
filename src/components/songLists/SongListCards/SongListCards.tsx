@@ -7,10 +7,11 @@ import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
 interface SongListCardsProps {
     variants: VariantDTO[],
     onClick?: (variant: VariantDTO) => void,
-    columns?: number
+    columns?: number,
+    itemBorder?: boolean
 }
 
-export default function SongListCards({variants, onClick, columns}: SongListCardsProps) {
+export default function SongListCards({variants, onClick, columns, itemBorder}: SongListCardsProps) {
     const theme = useTheme();
     const spacing = 1;
     return ( variants.length===0 ? <></> :
@@ -18,7 +19,7 @@ export default function SongListCards({variants, onClick, columns}: SongListCard
         marginLeft: -(spacing/2), 
         width: `calc(100% + ${theme.spacing(spacing)})`}} spacing={spacing}>
           {variants.map((v)=>{
-              return <SearchItem variant={v} key={v.guid} onClick={onClick}></SearchItem>
+              return <SearchItem variant={v} key={v.guid} onClick={onClick} border={itemBorder}></SearchItem>
           })}            
       </Masonry>
   )
