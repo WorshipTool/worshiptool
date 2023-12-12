@@ -7,7 +7,8 @@ interface AddMenuItemProps {
     onClick?: ()=>void,
     icon?: React.ReactNode,
     iconSize?: number,
-    disabled?: boolean
+    disabled?: boolean,
+    subtitle?: React.ReactNode
 }
 
 export default function AddMenuItem(props: AddMenuItemProps) {
@@ -49,11 +50,17 @@ export default function AddMenuItem(props: AddMenuItemProps) {
                     {props.icon}
                 </Box>
         
-                <Gap value={2}/>
+                <Gap value={1}/>
                 <Typography variant='h6' sx={{
                     textAlign:"center",
                     userSelect:"none",
                 }}>{props.title}</Typography>
+                {/* <Gap value={1}/> */}
+                <Typography variant="body2" sx={{
+                    textAlign:"center",
+                    userSelect:"none",
+                    paddingX: 2
+                }}>{props.subtitle}</Typography>
             </Box>
         </Paper>
     </div>
