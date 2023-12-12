@@ -30,7 +30,7 @@ export default function AddMenu() {
                 
                 <AddMenuItem 
                     title='Sepsat ručně' 
-                    subtitle='Použijte editor pro psaní textu písně'
+                    // subtitle='Použijte editor pro psaní textu písně'
                     icon={<Edit fontSize='inherit'/>} iconSize={40} onClick={()=>{
                     navigate("/add/write")
                 }}/>
