@@ -85,7 +85,7 @@ export default function PlaylistMenuItem({
             addVariantToPlaylist(guid)
         else 
             removeVariantFromPlaylist(guid)
-    }}>                        
+    }} disabled={loading}>                        
         <ListItemIcon>
             {loading ? 
                 <CircularProgress size={"1rem"} color='inherit'/> 

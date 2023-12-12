@@ -31,7 +31,7 @@ export default function VerifyButton(props: VerifyButtonProps) {
         post({url: getUrl_UNVERIFYVARIANT(props.variant.guid)},(result)=>{
             setLoading(false);
             reload();
-            enqueueSnackbar(`Ověření písně ${(props.variant.preferredTitle && " " || "")}bylo zrušeno`);
+            enqueueSnackbar(`Zveřejnění písně ${(props.variant.preferredTitle && " " || "")}bylo zrušeno`);
         });
         
     }
@@ -40,7 +40,7 @@ export default function VerifyButton(props: VerifyButtonProps) {
         post({url: getUrl_VERIFYVARIANT(props.variant.guid)},(result)=>{
             setLoading(false);
             reload();
-            enqueueSnackbar(`Píseň ${(props.variant.preferredTitle && " " || "")}byla ověřena.`);
+            enqueueSnackbar(`Píseň ${(props.variant.preferredTitle && " " || "")}byla zveřejněna.`);
         });
     }
 
