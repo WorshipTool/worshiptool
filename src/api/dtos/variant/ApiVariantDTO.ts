@@ -12,6 +12,7 @@ export interface ApiVariantDTO{
     createdByGuid:string,
     createdByLoader:boolean,
     sources: ApiSourceDTO[],
-    creators: ApiCreatorDTO[]
+    creators: ApiCreatorDTO[],
+    deleted:boolean,
 }
 

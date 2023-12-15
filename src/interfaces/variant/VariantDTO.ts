@@ -14,5 +14,6 @@ export interface VariantDTO{
     createdBy: string,
     createdByLoader: boolean,
     sources: Source[],
-    creators: Creator[]
+    creators: Creator[],
+    deleted: boolean,
 }
