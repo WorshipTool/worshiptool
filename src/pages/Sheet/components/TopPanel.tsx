@@ -18,6 +18,8 @@ import { POSTEDITVARIANT_URL } from '../../../api/constants'
 import { PostEditVariantBody } from '../../../api/dtos/dtosSong'
 import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import { useSnackbar } from 'notistack'
+import DeleteButton from './components/DeleteButton';
+import Gap from '../../../components/Gap'
 
 interface TopPanelProps {
     transpose: (i:number)=>void,
@@ -41,7 +43,7 @@ export default function TopPanel(props: TopPanelProps) {
     const isOwner = useMemo(()=>{
         if(!user) return false;
         return props.variant.createdBy === user?.guid
-    }, [user]);
+    }, [user, props.variant]);
 
     const {enqueueSnackbar} = useSnackbar();
     const {fetchData, post} = useFetch();
@@ -82,7 +84,7 @@ export default function TopPanel(props: TopPanelProps) {
     }
 
     const theme = useTheme();
-        
+    
     return (
         <Box sx={{
             display: "flex",
@@ -101,11 +103,22 @@ export default function TopPanel(props: TopPanelProps) {
                         sheetData={props.sheet?.getOriginalSheetData() || ""}
                         title={props.editedTitle}/>
 
+            </> : props.variant.deleted ? <>
+                {(isAdmin()&&props.song.variants.length>1)&&<Box sx={{
+                        [theme.breakpoints.down("md")]:{
+                            display: "none"
+                        }
+                    }}>
+                        <ChangeVariant 
+                            index={props.variantIndex}
+                            onChange={props.onChangeVariant}
+                            variants={props.song.variants}/>
+                    </Box>}
             </> : <>
                 
                     <TransposePanel transpose={props.transpose}/>
                 
-                    {isAdmin()&&props.song.variants.length>1&&<Box sx={{
+                    {(isAdmin()&&props.song.variants.length>1)&&<Box sx={{
                         [theme.breakpoints.down("md")]:{
                             display: "none"
                         }
@@ -129,8 +142,14 @@ export default function TopPanel(props: TopPanelProps) {
                     {(isOwner||(isAdmin()&&props.variant.createdByLoader))&&<Box sx={{
                         [theme.breakpoints.down("md")]:{
                             display: "none"
-                        }
+                        },
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
                     }}>
+                        <DeleteButton
+                            reloadSong={props.reloadSong}
+                            variant={props.variant}/>
                         <EditButton 
                             onClick={onEditClick} 
                             inEditMode={props.isInEditMode} 

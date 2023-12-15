@@ -16,6 +16,7 @@ export const mapApiToVariant = (api: ApiVariantDTO) : VariantDTO => {
         createdBy: api.createdByGuid,
         createdByLoader: api.createdByLoader,
         sources: api.sources,
-        creators: api.creators
+        creators: api.creators,
+        deleted: api.deleted,
     }
 }

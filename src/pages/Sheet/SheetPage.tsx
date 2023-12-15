@@ -11,6 +11,7 @@ import Gap from '../../components/Gap';
 import { VariantDTO } from '../../interfaces/variant/VariantDTO';
 import ToolbarHeaderSheetPage from './components/ToolbarHeaderSheetPage';
 import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel';
+import DeletedInfoPanel from './components/components/DeletedInfoPanel';
 
 
 export interface SheetPageState{
@@ -135,20 +136,27 @@ export default function SheetPage() {
                     <Gap value={2}/>
 
                     {currentSheet && <>
-                        <SheetDisplay 
-                            sheet={currentSheet} 
-                            title={title} 
-                            variant={"default"}
-                            editMode={inEditMode}
-                            onChange={(sheet, title)=>{
-                                setCurrentSheet(new Sheet(sheet));
-                                setEditedTitle(title);
-                            }}/>
+                        {song?.variants[variantID].deleted?<>
+                            <DeletedInfoPanel 
+                                variant={song.variants[variantID]}
+                                reloadSong={reload}/>
+                        </>:<>
+                            <SheetDisplay 
+                                sheet={currentSheet} 
+                                title={title} 
+                                variant={"default"}
+                                editMode={inEditMode}
+                                onChange={(sheet, title)=>{
+                                    setCurrentSheet(new Sheet(sheet));
+                                    setEditedTitle(title);
+                                }}/>
+                        
+                        </>}
                     </>}
 
+                {!inEditMode&&song&&!song.variants[variantID].deleted&&<AdditionalSongInfoPanel song={song} variant={song.variants[variantID]}/>}
                 </>}
                 
-                {!inEditMode&&song&&<AdditionalSongInfoPanel song={song} variant={song.variants[variantID]}/>}
             </ContainerGrid>
         </Box>
         <Box displayPrint={"block"} display={"none"}>

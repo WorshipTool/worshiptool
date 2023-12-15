@@ -75,11 +75,12 @@ export default function Create() {
         };
 
         post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            console.log(d);
             if(isRequestSuccess(d)){
                 if(d.data){
                     navigate(`/song/`+d.data.songGuid, { replace: false })
                 }
+            }else{
+                console.log(d);
             }            
         });
     }

@@ -14,7 +14,8 @@ export interface SongDataVariantDTO{
     createdBy: string,
     createdByLoader: boolean,
     sources: SongDataSource[],
-    creators: SongDataCreatorDTO[]
+    creators: SongDataCreatorDTO[],
+    deleted: boolean,
 }
 
 export interface SongDataCreatorDTO{

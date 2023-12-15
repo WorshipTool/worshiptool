@@ -34,7 +34,8 @@ export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
                 createdBy: variant.createdBy,
                 createdByLoader: variant.createdByLoader,
                 sources: variant.sources,
-                creators: variant.creators
+                creators: variant.creators,
+                deleted: variant.deleted,
             }
         }),
         media: d.media,
