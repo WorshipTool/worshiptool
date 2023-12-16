@@ -18,21 +18,20 @@ interface SheetDisplayProps {
 
 export default function SheetDisplay(props: SheetDisplayProps) {
 
-    const signature : signature = "sharp";
-    // useMemo(()=>{
-    //     const keyChord = props.sheet.getKeyChord();
-    //     if(keyChord===undefined) return "sharp";
-    //     const root = keyChord?.data.rootNote.toString("sharp") as note;
-    //     const quality = keyChord?.data.quality;
+    const getSignature = (sheet: Sheet) : signature => {
+        const keyChord = sheet.getKeyChord();
+        if(keyChord===undefined) return "sharp";
+        const root = keyChord?.data.rootNote.toString("sharp") as note;
+        const quality = keyChord?.data.quality;
 
-    //     if(root === "A#") return "flat";
-    //     if(root === "C" && quality === "m") return "flat";
-    //     if(root === "D" && quality === "m") return "flat";
-    //     if(root === "F" ) return "flat";
+        if(root === "A#") return "flat";
+        if(root === "C" && quality === "m") return "flat";
+        if(root === "D" && quality === "m") return "flat";
+        if(root === "F" ) return "flat";
 
-    //     return "sharp"
-    // },[props.sheet, props.sheet.toString()]);
-
+        return "sharp"
+    }
+    const signature : signature = getSignature(props.sheet);
     
     return (
         <div>
