@@ -3,19 +3,10 @@ import songObject from "../../../interfaces/song/song";
 import React, { useMemo } from 'react'
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { Chord, Sheet } from "@pepavlin/sheet-api";
-import { SheetStyleComponentType } from "./config";
+import { SheetStyleComponentProps, SheetStyleComponentType } from "./config";
 
-interface DefaultStyleProps{
-    variantData?: VariantDTO,
-    title? :string,
-    sheet: Sheet
-}
+const DefaultStyle : SheetStyleComponentType = ({sheet, title, signature}:SheetStyleComponentProps) => {
 
-const DefaultStyle : SheetStyleComponentType = ({variantData, sheet, title: titleString}:DefaultStyleProps) => {
-
-    const title = useMemo(()=>{
-        return titleString?titleString:variantData?.preferredTitle||undefined;
-    },[titleString, variantData])
 
     const sections = useMemo(()=>{
         if(sheet===undefined)return [];
@@ -59,7 +50,7 @@ const DefaultStyle : SheetStyleComponentType = ({variantData, sheet, title: titl
                                 return(
                                     <Box display={"flex"} flexDirection={"column"}  key={"cbox"+index}>
                                         <Box sx={{flex:1}}>
-                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord.toString()}</b></Typography>}
+                                            {segment.chord&&<Typography sx={{paddingRight: 1}} fontFamily={"inherit"}><b>{segment.chord.toString(signature)}</b></Typography>}
                                         </Box>
                                         
                                         <Typography sx={{flex:1}} fontFamily={"inherit"}>{segment.text}</Typography>
