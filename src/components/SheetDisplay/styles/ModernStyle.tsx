@@ -3,10 +3,11 @@ import { SheetStyleComponentType } from './config';
 import { Box, Grid, Typography } from '@mui/material';
 import { Section, Segment } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
 import { sectionNameToText } from '../../../tech/sectionNameToText';
+import { signature } from '@pepavlin/sheet-api/lib/models/note';
 
 const chordHeight = "1.5em";
 
-const SegmentElement = ({segment}: {segment: Segment}) => {
+const SegmentElement = ({segment, signature}: {segment: Segment, signature?: signature}) => {
     const words = useMemo(()=>{
         return segment.text?.split(/(\s+)/)||[];
     },[segment])
@@ -17,7 +18,7 @@ const SegmentElement = ({segment}: {segment: Segment}) => {
             return <Box>
                 {index == 0 ? <>
                     <Typography sx={{height: chordHeight}} fontWeight={900}>
-                        {segment.chord?.toString()}
+                        {segment.chord?.toString(signature)}
                     </Typography>
                 </>:<>
                     <Box sx={{height: chordHeight}}/>
@@ -31,7 +32,7 @@ const SegmentElement = ({segment}: {segment: Segment}) => {
     </>
 }
 
-const SectionComponent = ({section}: {section: Section}) => {
+const SectionComponent = ({section, signature}: {section: Section, signature?: signature}) => {
     const sectionName = useMemo(()=>{
         if(!section.name) return undefined;
         return sectionNameToText(section.name);
@@ -56,7 +57,7 @@ const SectionComponent = ({section}: {section: Section}) => {
                         flexWrap: "wrap",
                     }}>
                         {line.segments.map((segment, index)=>{
-                            return <SegmentElement segment={segment}/>
+                            return <SegmentElement segment={segment} signature={signature}/>
                         })}
                     </Box>
                 })}
@@ -71,7 +72,8 @@ const SectionComponent = ({section}: {section: Section}) => {
 
 const  ModernStyle : SheetStyleComponentType = ({
     sheet,
-    title
+    title,
+    signature
 }) => {
     
     const sections = useMemo(()=>{
@@ -101,7 +103,7 @@ const  ModernStyle : SheetStyleComponentType = ({
                     width: "fit-content",
                 }}>
                     {sections.map((section, index)=>{
-                        return <SectionComponent section={section}/>
+                        return <SectionComponent section={section} signature={signature}/>
                     })}
                 </div>
             </Box>
