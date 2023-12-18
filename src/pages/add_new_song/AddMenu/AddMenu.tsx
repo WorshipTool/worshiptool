@@ -26,7 +26,7 @@ export default function AddMenu() {
                     subtitle="Automaticky převeďte píseň z obrázku"
                     icon={<UploadFile fontSize='inherit'/>} onClick={()=>{
                     navigate("/add/upload")
-                }}/>
+                }}  disabled/>
                 
                 <AddMenuItem 
                     title='Sepsat ručně' 
