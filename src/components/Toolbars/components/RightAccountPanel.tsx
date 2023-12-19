@@ -160,7 +160,7 @@ export default function RightAccountPanel({transparent}: RightAccountPanelProps)
 
                 {isLoggedIn()?<>
                     <Tooltip title={"Přidat novou píseň"}>
-                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={false}>
+                        <IconButton color='inherit' sx={iconButtonStyle} onClick={onCreateSongClick} disabled={isMobile && !isTablet }>
                             <AddBox  sx={iconStyle} fontSize={fontSize}/>
                         </IconButton>
                     </Tooltip>
