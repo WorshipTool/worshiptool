@@ -12,14 +12,13 @@ import PrintButton from './components/PrintButton'
 import Buttons13ka from './components/Buttons13ka'
 import ChangeVariant from './components/ChangeVariant'
 import EditButton from './components/EditButton'
-import { fetchData } from '../../../tech/fetchHelpers';
-import useFetch from '../../../hooks/useFetch'
-import { POSTEDITVARIANT_URL } from '../../../api/constants'
 import { PostEditVariantBody } from '../../../api/dtos/dtosSong'
-import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 import { useSnackbar } from 'notistack'
 import DeleteButton from './components/DeleteButton';
 import Gap from '../../../components/Gap'
+import { SongsApi } from '../../../api/generated'
+import { useApiState } from '../../../tech/ApiState'
+import { handleApiCall } from '../../../tech/handleApiCall'
 
 interface TopPanelProps {
     transpose: (i:number)=>void,
@@ -38,7 +37,7 @@ interface TopPanelProps {
 
 export default function TopPanel(props: TopPanelProps) {
 
-    const {isAdmin, isTrustee, isLoggedIn, user} = useAuth()
+    const {isAdmin, isTrustee, isLoggedIn, user, apiConfiguration} = useAuth()
 
     const isOwner = useMemo(()=>{
         if(!user) return false;
@@ -46,8 +45,10 @@ export default function TopPanel(props: TopPanelProps) {
     }, [user, props.variant]);
 
     const {enqueueSnackbar} = useSnackbar();
-    const {fetchData, post} = useFetch();
 
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState} = useApiState();
+    
     const [saving, setSaving] = React.useState(false);
 
     const onEditClick = async (editable: boolean) => {
@@ -69,14 +70,13 @@ export default function TopPanel(props: TopPanelProps) {
             sheetData: props.sheet.getOriginalSheetData(),
             title: props.title
         }
-        const result = await post({url: POSTEDITVARIANT_URL, body})
-
-        if(isRequestSuccess(result)){
-            props.reloadSong();
-            enqueueSnackbar("Píseň uložena.", {variant: "default"})
-        }else{
-            enqueueSnackbar("Not saved! " + result.message, {variant: "error"})
-        }
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerEditVariant(body));
+        }, (result)=>{
+            enqueueSnackbar(`Píseň ${(props.variant.preferredTitle && " " || "")}byla upravena.`);
+            props.reloadSong?.();
+            setSaving(false);
+        });
 
         setSaving(false);
 

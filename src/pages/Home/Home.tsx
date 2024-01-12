@@ -42,11 +42,7 @@ const SearchInput = styled(InputBase)(({theme})=>({
 
 export default function Home() {
     const theme = useTheme();
-    
-    const [searchValue, setSearchValue] = useState("");
-    
     const {turnOff} = useGroup();    
-    const scrollLevel = 50;
     
     /**
      * Set document title
@@ -55,22 +51,6 @@ export default function Home() {
         document.title = "Chval Otce"
         turnOff();
     },[])
-
-    
-
-    useEffect(()=>{
-        if(searchValue==""){
-        }else{
-            window.scroll({
-                top: scrollLevel*2,
-                left: 0,
-                behavior: "smooth",
-              });
-
-        }
-    },[searchValue])
-
-
 
     return (
         <Box >

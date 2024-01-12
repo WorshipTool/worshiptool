@@ -1,8 +1,6 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { isRequestError } from '../../api/dtos/RequestResult';
-import { Close } from '@mui/icons-material';
 import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
@@ -109,11 +107,8 @@ export default function SignUp() {
 
         if(ok){
             signup({email, password, firstName, lastName},(result)=>{
-               if(isRequestError(result)) setErrorMessage(result.message);
-               else{
-                   navigate("/");
-               }
-               setInProgress(false);
+                navigate("/");
+                setInProgress(false);
            })
         }else{
             setInProgress(false);

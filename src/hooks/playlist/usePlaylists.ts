@@ -1,97 +1,73 @@
 import { GetPlaylistsResultDTO, GetSongsInPlaylistResultDTO, PostAddVariantToPlaylistBodyDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO, DeleteRemoveVariantFromPlaylistBodyDTO, PostDeletePlaylistBodyDTO, GetSearchInPlaylistResultDTO, ApiReorderPlaylistItemDTO } from '../../api/dtos/playlist/dtosPlaylist';
-import { getUrl_GETPLAYLISTS, getUrl_GETSONGSINPLAYLIST, getUrl_POSTADDTOPLAYLIST, getUrl_POSTCREATEPLAYLIST, getUrl_GETISVARIANTINPLAYLIST, getUrl_POSTREMOVEFROMPLAYLIST, getUrl_POSTDELETEPLAYLIST } from '../../api/urls';
 import useAuth from '../auth/useAuth';
-import useFetch from '../useFetch';
-import { RequestResult, isRequestSuccess, isRequestError, formatted, codes } from '../../api/dtos/RequestResult';
 import Playlist from '../../interfaces/playlist/PlaylistDTO';
-import { mapApiToVariant } from '../../api/dtos/variant/mapApiToVariant';
 import { mapApiToPlaylistItemDTO } from '../../api/dtos/playlist/ApiPlaylisItemMap';
 import { Chord } from '@pepavlin/sheet-api';
+import { SongsApi } from '../../api/generated';
+import { handleApiCall } from '../../tech/handleApiCall';
 
 
 export default function usePlaylists(){
-    const {fetchData, post, loading} = useFetch();
+    // const {fetchData, post, loading} = useFetch();
 
-    const addVariantToPlaylist = async (variant: string | undefined, playlist: string | undefined) => {
-        if(!variant || !playlist) return formatted(null, codes['Unknown Error'], "Invalid parameters");
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
 
-        const body : PostAddVariantToPlaylistBodyDTO = {playlist, variant};
-        const result = await post({url: getUrl_POSTADDTOPLAYLIST(), body});
-        console.log(result);
-        return result;
+    const addVariantToPlaylist = async (variant: string, playlist: string) => {
+        return await handleApiCall(songsApi.songsControllerAddVariantToPlaylist({playlist, variant}));
     }
 
-    const removeVariantFromPlaylist = async (variant:string | undefined, playlist: string | undefined) => {
-        if(!variant || !playlist) return formatted(null, codes['Unknown Error'], "Invalid parameters");
-        const body : DeleteRemoveVariantFromPlaylistBodyDTO = {playlist, variant};
-        const result = await post({url: getUrl_POSTREMOVEFROMPLAYLIST(), body});
-        return result;
+    const removeVariantFromPlaylist = async (variant:string, playlist: string) => {
+        return await handleApiCall(songsApi.songsControllerRemoveVariantFromPlaylistDelete(variant, playlist));
     }
 
     const isVariantInPlaylist = async (variant: string, playlist: string) : Promise<boolean> => {
-        const result = await fetchData<boolean>({url: getUrl_GETISVARIANTINPLAYLIST(variant, playlist)});
-        if(isRequestError(result)) return false;
-        return result.data;
+        const result = await handleApiCall(songsApi.songsControllerIsVariantInPlaylist(variant, playlist));
+        return result;
     }
 
-    const getPlaylistsOfUser = async () : Promise<RequestResult<GetPlaylistsResultDTO>> => {
-        const result = await fetchData<GetPlaylistsResultDTO>({url: getUrl_GETPLAYLISTS()})
-        return result;
+    const getPlaylistsOfUser = async () => {
+        return await handleApiCall(songsApi.songsControllerGetPlaylistsOfUser());
     }
 
     const createPlaylist = async (title?:string) => {
         if(!title)title="Nový playlist";
-        const body : PostCreatePlaylistBodyDTO = {title}
-        const result : RequestResult<PostCreatePlaylistResultDTO> = await post({url: getUrl_POSTCREATEPLAYLIST(), body})
-        return result;
+        return await handleApiCall(songsApi.songsControllerCreatePlaylist({title}));
     }
 
     const deletePlaylist = async (guid:string) => {
-        const body: PostDeletePlaylistBodyDTO = {
-            guid
-        }
-        const result = await post({url: getUrl_POSTDELETEPLAYLIST(), body});
-        return result;
+
+        return await handleApiCall(songsApi.songsControllerDeletePlaylistByGuid(guid));
     }
 
     const getSongsInPlaylist = async (guid:string) => {
-        return await fetchData<GetSongsInPlaylistResultDTO>({url: "/songs/playlist", params: {guid}})
-        
+        return await handleApiCall(songsApi.songsControllerGetSongsInPlaylistByGuid(guid));        
     }
 
-    const getPlaylistByGuid = async (guid: string) : Promise<RequestResult<Playlist>> => {
-        const result = await getSongsInPlaylist(guid);
-
-        if(isRequestError(result)){
-            return formatted(null, result.statusCode, result.message);
+    const getPlaylistByGuid = async (guid: string) : Promise<Playlist> => {
+        const result = await handleApiCall(songsApi.songsControllerGetSongsInPlaylistByGuid(guid));
+        return {
+            guid,
+            title: result.title,
+            items: result.items.map(item => mapApiToPlaylistItemDTO(item))
         }
         
-        return formatted({
-            guid:guid,
-            title:result.data.title,
-            items: result.data.items.map(item => mapApiToPlaylistItemDTO(item))
-
-        });
     }
 
-    const searchInPlaylistByGuid = async (guid: string, searchString: string) : Promise<RequestResult<GetSearchInPlaylistResultDTO>> => {
-        const result =  await fetchData<GetSearchInPlaylistResultDTO>({url: "/songs/playlist/search", params: {guid, searchKey: searchString}});
-        return result;
+    const searchInPlaylistByGuid = async (guid: string, searchString: string) : Promise<GetSearchInPlaylistResultDTO> => {
+        return await handleApiCall(songsApi.songsControllerSearchInPlaylist(searchString, guid));
     }
 
     const renamePlaylist = async (guid: string, title: string) => {
-        const result = await post({url: "/songs/playlist/rename", body: {guid, title}});
-        return result
+        return await handleApiCall(songsApi.songsControllerRenamePlaylist({guid, title}));
     }
 
     const reorderPlaylist = async (guid: string, items: ApiReorderPlaylistItemDTO[]) => {
-        const result = await post({url: "/songs/playlist/reorder", body: {guid, items}});
-        return result;
+        return await handleApiCall(songsApi.songsControllerReorderPlaylist({guid, items}));
     }
 
     const setKeyChordOfItem = async (guid: string, keyChord: Chord) => {
-        const result = await post({url: "/songs/playlist/item/transpose", body: {guid, key: keyChord.toString()}});
-        return result;
+        return await handleApiCall(songsApi.songsControllerTransposePlaylistItem({guid, key: keyChord.toString()}));
     }
 
 
@@ -107,6 +83,6 @@ export default function usePlaylists(){
         renamePlaylist,
         reorderPlaylist,
         setKeyChordOfItem,
-        loading
+        // loading
     }
 }

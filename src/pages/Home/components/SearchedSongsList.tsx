@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import OnChangeDelayer from '../../../components/ChangeDelayer';
 import SongListCards from '../../../components/songLists/SongListCards/SongListCards';
 import { Downloading, Sync } from '@mui/icons-material';
+import { SearchResult, SearchSongData } from '../../../api/generated';
 
 interface SearchedSongsListProps{
     searchString: string
@@ -31,15 +32,15 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const [enableLoadNext, setEnableLoadNext] = useState<boolean>(false);
 
     const searchSongs = useSongSearch();
-    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<SearchSongDataDTO>((page, resolve, arr)=>{
-        controller.abort();
+    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<SearchSongData>((page, resolve, arr)=>{
+        // controller.abort();
         searchSongs({searchKey: searchString, page, signal: controller.signal}).then((data)=>{
             console.log("found")   
             setLoading(false);
             setNextLoading(false);
-            resolve({result: data, data: data.data.songs.filter((v)=>{
+            resolve(data.songs.filter((v)=>{
                 return !arr.find((s)=>s.guid==v.guid);
-            })});
+            }));
 
         })
 

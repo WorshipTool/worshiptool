@@ -6,7 +6,6 @@ import { Add, Edit, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import usePlaylists from '../../../hooks/playlist/usePlaylists'
 import useCurrentPlaylist from '../../../hooks/playlist/useCurrentPlaylist'
-import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 
 interface QuickActionsProps {
     visible?: boolean
@@ -24,11 +23,9 @@ export default function QuickActions({visible}: QuickActionsProps) {
     const onCreatePlaylist = () => {
         setCreatePlaylistLoading(true);
         createPlaylist().then((r)=>{
-            if(isRequestSuccess(r)){
-                const guid = r.data.guid;
-                turnOn(guid);
-                navigate("/playlist/"+guid)
-            }
+            const guid = r.guid;
+            turnOn(guid);
+            navigate("/playlist/"+guid)
             setCreatePlaylistLoading(false);
 
         })

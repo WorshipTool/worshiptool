@@ -1,13 +1,13 @@
 import { Box, Button, ButtonGroup, CircularProgress, Divider, ListItemIcon, ListItemText, MenuItem } from '@mui/material'
 import React from 'react'
-import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import { ApiGroupDto } from '../../../../api/dtos/group/ApiGroupDto';
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
-import useFetch from '../../../../hooks/useFetch';
-import Gap from '../../../../components/Gap';
-import { LoadingButton } from '@mui/lab';
 import { Work, Workspaces } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
+import useAuth from '../../../../hooks/auth/useAuth';
+import { GroupApi, SongsApi } from '../../../../api/generated';
+import { useApiState, useApiStateEffect } from '../../../../tech/ApiState';
+import { handleApiCall } from '../../../../tech/handleApiCall';
 
 interface Buttons13kaProps {
     variant: VariantDTO
@@ -15,51 +15,52 @@ interface Buttons13kaProps {
 
 export default function Buttons13ka(props: Buttons13kaProps) {
 
-    const {fetch, post: postData} = useFetch();
-    const [loading, setLoading] = React.useState(false);
+    // const {fetch, post: postData} = useFetch();
+    // const [loading, setLoading] = React.useState(false);
+    const {apiConfiguration} = useAuth();
+    const groupApi = new GroupApi(apiConfiguration);
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState} = useApiState<boolean | undefined>();
+    const [{
+        data,
+        loading
+    }] = useApiStateEffect(()=>{
+        return handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, "13ka"));
+    })
+
     const {enqueueSnackbar} = useSnackbar();
 
     const addTo13ka = async () => {
-        setLoading(true);
-        const result = await fetch<ApiGroupDto>({url: "/group", params:{name:"13ka"}})
-        if(isRequestSuccess(result)){
-            const res2 = await postData({url: "/songs/playlist/add", body: {
-                playlist: result.data.selection,
+        fetchApiState(async ()=>{
+            if(!data?.selection) return;
+            return handleApiCall(songsApi.songsControllerAddVariantToPlaylist({
+                playlist: data.selection,
                 variant: props.variant.guid
-            }})
-
-            setLoading(false);
-            if(isRequestSuccess(res2)){
-                enqueueSnackbar("Píseň byla přidána do 13ky");
-                return;
-            }else{
-                enqueueSnackbar("\""+res2.message+"\"");
-                return;
-            }
-        }
-        setLoading(false);
+            }))
+            .catch((e)=>{
+                console.log(e);
+                return undefined;
+            })
+        },(r)=>{
+            if(r) enqueueSnackbar("Píseň byla přidána do 13ky");
+            else enqueueSnackbar("Píseň již byla přidána.");
+        })
 
     }
     const removeFrom13ka = async () => {
-        setLoading(true);
-        const result = await fetch<ApiGroupDto>({url: "/group", params:{name:"13ka"}})
-        if(isRequestSuccess(result)){
-            const res2 = await postData({url: "/songs/playlist/remove", body: {
-                playlist: result.data.selection,
-                variant: props.variant.guid
-            }})
-
-            setLoading(false);
-            if(isRequestSuccess(res2)){
-                enqueueSnackbar("Píseň byla odebrána ze 13ky");
-                return;
-            }else{
-                enqueueSnackbar("\""+res2.message+"\"");
-                return;
-            }
-        }
-        setLoading(false);
-
+        fetchApiState(async ()=>{
+            if(!data?.selection) return;
+            return handleApiCall(
+                songsApi.songsControllerRemoveVariantFromPlaylistDelete(
+                    props.variant.guid, data.selection))
+            .catch((e)=>{
+                console.log(e);
+                return undefined;
+            });
+        },(r)=>{
+            if(r) enqueueSnackbar("Píseň byla odebrána ze 13ky");
+            else enqueueSnackbar("Píseň nebyla ve skupině nalezena.");
+        })
     }
 
     interface CustomButtonProps {

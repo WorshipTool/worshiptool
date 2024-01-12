@@ -40,9 +40,15 @@ export default function RightPanel({playlist}: RightPanelProps) {
     const {items} = useInnerPlaylist();
 
     const ideaArr = useMemo(()=>{
-        return (isOn?selectionItems.filter((s)=>!items.map(v=>v.variant.guid).includes(s.guid)).map((v)=>v.variant):data.filter((s)=>!items.map(v=>v.variant.guid).includes(s.guid)));
+        return (isOn?   selectionItems
+                            .filter((s)=>!items.map(v=>v.variant.guid)
+                                .includes(s.guid)).map((v)=>v.variant)
+                :       data
+                            .filter((s)=>!items.map(v=>v.variant.guid)
+                                .includes(s.guid)))
+                .filter((v)=>playlist?.items.every((s)=>s.variant.guid!=v.guid));
 
-    },[data, selectionItems, isOn, items])
+    },[data, selectionItems, isOn, items, playlist])
 
     const idea = useMemo(()=>{
         const arr = ideaArr;

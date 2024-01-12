@@ -6,9 +6,10 @@ import useAuth from '../../../../hooks/auth/useAuth';
 import Playlist from '../../../../interfaces/playlist/PlaylistDTO';
 import usePlaylist from '../../../../hooks/playlist/usePlaylist';
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist';
-import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import useInnerPlaylist from '../../hooks/useInnerPlaylist';
 import { Sheet } from '@pepavlin/sheet-api';
+import { LoadingButton } from '@mui/lab';
+import { useApiState } from '../../../../tech/ApiState';
 
 const StyledContainer = styled(Box)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -40,6 +41,10 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
 
     const sheet = new Sheet(variant.sheetData);
 
+    const {fetchApiState, apiState:{
+        loading
+    }} = useApiState();
+
     const isInPlaylist = useMemo(()=>items.some((v)=>v.variant.guid==variant.guid),[items, variant.guid]);
 
     const {turnOn} = useCurrentPlaylist();
@@ -50,7 +55,9 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
 
     const addToPlaylist = async () => {
         turnOn(playlist.guid);
-        const c = await addVariant(variant.guid)
+        fetchApiState(()=>{
+            return addVariant(variant.guid)
+        })
         
     }
 
@@ -106,7 +113,9 @@ export default function SearchItem({variant, onClick: onClickCallback, playlist}
                 <Box display={"flex"} flexDirection={"column"} >
                     <Divider/>
                     <Button variant='text' onClick={open}>Otevřít</Button>
-                    <Button variant='contained' onClick={addToPlaylist}>Přidat do playlistu</Button>
+                    <LoadingButton variant='contained' onClick={addToPlaylist} loading={loading}>
+                        Přidat do playlistu
+                    </LoadingButton>
                 </Box>}
             
         </StyledContainer>

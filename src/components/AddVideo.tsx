@@ -2,15 +2,16 @@ import React, { useRef, useState } from 'react'
 import useYoutube from '../hooks/useYoutube';
 import { NewSongDataDTO, NewSongDataResult } from '../api/dtos/dtosNewSongData';
 import { MediaTypes } from '../interfaces/song/media';
-import { getUrl_ADDSONGDATA } from '../api/urls';
-import { RequestResult, isRequestSuccess } from '../api/dtos/RequestResult';
-import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import useAuth from '../hooks/auth/useAuth';
+import { useApiState } from '../tech/ApiState';
+import { NewSongDataProcessResult, SongsApi } from '../api/generated';
+import { handleApiCall } from '../tech/handleApiCall';
 
 interface AddVideoProps{
     open: boolean,
     handleClose: ()=>void,
-    afterUpload?: (r:RequestResult<NewSongDataResult>)=>void,
+    afterUpload?: (r:NewSongDataProcessResult)=>void,
     songGuid?:string
 }
 
@@ -19,7 +20,9 @@ export default function AddVideo({open, handleClose, afterUpload, songGuid}:AddV
     const inputRef = useRef();
 
     const {getId} = useYoutube();
-    const {post} = useFetch();
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState} = useApiState<NewSongDataProcessResult>();
 
     const [errorMessage, setErrorMessage] = useState("")
 
@@ -39,24 +42,25 @@ export default function AddVideo({open, handleClose, afterUpload, songGuid}:AddV
             return;
         }
 
-        const dto : Partial<NewSongDataDTO> = {
-            songGuid,
-            media: [{
-                type: MediaTypes.Youtube,
-                url: url
-            }]
-        }
 
-        post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isRequestSuccess(d)){
-                console.log(d);
-                //added
-                onClose();
-                if(afterUpload) afterUpload(d);
-            }else{
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerAddSongData({
+                songGuid,
+                media: [{
+                    type: MediaTypes.Youtube,
+                    url: url
+                }]
+            }))
+            .catch((e)=>{
                 setErrorMessage("Něco se pokazilo při nahrávání.")
-            } 
-        });
+                throw e;
+            })
+        },(d)=>{
+            setErrorMessage("")
+            onClose();
+            if(afterUpload) afterUpload(d);
+        })
+
     }
   return (
     <Dialog open={open} onClose={onClose}>

@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useFetch from "../useFetch";
-import { isRequestSuccess } from "../../api/dtos/RequestResult";
 import { Group } from "../../interfaces/group/Group";
 import { ApiGroupDto } from "../../api/dtos/group/ApiGroupDto";
 import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
-import useGroupSelection from "./useGroupSelection";
 import useAuth from "../auth/useAuth";
+import { GroupApi } from "../../api/generated";
+import { handleApiCall } from "../../tech/handleApiCall";
 
 export const groupContext = createContext<useProvideGroupI>({} as useProvideGroupI);
 
@@ -32,25 +31,28 @@ interface useProvideGroupI{
 } 
 
 export const useProvideGroup = () : useProvideGroupI => {
-    const {fetchData} = useFetch();
+    // const {fetchData} = useFetch();
 
     const [group, setGroup] = useState<Group>();
 
-    const {isLoggedIn} = useAuth();
+    const {isLoggedIn, apiConfiguration} = useAuth();
+    const groupApi = new GroupApi(apiConfiguration);
 
-    const navigate = useNavigate();
 
     const key = "activeGroup";
 
 
     const turnOn = (name: string) => {
         if(!isLoggedIn()) return;
-        fetchData<ApiGroupDto>({url: "/group", params: {name:name}}).then((r)=>{
-            if(isRequestSuccess(r)){
-                setGroup( mapApiToGroup(r.data) );
-                localStorage.setItem(key, name);
-            };
-        });
+        console.log("turning on group "+name);
+        handleApiCall(groupApi.groupControllerGetGroupInfo(undefined,name))
+        .then((r)=>{
+            setGroup( mapApiToGroup(r) );
+            localStorage.setItem(key, name);
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
     }
     const turnOff = () => {
         setGroup(undefined);

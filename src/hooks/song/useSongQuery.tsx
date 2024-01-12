@@ -1,63 +1,70 @@
 import { BACKEND_URL, GETSONGQUERY_URL } from "../../api/constants";
-import { RequestResult } from "../../api/dtos/RequestResult";
 import { SearchSongDataDTO, SongSearchResultDTO, songGetQueryDTO, songGetResultDTO } from "../../api/dtos/dtosSong";
-import useFetch from "./../useFetch";
+import { SongsApi, SongsControllerGetByQueryKeyEnum } from "../../api/generated";
+import { handleApiCall } from "../../tech/handleApiCall";
 
-interface songQueryBaseProps{
-    key:string,
-    page:number
+// interface songQueryBaseProps{
+//     key:string,
+//     page:number
 
-}
+// }
 
 // interface searchQueryProps extends songQueryBaseProps{
 //     key: "search",
 //     searchKey:string
 // }
-interface randomQueryProps extends songQueryBaseProps{
-    key: "random"
-}
-interface allQueryProps extends songQueryBaseProps{
-    key: "all"
-}
-interface unverifiedQueryProps extends songQueryBaseProps{
-    key: "unverified"
-}
-interface loadeUnverifiedQueryProps extends songQueryBaseProps{
-    key: "loaderUnverified"
-}
+// interface randomQueryProps extends songQueryBaseProps{
+//     key: "random"
+// }
+// interface allQueryProps extends songQueryBaseProps{
+//     key: "all"
+// }
+// interface unverifiedQueryProps extends songQueryBaseProps{
+//     key: "unverified"
+// }
+// interface loadeUnverifiedQueryProps extends songQueryBaseProps{
+//     key: "loaderUnverified"
+// }
 
-type useSongQueryProps = randomQueryProps|
-                        allQueryProps|
-                        unverifiedQueryProps|
-                        loadeUnverifiedQueryProps;
+// type useSongQueryProps = randomQueryProps|
+//                         allQueryProps|
+//                         unverifiedQueryProps|
+//                         loadeUnverifiedQueryProps;
+
+export type SongQueryType = SongsControllerGetByQueryKeyEnum;
+
+export default function useSongQuery(key: SongsControllerGetByQueryKeyEnum) {
+
+    const songsApi = new SongsApi();
 
 
-export default function useSongQuery(startParams:Partial<useSongQueryProps>) {
-    const {fetchData} = useFetch();
+    // const {fetchData} = useFetch();
 
-    const getSongs = async (additionalParams:Partial<useSongQueryProps>) : Promise<RequestResult<SongSearchResultDTO>> => {
+    const getSongs = async () => {
 
-        const _params : any = {
-            ...startParams,
-            ...additionalParams
-        }
+        const result = await handleApiCall(songsApi.songsControllerGetByQuery(key))
 
-        //spaces in searchKey
-        if(_params.searchKey){
-            const searchKey : string = _params.searchKey;
-            _params.searchKey = searchKey.replace(/\s/g, '_');
-        }
-        const params : useSongQueryProps = _params;
+        // const _params : any = {
+        //     ...startParams,
+        //     ...additionalParams
+        // }
 
-        const typed : songGetQueryDTO = params;
+        // //spaces in searchKey
+        // if(_params.searchKey){
+        //     const searchKey : string = _params.searchKey;
+        //     _params.searchKey = searchKey.replace(/\s/g, '_');
+        // }
+        // const params : useSongQueryProps = _params;
 
-        const url = BACKEND_URL + GETSONGQUERY_URL;
+        // const typed : songGetQueryDTO = params;
 
-        const result : RequestResult<SongSearchResultDTO> = await new Promise((res, reject) => {
-            fetchData<SongSearchResultDTO>({url, params: typed},(result)=>{
-                res(result);
-            })
-        });
+        // const url = BACKEND_URL + GETSONGQUERY_URL;
+
+        // const result : RequestResult<SongSearchResultDTO> = await new Promise((res, reject) => {
+        //     fetchData<SongSearchResultDTO>({url, params: typed},(result)=>{
+        //         res(result);
+        //     })
+        // });
 
 
         

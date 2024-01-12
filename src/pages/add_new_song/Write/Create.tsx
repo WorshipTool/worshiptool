@@ -1,11 +1,7 @@
 import { Box, Button, Divider, FormControlLabel, InputBase, Switch, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
-import useFetch from '../../../hooks/useFetch';
-import { getUrl_ADDSONGDATA } from '../../../api/urls';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RequestResult, isRequestSuccess } from '../../../api/dtos/RequestResult';
-import Toolbar from '../../../components/Toolbars/Toolbar';
 import DefaultStyle from '../../../components/SheetDisplay/styles/DefaultStyle';
 import {Sheet} from "@pepavlin/sheet-api";
 import Gap from '../../../components/Gap';
@@ -16,6 +12,10 @@ import useSong from '../../../hooks/song/useSong';
 import ContainerGrid from '../../../components/ContainerGrid';
 import AppContainer from '../../../components/AppContainer/AppContainer';
 import ImportButton from './components/ImportButton';
+import useAuth from '../../../hooks/auth/useAuth';
+import { NewSongDataProcessResult, SongsApi } from '../../../api/generated';
+import { useApiState } from '../../../tech/ApiState';
+import { handleApiCall } from '../../../tech/handleApiCall';
 
 const StyledContainer = styled(Box)(({theme})=>({
     padding: theme.spacing(3),
@@ -39,7 +39,12 @@ export default function Create() {
 
     const {setGUID, getName} = useSong(guid||null);
 
-    const [posting, setPosting] = useState(false);
+    const {apiConfiguration} = useAuth();
+    const apiSongs = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState: {
+        loading: posting,
+        error
+    }} = useApiState<NewSongDataProcessResult>();
 
     const [preview, setPreview] = useState(false);
 
@@ -59,30 +64,18 @@ export default function Create() {
     },[sheetData])
     
 
-    const {post, loading:fetching} = useFetch();
-
-    useEffect(()=>{
-        if(!fetching) setPosting(fetching);
-    },[fetching])
 
     const onPostClick = () => {
-        setPosting(true);
-        const dto : Partial<NewSongDataDTO> = {
-            title: title,            
-            sheetData: sheetData,
-            media:[],
-            songGuid: guid
-        };
+        fetchApiState(async ()=>{
+            return handleApiCall(apiSongs.songsControllerAddSongData({
+                songGuid: guid,
+                title, sheetData
+            }));
+        }, (result)=>{
+            navigate(`/song/`+result.guid, { replace: false })
 
-        post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isRequestSuccess(d)){
-                if(d.data){
-                    navigate(`/song/`+d.data.songGuid, { replace: false })
-                }
-            }else{
-                console.log(d);
-            }            
         });
+
     }
 
     const newSection = (name:string) => {

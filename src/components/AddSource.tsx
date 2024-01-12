@@ -1,17 +1,15 @@
 import React, { useRef, useState } from 'react'
-import useYoutube from '../hooks/useYoutube';
-import { NewSongDataDTO, NewSongDataResult } from '../api/dtos/dtosNewSongData';
-import { MediaTypes } from '../interfaces/song/media';
-import { getUrl_ADDSONGDATA } from '../api/urls';
-import { RequestResult, isRequestSuccess } from '../api/dtos/RequestResult';
-import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { SourceTypes } from '../interfaces/song/source';
+import useAuth from '../hooks/auth/useAuth';
+import { NewSongDataProcessResult, SongsApi } from '../api/generated';
+import { useApiState } from '../tech/ApiState';
+import { handleApiCall } from '../tech/handleApiCall';
 
 interface AddSourceProps{
     open: boolean,
     handleClose: ()=>void,
-    afterUpload?: (r:RequestResult<NewSongDataResult>)=>void,
+    afterUpload?: (r:NewSongDataProcessResult)=>void,
     songGuid?:string
 }
 
@@ -19,8 +17,10 @@ export default function AddSource({open, handleClose, afterUpload, songGuid}:Add
 
     const inputRef = useRef();
 
-    const {getId} = useYoutube();
-    const {post} = useFetch();
+    
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState} = useApiState<NewSongDataProcessResult>();
 
     const [errorMessage, setErrorMessage] = useState("")
 
@@ -35,24 +35,19 @@ export default function AddSource({open, handleClose, afterUpload, songGuid}:Add
         //@ts-ignore
         const value = inputRef.current.value;
 
-        const dto : Partial<NewSongDataDTO> = {
-            songGuid,
-            source: [{
-                type: SourceTypes.Url,
-                value 
-            }]
-        }
-
-        post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isRequestSuccess(d)){
-                console.log(d);
-                //added
-                onClose();
-                if(afterUpload) afterUpload(d);
-            }else{
-                setErrorMessage("Něco se pokazilo při nahrávání.")
-            } 
-        });
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerAddSongData({
+                songGuid,
+                source: {
+                    type: SourceTypes.Url,
+                    value
+                }
+            }));
+        },(d)=>{
+            setErrorMessage("")
+            onClose();
+            if(afterUpload) afterUpload(d);
+        })
     }
   return (
     <Dialog open={open} onClose={onClose}>
@@ -66,7 +61,7 @@ export default function AddSource({open, handleClose, afterUpload, songGuid}:Add
             margin="dense"
             id="source"
             label="Url zdroje"     
-            helperText={errorMessage}       
+            helperText={apiState.error && "Něco se pokazilo při nahrávání."}       
             type="email"
             fullWidth
             variant="standard"

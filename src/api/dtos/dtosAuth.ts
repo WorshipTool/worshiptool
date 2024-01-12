@@ -1,4 +1,5 @@
 import User from "../../interfaces/user"
+import { LoginResult } from "../generated";
 
 export interface LoginRequestDTO{
     email: string,
@@ -17,7 +18,7 @@ export interface SignUpRequestDTO{
     password:string
 }
 
-export function loginResultDTOToUser(res: LoginResultDTO):User{
+export function loginResultDTOToUser(res: LoginResult):User{
     return {...res.user, token: res.token};
 }   
 

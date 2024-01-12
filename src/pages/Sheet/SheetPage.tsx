@@ -22,7 +22,7 @@ export default function SheetPage() {
     const {state} : {state: SheetPageState} = useLocation();
 
     const {guid} = useParams();
-    const {setGUID, song, reload, getName, loading} = useSong(null);
+    const {setGUID, song, reload, getName, loading} = useSong(guid || null);
     const [variantID, setVariantID] = useState(0);
     const [currentSheet, setCurrentSheet] = useState<Sheet>();
 
@@ -34,6 +34,7 @@ export default function SheetPage() {
 
     const [editedTitle, setEditedTitle] = useState("");
 
+
     const title = useMemo(()=>{
         if(editedTitle!="") return editedTitle;
         return song?.variants[variantID]?.preferredTitle
@@ -42,10 +43,6 @@ export default function SheetPage() {
     },[song?.variants, editedTitle])
 
     
-    useEffect(()=>{
-        if(guid) setGUID(guid);
-    },[])
-
     useEffect(()=>{
         if(song){
           const sheet = new Sheet(song.variants[variantID].sheetData);

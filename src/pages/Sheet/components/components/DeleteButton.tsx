@@ -4,10 +4,11 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO'
-import useFetch from '../../../../hooks/useFetch'
-import { getUrl_DELETEVARIANT } from '../../../../api/urls'
-import { isRequestSuccess } from '../../../../api/dtos/RequestResult'
 import { useNavigate } from 'react-router-dom'
+import useAuth from '../../../../hooks/auth/useAuth'
+import { SongsApi } from '../../../../api/generated'
+import { useApiState, useApiStateEffect } from '../../../../tech/ApiState'
+import { handleApiCall } from '../../../../tech/handleApiCall';
 
 interface DeleteButtonProps {
     variant: VariantDTO,
@@ -20,9 +21,14 @@ export default function DeleteButton({
 }: DeleteButtonProps) {
     const {enqueueSnackbar} = useSnackbar();
     const [loading, setLoading] = React.useState(false);
-    const [fetching, setFetching] = React.useState(false);
     const navigate = useNavigate();
-    const {post} = useFetch();
+
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+
+    const {fetchApiState, apiState : {
+        loading: fetching
+    }} = useApiState();
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
@@ -37,32 +43,27 @@ export default function DeleteButton({
     }
 
     const indeedDelete = async () => {
-        return post({url: getUrl_DELETEVARIANT(variant.guid)},(result)=>{
-            setLoading(false);
-            console.log(result)
-            if(isRequestSuccess(result)){
-                enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla smazána.`);
-                reloadSong?.();
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerDelete(variant.guid));
+        }, (result)=>{
+            enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla smazána.`);
+            reloadSong?.();
 
-                // back in history
-                navigate(-1);
-            }
-
+            // back in history
+            navigate(-1);
+            setDialogOpen(false);
         });
+
     }
 
     const yesClick = () => {
-        setFetching(true);
-        indeedDelete().then(()=>{
-            setDialogOpen(false);
-            setFetching(false);
-        })
+        indeedDelete()
     }
 
     const noClick = () => {
         if(fetching) return;
-        setDialogOpen(false);
         setLoading(false);
+        setDialogOpen(false);
     }
 
   return (

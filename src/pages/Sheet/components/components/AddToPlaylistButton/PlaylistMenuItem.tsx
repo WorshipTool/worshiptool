@@ -2,7 +2,6 @@ import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
 import { CircularProgress, ListItemIcon, ListItemText, MenuItem } from '@mui/material'
 import React, { useEffect } from 'react'
 import { PostAddVariantToPlaylistBodyDTO } from '../../../../../api/dtos/playlist/dtosPlaylist'
-import { isRequestSuccess } from '../../../../../api/dtos/RequestResult';
 import { VariantDTO } from '../../../../../interfaces/variant/VariantDTO';
 import usePlaylists from '../../../../../hooks/playlist/usePlaylists';
 
@@ -49,11 +48,7 @@ export default function PlaylistMenuItem({
         }
         addToPlaylist(body.variant, guid)
         .then(async (result)=>{
-            if(isRequestSuccess(result)){
-                await reloadPlaylists();
-            }else{
-                console.log(result);
-            }
+            await reloadPlaylists();
             setLoading(false);
         })
 
@@ -69,11 +64,7 @@ export default function PlaylistMenuItem({
         removeFromPlaylist(body.variant, guid)
         .then(async (result)=>{
             console.log(result);
-            if(isRequestSuccess(result)){
-                await reloadPlaylists();
-            }else{
-                console.log(result);
-            }
+            await reloadPlaylists();
             setLoading(false);
         })
     }

@@ -1,27 +1,37 @@
 import { Box, Button, InputBase, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import useAuth from '../../../hooks/auth/useAuth';
-import useFetch from '../../../hooks/useFetch';
 import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from '../../../api/urls';
-import { RequestResult, codes, isRequestSuccess } from '../../../api/dtos/RequestResult';
 import { LoginRequestDTO, LoginResultDTO } from '../../../api/dtos/dtosAuth';
 import { songGetCountDTO } from '../../../api/dtos/dtosSong';
 import useGroup from '../../../hooks/group/useGroup';
 import AddToSelection from './components/AddToSelection';
 import RemoveFromSelection from './components/RemoveFromSelection';
 import Gap from '../../../components/Gap';
+import { AuthApi, SongsApi } from '../../../api/generated';
+import { handleApiCall } from '../../../tech/handleApiCall';
 
 export default function AdminPanel() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const {fetchData} = useFetch();
+    // const {fetchData} = useFetch();
 
     const [songCount, setSongCount] = useState<number>();
+    const {login, apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+    const authApi = new AuthApi(apiConfiguration);
     
     const getCount = async ()=>{
-        const r = await fetchData<songGetCountDTO>({url: getUrl_GETSONGCOUNT()});
-        setSongCount(r.data.count);
+        handleApiCall(songsApi.songsControllerGetSongsCount())
+        .then((r)=>{
+            setSongCount(r.count);
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
+        // const r = await fetchData<songGetCountDTO>({url: getUrl_GETSONGCOUNT()});
+        // setSongCount(r.data.count);
     }
 
     useEffect(() => {
@@ -36,25 +46,22 @@ export default function AdminPanel() {
 
     const [token, setToken] = useState("");
 
-    const {login} = useAuth();
 
-    const {post} = useFetch();
+    // const {post} = useFetch();
 
     const showToken = () => {
         const body : LoginRequestDTO = {
             email,
             password
         }
-        post({
-            url: getUrl_LOGIN(),
-            body
-        }, (result : RequestResult<LoginResultDTO>) => {
-            if(isRequestSuccess(result)){
-                setToken(result.data.token);
-                navigator.clipboard.writeText(result.data.token);
-                console.log(result.data.token);
-            }
-            
+        handleApiCall(authApi.authControllerLogin(body))
+        .then((r)=>{
+            setToken(r.token);
+            navigator.clipboard.writeText(r.token);
+            console.log(r.token);
+        })
+        .catch((e)=>{
+            console.log(e);
         })
     }
 

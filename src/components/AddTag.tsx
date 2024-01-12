@@ -1,17 +1,14 @@
 import React, { useRef, useState } from 'react'
-import useYoutube from '../hooks/useYoutube';
-import { NewSongDataDTO, NewSongDataResult } from '../api/dtos/dtosNewSongData';
-import { MediaTypes } from '../interfaces/song/media';
-import { getUrl_ADDSONGDATA } from '../api/urls';
-import { RequestResult, isRequestSuccess } from '../api/dtos/RequestResult';
-import useFetch from '../hooks/useFetch';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import { SourceTypes } from '../interfaces/song/source';
+import useAuth from '../hooks/auth/useAuth';
+import { NewSongDataProcessResult, SongsApi } from '../api/generated';
+import { useApiState } from '../tech/ApiState';
+import { handleApiCall } from '../tech/handleApiCall';
 
 interface AddTagProps{
     open: boolean,
     handleClose: ()=>void,
-    afterUpload?: (r:RequestResult<NewSongDataResult>)=>void,
+    afterUpload?: (r:NewSongDataProcessResult)=>void,
     songGuid?:string
 }
 
@@ -19,13 +16,14 @@ export default function AddTag({open, handleClose, afterUpload, songGuid}:AddTag
 
     const inputRef = useRef();
 
-    const {getId} = useYoutube();
-    const {post} = useFetch();
+    
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState} = useApiState<NewSongDataProcessResult>();
 
-    const [errorMessage, setErrorMessage] = useState("")
+
 
     const onClose = () => {
-        setErrorMessage("");
         //@ts-ignore
         inputRef.current.value = "";
         handleClose();
@@ -35,21 +33,16 @@ export default function AddTag({open, handleClose, afterUpload, songGuid}:AddTag
         //@ts-ignore
         const value = inputRef.current.value;
 
-        const dto : Partial<NewSongDataDTO> = {
-            songGuid,
-            tags: [value]
-        }
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerAddSongData({
+                songGuid,
+                tags: [value]
+            }));
+        },(d)=>{
+            onClose();
+            if(afterUpload) afterUpload(d);
+        })
 
-        post({url: getUrl_ADDSONGDATA(), body: dto}, (d:RequestResult<NewSongDataResult>)=> {
-            if(isRequestSuccess(d)){
-                console.log(d);
-                //added
-                onClose();
-                if(afterUpload) afterUpload(d);
-            }else{
-                setErrorMessage("Něco se pokazilo při nahrávání.")
-            } 
-        });
     }
   return (
     <Dialog open={open} onClose={onClose}>
@@ -63,12 +56,12 @@ export default function AddTag({open, handleClose, afterUpload, songGuid}:AddTag
             margin="dense"
             id="source"
             label="Jméno tagu"     
-            helperText={errorMessage}       
+            helperText={apiState.error&&"Něco se pokazilo při nahrávání."}       
             type="email"
             fullWidth
             variant="standard"
             inputRef={inputRef}
-            error={errorMessage!=""}
+            error={apiState.error?.message!=""}
           />
         </DialogContent>
         <DialogActions>

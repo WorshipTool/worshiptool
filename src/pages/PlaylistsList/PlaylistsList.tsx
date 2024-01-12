@@ -2,9 +2,6 @@ import { Box, Button, Card, Chip, CircularProgress, Dialog, DialogActions, Dialo
 import Toolbar from "../../components/Toolbars/Toolbar";
 import { PlaylistDataDTO, GetPlaylistsResultDTO, PostCreatePlaylistBodyDTO, PostCreatePlaylistResultDTO } from '../../api/dtos/playlist/dtosPlaylist';
 import { useEffect, useRef, useState } from "react";
-import useFetch from '../../hooks/useFetch';
-import { getUrl_GETPLAYLISTS, getUrl_POSTCREATEPLAYLIST } from '../../api/urls';
-import { isRequestSuccess, RequestResult, isRequestError } from '../../api/dtos/RequestResult';
 import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { Add, Remove } from "@mui/icons-material";
@@ -12,6 +9,8 @@ import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
 import AppContainer from "../../components/AppContainer/AppContainer";
 import Gap from "../../components/Gap";
 import { LoadingButton } from "@mui/lab";
+import AxiosResponse from 'axios';
+import { useApiStateEffect } from "../../tech/ApiState";
 
 
 
@@ -32,38 +31,46 @@ const StyledContainer = styled(Paper)(({theme})=>({
 
 export default function () {
 
-    const [playlists, setPlaylists] = useState<PlaylistDataDTO[]>([]);
-    const [result, setResult] = useState<RequestResult<any>|undefined>(undefined);
+    // const [playlists, setPlaylists] = useState<PlaylistDataDTO[]>([]);
 
     const inputRef = useRef();
 
     const [titleDialogOpen, setTitleDialogOpen] = useState(false);
 
 
-    const {getPlaylistsOfUser, createPlaylist: createWithName, deletePlaylist: deleteByGuid, loading} = usePlaylists();
+    const {getPlaylistsOfUser, createPlaylist: createWithName, deletePlaylist: deleteByGuid} = usePlaylists();
     const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
     const [createLoading, setCreateLoading] = useState(false);
 
-    useEffect(()=>{
-        reload()
-    },[]);
+    const [{
+        data: playlists,
+        loading,
+        error
+    }, reload] = useApiStateEffect(()=>{
+        return getPlaylistsOfUser().then((r)=>{
+            return r.playlists;
+        });
+    },[])
+
+    // useEffect(()=>{
+    //     reload()
+    // },[]);
 
     useEffect(()=>{
         if(loaded) return;
         if(!loading) setLoaded(true);
     },[loading])
 
-    const reload = () =>{
-        getPlaylistsOfUser()
-        .then((result)=>{
-            setResult(result);
-            if(isRequestSuccess(result)){
-                setPlaylists(result.data.playlists);
-            }
-        })
-    }
+    // const reload = () =>{
+    //     getPlaylistsOfUser()
+    //     .then((result)=>{
+    //         setPlaylists(result.playlists);
+    //     }).catch((e : any)=>{
+    //         setError(e.message)
+    //     })
+    // }
     
     const {guid : playlistGuid, turnOn, turnOff} = useCurrentPlaylist();
 
@@ -74,26 +81,31 @@ export default function () {
 
     const createPlaylist = async () => {
         const curr : any = inputRef.current;
-        const result = await createWithName("Nový playlist " + playlists.length);
-        if(isRequestSuccess(result)){
-            navigate("/playlist/"+result.data.guid);
-            turnOn(result.data.guid)
-        }else{
-            console.log("Something went wrong:", result.message);
+        try{
+            const result = await createWithName("Nový playlist " + playlists?.length);
+            navigate("/playlist/"+result.guid);
+            turnOn(result.guid)
+        }catch(e : any){
+            console.log("Something went wrong:", e.message);
             setCreateLoading(false);
         }
+        // if(isRequestSuccess(result)){
+        // }else{
+        //     console.log("Something went wrong:", result.message);
+        //     setCreateLoading(false);
+        // }
 
     }
 
 
     const deletePlaylist = async (guid:string) => {
-        const result = await deleteByGuid(guid);
         if(playlistGuid===guid) turnOff();
-        if(isRequestSuccess(result)){
+        deleteByGuid(guid)
+        .then((result)=>{
             reload();
-        }else{
-            console.log("Something went wrong:", result.message)
-        }
+        }).catch((e : any)=>{
+            console.log("Something went wrong:", e.message)
+        })
     }
 
     const openPlaylist = (guid:string) => {
@@ -121,9 +133,9 @@ export default function () {
         <AppContainer>
             <Box display={"flex"} justifyContent={"center"}>
                 <Box sx={{maxWidth:500, marginTop:7}} flex={1}>
-                    {result&&isRequestError(result)?<>
+                    {error?<>
                         <Typography>Při načítání nastala chyba.</Typography>
-                        <Typography>{result.message}</Typography>
+                        <Typography>{error.message}</Typography>
                     </>:<></>}
                     <Box display={"flex"} marginBottom={3}>
                         <Typography variant="h5" fontWeight={600} flex={1}>Moje playlisty:</Typography>
@@ -151,12 +163,12 @@ export default function () {
                         <CircularProgress size={"2rem"} color="inherit"/>
                     </Box>:<>
                         
-                        {playlists.map((p)=>{
+                        {playlists?.map((p)=>{
                             return <ListPlaylistItem name={p.title} guid={p.guid} key={p.guid}/>
                         })}
 
                         
-                        {playlists.length==0&&<>
+                        {playlists?.length==0&&<>
                             <Typography>Nemáš žádný vytvořený playlist.</Typography>
                         </>}
                     </>}

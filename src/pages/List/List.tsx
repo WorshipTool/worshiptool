@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import Toolbar from '../../components/Toolbars/Toolbar';
 import usePagination from '../../hooks/usePagination';
 import { ListSongDataDTO, ListResultDTO } from '../../api/dtos/dtosSong';
-import useFetch from '../../hooks/useFetch';
 import { getUrl_GETSONGLIST } from '../../api/urls';
 import { grey } from '@mui/material/colors';
 import Gap from '../../components/Gap';
 import { useNavigate } from 'react-router-dom';
+import { SongsApi } from '../../api/generated';
+import useAuth from '../../hooks/auth/useAuth';
+import { handleApiCall } from '../../tech/handleApiCall';
 
 const StyledPaper = styled(Paper)(({theme})=>({
     backgroundColor: theme.palette.grey[100],
@@ -23,15 +25,22 @@ const StyledPaper = styled(Paper)(({theme})=>({
 export default function List() {
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(1);
-    const {fetchData} = useFetch();
+
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+
+    
+
     const {nextPage, loadPage, data: songs, nextExists} = usePagination<ListSongDataDTO>((page, resolve, arr)=>{
-        const url = getUrl_GETSONGLIST(page);
-        fetchData<ListResultDTO>({url},(data)=>{
-            resolve({result: data, data: data.data.songs.filter((v)=>{
+        handleApiCall(songsApi.songsControllerGetList(page))
+        .then((data)=>{
+            resolve(data.songs.filter((v)=>{
                 return !arr.find((s)=>s.guid==v.guid);
-            })});
+            }));
         })
-        
+        .catch((e)=>{
+            console.log(e);
+        })
 
     });
     const navigate = useNavigate();

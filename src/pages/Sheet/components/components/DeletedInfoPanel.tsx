@@ -5,10 +5,10 @@ import useAuth from '../../../../hooks/auth/useAuth'
 import { LoadingButton } from '@mui/lab'
 import Gap from '../../../../components/Gap'
 import { Restore } from '@mui/icons-material'
-import useFetch from '../../../../hooks/useFetch'
-import { getUrl_RESTOREVARIANT } from '../../../../api/urls'
-import { isRequestSuccess } from '../../../../api/dtos/RequestResult'
 import { useSnackbar } from 'notistack'
+import { SongsApi } from '../../../../api/generated'
+import { useApiState } from '../../../../tech/ApiState'
+import { handleApiCall } from '../../../../tech/handleApiCall';
 
 interface DeletedInfoPanelProps {
     variant: VariantDTO,
@@ -20,21 +20,20 @@ export default function DeletedInfoPanel({
     reloadSong
 }: DeletedInfoPanelProps) {
 
-    const {isAdmin} = useAuth();
-    const [loading, setLoading] = React.useState(false);
-    const {post} = useFetch();
+    const {isAdmin, apiConfiguration} = useAuth();
     const {enqueueSnackbar} = useSnackbar();
 
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState:{
+        loading
+    }} = useApiState();
     const restore = () => {
-        setLoading(true);
-        post({url: getUrl_RESTOREVARIANT(variant.guid)},(result)=>{
-            if(isRequestSuccess(result)){
-                enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla obnovena.`);
-                reloadSong?.();
-            }
-            setLoading(false);
-
-        });
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerRestore(variant.guid));
+        }, ()=>{
+            enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla obnovena.`);
+            reloadSong?.();
+        }) 
     }
   return (
     <Box sx={{

@@ -1,15 +1,14 @@
 import { Box, Button, CircularProgress, Container, IconButton, Paper, Snackbar, TextField, Typography, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../hooks/auth/useAuth';
-import { RequestResult, isRequestError } from '../../api/dtos/RequestResult';
 import { Close } from '@mui/icons-material';
-import Gap from '../../components/Gap';
 import Toolbar from '../../components/Toolbars/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import User from '../../interfaces/user';
 import { LoginResultDTO } from '../../api/dtos/dtosAuth';
 import GoogleLoginButton from './components/GoogleLoginButton';
+import Gap from '../../components/Gap';
 
 const StyledContainer = styled(Paper)(({theme})=>({
     width: "30%",
@@ -82,12 +81,10 @@ export default function Login() {
 
     const loginAction = () => {
         setInProgress(true);
-        login({email, password},(result : RequestResult<LoginResultDTO>)=>{
+        login({email, password},(result : LoginResultDTO)=>{
             setInProgress(false);
-            if(isRequestError(result)) setErrorMessage(result.message);
-            else{
-                navigate("/");
-            }
+            navigate("/");
+            
         });
     }
 

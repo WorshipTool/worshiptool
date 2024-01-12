@@ -2,12 +2,10 @@ import { Sheet } from "@pepavlin/sheet-api"
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO"
 import useAuth from "../../../hooks/auth/useAuth"
 import { useEffect, useState } from "react";
-import useFetch from '../../../hooks/useFetch';
-import { getUrl } from "../../../api/urls";
-import { GETUSERSONGLIST_URL } from "../../../api/constants";
-import { GetUserSongListResultDTO } from "../../../api/dtos/dtosSong";
-import { isRequestSuccess } from "../../../api/dtos/RequestResult";
 import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
+import { SongsApi } from "../../../api/generated";
+import { useApiState, useApiStateEffect } from "../../../tech/ApiState";
+import { handleApiCall } from "../../../tech/handleApiCall";
 
 interface IUseMySongs{
     variants: VariantDTO[],
@@ -15,30 +13,21 @@ interface IUseMySongs{
 }
 
 export default function useMySongs() : IUseMySongs{
-    const {isLoggedIn} = useAuth();
-    const [variants, setVariants] = useState<VariantDTO[]>([]);
+    const {isLoggedIn, apiConfiguration} = useAuth();
 
-    const {fetchData} = useFetch();
     const [loaded, setLoaded] = useState(false);
-
-    useEffect(()=>{
-        if(!isLoggedIn()) return;
-        fetchData<GetUserSongListResultDTO>({url: getUrl(GETUSERSONGLIST_URL)})
-        .then((result)=>{
-            if(isRequestSuccess(result)){
-                const v = (result.data.variants.map((variant)=>{
-                    return mapApiToVariant(variant);
-                }));
-                console.log(v)
-                setVariants(v);
-            }
-
-            setLoaded(true);
-
+    const songsApi = new SongsApi(apiConfiguration);
+    const [apiState] = useApiStateEffect(async ()=>{
+        if(!isLoggedIn) return;
+        const result = await handleApiCall(songsApi.songsControllerGetSongListOfUser());
+        return result.variants.map((variant)=>{
+            return mapApiToVariant(variant);
         })
-    },[isLoggedIn])
+    },[isLoggedIn]);
+
+
     return {
-        variants: variants,
-        loaded: loaded,
+        variants: apiState.data || [],
+        loaded: !apiState.loading,
     }
 }
