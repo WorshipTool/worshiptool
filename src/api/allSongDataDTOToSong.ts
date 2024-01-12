@@ -1,8 +1,9 @@
 import { Sheet } from "@pepavlin/sheet-api";
 import Song from "../interfaces/song/song";
 import AllSongDataDTO from "./dtos/dtosSong";
+import { SongData } from "./generated";
 
-export default function convertAllSongDataDTOToSong(d: AllSongDataDTO) : Song{
+export default function convertAllSongDataDTOToSong(d: SongData) : Song{
     const data = d;
 
     if(data===undefined){

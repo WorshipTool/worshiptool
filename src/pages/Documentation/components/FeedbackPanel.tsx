@@ -1,21 +1,21 @@
 import { Box, Button, InputAdornment, Paper, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Gap from '../../../components/Gap'
-import { Feedback, Try } from '@mui/icons-material';
-import useFetch from '../../../hooks/useFetch';
-import { getUrl } from '../../../api/urls';
-import { POSTSENDFEEDBACK_URL } from '../../../api/constants';
 import { PostSendMessageDTO } from '../../../api/dtos/feedbackDtos';
 import useAuth from '../../../hooks/auth/useAuth';
 import { LoadingButton } from '@mui/lab';
+import { MessengerApi } from '../../../api/generated';
+import { useApiState } from '../../../tech/ApiState';
+import { Try } from '@mui/icons-material';
 
 export default function FeedbackPanel() {
     const [message, setMessage] = React.useState("");
     const [sent, setSent] = React.useState(false);
     const [sending, setSending] = React.useState(false);
 
-    const {post} = useFetch();
-    const {user, isLoggedIn} = useAuth()
+    const {user, isLoggedIn, apiConfiguration} = useAuth()
+    const messApi = new MessengerApi(apiConfiguration);
+    const {fetchApiState, apiState} = useApiState();
 
     const onMessageChange = (e:any) => {
         setMessage(e.target.value);
@@ -28,10 +28,11 @@ export default function FeedbackPanel() {
             message: message.replaceAll("\n", "\\n"),
             userName: isLoggedIn() ? user?.firstName + " " + user?.lastName : undefined
         }
-        post({url: getUrl(POSTSENDFEEDBACK_URL), body}).then((result)=>{
+        fetchApiState(async ()=>{
+            return await messApi.messengerControllerPostFeedback(body);
+        },()=>{
             setSent(true);
-            setSending(false);
-        });
+        })
     }
   return (
     <Box sx={{

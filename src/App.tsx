@@ -38,6 +38,8 @@ import MySongsList from './pages/MySongsList/MySongsList';
 import SheetPage from './pages/Sheet/SheetPage';
 import Snowfall from 'react-snowfall';
 import Snow from './components/Snow';
+import Test from './pages/Test/Test';
+import ErrorHandlerProvider from './components/ErrorHandlerProvider';
 
 
 const Background = styled(Box)(({theme})=>({
@@ -83,6 +85,7 @@ export const AppRoutes = () => {
       <Route path="playlist/:guid/cards" element={<PlaylistCards/>}/>
       <Route path='documentation' element={<Documentation/>}/>
       <Route path='group/:groupName' element={<GroupScreen/>}/>
+      <Route path='test' element={<Test/>}/>
       <Route path="*" element={<ErrorPage/>}/>
     </Routes>
   
@@ -98,14 +101,16 @@ function App() {
             <ThemeProvider theme={theme}>
               <BrowserRouter>
                 <AuthProvider> 
-                    <StackProvider>
-                        <GroupProvider>
-                          <PlaylistProvider>
-                            <Background/>
-                            <AppRoutes/>
-                          </PlaylistProvider>
-                        </GroupProvider>
-                    </StackProvider>
+                    <ErrorHandlerProvider>
+                        <StackProvider>
+                            <GroupProvider>
+                              <PlaylistProvider>
+                                <Background/>
+                                <AppRoutes/>
+                              </PlaylistProvider>
+                            </GroupProvider>
+                        </StackProvider>
+                    </ErrorHandlerProvider>
                 </AuthProvider>
               </BrowserRouter>
             </ThemeProvider>

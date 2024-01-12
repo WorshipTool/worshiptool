@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import AppContainer from '../../../../../../components/AppContainer/AppContainer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { EasySheet } from '../../Upload';
-import { isRequestSuccess } from '../../../../../../api/dtos/RequestResult';
 import { Box, Button, CircularProgress, Paper, Typography, useTheme } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 import Gap from '../../../../../../components/Gap';
@@ -10,9 +9,11 @@ import SheetListPreview from '../SheetListPreview';
 import UploadedSongList from '../UploadedSongList/UploadedSongList';
 import { NewSongDataDTO } from '../../../../../../api/dtos/dtosNewSongData';
 import useImport from '../../../../Write/hooks/useImport';
-import useFetch from '../../../../../../hooks/useFetch';
 import { getUrl_ADDSONGDATA } from '../../../../../../api/urls';
-import UploadPanel from '../UploadPanel/UploadPanel';
+import useAuth from '../../../../../../hooks/auth/useAuth';
+import { NewSongDataProcessResult, SongsApi } from '../../../../../../api/generated';
+import { useApiState } from '../../../../../../tech/ApiState';
+import { handleApiCall } from '../../../../../../tech/handleApiCall';
 
 const parsingMessages = [
     "Nahrávám soubor...",
@@ -44,10 +45,16 @@ export default function Parse() {
         guid: string
     }[]>([]);
     
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
 
-    const {post, loading:fetching} = useFetch();
+    // const {post, loading:fetching} = useFetch();
     const upload = useImport();
     const navigate = useNavigate();
+
+    const {fetchApiState, apiState: {
+        loading: fetching,
+    }} = useApiState<NewSongDataProcessResult>();
 
     const startParsing = async (files: File[]) => {
         setLoading(true);
@@ -59,18 +66,15 @@ export default function Parse() {
             const message = parsingMessages[Math.floor(Math.random() * parsingMessages.length)]+"\t" + (i+1) + "/" + files.length;
             setLoadingMessage(message);
             const data = await upload(file)
-
-            if(isRequestSuccess(data)){
-                const sheetsData = data.data.sheets;
-                sheetsData.forEach((sheetData)=>{
-                    sheets.push({
-                        title: sheetData.title,
-                        data: sheetData.data,
-                        randomHash: Math.random().toString(36).substring(7),
-                        originalFile: file
-                    });
-                })
-            }
+            const sheetsData = data.sheets;
+            sheetsData.forEach((sheetData)=>{
+                sheets.push({
+                    title: sheetData.title,
+                    data: sheetData.data,
+                    randomHash: Math.random().toString(36).substring(7),
+                    originalFile: file
+                });
+            })
         }
         setLoadingMessage("Rozluštěno")
         setSheets(sheets);
@@ -93,37 +97,36 @@ export default function Parse() {
             setUploadingMessage(message);
 
             const sheet = sheets[i];
-            const dto : Partial<NewSongDataDTO> = {
-                title: sheet.title,            
-                sheetData: sheet.data,
-                media:[],
-                songGuid: undefined
-            };
     
-            const result = await post({url: getUrl_ADDSONGDATA(), body: dto});
-            if(isRequestSuccess(result)){
-                if(result.data){
-                    guids.push(result.data.songGuid);
-                }
-            }
+            fetchApiState(async ()=>{
+                return await handleApiCall(songsApi.songsControllerAddSongData({
+                    songGuid: undefined,
+                    title: sheet.title,
+                    sheetData: sheet.data,
+                    media:[]
+                }));
+            },(data)=>{
+                guids.push(data.guid);
+                setUploadingMessage("Hotovo")
+                setTimeout(()=>{
+
+                    // navigate("/song/"+guids[0]);
+                    setUploadedSongs(guids.map((guid, i)=>{
+                        return {
+                            title: sheets[i].title,
+                            guid: guid
+                        }
+                    }));
+                    setUploading(false);
+                    setUploaded(true);
+
+                }, 2000);
+            })
 
             
         
         }
-        setUploadingMessage("Hotovo")
-        setTimeout(()=>{
-
-            // navigate("/song/"+guids[0]);
-            setUploadedSongs(guids.map((guid, i)=>{
-                return {
-                    title: sheets[i].title,
-                    guid: guid
-                }
-            }));
-            setUploading(false);
-            setUploaded(true);
-
-        }, 2000);
+        
 
     }
 

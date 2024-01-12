@@ -4,7 +4,6 @@ import {jwtDecode} from "jwt-decode"
 import axios from "axios"
 import useAuth from '../../../hooks/auth/useAuth'
 import { useNavigate } from 'react-router-dom'
-import { isRequestSuccess } from '../../../api/dtos/RequestResult'
 
 export default function GoogleLoginButton() {
 
@@ -12,9 +11,7 @@ export default function GoogleLoginButton() {
     const navigate = useNavigate();
     const onSuccess = (credentialResponse: CredentialResponse) => {
         loginWithGoogle(credentialResponse, (r)=>{
-          if(isRequestSuccess(r)){
             navigate("/")
-          }
         })
     }
 

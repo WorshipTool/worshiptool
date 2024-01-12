@@ -8,6 +8,7 @@ interface useGroupSelectionI extends ReturnType<typeof usePlaylist>{
 export default function useGroupSelection() : useGroupSelectionI{
 
     const {selectionGuid} = useGroup();
+    console.log("useGroupSelection", selectionGuid)
     const p = usePlaylist(selectionGuid);
 
 

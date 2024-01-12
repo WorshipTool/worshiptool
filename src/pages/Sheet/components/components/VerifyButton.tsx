@@ -2,12 +2,14 @@ import React from 'react'
 import useAuth from '../../../../hooks/auth/useAuth';
 import { Button, CircularProgress } from '@mui/material';
 import { verify } from 'crypto';
-import useFetch from '../../../../hooks/useFetch';
 import { getUrl_UNVERIFYVARIANT, getUrl_VERIFYVARIANT } from '../../../../api/urls';
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
 import { Public, PublicOff } from '@mui/icons-material';
+import { SongsApi } from '../../../../api/generated';
+import { useApiState } from '../../../../tech/ApiState';
+import { handleApiCall } from '../../../../tech/handleApiCall';
 
 export interface VerifyButtonProps {
     variant: VariantDTO,
@@ -16,10 +18,15 @@ export interface VerifyButtonProps {
 
 export default function VerifyButton(props: VerifyButtonProps) {
 
-    const {post} = useFetch();
+    const {apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
+    const {fetchApiState, apiState: {
+        loading
+    }} = useApiState();
+
     const {enqueueSnackbar} = useSnackbar();
 
-    const [loading, setLoading] = React.useState(false);
+    // const [loading, setLoading] = React.useState(false);
 
     const reload = () =>{
         props.reloadSong();
@@ -27,21 +34,23 @@ export default function VerifyButton(props: VerifyButtonProps) {
 
     
     const unverify = () => {
-        setLoading(true);
-        post({url: getUrl_UNVERIFYVARIANT(props.variant.guid)},(result)=>{
-            setLoading(false);
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerUnverify(props.variant.guid));
+        }, ()=>{
             reload();
             enqueueSnackbar(`Zveřejnění písně ${(props.variant.preferredTitle && " " || "")}bylo zrušeno`);
         });
         
+        
     }
     const verify = () => {
-        setLoading(true);
-        post({url: getUrl_VERIFYVARIANT(props.variant.guid)},(result)=>{
-            setLoading(false);
+        fetchApiState(async ()=>{
+            return handleApiCall(songsApi.songsControllerVerify(props.variant.guid));
+        }, ()=>{
             reload();
             enqueueSnackbar(`Píseň ${(props.variant.preferredTitle && " " || "")}byla zveřejněna.`);
         });
+
     }
 
     

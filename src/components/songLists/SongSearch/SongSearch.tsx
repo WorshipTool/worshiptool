@@ -34,7 +34,7 @@ export default function SongSearch({searchString, method = "group", component } 
                 searchKey: searchString, 
                 page: 0
             }).then((data)=>{
-                const d = data.data.songs
+                const d = data.songs
                           .map((s)=>mapApiToVariant(s.variant));
                 setVariants(d);
               })

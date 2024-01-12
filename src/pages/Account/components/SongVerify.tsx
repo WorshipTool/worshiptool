@@ -1,10 +1,11 @@
 import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import useSong from '../../../hooks/song/useSong'
-import { useActionData, useNavigate } from 'react-router-dom';
-import useFetch from '../../../hooks/useFetch';
 import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../../api/urls';
 import useAuth from '../../../hooks/auth/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { SongsApi } from '../../../api/generated';
+import { handleApiCall } from '../../../tech/handleApiCall';
 
 export interface SongVerifyProps{
     guid: string,
@@ -14,11 +15,12 @@ export interface SongVerifyProps{
 export default function SongVerify({guid, afterClick}:SongVerifyProps) {
     const {getName, loading, song} = useSong(guid);
 
-    const {post} = useFetch();
+    // const {post} = useFetch();
 
     const navigate = useNavigate();
 
-    const {isAdmin} = useAuth();
+    const {isAdmin, apiConfiguration} = useAuth();
+    const songsApi = new SongsApi(apiConfiguration);
 
     
     const [popupOpen, setPopupOpen] = useState(false);
@@ -34,18 +36,26 @@ export default function SongVerify({guid, afterClick}:SongVerifyProps) {
 
     const verify = () => {
         if(!song)return;
-        post({url: getUrl_VERIFYVARIANT(song.variants[0].guid)},()=>{
-            afterClick()
-        });
+        handleApiCall(songsApi.songsControllerVerify(song.variants[0].guid))
+        .then((r)=>{
+            afterClick();
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
     }
     const openDeletePopup = () => {
         setPopupOpen(true);
     }
     const deleteSong = () => {
         if(!song)return;
-        post({url: getUrl_DELETEVARIANT(song.variants[0].guid)},()=>{
+        handleApiCall(songsApi.songsControllerDelete(song.guid))
+        .then((r)=>{
             afterClick();
-        });
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
     }
 
     return (

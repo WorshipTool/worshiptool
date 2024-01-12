@@ -1,8 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAuth from '../../../hooks/auth/useAuth';
-import useFetch from '../../../hooks/useFetch';
-import { isRequestSuccess } from '../../../api/dtos/RequestResult';
 import { ROLES } from '../../../interfaces/user';
 import SongVerify from './SongVerify';
 import useSongQuery from '../../../hooks/song/useSongQuery';
@@ -17,26 +15,25 @@ export default function VerifySongPanel() {
     const [unverifiedSongs, setUnverifiedSongs] = useState<string[]>([]);
 
     
-    const {fetchData} = useFetch();
-    const {post} = useFetch();
+    // const {fetchData} = useFetch();
+    // const {post} = useFetch();
 
 
     
-    const getUnverified = useSongQuery({key:"unverified"});
-    const getLoaderUnverified = useSongQuery({key:"loaderUnverified"});
+    const getUnverified = useSongQuery("unverified");
+    const getLoaderUnverified = useSongQuery("loaderUnverified");
 
     const loadUnverified = () => {
-        getUnverified({}).then((r)=>{
-            if(isRequestSuccess(r)){
-                setUnverifiedSongs(r.data.songs.map((s:any)=>s.guid));
-            }
+        getUnverified().then((r)=>{
+            // if(isRequestSuccess(r)){
+                setUnverifiedSongs(r.songs.map((s:any)=>s.guid));
+            // }
         })
     }
     const loadLoaderUnverified = () => {
-        getLoaderUnverified({}).then((r)=>{
-            if(isRequestSuccess(r)){
-                setLoaderSongs(r.data.songs.map((s)=>s.guid));
-            }
+        getLoaderUnverified().then((r)=>{
+            setLoaderSongs(r.songs.map((s)=>s.guid));
+            
         })
     }
 

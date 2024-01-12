@@ -1,21 +1,36 @@
 import { POSTPARSEIMAGE_URL } from "../../../../api/constants";
-import { RequestResult } from "../../../../api/dtos/RequestResult";
 import { PostParseImageResultDTO } from "../../../../api/dtos/dtosSong";
+import { SongsApi } from "../../../../api/generated";
 import { getUrl } from "../../../../api/urls";
-import useFetch from "../../../../hooks/useFetch";
+import useAuth from "../../../../hooks/auth/useAuth";
+import { useApiState } from "../../../../tech/ApiState";
+import { handleApiCall } from '../../../../tech/handleApiCall';
 
 export default function useImport() {
-    const {postFormData} = useFetch()
-    const importImage = async (file: File) : Promise<RequestResult<PostParseImageResultDTO>> => {
+
+    const {getAuthHeader} = useAuth()
+    // const {postFormData} = useFetch()
+    const importImage = async (file: File) : Promise<PostParseImageResultDTO> => {
+
+        // Create regular axios fetch
+        
         const form = new FormData();
         form.append("file", file, file.name)
-        
-        const result = await postFormData({
-            url: getUrl(POSTPARSEIMAGE_URL),
-            body: form
 
+        const result : PostParseImageResultDTO = await fetch(getUrl(POSTPARSEIMAGE_URL), {
+            method: 'POST',
+            body: form,
         })
-
+        .then((response) => {
+            if (!response.ok) {
+                throw response;
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            return {sheets:[]}
+        })
+        
         return result;
 
 

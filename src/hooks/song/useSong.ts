@@ -1,55 +1,34 @@
 import { useEffect, useState } from "react";
 import Song from "../../interfaces/song/song";
-import useFetch from "../useFetch";
-import { getUrl_GETSONGBYGUID } from "../../api/urls";
-import AllSongDataDTO from "../../api/dtos/dtosSong";
 import useTranspose from "./hooks/useTranspose";
 import useAuth from "../auth/useAuth";
 import convertAllSongDataDTOToSong from "../../api/allSongDataDTOToSong";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";
+import { SongData, SongsApi } from "../../api/generated";
+import { useApiState, useApiStateEffect } from "../../tech/ApiState";
+import { handleApiCall } from '../../tech/handleApiCall';
 
 
 
 export default function useSong(g:string|null){
     const [guid, setGUID] = useState(g);
-    const {fetchData, data, loading:fetchLoading} = useFetch();
-    const [song, setSong] = useState<Song>();
-    const [loading, setLoading] = useState(true);
 
+    const {apiConfiguration} = useAuth();
+    const songApi = new SongsApi(apiConfiguration);
+
+    const [{
+        data: song, 
+        loading
+    }, reload] = useApiStateEffect<Song | null>(async ()=>{
+        if(!guid)return null;
+        const data = await handleApiCall(songApi.songsControllerGetSongData(guid));
+        return convertAllSongDataDTOToSong(data);
+    },[guid]);
 
     const {user, isLoggedIn} = useAuth();
 
-    const {getChord, transpose:trans, getTransposeOffset, setTransposeOffset} = useTranspose();
+    const {transpose:trans} = useTranspose();
 
-    useEffect(()=>{
-        if(song){
-            setGUID(song.guid);
-        }
-    },[song]);
-
-    useEffect(()=>{
-        setLoading(fetchLoading);
-    },[fetchLoading])
-
-    useEffect(()=>{
-        reload();
-    },[guid])
-
-    useEffect(()=>{
-        const d : AllSongDataDTO = data;
-        if(d===undefined){
-            setSong(undefined);
-            return;
-        }
-        const s = convertAllSongDataDTOToSong(d);
-        setSong(s);
-
-    },[data]);
-
-    const reload = () => {
-        if(guid) fetchData({url:getUrl_GETSONGBYGUID(guid)},(r)=>{
-        });
-    }
 
     const isCreatedByMe = (variant: VariantDTO) => {
         if(!isLoggedIn()||user===undefined)return false;
@@ -58,12 +37,11 @@ export default function useSong(g:string|null){
 
 
     const getTitle = () : string=> {
-        if(song===undefined) return "undefined";
-        return song.title;
+        return song?.title || "undefined";
     }
 
     const getText = (part?: number): string => {
-        if(song===undefined) return "undefined";
+        if(!song) return "undefined";
 
         if(song.variants.length==0)return "";
 
@@ -78,7 +56,7 @@ export default function useSong(g:string|null){
     }
 
     const getSheetData = () : string => {
-        if(song===undefined) return "undefined";
+        if(!song || song.variants.length==0) return "undefined";
         if(song.variants.length==0)return "undefined";
         return song.variants[0].sheetData;
     }
@@ -90,7 +68,8 @@ export default function useSong(g:string|null){
 
     return {
         setGUID,
-        song, setSong,
+        song, 
+        // setSong,
         getName: getTitle,
         getText,
         getSheetData,

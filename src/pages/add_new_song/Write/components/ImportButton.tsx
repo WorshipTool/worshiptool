@@ -1,7 +1,6 @@
 import { Button } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import useImport from '../hooks/useImport'
-import { isRequestSuccess } from '../../../../api/dtos/RequestResult';
 import { LoadingButton } from '@mui/lab';
 import { CloudUpload, FileUpload, Upload, UploadFile } from '@mui/icons-material';
 
@@ -25,16 +24,12 @@ export default function ImportButton({onLoad}: ImportButtonProps) {
         if(!file) return;
         setInProgress(true);
         await importImage(file).then((data)=>{
-            if(isRequestSuccess(data)){
-                const sheets = data.data.sheets;
-                if(sheets.length === 0){
-                    console.log("No sheets found")
-                }else{
-                    const sheet = sheets[0];
-                    if(onLoad) onLoad(sheet.title, sheet.data);
-                }
+            const sheets = data.sheets;
+            if(sheets.length === 0){
+                console.log("No sheets found")
             }else{
-                console.log("Error importing image")
+                const sheet = sheets[0];
+                if(onLoad) onLoad(sheet.title, sheet.data);
             }
         });
         setInProgress(false);

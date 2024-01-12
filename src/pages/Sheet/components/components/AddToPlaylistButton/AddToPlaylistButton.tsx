@@ -3,9 +3,8 @@ import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, Di
 import React, { useEffect, useState } from 'react'
 import usePlaylists from '../../../../../hooks/playlist/usePlaylists';
 import { VariantDTO } from '../../../../../interfaces/variant/VariantDTO';
-import { isRequestSuccess } from '../../../../../api/dtos/RequestResult';
-import { PostAddVariantToPlaylistBodyDTO } from '../../../../../api/dtos/playlist/dtosPlaylist';
 import PlaylistMenuItem from './PlaylistMenuItem';
+import { useApiStateEffect } from '../../../../../tech/ApiState';
 
 interface AddToPlaylistButtonProps {
     variant: VariantDTO
@@ -18,7 +17,6 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const [loading, setLoading] = useState(true);
   
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setOpen(true);
@@ -31,31 +29,19 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
     }
 
     const {getPlaylistsOfUser, isVariantInPlaylist} = usePlaylists();
-
-
-    const [playlists, setPlaylists] = useState<{guid:string, title:string}[]>([]);
+    const [{
+        data : playlists, 
+        loading
+    }] = useApiStateEffect(()=>{
+        return getPlaylistsOfUser().then((r)=>{
+            return r.playlists;
+        })
+    }, []);
 
     useEffect(()=>{
-        if(variant){
-            setLoading(true);
-            reloadPlaylists().then(()=>{
-                setLoading(false);
-            })
-        }
-      },[variant])
-  
-      const reloadPlaylists = () => {
-        return getPlaylistsOfUser()
-        .then(async (r)=>{
-          if(isRequestSuccess(r)){
-            
-              
-            setPlaylists(r.data.playlists);
-          }
+        console.log(playlists)
+    },[playlists])
 
-
-        })
-      }
 
     const theme = useTheme();
     const maxItems = 4;
@@ -102,7 +88,7 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                         </ListItemText>
                     </MenuItem>
                 </>:<>
-                    {playlists.length===0&&<>
+                    {playlists?.length===0&&<>
                         <MenuItem disabled>
                             <ListItemText>
                                 Nemáte žádné playlisty
@@ -110,14 +96,14 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                         </MenuItem>
                     </>}
                 </>}
-                {playlists.slice(0,maxItems).map((p, i)=>{
+                {playlists?.slice(0,maxItems).map((p, i)=>{
                     return <PlaylistMenuItem 
                         guid={p.guid} 
                         title={p.title}
                         variant={variant}/>
                 })}
 
-                {playlists.length>maxItems&&<>
+                {playlists&&playlists.length>maxItems&&<>
                     <Divider />
                     
                     <MenuItem onClick={()=>setOpenDialog(true)}>
@@ -138,7 +124,7 @@ export default function AddToPlaylistButton({variant}: AddToPlaylistButtonProps)
                     <DialogTitle>Přidat do playlistu</DialogTitle>
                     <DialogContent>
                         <Box>
-                        {playlists.map((p, i)=>{
+                        {playlists?.map((p, i)=>{
 
                             return <PlaylistMenuItem
                                         guid={p.guid}
