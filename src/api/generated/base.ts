@@ -19,7 +19,7 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = process.env.baseUrl ?? "http://localhost:3300";
+export const BASE_PATH = process.env.NODE_ENV !== 'production'?"http://localhost:3300":"https://chvalotce.cz/api";
 
 /**
  *
