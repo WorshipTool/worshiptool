@@ -114,7 +114,7 @@ export default function SheetPage() {
                     </>}
                     <Gap value={1} horizontal/>
                     <CircularProgress size={"2rem"} color="info"/>
-                </Box>:<>
+                </Box>:<Box>
                     {song?.variants[variantID] && 
                         <TopPanel 
                             transpose={transpose} 
@@ -152,7 +152,7 @@ export default function SheetPage() {
                     </>}
 
                 {!inEditMode&&song&&!song.variants[variantID].deleted&&<AdditionalSongInfoPanel song={song} variant={song.variants[variantID]}/>}
-                </>}
+                </Box>}
                 
             </ContainerGrid>
         </Box>

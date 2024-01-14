@@ -15,7 +15,8 @@ interface AdditionalSongInfoPanelProps {
 export default function AdditionalSongInfoPanel({song, variant}: AdditionalSongInfoPanelProps) {
     const {isAdmin, isLoggedIn} = useAuth()
     return (
-        <Box>
+        <Box sx={{
+        }}>
 
             {/* VIDEOS */}
             {isLoggedIn()?<>
