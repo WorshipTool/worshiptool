@@ -18,7 +18,7 @@ export default function YoutubeVideo({src}: {src:string}) {
     <div style={{
         position: "relative",
         maxWidth: 560,
-        height: 315,
+        // height: 315,
     }}>
         <img src="http://placehold.it/16x9" alt="16:9 Image" style={{
             width: "100%",
