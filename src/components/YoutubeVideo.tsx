@@ -15,10 +15,26 @@ export default function YoutubeVideo({src}: {src:string}) {
   },[src])
 
   return (
-    <div>
+    <div style={{
+        position: "relative",
+        maxWidth: 560,
+        height: 315,
+    }}>
+        <img src="http://placehold.it/16x9" alt="16:9 Image" style={{
+            width: "100%",
+            height: "auto",
+            display: "block"
+        }} />
         <iframe 
-            width="560" 
-            height="315" 
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%"
+            }}
+            width="100%" 
+            height="100%" 
             src={url}
             title="YouTube video player" 
             frameBorder="0" 
