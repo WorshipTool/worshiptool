@@ -23,7 +23,7 @@ export default function UploadFileInput(props: UploadFileInputProps) {
             name='file'
             onChange={handleFileChange}
             multiple
-            accept='image/*'
+            accept='image/*, .pdf'
         />
     </>
   )

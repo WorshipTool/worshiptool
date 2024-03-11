@@ -21,8 +21,6 @@ export default function UploadPanel(props: UploadPanelProps) {
     }
 
     const openFilePicker = () => {
-        console.log(inputRef)
-
         //@ts-ignore
         inputRef.current.click();
     }
@@ -112,7 +110,7 @@ export default function UploadPanel(props: UploadPanelProps) {
                     marginTop: 3,
                 }} width={200}>
                     <Typography variant='body2' color={"grey"}>
-                        Formáty: png, jpg, jpeg
+                        Formáty: png, jpg, jpeg, pdf
                     </Typography>
                 </Box>
                 
