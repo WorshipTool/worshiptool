@@ -40,7 +40,7 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
-        scp -r build/* root@prijmeni.cz:/var/www/chvalotce
+        scp -r build/* chvalotce@chvalotce.cz:/home/chvalotce.cz/www
         
     - name: Send message to Messenger
       uses: fjogeleit/http-request-action@v1
