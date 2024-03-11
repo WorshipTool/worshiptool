@@ -2,11 +2,11 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 're
 import useSong from '../../../hooks/song/useSong';
 import { Backdrop, Box, Button, Chip, CircularProgress, IconButton, Typography } from '@mui/material';
 import { sectionNameToText } from '../../../tech/sectionNameToText';
-import { Section } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
 import { PlaylistItemDTO } from '../../../interfaces/playlist/PlaylistDTO';
 import { Sheet } from '@pepavlin/sheet-api';
 import Gap from '../../../components/Gap';
 import OnChangeDelayer from '../../../components/ChangeDelayer';
+import { Section } from '@pepavlin/sheet-api/lib/models/song/section';
 
 const sectionPart = (section: Section, fontSize: number) => {
     const lines = section.lines;

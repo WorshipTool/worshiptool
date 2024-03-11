@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import { SheetStyleComponentType } from './config';
 import { Box, Grid, Typography } from '@mui/material';
-import { Section, Segment } from '@pepavlin/sheet-api/lib/sheetApi/conversition/song';
 import { sectionNameToText } from '../../../tech/sectionNameToText';
 import { signature } from '@pepavlin/sheet-api/lib/models/note';
+import { Section } from '@pepavlin/sheet-api/lib/models/song/section';
+import { Segment } from '@pepavlin/sheet-api/lib/models/song/segment';
 
 const chordHeight = "1.5em";
 
