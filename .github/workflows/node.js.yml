@@ -37,6 +37,8 @@ jobs:
       with:
         key: ${{ secrets.SSH_KEY }}
         known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+        name: id_rsa
+        config: ${{ secrets.SSH_CONFIG }}
       
     - name: Copy file with SSH
       run: | 
