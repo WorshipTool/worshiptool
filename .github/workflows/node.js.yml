@@ -42,7 +42,7 @@ jobs:
       
     - name: Copy file with SSH
       run: | 
-        scp -r build/* chvalotce@chvalotce.cz:/home/chvalotce.cz/www
+        sshpass -p ${{ secrets.SSH_PASSWORD }} scp -r build/* chvalotce@chvalotce.cz:/home/chvalotce.cz/www
         
     - name: Send message to Messenger
       uses: fjogeleit/http-request-action@v1
