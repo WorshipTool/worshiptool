@@ -39,11 +39,16 @@ jobs:
         known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
         name: id_rsa
         config: ${{ secrets.SSH_CONFIG }}
-      
-    - name: Copy file with SSH
-      run: | 
-        sshpass -p ${{ secrets.SSH_PASSWORD }} scp -r build/* chvalotce@chvalotce.cz:/home/chvalotce.cz/www
-        
+
+    - name: Copy files with SSH, sshpass
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        host: chvalotce.cz
+        user: chvalotce
+        pass: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          scp -r build/* chvalotce@chvalotce.cz:/home/chvalotce.cz/www
+          
     - name: Send message to Messenger
       uses: fjogeleit/http-request-action@v1
       with:
