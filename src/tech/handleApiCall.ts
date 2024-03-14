@@ -15,6 +15,9 @@ export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
         if(err.message == "Network Error"){
             window.dispatchEvent(networkErrorEvent) 
         }
+        else if(err.response.status === 502){
+            window.dispatchEvent(networkErrorEvent) 
+        }
         if(err.response.status === 401){
             window.dispatchEvent(unauthorizedEvent)
         }
