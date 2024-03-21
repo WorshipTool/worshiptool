@@ -16,9 +16,10 @@ import { PostEditVariantBody } from '../../../api/dtos/dtosSong'
 import { useSnackbar } from 'notistack'
 import DeleteButton from './components/DeleteButton';
 import Gap from '../../../components/Gap'
-import { SongsApi } from '../../../api/generated'
+import { SongEditingApi, SongsApi } from '../../../api/generated'
 import { useApiState } from '../../../tech/ApiState'
 import { handleApiCall } from '../../../tech/handleApiCall'
+import CreateCopyButton from './components/CreateCopyButton'
 
 interface TopPanelProps {
     transpose: (i:number)=>void,
@@ -46,7 +47,7 @@ export default function TopPanel(props: TopPanelProps) {
 
     const {enqueueSnackbar} = useSnackbar();
 
-    const songsApi = new SongsApi(apiConfiguration);
+    const songsApi = new SongEditingApi(apiConfiguration);
     const {fetchApiState, apiState} = useApiState();
     
     const [saving, setSaving] = React.useState(false);
@@ -71,7 +72,7 @@ export default function TopPanel(props: TopPanelProps) {
             title: props.title
         }
         fetchApiState(async ()=>{
-            return handleApiCall(songsApi.songsControllerEditVariant(body));
+            return handleApiCall(songsApi.songEditingControllerEditVariant(body));
         }, (result)=>{
             enqueueSnackbar(`Píseň ${(props.variant.preferredTitle && " " || "")}byla upravena.`);
             props.reloadSong?.();
@@ -138,8 +139,10 @@ export default function TopPanel(props: TopPanelProps) {
                     </Box>}
                 
                     <Box flex={1}/>
+
+                    <CreateCopyButton/>
                 
-                    {(isOwner||(isAdmin()&&props.variant.createdByLoader))&&<Box sx={{
+                    {isOwner&&<Box sx={{
                         [theme.breakpoints.down("md")]:{
                             display: "none"
                         },
@@ -167,7 +170,11 @@ export default function TopPanel(props: TopPanelProps) {
                             sheet={props.sheet} 
                             song={props.song} 
                             reload={props.reloadSong}
-                            variant={props.variant}/>
+                            variant={props.variant}
+                            onEditClick={onEditClick}
+                            isInEditMode={props.isInEditMode}
+                            editLoading={saving}
+                            editedTitle={props.editedTitle}/>
                     </Box>}
                 
                     {isLoggedIn()&&<Box sx={{

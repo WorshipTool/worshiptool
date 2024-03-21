@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab'
 import Gap from '../../../../components/Gap'
 import { Restore } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { SongsApi } from '../../../../api/generated'
+import { SongDeletingApi, SongsApi } from '../../../../api/generated'
 import { useApiState } from '../../../../tech/ApiState'
 import { handleApiCall } from '../../../../tech/handleApiCall';
 
@@ -23,13 +23,13 @@ export default function DeletedInfoPanel({
     const {isAdmin, apiConfiguration} = useAuth();
     const {enqueueSnackbar} = useSnackbar();
 
-    const songsApi = new SongsApi(apiConfiguration);
+    const songsApi = new SongDeletingApi(apiConfiguration);
     const {fetchApiState, apiState:{
         loading
     }} = useApiState();
     const restore = () => {
         fetchApiState(async ()=>{
-            return handleApiCall(songsApi.songsControllerRestore(variant.guid));
+            return handleApiCall(songsApi.songDeletingControllerRestore(variant.guid));
         }, ()=>{
             enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla obnovena.`);
             reloadSong?.();

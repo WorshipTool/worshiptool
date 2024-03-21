@@ -6,7 +6,7 @@ import React from 'react'
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../../../../hooks/auth/useAuth'
-import { SongsApi } from '../../../../api/generated'
+import { SongDeletingApi, SongsApi } from '../../../../api/generated'
 import { useApiState, useApiStateEffect } from '../../../../tech/ApiState'
 import { handleApiCall } from '../../../../tech/handleApiCall';
 
@@ -24,7 +24,7 @@ export default function DeleteButton({
     const navigate = useNavigate();
 
     const {apiConfiguration} = useAuth();
-    const songsApi = new SongsApi(apiConfiguration);
+    const songsApi = new SongDeletingApi(apiConfiguration);
 
     const {fetchApiState, apiState : {
         loading: fetching
@@ -44,7 +44,7 @@ export default function DeleteButton({
 
     const indeedDelete = async () => {
         fetchApiState(async ()=>{
-            return handleApiCall(songsApi.songsControllerDelete(variant.guid));
+            return handleApiCall(songsApi.songDeletingControllerDelete(variant.guid));
         }, (result)=>{
             enqueueSnackbar(`Píseň ${(variant.preferredTitle && " " || "")}byla smazána.`);
             reloadSong?.();

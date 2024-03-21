@@ -34,9 +34,11 @@ export default function List() {
     const {nextPage, loadPage, data: songs, nextExists} = usePagination<ListSongDataDTO>((page, resolve, arr)=>{
         handleApiCall(songsApi.songsControllerGetList(page))
         .then((data)=>{
-            resolve(data.songs.filter((v)=>{
+            const uniq = data.songs.filter((v)=>{
+                
                 return !arr.find((s)=>s.guid==v.guid);
-            }));
+            });
+            resolve(uniq);
         })
         .catch((e)=>{
             console.log(e);

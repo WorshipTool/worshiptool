@@ -1,6 +1,6 @@
 import { CheckCircle, PlaylistAdd, Add, KeyboardArrowDown, MoreHoriz, CopyAll, VideoFile, Tag, VerifiedUser } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, useTheme } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Paper, useTheme } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
 import { VariantDTO } from '../../../../interfaces/variant/VariantDTO';
 import AddVideo from '../../../../components/AddVideo';
 import AddTag from '../../../../components/AddTag';
@@ -9,15 +9,35 @@ import { Sheet } from '@pepavlin/sheet-api';
 import Song from '../../../../interfaces/song/song';
 import { useSnackbar } from 'notistack';
 import Buttons13ka from './Buttons13ka';
+import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
+import useAuth from '../../../../hooks/auth/useAuth';
 
 interface AddToPlaylistButtonProps {
     sheet: Sheet,
     song: Song,
     reload: () => void,
-    variant: VariantDTO
+    variant: VariantDTO,
+    onEditClick: (editable: boolean) => void,
+    isInEditMode?: boolean,
+    editLoading: boolean,
+    editedTitle: string,
 }
 
-export default function SheetAdminButtons({sheet, song, reload, variant}: AddToPlaylistButtonProps) {
+export default function SheetAdminButtons({
+    sheet, 
+    song, 
+    reload, 
+    variant,
+    onEditClick,
+    isInEditMode,
+    editLoading,
+    editedTitle
+}: AddToPlaylistButtonProps) {
+
+
+    const {isAdmin, user, apiConfiguration} = useAuth()
+
     const [open, setOpen] = React.useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -77,10 +97,27 @@ export default function SheetAdminButtons({sheet, song, reload, variant}: AddToP
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
-                'aria-labelledby': 'basic-button',
+                    'aria-labelledby': 'basic-button',
                 }}
             >
                 <Buttons13ka variant={variant}/>
+
+                {(isAdmin()&&variant.createdByLoader)&&
+                    <ButtonGroup orientation='horizontal' sx={{
+                        paddingX: theme.spacing(1),
+                    }}>
+                        <DeleteButton
+                            reloadSong={reload}
+                            variant={variant}/>
+                        <EditButton 
+                            onClick={onEditClick} 
+                            inEditMode={isInEditMode} 
+                            loading={editLoading}
+                            sheetData={sheet?.getOriginalSheetData()||""}
+                            title={editedTitle}/>
+                    </ButtonGroup>}
+
+                <Divider/>
 
                 <MenuItem onClick={onCopyClick}>
                     <ListItemIcon>
