@@ -4,7 +4,8 @@ import {
     CircularProgress,
     ListItemIcon,
     ListItemText,
-    MenuItem
+    MenuItem,
+    useTheme
 } from "@mui/material";
 import React from "react";
 import { useApi } from "../../../../hooks/api/useApi";
@@ -43,9 +44,11 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
         );
     };
 
+    const theme = useTheme();
+
     return props.asMenuItem ? (
         <MenuItem onClick={onClick} disabled={apiState.loading}>
-            <ListItemIcon sx={{}}>
+            <ListItemIcon>
                 {apiState.loading ? (
                     <CircularProgress size={`1rem`} color="inherit" />
                 ) : (
@@ -58,7 +61,15 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
         <LoadingButton
             color="success"
             variant="contained"
-            startIcon={<EggAlt />}
+            startIcon={
+                <EggAlt
+                    sx={{
+                        [theme.breakpoints.down("lg")]: {
+                            display: "none"
+                        }
+                    }}
+                />
+            }
             loading={apiState.loading}
             onClick={onClick}>
             Vytvořit kopii

@@ -26,7 +26,6 @@ export default function RecommendedSongsList() {
     const navigate = useNavigate();
 
     const onCardClick = (variant: SongVariantDto) => {
-        console.log(variant);
         navigate(getVariantUrl(variant.alias), {
             state: {
                 title: variant.preferredTitle

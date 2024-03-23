@@ -160,7 +160,16 @@ export default function TopPanel(props: TopPanelProps) {
                         isOwner={isOwner}
                     />
                     {isLoggedIn() && !isOwner && (
-                        <CreateCopyButton variantGuid={props.variant.guid} />
+                        <Box
+                            sx={{
+                                [theme.breakpoints.down("sm")]: {
+                                    display: "none"
+                                }
+                            }}>
+                            <CreateCopyButton
+                                variantGuid={props.variant.guid}
+                            />
+                        </Box>
                     )}
 
                     {isOwner && (
@@ -185,7 +194,7 @@ export default function TopPanel(props: TopPanelProps) {
                     {isLoggedIn() && (
                         <Box
                             sx={{
-                                [theme.breakpoints.down("md")]: {
+                                [theme.breakpoints.down("sm")]: {
                                     display: "none"
                                 }
                             }}>
