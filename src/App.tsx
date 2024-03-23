@@ -57,6 +57,9 @@ const theme = createTheme({
         },
         secondary: {
             main: "#EBBC1E"
+        },
+        success: {
+            main: "#43a047"
         }
     }
 });

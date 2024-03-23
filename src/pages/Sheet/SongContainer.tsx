@@ -70,6 +70,12 @@ export default function SongContainer({
         setInEditMode(editable);
     };
 
+    const cancelEditing = () => {
+        setInEditMode(false);
+        setCurrentSheet(sheet);
+        if (title) setEditedTitle(title);
+    };
+
     return (
         <>
             {state.loading && <LinearProgress />}
@@ -130,6 +136,7 @@ export default function SongContainer({
                                         song={song as SongDto}
                                         onEditClick={onEditClick}
                                         isInEditMode={inEditMode}
+                                        cancelEditing={cancelEditing}
                                     />
                                     <Gap value={2} />
                                     <>

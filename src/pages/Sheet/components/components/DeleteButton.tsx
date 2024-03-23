@@ -1,12 +1,16 @@
-import { Edit, Remove, Save } from "@mui/icons-material";
+import { Delete, Edit, Remove, Save } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    ListItemIcon,
+    ListItemText,
+    MenuItem
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React from "react";
@@ -19,110 +23,141 @@ import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";
 
 interface DeleteButtonProps {
-	variant: SongVariantDto;
-	reloadSong?: () => void;
+    variant: SongVariantDto;
+    reloadSong?: () => void;
+    asMenuItem?: boolean;
 }
 
 export default function DeleteButton({
-	variant,
-	reloadSong
+    variant,
+    reloadSong,
+    asMenuItem
 }: DeleteButtonProps) {
-	const { enqueueSnackbar } = useSnackbar();
-	const [loading, setLoading] = React.useState(false);
-	const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const [loading, setLoading] = React.useState(false);
+    const navigate = useNavigate();
 
-	const { apiConfiguration } = useAuth();
-	const songsApi = new SongDeletingApi(apiConfiguration);
+    const { apiConfiguration } = useAuth();
+    const songsApi = new SongDeletingApi(apiConfiguration);
 
-	const {
-		fetchApiState,
-		apiState: { loading: fetching }
-	} = useApiState();
+    const {
+        fetchApiState,
+        apiState: { loading: fetching }
+    } = useApiState();
 
-	const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [dialogOpen, setDialogOpen] = React.useState(false);
 
-	const onClick = async () => {
-		if (variant.verified) {
-			enqueueSnackbar("Nelze smazat veřejnou píseň.");
-			return;
-		}
+    const onClick = async () => {
+        if (variant.verified) {
+            enqueueSnackbar("Nelze smazat veřejnou píseň.");
+            return;
+        }
 
-		setDialogOpen(true);
-		setLoading(true);
-	};
+        setDialogOpen(true);
+        setLoading(true);
+    };
 
-	const indeedDelete = async () => {
-		fetchApiState(
-			async () => {
-				return handleApiCall(
-					songsApi.songDeletingControllerDelete(variant.guid)
-				);
-			},
-			(result) => {
-				enqueueSnackbar(
-					`Píseň ${
-						(variant.preferredTitle && " ") || ""
-					}byla smazána.`
-				);
-				reloadSong?.();
+    const indeedDelete = async () => {
+        fetchApiState(
+            async () => {
+                return handleApiCall(
+                    songsApi.songDeletingControllerDelete(variant.guid)
+                );
+            },
+            (result) => {
+                enqueueSnackbar(
+                    `Píseň ${
+                        (variant.preferredTitle && " ") || ""
+                    }byla smazána.`
+                );
+                reloadSong?.();
 
-				// back in history
-				navigate(-1);
-				setDialogOpen(false);
-			}
-		);
-	};
+                // back in history
+                navigate(-1);
+                setDialogOpen(false);
+            }
+        );
+    };
 
-	const yesClick = () => {
-		indeedDelete();
-	};
+    const yesClick = () => {
+        indeedDelete();
+    };
 
-	const noClick = () => {
-		if (fetching) return;
-		setLoading(false);
-		setDialogOpen(false);
-	};
+    const noClick = () => {
+        if (fetching) return;
+        setLoading(false);
+        setDialogOpen(false);
+    };
 
-	return (
-		<>
-			<LoadingButton
-				variant="contained"
-				color={"error"}
-				// startIcon={<Remove/>}
-				loading={loading}
-				loadingIndicator="Mazání..."
-				onClick={async () => {
-					onClick();
-				}}
-				disabled={variant.deleted}>
-				{variant.deleted ? "Smazáno" : "Smazat"}
-			</LoadingButton>
+    return (
+        <>
+            {asMenuItem ? (
+                loading ? (
+                    <MenuItem disabled>
+                        <ListItemIcon>
+                            <CircularProgress size={`1rem`} color="inherit" />
+                        </ListItemIcon>
+                        <ListItemText>Mazání...</ListItemText>
+                    </MenuItem>
+                ) : variant.deleted ? (
+                    <MenuItem>
+                        <ListItemText>Smazáno</ListItemText>
+                    </MenuItem>
+                ) : (
+                    <MenuItem
+                        onClick={onClick}
+                        sx={{
+                            color: "error.main"
+                        }}>
+                        <ListItemIcon>
+                            <Delete color="error" />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={"Odstranit"}
+                            secondary={"Odstranit píseň"}
+                        />
+                    </MenuItem>
+                )
+            ) : (
+                <LoadingButton
+                    variant="contained"
+                    color={"error"}
+                    // startIcon={<Remove/>}
+                    loading={loading}
+                    loadingIndicator="Mazání..."
+                    onClick={async () => {
+                        onClick();
+                    }}
+                    disabled={variant.deleted}>
+                    {variant.deleted ? "Smazáno" : "Smazat"}
+                </LoadingButton>
+            )}
 
-			<Dialog open={dialogOpen} onClose={noClick}>
-				<DialogTitle>Opravdu chcete smazat píseň?</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						{fetching
-							? "Probíhá odstraňování písně..."
-							: "Píseň se smaže natrvalo."}
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button
-						variant="outlined"
-						onClick={noClick}
-						disabled={fetching}>
-						Ne
-					</Button>
-					<LoadingButton
-						loading={fetching}
-						variant="contained"
-						color="error"
-						onClick={yesClick}>
-						Ano
-					</LoadingButton>
-				</DialogActions>
-			</Dialog>
-		</>
-	);
+            <Dialog open={dialogOpen} onClose={noClick}>
+                <DialogTitle>Opravdu chcete smazat píseň?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {fetching
+                            ? "Probíhá odstraňování písně..."
+                            : "Píseň se smaže natrvalo."}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="outlined"
+                        onClick={noClick}
+                        disabled={fetching}>
+                        Ne
+                    </Button>
+                    <LoadingButton
+                        loading={fetching}
+                        variant="contained"
+                        color="error"
+                        onClick={yesClick}>
+                        Ano
+                    </LoadingButton>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
 }

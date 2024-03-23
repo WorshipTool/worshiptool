@@ -1,5 +1,11 @@
 import { Cyclone, DonutLarge, EggAlt } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import {
+    Button,
+    CircularProgress,
+    ListItemIcon,
+    ListItemText,
+    MenuItem
+} from "@mui/material";
 import React from "react";
 import { useApi } from "../../../../hooks/api/useApi";
 import { useApiState } from "../../../../tech/ApiState";
@@ -11,6 +17,7 @@ import { getVariantUrl } from "../../../../routes/routes";
 
 export type CreateCopyButtonProps = {
     variantGuid: string;
+    asMenuItem?: boolean;
 };
 
 export default function CreateCopyButton(props: CreateCopyButtonProps) {
@@ -36,10 +43,21 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
         );
     };
 
-    return (
+    return props.asMenuItem ? (
+        <MenuItem>
+            <ListItemIcon sx={{}}>
+                {apiState.loading ? (
+                    <CircularProgress size={`1rem`} color="inherit" />
+                ) : (
+                    <EggAlt color="inherit" />
+                )}
+            </ListItemIcon>
+            <ListItemText primary="Vytvořit kopii" />
+        </MenuItem>
+    ) : (
         <LoadingButton
             color="success"
-            variant="outlined"
+            variant="contained"
             startIcon={<EggAlt />}
             loading={apiState.loading}
             onClick={onClick}>

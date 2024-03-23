@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import TransposePanel from "./TransposePanel";
-import { Box, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import useAuth from "../../../hooks/auth/useAuth";
 import VerifyButton from "./components/VerifyButton";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
@@ -27,6 +27,7 @@ import CreateCopyButton from "./components/CreateCopyButton";
 import { SongDto, SongVariantDto } from "../../../api/dtos";
 import { useNavigate } from "react-router-dom";
 import { getVariantUrl } from "../../../routes/routes";
+import SongsOptionsButton from "./components/SongsOptionsButton";
 
 interface TopPanelProps {
     transpose: (i: number) => void;
@@ -39,6 +40,7 @@ interface TopPanelProps {
     // variantIndex: number
     // onChangeVariant: (i:number)=>void,
     onEditClick?: (editable: boolean) => Promise<void>;
+    cancelEditing: () => void;
     isInEditMode?: boolean;
 }
 
@@ -109,6 +111,13 @@ export default function TopPanel(props: TopPanelProps) {
                 <>
                     <Box flex={1} />
 
+                    <Button
+                        onClick={() => props.cancelEditing()}
+                        color="info"
+                        variant="outlined">
+                        Zrušit
+                    </Button>
+
                     <EditButton
                         onClick={onEditClick}
                         inEditMode={props.isInEditMode}
@@ -118,40 +127,10 @@ export default function TopPanel(props: TopPanelProps) {
                     />
                 </>
             ) : props.variant.deleted ? (
-                <>
-                    {/* {isAdmin() && props.song.variants.length > 1 && (
-						<Box
-							sx={{
-								[theme.breakpoints.down("md")]: {
-									display: "none"
-								}
-							}}>
-							<ChangeVariant
-								index={props.variantIndex}
-								onChange={props.onChangeVariant}
-								variants={props.song.variants}
-							/>
-						</Box>
-					)} */}
-                </>
+                <></>
             ) : (
                 <>
                     <TransposePanel transpose={props.transpose} />
-
-                    {/* {isAdmin() && props.song.variants.length > 1 && (
-						<Box
-							sx={{
-								[theme.breakpoints.down("md")]: {
-									display: "none"
-								}
-							}}>
-							<ChangeVariant
-								index={props.variantIndex}
-								onChange={props.onChangeVariant}
-								variants={props.song.variants}
-							/>
-						</Box>
-					)} */}
 
                     {(isAdmin() || isTrustee()) && !saving && (
                         <Box
@@ -169,7 +148,18 @@ export default function TopPanel(props: TopPanelProps) {
 
                     <Box flex={1} />
 
-                    {isLoggedIn() && (
+                    <SongsOptionsButton
+                        reloadSong={props.reloadSong}
+                        variant={props.variant}
+                        sheet={props.sheet}
+                        song={props.song}
+                        onEditClick={onEditClick}
+                        isInEditMode={props.isInEditMode}
+                        saving={saving}
+                        editedTitle={props.editedTitle}
+                        isOwner={isOwner}
+                    />
+                    {isLoggedIn() && !isOwner && (
                         <CreateCopyButton variantGuid={props.variant.guid} />
                     )}
 
@@ -178,15 +168,8 @@ export default function TopPanel(props: TopPanelProps) {
                             sx={{
                                 [theme.breakpoints.down("md")]: {
                                     display: "none"
-                                },
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 1
+                                }
                             }}>
-                            <DeleteButton
-                                reloadSong={props.reloadSong}
-                                variant={props.variant}
-                            />
                             <EditButton
                                 onClick={onEditClick}
                                 inEditMode={props.isInEditMode}
@@ -195,26 +178,6 @@ export default function TopPanel(props: TopPanelProps) {
                                     props.sheet?.getOriginalSheetData() || ""
                                 }
                                 title={props.editedTitle}
-                            />
-                        </Box>
-                    )}
-
-                    {isAdmin() && (
-                        <Box
-                            sx={{
-                                [theme.breakpoints.down("lg")]: {
-                                    display: "none"
-                                }
-                            }}>
-                            <SheetAdminButtons
-                                sheet={props.sheet}
-                                song={props.song}
-                                reload={props.reloadSong}
-                                variant={props.variant}
-                                onEditClick={onEditClick}
-                                isInEditMode={props.isInEditMode}
-                                editLoading={saving}
-                                editedTitle={props.editedTitle}
                             />
                         </Box>
                     )}

@@ -1,29 +1,30 @@
 import {
-	CheckCircle,
-	PlaylistAdd,
-	Add,
-	KeyboardArrowDown,
-	MoreHoriz,
-	CopyAll,
-	VideoFile,
-	Tag,
-	VerifiedUser
+    CheckCircle,
+    PlaylistAdd,
+    Add,
+    KeyboardArrowDown,
+    MoreHoriz,
+    CopyAll,
+    VideoFile,
+    Tag,
+    VerifiedUser,
+    AdminPanelSettings
 } from "@mui/icons-material";
 import {
-	Box,
-	Button,
-	ButtonGroup,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	Divider,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Paper,
-	useTheme
+    Box,
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Paper,
+    useTheme
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
@@ -38,163 +39,169 @@ import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { SongDto, SongVariantDto } from "../../../../api/dtos";
+import AdminPanel from "../../../Account/AdminPanel/AdminPanel";
 
 interface AddToPlaylistButtonProps {
-	sheet: Sheet;
-	song: SongDto;
-	reload: () => void;
-	variant: SongVariantDto;
-	onEditClick: (editable: boolean) => void;
-	isInEditMode?: boolean;
-	editLoading: boolean;
-	editedTitle: string;
+    sheet: Sheet;
+    song: SongDto;
+    reload: () => void;
+    variant: SongVariantDto;
+    onEditClick: (editable: boolean) => void;
+    isInEditMode?: boolean;
+    editLoading: boolean;
+    editedTitle: string;
 }
 
 export default function SheetAdminButtons({
-	sheet,
-	song,
-	reload,
-	variant,
-	onEditClick,
-	isInEditMode,
-	editLoading,
-	editedTitle
+    sheet,
+    song,
+    reload,
+    variant,
+    onEditClick,
+    isInEditMode,
+    editLoading,
+    editedTitle
 }: AddToPlaylistButtonProps) {
-	const { isAdmin, user, apiConfiguration } = useAuth();
+    const { isAdmin, user, apiConfiguration } = useAuth();
 
-	const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		setOpen(true);
-		setAnchorEl(event.currentTarget);
-	};
+    const handleClick = (event: any) => {
+        setOpen(true);
+        setAnchorEl(event.currentTarget);
+    };
 
-	const handleClose = () => {
-		setOpen(false);
-		setAnchorEl(null);
-	};
+    const handleClose = () => {
+        setOpen(false);
+        setAnchorEl(null);
+    };
 
-	const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
-	const [addVideoOpen, setAddVideoOpen] = useState(false);
-	const [addTagOpen, setAddTagOpen] = useState(false);
-	const [addCreatorOpen, setAddCreatorOpen] = useState(false);
+    const [addVideoOpen, setAddVideoOpen] = useState(false);
+    const [addTagOpen, setAddTagOpen] = useState(false);
+    const [addCreatorOpen, setAddCreatorOpen] = useState(false);
 
-	const onCopyClick = () => {
-		navigator.clipboard.writeText(sheet?.getOriginalSheetData() || "");
-		enqueueSnackbar("Data písně byla zkopírována do schránky");
-	};
+    const onCopyClick = () => {
+        navigator.clipboard.writeText(sheet?.getOriginalSheetData() || "");
+        enqueueSnackbar("Data písně byla zkopírována do schránky");
+    };
 
-	const addCreator = () => {
-		setAddCreatorOpen(true);
-		handleClose();
-	};
+    const addCreator = () => {
+        setAddCreatorOpen(true);
+        handleClose();
+    };
 
-	const addVideo = () => {
-		setAddVideoOpen(true);
-		handleClose();
-	};
+    const addVideo = () => {
+        setAddVideoOpen(true);
+        handleClose();
+    };
 
-	const addTag = () => {
-		setAddTagOpen(true);
-		handleClose();
-	};
+    const addTag = () => {
+        setAddTagOpen(true);
+        handleClose();
+    };
 
-	const theme = useTheme();
+    const theme = useTheme();
 
-	return (
-		<div>
-			<Button
-				onClick={handleClick}
-				variant="contained"
-				color={"secondary"}
-				endIcon={<KeyboardArrowDown />}>
-				Admin
-			</Button>
-			<Menu
-				id="basic-menu"
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					"aria-labelledby": "basic-button"
-				}}>
-				<Buttons13ka variant={variant} />
+    return (
+        <div>
+            <MenuItem onClick={handleClick}>
+                <ListItemIcon>
+                    <AdminPanelSettings />
+                </ListItemIcon>
+                <ListItemText>Admin</ListItemText>
+            </MenuItem>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                }}
+                open={open}
+                onClose={handleClose}>
+                <Buttons13ka variant={variant} />
 
-				{isAdmin() && variant.createdByLoader && (
-					<ButtonGroup
-						orientation="horizontal"
-						sx={{
-							paddingX: theme.spacing(1)
-						}}>
-						<DeleteButton reloadSong={reload} variant={variant} />
-						<EditButton
-							onClick={onEditClick}
-							inEditMode={isInEditMode}
-							loading={editLoading}
-							sheetData={sheet?.getOriginalSheetData() || ""}
-							title={editedTitle}
-						/>
-					</ButtonGroup>
-				)}
+                {isAdmin() && variant.createdByLoader && (
+                    <>
+                        <ButtonGroup
+                            orientation="horizontal"
+                            sx={{
+                                paddingX: theme.spacing(1)
+                            }}>
+                            <DeleteButton
+                                reloadSong={reload}
+                                variant={variant}
+                            />
+                            <EditButton
+                                onClick={onEditClick}
+                                inEditMode={isInEditMode}
+                                loading={editLoading}
+                                sheetData={sheet?.getOriginalSheetData() || ""}
+                                title={editedTitle}
+                            />
+                        </ButtonGroup>
 
-				<Divider />
+                        <Divider />
+                    </>
+                )}
 
-				<MenuItem onClick={onCopyClick}>
-					<ListItemIcon>
-						<CopyAll fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Zkopírovat</ListItemText>
-				</MenuItem>
+                <MenuItem onClick={onCopyClick}>
+                    <ListItemIcon>
+                        <CopyAll fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Zkopírovat</ListItemText>
+                </MenuItem>
 
-				<MenuItem onClick={addCreator}>
-					<ListItemIcon>
-						<VerifiedUser fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat autora</ListItemText>
-				</MenuItem>
+                <MenuItem onClick={addCreator}>
+                    <ListItemIcon>
+                        <VerifiedUser fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Přidat autora</ListItemText>
+                </MenuItem>
 
-				<MenuItem onClick={addVideo}>
-					<ListItemIcon>
-						<VideoFile fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat video</ListItemText>
-				</MenuItem>
+                <MenuItem onClick={addVideo}>
+                    <ListItemIcon>
+                        <VideoFile fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Přidat video</ListItemText>
+                </MenuItem>
 
-				<MenuItem onClick={addTag}>
-					<ListItemIcon>
-						<Tag fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat tag</ListItemText>
-				</MenuItem>
-			</Menu>
+                <MenuItem onClick={addTag}>
+                    <ListItemIcon>
+                        <Tag fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Přidat tag</ListItemText>
+                </MenuItem>
+            </Menu>
 
-			<AddVideo
-				open={addVideoOpen}
-				handleClose={() => setAddVideoOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload();
-				}}
-			/>
-			<AddTag
-				open={addTagOpen}
-				handleClose={() => setAddTagOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload();
-				}}
-			/>
-			<AddCreator
-				open={addCreatorOpen}
-				handleClose={() => setAddCreatorOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload();
-				}}
-			/>
-		</div>
-	);
+            <AddVideo
+                open={addVideoOpen}
+                handleClose={() => setAddVideoOpen(false)}
+                songGuid={song?.guid}
+                afterUpload={() => {
+                    reload();
+                }}
+            />
+            <AddTag
+                open={addTagOpen}
+                handleClose={() => setAddTagOpen(false)}
+                songGuid={song?.guid}
+                afterUpload={() => {
+                    reload();
+                }}
+            />
+            <AddCreator
+                open={addCreatorOpen}
+                handleClose={() => setAddCreatorOpen(false)}
+                songGuid={song?.guid}
+                afterUpload={() => {
+                    reload();
+                }}
+            />
+        </div>
+    );
 }
