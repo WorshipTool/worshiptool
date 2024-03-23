@@ -4,7 +4,7 @@ import useSong from '../../../hooks/song/useSong'
 import { getUrl_DELETEVARIANT, getUrl_VERIFYVARIANT } from '../../../api/urls';
 import useAuth from '../../../hooks/auth/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { SongsApi } from '../../../api/generated';
+import { SongDeletingApi, SongsApi } from '../../../api/generated';
 import { handleApiCall } from '../../../tech/handleApiCall';
 
 export interface SongVerifyProps{
@@ -21,6 +21,7 @@ export default function SongVerify({guid, afterClick}:SongVerifyProps) {
 
     const {isAdmin, apiConfiguration} = useAuth();
     const songsApi = new SongsApi(apiConfiguration);
+    const deleteApi = new SongDeletingApi(apiConfiguration);
 
     
     const [popupOpen, setPopupOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function SongVerify({guid, afterClick}:SongVerifyProps) {
     }
     const deleteSong = () => {
         if(!song)return;
-        handleApiCall(songsApi.songsControllerDelete(song.guid))
+        handleApiCall(deleteApi.songDeletingControllerDelete(song.guid))
         .then((r)=>{
             afterClick();
         })
