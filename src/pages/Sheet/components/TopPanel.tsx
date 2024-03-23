@@ -169,7 +169,9 @@ export default function TopPanel(props: TopPanelProps) {
 
                     <Box flex={1} />
 
-                    <CreateCopyButton variantGuid={props.variant.guid} />
+                    {isLoggedIn() && (
+                        <CreateCopyButton variantGuid={props.variant.guid} />
+                    )}
 
                     {isOwner && (
                         <Box

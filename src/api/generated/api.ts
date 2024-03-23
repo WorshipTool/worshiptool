@@ -389,6 +389,12 @@ export interface ListSongData {
      * @memberof ListSongData
      */
     'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ListSongData
+     */
+    'alias': string;
 }
 /**
  * 
