@@ -115,6 +115,25 @@ export type CreatorDTOTypeEnum = typeof CreatorDTOTypeEnum[keyof typeof CreatorD
 /**
  * 
  * @export
+ * @interface EditVariantOutDto
+ */
+export interface EditVariantOutDto {
+    /**
+     * 
+     * @type {SongVariant}
+     * @memberof EditVariantOutDto
+     */
+    'variant': SongVariant;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditVariantOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface GetCountResult
  */
 export interface GetCountResult {
@@ -217,15 +236,58 @@ export interface GetSearchInPlaylistResult {
 /**
  * 
  * @export
+ * @interface GetSongDataOutDto
+ */
+export interface GetSongDataOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSongDataOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSongDataOutDto
+     */
+    'mainTitle': string;
+    /**
+     * 
+     * @type {Array<SongDataCreator>}
+     * @memberof GetSongDataOutDto
+     */
+    'creators': Array<SongDataCreator>;
+    /**
+     * 
+     * @type {Array<SongDataVariant>}
+     * @memberof GetSongDataOutDto
+     */
+    'variants': Array<SongDataVariant>;
+    /**
+     * 
+     * @type {Array<SongDataMedia>}
+     * @memberof GetSongDataOutDto
+     */
+    'media': Array<SongDataMedia>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetSongDataOutDto
+     */
+    'tags': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface GetSongListOfUserResult
  */
 export interface GetSongListOfUserResult {
     /**
      * 
-     * @type {Array<SongVariantDTO>}
+     * @type {Array<SongDataVariant>}
      * @memberof GetSongListOfUserResult
      */
-    'variants': Array<SongVariantDTO>;
+    'variants': Array<SongDataVariant>;
 }
 /**
  * 
@@ -495,6 +557,12 @@ export interface NewSongDataProcessResult {
      * @memberof NewSongDataProcessResult
      */
     'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewSongDataProcessResult
+     */
+    'alias': string;
 }
 /**
  * 
@@ -647,10 +715,10 @@ export interface PlaylistItemDTO {
     'order': number;
     /**
      * 
-     * @type {SongVariantDTO}
+     * @type {SongVariantDto}
      * @memberof PlaylistItemDTO
      */
-    'variant': SongVariantDTO;
+    'variant': SongVariantDto;
 }
 /**
  * 
@@ -745,6 +813,25 @@ export interface PostCreateCopyInDto {
      * @memberof PostCreateCopyInDto
      */
     'variantGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface PostCreateCopyOutDto
+ */
+export interface PostCreateCopyOutDto {
+    /**
+     * 
+     * @type {SongVariant}
+     * @memberof PostCreateCopyOutDto
+     */
+    'variant': SongVariant;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateCopyOutDto
+     */
+    'alias': string;
 }
 /**
  * 
@@ -1072,10 +1159,16 @@ export interface SearchSongData {
     'guid': string;
     /**
      * 
-     * @type {SongVariantDTO}
+     * @type {SongDataVariant}
      * @memberof SearchSongData
      */
-    'variant': SongVariantDTO;
+    'variant': SongDataVariant;
+    /**
+     * 
+     * @type {string}
+     * @memberof SearchSongData
+     */
+    'alias': string;
 }
 /**
  * 
@@ -1283,6 +1376,12 @@ export interface SongDataVariant {
      * @type {string}
      * @memberof SongDataVariant
      */
+    'songGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
     'prefferedTitle': string;
     /**
      * 
@@ -1313,7 +1412,7 @@ export interface SongDataVariant {
      * @type {string}
      * @memberof SongDataVariant
      */
-    'createdBy': string;
+    'createdByGuid': string;
     /**
      * 
      * @type {boolean}
@@ -1322,23 +1421,44 @@ export interface SongDataVariant {
     'createdByLoader': boolean;
     /**
      * 
-     * @type {Array<SongDataSource>}
+     * @type {Array<SourceDTO>}
      * @memberof SongDataVariant
      */
-    'sources': Array<SongDataSource>;
+    'sources': Array<SourceDTO>;
     /**
      * 
-     * @type {Array<SongDataCreator>}
+     * @type {Array<CreatorDTO>}
      * @memberof SongDataVariant
      */
-    'creators': Array<SongDataCreator>;
+    'creators': Array<CreatorDTO>;
     /**
      * 
      * @type {boolean}
      * @memberof SongDataVariant
      */
     'deleted': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof SongDataVariant
+     */
+    'createdType': SongDataVariantCreatedTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'alias': string;
 }
+
+export const SongDataVariantCreatedTypeEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type SongDataVariantCreatedTypeEnum = typeof SongDataVariantCreatedTypeEnum[keyof typeof SongDataVariantCreatedTypeEnum];
+
 /**
  * 
  * @export
@@ -1497,96 +1617,102 @@ export type SongVariantCreatedTypeEnum = typeof SongVariantCreatedTypeEnum[keyof
 /**
  * 
  * @export
- * @interface SongVariantDTO
+ * @interface SongVariantDto
  */
-export interface SongVariantDTO {
+export interface SongVariantDto {
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'guid': string;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'songGuid': string;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'prefferedTitle': string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'titles': Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'sheetData': string;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'sheetText': string;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'verified': boolean;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'createdByGuid': string;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'createdByLoader': boolean;
     /**
      * 
      * @type {Array<SourceDTO>}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'sources': Array<SourceDTO>;
     /**
      * 
      * @type {Array<CreatorDTO>}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'creators': Array<CreatorDTO>;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
     'deleted': boolean;
     /**
      * 
      * @type {number}
-     * @memberof SongVariantDTO
+     * @memberof SongVariantDto
      */
-    'createdType': SongVariantDTOCreatedTypeEnum;
+    'createdType': SongVariantDtoCreatedTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDto
+     */
+    'alias': string;
 }
 
-export const SongVariantDTOCreatedTypeEnum = {
+export const SongVariantDtoCreatedTypeEnum = {
     NUMBER_0: 0,
     NUMBER_1: 1,
     NUMBER_2: 2
 } as const;
 
-export type SongVariantDTOCreatedTypeEnum = typeof SongVariantDTOCreatedTypeEnum[keyof typeof SongVariantDTOCreatedTypeEnum];
+export type SongVariantDtoCreatedTypeEnum = typeof SongVariantDtoCreatedTypeEnum[keyof typeof SongVariantDtoCreatedTypeEnum];
 
 /**
  * 
@@ -4228,7 +4354,7 @@ export const SongAddingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SongVariant>> {
+        async songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreateCopyOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerCreateCopy(postCreateCopyInDto, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['SongAddingApi.songAddingControllerCreateCopy']?.[index]?.url;
@@ -4250,7 +4376,7 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: any): AxiosPromise<SongVariant> {
+        songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: any): AxiosPromise<PostCreateCopyOutDto> {
             return localVarFp.songAddingControllerCreateCopy(postCreateCopyInDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -4515,7 +4641,7 @@ export const SongEditingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EditVariantOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songEditingControllerEditVariant(postEditVariantInDto, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['SongEditingApi.songEditingControllerEditVariant']?.[index]?.url;
@@ -4537,7 +4663,7 @@ export const SongEditingApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: any): AxiosPromise<void> {
+        songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: any): AxiosPromise<EditVariantOutDto> {
             return localVarFp.songEditingControllerEditVariant(postEditVariantInDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -4559,6 +4685,113 @@ export class SongEditingApi extends BaseAPI {
      */
     public songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: RawAxiosRequestConfig) {
         return SongEditingApiFp(this.configuration).songEditingControllerEditVariant(postEditVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongGettingApi - axios parameter creator
+ * @export
+ */
+export const SongGettingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetSongDataByVariantGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'guid' is not null or undefined
+            assertParamExists('songGettingControllerGetSongDataByVariantGuid', 'guid', guid)
+            const localVarPath = `/song/ofvariant/{guid}`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (guid !== undefined) {
+                localVarQueryParameter['guid'] = guid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongGettingApi - functional programming interface
+ * @export
+ */
+export const SongGettingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongGettingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetSongDataByVariantGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSongDataOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetSongDataByVariantGuid(guid, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['SongGettingApi.songGettingControllerGetSongDataByVariantGuid']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongGettingApi - factory interface
+ * @export
+ */
+export const SongGettingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongGettingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetSongDataByVariantGuid(guid: string, options?: any): AxiosPromise<GetSongDataOutDto> {
+            return localVarFp.songGettingControllerGetSongDataByVariantGuid(guid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongGettingApi - object-oriented interface
+ * @export
+ * @class SongGettingApi
+ * @extends {BaseAPI}
+ */
+export class SongGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} guid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetSongDataByVariantGuid(guid: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetSongDataByVariantGuid(guid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5575,7 +5808,7 @@ export const SongsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerGetRandomVariant(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SongVariantDTO>> {
+        async songsControllerGetRandomVariant(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SongDataVariant>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetRandomVariant(options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['SongsApi.songsControllerGetRandomVariant']?.[index]?.url;
@@ -5860,7 +6093,7 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerGetRandomVariant(options?: any): AxiosPromise<SongVariantDTO> {
+        songsControllerGetRandomVariant(options?: any): AxiosPromise<SongDataVariant> {
             return localVarFp.songsControllerGetRandomVariant(options).then((request) => request(axios, basePath));
         },
         /**
@@ -6300,6 +6533,110 @@ export const SongsControllerGetByQueryKeyEnum = {
     LoaderUnverified: 'loaderUnverified'
 } as const;
 export type SongsControllerGetByQueryKeyEnum = typeof SongsControllerGetByQueryKeyEnum[keyof typeof SongsControllerGetByQueryKeyEnum];
+
+
+/**
+ * UrlAliasApi - axios parameter creator
+ * @export
+ */
+export const UrlAliasApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        urlAliasControllerGetVariantFromAlias: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('urlAliasControllerGetVariantFromAlias', 'alias', alias)
+            const localVarPath = `/alias/variant/{alias}`
+                .replace(`{${"alias"}}`, encodeURIComponent(String(alias)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UrlAliasApi - functional programming interface
+ * @export
+ */
+export const UrlAliasApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UrlAliasApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async urlAliasControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.urlAliasControllerGetVariantFromAlias(alias, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UrlAliasApi.urlAliasControllerGetVariantFromAlias']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * UrlAliasApi - factory interface
+ * @export
+ */
+export const UrlAliasApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UrlAliasApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        urlAliasControllerGetVariantFromAlias(alias: string, options?: any): AxiosPromise<string> {
+            return localVarFp.urlAliasControllerGetVariantFromAlias(alias, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UrlAliasApi - object-oriented interface
+ * @export
+ * @class UrlAliasApi
+ * @extends {BaseAPI}
+ */
+export class UrlAliasApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} alias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UrlAliasApi
+     */
+    public urlAliasControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig) {
+        return UrlAliasApiFp(this.configuration).urlAliasControllerGetVariantFromAlias(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 
 /**

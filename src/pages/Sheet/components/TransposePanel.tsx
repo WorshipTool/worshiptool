@@ -1,7 +1,7 @@
 import { Add, Remove } from '@mui/icons-material';
 import { Box, Button, IconButton, Typography, alpha, styled } from '@mui/material';
 import React from 'react'
-import Gap from '../../components/Gap';
+import Gap from '../../../components/Gap';
 
 const StyledButton = styled(IconButton)(({theme})=>({
     color:"black",

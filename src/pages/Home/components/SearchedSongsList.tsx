@@ -1,28 +1,46 @@
-import { LoadingButton, Masonry } from '@mui/lab';
-import { Box, Button, CircularProgress, Grid, LinearProgress, Typography, useTheme } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
-import usePagination from '../../../hooks/usePagination';
-import { useIsInViewport } from '../../../hooks/useIsInViewport';
-import Gap from '../../../components/Gap';
-import useSongSearch from '../../../hooks/song/useSongSearch';
-import { SearchSongDataDTO, SongSearchResultDTO } from '../../../api/dtos/dtosSong';
-import { grey } from '@mui/material/colors';
-import normalizeSearchText from '../../../tech/normalizeSearchText';
-import ContainerGrid from '../../../components/ContainerGrid';
-import { mapApiToVariant } from '../../../api/dtos/variant/mapApiToVariant';
-import { VariantDTO } from '../../../interfaces/variant/VariantDTO';
-import { useNavigate } from 'react-router-dom';
-import OnChangeDelayer from '../../../components/ChangeDelayer';
-import SongListCards from '../../../components/songLists/SongListCards/SongListCards';
-import { Downloading, Sync } from '@mui/icons-material';
-import { SearchResult, SearchSongData } from '../../../api/generated';
+import { LoadingButton, Masonry } from "@mui/lab";
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Grid,
+    LinearProgress,
+    Typography,
+    useTheme
+} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import usePagination from "../../../hooks/usePagination";
+import { useIsInViewport } from "../../../hooks/useIsInViewport";
+import Gap from "../../../components/Gap";
+import useSongSearch from "../../../hooks/song/useSongSearch";
+import {
+    SearchSongDataDTO,
+    SongSearchResultDTO
+} from "../../../api/dtos/dtosSong";
+import { grey } from "@mui/material/colors";
+import normalizeSearchText from "../../../tech/normalizeSearchText";
+import ContainerGrid from "../../../components/ContainerGrid";
+import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
+import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
+import { useNavigate } from "react-router-dom";
+import OnChangeDelayer from "../../../components/ChangeDelayer";
+import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
+import { Downloading, Sync } from "@mui/icons-material";
+import { SearchResult, SearchSongData } from "../../../api/generated";
+import {
+    mapSearchSongDataApiToSongVariantDto,
+    SongVariantDto
+} from "../../../api/dtos";
+import { getVariantUrl } from "../../../routes/routes";
 
-interface SearchedSongsListProps{
-    searchString: string
+interface SearchedSongsListProps {
+    searchString: string;
 }
 const controller = new AbortController();
 
-export default function SearchedSongsList({searchString} : SearchedSongsListProps) {    
+export default function SearchedSongsList({
+    searchString
+}: SearchedSongsListProps) {
     const theme = useTheme();
     const loadNextLevelRef = useRef(null);
     const isInViewport = useIsInViewport(loadNextLevelRef, "100px");
@@ -32,97 +50,122 @@ export default function SearchedSongsList({searchString} : SearchedSongsListProp
     const [enableLoadNext, setEnableLoadNext] = useState<boolean>(false);
 
     const searchSongs = useSongSearch();
-    const {nextPage: loadNext, loadPage, data: songs, nextExists} = usePagination<SearchSongData>((page, resolve, arr)=>{
+    const {
+        nextPage: loadNext,
+        loadPage,
+        data: songs,
+        nextExists
+    } = usePagination<SearchSongData>((page, resolve, arr) => {
         // controller.abort();
-        searchSongs({searchKey: searchString, page, signal: controller.signal}).then((data)=>{
-            console.log("found")   
+        searchSongs({
+            searchKey: searchString,
+            page,
+            signal: controller.signal
+        }).then((data) => {
+            console.log("found");
             setLoading(false);
             setNextLoading(false);
-            resolve(data.songs.filter((v)=>{
-                return !arr.find((s)=>s.guid==v.guid);
-            }));
-
-        })
-
+            resolve(
+                data.songs.filter((v) => {
+                    return !arr.find((s) => s.guid == v.guid);
+                })
+            );
+        });
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         setEnableLoadNext(false);
         setLoading(true);
-    },[searchString])
+    }, [searchString]);
 
-    useEffect(()=>{
-        if(!enableLoadNext) return;
-        if(!isInViewport) return;
-        if(songs.length>0&&nextExists){
+    useEffect(() => {
+        if (!enableLoadNext) return;
+        if (!isInViewport) return;
+        if (songs.length > 0 && nextExists) {
             setNextLoading(true);
             loadNext();
         }
-    },[isInViewport])
- 
+    }, [isInViewport]);
 
     const navigate = useNavigate();
 
-    const onCardClick = (variant: VariantDTO) => {
-        navigate("/song/"+variant.songGuid, {state:{
-            title: variant.preferredTitle 
-        }})
-    }
+    const onCardClick = (variant: SongVariantDto) => {
+        navigate(getVariantUrl(variant.alias), {
+            state: {
+                title: variant.preferredTitle
+            }
+        });
+    };
 
+    return (
+        <ContainerGrid direction="column">
+            <OnChangeDelayer
+                value={normalizeSearchText(searchString)}
+                onChange={() => {
+                    setLoading(true);
+                    loadPage(0, true).then(() => {
+                        setEnableLoadNext(true);
+                    });
+                    console.log("searching");
+                }}
+            />
 
-  return (
-    <ContainerGrid direction='column'>
+            <>
+                <Typography fontWeight={"bold"}>
+                    Výsledky vyhledávání:
+                </Typography>
 
-        <OnChangeDelayer value={normalizeSearchText(searchString)} onChange={()=>{
-            setLoading(true);
-            loadPage(0, true).then(()=>{
-                setEnableLoadNext(true);
-            })
-            console.log("searching")   
-        }}/>
+                {!loading && songs.length > 0 && (
+                    <SongListCards
+                        variants={songs.map((s) =>
+                            mapSearchSongDataApiToSongVariantDto(s)
+                        )}
+                        onClick={onCardClick}></SongListCards>
+                )}
+            </>
 
-        <>                       
-            <Typography fontWeight={"bold"}>Výsledky vyhledávání:</Typography>
-        
-            {!loading&&songs.length>0&&<SongListCards variants={songs.map(s=>mapApiToVariant(s.variant))} onClick={onCardClick}></SongListCards>}
-        </>
-        
-        <div ref={loadNextLevelRef}></div>
+            <div ref={loadNextLevelRef}></div>
 
-        
-        {loading&&<>
-            <LinearProgress sx={{color: grey[500]}} color={"inherit"}/>
-        </>}
-        
+            {loading && (
+                <>
+                    <LinearProgress
+                        sx={{ color: grey[500] }}
+                        color={"inherit"}
+                    />
+                </>
+            )}
 
-        <>
-            {!loading&&songs.length>0&&nextExists&&<>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
-                    <LoadingButton 
-                        loading={nextLoading}
-                        loadingPosition='start'
-                        onClick={()=>{loadNext()}}
-                        startIcon={<Sync/>}>
-                        Načíst další
-                    </LoadingButton>
-                </Box>
-            </>}
-        </>
+            <>
+                {!loading && songs.length > 0 && nextExists && (
+                    <>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                            <LoadingButton
+                                loading={nextLoading}
+                                loadingPosition="start"
+                                onClick={() => {
+                                    loadNext();
+                                }}
+                                startIcon={<Sync />}>
+                                Načíst další
+                            </LoadingButton>
+                        </Box>
+                    </>
+                )}
+            </>
 
-        {!loading&&songs.length<1&&<>
-            <Typography>Nic jsme nenašli...</Typography>            
-        </>}
-        
+            {!loading && songs.length < 1 && (
+                <>
+                    <Typography>Nic jsme nenašli...</Typography>
+                </>
+            )}
 
-        <Gap/>
-
-            
-
-    </ContainerGrid>
-  )
+            <Gap />
+        </ContainerGrid>
+    );
 }
