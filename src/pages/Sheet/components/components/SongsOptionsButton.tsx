@@ -24,6 +24,8 @@ import CreateCopyButton from "./CreateCopyButton";
 import useAuth from "../../../../hooks/auth/useAuth";
 import SheetAdminButtons from "./SheetAdminButtons";
 import { Sheet } from "@pepavlin/sheet-api";
+import AddToPlaylistButton from "./AddToPlaylistButton/AddToPlaylistButton";
+import EditButton from "./EditButton";
 
 type SongsOptionsButtonProps = {
     reloadSong: () => void;
@@ -51,7 +53,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
         setAnchorEl(null);
     };
 
-    const { isAdmin } = useAuth();
+    const { isAdmin, isLoggedIn } = useAuth();
     const theme = useTheme();
 
     return (
@@ -66,11 +68,44 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}>
-                {props.isOwner && (
-                    <CreateCopyButton
-                        variantGuid={props.variant.guid}
-                        asMenuItem
-                    />
+                {isLoggedIn() && (
+                    <>
+                        {props.isOwner && (
+                            <Box
+                                sx={{
+                                    [theme.breakpoints.up("md")]: {
+                                        display: "none"
+                                    }
+                                }}>
+                                <EditButton
+                                    inEditMode={props.isInEditMode}
+                                    sheetData={props.variant.sheetData}
+                                    title={props.variant.preferredTitle}
+                                    loading={props.saving}
+                                    asMenuItem
+                                    onClick={props.onEditClick}
+                                />
+                            </Box>
+                        )}
+                        {props.isOwner && (
+                            <CreateCopyButton
+                                variantGuid={props.variant.guid}
+                                asMenuItem
+                            />
+                        )}
+
+                        <Box
+                            sx={{
+                                [theme.breakpoints.up("sm")]: {
+                                    display: "none"
+                                }
+                            }}>
+                            <AddToPlaylistButton
+                                variant={props.variant}
+                                asMenuItem
+                            />
+                        </Box>
+                    </>
                 )}
 
                 {isAdmin() && (

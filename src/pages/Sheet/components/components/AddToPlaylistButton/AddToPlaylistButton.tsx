@@ -35,10 +35,12 @@ import { SongVariantDto } from "../../../../../api/dtos";
 
 interface AddToPlaylistButtonProps {
     variant: SongVariantDto;
+    asMenuItem?: boolean;
 }
 
 export default function AddToPlaylistButton({
-    variant
+    variant,
+    asMenuItem
 }: AddToPlaylistButtonProps) {
     const [open, setOpen] = React.useState(false);
 
@@ -49,6 +51,10 @@ export default function AddToPlaylistButton({
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setOpen(true);
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClick = (event: any) => {
+        handleClick(event);
     };
 
     const handleClose = () => {
@@ -67,32 +73,34 @@ export default function AddToPlaylistButton({
     const maxItems = 4;
 
     return (
-        <div>
-            <Button
-                onClick={handleClick}
-                variant="contained"
-                endIcon={<KeyboardArrowDown />}
-                sx={{
-                    [theme.breakpoints.down("md")]: {
-                        display: "none"
-                    }
-                }}>
-                Přidat do playlistu
-            </Button>
-
-            <IconButton
-                sx={{
-                    [theme.breakpoints.up("md")]: {
-                        display: "none"
-                    }
-                }}
-                onClick={handleClick}
-                color="primary">
-                <PlaylistAddCircle />
-            </IconButton>
+        <>
+            {" "}
+            {asMenuItem ? (
+                <MenuItem onClick={handleMenuClick}>
+                    <ListItemIcon>
+                        <PlaylistAddCircle />
+                    </ListItemIcon>
+                    <ListItemText primary={"Přidat do playlistu"} />
+                </MenuItem>
+            ) : (
+                <>
+                    <Button
+                        onClick={handleClick}
+                        variant="contained"
+                        endIcon={<KeyboardArrowDown />}
+                        sx={{
+                            [theme.breakpoints.down("sm")]: {
+                                display: "none"
+                            }
+                        }}>
+                        Přidat do playlistu
+                    </Button>
+                </>
+            )}
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
@@ -146,7 +154,6 @@ export default function AddToPlaylistButton({
                     </>
                 )}
             </Menu>
-
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                 <DialogTitle>Přidat do playlistu</DialogTitle>
                 <DialogContent>
@@ -166,6 +173,6 @@ export default function AddToPlaylistButton({
                     <Button onClick={() => setOpenDialog(false)}>Zavřít</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
