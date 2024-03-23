@@ -112,7 +112,10 @@ export default function SheetAdminButtons({
                 <ListItemIcon>
                     <AdminPanelSettings />
                 </ListItemIcon>
-                <ListItemText>Admin</ListItemText>
+                <ListItemText
+                    primary={"Admin"}
+                    secondary={"Pokročilé možnosti"}
+                />
             </MenuItem>
             <Menu
                 id="basic-menu"

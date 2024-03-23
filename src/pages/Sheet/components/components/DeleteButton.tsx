@@ -97,7 +97,10 @@ export default function DeleteButton({
                         <ListItemIcon>
                             <CircularProgress size={`1rem`} color="inherit" />
                         </ListItemIcon>
-                        <ListItemText>Mazání...</ListItemText>
+                        <ListItemText
+                            primary={"Odstraňování..."}
+                            secondary={"Odstranit píseň..."}
+                        />
                     </MenuItem>
                 ) : variant.deleted ? (
                     <MenuItem>

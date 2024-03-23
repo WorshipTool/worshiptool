@@ -67,18 +67,10 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                 open={open}
                 onClose={handleClose}>
                 {props.isOwner && (
-                    <>
-                        <CreateCopyButton
-                            variantGuid={props.variant.guid}
-                            asMenuItem
-                        />
-                        <Divider />
-                        <DeleteButton
-                            reloadSong={props.reloadSong}
-                            variant={props.variant}
-                            asMenuItem
-                        />
-                    </>
+                    <CreateCopyButton
+                        variantGuid={props.variant.guid}
+                        asMenuItem
+                    />
                 )}
 
                 {isAdmin() && (
@@ -91,6 +83,14 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                         isInEditMode={props.isInEditMode}
                         editLoading={props.saving}
                         editedTitle={props.editedTitle}
+                    />
+                )}
+                {props.isOwner && <Divider />}
+                {props.isOwner && (
+                    <DeleteButton
+                        reloadSong={props.reloadSong}
+                        variant={props.variant}
+                        asMenuItem
                     />
                 )}
             </Menu>

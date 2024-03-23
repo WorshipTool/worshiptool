@@ -44,7 +44,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
     };
 
     return props.asMenuItem ? (
-        <MenuItem>
+        <MenuItem onClick={onClick} disabled={apiState.loading}>
             <ListItemIcon sx={{}}>
                 {apiState.loading ? (
                     <CircularProgress size={`1rem`} color="inherit" />
