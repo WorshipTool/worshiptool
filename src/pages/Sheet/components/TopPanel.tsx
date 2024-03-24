@@ -162,7 +162,7 @@ export default function TopPanel(props: TopPanelProps) {
                     {isLoggedIn() && !isOwner && (
                         <Box
                             sx={{
-                                [theme.breakpoints.down("sm")]: {
+                                [theme.breakpoints.down("md")]: {
                                     display: "none"
                                 }
                             }}>

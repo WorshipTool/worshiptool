@@ -1,4 +1,5 @@
 import {
+    Create,
     Settings,
     SettingsOutlined,
     SettingsRounded,
@@ -87,11 +88,23 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                                 />
                             </Box>
                         )}
-                        {props.isOwner && (
+                        {props.isOwner ? (
                             <CreateCopyButton
                                 variantGuid={props.variant.guid}
                                 asMenuItem
                             />
+                        ) : (
+                            <Box
+                                sx={{
+                                    [theme.breakpoints.up("md")]: {
+                                        display: "none"
+                                    }
+                                }}>
+                                <CreateCopyButton
+                                    variantGuid={props.variant.guid}
+                                    asMenuItem
+                                />
+                            </Box>
                         )}
 
                         <Box
