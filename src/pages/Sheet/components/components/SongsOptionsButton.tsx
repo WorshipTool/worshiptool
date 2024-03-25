@@ -1,5 +1,6 @@
 import {
     Create,
+    Dashboard,
     Settings,
     SettingsOutlined,
     SettingsRounded,
@@ -38,6 +39,7 @@ type SongsOptionsButtonProps = {
     saving: boolean;
     editedTitle: string;
     isOwner: boolean;
+    anyChange: boolean;
 };
 
 export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
@@ -59,11 +61,13 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 
     return (
         <>
-            <Tooltip title={"Další možnosti"}>
-                <IconButton onClick={handleClick}>
-                    <Settings />
-                </IconButton>
-            </Tooltip>
+            {isLoggedIn() && (
+                <Tooltip title={"Další možnosti"}>
+                    <IconButton onClick={handleClick}>
+                        <Settings />
+                    </IconButton>
+                </Tooltip>
+            )}
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -85,6 +89,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                                     loading={props.saving}
                                     asMenuItem
                                     onClick={props.onEditClick}
+                                    anyChange={props.anyChange}
                                 />
                             </Box>
                         )}
@@ -118,28 +123,44 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                                 asMenuItem
                             />
                         </Box>
+
+                        <MenuItem disabled>
+                            <ListItemIcon>
+                                <Dashboard />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={"Karty"}
+                                secondary={"Zobrazit jako karty"}
+                            />
+                        </MenuItem>
                     </>
                 )}
 
                 {isAdmin() && (
-                    <SheetAdminButtons
-                        sheet={props.sheet}
-                        song={props.song}
-                        reload={props.reloadSong}
-                        variant={props.variant}
-                        onEditClick={props.onEditClick}
-                        isInEditMode={props.isInEditMode}
-                        editLoading={props.saving}
-                        editedTitle={props.editedTitle}
-                    />
+                    <>
+                        <Divider />
+                        <SheetAdminButtons
+                            sheet={props.sheet}
+                            song={props.song}
+                            reload={props.reloadSong}
+                            variant={props.variant}
+                            onEditClick={props.onEditClick}
+                            isInEditMode={props.isInEditMode}
+                            editLoading={props.saving}
+                            editedTitle={props.editedTitle}
+                            anyChange={props.anyChange}
+                        />
+                    </>
                 )}
-                {props.isOwner && <Divider />}
                 {props.isOwner && (
-                    <DeleteButton
-                        reloadSong={props.reloadSong}
-                        variant={props.variant}
-                        asMenuItem
-                    />
+                    <>
+                        <Divider />
+                        <DeleteButton
+                            reloadSong={props.reloadSong}
+                            variant={props.variant}
+                            asMenuItem
+                        />
+                    </>
                 )}
             </Menu>
         </>

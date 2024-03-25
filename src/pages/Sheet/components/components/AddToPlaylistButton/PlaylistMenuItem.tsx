@@ -82,7 +82,8 @@ export default function PlaylistMenuItem({
     };
     const navigate = useNavigate();
     const openPlaylist = () => {
-        navigate(`/playlist/${guid}`);
+        // navigate(`/playlist/${guid}`);
+        window.open(`/playlist/${guid}`, "_blank");
     };
 
     return (

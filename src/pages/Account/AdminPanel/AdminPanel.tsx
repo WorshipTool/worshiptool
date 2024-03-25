@@ -31,7 +31,6 @@ export default function AdminPanel() {
     const [apiState, reloadGetter] = useApiStateEffect(async () => {
         if (!isLoggedIn) return Promise.resolve(false);
         const r = await handleApiCall(getterApi.getterControllerIsActive());
-        console.log(r);
         return r;
     }, [isLoggedIn]);
     const { fetchApiState, apiState: apiState2 } = useApiState();

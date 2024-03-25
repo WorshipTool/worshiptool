@@ -50,6 +50,7 @@ interface AddToPlaylistButtonProps {
     isInEditMode?: boolean;
     editLoading: boolean;
     editedTitle: string;
+    anyChange: boolean;
 }
 
 export default function SheetAdminButtons({
@@ -60,7 +61,8 @@ export default function SheetAdminButtons({
     onEditClick,
     isInEditMode,
     editLoading,
-    editedTitle
+    editedTitle,
+    anyChange
 }: AddToPlaylistButtonProps) {
     const { isAdmin, user, apiConfiguration } = useAuth();
 
@@ -107,7 +109,7 @@ export default function SheetAdminButtons({
     const theme = useTheme();
 
     return (
-        <div>
+        <>
             <MenuItem onClick={handleClick}>
                 <ListItemIcon>
                     <AdminPanelSettings />
@@ -130,23 +132,20 @@ export default function SheetAdminButtons({
 
                 {isAdmin() && variant.createdByLoader && (
                     <>
-                        <ButtonGroup
-                            orientation="horizontal"
-                            sx={{
-                                paddingX: theme.spacing(1)
-                            }}>
-                            <DeleteButton
-                                reloadSong={reload}
-                                variant={variant}
-                            />
-                            <EditButton
-                                onClick={onEditClick}
-                                inEditMode={isInEditMode}
-                                loading={editLoading}
-                                sheetData={sheet?.getOriginalSheetData() || ""}
-                                title={editedTitle}
-                            />
-                        </ButtonGroup>
+                        <EditButton
+                            asMenuItem
+                            onClick={onEditClick}
+                            inEditMode={isInEditMode}
+                            loading={editLoading}
+                            sheetData={sheet?.getOriginalSheetData() || ""}
+                            title={editedTitle}
+                            anyChange={anyChange}
+                        />
+                        <DeleteButton
+                            reloadSong={reload}
+                            variant={variant}
+                            asMenuItem
+                        />
 
                         <Divider />
                     </>
@@ -205,6 +204,6 @@ export default function SheetAdminButtons({
                     reload();
                 }}
             />
-        </div>
+        </>
     );
 }

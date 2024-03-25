@@ -17,7 +17,7 @@ export default function PrintButton(props: PrintButtonProps) {
                 color="primary"
                 onClick={onPrintClick}
                 sx={{
-                    [theme.breakpoints.down("md")]: {
+                    [theme.breakpoints.down("lg")]: {
                         display: "none"
                     }
                 }}>
@@ -26,7 +26,7 @@ export default function PrintButton(props: PrintButtonProps) {
             <IconButton
                 onClick={onPrintClick}
                 sx={{
-                    [theme.breakpoints.up("md")]: {
+                    [theme.breakpoints.up("lg")]: {
                         display: "none"
                     }
                 }}>
