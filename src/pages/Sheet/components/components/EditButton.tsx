@@ -3,6 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import { Button, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React from "react";
+import { isSheetDataValid } from "../../../../tech/sheet.tech";
 
 interface EditButtonProps {
     onClick?: (editable: boolean) => void;
@@ -11,6 +12,7 @@ interface EditButtonProps {
     sheetData: string;
     title: string;
     asMenuItem?: boolean;
+    anyChange: boolean;
 }
 
 export default function EditButton(props: EditButtonProps) {
@@ -44,6 +46,10 @@ export default function EditButton(props: EditButtonProps) {
             startIcon={props.inEditMode ? <Save /> : <Edit />}
             loading={props.loading}
             loadingIndicator="Ukládání..."
+            disabled={
+                (props.inEditMode && !props.anyChange) ||
+                !isSheetDataValid(props.sheetData)
+            }
             onClick={onClick}>
             {props.inEditMode ? "Uložit" : "Upravit"}
         </LoadingButton>

@@ -1,6 +1,18 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState
+} from "react";
 import User, { ROLES } from "../../interfaces/user";
-import { LoginRequestDTO, LoginResultDTO, PostLoginGoogleDto, SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth';
+import {
+    LoginRequestDTO,
+    LoginResultDTO,
+    PostLoginGoogleDto,
+    SignUpRequestDTO,
+    loginResultDTOToUser
+} from "../../api/dtos/dtosAuth";
 import { useSnackbar } from "notistack";
 import useGroup from "../group/useGroup";
 import { LOGIN_GOOGLE_URL } from "../../api/constants";
@@ -11,36 +23,35 @@ import { AuthApi, Configuration, LoginInputData } from "../../api/generated";
 import { access } from "fs";
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
-    login: () => {},
+    login: async () => {},
     loginWithGoogle: () => {},
     logout: () => {},
     signup: () => {},
     isLoggedIn: () => false,
     user: undefined,
     info: {} as User,
-    getAuthHeader: ()=>({}),
-    isTrustee: ()=>false,
-    isAdmin: ()=>false,
+    getAuthHeader: () => ({}),
+    isTrustee: () => false,
+    isAdmin: () => false,
     loading: false,
     apiConfiguration: {
         isJsonMime: () => true
     }
 });
 
-export const AuthProvider = ({children}:{children:any}) => {
+export const AuthProvider = ({ children }: { children: any }) => {
     const auth = useProvideAuth();
-    return <authContext.Provider value={auth}>{children}</authContext.Provider>
-}
+    return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+};
 
-export default function useAuth(){
+export default function useAuth() {
     return useContext(authContext);
 }
 
-
-export function useProvideAuth(){
+export function useProvideAuth() {
     const [user, setUser] = useState<User>();
 
-    const {enqueueSnackbar} = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -55,120 +66,140 @@ export function useProvideAuth(){
         }
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         const u = localStorage.getItem("user");
-        if(u!=null){
+        if (u != null) {
             setUser(JSON.parse(u));
-        }else{
+        } else {
             setGoogleShouldLogin(true);
         }
-        
-        setLoading(false);
-    },[]);
 
-    useEffect(()=>{
-        if(user!==undefined){
+        setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        if (user !== undefined) {
             localStorage.setItem("user", JSON.stringify(user));
         }
-    },[user])
+    }, [user]);
 
-    const login = ({email, password}:{email:string, password:string}, after? : (r: any)=>void) => {
+    const login = async (
+        { email, password }: { email: string; password: string },
+        after?: (r: any) => void
+    ) => {
         setLoading(true);
-        
-        const body : LoginInputData = {
+
+        const body: LoginInputData = {
             email,
             password
-        }
+        };
 
-        
-        authApi.authControllerLogin(body).then((result) => {
-            innerLogin(loginResultDTOToUser(result.data));
-            if(after)after(result.data);
-        }).catch((err) => {
-            console.log(err);
-            if(after)after(err.response);
-        }).finally(()=>{
-            setLoading(false);
-        })
-
-    }
+        return authApi
+            .authControllerLogin(body)
+            .then((result) => {
+                innerLogin(loginResultDTOToUser(result.data));
+                if (after) after(result.data);
+            })
+            .catch((err) => {
+                console.log(err);
+                if (after) after(err.response);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     const innerLogin = (user: User) => {
-        enqueueSnackbar(`Ahoj ${user.firstName} ${user.lastName}. Ať najdeš, po čem paseš.`,);
+        enqueueSnackbar(
+            `Ahoj ${user.firstName} ${user.lastName}. Ať najdeš, po čem paseš.`
+        );
         setUser(user);
-    }
+    };
     const logout = () => {
         setLoading(false);
         setUser(undefined);
         localStorage.removeItem("user");
         enqueueSnackbar("Byl jsi odhlášen. Zase někdy!");
-        navigate("/")
+        navigate("/");
         setLoading(false);
-    }
+    };
 
-    const signup = (data: SignUpRequestDTO, after? : (r: any)=>void) => {
+    const signup = (data: SignUpRequestDTO, after?: (r: boolean) => void) => {
         setLoading(true);
         const body = data;
 
-        authApi.authControllerSignup(body).then((result) => {
-            enqueueSnackbar("Účet byl vytvořen. Nyní se můžeš přihlásit.");
-            if(after)after(result.data);
-        }).catch((err) => {
-            console.log(err);
-            if(after)after(err.response);
-        }).finally(()=>{
-            setLoading(false);
-        })
+        authApi
+            .authControllerSignup(body)
+            .then((result) => {
+                if (after) after(true);
+            })
+            .catch((err) => {
+                console.log(err);
+                if (after) after(false);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
-    }
-
-    const loginWithGoogle = (response: CredentialResponse, after? : (r: any)=>void) => {
+    const loginWithGoogle = (
+        response: CredentialResponse,
+        after?: (r: any) => void
+    ) => {
         setLoading(true);
 
-        const decoded : any = jwtDecode(response.credential || "")
+        const decoded: any = jwtDecode(response.credential || "");
         const data = {
             userToken: decoded.sub,
             email: decoded.email,
             firstName: decoded.given_name,
-            lastName: decoded.family_name,
+            lastName: decoded.family_name
         };
 
-        authApi.authControllerLoginWithGoogle(data).then((result) => {
-            innerLogin(loginResultDTOToUser(result.data));
-            if(after)after(result.data);
-        }).catch((err) => {
-            console.log(err);
-            if(after)after(err.response);
-        }).finally(()=>{
-            setLoading(false);
-        })
-
-    }
+        authApi
+            .authControllerLoginWithGoogle(data)
+            .then((result) => {
+                innerLogin(loginResultDTOToUser(result.data));
+                if (after) after(result.data);
+            })
+            .catch((err) => {
+                console.log(err);
+                if (after) after(err.response);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     const isLoggedIn = () => {
-        return user!==undefined;
-    }
+        return user !== undefined;
+    };
 
     const getAuthHeader = () => {
-        if(user)return {Authorization: "Bearer "+user.token};
+        if (user) return { Authorization: "Bearer " + user.token };
         return {};
-    }
+    };
 
-    const apiConfiguration : Configuration = useMemo(()=>({
+    const apiConfiguration: Configuration = useMemo(
+        () => ({
             isJsonMime: () => true,
             accessToken: user?.token
-    }),[user])
+        }),
+        [user]
+    );
 
     return {
-        login, logout, signup, loginWithGoogle,
+        login,
+        logout,
+        signup,
+        loginWithGoogle,
         isLoggedIn,
         user,
-        info: (user?user:({} as User)),
+        info: user ? user : ({} as User),
         getAuthHeader,
-        isTrustee: ()=>user!=undefined&&user.role==ROLES.Trustee,
-        isAdmin: ()=>user!=undefined&&user.role==ROLES.Admin,
+        isTrustee: () => user != undefined && user.role == ROLES.Trustee,
+        isAdmin: () => user != undefined && user.role == ROLES.Admin,
         loading,
         apiConfiguration
-
-    }
+    };
 }

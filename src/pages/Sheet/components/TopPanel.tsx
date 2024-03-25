@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import TransposePanel from "./TransposePanel";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import useAuth from "../../../hooks/auth/useAuth";
 import VerifyButton from "./components/VerifyButton";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
@@ -28,6 +28,8 @@ import { SongDto, SongVariantDto } from "../../../api/dtos";
 import { useNavigate } from "react-router-dom";
 import { getVariantUrl } from "../../../routes/routes";
 import SongsOptionsButton from "./components/SongsOptionsButton";
+import NotValidWarning from "../../add_new_song/Write/components/NotValidWarning";
+import { isSheetDataValid } from "../../../tech/sheet.tech";
 
 interface TopPanelProps {
     transpose: (i: number) => void;
@@ -60,6 +62,14 @@ export default function TopPanel(props: TopPanelProps) {
     const { fetchApiState, apiState } = useApiState<EditVariantOutDto>();
 
     const [saving, setSaving] = React.useState(false);
+
+    const anyChange = useMemo(() => {
+        const t = props.variant.preferredTitle !== props.editedTitle;
+        const s =
+            new Sheet(props.variant?.sheetData).toString() !==
+            props.sheet?.toString();
+        return t || s;
+    }, [props.sheet, props.editedTitle, props.variant]);
 
     const onEditClick = async (editable: boolean) => {
         if (editable) {
@@ -99,6 +109,11 @@ export default function TopPanel(props: TopPanelProps) {
 
     const theme = useTheme();
 
+    const isValid = useMemo(() => {
+        const data = props.sheet.toString();
+        return isSheetDataValid(data);
+    }, [props.sheet.toString()]);
+
     return (
         <Box
             sx={{
@@ -109,7 +124,7 @@ export default function TopPanel(props: TopPanelProps) {
             }}>
             {props.isInEditMode ? (
                 <>
-                    <Box flex={1} />
+                    {isValid ? <Box flex={1} /> : <NotValidWarning />}
 
                     <Button
                         onClick={() => props.cancelEditing()}
@@ -124,13 +139,17 @@ export default function TopPanel(props: TopPanelProps) {
                         loading={saving}
                         sheetData={props.sheet?.getOriginalSheetData() || ""}
                         title={props.editedTitle}
+                        anyChange={anyChange}
                     />
                 </>
             ) : props.variant.deleted ? (
                 <></>
             ) : (
                 <>
-                    <TransposePanel transpose={props.transpose} />
+                    <TransposePanel
+                        transpose={props.transpose}
+                        disabled={!Boolean(props.sheet?.getKeyChord())}
+                    />
 
                     {(isAdmin() || isTrustee()) && !saving && (
                         <Box
@@ -158,11 +177,12 @@ export default function TopPanel(props: TopPanelProps) {
                         saving={saving}
                         editedTitle={props.editedTitle}
                         isOwner={isOwner}
+                        anyChange={anyChange}
                     />
                     {isLoggedIn() && !isOwner && (
                         <Box
                             sx={{
-                                [theme.breakpoints.down("sm")]: {
+                                [theme.breakpoints.down("md")]: {
                                     display: "none"
                                 }
                             }}>
@@ -186,6 +206,7 @@ export default function TopPanel(props: TopPanelProps) {
                                 sheetData={
                                     props.sheet?.getOriginalSheetData() || ""
                                 }
+                                anyChange={anyChange}
                                 title={props.editedTitle}
                             />
                         </Box>

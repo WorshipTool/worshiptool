@@ -4,13 +4,21 @@ import {
     Divider,
     FormControlLabel,
     InputBase,
+    ListItemIcon,
+    ListItemText,
     Switch,
     Tooltip,
     Typography,
     styled,
     useTheme
 } from "@mui/material";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate, useParams } from "react-router-dom";
 import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
@@ -25,6 +33,10 @@ import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import useSong from "../../../hooks/song/useSong";
 import useAuth from "../../../hooks/auth/useAuth";
+import { isSheetDataValid } from "../../../tech/sheet.tech";
+import { getVariantUrl } from "../../../routes/routes";
+import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
+import NotValidWarning from "./components/NotValidWarning";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3),
@@ -66,6 +78,10 @@ export default function Create() {
 
     const [sheet, setSheet] = useState<Sheet>(new Sheet(sheetData));
 
+    const isSheetValid = useMemo(() => {
+        return isSheetDataValid(sheetData);
+    }, [sheetData]);
+
     useEffect(() => {
         setSheet(new Sheet(sheetData));
     }, [sheetData]);
@@ -82,7 +98,7 @@ export default function Create() {
                 );
             },
             (result) => {
-                navigate(`/p/` + result.alias, { replace: false });
+                navigate(getVariantUrl(result.alias), { replace: false });
             }
         );
     };
@@ -248,7 +264,8 @@ export default function Create() {
                                         disabled={
                                             posting ||
                                             title == "" ||
-                                            sheetData == ""
+                                            sheetData == "" ||
+                                            !isSheetValid
                                         }
                                         onClick={onPostClick}>
                                         Vytvořit {"(neveřejně)"}
@@ -261,6 +278,9 @@ export default function Create() {
                                         )}
                                     </Button>
                                 </Tooltip>
+                                {sheetData !== "" && !isSheetValid && (
+                                    <NotValidWarning />
+                                )}
                             </Box>
                         </Box>
                     </ContainerGrid>
