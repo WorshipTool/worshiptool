@@ -1,6 +1,5 @@
-import { Cyclone, DonutLarge, EggAlt } from "@mui/icons-material";
+import { EggAlt } from "@mui/icons-material";
 import {
-    Button,
     CircularProgress,
     ListItemIcon,
     ListItemText,
@@ -12,7 +11,7 @@ import React from "react";
 import { useApi } from "../../../../hooks/api/useApi";
 import { useApiState } from "../../../../tech/ApiState";
 import { LoadingButton } from "@mui/lab";
-import { PostCreateCopyOutDto, SongVariant } from "../../../../api/generated";
+import { PostCreateCopyOutDto } from "../../../../api/generated";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { useNavigate } from "react-router-dom";
 import { getVariantUrl } from "../../../../routes/routes";
