@@ -5,6 +5,7 @@ import {
     ListItemIcon,
     ListItemText,
     MenuItem,
+    Tooltip,
     useTheme
 } from "@mui/material";
 import React from "react";
@@ -58,21 +59,23 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
             <ListItemText primary="Vytvořit kopii" />
         </MenuItem>
     ) : (
-        <LoadingButton
-            color="success"
-            variant="contained"
-            startIcon={
-                <EggAlt
-                    sx={{
-                        [theme.breakpoints.down("lg")]: {
-                            display: "none"
-                        }
-                    }}
-                />
-            }
-            loading={apiState.loading}
-            onClick={onClick}>
-            Vytvořit kopii
-        </LoadingButton>
+        <Tooltip title={"Vytvořit kopii písně"}>
+            <LoadingButton
+                color="success"
+                variant="contained"
+                startIcon={
+                    <EggAlt
+                        sx={{
+                            [theme.breakpoints.down("lg")]: {
+                                display: "none"
+                            }
+                        }}
+                    />
+                }
+                loading={apiState.loading}
+                onClick={onClick}>
+                Vlastní úprava
+            </LoadingButton>
+        </Tooltip>
     );
 }

@@ -110,9 +110,9 @@ export default function TopPanel(props: TopPanelProps) {
     const theme = useTheme();
 
     const isValid = useMemo(() => {
-        const data = props.sheet.toString();
+        const data = props.sheet?.toString();
         return isSheetDataValid(data);
-    }, [props.sheet.toString()]);
+    }, [props.sheet?.toString()]);
 
     return (
         <Box
