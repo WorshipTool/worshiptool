@@ -15,7 +15,8 @@ export const mapSongDataVariantApiToSongVariantDto = (
         ...api,
         preferredTitle: api.prefferedTitle,
         sheet: new Sheet(api.sheetData),
-        createdBy: api.createdByGuid
+        createdBy: api.createdByGuid,
+        public: api.verified || api.createdByLoader
     };
 };
 
@@ -26,7 +27,8 @@ export const mapSongVariantDtoApiToSongVariantDto = (
         ...api,
         sheet: new Sheet(api.sheetData),
         createdBy: api.createdByGuid,
-        preferredTitle: api.prefferedTitle
+        preferredTitle: api.prefferedTitle,
+        public: api.verified || api.createdByLoader
     };
 };
 
@@ -37,7 +39,8 @@ export const mapSearchSongDataApiToSongVariantDto = (
         ...data.variant,
         sheet: new Sheet(data.variant.sheetData),
         preferredTitle: data.variant.prefferedTitle,
-        createdBy: data.variant.createdByGuid
+        createdBy: data.variant.createdByGuid,
+        public: data.variant.verified || data.variant.createdByLoader
     };
 };
 
@@ -51,7 +54,8 @@ export const mapSearchResultApiToSongVariantDtoArr = (
             sheet: new Sheet(variant.sheetData),
             preferredTitle: variant.prefferedTitle,
             createdBy: variant.createdByGuid,
-            alias: data.alias
+            alias: data.alias,
+            public: variant.verified || variant.createdByLoader
         };
         return v;
     });

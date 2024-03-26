@@ -3,24 +3,13 @@ import TransposePanel from "./TransposePanel";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import useAuth from "../../../hooks/auth/useAuth";
 import VerifyButton from "./components/VerifyButton";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import SheetAdminButtons from "./components/SheetAdminButtons";
 import { Sheet } from "@pepavlin/sheet-api";
-import Song from "../../../interfaces/song/song";
 import AddToPlaylistButton from "./components/AddToPlaylistButton/AddToPlaylistButton";
 import PrintButton from "./components/PrintButton";
-import Buttons13ka from "./components/Buttons13ka";
-import ChangeVariant from "./components/ChangeVariant";
 import EditButton from "./components/EditButton";
 import { PostEditVariantBody } from "../../../api/dtos/dtosSong";
 import { useSnackbar } from "notistack";
-import DeleteButton from "./components/DeleteButton";
-import Gap from "../../../components/Gap";
-import {
-    EditVariantOutDto,
-    SongEditingApi,
-    SongsApi
-} from "../../../api/generated";
+import { EditVariantOutDto, SongEditingApi } from "../../../api/generated";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import CreateCopyButton from "./components/CreateCopyButton";
@@ -30,6 +19,7 @@ import { getVariantUrl } from "../../../routes/routes";
 import SongsOptionsButton from "./components/SongsOptionsButton";
 import NotValidWarning from "../../add_new_song/Write/components/NotValidWarning";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
+import { Public, PublicOff } from "@mui/icons-material";
 
 interface TopPanelProps {
     transpose: (i: number) => void;
@@ -59,7 +49,7 @@ export default function TopPanel(props: TopPanelProps) {
     const navigate = useNavigate();
 
     const songsApi = new SongEditingApi(apiConfiguration);
-    const { fetchApiState, apiState } = useApiState<EditVariantOutDto>();
+    const { fetchApiState } = useApiState<EditVariantOutDto>();
 
     const [saving, setSaving] = React.useState(false);
 
@@ -110,9 +100,10 @@ export default function TopPanel(props: TopPanelProps) {
     const theme = useTheme();
 
     const isValid = useMemo(() => {
+        if (!props.sheet) return false;
         const data = props.sheet?.toString();
         return isSheetDataValid(data);
-    }, [props.sheet?.toString()]);
+    }, [props.sheet, props.sheet?.toString()]);
 
     return (
         <Box
@@ -162,6 +153,26 @@ export default function TopPanel(props: TopPanelProps) {
                                 variant={props.variant}
                                 reloadSong={props.reloadSong}
                             />
+                        </Box>
+                    )}
+                    {isOwner && (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: 0.5
+                            }}>
+                            {props.variant.public ? (
+                                <>
+                                    <Public />
+                                    <Typography>Píseň je veřejná</Typography>
+                                </>
+                            ) : (
+                                <>
+                                    <PublicOff />
+                                    <Typography>Píseň vídíte jen vy</Typography>
+                                </>
+                            )}
                         </Box>
                     )}
 

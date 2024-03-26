@@ -27,39 +27,46 @@ const Container = styled(Box)(({ theme }) => ({
 
 export default function TransposePanel({
     transpose,
-    disabled
+    disabled = true
 }: {
     transpose: (i: number) => void;
     disabled?: boolean;
 }) {
     return (
         <Container>
-            {disabled ? (
+            {/* {disabled ? (
                 <>
                     <Button disabled>Píseň nemá akordy</Button>
                 </>
-            ) : (
-                <>
-                    <Typography variant="subtitle2" fontWeight={"400"}>
-                        TRANSPOZICE
-                    </Typography>
-                    <Gap horizontal value={0.5} />
-                    <StyledButton
-                        onClick={() => {
-                            transpose(1);
-                        }}
-                        size="small">
-                        <Add />
-                    </StyledButton>
-                    <StyledButton
-                        onClick={() => {
-                            transpose(-1);
-                        }}
-                        size="small">
-                        <Remove />
-                    </StyledButton>
-                </>
-            )}
+            ) : ( */}
+            <>
+                <Typography
+                    variant="subtitle2"
+                    fontWeight={"400"}
+                    sx={{
+                        color: disabled ? "lightgrey" : "black"
+                    }}>
+                    TRANSPOZICE
+                </Typography>
+                <Gap horizontal value={0.5} />
+                <StyledButton
+                    disabled={disabled}
+                    onClick={() => {
+                        transpose(1);
+                    }}
+                    size="small">
+                    <Add />
+                </StyledButton>
+                <StyledButton
+                    disabled={disabled}
+                    onClick={() => {
+                        transpose(-1);
+                    }}
+                    size="small">
+                    <Remove />
+                </StyledButton>
+            </>
+            {/* )} */}
         </Container>
     );
 }

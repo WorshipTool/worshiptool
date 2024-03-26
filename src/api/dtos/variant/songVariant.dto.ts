@@ -10,6 +10,7 @@ export type SongVariantDto = {
     preferredTitle: string;
     titles: string[];
     verified: boolean;
+    public: boolean;
     deleted: boolean;
     createdBy: string;
     createdByLoader: boolean;
