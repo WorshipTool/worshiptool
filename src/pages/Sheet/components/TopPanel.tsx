@@ -20,6 +20,7 @@ import SongsOptionsButton from "./components/SongsOptionsButton";
 import NotValidWarning from "../../add_new_song/Write/components/NotValidWarning";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
 import { Public, PublicOff } from "@mui/icons-material";
+import VisibilityLabel from "./components/VisibilityLabel";
 
 interface TopPanelProps {
     transpose: (i: number) => void;
@@ -156,28 +157,14 @@ export default function TopPanel(props: TopPanelProps) {
                         </Box>
                     )}
                     {isOwner && (
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 0.5
-                            }}>
-                            {props.variant.public ? (
-                                <>
-                                    <Public />
-                                    <Typography>Píseň je veřejná</Typography>
-                                </>
-                            ) : (
-                                <>
-                                    <PublicOff />
-                                    <Typography>Píseň vídíte jen vy</Typography>
-                                </>
-                            )}
-                        </Box>
+                        <VisibilityLabel public={props.variant.public} />
                     )}
 
                     <Box flex={1} />
 
+                    {isOwner && (
+                        <VisibilityLabel public={props.variant.public} right />
+                    )}
                     <SongsOptionsButton
                         reloadSong={props.reloadSong}
                         variant={props.variant}
