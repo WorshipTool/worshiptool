@@ -59,26 +59,28 @@ export default function PlaylistMenuItem({
 
     const addVariantToPlaylist = (guid: string) => {
         setLoading(true);
-        const body: PostAddVariantToPlaylistBodyDTO = {
-            playlist: guid,
-            variant: variant.guid
-        };
-        addToPlaylist(body.variant, guid).then(async (result) => {
-            await reloadPlaylists();
-            setLoading(false);
-        });
+
+        try {
+            addToPlaylist(variant.alias, guid).then(async (result) => {
+                await reloadPlaylists();
+                setLoading(false);
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const removeVariantFromPlaylist = (guid: string) => {
         setLoading(true);
-        const body: PostAddVariantToPlaylistBodyDTO = {
-            playlist: guid,
-            variant: variant.guid
-        };
-        removeFromPlaylist(body.variant, guid).then(async (result) => {
-            await reloadPlaylists();
-            setLoading(false);
-        });
+
+        try {
+            removeFromPlaylist(variant.alias, guid).then(async (result) => {
+                await reloadPlaylists();
+                setLoading(false);
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
     const navigate = useNavigate();
     const openPlaylist = () => {

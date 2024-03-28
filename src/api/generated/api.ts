@@ -26,6 +26,25 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AddVariantToPlaylistInDto
+ */
+export interface AddVariantToPlaylistInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddVariantToPlaylistInDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddVariantToPlaylistInDto
+     */
+    'playlist': string;
+}
+/**
+ * 
+ * @export
  * @interface CSVLink
  */
 export interface CSVLink {
@@ -61,6 +80,19 @@ export const CSVLinkTypeEnum = {
 
 export type CSVLinkTypeEnum = typeof CSVLinkTypeEnum[keyof typeof CSVLinkTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface CreatePlaylistInDto
+ */
+export interface CreatePlaylistInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePlaylistInDto
+     */
+    'title': string;
+}
 /**
  * 
  * @export
@@ -228,10 +260,10 @@ export interface GetSearchInPlaylistResult {
     'guid': string;
     /**
      * 
-     * @type {Array<PlaylistItemDTO>}
+     * @type {Array<PlaylistItemOutDto>}
      * @memberof GetSearchInPlaylistResult
      */
-    'items': Array<PlaylistItemDTO>;
+    'items': Array<PlaylistItemOutDto>;
 }
 /**
  * 
@@ -288,25 +320,6 @@ export interface GetSongListOfUserResult {
      * @memberof GetSongListOfUserResult
      */
     'variants': Array<SongDataVariant>;
-}
-/**
- * 
- * @export
- * @interface GetVariantsInPlaylistResult
- */
-export interface GetVariantsInPlaylistResult {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetVariantsInPlaylistResult
-     */
-    'title': string;
-    /**
-     * 
-     * @type {Array<PlaylistItemDTO>}
-     * @memberof GetVariantsInPlaylistResult
-     */
-    'items': Array<PlaylistItemDTO>;
 }
 /**
  * 
@@ -661,6 +674,25 @@ export interface PlaylistData {
 /**
  * 
  * @export
+ * @interface PlaylistDataOutDto
+ */
+export interface PlaylistDataOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {Array<PlaylistItemOutDto>}
+     * @memberof PlaylistDataOutDto
+     */
+    'items': Array<PlaylistItemOutDto>;
+}
+/**
+ * 
+ * @export
  * @interface PlaylistItem
  */
 export interface PlaylistItem {
@@ -698,33 +730,33 @@ export interface PlaylistItem {
 /**
  * 
  * @export
- * @interface PlaylistItemDTO
+ * @interface PlaylistItemOutDto
  */
-export interface PlaylistItemDTO {
+export interface PlaylistItemOutDto {
     /**
      * 
      * @type {string}
-     * @memberof PlaylistItemDTO
+     * @memberof PlaylistItemOutDto
      */
     'guid': string;
     /**
      * 
      * @type {string}
-     * @memberof PlaylistItemDTO
+     * @memberof PlaylistItemOutDto
      */
     'toneKey': string;
     /**
      * 
      * @type {number}
-     * @memberof PlaylistItemDTO
+     * @memberof PlaylistItemOutDto
      */
     'order': number;
     /**
      * 
-     * @type {SongVariantDto}
-     * @memberof PlaylistItemDTO
+     * @type {SongVariantDataOutDto}
+     * @memberof PlaylistItemOutDto
      */
-    'variant': SongVariantDto;
+    'variant': SongVariantDataOutDto;
 }
 /**
  * 
@@ -787,25 +819,6 @@ export interface PostAddSubUrlDomainDto {
      * @memberof PostAddSubUrlDomainDto
      */
     'page': string;
-}
-/**
- * 
- * @export
- * @interface PostAddVariantToPlaylistBody
- */
-export interface PostAddVariantToPlaylistBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddVariantToPlaylistBody
-     */
-    'variant': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddVariantToPlaylistBody
-     */
-    'playlist': string;
 }
 /**
  * 
@@ -880,19 +893,6 @@ export interface PostCreateGroupResult {
 /**
  * 
  * @export
- * @interface PostCreatePlaylistBody
- */
-export interface PostCreatePlaylistBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreatePlaylistBody
-     */
-    'title': string;
-}
-/**
- * 
- * @export
  * @interface PostCreatePlaylistResult
  */
 export interface PostCreatePlaylistResult {
@@ -914,7 +914,7 @@ export interface PostEditVariantInDto {
      * @type {string}
      * @memberof PostEditVariantInDto
      */
-    'guid': string;
+    'variantAlias': string;
     /**
      * 
      * @type {string}
@@ -1020,44 +1020,6 @@ export interface PostProcessSubUrlDto {
 /**
  * 
  * @export
- * @interface PostRenamePlaylistBody
- */
-export interface PostRenamePlaylistBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostRenamePlaylistBody
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostRenamePlaylistBody
-     */
-    'title': string;
-}
-/**
- * 
- * @export
- * @interface PostReorderPlaylistBody
- */
-export interface PostReorderPlaylistBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostReorderPlaylistBody
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {Array<ReorderPlaylistItemDTO>}
-     * @memberof PostReorderPlaylistBody
-     */
-    'items': Array<ReorderPlaylistItemDTO>;
-}
-/**
- * 
- * @export
  * @interface PostSendFeedbackBody
  */
 export interface PostSendFeedbackBody {
@@ -1103,38 +1065,57 @@ export interface PostSubUrlLoopDto {
 /**
  * 
  * @export
- * @interface PostTransposePlaylistItemBody
+ * @interface RenamePlaylistInDto
  */
-export interface PostTransposePlaylistItemBody {
+export interface RenamePlaylistInDto {
     /**
      * 
      * @type {string}
-     * @memberof PostTransposePlaylistItemBody
+     * @memberof RenamePlaylistInDto
      */
     'guid': string;
     /**
      * 
      * @type {string}
-     * @memberof PostTransposePlaylistItemBody
+     * @memberof RenamePlaylistInDto
      */
-    'key': string;
+    'title': string;
 }
 /**
  * 
  * @export
- * @interface ReorderPlaylistItemDTO
+ * @interface ReorderPlaylistInDto
  */
-export interface ReorderPlaylistItemDTO {
+export interface ReorderPlaylistInDto {
     /**
      * 
      * @type {string}
-     * @memberof ReorderPlaylistItemDTO
+     * @memberof ReorderPlaylistInDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Array<ReorderPlaylistItem>}
+     * @memberof ReorderPlaylistInDto
+     */
+    'items': Array<ReorderPlaylistItem>;
+}
+/**
+ * 
+ * @export
+ * @interface ReorderPlaylistItem
+ */
+export interface ReorderPlaylistItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReorderPlaylistItem
      */
     'guid': string;
     /**
      * 
      * @type {number}
-     * @memberof ReorderPlaylistItemDTO
+     * @memberof ReorderPlaylistItem
      */
     'order': number;
 }
@@ -1617,102 +1598,96 @@ export type SongVariantCreatedTypeEnum = typeof SongVariantCreatedTypeEnum[keyof
 /**
  * 
  * @export
- * @interface SongVariantDto
+ * @interface SongVariantDataOutDto
  */
-export interface SongVariantDto {
+export interface SongVariantDataOutDto {
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'guid': string;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDto
-     */
-    'songGuid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'prefferedTitle': string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'titles': Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'sheetData': string;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'sheetText': string;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'verified': boolean;
     /**
      * 
      * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
-    'createdByGuid': string;
+    'createdBy': string;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'createdByLoader': boolean;
     /**
      * 
-     * @type {Array<SourceDTO>}
-     * @memberof SongVariantDto
+     * @type {number}
+     * @memberof SongVariantDataOutDto
      */
-    'sources': Array<SourceDTO>;
+    'createdType': SongVariantDataOutDtoCreatedTypeEnum;
     /**
      * 
-     * @type {Array<CreatorDTO>}
-     * @memberof SongVariantDto
+     * @type {Array<SongDataSource>}
+     * @memberof SongVariantDataOutDto
      */
-    'creators': Array<CreatorDTO>;
+    'sources': Array<SongDataSource>;
+    /**
+     * 
+     * @type {Array<SongDataCreator>}
+     * @memberof SongVariantDataOutDto
+     */
+    'creators': Array<SongDataCreator>;
     /**
      * 
      * @type {boolean}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'deleted': boolean;
     /**
      * 
-     * @type {number}
-     * @memberof SongVariantDto
-     */
-    'createdType': SongVariantDtoCreatedTypeEnum;
-    /**
-     * 
      * @type {string}
-     * @memberof SongVariantDto
+     * @memberof SongVariantDataOutDto
      */
     'alias': string;
 }
 
-export const SongVariantDtoCreatedTypeEnum = {
+export const SongVariantDataOutDtoCreatedTypeEnum = {
     NUMBER_0: 0,
     NUMBER_1: 1,
     NUMBER_2: 2
 } as const;
 
-export type SongVariantDtoCreatedTypeEnum = typeof SongVariantDtoCreatedTypeEnum[keyof typeof SongVariantDtoCreatedTypeEnum];
+export type SongVariantDataOutDtoCreatedTypeEnum = typeof SongVariantDataOutDtoCreatedTypeEnum[keyof typeof SongVariantDataOutDtoCreatedTypeEnum];
 
 /**
  * 
@@ -1802,6 +1777,25 @@ export interface Tag {
      * @memberof Tag
      */
     'value': string;
+}
+/**
+ * 
+ * @export
+ * @interface TransposePlaylistItemInDto
+ */
+export interface TransposePlaylistItemInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TransposePlaylistItemInDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransposePlaylistItemInDto
+     */
+    'key': string;
 }
 /**
  * 
@@ -3511,7 +3505,7 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerGetGroupSelection(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetVariantsInPlaylistResult>> {
+        async groupControllerGetGroupSelection(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistDataOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupSelection(guid, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['GroupApi.groupControllerGetGroupSelection']?.[index]?.url;
@@ -3587,7 +3581,7 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerGetGroupSelection(guid: string, options?: any): AxiosPromise<GetVariantsInPlaylistResult> {
+        groupControllerGetGroupSelection(guid: string, options?: any): AxiosPromise<PlaylistDataOutDto> {
             return localVarFp.groupControllerGetGroupSelection(guid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3866,22 +3860,21 @@ export class MessengerApi extends BaseAPI {
 
 
 /**
- * PlaylistsApi - axios parameter creator
+ * PlaylistEditingApi - axios parameter creator
  * @export
  */
-export const PlaylistsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
+         * 
+         * @param {AddVariantToPlaylistInDto} addVariantToPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerAddVariantToPlaylist: async (postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postAddVariantToPlaylistBody' is not null or undefined
-            assertParamExists('songsControllerAddVariantToPlaylist', 'postAddVariantToPlaylistBody', postAddVariantToPlaylistBody)
-            const localVarPath = `/songs/playlist/add`;
+        playlistEditingControllerAddVariantToPlaylist: async (addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addVariantToPlaylistInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerAddVariantToPlaylist', 'addVariantToPlaylistInDto', addVariantToPlaylistInDto)
+            const localVarPath = `/playlist/add`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3904,7 +3897,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postAddVariantToPlaylistBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(addVariantToPlaylistInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3912,16 +3905,15 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
+         * 
+         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerCreatePlaylist: async (postCreatePlaylistBody: PostCreatePlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postCreatePlaylistBody' is not null or undefined
-            assertParamExists('songsControllerCreatePlaylist', 'postCreatePlaylistBody', postCreatePlaylistBody)
-            const localVarPath = `/songs/playlist`;
+        playlistEditingControllerCreatePlaylist: async (createPlaylistInDto: CreatePlaylistInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPlaylistInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerCreatePlaylist', 'createPlaylistInDto', createPlaylistInDto)
+            const localVarPath = `/playlist`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3944,7 +3936,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postCreatePlaylistBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createPlaylistInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3952,16 +3944,15 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerDeletePlaylistByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        playlistEditingControllerDeletePlaylist: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songsControllerDeletePlaylistByGuid', 'guid', guid)
-            const localVarPath = `/songs/playlist`;
+            assertParamExists('playlistEditingControllerDeletePlaylist', 'guid', guid)
+            const localVarPath = `/playlist`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3993,134 +3984,18 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetPlaylistsOfUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/songs/playlists`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetSongsInPlaylistByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songsControllerGetSongsInPlaylistByGuid', 'guid', guid)
-            const localVarPath = `/songs/playlist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
+         * 
+         * @param {string} alias 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerIsVariantInPlaylist: async (variant: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variant' is not null or undefined
-            assertParamExists('songsControllerIsVariantInPlaylist', 'variant', variant)
+        playlistEditingControllerRemoveVariantFromPlaylistDelete: async (alias: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('playlistEditingControllerRemoveVariantFromPlaylistDelete', 'alias', alias)
             // verify required parameter 'playlist' is not null or undefined
-            assertParamExists('songsControllerIsVariantInPlaylist', 'playlist', playlist)
-            const localVarPath = `/songs/isinplaylist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (variant !== undefined) {
-                localVarQueryParameter['variant'] = variant;
-            }
-
-            if (playlist !== undefined) {
-                localVarQueryParameter['playlist'] = playlist;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerRemoveVariantFromPlaylistDelete: async (variant: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variant' is not null or undefined
-            assertParamExists('songsControllerRemoveVariantFromPlaylistDelete', 'variant', variant)
-            // verify required parameter 'playlist' is not null or undefined
-            assertParamExists('songsControllerRemoveVariantFromPlaylistDelete', 'playlist', playlist)
-            const localVarPath = `/songs/playlist/remove`;
+            assertParamExists('playlistEditingControllerRemoveVariantFromPlaylistDelete', 'playlist', playlist)
+            const localVarPath = `/playlist/remove`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4136,8 +4011,8 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (variant !== undefined) {
-                localVarQueryParameter['variant'] = variant;
+            if (alias !== undefined) {
+                localVarQueryParameter['alias'] = alias;
             }
 
             if (playlist !== undefined) {
@@ -4156,16 +4031,54 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
+         * 
+         * @param {RenamePlaylistInDto} renamePlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerRenamePlaylist: async (postRenamePlaylistBody: PostRenamePlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postRenamePlaylistBody' is not null or undefined
-            assertParamExists('songsControllerRenamePlaylist', 'postRenamePlaylistBody', postRenamePlaylistBody)
-            const localVarPath = `/songs/playlist/rename`;
+        playlistEditingControllerRenamePlaylist: async (renamePlaylistInDto: RenamePlaylistInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'renamePlaylistInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerRenamePlaylist', 'renamePlaylistInDto', renamePlaylistInDto)
+            const localVarPath = `/playlist/rename`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(renamePlaylistInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {ReorderPlaylistInDto} reorderPlaylistInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerReorderPlaylist: async (reorderPlaylistInDto: ReorderPlaylistInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'reorderPlaylistInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerReorderPlaylist', 'reorderPlaylistInDto', reorderPlaylistInDto)
+            const localVarPath = `/playlist/reorder`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4188,7 +4101,46 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postRenamePlaylistBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(reorderPlaylistInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerTransposePlaylistItem: async (transposePlaylistItemInDto: TransposePlaylistItemInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'transposePlaylistItemInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerTransposePlaylistItem', 'transposePlaylistItemInDto', transposePlaylistItemInDto)
+            const localVarPath = `/playlist/transpose`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(transposePlaylistItemInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4199,313 +4151,602 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 };
 
 /**
- * PlaylistsApi - functional programming interface
+ * PlaylistEditingApi - functional programming interface
  * @export
  */
-export const PlaylistsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = PlaylistsApiAxiosParamCreator(configuration)
+export const PlaylistEditingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PlaylistEditingApiAxiosParamCreator(configuration)
     return {
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
+         * 
+         * @param {AddVariantToPlaylistInDto} addVariantToPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options);
+        async playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerAddVariantToPlaylist']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerAddVariantToPlaylist']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
+         * 
+         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreatePlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerCreatePlaylist(postCreatePlaylistBody, options);
+        async playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreatePlaylistResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerCreatePlaylist(createPlaylistInDto, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerCreatePlaylist']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerCreatePlaylist']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerDeletePlaylistByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerDeletePlaylistByGuid(guid, options);
+        async playlistEditingControllerDeletePlaylist(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerDeletePlaylist(guid, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerDeletePlaylistByGuid']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerDeletePlaylist']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPlaylistsResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetPlaylistsOfUser(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerGetPlaylistsOfUser']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerGetSongsInPlaylistByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetVariantsInPlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetSongsInPlaylistByGuid(guid, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerGetSongsInPlaylistByGuid']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
+         * 
+         * @param {string} alias 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerIsVariantInPlaylist(variant, playlist, options);
+        async playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerIsVariantInPlaylist']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRemoveVariantFromPlaylistDelete']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
+         * 
+         * @param {RenamePlaylistInDto} renamePlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options);
+        async playlistEditingControllerRenamePlaylist(renamePlaylistInDto: RenamePlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRenamePlaylist(renamePlaylistInDto, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerRemoveVariantFromPlaylistDelete']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRenamePlaylist']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
+         * 
+         * @param {ReorderPlaylistInDto} reorderPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerRenamePlaylist(postRenamePlaylistBody, options);
+        async playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PlaylistsApi.songsControllerRenamePlaylist']?.[index]?.url;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerReorderPlaylist']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto: TransposePlaylistItemInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerTransposePlaylistItem']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
 
 /**
- * PlaylistsApi - factory interface
+ * PlaylistEditingApi - factory interface
  * @export
  */
-export const PlaylistsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = PlaylistsApiFp(configuration)
+export const PlaylistEditingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PlaylistEditingApiFp(configuration)
     return {
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
+         * 
+         * @param {AddVariantToPlaylistInDto} addVariantToPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options).then((request) => request(axios, basePath));
+        playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: any): AxiosPromise<PlaylistItem> {
+            return localVarFp.playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
+         * 
+         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: any): AxiosPromise<PostCreatePlaylistResult> {
-            return localVarFp.songsControllerCreatePlaylist(postCreatePlaylistBody, options).then((request) => request(axios, basePath));
+        playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: any): AxiosPromise<PostCreatePlaylistResult> {
+            return localVarFp.playlistEditingControllerCreatePlaylist(createPlaylistInDto, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerDeletePlaylistByGuid(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerDeletePlaylistByGuid(guid, options).then((request) => request(axios, basePath));
+        playlistEditingControllerDeletePlaylist(guid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerDeletePlaylist(guid, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetPlaylistsOfUser(options?: any): AxiosPromise<GetPlaylistsResult> {
-            return localVarFp.songsControllerGetPlaylistsOfUser(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetSongsInPlaylistByGuid(guid: string, options?: any): AxiosPromise<GetVariantsInPlaylistResult> {
-            return localVarFp.songsControllerGetSongsInPlaylistByGuid(guid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
+         * 
+         * @param {string} alias 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(axios, basePath));
+        playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
+         * 
+         * @param {RenamePlaylistInDto} renamePlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options).then((request) => request(axios, basePath));
+        playlistEditingControllerRenamePlaylist(renamePlaylistInDto: RenamePlaylistInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerRenamePlaylist(renamePlaylistInDto, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
+         * 
+         * @param {ReorderPlaylistInDto} reorderPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerRenamePlaylist(postRenamePlaylistBody, options).then((request) => request(axios, basePath));
+        playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto: TransposePlaylistItemInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * PlaylistsApi - object-oriented interface
+ * PlaylistEditingApi - object-oriented interface
  * @export
- * @class PlaylistsApi
+ * @class PlaylistEditingApi
  * @extends {BaseAPI}
  */
-export class PlaylistsApi extends BaseAPI {
+export class PlaylistEditingApi extends BaseAPI {
     /**
-     * The function adds a variant to a playlist.
-     * @summary Adds a variant to a playlist.
-     * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
+     * 
+     * @param {AddVariantToPlaylistInDto} addVariantToPlaylistInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistEditingApi
      */
-    public songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function creates a new empty playlist.
-     * @summary Creates a new empty playlist.
-     * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
+     * 
+     * @param {CreatePlaylistInDto} createPlaylistInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistEditingApi
      */
-    public songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerCreatePlaylist(postCreatePlaylistBody, options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerCreatePlaylist(createPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function deletes a playlist by the given guid.
-     * @summary Deletes a playlist by the given guid.
+     * 
      * @param {string} guid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistEditingApi
      */
-    public songsControllerDeletePlaylistByGuid(guid: string, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerDeletePlaylistByGuid(guid, options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerDeletePlaylist(guid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerDeletePlaylist(guid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function returns a list of playlists of the given user.
-     * @summary Returns a list of playlists of the given user.
+     * 
+     * @param {string} alias 
+     * @param {string} playlist 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistEditingApi
      */
-    public songsControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerGetPlaylistsOfUser(options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function returns a list of variants in the given playlist.
-     * @summary Returns a list of variants in the given playlist.
+     * 
+     * @param {RenamePlaylistInDto} renamePlaylistInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerRenamePlaylist(renamePlaylistInDto: RenamePlaylistInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRenamePlaylist(renamePlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ReorderPlaylistInDto} reorderPlaylistInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto: TransposePlaylistItemInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerTransposePlaylistItem(transposePlaylistItemInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * PlaylistGettingApi - axios parameter creator
+ * @export
+ */
+export const PlaylistGettingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerGetPlaylistDataByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'guid' is not null or undefined
+            assertParamExists('playlistGettingControllerGetPlaylistDataByGuid', 'guid', guid)
+            const localVarPath = `/playlist/data`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (guid !== undefined) {
+                localVarQueryParameter['guid'] = guid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerGetPlaylistsOfUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/playlist/ofuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} variant 
+         * @param {string} playlist 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerIsVariantInPlaylist: async (variant: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'variant' is not null or undefined
+            assertParamExists('playlistGettingControllerIsVariantInPlaylist', 'variant', variant)
+            // verify required parameter 'playlist' is not null or undefined
+            assertParamExists('playlistGettingControllerIsVariantInPlaylist', 'playlist', playlist)
+            const localVarPath = `/playlist/contains`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (variant !== undefined) {
+                localVarQueryParameter['variant'] = variant;
+            }
+
+            if (playlist !== undefined) {
+                localVarQueryParameter['playlist'] = playlist;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {string} playlist 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerSearchInPlaylist: async (searchKey: string, playlist: string, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchKey' is not null or undefined
+            assertParamExists('playlistGettingControllerSearchInPlaylist', 'searchKey', searchKey)
+            // verify required parameter 'playlist' is not null or undefined
+            assertParamExists('playlistGettingControllerSearchInPlaylist', 'playlist', playlist)
+            const localVarPath = `/playlist/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchKey !== undefined) {
+                localVarQueryParameter['searchKey'] = searchKey;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (playlist !== undefined) {
+                localVarQueryParameter['playlist'] = playlist;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PlaylistGettingApi - functional programming interface
+ * @export
+ */
+export const PlaylistGettingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PlaylistGettingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerGetPlaylistDataByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistDataOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerGetPlaylistDataByGuid(guid, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerGetPlaylistDataByGuid']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPlaylistsResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerGetPlaylistsOfUser(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerGetPlaylistsOfUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} variant 
+         * @param {string} playlist 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerIsVariantInPlaylist(variant, playlist, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerIsVariantInPlaylist']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {string} playlist 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSearchInPlaylistResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerSearchInPlaylist']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * PlaylistGettingApi - factory interface
+ * @export
+ */
+export const PlaylistGettingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PlaylistGettingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerGetPlaylistDataByGuid(guid: string, options?: any): AxiosPromise<PlaylistDataOutDto> {
+            return localVarFp.playlistGettingControllerGetPlaylistDataByGuid(guid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerGetPlaylistsOfUser(options?: any): AxiosPromise<GetPlaylistsResult> {
+            return localVarFp.playlistGettingControllerGetPlaylistsOfUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} variant 
+         * @param {string} playlist 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerIsVariantInPlaylist(variant: string, playlist: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistGettingControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {string} playlist 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: any): AxiosPromise<GetSearchInPlaylistResult> {
+            return localVarFp.playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PlaylistGettingApi - object-oriented interface
+ * @export
+ * @class PlaylistGettingApi
+ * @extends {BaseAPI}
+ */
+export class PlaylistGettingApi extends BaseAPI {
+    /**
+     * 
      * @param {string} guid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistGettingApi
      */
-    public songsControllerGetSongsInPlaylistByGuid(guid: string, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerGetSongsInPlaylistByGuid(guid, options).then((request) => request(this.axios, this.basePath));
+    public playlistGettingControllerGetPlaylistDataByGuid(guid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerGetPlaylistDataByGuid(guid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function checks if a variant is in a playlist.
-     * @summary Checks if a variant is in a playlist.
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistGettingApi
+     */
+    public playlistGettingControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerGetPlaylistsOfUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} variant 
      * @param {string} playlist 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistGettingApi
      */
-    public songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(this.axios, this.basePath));
+    public playlistGettingControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * The function removes a variant from a playlist.
-     * @summary Removes a variant from a playlist.
-     * @param {string} variant 
+     * 
+     * @param {string} searchKey 
      * @param {string} playlist 
+     * @param {number} [page] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PlaylistsApi
+     * @memberof PlaylistGettingApi
      */
-    public songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function renames a playlist.
-     * @summary Renames a playlist.
-     * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PlaylistsApi
-     */
-    public songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: RawAxiosRequestConfig) {
-        return PlaylistsApiFp(this.configuration).songsControllerRenamePlaylist(postRenamePlaylistBody, options).then((request) => request(this.axios, this.basePath));
+    public playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4916,6 +5157,53 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {string} searchKey 
+         * @param {number} page 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetBySearch: async (searchKey: string, page: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchKey' is not null or undefined
+            assertParamExists('songGettingControllerGetBySearch', 'searchKey', searchKey)
+            // verify required parameter 'page' is not null or undefined
+            assertParamExists('songGettingControllerGetBySearch', 'page', page)
+            const localVarPath = `/song/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchKey !== undefined) {
+                localVarQueryParameter['searchKey'] = searchKey;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4934,6 +5222,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (guid !== undefined) {
                 localVarQueryParameter['guid'] = guid;
@@ -4962,6 +5254,19 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} searchKey 
+         * @param {number} page 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SongVariantDataOutDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetBySearch(searchKey, page, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['SongGettingApi.songGettingControllerGetBySearch']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4984,6 +5289,16 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {string} searchKey 
+         * @param {number} page 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetBySearch(searchKey: string, page: number, options?: any): AxiosPromise<Array<SongVariantDataOutDto>> {
+            return localVarFp.songGettingControllerGetBySearch(searchKey, page, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5001,6 +5316,18 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class SongGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} searchKey 
+     * @param {number} page 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetBySearch(searchKey, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} guid 
@@ -5062,127 +5389,6 @@ export const SongsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerAddVariantToPlaylist: async (postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postAddVariantToPlaylistBody' is not null or undefined
-            assertParamExists('songsControllerAddVariantToPlaylist', 'postAddVariantToPlaylistBody', postAddVariantToPlaylistBody)
-            const localVarPath = `/songs/playlist/add`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postAddVariantToPlaylistBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerCreatePlaylist: async (postCreatePlaylistBody: PostCreatePlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postCreatePlaylistBody' is not null or undefined
-            assertParamExists('songsControllerCreatePlaylist', 'postCreatePlaylistBody', postCreatePlaylistBody)
-            const localVarPath = `/songs/playlist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postCreatePlaylistBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerDeletePlaylistByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songsControllerDeletePlaylistByGuid', 'guid', guid)
-            const localVarPath = `/songs/playlist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * The function returns a list of songs by the given query.
          * @summary Returns a list of songs by the given query.
          * @param {SongsControllerGetByQueryKeyEnum} key 
@@ -5206,50 +5412,6 @@ export const SongsApiAxiosParamCreator = function (configuration?: Configuration
 
             if (key !== undefined) {
                 localVarQueryParameter['key'] = key;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns a list of songs by the given search query.
-         * @summary Returns a list of songs by the given search query.
-         * @param {string} searchKey 
-         * @param {number} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetBySearch: async (searchKey: string, page: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'searchKey' is not null or undefined
-            assertParamExists('songsControllerGetBySearch', 'searchKey', searchKey)
-            // verify required parameter 'page' is not null or undefined
-            assertParamExists('songsControllerGetBySearch', 'page', page)
-            const localVarPath = `/songs/search`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (searchKey !== undefined) {
-                localVarQueryParameter['searchKey'] = searchKey;
-            }
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
             }
 
 
@@ -5288,40 +5450,6 @@ export const SongsApiAxiosParamCreator = function (configuration?: Configuration
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
             }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetPlaylistsOfUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/songs/playlists`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5463,87 +5591,6 @@ export const SongsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetSongsInPlaylistByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songsControllerGetSongsInPlaylistByGuid', 'guid', guid)
-            const localVarPath = `/songs/playlist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerIsVariantInPlaylist: async (variant: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variant' is not null or undefined
-            assertParamExists('songsControllerIsVariantInPlaylist', 'variant', variant)
-            // verify required parameter 'playlist' is not null or undefined
-            assertParamExists('songsControllerIsVariantInPlaylist', 'playlist', playlist)
-            const localVarPath = `/songs/isinplaylist`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (variant !== undefined) {
-                localVarQueryParameter['variant'] = variant;
-            }
-
-            if (playlist !== undefined) {
-                localVarQueryParameter['playlist'] = playlist;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * The function merges two variants of a song by the given guids.
          * @summary Merges two variants of a song by the given guids.
          * @param {PostMergeBody} postMergeBody 
@@ -5603,227 +5650,6 @@ export const SongsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerRemoveVariantFromPlaylistDelete: async (variant: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variant' is not null or undefined
-            assertParamExists('songsControllerRemoveVariantFromPlaylistDelete', 'variant', variant)
-            // verify required parameter 'playlist' is not null or undefined
-            assertParamExists('songsControllerRemoveVariantFromPlaylistDelete', 'playlist', playlist)
-            const localVarPath = `/songs/playlist/remove`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (variant !== undefined) {
-                localVarQueryParameter['variant'] = variant;
-            }
-
-            if (playlist !== undefined) {
-                localVarQueryParameter['playlist'] = playlist;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerRenamePlaylist: async (postRenamePlaylistBody: PostRenamePlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postRenamePlaylistBody' is not null or undefined
-            assertParamExists('songsControllerRenamePlaylist', 'postRenamePlaylistBody', postRenamePlaylistBody)
-            const localVarPath = `/songs/playlist/rename`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postRenamePlaylistBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function reorders a playlist.
-         * @summary Reorders a playlist.
-         * @param {PostReorderPlaylistBody} postReorderPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerReorderPlaylist: async (postReorderPlaylistBody: PostReorderPlaylistBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postReorderPlaylistBody' is not null or undefined
-            assertParamExists('songsControllerReorderPlaylist', 'postReorderPlaylistBody', postReorderPlaylistBody)
-            const localVarPath = `/songs/playlist/reorder`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postReorderPlaylistBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function searches in a playlist.
-         * @summary Searches in a playlist.
-         * @param {string} searchKey 
-         * @param {string} guid 
-         * @param {number} [page] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerSearchInPlaylist: async (searchKey: string, guid: string, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'searchKey' is not null or undefined
-            assertParamExists('songsControllerSearchInPlaylist', 'searchKey', searchKey)
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songsControllerSearchInPlaylist', 'guid', guid)
-            const localVarPath = `/songs/playlist/search`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (searchKey !== undefined) {
-                localVarQueryParameter['searchKey'] = searchKey;
-            }
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function transposes a playlist item.
-         * @summary Transposes a playlist item.
-         * @param {PostTransposePlaylistItemBody} postTransposePlaylistItemBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerTransposePlaylistItem: async (postTransposePlaylistItemBody: PostTransposePlaylistItemBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postTransposePlaylistItemBody' is not null or undefined
-            assertParamExists('songsControllerTransposePlaylistItem', 'postTransposePlaylistItemBody', postTransposePlaylistItemBody)
-            const localVarPath = `/songs/playlist/item/transpose`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postTransposePlaylistItemBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5930,45 +5756,6 @@ export const SongsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerAddVariantToPlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreatePlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerCreatePlaylist(postCreatePlaylistBody, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerCreatePlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerDeletePlaylistByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerDeletePlaylistByGuid(guid, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerDeletePlaylistByGuid']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
          * The function returns a list of songs by the given query.
          * @summary Returns a list of songs by the given query.
          * @param {SongsControllerGetByQueryKeyEnum} key 
@@ -5982,20 +5769,6 @@ export const SongsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function returns a list of songs by the given search query.
-         * @summary Returns a list of songs by the given search query.
-         * @param {string} searchKey 
-         * @param {number} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SearchResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetBySearch(searchKey, page, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerGetBySearch']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
          * The function returns a list of public songs by the given page.
          * @summary Returns a list of public songs by the given page.
          * @param {number} page 
@@ -6006,18 +5779,6 @@ export const SongsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetList(page, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['SongsApi.songsControllerGetList']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPlaylistsResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetPlaylistsOfUser(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerGetPlaylistsOfUser']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
@@ -6070,33 +5831,6 @@ export const SongsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerGetSongsInPlaylistByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetVariantsInPlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerGetSongsInPlaylistByGuid(guid, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerGetSongsInPlaylistByGuid']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerIsVariantInPlaylist(variant, playlist, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerIsVariantInPlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
          * The function merges two variants of a song by the given guids.
          * @summary Merges two variants of a song by the given guids.
          * @param {PostMergeBody} postMergeBody 
@@ -6119,74 +5853,6 @@ export const SongsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerParse(options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['SongsApi.songsControllerParse']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerRemoveVariantFromPlaylistDelete']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerRenamePlaylist(postRenamePlaylistBody, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerRenamePlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function reorders a playlist.
-         * @summary Reorders a playlist.
-         * @param {PostReorderPlaylistBody} postReorderPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerReorderPlaylist(postReorderPlaylistBody: PostReorderPlaylistBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerReorderPlaylist(postReorderPlaylistBody, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerReorderPlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function searches in a playlist.
-         * @summary Searches in a playlist.
-         * @param {string} searchKey 
-         * @param {string} guid 
-         * @param {number} [page] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerSearchInPlaylist(searchKey: string, guid: string, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSearchInPlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerSearchInPlaylist(searchKey, guid, page, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerSearchInPlaylist']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * The function transposes a playlist item.
-         * @summary Transposes a playlist item.
-         * @param {PostTransposePlaylistItemBody} postTransposePlaylistItemBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songsControllerTransposePlaylistItem(postTransposePlaylistItemBody: PostTransposePlaylistItemBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songsControllerTransposePlaylistItem(postTransposePlaylistItemBody, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['SongsApi.songsControllerTransposePlaylistItem']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
@@ -6236,36 +5902,6 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.songsControllerAddSongData(postAddSongDataBody, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function adds a variant to a playlist.
-         * @summary Adds a variant to a playlist.
-         * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function creates a new empty playlist.
-         * @summary Creates a new empty playlist.
-         * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: any): AxiosPromise<PostCreatePlaylistResult> {
-            return localVarFp.songsControllerCreatePlaylist(postCreatePlaylistBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function deletes a playlist by the given guid.
-         * @summary Deletes a playlist by the given guid.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerDeletePlaylistByGuid(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerDeletePlaylistByGuid(guid, options).then((request) => request(axios, basePath));
-        },
-        /**
          * The function returns a list of songs by the given query.
          * @summary Returns a list of songs by the given query.
          * @param {SongsControllerGetByQueryKeyEnum} key 
@@ -6276,17 +5912,6 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.songsControllerGetByQuery(key, options).then((request) => request(axios, basePath));
         },
         /**
-         * The function returns a list of songs by the given search query.
-         * @summary Returns a list of songs by the given search query.
-         * @param {string} searchKey 
-         * @param {number} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetBySearch(searchKey: string, page: number, options?: any): AxiosPromise<SearchResult> {
-            return localVarFp.songsControllerGetBySearch(searchKey, page, options).then((request) => request(axios, basePath));
-        },
-        /**
          * The function returns a list of public songs by the given page.
          * @summary Returns a list of public songs by the given page.
          * @param {number} page 
@@ -6295,15 +5920,6 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
          */
         songsControllerGetList(page: number, options?: any): AxiosPromise<ListResult> {
             return localVarFp.songsControllerGetList(page, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns a list of playlists of the given user.
-         * @summary Returns a list of playlists of the given user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetPlaylistsOfUser(options?: any): AxiosPromise<GetPlaylistsResult> {
-            return localVarFp.songsControllerGetPlaylistsOfUser(options).then((request) => request(axios, basePath));
         },
         /**
          * The function returns a random variant.
@@ -6343,27 +5959,6 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.songsControllerGetSongsCount(options).then((request) => request(axios, basePath));
         },
         /**
-         * The function returns a list of variants in the given playlist.
-         * @summary Returns a list of variants in the given playlist.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerGetSongsInPlaylistByGuid(guid: string, options?: any): AxiosPromise<GetVariantsInPlaylistResult> {
-            return localVarFp.songsControllerGetSongsInPlaylistByGuid(guid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function checks if a variant is in a playlist.
-         * @summary Checks if a variant is in a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(axios, basePath));
-        },
-        /**
          * The function merges two variants of a song by the given guids.
          * @summary Merges two variants of a song by the given guids.
          * @param {PostMergeBody} postMergeBody 
@@ -6381,59 +5976,6 @@ export const SongsApiFactory = function (configuration?: Configuration, basePath
          */
         songsControllerParse(options?: any): AxiosPromise<ParserSongDataResult> {
             return localVarFp.songsControllerParse(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function removes a variant from a playlist.
-         * @summary Removes a variant from a playlist.
-         * @param {string} variant 
-         * @param {string} playlist 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function renames a playlist.
-         * @summary Renames a playlist.
-         * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerRenamePlaylist(postRenamePlaylistBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function reorders a playlist.
-         * @summary Reorders a playlist.
-         * @param {PostReorderPlaylistBody} postReorderPlaylistBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerReorderPlaylist(postReorderPlaylistBody: PostReorderPlaylistBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerReorderPlaylist(postReorderPlaylistBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function searches in a playlist.
-         * @summary Searches in a playlist.
-         * @param {string} searchKey 
-         * @param {string} guid 
-         * @param {number} [page] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerSearchInPlaylist(searchKey: string, guid: string, page?: number, options?: any): AxiosPromise<GetSearchInPlaylistResult> {
-            return localVarFp.songsControllerSearchInPlaylist(searchKey, guid, page, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function transposes a playlist item.
-         * @summary Transposes a playlist item.
-         * @param {PostTransposePlaylistItemBody} postTransposePlaylistItemBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songsControllerTransposePlaylistItem(postTransposePlaylistItemBody: PostTransposePlaylistItemBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songsControllerTransposePlaylistItem(postTransposePlaylistItemBody, options).then((request) => request(axios, basePath));
         },
         /**
          * The function unverifies a variant by the given guid.
@@ -6478,42 +6020,6 @@ export class SongsApi extends BaseAPI {
     }
 
     /**
-     * The function adds a variant to a playlist.
-     * @summary Adds a variant to a playlist.
-     * @param {PostAddVariantToPlaylistBody} postAddVariantToPlaylistBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody: PostAddVariantToPlaylistBody, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerAddVariantToPlaylist(postAddVariantToPlaylistBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function creates a new empty playlist.
-     * @summary Creates a new empty playlist.
-     * @param {PostCreatePlaylistBody} postCreatePlaylistBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerCreatePlaylist(postCreatePlaylistBody: PostCreatePlaylistBody, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerCreatePlaylist(postCreatePlaylistBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function deletes a playlist by the given guid.
-     * @summary Deletes a playlist by the given guid.
-     * @param {string} guid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerDeletePlaylistByGuid(guid: string, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerDeletePlaylistByGuid(guid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * The function returns a list of songs by the given query.
      * @summary Returns a list of songs by the given query.
      * @param {SongsControllerGetByQueryKeyEnum} key 
@@ -6526,19 +6032,6 @@ export class SongsApi extends BaseAPI {
     }
 
     /**
-     * The function returns a list of songs by the given search query.
-     * @summary Returns a list of songs by the given search query.
-     * @param {string} searchKey 
-     * @param {number} page 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerGetBySearch(searchKey, page, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * The function returns a list of public songs by the given page.
      * @summary Returns a list of public songs by the given page.
      * @param {number} page 
@@ -6548,17 +6041,6 @@ export class SongsApi extends BaseAPI {
      */
     public songsControllerGetList(page: number, options?: RawAxiosRequestConfig) {
         return SongsApiFp(this.configuration).songsControllerGetList(page, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function returns a list of playlists of the given user.
-     * @summary Returns a list of playlists of the given user.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerGetPlaylistsOfUser(options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerGetPlaylistsOfUser(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6607,31 +6089,6 @@ export class SongsApi extends BaseAPI {
     }
 
     /**
-     * The function returns a list of variants in the given playlist.
-     * @summary Returns a list of variants in the given playlist.
-     * @param {string} guid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerGetSongsInPlaylistByGuid(guid: string, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerGetSongsInPlaylistByGuid(guid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function checks if a variant is in a playlist.
-     * @summary Checks if a variant is in a playlist.
-     * @param {string} variant 
-     * @param {string} playlist 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerIsVariantInPlaylist(variant: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerIsVariantInPlaylist(variant, playlist, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * The function merges two variants of a song by the given guids.
      * @summary Merges two variants of a song by the given guids.
      * @param {PostMergeBody} postMergeBody 
@@ -6652,69 +6109,6 @@ export class SongsApi extends BaseAPI {
      */
     public songsControllerParse(options?: RawAxiosRequestConfig) {
         return SongsApiFp(this.configuration).songsControllerParse(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function removes a variant from a playlist.
-     * @summary Removes a variant from a playlist.
-     * @param {string} variant 
-     * @param {string} playlist 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerRemoveVariantFromPlaylistDelete(variant: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerRemoveVariantFromPlaylistDelete(variant, playlist, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function renames a playlist.
-     * @summary Renames a playlist.
-     * @param {PostRenamePlaylistBody} postRenamePlaylistBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerRenamePlaylist(postRenamePlaylistBody: PostRenamePlaylistBody, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerRenamePlaylist(postRenamePlaylistBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function reorders a playlist.
-     * @summary Reorders a playlist.
-     * @param {PostReorderPlaylistBody} postReorderPlaylistBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerReorderPlaylist(postReorderPlaylistBody: PostReorderPlaylistBody, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerReorderPlaylist(postReorderPlaylistBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function searches in a playlist.
-     * @summary Searches in a playlist.
-     * @param {string} searchKey 
-     * @param {string} guid 
-     * @param {number} [page] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerSearchInPlaylist(searchKey: string, guid: string, page?: number, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerSearchInPlaylist(searchKey, guid, page, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function transposes a playlist item.
-     * @summary Transposes a playlist item.
-     * @param {PostTransposePlaylistItemBody} postTransposePlaylistItemBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongsApi
-     */
-    public songsControllerTransposePlaylistItem(postTransposePlaylistItemBody: PostTransposePlaylistItemBody, options?: RawAxiosRequestConfig) {
-        return SongsApiFp(this.configuration).songsControllerTransposePlaylistItem(postTransposePlaylistItemBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

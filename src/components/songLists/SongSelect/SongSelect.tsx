@@ -30,11 +30,9 @@ export default function SongSelect({ onChange, filter }: SongSelectProps) {
 
     const searchCallback = () => {
         search({ searchKey: value, page: 0 }).then((data) => {
-            const d = mapSearchResultApiToSongVariantDtoArr(data).filter((v) =>
-                filter ? filter(v) : true
-            );
+            const d = data.filter((v) => (filter ? filter(v) : true));
             setData(d);
-            setOpen(data.songs.length > 0);
+            setOpen(data.length > 0);
         });
     };
 

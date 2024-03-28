@@ -44,8 +44,7 @@ export default function SongSearch({
                 searchKey: searchString,
                 page: 0
             }).then((data) => {
-                const d = mapSearchResultApiToSongVariantDtoArr(data);
-                setVariants(d);
+                setVariants(data);
             });
         }
 

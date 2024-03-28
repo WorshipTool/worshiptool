@@ -3,7 +3,7 @@ import {
     SearchResult,
     SearchSongData,
     SongDataVariant,
-    SongVariantDto as ApiDto
+    SongVariantDataOutDto
 } from "../../generated";
 import { SongVariantDto } from "./songVariant.dto";
 import { mapApiToVariant } from "./mapApiToVariant";
@@ -20,14 +20,14 @@ export const mapSongDataVariantApiToSongVariantDto = (
     };
 };
 
-export const mapSongVariantDtoApiToSongVariantDto = (
-    api: ApiDto
+export const mapSongVariantDataOutDtoToSongVariantDto = (
+    api: SongVariantDataOutDto
 ): SongVariantDto => {
     return {
         ...api,
-        sheet: new Sheet(api.sheetData),
-        createdBy: api.createdByGuid,
         preferredTitle: api.prefferedTitle,
+        sheet: new Sheet(api.sheetData),
+        createdBy: api.createdBy,
         public: api.verified || api.createdByLoader
     };
 };

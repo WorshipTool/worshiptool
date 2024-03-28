@@ -48,7 +48,7 @@ export default function EditButton(props: EditButtonProps) {
             loadingIndicator="Ukládání..."
             disabled={
                 (props.inEditMode && !props.anyChange) ||
-                !isSheetDataValid(props.sheetData)
+                (props.inEditMode && !isSheetDataValid(props.sheetData))
             }
             onClick={onClick}>
             {props.inEditMode ? "Uložit" : "Upravit"}

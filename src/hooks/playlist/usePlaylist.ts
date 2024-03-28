@@ -6,7 +6,7 @@ import Playlist, {
 import { ApiReorderPlaylistItemDTO } from "../../api/dtos/playlist/dtosPlaylist";
 import { Chord } from "@pepavlin/sheet-api";
 import useAuth from "../auth/useAuth";
-import { mapPlaylistItemDtoApiToPlaylistItemDto } from "../../api/dtos/playlist/playlist.map";
+import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from "../../api/dtos/playlist/playlist.map";
 
 export default function usePlaylist(guid: string | undefined) {
     const {
@@ -38,7 +38,7 @@ export default function usePlaylist(guid: string | undefined) {
         return getPlaylistByGuid(guid)
             .then((r) => {
                 setPlaylist(r);
-                setItems(r.items);
+                setItems(r.items.sort((a, b) => a.order - b.order));
                 setCount(r.items.length);
                 setLoading(false);
             })
@@ -55,7 +55,7 @@ export default function usePlaylist(guid: string | undefined) {
                 console.log(r);
                 setItems(
                     r.items.map((v) =>
-                        mapPlaylistItemDtoApiToPlaylistItemDto(v)
+                        mapPlaylistItemOutDtoApiToPlaylistItemDto(v)
                     )
                 );
             })
@@ -64,24 +64,30 @@ export default function usePlaylist(guid: string | undefined) {
             });
     };
 
-    const addVariant = (variant: string): Promise<boolean> => {
+    const addVariant = async (variantAlias: string): Promise<boolean> => {
         if (!guid) {
             console.error("Guid is undefined");
             return Promise.reject();
         }
 
-        return addVariantToPlaylist(variant, guid).then(async (r) => {
-            await reload();
-            return r;
-        });
+        try {
+            await addVariantToPlaylist(variantAlias, guid).then(async (r) => {
+                await reload();
+                return r;
+            });
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     };
-    const removeVariant = async (variant: string): Promise<boolean> => {
+    const removeVariant = async (variantAlias: string): Promise<boolean> => {
         if (!guid) {
             console.error("Guid is undefined");
             return Promise.reject();
         }
 
-        const r = await removeVariantFromPlaylist(variant, guid);
+        const r = await removeVariantFromPlaylist(variantAlias, guid);
         await reload();
         return r;
     };

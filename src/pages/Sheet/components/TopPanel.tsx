@@ -7,9 +7,12 @@ import { Sheet } from "@pepavlin/sheet-api";
 import AddToPlaylistButton from "./components/AddToPlaylistButton/AddToPlaylistButton";
 import PrintButton from "./components/PrintButton";
 import EditButton from "./components/EditButton";
-import { PostEditVariantBody } from "../../../api/dtos/dtosSong";
 import { useSnackbar } from "notistack";
-import { EditVariantOutDto, SongEditingApi } from "../../../api/generated";
+import {
+    EditVariantOutDto,
+    PostEditVariantInDto,
+    SongEditingApi
+} from "../../../api/generated";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import CreateCopyButton from "./components/CreateCopyButton";
@@ -74,8 +77,8 @@ export default function TopPanel(props: TopPanelProps) {
 
         setSaving(true);
 
-        const body: PostEditVariantBody = {
-            guid: props.variant.guid,
+        const body: PostEditVariantInDto = {
+            variantAlias: props.variant.alias,
             sheetData: props.sheet.getOriginalSheetData(),
             title: props.title
         };

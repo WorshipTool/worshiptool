@@ -27,7 +27,7 @@ export default function AddToSelection({
     const onAddClick = async () => {
         if (selectedVariant === null) return;
 
-        await selection.addVariant(selectedVariant.guid);
+        await selection.addVariant(selectedVariant.alias);
         onChangeCallback?.();
 
         // window.location.reload();

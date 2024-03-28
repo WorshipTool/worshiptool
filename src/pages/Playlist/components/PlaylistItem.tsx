@@ -59,7 +59,7 @@ export const PlaylistItem = ({ item, reload }: PlaylistItemProps) => {
 
     const onRemove = async () => {
         setRemoving(true);
-        const result = await removeVariant(item.variant.guid);
+        await removeVariant(item.variant.alias);
         setRemoving(false);
 
         turnOn(playlistGuid);
