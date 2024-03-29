@@ -37,3 +37,10 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - proklik na jednotlivé písně
 - tisk
 - mód karty
+
+## Horní líšta
+- fungují prokliky
+  
+## Seznam playlistů
+## Seznam mých písní
+## Mód skupiny
