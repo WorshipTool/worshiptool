@@ -44,3 +44,5 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 ## Seznam playlistů
 ## Seznam mých písní
 ## Mód skupiny
+
+## Feedback
