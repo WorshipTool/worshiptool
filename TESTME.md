@@ -22,6 +22,12 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - vygenerování nového url při velké změně jména
 - rezponzivnost
 
+## Vytvořit píseň
+- Přidání ručně psané písně
+- Při ručním psaní písně kontrola validity
+- Pokud je možnost použít Image-Parser aktivní, musí fungovat všechny uvedené formáty
+- Pokud Image-Parser není k dizpozici, neaktivní tlačítko
+
 ## Playlist
 - přidávání písní ze stránky písně
 - přidávání písní z pravého panelu
