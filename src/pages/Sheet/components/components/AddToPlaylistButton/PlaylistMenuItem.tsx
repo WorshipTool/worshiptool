@@ -29,7 +29,7 @@ interface PlaylistMenuItemProps {
 
 export default function PlaylistMenuItem({
     variant,
-    guid,
+    guid: playlistGuid,
     title
 }: PlaylistMenuItemProps) {
     const {
@@ -44,7 +44,7 @@ export default function PlaylistMenuItem({
     useEffect(() => {
         if (variant) {
             setLoading(true);
-            isVariantInPlaylist(variant.guid, guid).then((r) => {
+            isVariantInPlaylist(variant.alias, playlistGuid).then((r) => {
                 setIsInPlaylist(r);
                 setLoading(false);
             });
@@ -52,46 +52,48 @@ export default function PlaylistMenuItem({
     }, [variant]);
 
     const reloadPlaylists = () => {
-        return isVariantInPlaylist(variant.guid, guid).then((r) => {
+        return isVariantInPlaylist(variant.alias, playlistGuid).then((r) => {
             setIsInPlaylist(r);
         });
     };
 
     const addVariantToPlaylist = (guid: string) => {
         setLoading(true);
-        const body: PostAddVariantToPlaylistBodyDTO = {
-            playlist: guid,
-            variant: variant.guid
-        };
-        addToPlaylist(body.variant, guid).then(async (result) => {
-            await reloadPlaylists();
-            setLoading(false);
-        });
+
+        try {
+            addToPlaylist(variant.alias, guid).then(async (result) => {
+                await reloadPlaylists();
+                setLoading(false);
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const removeVariantFromPlaylist = (guid: string) => {
         setLoading(true);
-        const body: PostAddVariantToPlaylistBodyDTO = {
-            playlist: guid,
-            variant: variant.guid
-        };
-        removeFromPlaylist(body.variant, guid).then(async (result) => {
-            await reloadPlaylists();
-            setLoading(false);
-        });
+
+        try {
+            removeFromPlaylist(variant.alias, guid).then(async (result) => {
+                await reloadPlaylists();
+                setLoading(false);
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
     const navigate = useNavigate();
     const openPlaylist = () => {
         // navigate(`/playlist/${guid}`);
-        window.open(`/playlist/${guid}`, "_blank");
+        window.open(`/playlist/${playlistGuid}`, "_blank");
     };
 
     return (
-        <MenuItem key={guid + "pl"} disabled={loading}>
+        <MenuItem key={playlistGuid + "pl"} disabled={loading}>
             <Box
                 onClick={() => {
-                    if (!isInPlaylist) addVariantToPlaylist(guid);
-                    else removeVariantFromPlaylist(guid);
+                    if (!isInPlaylist) addVariantToPlaylist(playlistGuid);
+                    else removeVariantFromPlaylist(playlistGuid);
                 }}
                 sx={{
                     flexDirection: "row",

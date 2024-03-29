@@ -28,15 +28,14 @@ import ToolPanel from "./ToolPanel";
 import ContainerGrid from "../../../components/ContainerGrid";
 import AppContainer from "../../../components/AppContainer/AppContainer";
 import ImportButton from "./components/ImportButton";
-import { NewSongDataProcessResult, SongsApi } from "../../../api/generated";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
-import useSong from "../../../hooks/song/useSong";
-import useAuth from "../../../hooks/auth/useAuth";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
 import { getVariantUrl } from "../../../routes/routes";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import NotValidWarning from "./components/NotValidWarning";
+import { useApi } from "../../../hooks/api/useApi";
+import { NewSongDataProcessResult } from "../../../api/generated";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3),
@@ -57,10 +56,7 @@ const SheetInput = styled(InputBase)(({}) => ({
 export default function Create() {
     const { guid } = useParams();
 
-    const { setGUID, getName } = useSong(guid || null);
-
-    const { apiConfiguration } = useAuth();
-    const apiSongs = new SongsApi(apiConfiguration);
+    const { songAddingApi } = useApi();
     const {
         fetchApiState,
         apiState: { loading: posting, error }
@@ -90,7 +86,7 @@ export default function Create() {
         fetchApiState(
             async () => {
                 return handleApiCall(
-                    apiSongs.songsControllerAddSongData({
+                    songAddingApi.songAddingControllerCreate({
                         songGuid: guid,
                         title,
                         sheetData
@@ -180,11 +176,15 @@ export default function Create() {
                                 display={"flex"}
                                 alignItems={"center"}>
                                 {/* <ImportButton onLoad={onImport}/> */}
-                                {guid && <Typography>Parent song:</Typography>}
+                                {guid && (
+                                    <Typography>
+                                        Tato píseň má i jiné verze..
+                                    </Typography>
+                                )}
                                 <Gap horizontal />
                                 {guid && (
                                     <Typography fontWeight={"bold"}>
-                                        {getName()}
+                                        {/* {getName()} */}
                                     </Typography>
                                 )}
                             </Box>

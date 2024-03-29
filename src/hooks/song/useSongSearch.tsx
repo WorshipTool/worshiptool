@@ -1,4 +1,7 @@
-import { SongsApi } from "../../api/generated";
+import {
+    mapSongDataVariantApiToSongVariantDto,
+    mapSongVariantDataOutDtoToSongVariantDto
+} from "../../api/dtos";
 import { handleApiCall } from "../../tech/handleApiCall";
 import { useApi } from "../api/useApi";
 import useAuth from "../auth/useAuth";
@@ -10,13 +13,13 @@ type useSongSearchProps = {
 };
 
 export default function useSongSearch() {
-    const { songsApi } = useApi();
+    const { songGettingApi } = useApi();
     const { user } = useAuth();
 
     const getSongs = async (additionalParams: useSongSearchProps) => {
         try {
             const result = await handleApiCall(
-                songsApi.songsControllerGetBySearch(
+                songGettingApi.songGettingControllerGetBySearch(
                     additionalParams.searchKey,
                     additionalParams.page || 0,
                     {
@@ -24,20 +27,21 @@ export default function useSongSearch() {
                     }
                 )
             );
-            // Createdy by user first
-            const ordered = result.songs.sort((a, b) => {
-                if (a.variant.createdByGuid === user?.guid) return -1;
-                if (b.variant.createdByGuid === user?.guid) return 1;
+            // Created by user first
+            const ordered = result.sort((a, b) => {
+                if (a.createdBy === user?.guid) return -1;
+                if (b.createdBy === user?.guid) return 1;
                 return 0;
             });
 
-            result.songs = ordered;
-            return result;
+            return ordered.map((s) =>
+                mapSongVariantDataOutDtoToSongVariantDto(s)
+            );
         } catch (e) {
             console.log(e);
         }
 
-        return { songs: [] };
+        return [];
     };
 
     return getSongs;

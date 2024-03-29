@@ -60,11 +60,6 @@ export default function SearchItem({
         apiState: { loading }
     } = useApiState();
 
-    const isInPlaylist = useMemo(
-        () => items.some((v) => v.variant.guid == variant.guid),
-        [items, variant.guid]
-    );
-
     const { turnOn } = useCurrentPlaylist();
     const onSongClick = () => {
         onClickCallback?.(variant);
@@ -73,9 +68,12 @@ export default function SearchItem({
 
     const addToPlaylist = async () => {
         turnOn(playlist.guid);
-        fetchApiState(() => {
-            return addVariant(variant.guid);
-        });
+        fetchApiState(
+            async () => {
+                return await addVariant(variant.alias);
+            },
+            () => reload()
+        );
     };
 
     const navigate = useNavigate();

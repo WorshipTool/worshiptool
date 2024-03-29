@@ -14,22 +14,18 @@ import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import { Work, Workspaces } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import useAuth from "../../../../hooks/auth/useAuth";
-import { GroupApi, SongsApi } from "../../../../api/generated";
 import { useApiState, useApiStateEffect } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";
+import { useApi } from "../../../../hooks/api/useApi";
 
 interface Buttons13kaProps {
     variant: SongVariantDto;
 }
 
 export default function Buttons13ka(props: Buttons13kaProps) {
-    // const {fetch, post: postData} = useFetch();
-    // const [loading, setLoading] = React.useState(false);
-    const { apiConfiguration } = useAuth();
-    const groupApi = new GroupApi(apiConfiguration);
-    const songsApi = new SongsApi(apiConfiguration);
-    const { fetchApiState, apiState } = useApiState<boolean | undefined>();
+    const { playlistEditingApi, groupApi } = useApi();
+    const { fetchApiState, apiState } = useApiState();
     const [{ data, loading }] = useApiStateEffect(() => {
         return handleApiCall(
             groupApi.groupControllerGetGroupInfo(undefined, "13ka")
@@ -43,10 +39,12 @@ export default function Buttons13ka(props: Buttons13kaProps) {
             async () => {
                 if (!data?.selection) return;
                 return handleApiCall(
-                    songsApi.songsControllerAddVariantToPlaylist({
-                        playlist: data.selection,
-                        variant: props.variant.guid
-                    })
+                    playlistEditingApi.playlistEditingControllerAddVariantToPlaylist(
+                        {
+                            playlist: data.selection,
+                            alias: props.variant.alias
+                        }
+                    )
                 ).catch((e) => {
                     return undefined;
                 });
@@ -62,8 +60,8 @@ export default function Buttons13ka(props: Buttons13kaProps) {
             async () => {
                 if (!data?.selection) return;
                 return handleApiCall(
-                    songsApi.songsControllerRemoveVariantFromPlaylistDelete(
-                        props.variant.guid,
+                    playlistEditingApi.playlistEditingControllerRemoveVariantFromPlaylistDelete(
+                        props.variant.alias,
                         data.selection
                     )
                 ).catch((e) => {

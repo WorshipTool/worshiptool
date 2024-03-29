@@ -26,11 +26,8 @@ import { useNavigate } from "react-router-dom";
 import OnChangeDelayer from "../../../components/ChangeDelayer";
 import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
 import { Downloading, Sync } from "@mui/icons-material";
-import { SearchResult, SearchSongData } from "../../../api/generated";
-import {
-    mapSearchSongDataApiToSongVariantDto,
-    SongVariantDto
-} from "../../../api/dtos";
+
+import { SongVariantDto } from "../../../api/dtos";
 import { getVariantUrl } from "../../../routes/routes";
 
 interface SearchedSongsListProps {
@@ -55,7 +52,7 @@ export default function SearchedSongsList({
         loadPage,
         data: songs,
         nextExists
-    } = usePagination<SearchSongData>((page, resolve, arr) => {
+    } = usePagination<SongVariantDto>((page, resolve, arr) => {
         // controller.abort();
         searchSongs({
             searchKey: searchString,
@@ -66,7 +63,7 @@ export default function SearchedSongsList({
             setLoading(false);
             setNextLoading(false);
             resolve(
-                data.songs.filter((v) => {
+                data.filter((v) => {
                     return !arr.find((s) => s.guid == v.guid);
                 })
             );
@@ -117,9 +114,7 @@ export default function SearchedSongsList({
 
                 {!loading && songs.length > 0 && (
                     <SongListCards
-                        variants={songs.map((s) =>
-                            mapSearchSongDataApiToSongVariantDto(s)
-                        )}
+                        variants={songs}
                         onClick={onCardClick}></SongListCards>
                 )}
             </>

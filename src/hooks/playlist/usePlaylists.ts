@@ -2,78 +2,93 @@ import { ApiReorderPlaylistItemDTO } from "../../api/dtos/playlist/dtosPlaylist"
 import useAuth from "../auth/useAuth";
 import Playlist from "../../interfaces/playlist/PlaylistDTO";
 import { Chord } from "@pepavlin/sheet-api";
-import { GetSearchInPlaylistResult, SongsApi } from "../../api/generated";
+import {
+    GetSearchInPlaylistResult,
+    PlaylistEditingApi,
+    PlaylistGettingApi
+} from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
-import { mapPlaylistItemDtoApiToPlaylistItemDto } from "../../api/dtos/playlist/playlist.map";
+import { useApi } from "../api/useApi";
+import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from "../../api/dtos/playlist/playlist.map";
 
 export default function usePlaylists() {
     // const {fetchData, post, loading} = useFetch();
 
+    // const { playlistEditingApi, playlistGettingApi } = useApi();
     const { apiConfiguration } = useAuth();
-    const songsApi = new SongsApi(apiConfiguration);
+    const playlistEditingApi = new PlaylistEditingApi(apiConfiguration);
+    const playlistGettingApi = new PlaylistGettingApi(apiConfiguration);
 
-    const addVariantToPlaylist = async (variant: string, playlist: string) => {
+    const addVariantToPlaylist = async (
+        variantAlias: string,
+        playlist: string
+    ) => {
         return await handleApiCall(
-            songsApi.songsControllerAddVariantToPlaylist({ playlist, variant })
+            playlistEditingApi.playlistEditingControllerAddVariantToPlaylist({
+                playlist,
+                alias: variantAlias
+            })
         );
     };
 
     const removeVariantFromPlaylist = async (
-        variant: string,
+        variantAlias: string,
         playlist: string
     ) => {
         return await handleApiCall(
-            songsApi.songsControllerRemoveVariantFromPlaylistDelete(
-                variant,
+            playlistEditingApi.playlistEditingControllerRemoveVariantFromPlaylistDelete(
+                variantAlias,
                 playlist
             )
         );
     };
 
     const isVariantInPlaylist = async (
-        variant: string,
+        variantAlias: string,
         playlist: string
     ): Promise<boolean> => {
         const result = await handleApiCall(
-            songsApi.songsControllerIsVariantInPlaylist(variant, playlist)
+            playlistGettingApi.playlistGettingControllerIsVariantInPlaylist(
+                variantAlias,
+                playlist
+            )
         );
+
         return result;
     };
 
     const getPlaylistsOfUser = async () => {
         return await handleApiCall(
-            songsApi.songsControllerGetPlaylistsOfUser()
+            playlistGettingApi.playlistGettingControllerGetPlaylistsOfUser()
         );
     };
 
     const createPlaylist = async (title?: string) => {
         if (!title) title = "Nový playlist";
         return await handleApiCall(
-            songsApi.songsControllerCreatePlaylist({ title })
+            playlistEditingApi.playlistEditingControllerCreatePlaylist({
+                title
+            })
         );
     };
 
     const deletePlaylist = async (guid: string) => {
         return await handleApiCall(
-            songsApi.songsControllerDeletePlaylistByGuid(guid)
-        );
-    };
-
-    const getSongsInPlaylist = async (guid: string) => {
-        return await handleApiCall(
-            songsApi.songsControllerGetSongsInPlaylistByGuid(guid)
+            playlistEditingApi.playlistEditingControllerDeletePlaylist(guid)
         );
     };
 
     const getPlaylistByGuid = async (guid: string): Promise<Playlist> => {
         const result = await handleApiCall(
-            songsApi.songsControllerGetSongsInPlaylistByGuid(guid)
+            playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
+                guid
+            )
         );
         return {
             guid,
             title: result.title,
             items: result.items.map((item) =>
-                mapPlaylistItemDtoApiToPlaylistItemDto(item)
+                mapPlaylistItemOutDtoApiToPlaylistItemDto(item)
             )
         };
     };
@@ -83,13 +98,19 @@ export default function usePlaylists() {
         searchString: string
     ): Promise<GetSearchInPlaylistResult> => {
         return await handleApiCall(
-            songsApi.songsControllerSearchInPlaylist(searchString, guid)
+            playlistGettingApi.playlistGettingControllerSearchInPlaylist(
+                searchString,
+                guid
+            )
         );
     };
 
     const renamePlaylist = async (guid: string, title: string) => {
         return await handleApiCall(
-            songsApi.songsControllerRenamePlaylist({ guid, title })
+            playlistEditingApi.playlistEditingControllerRenamePlaylist({
+                guid,
+                title
+            })
         );
     };
 
@@ -98,13 +119,16 @@ export default function usePlaylists() {
         items: ApiReorderPlaylistItemDTO[]
     ) => {
         return await handleApiCall(
-            songsApi.songsControllerReorderPlaylist({ guid, items })
+            playlistEditingApi.playlistEditingControllerReorderPlaylist({
+                guid,
+                items
+            })
         );
     };
 
     const setKeyChordOfItem = async (guid: string, keyChord: Chord) => {
         return await handleApiCall(
-            songsApi.songsControllerTransposePlaylistItem({
+            playlistEditingApi.playlistEditingControllerTransposePlaylistItem({
                 guid,
                 key: keyChord.toString()
             })

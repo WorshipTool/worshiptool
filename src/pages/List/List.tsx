@@ -14,10 +14,11 @@ import Toolbar from "../../components/Toolbars/Toolbar";
 import usePagination from "../../hooks/usePagination";
 import Gap from "../../components/Gap";
 import { useNavigate } from "react-router-dom";
-import { ListResult, ListSongData, SongsApi } from "../../api/generated";
 import useAuth from "../../hooks/auth/useAuth";
 import { handleApiCall } from "../../tech/handleApiCall";
 import { getVariantUrl } from "../../routes/routes";
+import { useApi } from "../../hooks/api/useApi";
+import { ListSongData } from "../../api/generated";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -34,18 +35,16 @@ export default function List() {
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(1);
 
-    const { apiConfiguration } = useAuth();
-    const songsApi = new SongsApi(apiConfiguration);
-
+    const { songGettingApi } = useApi();
     const {
         nextPage,
         loadPage,
         data: songs,
         nextExists
     } = usePagination<ListSongData>((page, resolve, arr) => {
-        handleApiCall(songsApi.songsControllerGetList(page))
+        handleApiCall(songGettingApi.songGettingControllerGetList(page))
             .then((data) => {
-                const uniq = data.songs.filter((v) => {
+                const uniq = data.filter((v) => {
                     return !arr.find((s) => s.guid == v.guid);
                 });
                 resolve(uniq);

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from "react";
-import useSong from "../../../hooks/song/useSong";
 import useInnerPlaylist from "../hooks/useInnerPlaylist";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
 import { useNavigate } from "react-router-dom";
@@ -32,10 +31,9 @@ const PageBreak = () => {
 
 interface PlaylistItemProps {
     item: PlaylistItemDTO;
-    reload: () => void;
 }
 
-export const PlaylistItem = ({ item, reload }: PlaylistItemProps) => {
+export const PlaylistItem = ({ item }: PlaylistItemProps) => {
     const {
         removeVariant,
         items,
@@ -43,7 +41,8 @@ export const PlaylistItem = ({ item, reload }: PlaylistItemProps) => {
         guid: playlistGuid,
         loading,
         setItemsKeyChord,
-        isOwner
+        isOwner,
+        reload
     } = useInnerPlaylist();
     const { turnOn } = useCurrentPlaylist();
 
@@ -59,10 +58,15 @@ export const PlaylistItem = ({ item, reload }: PlaylistItemProps) => {
 
     const onRemove = async () => {
         setRemoving(true);
-        const result = await removeVariant(item.variant.guid);
+        try {
+            await removeVariant(item.variant.alias);
+        } catch (e) {
+            console.error(e);
+        }
         setRemoving(false);
 
         turnOn(playlistGuid);
+        await reload();
     };
 
     const transpose = async (value: number) => {

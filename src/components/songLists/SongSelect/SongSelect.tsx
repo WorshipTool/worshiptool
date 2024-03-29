@@ -6,10 +6,7 @@ import normalizeSearchText from "../../../tech/normalizeSearchText";
 import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
 import OnChangeDelayer from "../../ChangeDelayer";
 import SongListCards from "../SongListCards/SongListCards";
-import {
-    mapSearchResultApiToSongVariantDtoArr,
-    SongVariantDto
-} from "../../../api/dtos";
+import { SongVariantDto } from "../../../api/dtos";
 
 interface SongSelectProps {
     onChange?: (a: SongVariantDto | null) => void;
@@ -30,11 +27,9 @@ export default function SongSelect({ onChange, filter }: SongSelectProps) {
 
     const searchCallback = () => {
         search({ searchKey: value, page: 0 }).then((data) => {
-            const d = mapSearchResultApiToSongVariantDtoArr(data).filter((v) =>
-                filter ? filter(v) : true
-            );
+            const d = data.filter((v) => (filter ? filter(v) : true));
             setData(d);
-            setOpen(data.songs.length > 0);
+            setOpen(data.length > 0);
         });
     };
 
