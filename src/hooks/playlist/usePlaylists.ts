@@ -44,15 +44,16 @@ export default function usePlaylists() {
     };
 
     const isVariantInPlaylist = async (
-        variant: string,
+        variantAlias: string,
         playlist: string
     ): Promise<boolean> => {
         const result = await handleApiCall(
             playlistGettingApi.playlistGettingControllerIsVariantInPlaylist(
-                variant,
+                variantAlias,
                 playlist
             )
         );
+
         return result;
     };
 

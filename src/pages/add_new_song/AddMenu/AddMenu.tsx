@@ -37,6 +37,7 @@ export default function AddMenu() {
                     }}>
                     <AddMenuItem
                         disabled={!apiState.data}
+                        loading={apiState.loading}
                         title="Nahrát soubor"
                         subtitle="Automaticky převeďte píseň z obrázku"
                         icon={<UploadFile fontSize="inherit" />}
