@@ -4,9 +4,21 @@ import AddMenuItem from "./components/AddMenuItem";
 import { Box, Typography } from "@mui/material";
 import { Add, Camera, Edit, UploadFile } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useApiStateEffect } from "../../../tech/ApiState";
+import { useApi } from "../../../hooks/api/useApi";
+import { handleApiCall } from "../../../tech/handleApiCall";
 
 export default function AddMenu() {
     const navigate = useNavigate();
+
+    const { songAddingApi } = useApi();
+
+    const [apiState] = useApiStateEffect(() => {
+        return handleApiCall(
+            songAddingApi.songAddingControllerIsParserAvailable()
+        );
+    });
+
     return (
         <AppContainer>
             <Box
@@ -24,7 +36,7 @@ export default function AddMenu() {
                         gap: 5
                     }}>
                     <AddMenuItem
-                        disabled
+                        disabled={!apiState.data}
                         title="Nahrát soubor"
                         subtitle="Automaticky převeďte píseň z obrázku"
                         icon={<UploadFile fontSize="inherit" />}

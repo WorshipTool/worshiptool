@@ -4797,6 +4797,39 @@ export const SongAddingApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songAddingControllerIsParserAvailable: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/parser/available`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -4819,6 +4852,17 @@ export const SongAddingApiFp = function(configuration?: Configuration) {
             const operationBasePath = operationServerMap['SongAddingApi.songAddingControllerCreateCopy']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songAddingControllerIsParserAvailable(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerIsParserAvailable(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['SongAddingApi.songAddingControllerIsParserAvailable']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
     }
 };
 
@@ -4837,6 +4881,14 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
          */
         songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: any): AxiosPromise<PostCreateCopyOutDto> {
             return localVarFp.songAddingControllerCreateCopy(postCreateCopyInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songAddingControllerIsParserAvailable(options?: any): AxiosPromise<boolean> {
+            return localVarFp.songAddingControllerIsParserAvailable(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4857,6 +4909,16 @@ export class SongAddingApi extends BaseAPI {
      */
     public songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: RawAxiosRequestConfig) {
         return SongAddingApiFp(this.configuration).songAddingControllerCreateCopy(postCreateCopyInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongAddingApi
+     */
+    public songAddingControllerIsParserAvailable(options?: RawAxiosRequestConfig) {
+        return SongAddingApiFp(this.configuration).songAddingControllerIsParserAvailable(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
