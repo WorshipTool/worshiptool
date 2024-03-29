@@ -14,3 +14,9 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - transpozice
 - tisk
 - nelze upravovat, kdyz neni uzivatel prihlasen, nebo je to cizi pisen
+- přidávání do playlistu
+- při cizí písně vytvoření kopie
+- při vlastní písni, možnost upravit
+- upravovaní
+- validita uprávy
+- rezponzivnost
