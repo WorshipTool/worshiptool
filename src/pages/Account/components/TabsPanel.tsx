@@ -28,7 +28,6 @@ export default function TabsPanel() {
 
                 <Tab label="Informace" />
                 <Tab label="Změnit heslo" />
-                {(isTrustee() || isAdmin()) && <Tab label="Ověřování" />}
                 {isAdmin() && <Tab label="ejdmin" />}
             </Tabs>
 
