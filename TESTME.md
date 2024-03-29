@@ -38,6 +38,8 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - tisk
 - mód karty
 
+## Feedback
+
 ## Horní líšta
 - fungují prokliky
   
@@ -45,4 +47,3 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 ## Seznam mých písní
 ## Mód skupiny
 
-## Feedback
