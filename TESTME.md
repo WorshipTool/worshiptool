@@ -19,4 +19,15 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - při vlastní písni, možnost upravit
 - upravovaní
 - validita uprávy
+- vygenerování nového url při velké změně jména
 - rezponzivnost
+
+## Playlist
+- přidávání písní ze stránky písně
+- přidávání písní z pravého panelu
+- změna pořádí
+- změna názvu
+- odebírání písní
+- proklik na jednotlivé písně
+- tisk
+- mód karty
