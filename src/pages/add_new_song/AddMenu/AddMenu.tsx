@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useApiStateEffect } from "../../../tech/ApiState";
 import { useApi } from "../../../hooks/api/useApi";
 import { handleApiCall } from "../../../tech/handleApiCall";
+import { UPLOAD_URL, WRITE_SONG_URL } from "../../../routes/routes";
 
 export default function AddMenu() {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function AddMenu() {
                         subtitle="Automaticky převeďte píseň z obrázku"
                         icon={<UploadFile fontSize="inherit" />}
                         onClick={() => {
-                            navigate("/add/upload");
+                            navigate(UPLOAD_URL);
                         }}
                     />
                     <AddMenuItem
@@ -51,7 +52,7 @@ export default function AddMenu() {
                         icon={<Edit fontSize="inherit" />}
                         iconSize={40}
                         onClick={() => {
-                            navigate("/add/write");
+                            navigate(WRITE_SONG_URL);
                         }}
                     />
                 </Box>

@@ -59,14 +59,6 @@ export const useProvideGroup = (): useProvideGroupI => {
         localStorage.removeItem(key);
     };
 
-    // useEffect(()=>{
-    //     const u = localStorage.getItem("user");
-    //     if(!u){
-    //         turnOff();
-    //         navigate("/");
-    //     }
-    // },[])
-
     useEffect(() => {
         if (!isLoggedIn()) return;
         const activeName = localStorage.getItem(key);

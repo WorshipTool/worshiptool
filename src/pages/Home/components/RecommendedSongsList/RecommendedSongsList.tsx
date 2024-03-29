@@ -13,7 +13,7 @@ import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import SongListCards from "../../../../components/songLists/SongListCards/SongListCards";
 import Gap from "../../../../components/Gap";
 import { SongVariantDto } from "../../../../api/dtos";
-import { getVariantUrl } from "../../../../routes/routes";
+import { getVariantUrl, SONGS_LIST_URL } from "../../../../routes/routes";
 
 const GridContainer = styled(Grid)(({ theme }) => ({
     padding: 10,
@@ -34,7 +34,7 @@ export default function RecommendedSongsList() {
     };
 
     const openList = () => {
-        navigate("/list");
+        navigate(SONGS_LIST_URL);
     };
 
     return (

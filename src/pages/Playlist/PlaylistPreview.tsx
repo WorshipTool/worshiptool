@@ -20,6 +20,7 @@ import useInnerPlaylist, {
 import AppContainer from "../../components/AppContainer/AppContainer";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
+import { getPlaylistCardsUrl } from "../../routes/routes";
 
 const Container = styled(Box)(({ theme }) => ({
     padding: 30
@@ -52,7 +53,7 @@ export default function PlaylistPreview() {
             <Box display={"flex"} flexDirection={"row"}>
                 <SidePanel
                     onCardsClick={() => {
-                        navigate("/playlist/cards/" + guid);
+                        navigate(getPlaylistCardsUrl(guid));
                     }}
                 />
 

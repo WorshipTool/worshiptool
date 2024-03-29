@@ -1,4 +1,10 @@
-import { SongVariantDto } from "../api/dtos";
+const getReplacedUrl = (url: string, params: { [key: string]: string }) => {
+    let result = url;
+    for (const key in params) {
+        result = result.replace(`:${key}`, params[key]);
+    }
+    return result;
+};
 
 export const getVariantUrl = (variantAlias: string) => {
     const alias = variantAlias;
@@ -8,5 +14,34 @@ export const getVariantUrl = (variantAlias: string) => {
     // Part after first - to the end
     const code = alias.split("-").slice(1).join("-");
 
-    return `/${hex}/${code}`;
+    return getReplacedUrl(VARIANT_URL, { hex, alias: code });
 };
+
+export const getPlaylistUrl = (playlistGuid: string) => {
+    return getReplacedUrl(PLAYLIST_URL, { guid: playlistGuid });
+};
+
+export const getGroupUrl = (name: string) => {
+    return getReplacedUrl(GROUP_URL, { groupName: name });
+};
+
+export const getPlaylistCardsUrl = (playlistGuid: string) => {
+    return getReplacedUrl(PLAYLIST_CARDS_URL, { guid: playlistGuid });
+};
+
+export const VARIANT_URL = "/p/:hex/:alias";
+export const PLAYLIST_URL = "/playlist/:guid";
+export const PLAYLIST_CARDS_URL = "/playlist/:guid/karty";
+export const GROUP_URL = "/skupina/:groupName";
+export const DOCUMENTATION_URL = "/dokumentace";
+export const ADD_MENU_URL = "/vytvorit";
+export const UPLOAD_URL = "/nahrat";
+export const UPLOAD_PARSE_URL = "/nahrat/hledani";
+export const WRITE_SONG_URL = "/vytvorit/napsat";
+export const LOGIN_URL = "/prihlaseni";
+export const SIGNUP_URL = "/registrace";
+export const ACCOUNT_URL = "/ucet";
+export const USERS_PLAYLISTS_URL = "/ucet/playlisty";
+export const USERS_SONGS_URL = "/ucet/pisne";
+export const SONGS_LIST_URL = "/seznam";
+export const TEST_URL = "/test";

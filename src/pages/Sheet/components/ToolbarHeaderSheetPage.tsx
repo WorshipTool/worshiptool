@@ -5,6 +5,7 @@ import useGroup from "../../../hooks/group/useGroup";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { useNavigate } from "react-router-dom";
 import { SongVariantDto } from "../../../api/dtos";
+import { getPlaylistUrl } from "../../../routes/routes";
 
 interface ToolbarHeaderSheetPageProps {
     variant: SongVariantDto;
@@ -36,7 +37,7 @@ export default function ToolbarHeaderSheetPage(
     };
 
     const openPlaylist = () => {
-        navigate("/playlist/" + currentPlaylist.guid);
+        navigate(getPlaylistUrl(currentPlaylist.guid));
     };
 
     return (
