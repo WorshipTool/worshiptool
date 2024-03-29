@@ -7,10 +7,7 @@ import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import useGroup from "../../../hooks/group/useGroup";
 import useGroupSelection from "../../../hooks/group/useGroupSelection";
 import normalizeSearchText from "../../../tech/normalizeSearchText";
-import {
-    mapSearchResultApiToSongVariantDtoArr,
-    SongVariantDto
-} from "../../../api/dtos";
+import { SongVariantDto } from "../../../api/dtos";
 
 type SongSearchMethod = "all" | "group";
 

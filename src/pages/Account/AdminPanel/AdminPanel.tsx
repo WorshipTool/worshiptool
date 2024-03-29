@@ -8,14 +8,12 @@ import {
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import useAuth from "../../../hooks/auth/useAuth";
-import { getUrl_LOGIN, getUrl_GETSONGCOUNT } from "../../../api/urls";
 import { LoginRequestDTO, LoginResultDTO } from "../../../api/dtos/dtosAuth";
 import { songGetCountDTO } from "../../../api/dtos/dtosSong";
 import useGroup from "../../../hooks/group/useGroup";
 import AddToSelection from "./components/AddToSelection";
 import RemoveFromSelection from "./components/RemoveFromSelection";
 import Gap from "../../../components/Gap";
-import { AuthApi, SongsApi } from "../../../api/generated";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import { useApiState, useApiStateEffect } from "../../../tech/ApiState";
 import { useApi } from "../../../hooks/api/useApi";
@@ -26,7 +24,7 @@ export default function AdminPanel() {
     const [password, setPassword] = useState("");
 
     // const {fetchData} = useFetch();
-    const { songsApi, authApi, getterApi } = useApi();
+    const { songGettingApi, authApi, getterApi } = useApi();
     const { isLoggedIn, apiConfiguration } = useAuth();
     const [apiState, reloadGetter] = useApiStateEffect(async () => {
         if (!isLoggedIn) return Promise.resolve(false);
@@ -53,9 +51,9 @@ export default function AdminPanel() {
     const [songCount, setSongCount] = useState<number>();
 
     const getCount = async () => {
-        handleApiCall(songsApi.songsControllerGetSongsCount())
+        handleApiCall(songGettingApi.songGettingControllerGetSongsCount())
             .then((r) => {
-                setSongCount(r.count);
+                setSongCount(r);
             })
             .catch((e) => {
                 console.log(e);

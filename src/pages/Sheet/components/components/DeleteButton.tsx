@@ -17,7 +17,7 @@ import React from "react";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../../hooks/auth/useAuth";
-import { SongDeletingApi, SongsApi } from "../../../../api/generated";
+import { SongDeletingApi } from "../../../../api/generated";
 import { useApiState, useApiStateEffect } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";

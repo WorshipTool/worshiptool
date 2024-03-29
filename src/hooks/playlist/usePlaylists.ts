@@ -5,8 +5,7 @@ import { Chord } from "@pepavlin/sheet-api";
 import {
     GetSearchInPlaylistResult,
     PlaylistEditingApi,
-    PlaylistGettingApi,
-    SongsApi
+    PlaylistGettingApi
 } from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
 import { useApi } from "../api/useApi";

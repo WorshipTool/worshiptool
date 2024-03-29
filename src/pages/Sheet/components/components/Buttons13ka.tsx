@@ -14,7 +14,6 @@ import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import { Work, Workspaces } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import useAuth from "../../../../hooks/auth/useAuth";
-import { GroupApi, SongsApi } from "../../../../api/generated";
 import { useApiState, useApiStateEffect } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";

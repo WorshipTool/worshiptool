@@ -2,18 +2,14 @@ import React from "react";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { Button, CircularProgress, useTheme } from "@mui/material";
 import { verify } from "crypto";
-import {
-    getUrl_UNVERIFYVARIANT,
-    getUrl_VERIFYVARIANT
-} from "../../../../api/urls";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import { useSnackbar } from "notistack";
 import { LoadingButton } from "@mui/lab";
 import { Public, PublicOff } from "@mui/icons-material";
-import { SongsApi } from "../../../../api/generated";
 import { useApiState } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";
+import { useApi } from "../../../../hooks/api/useApi";
 
 export interface VerifyButtonProps {
     variant: SongVariantDto;
@@ -21,8 +17,7 @@ export interface VerifyButtonProps {
 }
 
 export default function VerifyButton(props: VerifyButtonProps) {
-    const { apiConfiguration } = useAuth();
-    const songsApi = new SongsApi(apiConfiguration);
+    const { songEditingApi } = useApi();
     const {
         fetchApiState,
         apiState: { loading }
@@ -40,7 +35,9 @@ export default function VerifyButton(props: VerifyButtonProps) {
         fetchApiState(
             async () => {
                 return handleApiCall(
-                    songsApi.songsControllerUnverify(props.variant.guid)
+                    songEditingApi.songEditingControllerUnverify(
+                        props.variant.guid
+                    )
                 );
             },
             () => {
@@ -57,7 +54,9 @@ export default function VerifyButton(props: VerifyButtonProps) {
         fetchApiState(
             async () => {
                 return handleApiCall(
-                    songsApi.songsControllerVerify(props.variant.guid)
+                    songEditingApi.songEditingControllerVerify(
+                        props.variant.guid
+                    )
                 );
             },
             () => {

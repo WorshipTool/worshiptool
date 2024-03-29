@@ -6,10 +6,7 @@ import normalizeSearchText from "../../../tech/normalizeSearchText";
 import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
 import OnChangeDelayer from "../../ChangeDelayer";
 import SongListCards from "../SongListCards/SongListCards";
-import {
-    mapSearchResultApiToSongVariantDtoArr,
-    SongVariantDto
-} from "../../../api/dtos";
+import { SongVariantDto } from "../../../api/dtos";
 
 interface SongSelectProps {
     onChange?: (a: SongVariantDto | null) => void;

@@ -1,27 +1,21 @@
-import { SearchSongDataDTO } from "../../../../../api/dtos/dtosSong";
-import { VariantDTO } from "../../../../../interfaces/variant/VariantDTO";
-import { mapApiToVariant } from "../../../../../api/dtos/variant/mapApiToVariant";
-import {
-    SongsApi,
-    SongsControllerGetByQueryKeyEnum
-} from "../../../../../api/generated";
 import { handleApiCall } from "../../../../../tech/handleApiCall";
 import { useApiStateEffect } from "../../../../../tech/ApiState";
 import {
-    mapSearchResultApiToSongVariantDtoArr,
+    mapSongVariantDataOutDtoToSongVariantDto,
     SongVariantDto
 } from "../../../../../api/dtos";
+import { useApi } from "../../../../../hooks/api/useApi";
 
 export default function useRecommendedSongs() {
-    const songAPI = new SongsApi();
+    const { songGettingApi } = useApi();
 
     const [state] = useApiStateEffect<SongVariantDto[]>(async () => {
         const result = await handleApiCall(
-            songAPI.songsControllerGetByQuery(
-                SongsControllerGetByQueryKeyEnum.Random
-            )
+            songGettingApi.songGettingControllerGetRecommendedSongs()
         );
-        return mapSearchResultApiToSongVariantDtoArr(result);
+        return result.variants.map((v) =>
+            mapSongVariantDataOutDtoToSongVariantDto(v)
+        );
     }, []);
 
     return {
