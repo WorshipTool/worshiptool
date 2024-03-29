@@ -192,7 +192,7 @@ export default function SongContainer({
                     <>
                         <SheetDisplay
                             sheet={currentSheet}
-                            title={title as string}
+                            title={editedTitle as string}
                             variant={"default"}
                         />
                     </>

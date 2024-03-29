@@ -58,7 +58,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
             <ListItemText primary="Vytvořit kopii" />
         </MenuItem>
     ) : (
-        <Tooltip title={"Vytvořit kopii písně"}>
+        <Tooltip title={"Vytvořit soukromou kopii písně"}>
             <LoadingButton
                 color="success"
                 variant="contained"
@@ -73,7 +73,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
                 }
                 loading={apiState.loading}
                 onClick={onClick}>
-                Vlastní úprava
+                Vytvořit úpravu
             </LoadingButton>
         </Tooltip>
     );
