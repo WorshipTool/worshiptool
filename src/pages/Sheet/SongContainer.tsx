@@ -174,7 +174,7 @@ export default function SongContainer({
                                     </>
                                     {!inEditMode &&
                                         variant &&
-                                        variant.deleted && (
+                                        !variant.deleted && (
                                             <AdditionalSongInfoPanel
                                                 song={song as SongDto}
                                                 variant={
@@ -183,10 +183,6 @@ export default function SongContainer({
                                             />
                                         )}
                                 </Box>
-
-                                <SourcesList
-                                    variant={variant as SongVariantDto}
-                                />
                             </>
                         )}
                     />

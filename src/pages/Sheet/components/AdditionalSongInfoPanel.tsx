@@ -7,6 +7,7 @@ import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { SourceTypes } from "../../../interfaces/song/source";
 import useAuth from "../../../hooks/auth/useAuth";
 import { SongDto, SongVariantDto } from "../../../api/dtos";
+import { SourcesList } from "./SourcesList/SourcesList";
 
 interface AdditionalSongInfoPanelProps {
     song: SongDto;
@@ -43,43 +44,11 @@ export default function AdditionalSongInfoPanel({
             ) : (
                 <></>
             )}
-
+            {variant.sources?.length > 0 && (
+                <SourcesList variant={variant as SongVariantDto} />
+            )}
             <Box>
                 {/* RESOURCES */}
-                {variant.sources?.length > 0 && (
-                    <>
-                        <Typography variant="subtitle2">Zdroje</Typography>
-
-                        <Box display={"flex"} flexDirection={"row"} gap={0.5}>
-                            {variant.sources.map((s) => {
-                                if (s.type == SourceTypes.Url) {
-                                    const onClick = () => {
-                                        window.open(
-                                            s.value,
-                                            "_blank",
-                                            "noreferrer"
-                                        );
-                                    };
-                                    return (
-                                        <>
-                                            <Chip
-                                                label={s.value}
-                                                onClick={onClick}
-                                                sx={{ cursor: "pointer" }}
-                                                key={s.value}
-                                            />
-                                        </>
-                                    );
-                                }
-                                return (
-                                    <>
-                                        <Chip label={s.value} />
-                                    </>
-                                );
-                            })}
-                        </Box>
-                    </>
-                )}
 
                 {isAdmin() ? (
                     <>
