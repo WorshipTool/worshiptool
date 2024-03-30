@@ -5,7 +5,7 @@ import useMySongs from "./hooks/useMySongs";
 import MySongItem from "./components/MySongItem";
 import Gap from "../../components/Gap";
 import { useNavigate } from "react-router-dom";
-import { getVariantUrl } from "../../routes/routes";
+import { ADD_MENU_URL, getVariantUrl } from "../../routes/routes";
 
 export default function MySongsList() {
     const { variants, loaded } = useMySongs();
@@ -72,7 +72,7 @@ export default function MySongsList() {
                                     </Typography>
                                     <Button
                                         onClick={() => {
-                                            navigate("/add");
+                                            navigate(ADD_MENU_URL);
                                         }}
                                         variant="contained">
                                         Vytvořit

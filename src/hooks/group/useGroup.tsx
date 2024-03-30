@@ -6,6 +6,7 @@ import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
 import useAuth from "../auth/useAuth";
 import { GroupApi } from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
+import { getGroupUrl } from "../../routes/routes";
 
 export const groupContext = createContext<useProvideGroupI>(
     {} as useProvideGroupI
@@ -59,14 +60,6 @@ export const useProvideGroup = (): useProvideGroupI => {
         localStorage.removeItem(key);
     };
 
-    // useEffect(()=>{
-    //     const u = localStorage.getItem("user");
-    //     if(!u){
-    //         turnOff();
-    //         navigate("/");
-    //     }
-    // },[])
-
     useEffect(() => {
         if (!isLoggedIn()) return;
         const activeName = localStorage.getItem(key);
@@ -81,6 +74,6 @@ export const useProvideGroup = (): useProvideGroupI => {
         name: group?.name || "",
         guid: group?.guid || "",
         selectionGuid: group?.selection || "",
-        url: "/group/" + group?.name || ""
+        url: getGroupUrl(group?.name || "")
     };
 };

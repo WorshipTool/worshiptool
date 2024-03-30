@@ -146,19 +146,6 @@ export default function TopPanel(props: TopPanelProps) {
                         disabled={!Boolean(props.sheet?.getKeyChord())}
                     />
 
-                    {(isAdmin() || isTrustee()) && !saving && (
-                        <Box
-                            sx={{
-                                [theme.breakpoints.down("md")]: {
-                                    display: "none"
-                                }
-                            }}>
-                            <VerifyButton
-                                variant={props.variant}
-                                reloadSong={props.reloadSong}
-                            />
-                        </Box>
-                    )}
                     {isOwner && (
                         <VisibilityLabel public={props.variant.public} />
                     )}

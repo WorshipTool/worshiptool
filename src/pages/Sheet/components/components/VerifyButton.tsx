@@ -1,6 +1,14 @@
 import React from "react";
 import useAuth from "../../../../hooks/auth/useAuth";
-import { Button, CircularProgress, useTheme } from "@mui/material";
+import {
+    Button,
+    CircularProgress,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    useTheme
+} from "@mui/material";
 import { verify } from "crypto";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import { useSnackbar } from "notistack";
@@ -73,38 +81,29 @@ export default function VerifyButton(props: VerifyButtonProps) {
     const theme = useTheme();
 
     return (
-        <div>
-            <LoadingButton
-                onClick={() => {
-                    if (props.variant.verified) {
-                        unverify();
-                    } else {
-                        verify();
-                    }
-                }}
-                loading={loading}
-                loadingPosition="start"
-                startIcon={
-                    props.variant.verified ? (
-                        <PublicOff
-                            sx={{
-                                [theme.breakpoints.down("lg")]: {
-                                    display: "none"
-                                }
-                            }}
-                        />
-                    ) : (
-                        <Public
-                            sx={{
-                                [theme.breakpoints.down("lg")]: {
-                                    display: "none"
-                                }
-                            }}
-                        />
-                    )
-                }>
-                {props.variant.verified ? "Zrušit zveřejnění" : "Zveřejnit"}
-            </LoadingButton>
-        </div>
+        <MenuItem
+            onClick={() => {
+                if (props.variant.verified) {
+                    unverify();
+                } else {
+                    verify();
+                }
+            }}
+            disabled={loading}>
+            <ListItemIcon>
+                {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                ) : props.variant.verified ? (
+                    <PublicOff />
+                ) : (
+                    <Public />
+                )}
+            </ListItemIcon>
+            <ListItemText
+                primary={
+                    props.variant.verified ? "Zrušit zveřejnění" : "Zveřejnit"
+                }
+            />
+        </MenuItem>
     );
 }

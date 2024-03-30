@@ -20,6 +20,7 @@ import usePlaylists from "../../../../../hooks/playlist/usePlaylists";
 import { SongVariantDto } from "../../../../../api/dtos";
 import Gap from "../../../../../components/Gap";
 import { useNavigate } from "react-router-dom";
+import { getPlaylistUrl } from "../../../../../routes/routes";
 
 interface PlaylistMenuItemProps {
     variant: SongVariantDto;
@@ -84,8 +85,7 @@ export default function PlaylistMenuItem({
     };
     const navigate = useNavigate();
     const openPlaylist = () => {
-        // navigate(`/playlist/${guid}`);
-        window.open(`/playlist/${playlistGuid}`, "_blank");
+        window.open(getPlaylistUrl(playlistGuid), "_blank");
     };
 
     return (

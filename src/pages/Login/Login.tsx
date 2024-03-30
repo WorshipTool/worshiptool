@@ -21,6 +21,7 @@ import User from "../../interfaces/user";
 import { LoginResultDTO } from "../../api/dtos/dtosAuth";
 import GoogleLoginButton from "./components/GoogleLoginButton";
 import Gap from "../../components/Gap";
+import { SIGNUP_URL } from "../../routes/routes";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
@@ -174,7 +175,7 @@ export default function Login() {
                         <Button
                             size={"small"}
                             onClick={() => {
-                                navigate("/signup");
+                                navigate(SIGNUP_URL);
                             }}>
                             Vytvořte si ho
                         </Button>

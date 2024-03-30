@@ -21,6 +21,7 @@ import { NewSongDataProcessResult } from "../../../../../../api/generated";
 import { useApiState } from "../../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../../tech/handleApiCall";
 import { useApi } from "../../../../../../hooks/api/useApi";
+import { UPLOAD_URL } from "../../../../../../routes/routes";
 
 const parsingMessages = [
     "Nahrávám soubor...",
@@ -331,7 +332,7 @@ export default function Parse() {
                                     <Button
                                         variant="contained"
                                         onClick={() => {
-                                            navigate("/add/upload");
+                                            navigate(UPLOAD_URL);
                                         }}>
                                         Nahrát další
                                     </Button>
