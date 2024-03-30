@@ -40,6 +40,7 @@ import EditButton from "./EditButton";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { SongDto, SongVariantDto } from "../../../../api/dtos";
 import AdminPanel from "../../../Account/AdminPanel/AdminPanel";
+import VerifyButton from "./VerifyButton";
 
 interface AddToPlaylistButtonProps {
     sheet: Sheet;
@@ -128,6 +129,7 @@ export default function SheetAdminButtons({
                 }}
                 open={open}
                 onClose={handleClose}>
+                <VerifyButton variant={variant} reloadSong={reload} />
                 <Buttons13ka variant={variant} />
 
                 {isAdmin() && variant.createdByLoader && (

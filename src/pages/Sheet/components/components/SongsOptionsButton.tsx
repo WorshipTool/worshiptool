@@ -28,6 +28,7 @@ import SheetAdminButtons from "./SheetAdminButtons";
 import { Sheet } from "@pepavlin/sheet-api";
 import AddToPlaylistButton from "./AddToPlaylistButton/AddToPlaylistButton";
 import EditButton from "./EditButton";
+import VerifyButton from "./VerifyButton";
 
 type SongsOptionsButtonProps = {
     reloadSong: () => void;
@@ -56,7 +57,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
         setAnchorEl(null);
     };
 
-    const { isAdmin, isLoggedIn } = useAuth();
+    const { isAdmin, isLoggedIn, isTrustee } = useAuth();
     const theme = useTheme();
 
     return (
@@ -133,6 +134,16 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                                 secondary={"Zobrazit jako karty"}
                             />
                         </MenuItem>
+
+                        {isTrustee() && (
+                            <>
+                                <Divider />
+                                <VerifyButton
+                                    variant={props.variant}
+                                    reloadSong={props.reloadSong}
+                                />
+                            </>
+                        )}
                     </>
                 )}
 

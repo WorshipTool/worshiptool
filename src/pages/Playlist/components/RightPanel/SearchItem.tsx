@@ -67,12 +67,14 @@ export default function SearchItem({
     };
 
     const addToPlaylist = async () => {
-        turnOn(playlist.guid);
         fetchApiState(
             async () => {
                 return await addVariant(variant.alias);
             },
-            () => reload()
+            () => {
+                reload();
+                turnOn(playlist.guid);
+            }
         );
     };
 
