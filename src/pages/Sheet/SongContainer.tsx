@@ -22,6 +22,7 @@ import TopPanel from "./components/TopPanel";
 import { SongDto, SongVariantDto } from "../../api/dtos";
 import { useRerender } from "../../hooks/useRerender";
 import { useBrowserTitle } from "../../hooks/useBrowserTitle";
+import { SourcesList } from "./components/SourcesList/SourcesList";
 
 export type SongPageProps = {
     variantGuid: string;
@@ -182,6 +183,10 @@ export default function SongContainer({
                                             />
                                         )}
                                 </Box>
+
+                                <SourcesList
+                                    variant={variant as SongVariantDto}
+                                />
                             </>
                         )}
                     />
