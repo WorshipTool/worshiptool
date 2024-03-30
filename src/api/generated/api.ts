@@ -2139,35 +2139,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        domainApprovalControllerSendNextApproval: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/domain-approval/sendApproval`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         statusMonitorControllerRoot: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2207,17 +2178,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainApprovalControllerSendNextApproval(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.domainApprovalControllerSendNextApproval']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         async statusMonitorControllerRoot(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.statusMonitorControllerRoot(options);
             const index = configuration?.serverIndex ?? 0;
@@ -2234,14 +2194,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
 export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DefaultApiFp(configuration)
     return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainApprovalControllerSendNextApproval(options?: any): AxiosPromise<boolean> {
-            return localVarFp.domainApprovalControllerSendNextApproval(options).then((request) => request(axios, basePath));
-        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -2266,18 +2218,105 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).domainApprovalControllerSendNextApproval(options).then((request) => request(this.axios, this.basePath));
+    public statusMonitorControllerRoot(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).statusMonitorControllerRoot(options).then((request) => request(this.axios, this.basePath));
     }
+}
 
+
+
+/**
+ * DomainApprovalApi - axios parameter creator
+ * @export
+ */
+export const DomainApprovalApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        domainApprovalControllerSendNextApproval: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/getter/approval/sendApproval`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DomainApprovalApi - functional programming interface
+ * @export
+ */
+export const DomainApprovalApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DomainApprovalApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.domainApprovalControllerSendNextApproval(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DomainApprovalApi.domainApprovalControllerSendNextApproval']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DomainApprovalApi - factory interface
+ * @export
+ */
+export const DomainApprovalApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DomainApprovalApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        domainApprovalControllerSendNextApproval(options?: any): AxiosPromise<boolean> {
+            return localVarFp.domainApprovalControllerSendNextApproval(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DomainApprovalApi - object-oriented interface
+ * @export
+ * @class DomainApprovalApi
+ * @extends {BaseAPI}
+ */
+export class DomainApprovalApi extends BaseAPI {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof DomainApprovalApi
      */
-    public statusMonitorControllerRoot(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).statusMonitorControllerRoot(options).then((request) => request(this.axios, this.basePath));
+    public domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig) {
+        return DomainApprovalApiFp(this.configuration).domainApprovalControllerSendNextApproval(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2298,7 +2337,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
         domainExploreControllerAddSubUrlPage: async (postAddSubUrlDomainDto: PostAddSubUrlDomainDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postAddSubUrlDomainDto' is not null or undefined
             assertParamExists('domainExploreControllerAddSubUrlPage', 'postAddSubUrlDomainDto', postAddSubUrlDomainDto)
-            const localVarPath = `/getter/addsuburlpage`;
+            const localVarPath = `/getter/explore/suburl/add`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2330,7 +2369,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
          * @throws {RequiredError}
          */
         domainExploreControllerGetDomainCheck: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/domain/explore/check`;
+            const localVarPath = `/getter/explore/check`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2362,7 +2401,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
         domainExploreControllerGetDomainExplore: async (url: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'url' is not null or undefined
             assertParamExists('domainExploreControllerGetDomainExplore', 'url', url)
-            const localVarPath = `/getter/domain/explore`;
+            const localVarPath = `/getter/explore`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2391,42 +2430,6 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {string} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetMetaData: async (page: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'page' is not null or undefined
-            assertParamExists('domainExploreControllerGetMetaData', 'page', page)
-            const localVarPath = `/getter/getMetaData`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2434,7 +2437,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
         domainExploreControllerProcess: async (postProcessSubUrlDto: PostProcessSubUrlDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postProcessSubUrlDto' is not null or undefined
             assertParamExists('domainExploreControllerProcess', 'postProcessSubUrlDto', postProcessSubUrlDto)
-            const localVarPath = `/processSubUrl`;
+            const localVarPath = `/getter/explore/suburl/process`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2469,7 +2472,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
         domainExploreControllerSubUrlLoop: async (postSubUrlLoopDto: PostSubUrlLoopDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postSubUrlLoopDto' is not null or undefined
             assertParamExists('domainExploreControllerSubUrlLoop', 'postSubUrlLoopDto', postSubUrlLoopDto)
-            const localVarPath = `/getter/suburlloop`;
+            const localVarPath = `/getter/explore/suburl/loop`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2501,7 +2504,7 @@ export const GetterApiAxiosParamCreator = function (configuration?: Configuratio
          * @throws {RequiredError}
          */
         domainSearchControllerSearch: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/search`;
+            const localVarPath = `/getter/search`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2722,18 +2725,6 @@ export const GetterApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerGetMetaData(page: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerGetMetaData(page, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['GetterApi.domainExploreControllerGetMetaData']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * 
          * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2861,15 +2852,6 @@ export const GetterApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @param {string} page 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetMetaData(page: string, options?: any): AxiosPromise<object> {
-            return localVarFp.domainExploreControllerGetMetaData(page, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2975,17 +2957,6 @@ export class GetterApi extends BaseAPI {
      */
     public domainExploreControllerGetDomainExplore(url: string, options?: RawAxiosRequestConfig) {
         return GetterApiFp(this.configuration).domainExploreControllerGetDomainExplore(url, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} page 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerGetMetaData(page: string, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerGetMetaData(page, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
