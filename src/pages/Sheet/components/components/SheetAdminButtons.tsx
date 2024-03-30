@@ -130,6 +130,7 @@ export default function SheetAdminButtons({
                 open={open}
                 onClose={handleClose}>
                 <VerifyButton variant={variant} reloadSong={reload} />
+                <Divider />
                 <Buttons13ka variant={variant} />
 
                 {isAdmin() && variant.createdByLoader && (
