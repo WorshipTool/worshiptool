@@ -76,7 +76,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                 onClose={handleClose}>
                 {isLoggedIn() && (
                     <>
-                        {props.isOwner && (
+                        {props.isOwner && !props.variant.public && (
                             <Box
                                 sx={{
                                     [theme.breakpoints.up("md")]: {
