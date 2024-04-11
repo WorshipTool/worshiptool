@@ -7,7 +7,7 @@ export const useSmartNavigate = () => {
 
     const navigate = <T extends keyof CustomRouterProps>(
         to: SmartTo<T>,
-        options: SmartNavigateOptions<T>
+        options?: SmartNavigateOptions<T>
     ) => {
         nv(routesPaths[to], options);
     };

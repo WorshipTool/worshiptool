@@ -57,7 +57,9 @@ export type CustomRouterProps = {
     documentation: undefined;
     addMenu: undefined;
     upload: undefined;
-    uploadParse: undefined;
+    uploadParse: {
+        files: File[];
+    };
     writeSong: undefined;
     login: {
         previousPage: string;

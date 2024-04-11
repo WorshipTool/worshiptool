@@ -1,4 +1,3 @@
-import { List } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import Account from "../pages/Account/Account";
 import AddMenu from "../pages/add_new_song/AddMenu/AddMenu";
@@ -18,6 +17,7 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Upload from "../pages/add_new_song/AddMenu/Upload/Upload";
 import Create from "../pages/add_new_song/Write/Create";
+import List from "../pages/List/List";
 
 export const AppRoutes = () => {
     return (
