@@ -11,7 +11,7 @@ import {
 import SheetDisplay from "../../components/SheetDisplay/SheetDisplay";
 import { Sheet, transpose } from "@pepavlin/sheet-api";
 import { Helmet } from "react-helmet";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import ContainerGrid from "../../components/ContainerGrid";
 import Gap from "../../components/Gap";
 import { VariantDTO } from "../../interfaces/variant/VariantDTO";

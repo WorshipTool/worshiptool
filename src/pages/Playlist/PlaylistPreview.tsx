@@ -17,7 +17,7 @@ import RightPanel from "./components/RightPanel/RightPanel";
 import useInnerPlaylist, {
     InnerPlaylistProvider
 } from "./hooks/useInnerPlaylist";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
 import { getPlaylistCardsUrl } from "../../routes/routes";
@@ -49,7 +49,7 @@ export default function PlaylistPreview() {
     }, [playlist?.title]);
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box display={"flex"} flexDirection={"row"}>
                 <SidePanel
                     onCardsClick={() => {
@@ -127,6 +127,6 @@ export default function PlaylistPreview() {
                     </>
                 )}
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }

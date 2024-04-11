@@ -1,6 +1,6 @@
 import { Box, Card, useTheme } from "@mui/material";
 import { useEffect } from "react";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { useSmartNavigate } from "../../routes/useSmartNavigate";
 import BasicInfo from "./components/BasicInfo";
@@ -28,7 +28,7 @@ export default function Account() {
     const theme = useTheme();
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     [theme.breakpoints.down("md")]: {
@@ -48,6 +48,6 @@ export default function Account() {
                 }}>
                 <BasicInfo />
             </Card>
-        </AppContainer>
+        </AppLayout>
     );
 }

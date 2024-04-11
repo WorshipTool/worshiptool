@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { Add, Remove } from "@mui/icons-material";
 import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import Gap from "../../components/Gap";
 import { LoadingButton } from "@mui/lab";
 import { useApiStateEffect } from "../../tech/ApiState";
@@ -136,7 +136,7 @@ export default function () {
 
     return (
         <>
-            <AppContainer>
+            <AppLayout>
                 <Box display={"flex"} justifyContent={"center"}>
                     <Box sx={{ maxWidth: 500, marginTop: 7 }} flex={1}>
                         {error ? (
@@ -203,7 +203,7 @@ export default function () {
                         )}
                     </Box>
                 </Box>
-            </AppContainer>
+            </AppLayout>
         </>
     );
 }

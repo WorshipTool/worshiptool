@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AppContainer from "../../../../../../components/AppContainer/AppContainer";
+import AppLayout from "../../../../../../components/app/AppLayout/AppLayout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { EasySheet } from "../../Upload";
 import {
@@ -159,7 +159,7 @@ export default function Parse() {
     const theme = useTheme();
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     display: "flex",
@@ -382,6 +382,6 @@ export default function Parse() {
                     </Box>
                 )}
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }

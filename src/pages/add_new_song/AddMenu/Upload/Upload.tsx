@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AppContainer from "../../../../components/AppContainer/AppContainer";
+import AppLayout from "../../../../components/app/AppLayout/AppLayout";
 import UploadPanel from "./components/UploadPanel/UploadPanel";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function Upload() {
     };
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     width: "100%",
@@ -42,6 +42,6 @@ export default function Upload() {
                     <UploadPanel onUpload={parseFiles} />
                 </Box>
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }

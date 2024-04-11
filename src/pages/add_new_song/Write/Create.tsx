@@ -26,7 +26,7 @@ import { Sheet } from "@pepavlin/sheet-api";
 import Gap from "../../../components/Gap";
 import ToolPanel from "./ToolPanel";
 import ContainerGrid from "../../../components/ContainerGrid";
-import AppContainer from "../../../components/AppContainer/AppContainer";
+import AppLayout from "../../../components/app/AppLayout/AppLayout";
 import ImportButton from "./components/ImportButton";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
@@ -159,7 +159,7 @@ export default function Create() {
     };
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box flex={1} display={"flex"} flexDirection={"row"}>
                 <Box
                     sx={{
@@ -286,6 +286,6 @@ export default function Create() {
                     </ContainerGrid>
                 </Box>
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }
