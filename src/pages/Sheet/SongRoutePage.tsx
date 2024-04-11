@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { useApiStateEffect } from "../../tech/ApiState";
 import {
@@ -33,7 +33,7 @@ export default function SongRoutePage() {
     const { state }: { state: SongRoutePageState } = useLocation();
 
     return (
-        <AppContainer>
+        <AppLayout>
             <SkeletonLoaderCore
                 data={[apiState]}
                 render={() => (
@@ -59,6 +59,6 @@ export default function SongRoutePage() {
                     </>
                 )}
             />
-        </AppContainer>
+        </AppLayout>
     );
 }

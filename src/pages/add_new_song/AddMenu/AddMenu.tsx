@@ -1,5 +1,5 @@
 import React from "react";
-import AppContainer from "../../../components/AppContainer/AppContainer";
+import AppLayout from "../../../components/app/AppLayout/AppLayout";
 import AddMenuItem from "./components/AddMenuItem";
 import { Box, Typography } from "@mui/material";
 import { Add, Camera, Edit, UploadFile } from "@mui/icons-material";
@@ -21,7 +21,7 @@ export default function AddMenu() {
     });
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     width: "100%",
@@ -57,6 +57,6 @@ export default function AddMenu() {
                     />
                 </Box>
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import AppContainer from "../../components/AppContainer/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import useMySongs from "./hooks/useMySongs";
 import MySongItem from "./components/MySongItem";
@@ -11,7 +11,7 @@ export default function MySongsList() {
     const { variants, loaded } = useMySongs();
     const navigate = useNavigate();
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     display: "flex",
@@ -83,6 +83,6 @@ export default function MySongsList() {
                     )}
                 </Box>
             </Box>
-        </AppContainer>
+        </AppLayout>
     );
 }

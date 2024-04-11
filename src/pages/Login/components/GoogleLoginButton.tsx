@@ -1,26 +1,31 @@
-import React from 'react'
-import {CredentialResponse, GoogleLogin} from "@react-oauth/google"
-import {jwtDecode} from "jwt-decode"
-import axios from "axios"
-import useAuth from '../../../hooks/auth/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/auth/useAuth";
 
-export default function GoogleLoginButton() {
+type GoogleLoginButtonProps = {
+    afterLogin?: () => void;
+};
 
-    const {login, signup, loginWithGoogle} = useAuth();
+export default function GoogleLoginButton(props: GoogleLoginButtonProps) {
+    const { loginWithGoogle } = useAuth();
     const navigate = useNavigate();
     const onSuccess = (credentialResponse: CredentialResponse) => {
-        loginWithGoogle(credentialResponse, (r)=>{
-            navigate("/")
-        })
-    }
+        loginWithGoogle(
+            credentialResponse,
+            props.afterLogin || (() => navigate("/"))
+        );
+    };
 
-    const onFailure = () => {
-    }
+    const onFailure = () => {};
 
-  return (
-    <div>
-        <GoogleLogin onSuccess={onSuccess} onError={onFailure} useOneTap auto_select/>
-    </div>
-  )
+    return (
+        <div>
+            <GoogleLogin
+                onSuccess={onSuccess}
+                onError={onFailure}
+                useOneTap
+                auto_select
+            />
+        </div>
+    );
 }

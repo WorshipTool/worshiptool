@@ -119,7 +119,7 @@ export function useProvideAuth() {
         setUser(undefined);
         localStorage.removeItem("user");
         enqueueSnackbar("Byl jsi odhlášen. Zase někdy!");
-        navigate("/");
+        // navigate("/");
         setLoading(false);
     };
 

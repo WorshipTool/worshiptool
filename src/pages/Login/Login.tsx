@@ -2,26 +2,21 @@ import {
     Box,
     Button,
     CircularProgress,
-    Container,
-    IconButton,
     Paper,
-    Snackbar,
+    styled,
     TextField,
     Typography,
-    styled,
     useTheme
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/auth/useAuth";
-import { Close } from "@mui/icons-material";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import User from "../../interfaces/user";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LoginResultDTO } from "../../api/dtos/dtosAuth";
-import GoogleLoginButton from "./components/GoogleLoginButton";
 import Gap from "../../components/Gap";
-import { SIGNUP_URL } from "../../routes/routes";
+import Toolbar from "../../components/Toolbars/Toolbar";
+import useAuth from "../../hooks/auth/useAuth";
+import { CustomRouterProps, SIGNUP_URL } from "../../routes/routes";
+import GoogleLoginButton from "./components/GoogleLoginButton";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
@@ -56,6 +51,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     const { login } = useAuth();
+    const { state }: { state: CustomRouterProps["login"] } = useLocation();
 
     useEffect(() => {
         document.title = "Přihlašení";
@@ -66,6 +62,14 @@ export default function Login() {
     };
     const onPasswordChange = (e: any) => {
         setPassword(e.target.value);
+    };
+
+    const afterGoogleLogin = () => {
+        if (state?.previousPage) {
+            navigate(state.previousPage);
+        } else {
+            navigate("/");
+        }
     };
 
     const onLoginClick = () => {
@@ -100,7 +104,11 @@ export default function Login() {
                 return;
             }
 
-            navigate("/");
+            if (state?.previousPage) {
+                navigate(state.previousPage);
+            } else {
+                navigate("/");
+            }
         });
     };
 
@@ -188,7 +196,7 @@ export default function Login() {
                             alignItems: "center",
                             justifyContent: "end"
                         }}>
-                        <GoogleLoginButton />
+                        <GoogleLoginButton afterLogin={afterGoogleLogin} />
                     </Box>
                 </StyledContainer>
             </Box>

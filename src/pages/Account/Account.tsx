@@ -1,21 +1,23 @@
-import { Box, Card, Tab, Tabs, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Card, useTheme } from "@mui/material";
+import { useEffect } from "react";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import { useNavigate } from "react-router-dom";
-import TabPanel from "./components/TabPanel";
+import { useSmartNavigate } from "../../routes/useSmartNavigate";
 import BasicInfo from "./components/BasicInfo";
-import AppContainer from "../../components/AppContainer/AppContainer";
 import TabsPanel from "./components/TabsPanel";
 
 export default function Account() {
-    const { isLoggedIn, user, isTrustee, isAdmin } = useAuth();
+    const { isLoggedIn } = useAuth();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     useEffect(() => {
         if (!isLoggedIn()) {
-            navigate("/login");
+            navigate("login", {
+                state: {
+                    previousPage: window.location.pathname
+                }
+            });
         }
     }, [isLoggedIn]);
 
@@ -26,7 +28,7 @@ export default function Account() {
     const theme = useTheme();
 
     return (
-        <AppContainer>
+        <AppLayout>
             <Box
                 sx={{
                     [theme.breakpoints.down("md")]: {
@@ -46,6 +48,6 @@ export default function Account() {
                 }}>
                 <BasicInfo />
             </Card>
-        </AppContainer>
+        </AppLayout>
     );
 }

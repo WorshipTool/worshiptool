@@ -27,6 +27,7 @@ import {
     DOCUMENTATION_URL,
     LOGIN_URL
 } from "../../../routes/routes";
+import { useSmartNavigate } from "../../../routes/useSmartNavigate";
 
 const Container = styled(Box)(({ theme }) => ({
     flex: 1,
@@ -63,7 +64,7 @@ interface RightAccountPanelProps {
 export default function RightAccountPanel({
     transparent
 }: RightAccountPanelProps) {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const { isLoggedIn, loading } = useAuth();
 
@@ -99,7 +100,7 @@ export default function RightAccountPanel({
     const fontSize = "medium";
 
     const openDocumentation = () => {
-        navigate(DOCUMENTATION_URL);
+        navigate("documentation");
     };
 
     const onToolsMenuClick = () => {
@@ -118,18 +119,23 @@ export default function RightAccountPanel({
         if (isMobile && !isTablet) {
             uploadInputRef.current?.click();
         } else {
-            navigate(ADD_MENU_URL);
+            navigate("addMenu");
         }
     };
 
     const onLoginClick = () => {
-        navigate(LOGIN_URL);
+        navigate("login", {
+            state: {
+                previousPage: window.location.pathname
+            }
+        });
     };
 
+    const nv = useNavigate();
     const { isOn, url } = useGroup();
     const goHomeClick = () => {
-        if (isOn) navigate(url);
-        else navigate("/");
+        if (isOn) nv(url);
+        else navigate("home");
 
         setTimeout(() => {
             window.scroll({
@@ -153,7 +159,7 @@ export default function RightAccountPanel({
             <Container color={color}>
                 <UploadFileInput
                     onUpload={(files) => {
-                        navigate("/add/upload/parse", {
+                        navigate("uploadParse", {
                             state: { files: files }
                         });
                     }}

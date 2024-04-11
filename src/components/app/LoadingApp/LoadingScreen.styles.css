@@ -1,0 +1,23 @@
+.rotate {
+    animation: rotation 3.14s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.loadingText {
+    display: inline-block;
+    clip-path: inset(0 1.5ch 0 0);
+    animation: l 1s steps(4) infinite;
+}
+
+@keyframes l {
+    to {
+        clip-path: inset(0 -0.5ch 0 0);
+    }
+}

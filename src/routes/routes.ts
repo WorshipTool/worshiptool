@@ -1,3 +1,5 @@
+import { RoutesPaths } from "./routes.types";
+
 const getReplacedUrl = (url: string, params: { [key: string]: string }) => {
     let result = url;
     for (const key in params) {
@@ -45,3 +47,48 @@ export const USERS_PLAYLISTS_URL = "/ucet/playlisty";
 export const USERS_SONGS_URL = "/ucet/pisne";
 export const SONGS_LIST_URL = "/seznam";
 export const TEST_URL = "/test";
+
+export type CustomRouterProps = {
+    home: undefined;
+    variant: undefined;
+    playlist: undefined;
+    playlistCards: undefined;
+    group: undefined;
+    documentation: undefined;
+    addMenu: undefined;
+    upload: undefined;
+    uploadParse: {
+        files: File[];
+    };
+    writeSong: undefined;
+    login: {
+        previousPage: string;
+    };
+    signup: undefined;
+    account: undefined;
+    usersPlaylists: undefined;
+    usersSongs: undefined;
+    songsList: undefined;
+    test: undefined;
+};
+
+export const routesPaths: RoutesPaths<CustomRouterProps> = {
+    home: "/",
+    variant: VARIANT_URL,
+    playlist: PLAYLIST_URL,
+    playlistCards: PLAYLIST_CARDS_URL,
+    group: GROUP_URL,
+
+    documentation: DOCUMENTATION_URL,
+    addMenu: ADD_MENU_URL,
+    upload: UPLOAD_URL,
+    uploadParse: UPLOAD_PARSE_URL,
+    writeSong: WRITE_SONG_URL,
+    login: LOGIN_URL,
+    signup: SIGNUP_URL,
+    account: ACCOUNT_URL,
+    usersPlaylists: USERS_PLAYLISTS_URL,
+    usersSongs: USERS_SONGS_URL,
+    songsList: SONGS_LIST_URL,
+    test: TEST_URL
+};
