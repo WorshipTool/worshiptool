@@ -1,28 +1,17 @@
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Fade,
-    Grid,
-    Grow,
-    Typography
-} from "@mui/material";
+import { Search } from "@mui/icons-material";
+import { Box, Button, CircularProgress, Grow, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import SearchBar from "../../../components/SearchBar/SearchBar";
-import Gap from "../../../components/Gap";
-import OnChangeDelayer from "../../../components/ChangeDelayer";
-import normalizeSearchText from "../../../tech/normalizeSearchText";
-import useGroupSelection from "../../../hooks/group/useGroupSelection";
-import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
-import ContainerGrid from "../../../components/ContainerGrid";
-import OnScrollComponent from "../../../components/OnScrollComponent/OnScrollComponent";
-import { Search } from "@mui/icons-material";
-import { on } from "events";
-import useGroup from "../../../hooks/group/useGroup";
 import { SongVariantDto } from "../../../api/dtos";
+import OnChangeDelayer from "../../../components/ChangeDelayer";
+import Gap from "../../../components/Gap";
+import OnScrollComponent from "../../../components/OnScrollComponent/OnScrollComponent";
+import SearchBar from "../../../components/SearchBar/SearchBar";
+import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
+import useGroup from "../../../hooks/group/useGroup";
+import useGroupSelection from "../../../hooks/group/useGroupSelection";
 import { getVariantUrl } from "../../../routes/routes";
+import normalizeSearchText from "../../../tech/normalizeSearchText";
 
 export default function SelectionList() {
     const { items, search, reload, loading } = useGroupSelection();
@@ -157,9 +146,8 @@ export default function SelectionList() {
                         ) : (
                             <>
                                 <SongListCards
-                                    variants={items.map((v) => v.variant)}
+                                    data={items.map((v) => v.variant)}
                                     onClick={onCardClick}
-                                    itemBorder={false}
                                 />
                                 {items.length == 0 && stillString !== "" && (
                                     <Typography>

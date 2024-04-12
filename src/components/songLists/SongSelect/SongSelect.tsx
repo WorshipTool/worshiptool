@@ -75,7 +75,7 @@ export default function SongSelect({ onChange, filter }: SongSelectProps) {
                 </>
             )}
 
-            {open && <SongListCards variants={data} onClick={onSongClick} />}
+            {open && <SongListCards data={data} onClick={onSongClick} />}
         </Box>
     );
 }
