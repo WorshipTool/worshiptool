@@ -1,42 +1,71 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Masonry } from "@mui/lab";
 import { useTheme } from "@mui/material";
-import SearchItem from "./components/SearchItem";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { SongVariantDto } from "../../../api/dtos";
+import SongCard from "../../SongCard/SongCard";
+import { ResponsiveStyleValue } from "@mui/system";
 
-interface SongListCardsProps {
-    variants: SongVariantDto[];
+type CommmonProps = {
+    data: SongVariantDto[];
     onClick?: (variant: SongVariantDto) => void;
-    columns?: number;
-    itemBorder?: boolean;
-}
+};
 
-export default function SongListCards({
-    variants,
-    onClick,
-    columns,
-    itemBorder
-}: SongListCardsProps) {
+type ListProps = CommmonProps & {
+    variant: "list";
+};
+
+type MasonryGridProps = CommmonProps & {
+    variant?: "masonrygrid";
+    columns?: ResponsiveStyleValue<string | number>;
+};
+
+type RowProps = CommmonProps & {
+    variant: "row";
+    columns?: ResponsiveStyleValue<string | number>;
+};
+
+type SongListCardsProps = ListProps | MasonryGridProps | RowProps;
+
+export default function SongListCards(props: SongListCardsProps) {
     const theme = useTheme();
     const spacing = 1;
-    return variants.length === 0 ? (
+
+    let columns: ResponsiveStyleValue<string | number> = useMemo(() => {
+        switch (props.variant) {
+            case "list":
+                return 1;
+                break;
+            case undefined:
+            case "masonrygrid":
+            case "row":
+                return {
+                    xs: 1,
+                    md: 2,
+                    lg: 4
+                };
+        }
+    }, [props]);
+
+    return props.data.length === 0 ? (
         <></>
     ) : (
         <Masonry
-            columns={columns || { xs: 1, md: 2, lg: 4 }}
+            columns={columns}
             sx={{
                 marginLeft: -(spacing / 2),
                 width: `calc(100% + ${theme.spacing(spacing)})`
             }}
             spacing={spacing}>
-            {variants.map((v) => {
+            {props.data.map((v) => {
                 return (
-                    <SearchItem
-                        variant={v}
+                    <SongCard
+                        data={v}
                         key={v.guid}
-                        onClick={onClick}
-                        border={itemBorder}></SearchItem>
+                        onClick={props.onClick}
+                        publicityMode="privateandloader"
+                        flexibleHeght={props.variant !== "row"}
+                    />
                 );
             })}
         </Masonry>

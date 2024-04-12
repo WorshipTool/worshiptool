@@ -114,7 +114,7 @@ export default function SearchedSongsList({
 
                 {!loading && songs.length > 0 && (
                     <SongListCards
-                        variants={songs}
+                        data={songs}
                         onClick={onCardClick}></SongListCards>
                 )}
             </>
