@@ -3,14 +3,6 @@ import React from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { RouterProps, routesPaths, SmartState, SmartTo } from "../../routes";
 
-// const StyledLink = styled(Link)(({ theme }) => ({
-//     color: "inherit",
-//     textDecoration: "none",
-//     "&:hover": {
-//         textDecoration: "underline"
-//     }
-// }));
-
 type CustomLinkProps<T extends keyof RouterProps> = {
     to: string;
     type: T;
