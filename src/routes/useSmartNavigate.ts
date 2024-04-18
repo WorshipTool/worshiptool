@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { CustomRouterProps, routesPaths } from "./routes";
+import { RouterProps, routesPaths } from "./routes";
 import { SmartNavigateOptions, SmartTo } from "./routes.types";
 
 export const useSmartNavigate = () => {
     const nv = useNavigate();
 
-    const navigate = <T extends keyof CustomRouterProps>(
+    const navigate = <T extends keyof RouterProps>(
         to: SmartTo<T>,
         options?: SmartNavigateOptions<T>
     ) => {

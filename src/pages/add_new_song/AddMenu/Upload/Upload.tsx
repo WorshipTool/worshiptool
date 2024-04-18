@@ -4,6 +4,7 @@ import UploadPanel from "./components/UploadPanel/UploadPanel";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { UPLOAD_PARSE_URL } from "../../../../routes/routes";
+import { useWindowTitle } from "../../../../hooks/useWindowTitle";
 
 export interface EasySheet {
     title: string;
@@ -19,6 +20,8 @@ export default function Upload() {
         navigate(UPLOAD_PARSE_URL, { state: { files: files } });
         return;
     };
+
+    useWindowTitle("Nahrát píseň");
 
     return (
         <AppLayout>

@@ -168,7 +168,7 @@ export default function RightAccountPanel({
 
                 {isHome ? (
                     <>
-                        <Tooltip title={"Dokumentace"}>
+                        <Tooltip title={"O aplikaci"}>
                             <IconButton
                                 color="inherit"
                                 sx={iconButtonStyle}

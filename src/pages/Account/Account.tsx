@@ -5,11 +5,13 @@ import useAuth from "../../hooks/auth/useAuth";
 import { useSmartNavigate } from "../../routes/useSmartNavigate";
 import BasicInfo from "./components/BasicInfo";
 import TabsPanel from "./components/TabsPanel";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 export default function Account() {
     const { isLoggedIn } = useAuth();
 
     const navigate = useSmartNavigate();
+    useWindowTitle("Můj účet");
 
     useEffect(() => {
         if (!isLoggedIn()) {
@@ -20,10 +22,6 @@ export default function Account() {
             });
         }
     }, [isLoggedIn]);
-
-    useEffect(() => {
-        document.title = "Váš účet";
-    }, []);
 
     const theme = useTheme();
 

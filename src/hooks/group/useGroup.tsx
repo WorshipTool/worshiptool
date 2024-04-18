@@ -6,7 +6,8 @@ import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
 import useAuth from "../auth/useAuth";
 import { GroupApi } from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
-import { getGroupUrl } from "../../routes/routes";
+import { getGroupUrl, routesPaths } from "../../routes/routes";
+import { useSmartNavigate } from "../../routes";
 
 export const groupContext = createContext<useProvideGroupI>(
     {} as useProvideGroupI
@@ -37,6 +38,8 @@ interface useProvideGroupI {
 export const useProvideGroup = (): useProvideGroupI => {
     // const {fetchData} = useFetch();
 
+    const navigate = useSmartNavigate();
+
     const [group, setGroup] = useState<Group>();
 
     const { isLoggedIn, apiConfiguration } = useAuth();
@@ -58,6 +61,11 @@ export const useProvideGroup = (): useProvideGroupI => {
     const turnOff = () => {
         setGroup(undefined);
         localStorage.removeItem(key);
+
+        // TODO: implements better
+        if (window.location.pathname.includes("skupina")) {
+            navigate("home");
+        }
     };
 
     useEffect(() => {

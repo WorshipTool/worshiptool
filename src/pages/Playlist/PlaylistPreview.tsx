@@ -21,6 +21,7 @@ import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
 import { getPlaylistCardsUrl } from "../../routes/routes";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const Container = styled(Box)(({ theme }) => ({
     padding: 30
@@ -43,10 +44,7 @@ export default function PlaylistPreview() {
         window.dispatchEvent(new Event("searchBarFocus"));
     };
 
-    useEffect(() => {
-        if (playlist?.title) document.title = playlist?.title;
-        else document.title = "Playlist";
-    }, [playlist?.title]);
+    useWindowTitle(playlist?.title || "Playlist");
 
     return (
         <AppLayout>

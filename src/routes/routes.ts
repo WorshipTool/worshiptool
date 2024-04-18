@@ -1,4 +1,4 @@
-import { RoutesPaths } from "./routes.types";
+import { RoutesPathsType } from "./routes.types";
 
 const getReplacedUrl = (url: string, params: { [key: string]: string }) => {
     let result = url;
@@ -48,7 +48,7 @@ export const USERS_SONGS_URL = "/ucet/pisne";
 export const SONGS_LIST_URL = "/seznam";
 export const TEST_URL = "/test";
 
-export type CustomRouterProps = {
+export type RouterProps = {
     home: undefined;
     variant: undefined;
     playlist: undefined;
@@ -73,13 +73,12 @@ export type CustomRouterProps = {
     test: undefined;
 };
 
-export const routesPaths: RoutesPaths<CustomRouterProps> = {
+export const routesPaths: RoutesPathsType<RouterProps> = {
     home: "/",
     variant: VARIANT_URL,
     playlist: PLAYLIST_URL,
     playlistCards: PLAYLIST_CARDS_URL,
     group: GROUP_URL,
-
     documentation: DOCUMENTATION_URL,
     addMenu: ADD_MENU_URL,
     upload: UPLOAD_URL,

@@ -1,13 +1,8 @@
 import { POSTPARSEIMAGE_URL } from "../../../../api/constants";
 import { PostParseImageResultDTO } from "../../../../api/dtos/dtosSong";
 import { getUrl } from "../../../../api/urls";
-import useAuth from "../../../../hooks/auth/useAuth";
-import { useApiState } from "../../../../tech/ApiState";
-import { handleApiCall } from "../../../../tech/handleApiCall";
 
 export default function useImport() {
-    const { getAuthHeader } = useAuth();
-    // const {postFormData} = useFetch()
     const importImage = async (
         file: File
     ): Promise<PostParseImageResultDTO> => {

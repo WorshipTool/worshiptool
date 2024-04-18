@@ -8,9 +8,12 @@ import { useApiStateEffect } from "../../../tech/ApiState";
 import { useApi } from "../../../hooks/api/useApi";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import { UPLOAD_URL, WRITE_SONG_URL } from "../../../routes/routes";
+import { useWindowTitle } from "../../../hooks/useWindowTitle";
 
 export default function AddMenu() {
     const navigate = useNavigate();
+
+    useWindowTitle("Nová píseň");
 
     const { songAddingApi } = useApi();
 

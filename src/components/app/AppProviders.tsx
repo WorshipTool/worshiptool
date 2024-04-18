@@ -13,6 +13,7 @@ import Snow from "../Snow";
 import AppContainer from "./AppContainer";
 import { theme } from "./theme";
 import App from "../../App";
+import { WindowTitleProvider } from "../../hooks/useWindowTitle";
 
 type AppProvidersProps = {
     children?: React.ReactNode;
@@ -27,17 +28,19 @@ export default function AppProviders(props: AppProvidersProps) {
                 autoHideDuration={3000}>
                 <ThemeProvider theme={theme}>
                     <BrowserRouter>
-                        <AuthProvider>
-                            <ErrorHandlerProvider>
-                                <StackProvider>
-                                    <GroupProvider>
-                                        <PlaylistProvider>
-                                            {props.children}
-                                        </PlaylistProvider>
-                                    </GroupProvider>
-                                </StackProvider>
-                            </ErrorHandlerProvider>
-                        </AuthProvider>
+                        <WindowTitleProvider>
+                            <AuthProvider>
+                                <ErrorHandlerProvider>
+                                    <StackProvider>
+                                        <GroupProvider>
+                                            <PlaylistProvider>
+                                                {props.children}
+                                            </PlaylistProvider>
+                                        </GroupProvider>
+                                    </StackProvider>
+                                </ErrorHandlerProvider>
+                            </AuthProvider>
+                        </WindowTitleProvider>
                     </BrowserRouter>
                 </ThemeProvider>
             </SnackbarProvider>
