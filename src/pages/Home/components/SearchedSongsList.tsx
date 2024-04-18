@@ -59,7 +59,6 @@ export default function SearchedSongsList({
             page,
             signal: controller.signal
         }).then((data) => {
-            console.log("found");
             setLoading(false);
             setNextLoading(false);
             resolve(
@@ -103,7 +102,6 @@ export default function SearchedSongsList({
                     loadPage(0, true).then(() => {
                         setEnableLoadNext(true);
                     });
-                    console.log("searching");
                 }}
             />
 
