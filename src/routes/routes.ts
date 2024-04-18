@@ -50,7 +50,9 @@ export const TEST_URL = "/test";
 
 export type RouterProps = {
     home: undefined;
-    variant: undefined;
+    variant: {
+        title?: string;
+    };
     playlist: undefined;
     playlistCards: undefined;
     group: undefined;

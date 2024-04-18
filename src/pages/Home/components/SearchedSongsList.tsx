@@ -85,14 +85,6 @@ export default function SearchedSongsList({
 
     const navigate = useNavigate();
 
-    const onCardClick = (variant: SongVariantDto) => {
-        navigate(getVariantUrl(variant.alias), {
-            state: {
-                title: variant.preferredTitle
-            }
-        });
-    };
-
     return (
         <ContainerGrid direction="column">
             <OnChangeDelayer
@@ -111,9 +103,7 @@ export default function SearchedSongsList({
                 </Typography>
 
                 {!loading && songs.length > 0 && (
-                    <SongListCards
-                        data={songs}
-                        onClick={onCardClick}></SongListCards>
+                    <SongListCards data={songs}></SongListCards>
                 )}
             </>
 

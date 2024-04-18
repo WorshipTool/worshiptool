@@ -11,10 +11,7 @@ import SongContainer from "./SongContainer";
 import { Helmet } from "react-helmet";
 import { useApi } from "../../hooks/api/useApi";
 import { handleApiCall } from "../../tech/handleApiCall";
-
-export interface SongRoutePageState {
-    title?: string;
-}
+import { useSmartLocation } from "../../routes";
 
 export default function SongRoutePage() {
     const { alias: code, hex } = useParams();
@@ -30,7 +27,7 @@ export default function SongRoutePage() {
         return guid;
     }, [alias]);
 
-    const { state }: { state: SongRoutePageState } = useLocation();
+    const { state } = useSmartLocation("variant");
 
     return (
         <AppLayout>

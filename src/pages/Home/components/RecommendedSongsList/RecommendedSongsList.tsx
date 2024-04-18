@@ -25,14 +25,6 @@ export default function RecommendedSongsList() {
 
     const navigate = useNavigate();
 
-    const onCardClick = (variant: SongVariantDto) => {
-        navigate(getVariantUrl(variant.alias), {
-            state: {
-                title: variant.preferredTitle
-            }
-        });
-    };
-
     const openList = () => {
         navigate(SONGS_LIST_URL);
     };
@@ -67,11 +59,7 @@ export default function RecommendedSongsList() {
                 container
                 columns={{ xs: 1, sm: 2, md: 4 }}
                 sx={{ padding: 0 }}>
-                <SongListCards
-                    data={data.slice(0, 4)}
-                    onClick={onCardClick}
-                    variant="row"
-                />
+                <SongListCards data={data.slice(0, 4)} variant="row" />
             </GridContainer>
 
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>

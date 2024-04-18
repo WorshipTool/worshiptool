@@ -19,14 +19,6 @@ export default function SelectionList() {
 
     const navigate = useNavigate();
 
-    const onCardClick = (variant: SongVariantDto) => {
-        navigate(getVariantUrl(variant.alias), {
-            state: {
-                title: variant.preferredTitle
-            }
-        });
-    };
-
     const [searchString, setSearchString] = React.useState<string>("");
     const [stillString, setStillString] = useState<string>("");
 
@@ -147,7 +139,6 @@ export default function SelectionList() {
                             <>
                                 <SongListCards
                                     data={items.map((v) => v.variant)}
-                                    onClick={onCardClick}
                                 />
                                 {items.length == 0 && stillString !== "" && (
                                     <Typography>

@@ -8,7 +8,6 @@ import { ResponsiveStyleValue } from "@mui/system";
 
 type CommmonProps = {
     data: SongVariantDto[];
-    onClick?: (variant: SongVariantDto) => void;
 };
 
 type ListProps = CommmonProps & {
@@ -62,7 +61,6 @@ export default function SongListCards(props: SongListCardsProps) {
                     <SongCard
                         data={v}
                         key={v.guid}
-                        onClick={props.onClick}
                         publicityMode="privateandloader"
                         flexibleHeght={props.variant !== "row"}
                     />

@@ -1,17 +1,10 @@
 import { Lock, Public } from "@mui/icons-material";
-import {
-    alpha,
-    Box,
-    IconButton,
-    styled,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { Box, Link, styled, Typography, useTheme } from "@mui/material";
 import { SongVariantDto } from "../../api/dtos";
 import useAuth from "../../hooks/auth/useAuth";
 import CustomChip from "../CustomChip/CustomChip";
-import CustomTooltip from "../CustomTooltip/CustomTooltip";
-import ChordIcon from "../songLists/SongListCards/components/ChordIcon";
+import CustomLink from "../Link/CustomLink";
+import { getVariantUrl } from "../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -40,13 +33,11 @@ type PublicityMode = "none" | "private" | "byyou" | "privateandloader" | "all";
 
 type SongCardProps = {
     data: SongVariantDto;
-    onClick?: (variant: SongVariantDto) => void;
     publicityMode?: PublicityMode;
     flexibleHeght?: boolean;
 };
 export default function SongCard({
     data,
-    onClick,
     publicityMode,
     flexibleHeght = true
 }: SongCardProps) {
@@ -54,7 +45,6 @@ export default function SongCard({
     const theme = useTheme();
 
     const createdByYou = user && data.createdBy === user.guid;
-
     // What display
     let showCreatedByLoader = data.createdByLoader;
     let showPrivate = !data.public && createdByYou;
@@ -89,76 +79,86 @@ export default function SongCard({
         ?.text?.split("\n")
         .slice(0, 4);
 
+    const to = getVariantUrl(data.alias);
+
     return (
-        <StyledContainer
-            onClick={() => onClick?.(data)}
-            sx={{
-                borderColor: showBorder
-                    ? theme.palette.grey[300]
-                    : "transparent",
-                height: flexibleHeght ? "auto" : "11rem",
-                overflowY: "hidden"
+        <CustomLink
+            to={to}
+            type="variant"
+            state={{
+                title: data.preferredTitle
             }}>
-            <Box display={"flex"} flexDirection={"row"} gap={1}>
-                <Typography fontWeight={"bold"} flex={1}>
-                    {title}
-                </Typography>
-                {
-                    <Box>
-                        {(showPrivate || showPublic) && (
-                            <CustomChip
-                                icon={showPrivate ? <Lock /> : <Public />}
-                                label={
-                                    showPrivate ? "Soukromé" : "Vytvořeno vámi"
-                                }
-                                color={
-                                    showPrivate
-                                        ? theme.palette.grey[600]
-                                        : theme.palette.primary.main
-                                }
-                                borderColor={
-                                    showPrivate
-                                        ? theme.palette.grey[400]
-                                        : theme.palette.primary.main
-                                }
-                            />
-                        )}
-                        {showCreatedByLoader && (
-                            <Typography variant="caption">
-                                Nahráno programem
-                            </Typography>
-                        )}
-                    </Box>
-                }
-            </Box>
-
-            <StyledBox>
-                {dataLines.map((line, index) => {
-                    return (
-                        <Box display={"flex"} flexDirection={"row"}>
-                            <Typography
-                                noWrap
-                                key={"SearchItemText" + index}
-                                flex={1}>
-                                {line}
-                            </Typography>
-                        </Box>
-                    );
-                })}
-            </StyledBox>
-
-            <Box
-                className="songcardgradient"
+            <StyledContainer
                 sx={{
-                    background: `linear-gradient(0deg, ${theme.palette.grey[100]} 50%, transparent)`,
+                    borderColor: showBorder
+                        ? theme.palette.grey[300]
+                        : "transparent",
+                    height: flexibleHeght ? "auto" : "11rem",
+                    overflowY: "hidden"
+                }}>
+                <Box display={"flex"} flexDirection={"row"} gap={1}>
+                    <Typography fontWeight={"bold"} flex={1}>
+                        {title}
+                    </Typography>
+                    {
+                        <Box>
+                            {(showPrivate || showPublic) && (
+                                <CustomChip
+                                    icon={showPrivate ? <Lock /> : <Public />}
+                                    label={
+                                        showPrivate
+                                            ? "Soukromé"
+                                            : "Vytvořeno vámi"
+                                    }
+                                    color={
+                                        showPrivate
+                                            ? theme.palette.grey[600]
+                                            : theme.palette.primary.main
+                                    }
+                                    borderColor={
+                                        showPrivate
+                                            ? theme.palette.grey[400]
+                                            : theme.palette.primary.main
+                                    }
+                                />
+                            )}
+                            {showCreatedByLoader && (
+                                <Typography variant="caption">
+                                    Nahráno programem
+                                </Typography>
+                            )}
+                        </Box>
+                    }
+                </Box>
 
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "1rem"
-                }}
-            />
-        </StyledContainer>
+                <StyledBox>
+                    {dataLines.map((line, index) => {
+                        return (
+                            <Box display={"flex"} flexDirection={"row"}>
+                                <Typography
+                                    noWrap
+                                    key={"SearchItemText" + index}
+                                    flex={1}>
+                                    {line}
+                                </Typography>
+                            </Box>
+                        );
+                    })}
+                </StyledBox>
+
+                <Box
+                    className="songcardgradient"
+                    sx={{
+                        background: `linear-gradient(0deg, ${theme.palette.grey[100]} 50%, transparent)`,
+
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "1rem"
+                    }}
+                />
+            </StyledContainer>
+        </CustomLink>
     );
 }
