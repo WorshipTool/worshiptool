@@ -63,6 +63,7 @@ export type CustomRouterProps = {
     writeSong: undefined;
     login: {
         previousPage: string;
+        message?: string;
     };
     signup: undefined;
     account: undefined;

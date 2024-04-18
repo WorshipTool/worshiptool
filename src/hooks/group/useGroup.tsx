@@ -45,7 +45,7 @@ export const useProvideGroup = (): useProvideGroupI => {
     const key = "activeGroup";
 
     const turnOn = (name: string) => {
-        if (!isLoggedIn()) return;
+        // if (!isLoggedIn()) return;
         handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, name))
             .then((r) => {
                 setGroup(mapApiToGroup(r));
