@@ -56,7 +56,7 @@ export default function HomeMobile() {
                     <SearchedSongsList searchString={searchValue} />
                 )}
 
-                <RecommendedSongsList />
+                <RecommendedSongsList listType="list" />
             </Box>
             <Box
                 sx={{

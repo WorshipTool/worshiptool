@@ -24,7 +24,7 @@ type RowProps = CommmonProps & {
     columns?: ResponsiveStyleValue<string | number>;
 };
 
-type SongListCardsProps = ListProps | MasonryGridProps | RowProps;
+export type SongListCardsProps = ListProps | MasonryGridProps | RowProps;
 
 export default function SongListCards(props: SongListCardsProps) {
     const theme = useTheme();
