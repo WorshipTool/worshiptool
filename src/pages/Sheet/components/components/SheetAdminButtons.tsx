@@ -21,7 +21,6 @@ import AddCreator from "../../../../components/AddCreator";
 import AddTag from "../../../../components/AddTag";
 import AddVideo from "../../../../components/AddVideo";
 import useAuth from "../../../../hooks/auth/useAuth";
-import Buttons13ka from "./Buttons13ka";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 import VerifyButton from "./VerifyButton";
@@ -115,7 +114,6 @@ export default function SheetAdminButtons({
                 onClose={handleClose}>
                 <VerifyButton variant={variant} reloadSong={reload} />
                 <Divider />
-                <Buttons13ka variant={variant} />
 
                 {isAdmin() && variant.createdByLoader && (
                     <>

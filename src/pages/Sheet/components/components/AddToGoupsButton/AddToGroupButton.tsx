@@ -1,4 +1,4 @@
-import { Diversity3, Tune } from "@mui/icons-material";
+import { Diversity3 } from "@mui/icons-material";
 import {
     Divider,
     ListItemIcon,
@@ -6,15 +6,21 @@ import {
     Menu,
     MenuItem
 } from "@mui/material";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { usePermissions } from "../../../../../hooks/auth/usePermissions";
+import GroupItem from "./GroupItem";
 
-export default function AddToGroupButton() {
+type AddToGroupButtonProps = {
+    variantAlias: string;
+};
+
+export default function AddToGroupButton(props: AddToGroupButtonProps) {
     const permissions = usePermissions();
+
     const permissionsToAdd = useMemo(() => {
         if (permissions) {
             return permissions.permissions.filter(
-                (p) => p.type === "GROUP_ADD_SONG"
+                (p) => p.type === "GROUP_ADD_SONG" || p.type === "GROUP_OWNER"
             );
         }
         return [];
@@ -46,9 +52,12 @@ export default function AddToGroupButton() {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}>
-                <MenuItem>
-                    <ListItemText primary={"Ahooj"} />
-                </MenuItem>
+                {permissionsToAdd.map((p) => (
+                    <GroupItem
+                        groupGuid={p.payload || ""}
+                        variantAlias={props.variantAlias}
+                    />
+                ))}
             </Menu>
         </>
     );

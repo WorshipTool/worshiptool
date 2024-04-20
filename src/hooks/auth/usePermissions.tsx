@@ -6,9 +6,11 @@ import {
 import { useApi } from "../api/useApi";
 import { useApiStateEffect } from "../../tech/ApiState";
 import { handleApiCall } from "../../tech/handleApiCall";
+import useAuth from "./useAuth";
 
 export const usePermissions = (userGuid?: string) => {
     const { permissionApi } = useApi();
+    const { user, isAdmin } = useAuth();
     const [state, reload] = useApiStateEffect<
         PermissionDataType[]
     >(async () => {
@@ -30,13 +32,17 @@ export const usePermissions = (userGuid?: string) => {
         permissions: state.data || [],
         includesPermission: <T extends PermissionType>(
             type: T,
-            payload: PermissionPayloadType<T>
+            payload?: PermissionPayloadType<T>
         ) => {
+            if ((!userGuid || user?.guid === userGuid) && isAdmin())
+                return true;
             return (
                 state.data?.some(
                     (p) =>
                         p.type === type &&
-                        JSON.stringify(p.payload) === JSON.stringify(payload)
+                        (!payload ||
+                            JSON.stringify(p.payload) ===
+                                JSON.stringify(payload))
                 ) || false
             );
         }

@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
-import GroupToolbarActionButton from "./GroupToolbarActionButton";
-import Gap from "../../Gap";
 import { Add, Edit, Search } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import usePlaylists from "../../../hooks/playlist/usePlaylists";
+import useGroup from "../../../hooks/group/useGroup";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
+import usePlaylists from "../../../hooks/playlist/usePlaylists";
 import { ADD_MENU_URL, getPlaylistUrl } from "../../../routes/routes";
+import GroupToolbarActionButton from "./GroupToolbarActionButton";
 
 interface QuickActionsProps {
     visible?: boolean;
@@ -17,6 +17,8 @@ export default function QuickActions({ visible }: QuickActionsProps) {
     const { turnOn, isOn, guid, playlist } = useCurrentPlaylist();
 
     const navigate = useNavigate();
+
+    const { guid: groupGuid } = useGroup();
 
     const [createSongLoading, setCreateSongLoading] = useState(false);
     const [createPlaylistLoading, setCreatePlaylistLoading] = useState(false);

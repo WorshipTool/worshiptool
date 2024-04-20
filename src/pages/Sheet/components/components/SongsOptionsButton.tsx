@@ -1,15 +1,6 @@
-import {
-    Create,
-    Dashboard,
-    Settings,
-    SettingsOutlined,
-    SettingsRounded,
-    SettingsTwoTone,
-    Tune
-} from "@mui/icons-material";
+import { Dashboard, Settings } from "@mui/icons-material";
 import {
     Box,
-    CircularProgress,
     Divider,
     IconButton,
     ListItemIcon,
@@ -19,18 +10,17 @@ import {
     Tooltip,
     useTheme
 } from "@mui/material";
-import React, { useMemo } from "react";
-import DeleteButton from "./DeleteButton";
-import { SongDto, SongVariantDto } from "../../../../api/dtos";
-import CreateCopyButton from "./CreateCopyButton";
-import useAuth from "../../../../hooks/auth/useAuth";
-import SheetAdminButtons from "./SheetAdminButtons";
 import { Sheet } from "@pepavlin/sheet-api";
-import AddToPlaylistButton from "./AddToPlaylistButton/AddToPlaylistButton";
-import EditButton from "./EditButton";
-import VerifyButton from "./VerifyButton";
-import { usePermissions } from "../../../../hooks/auth/usePermissions";
+import React from "react";
+import { SongDto, SongVariantDto } from "../../../../api/dtos";
+import useAuth from "../../../../hooks/auth/useAuth";
 import AddToGroupButton from "./AddToGoupsButton/AddToGroupButton";
+import AddToPlaylistButton from "./AddToPlaylistButton/AddToPlaylistButton";
+import CreateCopyButton from "./CreateCopyButton";
+import DeleteButton from "./DeleteButton";
+import EditButton from "./EditButton";
+import SheetAdminButtons from "./SheetAdminButtons";
+import VerifyButton from "./VerifyButton";
 
 type SongsOptionsButtonProps = {
     reloadSong: () => void;
@@ -149,7 +139,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                     </>
                 )}
 
-                <AddToGroupButton />
+                <AddToGroupButton variantAlias={props.variant.alias} />
 
                 {isAdmin() && (
                     <>

@@ -14,6 +14,6 @@ export type PermissionPayloadType<T extends keyof PermissionPayloads> =
 
 export type PermissionDataType<T extends PermissionType = PermissionType> = {
     type: T;
-    payload: PermissionPayloadType<T>;
+    payload?: PermissionPayloadType<T>;
     guid?: string;
 };
