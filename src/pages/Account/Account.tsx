@@ -1,4 +1,4 @@
-import { Box, Card, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
@@ -6,6 +6,7 @@ import { useSmartNavigate } from "../../routes/useSmartNavigate";
 import BasicInfo from "./components/BasicInfo";
 import TabsPanel from "./components/TabsPanel";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import Card from "../../components/Card/Card";
 
 export default function Account() {
     const { isLoggedIn } = useAuth();
@@ -37,15 +38,14 @@ export default function Account() {
                 <TabsPanel />
             </Box>
 
-            <Card
+            <Box
                 sx={{
                     [theme.breakpoints.up("md")]: {
                         display: "none"
-                    },
-                    padding: 3
+                    }
                 }}>
                 <BasicInfo />
-            </Card>
+            </Box>
         </AppLayout>
     );
 }

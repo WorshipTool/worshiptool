@@ -1,25 +1,20 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState
-} from "react";
-import User, { ROLES } from "../../interfaces/user";
+import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { useSnackbar } from "notistack";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-    LoginRequestDTO,
-    LoginResultDTO,
-    PostLoginGoogleDto,
     SignUpRequestDTO,
     loginResultDTOToUser
 } from "../../api/dtos/dtosAuth";
-import { useSnackbar } from "notistack";
-import useGroup from "../group/useGroup";
-import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-import { AuthApi, Configuration, LoginInputData } from "../../api/generated";
-import { access } from "fs";
+import {
+    AuthApi,
+    Configuration,
+    LoginInputData,
+    PermissionsApi
+} from "../../api/generated";
+import User, { ROLES } from "../../interfaces/user";
+import { PermissionDataType } from "../../interfaces/permission.types";
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
     login: async () => {},

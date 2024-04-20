@@ -17,6 +17,6 @@ export const useSmartLocation = <T extends keyof RouterProps>(
 
     return {
         ...loc,
-        state: loc.state as RouterProps[T]
+        state: loc.state || ({} as RouterProps[T])
     };
 };

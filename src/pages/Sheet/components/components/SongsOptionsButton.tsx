@@ -19,7 +19,7 @@ import {
     Tooltip,
     useTheme
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import DeleteButton from "./DeleteButton";
 import { SongDto, SongVariantDto } from "../../../../api/dtos";
 import CreateCopyButton from "./CreateCopyButton";
@@ -29,6 +29,8 @@ import { Sheet } from "@pepavlin/sheet-api";
 import AddToPlaylistButton from "./AddToPlaylistButton/AddToPlaylistButton";
 import EditButton from "./EditButton";
 import VerifyButton from "./VerifyButton";
+import { usePermissions } from "../../../../hooks/auth/usePermissions";
+import AddToGroupButton from "./AddToGoupsButton/AddToGroupButton";
 
 type SongsOptionsButtonProps = {
     reloadSong: () => void;
@@ -146,6 +148,8 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
                         )}
                     </>
                 )}
+
+                <AddToGroupButton />
 
                 {isAdmin() && (
                     <>
