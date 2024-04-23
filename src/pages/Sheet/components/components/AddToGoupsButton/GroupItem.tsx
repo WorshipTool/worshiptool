@@ -14,6 +14,8 @@ import { useSnackbar } from "notistack";
 type GroupItemProps = {
     groupGuid: string;
     variantAlias: string;
+    addable: boolean;
+    removable: boolean;
 };
 export default function GroupItem(props: GroupItemProps) {
     const groups = useGroups();
@@ -66,14 +68,19 @@ export default function GroupItem(props: GroupItemProps) {
     const handleClick = () => {
         if (!groupState.data) return;
         if (isInState.data) {
-            removeFromSelection();
+            if (props.removable) removeFromSelection();
         } else {
-            addToSelection();
+            if (props.addable) addToSelection();
         }
     };
 
     return (
-        <MenuItem onClick={handleClick}>
+        <MenuItem
+            onClick={handleClick}
+            disabled={
+                (isInState.data && !props.removable) ||
+                (!isInState.data && !props.addable)
+            }>
             <SkeletonLoader
                 data={[groupState, isInState]}
                 render={() => {

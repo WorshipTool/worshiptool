@@ -34,11 +34,10 @@ export const AppRoutes = () => {
             <Route path={p.upload} element={<Upload />} />
             <Route path={p.uploadParse} element={<Parse />} />
             <Route path={p.writeSong} element={<Create />} />
-            {/* <Route path="add/write/:guid" element={<Create />} /> */}
             <Route path={p.playlist} element={<PlaylistScreen />} />
             <Route path={p.playlistCards} element={<PlaylistCards />} />
             <Route path={p.documentation} element={<Documentation />} />
-            <Route path={p.group} element={<GroupScreen />} />
+            <Route path={p.group + "/*"} element={<GroupScreen />} />
             <Route path={p.test} element={<Test />} />
             <Route path="*" element={<ErrorPage />} />
         </Routes>

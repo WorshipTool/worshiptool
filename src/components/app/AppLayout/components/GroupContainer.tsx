@@ -1,9 +1,8 @@
 import React from "react";
 import GroupToolbar from "../../../Toolbars/GroupToolbar/GroupToolbar";
-import SideToolbar from "../../../Toolbars/SideToolbar/SideToolbar";
 import { Box } from "@mui/material";
 import OnScrollComponent from "../../../OnScrollComponent/OnScrollComponent";
-import SideToolbar2 from "../../../Toolbars/SideToolbar/SideToolbar2";
+import SideToolbar from "../../../Toolbars/SideToolbar/SideToolbar";
 
 interface GroupContainerProps {
     children?: React.ReactNode;
@@ -25,9 +24,9 @@ export default function GroupContainer({
                             expanded={expandable && top}
                             header={header}
                         />
-                        <SideToolbar2>
+                        <SideToolbar>
                             <>{children}</>
-                        </SideToolbar2>
+                        </SideToolbar>
                     </Box>
                 );
             }}

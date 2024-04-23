@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
     PermissionPayloadType,
     PermissionType
@@ -7,7 +8,14 @@ import { usePermissions } from "./usePermissions";
 export const usePermission = <T extends PermissionType>(
     type: T,
     payload: PermissionPayloadType<T>
-): boolean => {
+): boolean | null => {
     const data = usePermissions();
-    return data.includesPermission(type, payload);
+
+    const includes = useMemo(() => {
+        return data.state.loading
+            ? null
+            : data.includesPermission(type, payload);
+    }, [data, type, payload]);
+
+    return includes;
 };

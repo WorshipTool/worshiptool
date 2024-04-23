@@ -26,10 +26,24 @@ export const usePermissions = (userGuid?: string) => {
         });
     }, [userGuid]);
 
+    const getUsersWithPermission = async <T extends PermissionType>(
+        type: T,
+        payload: PermissionPayloadType<T>
+    ) => {
+        const data = await handleApiCall(
+            permissionApi.permissionControllerGetAllUsersWithPermission(
+                type,
+                payload as any
+            )
+        );
+        return data;
+    };
+
     return {
         reload,
         state: state,
         permissions: state.data || [],
+        getUsersWithPermission,
         includesPermission: <T extends PermissionType>(
             type: T,
             payload?: PermissionPayloadType<T>

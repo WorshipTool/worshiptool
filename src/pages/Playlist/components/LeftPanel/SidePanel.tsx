@@ -51,20 +51,17 @@ export default function SidePanel({
         playlist,
         items,
         guid: playlistGuid,
-        loading
+        loading,
+        isOwner
     } = useInnerPlaylist();
 
     const { isOn: isGroupOn } = useGroup();
 
     const [title, setTitle] = useState<string>("");
 
-    const { isLoggedIn, user } = useAuth();
-
     const [saving, setSaving] = useState(0);
 
     const [someIsMoving, setSomeIsMoving] = useState(false);
-
-    const isOwner = useMemo(() => isLoggedIn(), [isLoggedIn]);
 
     const navigate = useNavigate();
 

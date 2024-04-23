@@ -34,8 +34,9 @@ export default function PlaylistPreview() {
     const isOwner = useMemo(() => {
         if (!playlist || !user) return false;
         if (!isLoggedIn()) return false;
-        return true;
-        // return playlist.ownerGuid === user.guid;
+        // return true;
+        console.log(playlist.ownerGuid, user.guid);
+        return playlist.ownerGuid === user.guid;
     }, [playlist, user]);
 
     const navigate = useNavigate();

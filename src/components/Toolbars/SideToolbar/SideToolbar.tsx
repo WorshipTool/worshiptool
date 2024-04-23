@@ -1,16 +1,27 @@
 import { Box, IconButton, Tooltip, styled } from "@mui/material";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useEffect } from "react";
 import { ReactComponent as SvgIcon } from "../../../assets/icon.svg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import useGroup from "../../../hooks/group/useGroup";
 import {
+    ArrowBack,
     ExitToApp,
     ExitToAppOutlined,
     ExitToAppRounded,
     ExtensionOff,
-    Logout
+    Home,
+    Logout,
+    Settings
 } from "@mui/icons-material";
-import { GROUP_URL } from "../../../routes/routes";
+import {
+    getGroupSettingsUrl,
+    getGroupUrl,
+    GROUP_SETTINGS_URL,
+    routesPaths,
+    useSmartNavigate
+} from "../../../routes";
+import { usePermission } from "../../../hooks/auth/usePermission";
+import useAuth from "../../../hooks/auth/useAuth";
 
 const Container = styled(Box)(({ theme }) => ({
     width: 56,
@@ -42,7 +53,8 @@ const IconContainer = styled(Box)(({ theme }) => ({
     },
     "&:active": {
         transform: "scale(98%)"
-    }
+    },
+    displayPrint: "none"
 }));
 
 interface SideToolbarProps {
@@ -51,73 +63,79 @@ interface SideToolbarProps {
 }
 
 export default function SideToolbar({ component, children }: SideToolbarProps) {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
+    const nvt = useNavigate();
 
-    const { isOn, url, turnOff } = useGroup();
+    const onSettings = !!useMatch(GROUP_SETTINGS_URL);
 
-    const goHomeClick = () => {
-        if (isOn) navigate(url);
-        else navigate("/");
-        window.scroll({
-            top: 0,
-            behavior: "smooth"
-        });
-    };
+    const { isOn, url, turnOff, name, guid } = useGroup();
+    const isOwner = usePermission("GROUP_OWNER", guid);
 
     const leave = () => {
         turnOff();
-        if (window.location.pathname.startsWith(GROUP_URL)) navigate("/");
+        navigate("home");
     };
 
-    // return <>
-    //         <Box sx={{
-    //             display:"flex",
-    //             flexDirection: "row",
-
-    //             boxShadow: "4px 0px 8px #00000044",
-    //             bgcolor:"blue"
-    //         }} displayPrint={"none"}>
-    //             <Box flex={1} bgcolor={"red"}>
-    //                 {children}
-    //             </Box>
-    //             {/* {children} */}
-    //         </Box>
-    // </>;
     return (
         <>
             <Box
                 sx={{
                     display: "flex",
-                    flexDirection: "row",
-
-                    boxShadow: "4px 0px 8px #00000044"
+                    flexDirection: "row"
                 }}>
-                <Container>
-                    <IconContainer onClick={goHomeClick}>
-                        <SvgIcon
-                            height={40}
-                            style={{
-                                filter: " drop-shadow(1px 4px 4px #00000044)"
-                            }}
-                        />
-                    </IconContainer>
-                    <Box
-                        flex={1}
-                        display={"flex"}
-                        flexDirection={"column"}
-                        justifyContent={"end"}
-                        marginBottom={2}
-                        displayPrint={"none"}>
-                        {component}
-                        <Tooltip title={"Ukončit mód"} placement="right">
-                            <IconButton color="secondary" onClick={leave}>
-                                <ExitToApp />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                </Container>
-                <Box width={56} displayPrint={"none"} />
-                <Box flex={1} minHeight={"100vh"}>
+                <Box displayPrint={"none"}>
+                    <Container>
+                        <Box
+                            flex={1}
+                            display={"flex"}
+                            flexDirection={"column"}
+                            justifyContent={"end"}
+                            marginBottom={2}
+                            displayPrint={"none"}
+                            color={"white"}>
+                            {component}
+
+                            {isOwner && (
+                                <>
+                                    <Tooltip
+                                        title={"Zpět na stránku skupiny"}
+                                        placement="right">
+                                        <IconButton
+                                            disabled={!onSettings}
+                                            color={"inherit"}
+                                            onClick={() =>
+                                                nvt(getGroupUrl(name))
+                                            }>
+                                            <ArrowBack />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip
+                                        title={"Spravovat skupinu"}
+                                        placement="right">
+                                        <IconButton
+                                            disabled={onSettings}
+                                            color={"inherit"}
+                                            onClick={() =>
+                                                nvt(getGroupSettingsUrl(name))
+                                            }>
+                                            <Settings />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            )}
+
+                            <Tooltip
+                                title={"Opustit mód " + name}
+                                placement="right">
+                                <IconButton color={"inherit"} onClick={leave}>
+                                    <Home />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    </Container>
+                    <Box width={56} displayPrint={"none"} />
+                </Box>
+                <Box flex={1} minHeight={"calc(100vh - 56px)"}>
                     {children}
                 </Box>
             </Box>

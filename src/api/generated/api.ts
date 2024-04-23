@@ -64,6 +64,53 @@ export interface AddVariantToPlaylistInDto {
 /**
  * 
  * @export
+ * @interface BaseUserInfoOutDto
+ */
+export interface BaseUserInfoOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'lastName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseUserInfoOutDto
+     */
+    'role': BaseUserInfoOutDtoRoleEnum;
+}
+
+export const BaseUserInfoOutDtoRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3
+} as const;
+
+export type BaseUserInfoOutDtoRoleEnum = typeof BaseUserInfoOutDtoRoleEnum[keyof typeof BaseUserInfoOutDtoRoleEnum];
+
+/**
+ * 
+ * @export
  * @interface CSVLink
  */
 export interface CSVLink {
@@ -206,6 +253,12 @@ export interface GetGroupInfoResult {
      * @memberof GetGroupInfoResult
      */
     'selection': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof GetGroupInfoResult
+     */
+    'payload': object;
 }
 /**
  * 
@@ -345,6 +398,31 @@ export interface GetSongDataOutDto {
      * @memberof GetSongDataOutDto
      */
     'tags': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserPermissionOutDto
+ */
+export interface GetUserPermissionOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserPermissionOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserPermissionOutDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserPermissionOutDto
+     */
+    'payload'?: string;
 }
 /**
  * 
@@ -623,10 +701,10 @@ export interface Permission {
     'guid': string;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof Permission
      */
-    'type': string;
+    'type': object;
     /**
      * 
      * @type {string}
@@ -714,6 +792,12 @@ export interface PlaylistDataOutDto {
      * @memberof PlaylistDataOutDto
      */
     'items': Array<PlaylistItemOutDto>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'ownerGuid': string;
 }
 /**
  * 
@@ -1111,6 +1195,25 @@ export interface ReorderPlaylistItem {
      * @memberof ReorderPlaylistItem
      */
     'order': number;
+}
+/**
+ * 
+ * @export
+ * @interface SetGroupPayloadInDto
+ */
+export interface SetGroupPayloadInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SetGroupPayloadInDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof SetGroupPayloadInDto
+     */
+    'payload': object;
 }
 /**
  * 
@@ -3398,6 +3501,45 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerUpdateGroupPayload: async (setGroupPayloadInDto: SetGroupPayloadInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'setGroupPayloadInDto' is not null or undefined
+            assertParamExists('groupControllerUpdateGroupPayload', 'setGroupPayloadInDto', setGroupPayloadInDto)
+            const localVarPath = `/payload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(setGroupPayloadInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3486,6 +3628,18 @@ export const GroupApiFp = function(configuration?: Configuration) {
             const operationBasePath = operationServerMap['GroupApi.groupControllerGetGroupsList']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
+        /**
+         * 
+         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerUpdateGroupPayload(setGroupPayloadInDto, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.groupControllerUpdateGroupPayload']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
     }
 };
 
@@ -3555,6 +3709,15 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerGetGroupsList(options?: any): AxiosPromise<Array<GetGroupListItem>> {
             return localVarFp.groupControllerGetGroupsList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.groupControllerUpdateGroupPayload(setGroupPayloadInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3636,6 +3799,17 @@ export class GroupApi extends BaseAPI {
      */
     public groupControllerGetGroupsList(options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).groupControllerGetGroupsList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).groupControllerUpdateGroupPayload(setGroupPayloadInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3869,6 +4043,51 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {string} type 
+         * @param {string} [payload] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerGetAllUsersWithPermission: async (type: string, payload?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'type' is not null or undefined
+            assertParamExists('permissionControllerGetAllUsersWithPermission', 'type', type)
+            const localVarPath = `/permissions/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (payload !== undefined) {
+                localVarQueryParameter['payload'] = payload;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {GetOrCreatePermissionInDto} getOrCreatePermissionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4007,6 +4226,19 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} type 
+         * @param {string} [payload] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permissionControllerGetAllUsersWithPermission(type: string, payload?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BaseUserInfoOutDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerGetAllUsersWithPermission(type, payload, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PermissionsApi.permissionControllerGetAllUsersWithPermission']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
          * @param {GetOrCreatePermissionInDto} getOrCreatePermissionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4023,7 +4255,7 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async permissionControllerGetUserPermissions(userGuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Permission>>> {
+        async permissionControllerGetUserPermissions(userGuid?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetUserPermissionOutDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerGetUserPermissions(userGuid, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['PermissionsApi.permissionControllerGetUserPermissions']?.[index]?.url;
@@ -4062,6 +4294,16 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {string} type 
+         * @param {string} [payload] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerGetAllUsersWithPermission(type: string, payload?: string, options?: any): AxiosPromise<Array<BaseUserInfoOutDto>> {
+            return localVarFp.permissionControllerGetAllUsersWithPermission(type, payload, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {GetOrCreatePermissionInDto} getOrCreatePermissionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4075,7 +4317,7 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        permissionControllerGetUserPermissions(userGuid?: string, options?: any): AxiosPromise<Array<Permission>> {
+        permissionControllerGetUserPermissions(userGuid?: string, options?: any): AxiosPromise<Array<GetUserPermissionOutDto>> {
             return localVarFp.permissionControllerGetUserPermissions(userGuid, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4106,6 +4348,18 @@ export class PermissionsApi extends BaseAPI {
      */
     public permissionControllerAddPermissionToUser(addPermissionToUserInDto: AddPermissionToUserInDto, options?: RawAxiosRequestConfig) {
         return PermissionsApiFp(this.configuration).permissionControllerAddPermissionToUser(addPermissionToUserInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} type 
+     * @param {string} [payload] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PermissionsApi
+     */
+    public permissionControllerGetAllUsersWithPermission(type: string, payload?: string, options?: RawAxiosRequestConfig) {
+        return PermissionsApiFp(this.configuration).permissionControllerGetAllUsersWithPermission(type, payload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

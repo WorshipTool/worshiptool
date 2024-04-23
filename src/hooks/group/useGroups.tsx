@@ -1,6 +1,5 @@
 import { useApi } from "../api/useApi";
 import { handleApiCall } from "../../tech/handleApiCall";
-import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
 
 export const useGroups = () => {
     const { groupApi } = useApi();
@@ -9,7 +8,7 @@ export const useGroups = () => {
         const d = await handleApiCall(
             groupApi.groupControllerGetGroupInfo(guid)
         );
-        return mapApiToGroup(d);
+        return d;
     };
 
     const getAllGroups = async () => {

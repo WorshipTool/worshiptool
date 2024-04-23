@@ -6,6 +6,7 @@ export default interface PlaylistDTO {
     guid: string;
     title: string;
     items: PlaylistItemDTO[];
+    ownerGuid: string;
 }
 
 export interface PlaylistItemDTO {

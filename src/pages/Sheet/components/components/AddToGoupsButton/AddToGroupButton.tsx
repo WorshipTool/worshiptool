@@ -20,11 +20,46 @@ export default function AddToGroupButton(props: AddToGroupButtonProps) {
     const permissionsToAdd = useMemo(() => {
         if (permissions) {
             return permissions.permissions.filter(
-                (p) => p.type === "GROUP_ADD_SONG" || p.type === "GROUP_OWNER"
+                (p) => p.type === "GROUP_ADD_SONG"
             );
         }
         return [];
     }, [permissions]);
+
+    const permissionsToRemove = useMemo(() => {
+        if (permissions) {
+            return permissions.permissions.filter(
+                (p) => p.type === "GROUP_REMOVE_SONG"
+            );
+        }
+        return [];
+    }, [permissions]);
+
+    const permissionsArr = useMemo(() => {
+        const arr = [];
+
+        for (let i = 0; i < permissionsToAdd.length; i++) {
+            arr.push({
+                guid: permissionsToAdd[i].payload,
+                addable: true,
+                removable: permissionsToRemove.some(
+                    (p) => p.payload === permissionsToAdd[i].payload
+                )
+            });
+        }
+
+        for (let i = 0; i < permissionsToRemove.length; i++) {
+            if (!arr.some((p) => p.guid === permissionsToRemove[i].payload)) {
+                arr.push({
+                    guid: permissionsToRemove[i].payload,
+                    addable: false,
+                    removable: true
+                });
+            }
+        }
+
+        return arr;
+    }, [permissionsToAdd, permissionsToRemove]);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -32,7 +67,7 @@ export default function AddToGroupButton(props: AddToGroupButtonProps) {
         setAnchorEl(event.currentTarget);
     };
 
-    return permissionsToAdd.length == 0 ? null : (
+    return permissionsArr.length == 0 ? null : (
         <>
             <Divider />
             <MenuItem onClick={onClick}>
@@ -52,10 +87,12 @@ export default function AddToGroupButton(props: AddToGroupButtonProps) {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}>
-                {permissionsToAdd.map((p) => (
+                {permissionsArr.map((p) => (
                     <GroupItem
-                        groupGuid={p.payload || ""}
+                        groupGuid={p.guid || ""}
                         variantAlias={props.variantAlias}
+                        addable={p.addable}
+                        removable={p.removable}
                     />
                 ))}
             </Menu>

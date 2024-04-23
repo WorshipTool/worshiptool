@@ -89,7 +89,8 @@ export default function usePlaylists() {
             title: result.title,
             items: result.items.map((item) =>
                 mapPlaylistItemOutDtoApiToPlaylistItemDto(item)
-            )
+            ),
+            ownerGuid: result.ownerGuid
         };
     };
 

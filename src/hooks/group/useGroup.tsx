@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Group } from "../../interfaces/group/Group";
-import { ApiGroupDto } from "../../api/dtos/group/ApiGroupDto";
-import { mapApiToGroup } from "../../api/dtos/group/ApiGroupMap";
+import { Group, GroupPayloadType } from "../../interfaces/group/Group";
 import useAuth from "../auth/useAuth";
 import { GroupApi } from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
@@ -29,6 +27,8 @@ interface useProvideGroupI {
     name: string;
     guid: string;
     selectionGuid: string;
+    payload: GroupPayloadType;
+    setPayload: (payload: GroupPayloadType) => Promise<void>;
     turnOn: (name: string) => void;
     turnOff: () => void;
     isOn: boolean;
@@ -50,7 +50,7 @@ export const useProvideGroup = (): useProvideGroupI => {
     const turnOn = (name: string) => {
         handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, name))
             .then((r) => {
-                setGroup(mapApiToGroup(r));
+                setGroup(r);
                 localStorage.setItem(key, name);
             })
             .catch((e) => {
@@ -67,6 +67,16 @@ export const useProvideGroup = (): useProvideGroupI => {
         }
     };
 
+    const setPayload = async (payload: GroupPayloadType) => {
+        if (!group) return;
+        return await handleApiCall(
+            groupApi.groupControllerUpdateGroupPayload({
+                guid: group.guid,
+                payload
+            })
+        );
+    };
+
     useEffect(() => {
         if (!isLoggedIn()) return;
         const activeName = localStorage.getItem(key);
@@ -80,6 +90,8 @@ export const useProvideGroup = (): useProvideGroupI => {
         isOn: group !== undefined,
         name: group?.name || "",
         guid: group?.guid || "",
+        payload: group?.payload || {},
+        setPayload,
         selectionGuid: group?.selection || "",
         url: getGroupUrl(group?.name || "")
     };

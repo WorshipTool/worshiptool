@@ -1,10 +1,12 @@
 export const Permissions: Record<keyof PermissionPayloads, string> = {
     GROUP_ADD_SONG: "GROUP_ADD_SONG",
+    GROUP_REMOVE_SONG: "GROUP_REMOVE_SONG",
     GROUP_OWNER: "GROUP_OWNER"
 };
 
 export type PermissionPayloads = {
     GROUP_ADD_SONG: string;
+    GROUP_REMOVE_SONG: string;
     GROUP_OWNER: string;
 };
 

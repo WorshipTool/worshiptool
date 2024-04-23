@@ -7,13 +7,15 @@ type ChipProps = {
     label: string;
     color?: string;
     borderColor?: string;
+    children?: React.ReactNode;
 };
 
 export default function CustomChip({
     icon,
     label,
     color,
-    borderColor
+    borderColor,
+    children
 }: ChipProps) {
     const theme = useTheme();
     color = color || theme.palette.primary.main;
@@ -40,6 +42,9 @@ export default function CustomChip({
             {/* Create label */}
 
             <Typography variant="subtitle2">{label}</Typography>
+
+            {/* Create children */}
+            {children}
         </Box>
     );
 }

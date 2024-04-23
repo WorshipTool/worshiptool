@@ -1,13 +1,18 @@
 import { useEffect } from "react";
+import { Route, Routes, useMatch } from "react-router-dom";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
-import { usePermission } from "../../hooks/auth/usePermission";
-import useGroup from "../../hooks/group/useGroup";
+import GroupSettings from "./components/Settings/GroupSettings";
 import SelectionList from "./components/SelectionList";
+import {
+    COMMON_SETTINGS_URL,
+    GROUP_SETTINGS_URL,
+    routesPaths
+} from "../../routes";
 
 export default function GroupHome() {
-    const group = useGroup();
-
-    const has = usePermission("GROUP_ADD_SONG", group.guid);
+    // Check if location is home
+    const home = useMatch(GROUP_SETTINGS_URL);
+    console.log(home);
 
     useEffect(() => {
         window.scroll({
@@ -16,8 +21,12 @@ export default function GroupHome() {
         });
     }, []);
     return (
-        <AppLayout expandable>
-            <SelectionList />
+        <AppLayout expandable={!home}>
+            {/* <SelectionList /> */}
+            <Routes>
+                <Route path={COMMON_SETTINGS_URL} element={<GroupSettings />} />
+                <Route path={"*"} element={<SelectionList />} />
+            </Routes>
         </AppLayout>
     );
 }
