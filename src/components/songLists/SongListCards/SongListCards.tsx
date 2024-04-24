@@ -8,7 +8,6 @@ import { ResponsiveStyleValue } from "@mui/system";
 
 type CommmonProps = {
     data: SongVariantDto[];
-    onClick?: (variant: SongVariantDto) => void;
 };
 
 type ListProps = CommmonProps & {
@@ -25,7 +24,7 @@ type RowProps = CommmonProps & {
     columns?: ResponsiveStyleValue<string | number>;
 };
 
-type SongListCardsProps = ListProps | MasonryGridProps | RowProps;
+export type SongListCardsProps = ListProps | MasonryGridProps | RowProps;
 
 export default function SongListCards(props: SongListCardsProps) {
     const theme = useTheme();
@@ -62,7 +61,6 @@ export default function SongListCards(props: SongListCardsProps) {
                     <SongCard
                         data={v}
                         key={v.guid}
-                        onClick={props.onClick}
                         publicityMode="privateandloader"
                         flexibleHeght={props.variant !== "row"}
                     />

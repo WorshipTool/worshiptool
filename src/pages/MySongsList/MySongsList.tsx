@@ -6,10 +6,12 @@ import MySongItem from "./components/MySongItem";
 import Gap from "../../components/Gap";
 import { useNavigate } from "react-router-dom";
 import { ADD_MENU_URL, getVariantUrl } from "../../routes/routes";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 export default function MySongsList() {
     const { variants, loaded } = useMySongs();
     const navigate = useNavigate();
+    useWindowTitle("Moje písně");
     return (
         <AppLayout>
             <Box

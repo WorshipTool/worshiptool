@@ -16,7 +16,7 @@ export default function TabsPanel() {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, display: "flex" }}>
+        <Box sx={{ flexGrow: 1, display: "flex", gap: 2 }}>
             <Tabs
                 orientation="vertical"
                 value={tabValue}

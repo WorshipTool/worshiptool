@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React from "react";
 import Snowfall from "react-snowfall";
 
@@ -11,17 +12,19 @@ const images = imagesName.map((name) => {
 
 export default function Snow() {
     return (
-        <Snowfall
-            snowflakeCount={30}
-            speed={[0.2, 1]}
-            color="#0085FF44"
-            images={images}
-            radius={[5, 15]}
-            style={{
-                zIndex: -100,
-                opacity: 0.8,
-                filter: "blur(1px)"
-            }}
-        />
+        <Box displayPrint={"none"}>
+            <Snowfall
+                snowflakeCount={30}
+                speed={[0.2, 1]}
+                color="#0085FF44"
+                images={images}
+                radius={[5, 15]}
+                style={{
+                    zIndex: -100,
+                    opacity: 0.8,
+                    filter: "blur(1px)"
+                }}
+            />
+        </Box>
     );
 }

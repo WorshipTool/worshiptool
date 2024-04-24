@@ -24,6 +24,7 @@ import Gap from "../../components/Gap";
 import { LoadingButton } from "@mui/lab";
 import { useApiStateEffect } from "../../tech/ApiState";
 import { getPlaylistUrl } from "../../routes/routes";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -43,6 +44,8 @@ export default function () {
     } = usePlaylists();
     const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
+
+    useWindowTitle("Playlisty");
 
     const [createLoading, setCreateLoading] = useState(false);
 

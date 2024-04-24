@@ -10,7 +10,9 @@ import useRecommendedSongs from "./hooks/useRecommendedSongs";
 import ContainerGrid from "../../../../components/ContainerGrid";
 import { useNavigate } from "react-router-dom";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
-import SongListCards from "../../../../components/songLists/SongListCards/SongListCards";
+import SongListCards, {
+    SongListCardsProps
+} from "../../../../components/songLists/SongListCards/SongListCards";
 import Gap from "../../../../components/Gap";
 import { SongVariantDto } from "../../../../api/dtos";
 import { getVariantUrl, SONGS_LIST_URL } from "../../../../routes/routes";
@@ -20,18 +22,16 @@ const GridContainer = styled(Grid)(({ theme }) => ({
     paddingTop: 5
 }));
 
-export default function RecommendedSongsList() {
+type RecommendedSongsListProps = {
+    listType?: SongListCardsProps["variant"];
+};
+
+export default function RecommendedSongsList({
+    listType = "row"
+}: RecommendedSongsListProps) {
     const { data, isLoading, isError, isSuccess } = useRecommendedSongs();
 
     const navigate = useNavigate();
-
-    const onCardClick = (variant: SongVariantDto) => {
-        navigate(getVariantUrl(variant.alias), {
-            state: {
-                title: variant.preferredTitle
-            }
-        });
-    };
 
     const openList = () => {
         navigate(SONGS_LIST_URL);
@@ -67,11 +67,7 @@ export default function RecommendedSongsList() {
                 container
                 columns={{ xs: 1, sm: 2, md: 4 }}
                 sx={{ padding: 0 }}>
-                <SongListCards
-                    data={data.slice(0, 4)}
-                    onClick={onCardClick}
-                    variant="row"
-                />
+                <SongListCards data={data.slice(0, 4)} variant={listType} />
             </GridContainer>
 
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>

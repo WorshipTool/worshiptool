@@ -1,4 +1,4 @@
-import { RoutesPaths } from "./routes.types";
+import { RoutesPathsType } from "./routes.types";
 
 const getReplacedUrl = (url: string, params: { [key: string]: string }) => {
     let result = url;
@@ -31,10 +31,16 @@ export const getPlaylistCardsUrl = (playlistGuid: string) => {
     return getReplacedUrl(PLAYLIST_CARDS_URL, { guid: playlistGuid });
 };
 
+export const getGroupSettingsUrl = (name: string) => {
+    return getReplacedUrl(GROUP_SETTINGS_URL, { groupName: name });
+};
+
+export const COMMON_SETTINGS_URL = "/nastaveni";
 export const VARIANT_URL = "/p/:hex/:alias";
 export const PLAYLIST_URL = "/playlist/:guid";
 export const PLAYLIST_CARDS_URL = "/playlist/:guid/karty";
 export const GROUP_URL = "/skupina/:groupName";
+export const GROUP_SETTINGS_URL = GROUP_URL + COMMON_SETTINGS_URL;
 export const DOCUMENTATION_URL = "/dokumentace";
 export const ADD_MENU_URL = "/vytvorit";
 export const UPLOAD_URL = "/nahrat";
@@ -48,9 +54,11 @@ export const USERS_SONGS_URL = "/ucet/pisne";
 export const SONGS_LIST_URL = "/seznam";
 export const TEST_URL = "/test";
 
-export type CustomRouterProps = {
+export type RouterProps = {
     home: undefined;
-    variant: undefined;
+    variant: {
+        title?: string;
+    };
     playlist: undefined;
     playlistCards: undefined;
     group: undefined;
@@ -63,6 +71,7 @@ export type CustomRouterProps = {
     writeSong: undefined;
     login: {
         previousPage: string;
+        message?: string;
     };
     signup: undefined;
     account: undefined;
@@ -72,13 +81,12 @@ export type CustomRouterProps = {
     test: undefined;
 };
 
-export const routesPaths: RoutesPaths<CustomRouterProps> = {
+export const routesPaths: RoutesPathsType<RouterProps> = {
     home: "/",
     variant: VARIANT_URL,
     playlist: PLAYLIST_URL,
     playlistCards: PLAYLIST_CARDS_URL,
     group: GROUP_URL,
-
     documentation: DOCUMENTATION_URL,
     addMenu: ADD_MENU_URL,
     upload: UPLOAD_URL,

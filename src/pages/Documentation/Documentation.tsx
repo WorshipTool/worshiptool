@@ -8,9 +8,12 @@ import AppLayout from "../../components/app/AppLayout/AppLayout";
 import { Feedback } from "@mui/icons-material";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Gap from "../../components/Gap";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 export default function Documentation() {
     const { getRawData: fetchRawData } = useReadme();
+
+    useWindowTitle("O aplikaci");
 
     const [raw, setRaw] = useState("");
     useEffect(() => {

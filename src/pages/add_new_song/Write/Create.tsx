@@ -1,41 +1,29 @@
 import {
     Box,
     Button,
-    Divider,
-    FormControlLabel,
     InputBase,
-    ListItemIcon,
-    ListItemText,
     Switch,
     Tooltip,
     Typography,
-    styled,
-    useTheme
+    styled
 } from "@mui/material";
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate, useParams } from "react-router-dom";
-import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
 import { Sheet } from "@pepavlin/sheet-api";
-import Gap from "../../../components/Gap";
-import ToolPanel from "./ToolPanel";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { NewSongDataProcessResult } from "../../../api/generated";
 import ContainerGrid from "../../../components/ContainerGrid";
+import Gap from "../../../components/Gap";
+import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
 import AppLayout from "../../../components/app/AppLayout/AppLayout";
-import ImportButton from "./components/ImportButton";
+import { useApi } from "../../../hooks/api/useApi";
+import { getVariantUrl } from "../../../routes/routes";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
-import { getVariantUrl } from "../../../routes/routes";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
+import ToolPanel from "./ToolPanel";
 import NotValidWarning from "./components/NotValidWarning";
-import { useApi } from "../../../hooks/api/useApi";
-import { NewSongDataProcessResult } from "../../../api/generated";
+import { useWindowTitle } from "../../../hooks/useWindowTitle";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3),
@@ -55,6 +43,8 @@ const SheetInput = styled(InputBase)(({}) => ({
 
 export default function Create() {
     const { guid } = useParams();
+
+    useWindowTitle("Napsat píseň");
 
     const { songAddingApi } = useApi();
     const {

@@ -21,7 +21,7 @@ import ToolbarHeaderSheetPage from "./components/ToolbarHeaderSheetPage";
 import TopPanel from "./components/TopPanel";
 import { SongDto, SongVariantDto } from "../../api/dtos";
 import { useRerender } from "../../hooks/useRerender";
-import { useBrowserTitle } from "../../hooks/useBrowserTitle";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 import { SourcesList } from "./components/SourcesList/SourcesList";
 
 export type SongPageProps = {
@@ -36,7 +36,7 @@ export default function SongContainer({
     const { state, loading, title, variant, song, sheet } =
         useSongVariant(variantGuid);
 
-    useBrowserTitle(title ? [title] : undefined);
+    useWindowTitle(title);
 
     const theme = useTheme();
 

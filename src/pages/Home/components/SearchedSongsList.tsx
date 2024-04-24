@@ -59,7 +59,6 @@ export default function SearchedSongsList({
             page,
             signal: controller.signal
         }).then((data) => {
-            console.log("found");
             setLoading(false);
             setNextLoading(false);
             resolve(
@@ -86,14 +85,6 @@ export default function SearchedSongsList({
 
     const navigate = useNavigate();
 
-    const onCardClick = (variant: SongVariantDto) => {
-        navigate(getVariantUrl(variant.alias), {
-            state: {
-                title: variant.preferredTitle
-            }
-        });
-    };
-
     return (
         <ContainerGrid direction="column">
             <OnChangeDelayer
@@ -103,7 +94,6 @@ export default function SearchedSongsList({
                     loadPage(0, true).then(() => {
                         setEnableLoadNext(true);
                     });
-                    console.log("searching");
                 }}
             />
 
@@ -113,9 +103,7 @@ export default function SearchedSongsList({
                 </Typography>
 
                 {!loading && songs.length > 0 && (
-                    <SongListCards
-                        data={songs}
-                        onClick={onCardClick}></SongListCards>
+                    <SongListCards data={songs}></SongListCards>
                 )}
             </>
 

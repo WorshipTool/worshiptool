@@ -109,7 +109,11 @@ export default function usePlaylist(guid: string | undefined) {
         return setKeyChordOfItem(item.guid, keyChord);
     };
 
-    const isOwner = useMemo(() => isLoggedIn(), [user, isLoggedIn]);
+    const isOwner = useMemo(() => {
+        if (!playlist || !user) return false;
+        if (!isLoggedIn()) return false;
+        return playlist.ownerGuid === user.guid;
+    }, [user, isLoggedIn, playlist]);
 
     return {
         addVariant,

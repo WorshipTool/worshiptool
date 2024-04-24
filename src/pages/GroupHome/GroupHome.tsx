@@ -1,19 +1,18 @@
-import { Box, Button, Grid, Select, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import useGroup from "../../hooks/group/useGroup";
-import SelectionList from "./components/SelectionList";
-import ContainerGrid from "../../components/ContainerGrid";
-import Gap from "../../components/Gap";
-import LeftGroupPanel from "./components/LeftPanel/LeftGroupPanel";
-import GroupToolbar from "../../components/Toolbars/GroupToolbar/GroupToolbar";
-import SideToolbar from "../../components/Toolbars/SideToolbar/SideToolbar";
-import OnScrollComponent from "../../components/OnScrollComponent/OnScrollComponent";
+import { useEffect } from "react";
+import { Route, Routes, useMatch } from "react-router-dom";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
+import GroupSettings from "./components/Settings/GroupSettings";
+import SelectionList from "./components/SelectionList";
+import {
+    COMMON_SETTINGS_URL,
+    GROUP_SETTINGS_URL,
+    routesPaths
+} from "../../routes";
 
 export default function GroupHome() {
-    const group = useGroup();
-    // const [expand, setExpand] = React.useState<boolean>(false);
+    // Check if location is home
+    const home = useMatch(GROUP_SETTINGS_URL);
+
     useEffect(() => {
         window.scroll({
             top: 0,
@@ -21,8 +20,12 @@ export default function GroupHome() {
         });
     }, []);
     return (
-        <AppLayout expandable>
-            <SelectionList />
+        <AppLayout expandable={!home}>
+            {/* <SelectionList /> */}
+            <Routes>
+                <Route path={COMMON_SETTINGS_URL} element={<GroupSettings />} />
+                <Route path={"*"} element={<SelectionList />} />
+            </Routes>
         </AppLayout>
     );
 }

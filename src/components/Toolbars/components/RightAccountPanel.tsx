@@ -68,8 +68,6 @@ export default function RightAccountPanel({
 
     const { isLoggedIn, loading } = useAuth();
 
-    const { createPlaylist } = usePlaylists();
-
     const color = useMemo(() => {
         return transparent ? "black" : "white";
     }, [transparent]);
@@ -112,7 +110,6 @@ export default function RightAccountPanel({
         setAccountMenuOpen(true);
     };
 
-    const { turnOn } = useCurrentPlaylist();
     const uploadInputRef = React.useRef<HTMLInputElement>(null);
 
     const onCreateSongClick = async () => {
@@ -168,7 +165,7 @@ export default function RightAccountPanel({
 
                 {isHome ? (
                     <>
-                        <Tooltip title={"Dokumentace"}>
+                        <Tooltip title={"O aplikaci"}>
                             <IconButton
                                 color="inherit"
                                 sx={iconButtonStyle}

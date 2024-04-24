@@ -32,7 +32,7 @@ const DefaultStyle: SheetStyleComponentType = ({
         <Box
             fontFamily={font}
             sx={{
-                width: 300,
+                maxWidth: "300px",
                 scrollbarX: "auto"
             }}>
             <Box

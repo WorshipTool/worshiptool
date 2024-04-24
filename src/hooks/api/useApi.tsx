@@ -10,7 +10,8 @@ import {
     AuthApi,
     GroupApi,
     SongEditingApi,
-    SongDeletingApi
+    SongDeletingApi,
+    PermissionsApi
 } from "../../api/generated";
 
 export const useApi = () => {
@@ -26,7 +27,8 @@ export const useApi = () => {
         urlAliasApi: new UrlAliasApi(apiConfiguration),
         getterApi: new GetterApi(apiConfiguration),
         groupApi: new GroupApi(apiConfiguration),
-        authApi: new AuthApi(apiConfiguration)
+        authApi: new AuthApi(apiConfiguration),
+        permissionApi: new PermissionsApi(apiConfiguration)
     };
 
     return apis;

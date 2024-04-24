@@ -3,29 +3,34 @@ import GroupHome from "./GroupHome";
 import useGroup, { GroupProvider } from "../../hooks/group/useGroup";
 import { useEffect } from "react";
 import useAuth from "../../hooks/auth/useAuth";
-
+import { useSmartNavigate } from "../../routes/useSmartNavigate";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 export default function GroupScreen() {
-    const {groupName} = useParams();
-    const {turnOn, turnOff, isOn} = useGroup();
-    const {isLoggedIn} = useAuth();
-    const navigate = useNavigate();
+    const { groupName } = useParams();
+    const { turnOn, turnOff, isOn } = useGroup();
+    const { isLoggedIn } = useAuth();
+    const navigate = useSmartNavigate();
 
-    useEffect(()=>{
-        if(localStorage.getItem("user")) return;
-        if(!isLoggedIn()) navigate("/")
-    },[isLoggedIn])
+    useWindowTitle(groupName);
 
+    useEffect(() => {
+        if (!isLoggedIn())
+            navigate("login", {
+                state: {
+                    previousPage: window.location.pathname,
+                    message: "Pro zobrazení skupiny se musíte přihlásit."
+                }
+            });
+    }, [isLoggedIn]);
 
-    useEffect(()=>{
-        if(groupName===undefined) turnOff();
-        else{
+    useEffect(() => {
+        if (groupName === undefined) {
+            turnOff();
+        } else {
             turnOn(groupName);
-            document.title = "Chval Otce - " + groupName;
         }
-    },[groupName])
+    }, [groupName]);
 
-    return (
-        <GroupHome/>
-    )
+    return <GroupHome />;
 }

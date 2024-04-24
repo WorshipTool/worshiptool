@@ -221,7 +221,6 @@ export default function HomeDesktop() {
                     {showSearchedList && (
                         <SearchedSongsList searchString={searchValue} />
                     )}
-
                     <RecommendedSongsList />
                 </motion.div>
             </Box>

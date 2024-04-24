@@ -49,7 +49,7 @@ export default function PanelItem({
     setMoving: sm,
     moving: someIsMoving
 }: PanelItemProps) {
-    const { loading, items, reorder } = useInnerPlaylist();
+    const { loading, items, reorder, isOwner } = useInnerPlaylist();
 
     const [moving, setMoving] = React.useState(false);
 
@@ -97,7 +97,7 @@ export default function PanelItem({
                     </IconButton>
                 ) : (
                     <>
-                        {someIsMoving ? (
+                        {someIsMoving || !isOwner ? (
                             <></>
                         ) : (
                             <>

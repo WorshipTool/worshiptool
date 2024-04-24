@@ -1,22 +1,31 @@
-import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
-import GroupToolbarActionButton from "./GroupToolbarActionButton";
-import Gap from "../../Gap";
-import { Add, Edit, Search } from "@mui/icons-material";
+import { Add, Edit, PinDrop, PushPin, Search } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import usePlaylists from "../../../hooks/playlist/usePlaylists";
+import useGroup from "../../../hooks/group/useGroup";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
+import usePlaylists from "../../../hooks/playlist/usePlaylists";
 import { ADD_MENU_URL, getPlaylistUrl } from "../../../routes/routes";
+import GroupToolbarActionButton from "./GroupToolbarActionButton";
+import { useApiStateEffect } from "../../../tech/ApiState";
 
 interface QuickActionsProps {
     visible?: boolean;
 }
 
 export default function QuickActions({ visible }: QuickActionsProps) {
-    const { createPlaylist } = usePlaylists();
+    const { createPlaylist, getPlaylistByGuid } = usePlaylists();
     const { turnOn, isOn, guid, playlist } = useCurrentPlaylist();
 
     const navigate = useNavigate();
+
+    const { guid: groupGuid, payload } = useGroup();
+
+    const pinnedPlaylistGuid = payload?.pinnedPlaylist;
+    const [pinnedState] = useApiStateEffect(async () => {
+        if (!pinnedPlaylistGuid) return;
+        return await getPlaylistByGuid(pinnedPlaylistGuid);
+    }, [pinnedPlaylistGuid]);
 
     const [createSongLoading, setCreateSongLoading] = useState(false);
     const [createPlaylistLoading, setCreatePlaylistLoading] = useState(false);
@@ -43,6 +52,11 @@ export default function QuickActions({ visible }: QuickActionsProps) {
 
     const openPlaylistToEdit = () => {
         navigate(getPlaylistUrl(guid));
+    };
+
+    const openPinnedPlaylist = () => {
+        if (!pinnedState.data) return;
+        navigate(getPlaylistUrl(pinnedState.data.guid));
     };
 
     return (
@@ -76,7 +90,7 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     visible={visible}
                     id={1}
                 />
-                <GroupToolbarActionButton
+                {/* <GroupToolbarActionButton
                     label="Vytvořit novou píseň"
                     icon={
                         <Add
@@ -89,7 +103,7 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     visible={visible}
                     id={2}
                     loading={createSongLoading}
-                />
+                /> */}
 
                 {isOn ? (
                     <GroupToolbarActionButton
@@ -103,6 +117,20 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     />
                 ) : (
                     <></>
+                )}
+
+                {pinnedState.data && (
+                    <>
+                        <GroupToolbarActionButton
+                            label="Připnutý playlist"
+                            secondaryLabel={pinnedState.data?.title}
+                            variant="secondary"
+                            icon={<PushPin />}
+                            onClick={openPinnedPlaylist}
+                            visible={visible}
+                            id={4}
+                        />
+                    </>
                 )}
             </Box>
         </Box>

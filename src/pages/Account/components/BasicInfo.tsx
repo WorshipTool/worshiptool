@@ -1,51 +1,77 @@
-import { Box, TextField, Typography } from '@mui/material'
-import React from 'react'
-import useAuth from '../../../hooks/auth/useAuth'
-import AccountImage from '../../../assets/images/account.webp'
-import { ROLES } from '../../../interfaces/user';
-import Gap from '../../../components/Gap';
+import { Box, TextField, Typography } from "@mui/material";
+import React from "react";
+import useAuth from "../../../hooks/auth/useAuth";
+import AccountImage from "../../../assets/images/account.webp";
+import { ROLES } from "../../../interfaces/user";
+import Gap from "../../../components/Gap";
+import Card from "../../../components/Card/Card";
 
 export default function BasicInfo() {
-    const {info} = useAuth();
-  return (
-    <Box display={"flex"} flexDirection={"column"}>
-        <Box display={"flex"} flexDirection={"row"}>
-
-            <img src={AccountImage} width={70} height={70} style={{opacity: 0.3}}/>
-            <Box marginLeft={3} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
-                <Typography variant='h6'>{info.firstName} {info.lastName}</Typography>
-                <Typography>{
-                    info.role === ROLES.Admin?"Admin" 
-                    : info.role === ROLES.Trustee?"Trustee"
-                    : info.role === ROLES.User ? "Uživatel"
-                    : ROLES[info.role]
-                }</Typography>
+    const { info } = useAuth();
+    return (
+        <Card>
+            <Box display={"flex"} flexDirection={"row"}>
+                <img
+                    src={AccountImage}
+                    width={70}
+                    height={70}
+                    style={{ opacity: 0.3 }}
+                />
+                <Box
+                    marginLeft={3}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"center"}>
+                    <Typography variant="h6">
+                        {info.firstName} {info.lastName}
+                    </Typography>
+                    <Typography>
+                        {info.role === ROLES.Admin
+                            ? "Admin"
+                            : info.role === ROLES.Trustee
+                            ? "Trustee"
+                            : info.role === ROLES.User
+                            ? "Uživatel"
+                            : ROLES[info.role]}
+                    </Typography>
+                </Box>
             </Box>
-        </Box>
 
-        <Gap value={3}/>
+            <Gap value={3} />
 
-        <Box display={"flex"} flexDirection={"row"} gap={3}>
-            <Box>
-                <Typography variant='subtitle2'>Křestní jméno</Typography>
-                <TextField size="small" fullWidth value={info.firstName} disabled/>
+            <Box display={"flex"} flexDirection={"row"} gap={3}>
+                <Box>
+                    <Typography variant="subtitle2">Křestní jméno</Typography>
+                    <TextField
+                        size="small"
+                        fullWidth
+                        value={info.firstName}
+                        disabled
+                    />
+                </Box>
+                <Box>
+                    <Typography variant="subtitle2">Příjmení</Typography>
+                    <TextField
+                        size="small"
+                        fullWidth
+                        value={info.lastName}
+                        disabled
+                    />
+                </Box>
             </Box>
-            <Box>
-                <Typography variant='subtitle2'>Příjmení</Typography>
-                <TextField size="small" fullWidth value={info.lastName} disabled/>
-            </Box>
-        </Box>
 
-        <Gap/>
+            <Gap />
 
-        <Typography variant='subtitle2'>Email</Typography>
-        <TextField size="small" fullWidth value={info.email} disabled/>
+            <Typography variant="subtitle2">Email</Typography>
+            <TextField size="small" fullWidth value={info.email} disabled />
 
-        <Gap value={3}/>
-        <Typography variant="caption">Informace uživatele zatím nelze změnit.</Typography>
-        <Typography variant="caption">Na této funkcionalitě se zatím stále pracuje...</Typography>
-
-
-    </Box>
-  )
+            <Gap value={3} />
+            <Typography variant="caption">
+                Informace uživatele zatím nelze změnit.
+            </Typography>
+            <Typography variant="caption">
+                Na této funkcionalitě se zatím stále pracuje...
+            </Typography>
+        </Card>
+    );
 }

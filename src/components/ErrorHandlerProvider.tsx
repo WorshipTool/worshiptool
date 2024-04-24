@@ -43,13 +43,8 @@ export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
                 }
             });
             enqueueSnackbar("Je třeba se znovu přihlásit.", {
-                // variant: "error",
                 persist: true
             });
-            // enqueueSnackbar("Problém s autorizací.", {
-            //     variant: "error",
-            //     persist: true
-            // });
         };
         window.addEventListener(networkErrorEvent.type, ne);
         window.addEventListener(unauthorizedEvent.type, ue);

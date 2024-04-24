@@ -21,6 +21,7 @@ import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
 import { getPlaylistCardsUrl } from "../../routes/routes";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const Container = styled(Box)(({ theme }) => ({
     padding: 30
@@ -33,8 +34,9 @@ export default function PlaylistPreview() {
     const isOwner = useMemo(() => {
         if (!playlist || !user) return false;
         if (!isLoggedIn()) return false;
-        return true;
-        // return playlist.ownerGuid === user.guid;
+        // return true;
+        console.log(playlist.ownerGuid, user.guid);
+        return playlist.ownerGuid === user.guid;
     }, [playlist, user]);
 
     const navigate = useNavigate();
@@ -43,19 +45,12 @@ export default function PlaylistPreview() {
         window.dispatchEvent(new Event("searchBarFocus"));
     };
 
-    useEffect(() => {
-        if (playlist?.title) document.title = playlist?.title;
-        else document.title = "Playlist";
-    }, [playlist?.title]);
+    useWindowTitle(playlist?.title || "Playlist");
 
     return (
         <AppLayout>
             <Box display={"flex"} flexDirection={"row"}>
-                <SidePanel
-                    onCardsClick={() => {
-                        navigate(getPlaylistCardsUrl(guid));
-                    }}
-                />
+                <SidePanel />
 
                 {loading ? (
                     <Box

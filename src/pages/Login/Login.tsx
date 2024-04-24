@@ -15,13 +15,17 @@ import { LoginResultDTO } from "../../api/dtos/dtosAuth";
 import Gap from "../../components/Gap";
 import Toolbar from "../../components/Toolbars/Toolbar";
 import useAuth from "../../hooks/auth/useAuth";
-import { CustomRouterProps, SIGNUP_URL } from "../../routes/routes";
+import { RouterProps, SIGNUP_URL } from "../../routes/routes";
 import GoogleLoginButton from "./components/GoogleLoginButton";
+import { Info } from "@mui/icons-material";
+import AppContainer from "../../components/app/AppContainer";
+import AppLayout from "../../components/app/AppLayout/AppLayout";
+import { useSmartLocation } from "../../routes";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
     padding: 30,
-    margin: 50,
     [theme.breakpoints.down("md")]: {
         width: "50%"
     },
@@ -45,17 +49,12 @@ export default function Login() {
 
     const [inProgress, setInProgress] = useState(false);
 
-    const { enqueueSnackbar } = useSnackbar();
-
     const theme = useTheme();
     const navigate = useNavigate();
 
     const { login } = useAuth();
-    const { state }: { state: CustomRouterProps["login"] } = useLocation();
-
-    useEffect(() => {
-        document.title = "Přihlašení";
-    }, []);
+    const { state } = useSmartLocation("login");
+    const _ = useWindowTitle("Přihlášení");
 
     const onEmailChange = (e: any) => {
         setEmail(e.target.value);
@@ -113,15 +112,29 @@ export default function Login() {
     };
 
     return (
-        <Box>
-            <Toolbar transparent={false} />
+        <AppLayout>
             <Box
                 flex={1}
                 display={"flex"}
                 justifyContent={"center"}
-                alignItems={"center"}>
+                flexDirection={"column"}
+                alignItems={"center"}
+                paddingTop={5}>
+                {state.message && (
+                    <StyledContainer
+                        style={{
+                            marginBottom: theme.spacing(2),
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: theme.spacing(1)
+                        }}>
+                        <Info fontSize="large" color="info" />
+                        <Typography>{state.message}</Typography>
+                    </StyledContainer>
+                )}
                 <StyledContainer>
-                    <Box display={"flex"} flexDirection={"row"}>
+                    <Box display={"flex"} flexDirection={"column"}>
                         <Typography variant={"h5"} fontWeight={"bold"} flex={1}>
                             Která jsi ovce?
                         </Typography>
@@ -200,6 +213,6 @@ export default function Login() {
                     </Box>
                 </StyledContainer>
             </Box>
-        </Box>
+        </AppLayout>
     );
 }

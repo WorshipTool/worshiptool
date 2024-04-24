@@ -18,6 +18,7 @@ import Toolbar from "../../components/Toolbars/Toolbar";
 import { useNavigate } from "react-router-dom";
 import GoogleLoginButton from "../Login/components/GoogleLoginButton";
 import { useSnackbar } from "notistack";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
@@ -58,12 +59,7 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     const { signup, login } = useAuth();
-
-    const { enqueueSnackbar } = useSnackbar();
-
-    useEffect(() => {
-        document.title = "Vytvoření účtu";
-    }, []);
+    useWindowTitle("Vytvoření účtu");
 
     const onFirstNameChange = (e: any) => {
         setFirstName(e.target.value);

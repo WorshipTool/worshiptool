@@ -1,75 +1,59 @@
+import { Dashboard, Edit } from "@mui/icons-material";
+import { Masonry } from "@mui/lab";
 import {
     Box,
     Button,
     Chip,
     CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
     IconButton,
-    Input,
     InputBase,
-    Switch,
     Typography,
     styled,
     useTheme
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
-import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
-import useInnerPlaylist from "../../hooks/useInnerPlaylist";
-import useAuth from "../../../../hooks/auth/useAuth";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import OnChangeDelayer from "../../../../components/ChangeDelayer";
 import Gap from "../../../../components/Gap";
-import { Dashboard, Edit } from "@mui/icons-material";
-import { Masonry } from "@mui/lab";
-import PanelItem from "./PanelItem";
-import { useNavigate } from "react-router-dom";
 import useGroup from "../../../../hooks/group/useGroup";
+import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
 import { getPlaylistCardsUrl } from "../../../../routes/routes";
+import useInnerPlaylist from "../../hooks/useInnerPlaylist";
+import PanelItem from "./PanelItem";
 
 const Container = styled(Box)(({ theme }) => ({
     width: 300,
     backgroundColor: theme.palette.grey[100],
-    // backgroundColor:"red",
     boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
     height: "calc(100vh - 56px)",
     position: "sticky",
     top: 56
-    // maxHeight: "calc(100vh - 56px)",
 }));
 
-export default function SidePanel({
-    onCardsClick
-}: {
-    onCardsClick: () => void;
-}) {
+export default function SidePanel({}: {}) {
     const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist();
     const {
         rename,
         playlist,
         items,
         guid: playlistGuid,
-        loading
+        loading,
+        isOwner
     } = useInnerPlaylist();
 
     const { isOn: isGroupOn } = useGroup();
 
     const [title, setTitle] = useState<string>("");
 
-    const { isLoggedIn, user } = useAuth();
-
     const [saving, setSaving] = useState(0);
 
     const [someIsMoving, setSomeIsMoving] = useState(false);
-
-    const isOwner = useMemo(() => isLoggedIn(), [isLoggedIn]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setTitle(playlist?.title || "");
+        console.log(isOwner, playlist);
     }, [playlist]);
 
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

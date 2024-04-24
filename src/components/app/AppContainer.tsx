@@ -4,6 +4,7 @@ import { AppRoutes } from "../../routes/AppRoutes";
 import Snow from "../Snow";
 import useAuth from "../../hooks/auth/useAuth";
 import LoadingScreen from "./LoadingApp/LoadingScreen";
+import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const Background = styled(Box)(({ theme }) => ({
     background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
@@ -21,6 +22,8 @@ export default function AppContainer(props: AppContainerProps) {
     const { loading: authLoading } = useAuth();
     const [appLoaded, setAppLoaded] = useState(false);
     const [hideLoadingScreen, setHideLoadingScreen] = useState(false);
+
+    const _ = useWindowTitle();
 
     useEffect(() => {
         if (appLoaded) return;
