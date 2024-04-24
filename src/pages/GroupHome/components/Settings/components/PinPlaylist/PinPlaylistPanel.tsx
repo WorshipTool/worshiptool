@@ -6,6 +6,7 @@ import useGroup from "../../../../../../hooks/group/useGroup";
 import PinnedPlaylist from "./PinnedPlaylist";
 import Gap from "../../../../../../components/Gap";
 import { getSmartParams, routesPaths } from "../../../../../../routes";
+import { LoadingButton } from "@mui/lab";
 
 export default function PinPlaylistPanel() {
     const { payload, setPayload } = useGroup();
@@ -23,6 +24,8 @@ export default function PinPlaylistPanel() {
     const [value, setValue] = useState("");
     const [error, setError] = useState<string | null>(null);
 
+    const [loading, setLoading] = useState(false);
+
     const onPinClick = () => {
         // setChoosing(false);
         const params = getSmartParams(value, routesPaths.playlist);
@@ -32,20 +35,36 @@ export default function PinPlaylistPanel() {
             setError("Neplatná url playlistu.");
             return;
         }
-
+        setError(null);
+        setLoading(true);
         setPayload({
             pinnedPlaylist: playlistGuid
-        }).then(() => {
-            setPinnedPlaylist(playlistGuid);
-            setChoosing(false);
-        });
+        })
+            .then(() => {
+                setPinnedPlaylist(playlistGuid);
+            })
+            .finally(() => {
+                setChoosing(false);
+                setLoading(false);
+            });
+    };
+
+    const onTryAgain = () => {
+        setPinnedPlaylist(null);
+        setValue("");
+        setChoosing(true);
+        setError(null);
     };
 
     const onRemoveClick = () => {
+        setLoading(true);
         setPayload({
             pinnedPlaylist: null
         }).then(() => {
             setPinnedPlaylist(null);
+            setValue("");
+            setLoading(false);
+            setError(null);
         });
     };
 
@@ -56,21 +75,14 @@ export default function PinPlaylistPanel() {
             sx={{
                 position: "relative"
             }}>
-            {/* <Button
-                size="small"
-                sx={{
-                    position: "absolute",
-                    right: 15,
-                    top: 15
-                }}>
-                Upravit
-            </Button> */}
             <Box>
                 {pinnedPlaylist ? (
                     <>
                         <PinnedPlaylist
                             guid={pinnedPlaylist}
                             onRemove={onRemoveClick}
+                            onTryAgain={onTryAgain}
+                            loading={loading}
                         />
                     </>
                 ) : (
@@ -79,22 +91,31 @@ export default function PinPlaylistPanel() {
                         sx={{
                             flexDirection: "row",
                             alignItems: "center",
-                            justifyContent: "space-between"
+                            justifyContent: "space-between",
+                            gap: 1
                         }}>
                         {!choosing ? (
                             <>
                                 <Typography>
                                     Zatím nemáte připnutý žádný playlist.
                                 </Typography>
-                                <Button
+                                <LoadingButton
+                                    loading={loading}
                                     size="small"
                                     variant="contained"
                                     onClick={() => setChoosing(true)}>
                                     Zvolit playlist
-                                </Button>
+                                </LoadingButton>
                             </>
                         ) : (
-                            <Box>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "start",
+                                    justifyContent: "space-between"
+                                }}
+                                flex={1}>
                                 <Typography variant="body1">
                                     Zadejte, prosím, url playlistu, který chcete
                                     připnout.
@@ -108,12 +129,15 @@ export default function PinPlaylistPanel() {
                                         onChange={(e) =>
                                             setValue(e.target.value)
                                         }
+                                        disabled={loading}
                                         helperText={error}
                                         error={!!error}
                                     />
-                                    <Button onClick={onPinClick}>
+                                    <LoadingButton
+                                        onClick={onPinClick}
+                                        loading={loading}>
                                         Připnout
-                                    </Button>
+                                    </LoadingButton>
                                 </Box>
                             </Box>
                         )}

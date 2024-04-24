@@ -10,10 +10,11 @@ import useAuth from "./useAuth";
 
 export const usePermissions = (userGuid?: string) => {
     const { permissionApi } = useApi();
-    const { user, isAdmin } = useAuth();
+    const { user, isAdmin, isLoggedIn } = useAuth();
     const [state, reload] = useApiStateEffect<
         PermissionDataType[]
     >(async () => {
+        if (!isLoggedIn()) return [];
         const data = await handleApiCall(
             permissionApi.permissionControllerGetUserPermissions(userGuid)
         );
@@ -24,12 +25,13 @@ export const usePermissions = (userGuid?: string) => {
                 guid: p.guid
             };
         });
-    }, [userGuid]);
+    }, [userGuid, isLoggedIn]);
 
     const getUsersWithPermission = async <T extends PermissionType>(
         type: T,
         payload: PermissionPayloadType<T>
     ) => {
+        if (!isLoggedIn()) return [];
         const data = await handleApiCall(
             permissionApi.permissionControllerGetAllUsersWithPermission(
                 type,

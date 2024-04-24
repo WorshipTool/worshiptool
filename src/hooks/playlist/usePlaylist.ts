@@ -113,7 +113,7 @@ export default function usePlaylist(guid: string | undefined) {
         if (!playlist || !user) return false;
         if (!isLoggedIn()) return false;
         return playlist.ownerGuid === user.guid;
-    }, [user, isLoggedIn]);
+    }, [user, isLoggedIn, playlist]);
 
     return {
         addVariant,

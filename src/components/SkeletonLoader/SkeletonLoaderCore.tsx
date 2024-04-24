@@ -43,6 +43,7 @@ export function SkeletonLoaderCore<T extends unknown[]>({
 
     useEffect(() => {
         if (!isDevelopment) return;
+        if (renderError) return;
 
         if (status === ApiStateStatus.ERROR) {
             enqueueSnackbar(
@@ -62,7 +63,7 @@ export function SkeletonLoaderCore<T extends unknown[]>({
                 }
             );
         }
-    }, [status]);
+    }, [status, renderError]);
 
     return (
         <>

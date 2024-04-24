@@ -50,11 +50,7 @@ export default function PlaylistPreview() {
     return (
         <AppLayout>
             <Box display={"flex"} flexDirection={"row"}>
-                <SidePanel
-                    onCardsClick={() => {
-                        navigate(getPlaylistCardsUrl(guid));
-                    }}
-                />
+                <SidePanel />
 
                 {loading ? (
                     <Box

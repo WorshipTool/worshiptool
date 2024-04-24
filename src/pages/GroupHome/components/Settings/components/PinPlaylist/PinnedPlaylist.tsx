@@ -1,13 +1,16 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import React from "react";
 import usePlaylists from "../../../../../../hooks/playlist/usePlaylists";
 import { useApiStateEffect } from "../../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../../tech/handleApiCall";
 import { SkeletonLoader } from "../../../../../../components/SkeletonLoader";
+import { LoadingButton } from "@mui/lab";
 
 type PinnedPlaylistProps = {
     guid: string;
     onRemove: () => void;
+    onTryAgain: () => void;
+    loading: boolean;
 };
 
 export default function PinnedPlaylist(props: PinnedPlaylistProps) {
@@ -35,13 +38,26 @@ export default function PinnedPlaylist(props: PinnedPlaylistProps) {
                             </Typography>
                             <Typography>{state.data?.title}</Typography>
                         </Box>
-                        <Button
+                        <LoadingButton
+                            loading={props.loading}
                             variant="text"
                             size="small"
                             color="error"
                             onClick={props.onRemove}>
                             Odebrat
-                        </Button>
+                        </LoadingButton>
+                    </Box>
+                )}
+                renderLoading={() => <LinearProgress />}
+                renderError={() => (
+                    <Box display={"flex"} alignItems={"center"} gap={1}>
+                        <Typography>Playlist nebyl nalezen</Typography>
+                        <LoadingButton
+                            size="small"
+                            onClick={props.onTryAgain}
+                            loading={props.loading}>
+                            Připnout jiný
+                        </LoadingButton>
                     </Box>
                 )}
             />

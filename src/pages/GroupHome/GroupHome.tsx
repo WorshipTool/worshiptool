@@ -12,7 +12,6 @@ import {
 export default function GroupHome() {
     // Check if location is home
     const home = useMatch(GROUP_SETTINGS_URL);
-    console.log(home);
 
     useEffect(() => {
         window.scroll({
