@@ -40,6 +40,9 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 
 ## Feedback
 
+## Práva
+
+
 ## Horní líšta
 - fungují prokliky
   
