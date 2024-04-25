@@ -20,6 +20,7 @@ import {
     PermissionPayloadType,
     PermissionType
 } from "../../../../../interfaces/permission.types";
+import { permissionPayloadToApi } from "../../../../../api/dtos/permission";
 
 type GroupUserItemProps<T extends PermissionType> = {
     user: BaseUserInfoOutDto;
@@ -43,7 +44,7 @@ export default function GroupUserItem<T extends PermissionType>(
                 const permission = await handleApiCall(
                     permissionApi.permissionControllerGetOrAddPermission({
                         type: props.permissionType,
-                        payload: props.permissionPayload
+                        payload: permissionPayloadToApi(props.permissionPayload)
                     })
                 );
 
