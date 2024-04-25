@@ -6,6 +6,7 @@ import { GroupApi } from "../../api/generated";
 import { handleApiCall } from "../../tech/handleApiCall";
 import { getGroupUrl, routesPaths } from "../../routes/routes";
 import { useSmartNavigate } from "../../routes";
+import { apiToGroupPayload } from "../../api/dtos/group";
 
 export const groupContext = createContext<useProvideGroupI>(
     {} as useProvideGroupI
@@ -50,7 +51,10 @@ export const useProvideGroup = (): useProvideGroupI => {
     const turnOn = (name: string) => {
         handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, name))
             .then((r) => {
-                setGroup(r);
+                setGroup({
+                    ...r,
+                    payload: apiToGroupPayload(r.payload)
+                });
                 localStorage.setItem(key, name);
             })
             .catch((e) => {
@@ -72,7 +76,7 @@ export const useProvideGroup = (): useProvideGroupI => {
         return await handleApiCall(
             groupApi.groupControllerUpdateGroupPayload({
                 guid: group.guid,
-                payload
+                payload: JSON.stringify(payload)
             })
         );
     };

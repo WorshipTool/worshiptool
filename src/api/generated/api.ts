@@ -255,10 +255,10 @@ export interface GetGroupInfoResult {
     'selection': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof GetGroupInfoResult
      */
-    'payload': object;
+    'payload': string;
 }
 /**
  * 
@@ -701,10 +701,10 @@ export interface Permission {
     'guid': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof Permission
      */
-    'type': object;
+    'type': string;
     /**
      * 
      * @type {string}
@@ -1210,10 +1210,10 @@ export interface SetGroupPayloadInDto {
     'guid': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof SetGroupPayloadInDto
      */
-    'payload': object;
+    'payload': string;
 }
 /**
  * 

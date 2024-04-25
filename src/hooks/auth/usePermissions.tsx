@@ -7,6 +7,10 @@ import { useApi } from "../api/useApi";
 import { useApiStateEffect } from "../../tech/ApiState";
 import { handleApiCall } from "../../tech/handleApiCall";
 import useAuth from "./useAuth";
+import {
+    apiToPermissionPayload,
+    permissionPayloadToApi
+} from "../../api/dtos/permission";
 
 export const usePermissions = (userGuid?: string) => {
     const { permissionApi } = useApi();
@@ -21,7 +25,7 @@ export const usePermissions = (userGuid?: string) => {
         return data.map((p) => {
             return {
                 type: p.type as PermissionType,
-                payload: p.payload as PermissionPayloadType<PermissionType>,
+                payload: apiToPermissionPayload(p.payload),
                 guid: p.guid
             };
         });
@@ -35,7 +39,7 @@ export const usePermissions = (userGuid?: string) => {
         const data = await handleApiCall(
             permissionApi.permissionControllerGetAllUsersWithPermission(
                 type,
-                payload as any
+                permissionPayloadToApi(payload)
             )
         );
         return data;

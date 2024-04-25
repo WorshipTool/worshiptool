@@ -8,6 +8,7 @@ import {
     PermissionType
 } from "../../../../../interfaces/permission.types";
 import { handleApiCall } from "../../../../../tech/handleApiCall";
+import { permissionPayloadToApi } from "../../../../../api/dtos/permission";
 
 type AddUserItemProps<T extends PermissionType> = {
     permissionType: T;
@@ -28,7 +29,7 @@ export default function AddUserItem<T extends PermissionType>(
                 const permission = await handleApiCall(
                     permissionApi.permissionControllerGetOrAddPermission({
                         type: props.permissionType,
-                        payload: props.permissionPayload
+                        payload: permissionPayloadToApi(props.permissionPayload)
                     })
                 );
 
