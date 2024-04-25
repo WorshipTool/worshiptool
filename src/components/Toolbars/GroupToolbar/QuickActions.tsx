@@ -104,7 +104,19 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     id={2}
                     loading={createSongLoading}
                 /> */}
-
+                {pinnedState.data && (
+                    <>
+                        <GroupToolbarActionButton
+                            label={pinnedState.data?.title}
+                            secondaryLabel="Připnuté"
+                            variant="secondary"
+                            icon={<PushPin />}
+                            onClick={openPinnedPlaylist}
+                            visible={visible}
+                            id={4}
+                        />
+                    </>
+                )}
                 {isOn ? (
                     <GroupToolbarActionButton
                         label="Editovat playlist"
@@ -117,20 +129,6 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     />
                 ) : (
                     <></>
-                )}
-
-                {pinnedState.data && (
-                    <>
-                        <GroupToolbarActionButton
-                            label="Připnutý playlist"
-                            secondaryLabel={pinnedState.data?.title}
-                            variant="secondary"
-                            icon={<PushPin />}
-                            onClick={openPinnedPlaylist}
-                            visible={visible}
-                            id={4}
-                        />
-                    </>
                 )}
             </Box>
         </Box>
