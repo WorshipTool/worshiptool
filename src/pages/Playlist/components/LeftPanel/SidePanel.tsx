@@ -268,7 +268,7 @@ export default function SidePanel({}: {}) {
                                     variant="outlined"
                                     // startIcon={<Dashboard />}
                                     onClick={openCards}
-                                    color={isGroupOn ? "secondary" : "primary"}
+                                    color={isGroupOn ? "primary" : "primary"}
                                     sx={{ pointerEvents: "auto" }}>
                                     Prezentace
                                 </Button>
