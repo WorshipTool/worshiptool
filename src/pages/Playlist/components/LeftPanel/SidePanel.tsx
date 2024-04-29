@@ -1,8 +1,9 @@
-import { Dashboard, Edit } from "@mui/icons-material";
+import { Dashboard, Edit, Print } from "@mui/icons-material";
 import { Masonry } from "@mui/lab";
 import {
     Box,
     Button,
+    ButtonGroup,
     Chip,
     CircularProgress,
     IconButton,
@@ -254,26 +255,32 @@ export default function SidePanel({}: {}) {
                             pointerEvents: "none"
                         }}
                         display={"flex"}
-                        justifyContent={"space-between"}>
-                        {items.length > 0 ? (
-                            <Box sx={{ pointerEvents: "auto" }}>
+                        alignItems={"end"}
+                        gap={1}
+                        justifyContent={"space-between"}
+                        flexDirection={"row"}>
+                        <ButtonGroup
+                            sx={{
+                                flex: 1
+                            }}>
+                            {items.length > 0 && (
                                 <Button
-                                    variant="contained"
-                                    startIcon={<Dashboard />}
+                                    variant="outlined"
+                                    // startIcon={<Dashboard />}
                                     onClick={openCards}
-                                    color={isGroupOn ? "secondary" : "primary"}>
-                                    Karty
+                                    color={isGroupOn ? "secondary" : "primary"}
+                                    sx={{ pointerEvents: "auto" }}>
+                                    Prezentace
                                 </Button>
-                            </Box>
-                        ) : (
-                            <Box />
-                        )}
-                        <Button
-                            variant="contained"
-                            onClick={onPrint}
-                            sx={{ pointerEvents: "auto" }}>
-                            Vytisknout
-                        </Button>
+                            )}
+                            <Button
+                                variant="contained"
+                                onClick={onPrint}
+                                startIcon={<Print />}
+                                sx={{ pointerEvents: "auto", flex: 1 }}>
+                                Tisk
+                            </Button>
+                        </ButtonGroup>
                     </Box>
                 </>
             )}

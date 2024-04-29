@@ -38,7 +38,7 @@ export const getGroupSettingsUrl = (name: string) => {
 export const COMMON_SETTINGS_URL = "/nastaveni";
 export const VARIANT_URL = "/p/:hex/:alias";
 export const PLAYLIST_URL = "/playlist/:guid";
-export const PLAYLIST_CARDS_URL = "/playlist/:guid/karty";
+export const PLAYLIST_CARDS_URL = "/playlist/:guid/prezentace";
 export const GROUP_URL = "/skupina/:groupName";
 export const GROUP_SETTINGS_URL = GROUP_URL + COMMON_SETTINGS_URL;
 export const DOCUMENTATION_URL = "/dokumentace";
