@@ -14,6 +14,7 @@ import AppContainer from "./AppContainer";
 import { theme } from "./theme";
 import App from "../../App";
 import { WindowTitleProvider } from "../../hooks/useWindowTitle";
+import SearchGroupDialog from "../Toolbars/components/Toolsmenu/components/SearchGroupDialog";
 
 type AppProvidersProps = {
     children?: React.ReactNode;

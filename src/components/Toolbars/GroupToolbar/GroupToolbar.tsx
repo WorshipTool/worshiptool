@@ -140,7 +140,8 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
                                                       fontSize: 18
                                                   })
                                         }}>
-                                        CB Třináctka
+                                        {/* CB Třináctka */}
+                                        {name}
                                     </Typography>
                                 </Box>
                             </ButtonComponent>

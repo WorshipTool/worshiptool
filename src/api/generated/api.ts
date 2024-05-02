@@ -440,6 +440,37 @@ export interface GetVariantsOfUserOutDto {
 /**
  * 
  * @export
+ * @interface Group
+ */
+export interface Group {
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof Group
+     */
+    'selection': Playlist;
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'payload': string;
+}
+/**
+ * 
+ * @export
  * @interface JwtResult
  */
 export interface JwtResult {
@@ -973,6 +1004,12 @@ export interface PostCreateGroupBody {
      * @memberof PostCreateGroupBody
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateGroupBody
+     */
+    'code': string;
 }
 /**
  * 
@@ -3503,6 +3540,46 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerSearchGroups: async (searchString: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchString' is not null or undefined
+            assertParamExists('groupControllerSearchGroups', 'searchString', searchString)
+            const localVarPath = `/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3630,6 +3707,18 @@ export const GroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Group>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerSearchGroups(searchString, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.groupControllerSearchGroups']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
          * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3709,6 +3798,15 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerGetGroupsList(options?: any): AxiosPromise<Array<GetGroupListItem>> {
             return localVarFp.groupControllerGetGroupsList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerSearchGroups(searchString: string, options?: any): AxiosPromise<Array<Group>> {
+            return localVarFp.groupControllerSearchGroups(searchString, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3799,6 +3897,17 @@ export class GroupApi extends BaseAPI {
      */
     public groupControllerGetGroupsList(options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).groupControllerGetGroupsList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} searchString 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).groupControllerSearchGroups(searchString, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

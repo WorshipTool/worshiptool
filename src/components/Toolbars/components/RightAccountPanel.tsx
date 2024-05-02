@@ -28,6 +28,7 @@ import {
     LOGIN_URL
 } from "../../../routes/routes";
 import { useSmartNavigate } from "../../../routes/useSmartNavigate";
+import SearchGroupDialog from "./Toolsmenu/components/SearchGroupDialog";
 
 const Container = styled(Box)(({ theme }) => ({
     flex: 1,

@@ -3,6 +3,7 @@ import CurrentSongCount from "./components/CurrentSongCount";
 import GetToken from "./components/GetToken";
 import TurnOnGetter from "./components/TurnOnGetter";
 import AddPermissionToUser from "./components/AddPermissionToUser/AddPermissionToUser";
+import CreateGroupPanel from "./components/CreateGroupPanel/CreateGroupPanel";
 
 export default function AdminPanel() {
     return (
@@ -10,6 +11,8 @@ export default function AdminPanel() {
             <CurrentSongCount />
             <Divider />
             <AddPermissionToUser />
+            <Divider />
+            <CreateGroupPanel />
             <Divider />
             <TurnOnGetter />
             <Divider />

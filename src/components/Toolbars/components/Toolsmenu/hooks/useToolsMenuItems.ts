@@ -13,6 +13,8 @@ interface MenuItem {
     disabled?: boolean;
 }
 
+export const searchGroupsEvent = new Event("searchGroups");
+
 export default function useToolsMenuItems() {
     const navigate = useNavigate();
 
@@ -34,13 +36,20 @@ export default function useToolsMenuItems() {
             disabled: isMobile && !isTablet
         },
         {
-            title: "13ka",
-            image: "/static/assets/13ka-icon.png",
+            title: "Hledat skupinu",
+            image: "https://static.thenounproject.com/png/79376-200.png",
             action: () => {
-                navigate(getGroupUrl("13ka"));
-            },
-            disabled: isMobile && !isTablet
+                dispatchEvent(searchGroupsEvent);
+            }
         }
+        // {
+        //     title: "13ka",
+        //     image: "/static/assets/13ka-icon.png",
+        //     action: () => {
+        //         navigate(getGroupUrl("13ka"));
+        //     },
+        //     disabled: isMobile && !isTablet
+        // }
     ];
 
     return {

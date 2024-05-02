@@ -23,16 +23,16 @@ export const getPlaylistUrl = (playlistGuid: string) => {
     return getReplacedUrl(PLAYLIST_URL, { guid: playlistGuid });
 };
 
-export const getGroupUrl = (name: string) => {
-    return getReplacedUrl(GROUP_URL, { groupName: name });
+export const getGroupUrl = (code: string) => {
+    return getReplacedUrl(GROUP_URL, { groupName: code });
 };
 
 export const getPlaylistCardsUrl = (playlistGuid: string) => {
     return getReplacedUrl(PLAYLIST_CARDS_URL, { guid: playlistGuid });
 };
 
-export const getGroupSettingsUrl = (name: string) => {
-    return getReplacedUrl(GROUP_SETTINGS_URL, { groupName: name });
+export const getGroupSettingsUrl = (code: string) => {
+    return getReplacedUrl(GROUP_SETTINGS_URL, { groupName: code });
 };
 
 export const COMMON_SETTINGS_URL = "/nastaveni";
