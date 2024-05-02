@@ -30,6 +30,15 @@ export default function useToolsMenuItems() {
             },
             disabled: isMobile && !isTablet
         },
+
+        {
+            title: "13ka",
+            image: "/static/assets/13ka-icon.png",
+            action: () => {
+                navigate("group", { params: { groupCode: "13ka" } });
+            },
+            disabled: isMobile && !isTablet
+        },
         {
             title: "Hledat skupinu",
             image: "https://static.thenounproject.com/png/79376-200.png",
@@ -37,14 +46,6 @@ export default function useToolsMenuItems() {
                 dispatchEvent(searchGroupsEvent);
             }
         }
-        // {
-        //     title: "13ka",
-        //     image: "/static/assets/13ka-icon.png",
-        //     action: () => {
-        //         navigate(getGroupUrl("13ka"));
-        //     },
-        //     disabled: isMobile && !isTablet
-        // }
     ];
 
     return {

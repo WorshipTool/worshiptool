@@ -170,7 +170,7 @@ export default function TopPanel(props: TopPanelProps) {
                         isOwner={isOwner}
                         anyChange={anyChange}
                     />
-                    {isLoggedIn() && (
+                    {isLoggedIn() && !(isOwner && !props.variant.public) && (
                         <Box
                             sx={{
                                 [theme.breakpoints.down("md")]: {
