@@ -2,7 +2,7 @@ import { Box, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
-import { useSmartNavigate } from "../../routes/useSmartNavigate";
+import { useSmartNavigate } from "../../routes/useSmartNavigate.1";
 import BasicInfo from "./components/BasicInfo";
 import TabsPanel from "./components/TabsPanel";
 import { useWindowTitle } from "../../hooks/useWindowTitle";

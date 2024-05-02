@@ -1,6 +1,6 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/auth/useAuth";
+import { useSmartNavigate } from "../../../routes";
 
 type GoogleLoginButtonProps = {
     afterLogin?: () => void;
@@ -8,11 +8,11 @@ type GoogleLoginButtonProps = {
 
 export default function GoogleLoginButton(props: GoogleLoginButtonProps) {
     const { loginWithGoogle } = useAuth();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
     const onSuccess = (credentialResponse: CredentialResponse) => {
         loginWithGoogle(
             credentialResponse,
-            props.afterLogin || (() => navigate("/"))
+            props.afterLogin || (() => navigate("home", {}))
         );
     };
 

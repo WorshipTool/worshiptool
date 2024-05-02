@@ -6,16 +6,13 @@ import {
     Typography,
     styled
 } from "@mui/material";
-import useRecommendedSongs from "./hooks/useRecommendedSongs";
 import ContainerGrid from "../../../../components/ContainerGrid";
-import { useNavigate } from "react-router-dom";
-import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
+import Gap from "../../../../components/Gap";
 import SongListCards, {
     SongListCardsProps
 } from "../../../../components/songLists/SongListCards/SongListCards";
-import Gap from "../../../../components/Gap";
-import { SongVariantDto } from "../../../../api/dtos";
-import { getVariantUrl, SONGS_LIST_URL } from "../../../../routes/routes";
+import useRecommendedSongs from "./hooks/useRecommendedSongs";
+import { useSmartNavigate } from "../../../../routes";
 
 const GridContainer = styled(Grid)(({ theme }) => ({
     padding: 10,
@@ -31,10 +28,10 @@ export default function RecommendedSongsList({
 }: RecommendedSongsListProps) {
     const { data, isLoading, isError, isSuccess } = useRecommendedSongs();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const openList = () => {
-        navigate(SONGS_LIST_URL);
+        navigate("songsList", {});
     };
 
     return (

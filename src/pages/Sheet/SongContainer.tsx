@@ -1,28 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useSongVariant } from "../../hooks/song/useSongVariant";
-import { SkeletonLoaderCore } from "../../components/SkeletonLoader";
-import {
-    Box,
-    CircularProgress,
-    LinearProgress,
-    Typography,
-    useTheme
-} from "@mui/material";
-import SheetDisplay from "../../components/SheetDisplay/SheetDisplay";
-import { Sheet, transpose } from "@pepavlin/sheet-api";
-import { Helmet } from "react-helmet";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import { Box, LinearProgress, Typography, useTheme } from "@mui/material";
+import { Sheet } from "@pepavlin/sheet-api";
+import { useEffect, useState } from "react";
+import { SongDto, SongVariantDto } from "../../api/dtos";
 import ContainerGrid from "../../components/ContainerGrid";
 import Gap from "../../components/Gap";
-import { VariantDTO } from "../../interfaces/variant/VariantDTO";
-import AdditionalSongInfoPanel from "./components/AdditionalSongInfoPanel";
-import DeletedInfoPanel from "./components/components/DeletedInfoPanel";
-import ToolbarHeaderSheetPage from "./components/ToolbarHeaderSheetPage";
-import TopPanel from "./components/TopPanel";
-import { SongDto, SongVariantDto } from "../../api/dtos";
+import SheetDisplay from "../../components/SheetDisplay/SheetDisplay";
+import { SkeletonLoaderCore } from "../../components/SkeletonLoader";
+import { useSongVariant } from "../../hooks/song/useSongVariant";
 import { useRerender } from "../../hooks/useRerender";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
-import { SourcesList } from "./components/SourcesList/SourcesList";
+import AdditionalSongInfoPanel from "./components/AdditionalSongInfoPanel";
+import DeletedInfoPanel from "./components/components/DeletedInfoPanel";
+import TopPanel from "./components/TopPanel";
 
 export type SongPageProps = {
     variantGuid: string;

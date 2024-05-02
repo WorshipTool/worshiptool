@@ -4,13 +4,12 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import useMySongs from "./hooks/useMySongs";
 import MySongItem from "./components/MySongItem";
 import Gap from "../../components/Gap";
-import { useNavigate } from "react-router-dom";
-import { ADD_MENU_URL, getVariantUrl } from "../../routes/routes";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import { parseVariantAlias, useSmartNavigate } from "../../routes";
 
 export default function MySongsList() {
     const { variants, loaded } = useMySongs();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
     useWindowTitle("Moje písně");
     return (
         <AppLayout>
@@ -54,9 +53,14 @@ export default function MySongsList() {
                                         key={`mysong${variant.guid}`}
                                         onClick={() => {
                                             if (variant)
-                                                navigate(
-                                                    getVariantUrl(variant.alias)
-                                                );
+                                                navigate("variant", {
+                                                    params: parseVariantAlias(
+                                                        variant.alias
+                                                    ),
+                                                    state: {
+                                                        title: variant.preferredTitle
+                                                    }
+                                                });
                                         }}></MySongItem>
                                 );
                             })}
@@ -74,7 +78,7 @@ export default function MySongsList() {
                                     </Typography>
                                     <Button
                                         onClick={() => {
-                                            navigate(ADD_MENU_URL);
+                                            navigate("addMenu", {});
                                         }}
                                         variant="contained">
                                         Vytvořit

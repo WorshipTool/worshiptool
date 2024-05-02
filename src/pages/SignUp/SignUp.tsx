@@ -2,23 +2,19 @@ import {
     Box,
     Button,
     CircularProgress,
-    Container,
-    IconButton,
     Paper,
-    Snackbar,
     TextField,
     Typography,
     styled,
     useTheme
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/auth/useAuth";
+import { useState } from "react";
 import Gap from "../../components/Gap";
 import Toolbar from "../../components/Toolbars/Toolbar";
-import { useNavigate } from "react-router-dom";
-import GoogleLoginButton from "../Login/components/GoogleLoginButton";
-import { useSnackbar } from "notistack";
+import useAuth from "../../hooks/auth/useAuth";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import GoogleLoginButton from "../Login/components/GoogleLoginButton";
+import { useSmartNavigate } from "../../routes";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
@@ -56,7 +52,7 @@ export default function SignUp() {
     const [inProgress, setInProgress] = useState(false);
 
     const theme = useTheme();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const { signup, login } = useAuth();
     useWindowTitle("Vytvoření účtu");
@@ -120,7 +116,7 @@ export default function SignUp() {
                     setErrorMessage("Účet s tímto emailem již existuje");
                 } else {
                     await login({ email, password });
-                    navigate("/");
+                    navigate("home", {});
                 }
                 setInProgress(false);
             });

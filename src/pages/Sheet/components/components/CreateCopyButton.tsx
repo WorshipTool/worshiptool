@@ -13,8 +13,7 @@ import { useApiState } from "../../../../tech/ApiState";
 import { LoadingButton } from "@mui/lab";
 import { PostCreateCopyOutDto } from "../../../../api/generated";
 import { handleApiCall } from "../../../../tech/handleApiCall";
-import { useNavigate } from "react-router-dom";
-import { getVariantUrl } from "../../../../routes/routes";
+import { parseVariantAlias, useSmartNavigate } from "../../../../routes";
 
 export type CreateCopyButtonProps = {
     variantGuid: string;
@@ -25,7 +24,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
     const { songAddingApi } = useApi();
 
     const { fetchApiState, apiState } = useApiState<PostCreateCopyOutDto>();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const onClick = async () => {
         await fetchApiState(
@@ -39,7 +38,12 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
                 return result;
             },
             (data) => {
-                navigate(getVariantUrl(data.alias));
+                navigate("variant", {
+                    params: parseVariantAlias(data.alias),
+                    state: {
+                        title: data.variant.prefferedTitle.title || "Úprava"
+                    }
+                });
             }
         );
     };

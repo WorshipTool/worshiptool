@@ -5,8 +5,9 @@ import Card from "../../../../../../components/Card/Card";
 import useGroup from "../../../../../../hooks/group/useGroup";
 import PinnedPlaylist from "./PinnedPlaylist";
 import Gap from "../../../../../../components/Gap";
-import { getSmartParams, routesPaths } from "../../../../../../routes";
+import { routesPaths } from "../../../../../../routes";
 import { LoadingButton } from "@mui/lab";
+import { getParamsFromUrl } from "../../../../../../routes/useSmartParams";
 
 export default function PinPlaylistPanel() {
     const { payload, setPayload } = useGroup();
@@ -28,7 +29,7 @@ export default function PinPlaylistPanel() {
 
     const onPinClick = () => {
         // setChoosing(false);
-        const params = getSmartParams(value, routesPaths.playlist);
+        const params = getParamsFromUrl(value, routesPaths.playlist);
         const playlistGuid = params.guid;
 
         if (!playlistGuid) {

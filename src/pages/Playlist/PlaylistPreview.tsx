@@ -12,7 +12,6 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Gap from "../../components/Gap";
 import SidePanel from "./components/LeftPanel/SidePanel";
-import { useNavigate, useParams } from "react-router-dom";
 import RightPanel from "./components/RightPanel/RightPanel";
 import useInnerPlaylist, {
     InnerPlaylistProvider
@@ -20,7 +19,6 @@ import useInnerPlaylist, {
 import AppLayout from "../../components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
-import { getPlaylistCardsUrl } from "../../routes/routes";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 const Container = styled(Box)(({ theme }) => ({
@@ -38,8 +36,6 @@ export default function PlaylistPreview() {
         console.log(playlist.ownerGuid, user.guid);
         return playlist.ownerGuid === user.guid;
     }, [playlist, user]);
-
-    const navigate = useNavigate();
 
     const onSearchClick = () => {
         window.dispatchEvent(new Event("searchBarFocus"));

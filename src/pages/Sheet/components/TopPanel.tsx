@@ -17,13 +17,11 @@ import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import CreateCopyButton from "./components/CreateCopyButton";
 import { SongDto, SongVariantDto } from "../../../api/dtos";
-import { useNavigate } from "react-router-dom";
-import { getVariantUrl } from "../../../routes/routes";
 import SongsOptionsButton from "./components/SongsOptionsButton";
 import NotValidWarning from "../../add_new_song/Write/components/NotValidWarning";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
-import { Public, PublicOff } from "@mui/icons-material";
 import VisibilityLabel from "./components/VisibilityLabel";
+import { parseVariantAlias, useSmartNavigate } from "../../../routes";
 
 interface TopPanelProps {
     transpose: (i: number) => void;
@@ -50,7 +48,7 @@ export default function TopPanel(props: TopPanelProps) {
     }, [user, props.variant]);
 
     const { enqueueSnackbar } = useSnackbar();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const songsApi = new SongEditingApi(apiConfiguration);
     const { fetchApiState } = useApiState<EditVariantOutDto>();
@@ -95,7 +93,12 @@ export default function TopPanel(props: TopPanelProps) {
                         (props.variant.preferredTitle && " ") || ""
                     }byla upravena.`
                 );
-                navigate(getVariantUrl(result.alias));
+                navigate("variant", {
+                    params: parseVariantAlias(result.alias),
+                    state: {
+                        title: props.title
+                    }
+                });
                 setSaving(false);
             }
         );
@@ -167,7 +170,7 @@ export default function TopPanel(props: TopPanelProps) {
                         isOwner={isOwner}
                         anyChange={anyChange}
                     />
-                    {isLoggedIn() && props.variant.public && (
+                    {isLoggedIn() && !(isOwner && !props.variant.public) && (
                         <Box
                             sx={{
                                 [theme.breakpoints.down("md")]: {

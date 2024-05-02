@@ -5,6 +5,7 @@ import Snow from "../Snow";
 import useAuth from "../../hooks/auth/useAuth";
 import LoadingScreen from "./LoadingApp/LoadingScreen";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import SearchGroupDialog from "../Toolbars/components/Toolsmenu/components/SearchGroupDialog";
 
 const Background = styled(Box)(({ theme }) => ({
     background: `linear-gradient(160deg, ${theme.palette.grey[200]}, ${theme.palette.grey[300]})`,
@@ -51,6 +52,8 @@ export default function AppContainer(props: AppContainerProps) {
                 </>
             )}
             <LoadingScreen isVisible={!hideLoadingScreen} />
+
+            <SearchGroupDialog />
         </>
     );
 }

@@ -1,3 +1,4 @@
+import { Info } from "@mui/icons-material";
 import {
     Box,
     Button,
@@ -8,20 +9,15 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
-import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { LoginResultDTO } from "../../api/dtos/dtosAuth";
-import Gap from "../../components/Gap";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import useAuth from "../../hooks/auth/useAuth";
-import { RouterProps, SIGNUP_URL } from "../../routes/routes";
-import GoogleLoginButton from "./components/GoogleLoginButton";
-import { Info } from "@mui/icons-material";
-import AppContainer from "../../components/app/AppContainer";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
-import { useSmartLocation } from "../../routes";
+import Gap from "../../components/Gap";
+import useAuth from "../../hooks/auth/useAuth";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import { useSmartLocation, useSmartNavigate } from "../../routes";
+import GoogleLoginButton from "./components/GoogleLoginButton";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     width: "30%",
@@ -50,7 +46,8 @@ export default function Login() {
     const [inProgress, setInProgress] = useState(false);
 
     const theme = useTheme();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
+    const nvt = useNavigate();
 
     const { login } = useAuth();
     const { state } = useSmartLocation("login");
@@ -65,9 +62,9 @@ export default function Login() {
 
     const afterGoogleLogin = () => {
         if (state?.previousPage) {
-            navigate(state.previousPage);
+            nvt(state.previousPage);
         } else {
-            navigate("/");
+            navigate("home", {});
         }
     };
 
@@ -104,9 +101,9 @@ export default function Login() {
             }
 
             if (state?.previousPage) {
-                navigate(state.previousPage);
+                nvt(state.previousPage);
             } else {
-                navigate("/");
+                navigate("home", {});
             }
         });
     };
@@ -196,7 +193,7 @@ export default function Login() {
                         <Button
                             size={"small"}
                             onClick={() => {
-                                navigate(SIGNUP_URL);
+                                navigate("signup", {});
                             }}>
                             Vytvořte si ho
                         </Button>

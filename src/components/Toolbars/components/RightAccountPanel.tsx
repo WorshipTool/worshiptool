@@ -1,9 +1,8 @@
 import { AddBox, Apps, HelpOutline, Login, Search } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
     Avatar,
     Box,
-    Button,
-    Chip,
     IconButton,
     SxProps,
     Theme,
@@ -11,23 +10,14 @@ import {
     styled
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ToolsMenu from "./Toolsmenu/ToolsMenu";
-import AccountMenu from "./AccountMenu";
+import { isMobile, isTablet } from "react-device-detect";
 import useAuth from "../../../hooks/auth/useAuth";
 import useGroup from "../../../hooks/group/useGroup";
-import GroupChip from "./GroupChip";
-import usePlaylists from "../../../hooks/playlist/usePlaylists";
-import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
-import { isMobile, isTablet } from "react-device-detect";
 import UploadFileInput from "../../../pages/add_new_song/AddMenu/Upload/components/UploadFileInput";
-import { LoadingButton } from "@mui/lab";
-import {
-    ADD_MENU_URL,
-    DOCUMENTATION_URL,
-    LOGIN_URL
-} from "../../../routes/routes";
-import { useSmartNavigate } from "../../../routes/useSmartNavigate";
+import { useSmartNavigate } from "../../../routes/useSmartNavigate.1";
+import AccountMenu from "./AccountMenu";
+import GroupChip from "./GroupChip";
+import ToolsMenu from "./Toolsmenu/ToolsMenu";
 
 const Container = styled(Box)(({ theme }) => ({
     flex: 1,
@@ -64,8 +54,6 @@ interface RightAccountPanelProps {
 export default function RightAccountPanel({
     transparent
 }: RightAccountPanelProps) {
-    const navigate = useSmartNavigate();
-
     const { isLoggedIn, loading } = useAuth();
 
     const color = useMemo(() => {
@@ -98,7 +86,7 @@ export default function RightAccountPanel({
     const fontSize = "medium";
 
     const openDocumentation = () => {
-        navigate("documentation");
+        navigate("documentation", {});
     };
 
     const onToolsMenuClick = () => {
@@ -116,7 +104,7 @@ export default function RightAccountPanel({
         if (isMobile && !isTablet) {
             uploadInputRef.current?.click();
         } else {
-            navigate("addMenu");
+            navigate("addMenu", {});
         }
     };
 
@@ -128,11 +116,11 @@ export default function RightAccountPanel({
         });
     };
 
-    const nv = useNavigate();
-    const { isOn, url } = useGroup();
+    const navigate = useSmartNavigate();
+    const { isOn, code } = useGroup();
     const goHomeClick = () => {
-        if (isOn) nv(url);
-        else navigate("home");
+        if (isOn) navigate("group", { params: { groupCode: code } });
+        else navigate("home", {});
 
         setTimeout(() => {
             window.scroll({

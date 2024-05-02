@@ -1,8 +1,8 @@
 import { Box, Typography, styled } from "@mui/material";
 import React from "react";
 import usePlaylists from "../../../hooks/playlist/usePlaylists";
-import { useNavigate } from "react-router-dom";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
+import { useSmartNavigate } from "../../../routes";
 
 const Container = styled(Box)(({ theme }) => ({
     background: `linear-gradient(2800deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
@@ -25,13 +25,13 @@ export default function CreatePlaylistButton() {
     const { createPlaylist } = usePlaylists();
     const { turnOn } = useCurrentPlaylist();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const onClick = () => {
         createPlaylist().then((r) => {
             const guid = r.guid;
             turnOn(guid);
-            navigate("/playlist/" + guid);
+            navigate("playlist", { params: { guid } });
         });
     };
     return (

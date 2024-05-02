@@ -1,27 +1,26 @@
-import { isTablet, isMobile } from "react-device-detect";
-import { useNavigate } from "react-router-dom";
-import {
-    getGroupUrl,
-    USERS_PLAYLISTS_URL,
-    USERS_SONGS_URL
-} from "../../../../../routes/routes";
+import { isMobile, isTablet } from "react-device-detect";
+import { useSmartNavigate } from "../../../../../routes";
+import { SxProps } from "@mui/material";
 
 interface MenuItem {
     title: string;
     image: string;
     action: () => void;
     disabled?: boolean;
+    sx?: SxProps;
 }
 
+export const searchGroupsEvent = new Event("searchGroups");
+
 export default function useToolsMenuItems() {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const items: MenuItem[] = [
         {
             title: "Playlisty",
             image: "https://cdn-icons-png.flaticon.com/512/636/636224.png",
             action: () => {
-                navigate(USERS_PLAYLISTS_URL);
+                navigate("usersPlaylists", {});
             },
             disabled: isMobile && !isTablet
         },
@@ -29,17 +28,28 @@ export default function useToolsMenuItems() {
             title: "Moje",
             image: "https://cdn-icons-png.flaticon.com/512/10627/10627120.png",
             action: () => {
-                navigate(USERS_SONGS_URL);
+                navigate("usersSongs", {});
             },
             disabled: isMobile && !isTablet
         },
+
         {
             title: "13ka",
             image: "/static/assets/13ka-icon.png",
             action: () => {
-                navigate(getGroupUrl("13ka"));
+                navigate("group", { params: { groupCode: "13ka" } });
             },
             disabled: isMobile && !isTablet
+        },
+        {
+            title: "Hledat skupinu",
+            image: "https://static.thenounproject.com/png/79376-200.png",
+            action: () => {
+                dispatchEvent(searchGroupsEvent);
+            },
+            sx: {
+                filter: "invert(1) brightness(0.1)"
+            }
         }
     ];
 

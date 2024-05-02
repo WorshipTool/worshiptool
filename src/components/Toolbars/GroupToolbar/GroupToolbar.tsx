@@ -1,12 +1,12 @@
 import { Box, Fade, Typography, Zoom, styled, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { ReactComponent as SvgIcon } from "../../../assets/icon.svg";
 import useGroup from "../../../hooks/group/useGroup";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 import Gap from "../../Gap";
 import Toolbar from "../Toolbar";
 import QuickActions from "./QuickActions";
+import { useSmartNavigate } from "../../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     borderRadius: "0 0 0 150px",
@@ -27,12 +27,12 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
         return expanded ? "250px" : "56px";
     }, [expanded]);
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
-    const { isOn, url } = useGroup();
+    const { isOn, code } = useGroup();
     const goHome = () => {
-        if (isOn) navigate(url);
-        else navigate("/");
+        if (isOn) navigate("group", { params: { groupCode: code } });
+        else navigate("home", {});
         window.scroll({
             top: 0,
             behavior: "auto"
@@ -140,7 +140,8 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
                                                       fontSize: 18
                                                   })
                                         }}>
-                                        CB Třináctka
+                                        {/* CB Třináctka */}
+                                        {name}
                                     </Typography>
                                 </Box>
                             </ButtonComponent>

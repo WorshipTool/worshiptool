@@ -1,13 +1,12 @@
 import { Add, Edit, PinDrop, PushPin, Search } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useGroup from "../../../hooks/group/useGroup";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
 import usePlaylists from "../../../hooks/playlist/usePlaylists";
-import { ADD_MENU_URL, getPlaylistUrl } from "../../../routes/routes";
 import GroupToolbarActionButton from "./GroupToolbarActionButton";
 import { useApiStateEffect } from "../../../tech/ApiState";
+import { useSmartNavigate } from "../../../routes";
 
 interface QuickActionsProps {
     visible?: boolean;
@@ -17,7 +16,7 @@ export default function QuickActions({ visible }: QuickActionsProps) {
     const { createPlaylist, getPlaylistByGuid } = usePlaylists();
     const { turnOn, isOn, guid, playlist } = useCurrentPlaylist();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const { guid: groupGuid, payload } = useGroup();
 
@@ -35,7 +34,9 @@ export default function QuickActions({ visible }: QuickActionsProps) {
         createPlaylist().then((r) => {
             const guid = r.guid;
             turnOn(guid);
-            navigate(getPlaylistUrl(guid));
+            navigate("playlist", {
+                params: { guid }
+            });
             setCreatePlaylistLoading(false);
         });
     };
@@ -44,19 +45,13 @@ export default function QuickActions({ visible }: QuickActionsProps) {
         window.dispatchEvent(new Event("searchBarFocus"));
     };
 
-    const onNewSong = () => {
-        setCreateSongLoading(true);
-        navigate(ADD_MENU_URL);
-        setCreateSongLoading(false);
-    };
-
     const openPlaylistToEdit = () => {
-        navigate(getPlaylistUrl(guid));
+        navigate("playlist", { params: { guid } });
     };
 
     const openPinnedPlaylist = () => {
         if (!pinnedState.data) return;
-        navigate(getPlaylistUrl(pinnedState.data.guid));
+        navigate("playlist", { params: { guid: pinnedState.data.guid } });
     };
 
     return (

@@ -1,12 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Group, GroupPayloadType } from "../../interfaces/group/Group";
-import useAuth from "../auth/useAuth";
-import { GroupApi } from "../../api/generated";
-import { handleApiCall } from "../../tech/handleApiCall";
-import { getGroupUrl, routesPaths } from "../../routes/routes";
-import { useSmartNavigate } from "../../routes";
 import { apiToGroupPayload } from "../../api/dtos/group";
+import { GroupApi } from "../../api/generated";
+import { Group, GroupPayloadType } from "../../interfaces/group/Group";
+import { useSmartNavigate } from "../../routes";
+import { handleApiCall } from "../../tech/handleApiCall";
+import useAuth from "../auth/useAuth";
 
 export const groupContext = createContext<useProvideGroupI>(
     {} as useProvideGroupI
@@ -25,15 +23,15 @@ export const GroupProvider = ({ children }: { children: any }) => {
 };
 
 interface useProvideGroupI {
+    code: string;
     name: string;
     guid: string;
     selectionGuid: string;
     payload: GroupPayloadType;
     setPayload: (payload: GroupPayloadType) => Promise<void>;
-    turnOn: (name: string) => void;
+    turnOn: (code: string) => void;
     turnOff: () => void;
     isOn: boolean;
-    url: string;
 }
 
 export const useProvideGroup = (): useProvideGroupI => {
@@ -48,14 +46,14 @@ export const useProvideGroup = (): useProvideGroupI => {
 
     const key = "activeGroup";
 
-    const turnOn = (name: string) => {
-        handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, name))
+    const turnOn = (code: string) => {
+        handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, code))
             .then((r) => {
                 setGroup({
                     ...r,
                     payload: apiToGroupPayload(r.payload)
                 });
-                localStorage.setItem(key, name);
+                localStorage.setItem(key, code);
             })
             .catch((e) => {
                 console.log(e);
@@ -67,7 +65,7 @@ export const useProvideGroup = (): useProvideGroupI => {
 
         // TODO: implements better
         if (window.location.pathname.includes("skupina")) {
-            navigate("home");
+            navigate("home", {});
         }
     };
 
@@ -92,11 +90,11 @@ export const useProvideGroup = (): useProvideGroupI => {
         turnOn,
         turnOff,
         isOn: group !== undefined,
+        code: group?.code || "",
         name: group?.name || "",
         guid: group?.guid || "",
         payload: group?.payload || {},
         setPayload,
-        selectionGuid: group?.selection || "",
-        url: getGroupUrl(group?.name || "")
+        selectionGuid: group?.selection || ""
     };
 };

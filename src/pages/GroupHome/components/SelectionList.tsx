@@ -1,8 +1,6 @@
 import { Search } from "@mui/icons-material";
 import { Box, Button, CircularProgress, Grow, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { SongVariantDto } from "../../../api/dtos";
 import OnChangeDelayer from "../../../components/ChangeDelayer";
 import Gap from "../../../components/Gap";
 import OnScrollComponent from "../../../components/OnScrollComponent/OnScrollComponent";
@@ -10,14 +8,14 @@ import SearchBar from "../../../components/SearchBar/SearchBar";
 import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
 import useGroup from "../../../hooks/group/useGroup";
 import useGroupSelection from "../../../hooks/group/useGroupSelection";
-import { getVariantUrl } from "../../../routes/routes";
 import normalizeSearchText from "../../../tech/normalizeSearchText";
+import { useSmartNavigate } from "../../../routes";
 
 export default function SelectionList() {
     const { items, search, reload, loading } = useGroupSelection();
     const { name } = useGroup();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const [searchString, setSearchString] = React.useState<string>("");
     const [stillString, setStillString] = useState<string>("");

@@ -1,24 +1,22 @@
 import {
-    Typography,
     Box,
-    Grid,
-    Paper,
-    Container,
     CircularProgress,
+    Container,
     Divider,
+    Grid,
     Pagination,
-    styled
+    Paper,
+    styled,
+    Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import usePagination from "../../hooks/usePagination";
-import Gap from "../../components/Gap";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/auth/useAuth";
-import { handleApiCall } from "../../tech/handleApiCall";
-import { getVariantUrl } from "../../routes/routes";
-import { useApi } from "../../hooks/api/useApi";
 import { ListSongData } from "../../api/generated";
+import Gap from "../../components/Gap";
+import Toolbar from "../../components/Toolbars/Toolbar";
+import { useApi } from "../../hooks/api/useApi";
+import usePagination from "../../hooks/usePagination";
+import { handleApiCall } from "../../tech/handleApiCall";
+import { parseVariantAlias, useSmartNavigate } from "../../routes";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -53,7 +51,7 @@ export default function List() {
                 console.log(e);
             });
     });
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const countPerPage = 30;
     useEffect(() => {
@@ -115,8 +113,14 @@ export default function List() {
                                 <Grid item xs={3} md={1.5} lg={1}>
                                     <StyledPaper
                                         onClick={() => {
-                                            console.log(s);
-                                            navigate(getVariantUrl(s.alias));
+                                            navigate("variant", {
+                                                params: parseVariantAlias(
+                                                    s.alias
+                                                ),
+                                                state: {
+                                                    title: s.title
+                                                }
+                                            });
                                         }}>
                                         <Box display={"flex"} gap={1}>
                                             <Typography fontWeight={"bold"}>

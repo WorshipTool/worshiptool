@@ -246,6 +246,12 @@ export interface GetGroupInfoResult {
      * @type {string}
      * @memberof GetGroupInfoResult
      */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupInfoResult
+     */
     'name': string;
     /**
      * 
@@ -436,6 +442,43 @@ export interface GetVariantsOfUserOutDto {
      * @memberof GetVariantsOfUserOutDto
      */
     'variants': Array<SongVariantDataOutDto>;
+}
+/**
+ * 
+ * @export
+ * @interface Group
+ */
+export interface Group {
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof Group
+     */
+    'selection': Playlist;
+    /**
+     * 
+     * @type {string}
+     * @memberof Group
+     */
+    'payload': string;
 }
 /**
  * 
@@ -973,6 +1016,12 @@ export interface PostCreateGroupBody {
      * @memberof PostCreateGroupBody
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateGroupBody
+     */
+    'code': string;
 }
 /**
  * 
@@ -986,6 +1035,12 @@ export interface PostCreateGroupResult {
      * @memberof PostCreateGroupResult
      */
     'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateGroupResult
+     */
+    'code': string;
     /**
      * 
      * @type {string}
@@ -3316,11 +3371,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * The function deletes a group. Only admin users can access this endpoint.
          * @summary Deletes a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerDeleteGroup: async (guid?: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        groupControllerDeleteGroup: async (guid?: string, code?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/group`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3341,8 +3396,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['guid'] = guid;
             }
 
-            if (name !== undefined) {
-                localVarQueryParameter['name'] = name;
+            if (code !== undefined) {
+                localVarQueryParameter['code'] = code;
             }
 
 
@@ -3390,11 +3445,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * The function returns information about a group.
          * @summary Returns information about a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerGetGroupInfo: async (guid?: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        groupControllerGetGroupInfo: async (guid?: string, code?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/group`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3411,8 +3466,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['guid'] = guid;
             }
 
-            if (name !== undefined) {
-                localVarQueryParameter['name'] = name;
+            if (code !== undefined) {
+                localVarQueryParameter['code'] = code;
             }
 
 
@@ -3503,6 +3558,46 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerSearchGroups: async (searchString: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchString' is not null or undefined
+            assertParamExists('groupControllerSearchGroups', 'searchString', searchString)
+            const localVarPath = `/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3567,12 +3662,12 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * The function deletes a group. Only admin users can access this endpoint.
          * @summary Deletes a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerDeleteGroup(guid?: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerDeleteGroup(guid, name, options);
+        async groupControllerDeleteGroup(guid?: string, code?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerDeleteGroup(guid, code, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['GroupApi.groupControllerDeleteGroup']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -3593,12 +3688,12 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * The function returns information about a group.
          * @summary Returns information about a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerGetGroupInfo(guid?: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGroupInfoResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupInfo(guid, name, options);
+        async groupControllerGetGroupInfo(guid?: string, code?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGroupInfoResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupInfo(guid, code, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['GroupApi.groupControllerGetGroupInfo']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -3626,6 +3721,18 @@ export const GroupApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupsList(options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['GroupApi.groupControllerGetGroupsList']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Group>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerSearchGroups(searchString, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.groupControllerSearchGroups']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
@@ -3664,12 +3771,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * The function deletes a group. Only admin users can access this endpoint.
          * @summary Deletes a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerDeleteGroup(guid?: string, name?: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.groupControllerDeleteGroup(guid, name, options).then((request) => request(axios, basePath));
+        groupControllerDeleteGroup(guid?: string, code?: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.groupControllerDeleteGroup(guid, code, options).then((request) => request(axios, basePath));
         },
         /**
          * The function returns number of all groups.
@@ -3684,12 +3791,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * The function returns information about a group.
          * @summary Returns information about a group.
          * @param {string} [guid] 
-         * @param {string} [name] 
+         * @param {string} [code] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerGetGroupInfo(guid?: string, name?: string, options?: any): AxiosPromise<GetGroupInfoResult> {
-            return localVarFp.groupControllerGetGroupInfo(guid, name, options).then((request) => request(axios, basePath));
+        groupControllerGetGroupInfo(guid?: string, code?: string, options?: any): AxiosPromise<GetGroupInfoResult> {
+            return localVarFp.groupControllerGetGroupInfo(guid, code, options).then((request) => request(axios, basePath));
         },
         /**
          * The function returns the selection of a group.
@@ -3709,6 +3816,15 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerGetGroupsList(options?: any): AxiosPromise<Array<GetGroupListItem>> {
             return localVarFp.groupControllerGetGroupsList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} searchString 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerSearchGroups(searchString: string, options?: any): AxiosPromise<Array<Group>> {
+            return localVarFp.groupControllerSearchGroups(searchString, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3745,13 +3861,13 @@ export class GroupApi extends BaseAPI {
      * The function deletes a group. Only admin users can access this endpoint.
      * @summary Deletes a group.
      * @param {string} [guid] 
-     * @param {string} [name] 
+     * @param {string} [code] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerDeleteGroup(guid?: string, name?: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerDeleteGroup(guid, name, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerDeleteGroup(guid?: string, code?: string, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).groupControllerDeleteGroup(guid, code, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3769,13 +3885,13 @@ export class GroupApi extends BaseAPI {
      * The function returns information about a group.
      * @summary Returns information about a group.
      * @param {string} [guid] 
-     * @param {string} [name] 
+     * @param {string} [code] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerGetGroupInfo(guid?: string, name?: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerGetGroupInfo(guid, name, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerGetGroupInfo(guid?: string, code?: string, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).groupControllerGetGroupInfo(guid, code, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3799,6 +3915,17 @@ export class GroupApi extends BaseAPI {
      */
     public groupControllerGetGroupsList(options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).groupControllerGetGroupsList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} searchString 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).groupControllerSearchGroups(searchString, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

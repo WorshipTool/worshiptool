@@ -4,7 +4,7 @@ import { SongVariantDto } from "../../api/dtos";
 import useAuth from "../../hooks/auth/useAuth";
 import CustomChip from "../CustomChip/CustomChip";
 import CustomLink from "../Link/CustomLink";
-import { getVariantUrl } from "../../routes";
+import { parseVariantAlias } from "../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -79,12 +79,10 @@ export default function SongCard({
         ?.text?.split("\n")
         .slice(0, 4);
 
-    const to = getVariantUrl(data.alias);
-
     return (
         <CustomLink
-            to={to}
-            type="variant"
+            to={"variant"}
+            params={parseVariantAlias(data.alias)}
             state={{
                 title: data.preferredTitle
             }}>
@@ -134,7 +132,10 @@ export default function SongCard({
                 <StyledBox>
                     {dataLines.map((line, index) => {
                         return (
-                            <Box display={"flex"} flexDirection={"row"}>
+                            <Box
+                                display={"flex"}
+                                flexDirection={"row"}
+                                key={line}>
                                 <Typography
                                     noWrap
                                     key={"SearchItemText" + index}

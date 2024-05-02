@@ -1,11 +1,9 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
-import React, { useMemo } from "react";
-import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
-import useGroup from "../../../hooks/group/useGroup";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import { SongVariantDto } from "../../../api/dtos";
-import { getPlaylistUrl } from "../../../routes/routes";
+import useGroup from "../../../hooks/group/useGroup";
+import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
+import { useSmartNavigate } from "../../../routes";
 
 interface ToolbarHeaderSheetPageProps {
     variant: SongVariantDto;
@@ -14,7 +12,7 @@ interface ToolbarHeaderSheetPageProps {
 export default function ToolbarHeaderSheetPage(
     props: ToolbarHeaderSheetPageProps
 ) {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const { isOn } = useGroup();
     const currentPlaylist = useCurrentPlaylist();
@@ -37,7 +35,11 @@ export default function ToolbarHeaderSheetPage(
     };
 
     const openPlaylist = () => {
-        navigate(getPlaylistUrl(currentPlaylist.guid));
+        navigate("playlist", {
+            params: {
+                guid: currentPlaylist.guid
+            }
+        });
     };
 
     return (
