@@ -25,12 +25,13 @@ export const GroupProvider = ({ children }: { children: any }) => {
 };
 
 interface useProvideGroupI {
+    code: string;
     name: string;
     guid: string;
     selectionGuid: string;
     payload: GroupPayloadType;
     setPayload: (payload: GroupPayloadType) => Promise<void>;
-    turnOn: (name: string) => void;
+    turnOn: (code: string) => void;
     turnOff: () => void;
     isOn: boolean;
     url: string;
@@ -48,14 +49,14 @@ export const useProvideGroup = (): useProvideGroupI => {
 
     const key = "activeGroup";
 
-    const turnOn = (name: string) => {
-        handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, name))
+    const turnOn = (code: string) => {
+        handleApiCall(groupApi.groupControllerGetGroupInfo(undefined, code))
             .then((r) => {
                 setGroup({
                     ...r,
                     payload: apiToGroupPayload(r.payload)
                 });
-                localStorage.setItem(key, name);
+                localStorage.setItem(key, code);
             })
             .catch((e) => {
                 console.log(e);
@@ -92,6 +93,7 @@ export const useProvideGroup = (): useProvideGroupI => {
         turnOn,
         turnOff,
         isOn: group !== undefined,
+        code: group?.code || "",
         name: group?.name || "",
         guid: group?.guid || "",
         payload: group?.payload || {},

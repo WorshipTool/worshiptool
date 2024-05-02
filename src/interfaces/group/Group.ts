@@ -1,5 +1,6 @@
 export interface Group {
     name: string;
+    code: string;
     guid: string;
     selection: string;
     payload: GroupPayloadType;
