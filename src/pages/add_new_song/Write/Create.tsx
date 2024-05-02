@@ -10,20 +10,20 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import { Sheet } from "@pepavlin/sheet-api";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { NewSongDataProcessResult } from "../../../api/generated";
 import ContainerGrid from "../../../components/ContainerGrid";
 import Gap from "../../../components/Gap";
 import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
 import AppLayout from "../../../components/app/AppLayout/AppLayout";
 import { useApi } from "../../../hooks/api/useApi";
-import { getVariantUrl } from "../../../routes/routes";
 import { useApiState } from "../../../tech/ApiState";
 import { handleApiCall } from "../../../tech/handleApiCall";
 import { isSheetDataValid } from "../../../tech/sheet.tech";
 import ToolPanel from "./ToolPanel";
 import NotValidWarning from "./components/NotValidWarning";
 import { useWindowTitle } from "../../../hooks/useWindowTitle";
+import { useSmartParams } from "../../../routes/useSmartParams";
+import { parseVariantAlias, useSmartNavigate } from "../../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3),
@@ -42,8 +42,6 @@ const SheetInput = styled(InputBase)(({}) => ({
 }));
 
 export default function Create() {
-    const { guid } = useParams();
-
     useWindowTitle("Napsat píseň");
 
     const { songAddingApi } = useApi();
@@ -60,7 +58,7 @@ export default function Create() {
     const [title, setTitle] = useState("");
     const [sheetData, setSheetData] = useState("");
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const [sheet, setSheet] = useState<Sheet>(new Sheet(sheetData));
 
@@ -77,14 +75,23 @@ export default function Create() {
             async () => {
                 return handleApiCall(
                     songAddingApi.songAddingControllerCreate({
-                        songGuid: guid,
                         title,
                         sheetData
                     })
                 );
             },
             (result) => {
-                navigate(getVariantUrl(result.alias), { replace: false });
+                const a = parseVariantAlias(result.alias);
+                navigate("variant", {
+                    replace: false,
+                    params: {
+                        hex: a.hex,
+                        alias: a.alias
+                    },
+                    state: {
+                        title: title
+                    }
+                });
             }
         );
     };
@@ -166,17 +173,7 @@ export default function Create() {
                                 display={"flex"}
                                 alignItems={"center"}>
                                 {/* <ImportButton onLoad={onImport}/> */}
-                                {guid && (
-                                    <Typography>
-                                        Tato píseň má i jiné verze..
-                                    </Typography>
-                                )}
                                 <Gap horizontal />
-                                {guid && (
-                                    <Typography fontWeight={"bold"}>
-                                        {/* {getName()} */}
-                                    </Typography>
-                                )}
                             </Box>
                             <Box
                                 display={"flex"}

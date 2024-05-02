@@ -2,19 +2,13 @@ import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useSnackbar } from "notistack";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
     SignUpRequestDTO,
     loginResultDTOToUser
 } from "../../api/dtos/dtosAuth";
-import {
-    AuthApi,
-    Configuration,
-    LoginInputData,
-    PermissionsApi
-} from "../../api/generated";
+import { AuthApi, Configuration, LoginInputData } from "../../api/generated";
 import User, { ROLES } from "../../interfaces/user";
-import { PermissionDataType } from "../../interfaces/permission.types";
+import { useSmartNavigate } from "../../routes";
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
     login: async () => {},
@@ -46,7 +40,7 @@ export function useProvideAuth() {
     const [user, setUser] = useState<User>();
 
     const { enqueueSnackbar } = useSnackbar();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const [loading, setLoading] = useState<boolean>(true);
 

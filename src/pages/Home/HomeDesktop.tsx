@@ -16,7 +16,7 @@ import RecommendedSongsList from "./components/RecommendedSongsList/RecommendedS
 import Toolbar from "../../components/Toolbars/Toolbar";
 import FloatingAddButton from "./components/FloatingAddButton";
 import ContainerGrid from "../../components/ContainerGrid";
-import { useNavigate } from "react-router-dom";
+import { useSmartNavigate } from "../../routes";
 
 const SearchContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -101,7 +101,7 @@ export default function HomeDesktop() {
         };
     }, []);
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     return (
         <>

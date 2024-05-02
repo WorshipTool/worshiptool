@@ -1,8 +1,8 @@
 import { Box, Button, Link, Typography, styled } from "@mui/material";
 import React, { useMemo } from "react";
 import { ReactComponent as SvgIcon } from "../../../assets/icon.svg";
-import { useNavigate } from "react-router-dom";
 import useGroup from "../../../hooks/group/useGroup";
+import { useSmartNavigate } from "../../../routes";
 
 const Container = styled(Box)(({ theme }) => ({
     height: "100%",
@@ -26,17 +26,22 @@ interface LeftWebTitleProps {
     transparent?: boolean;
 }
 export default function LeftWebTitle({ transparent }: LeftWebTitleProps) {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const color = useMemo(() => {
         return transparent ? "transparent" : "white";
     }, [transparent]);
     const size = 36;
 
-    const { isOn, url } = useGroup();
+    const { isOn, code } = useGroup();
     const goHomeClick = () => {
-        if (isOn) navigate(url);
-        else navigate("/");
+        if (isOn)
+            navigate("group", {
+                params: {
+                    groupCode: code
+                }
+            });
+        else navigate("home", {});
         window.scroll({
             top: 0,
             behavior: "smooth"

@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
+import { LoadingButton } from "@mui/lab";
 import {
     Box,
     Button,
@@ -9,17 +8,15 @@ import {
     styled,
     useTheme
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../../../hooks/auth/useAuth";
-import Playlist from "../../../../interfaces/playlist/PlaylistDTO";
-import usePlaylist from "../../../../hooks/playlist/usePlaylist";
-import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
-import useInnerPlaylist from "../../hooks/useInnerPlaylist";
 import { Sheet } from "@pepavlin/sheet-api";
-import { LoadingButton } from "@mui/lab";
-import { useApiState } from "../../../../tech/ApiState";
+import { useState } from "react";
 import { SongVariantDto } from "../../../../api/dtos";
-import { getVariantUrl } from "../../../../routes/routes";
+import useAuth from "../../../../hooks/auth/useAuth";
+import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
+import Playlist from "../../../../interfaces/playlist/PlaylistDTO";
+import { useApiState } from "../../../../tech/ApiState";
+import useInnerPlaylist from "../../hooks/useInnerPlaylist";
+import { parseVariantAlias, useSmartNavigate } from "../../../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -78,10 +75,13 @@ export default function SearchItem({
         );
     };
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const open = () => {
-        navigate(getVariantUrl(variant.alias));
+        navigate("variant", {
+            params: parseVariantAlias(variant.alias),
+            state: { title: variant.preferredTitle }
+        });
     };
     const { user } = useAuth();
     const theme = useTheme();

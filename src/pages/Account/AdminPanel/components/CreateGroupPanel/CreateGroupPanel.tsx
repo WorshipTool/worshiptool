@@ -8,8 +8,7 @@ import { useApi } from "../../../../../hooks/api/useApi";
 import { handleApiCall } from "../../../../../tech/handleApiCall";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
-import { getGroupUrl } from "../../../../../routes";
+import { useSmartNavigate } from "../../../../../routes";
 
 export default function CreateGroupPanel() {
     const [name, setName] = React.useState("");
@@ -24,7 +23,7 @@ export default function CreateGroupPanel() {
     const [error, setError] = React.useState<string | null>(null);
 
     const { enqueueSnackbar } = useSnackbar();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const onClick = () => {
         setSubmitted(true);
@@ -50,7 +49,13 @@ export default function CreateGroupPanel() {
                                 <Button
                                     variant="contained"
                                     color="success"
-                                    onClick={() => navigate(getGroupUrl(code))}>
+                                    onClick={() =>
+                                        navigate("group", {
+                                            params: {
+                                                groupCode: code
+                                            }
+                                        })
+                                    }>
                                     Otevřít
                                 </Button>
                             )

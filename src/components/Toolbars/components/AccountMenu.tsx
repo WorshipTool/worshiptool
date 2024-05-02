@@ -1,24 +1,6 @@
-import {
-    Divider,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem
-} from "@mui/material";
-import React from "react";
-import { click } from "@testing-library/user-event/dist/click";
-import { useNavigate } from "react-router-dom";
-import {
-    AccountBalance,
-    AccountCircle,
-    LibraryMusic,
-    Logout,
-    ManageAccounts,
-    MusicNote,
-    Person
-} from "@mui/icons-material";
+import { ListItemText, Menu, MenuItem } from "@mui/material";
 import useAuth from "../../../hooks/auth/useAuth";
-import { ACCOUNT_URL } from "../../../routes/routes";
+import { useSmartNavigate } from "../../../routes";
 
 interface AccountMenuProps {
     anchor: Element | null;
@@ -32,7 +14,7 @@ export default function AccountMenu({
     onClose
 }: AccountMenuProps) {
     const { logout, user } = useAuth();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const onLogoutClick = () => {
         logout();
@@ -40,7 +22,7 @@ export default function AccountMenu({
     };
 
     const onSettingClick = () => {
-        navigate(ACCOUNT_URL);
+        navigate("account", {});
     };
 
     return (

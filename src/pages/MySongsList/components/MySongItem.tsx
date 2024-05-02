@@ -1,9 +1,6 @@
-import React from "react";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import Gap from "../../../components/Gap";
-import { useNavigate } from "react-router-dom";
+import { Box, Button, Typography } from "@mui/material";
 import { SongVariantDto } from "../../../api/dtos";
+import Gap from "../../../components/Gap";
 
 interface MySongItemProps {
     variant: SongVariantDto;

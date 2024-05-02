@@ -9,8 +9,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
 import useAuth from "../../../hooks/auth/useAuth";
-import { useNavigate } from "react-router-dom";
-import { ADD_MENU_URL } from "../../../routes/routes";
+import { useSmartNavigate } from "../../../routes";
 
 interface FloatingAddButtonProps {
     extended?: boolean;
@@ -20,10 +19,10 @@ export default function FloatingAddButton({
     extended
 }: FloatingAddButtonProps) {
     const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const onClickAddSong = useCallback(() => {
-        navigate(ADD_MENU_URL);
+        navigate("addMenu", {});
     }, []);
 
     const transition = "all 0.2s ease";

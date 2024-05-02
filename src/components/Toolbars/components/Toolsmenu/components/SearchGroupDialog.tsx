@@ -1,24 +1,20 @@
+import { Search } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
+    Box,
     Dialog,
     DialogContent,
+    DialogContentText,
     DialogTitle,
-    TextField,
-    Button,
-    ButtonGroup,
-    Box,
-    DialogContentText
+    TextField
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { searchGroupsEvent } from "../hooks/useToolsMenuItems";
+import { Group } from "../../../../../api/generated";
 import { useApi } from "../../../../../hooks/api/useApi";
+import { useSmartNavigate } from "../../../../../routes";
 import { useApiState } from "../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../tech/handleApiCall";
-import { on } from "events";
-import { LoadingButton } from "@mui/lab";
-import { Search } from "@mui/icons-material";
-import { getGroupUrl, useSmartNavigate } from "../../../../../routes";
-import { useNavigate } from "react-router-dom";
-import { Group } from "../../../../../api/generated";
+import { searchGroupsEvent } from "../hooks/useToolsMenuItems";
 
 export default function SearchGroupDialog() {
     const [open, setOpen] = React.useState(false);
@@ -28,7 +24,7 @@ export default function SearchGroupDialog() {
 
     const { apiState, fetchApiState } = useApiState<Group[]>();
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     useEffect(() => {
         if (open) {
@@ -58,7 +54,11 @@ export default function SearchGroupDialog() {
                 return result;
             },
             (result) => {
-                navigate(getGroupUrl(result[0].name));
+                navigate("group", {
+                    params: {
+                        groupCode: result[0].code
+                    }
+                });
                 setOpen(false);
             }
         );

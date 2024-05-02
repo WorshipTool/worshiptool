@@ -19,8 +19,7 @@ import { VariantDTO } from "../../../../../interfaces/variant/VariantDTO";
 import usePlaylists from "../../../../../hooks/playlist/usePlaylists";
 import { SongVariantDto } from "../../../../../api/dtos";
 import Gap from "../../../../../components/Gap";
-import { useNavigate } from "react-router-dom";
-import { getPlaylistUrl } from "../../../../../routes/routes";
+import { getReplacedUrlWithParams, routesPaths } from "../../../../../routes";
 
 interface PlaylistMenuItemProps {
     variant: SongVariantDto;
@@ -83,9 +82,13 @@ export default function PlaylistMenuItem({
             console.log(e);
         }
     };
-    const navigate = useNavigate();
     const openPlaylist = () => {
-        window.open(getPlaylistUrl(playlistGuid), "_blank");
+        window.open(
+            getReplacedUrlWithParams(routesPaths.playlist, {
+                guid: playlistGuid
+            }),
+            "_blank"
+        );
     };
 
     return (

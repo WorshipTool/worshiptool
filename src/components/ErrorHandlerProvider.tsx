@@ -3,9 +3,7 @@ import { networkErrorEvent, unauthorizedEvent } from "../tech/handleApiCall";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
 import useAuth from "../hooks/auth/useAuth";
-import { useNavigate } from "react-router-dom";
-import { LOGIN_URL } from "../routes/routes";
-import { useSmartNavigate } from "../routes/useSmartNavigate";
+import { useSmartNavigate } from "../routes/useSmartNavigate.1";
 
 interface ErrorHandlerProviderProps {
     children: React.ReactNode;

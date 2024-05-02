@@ -1,30 +1,23 @@
+import { Add, Remove } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
     Box,
     Button,
-    Card,
     Chip,
     CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     Paper,
-    TextField,
     Typography,
     styled
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import usePlaylists from "../../hooks/playlist/usePlaylists";
-import { Add, Remove } from "@mui/icons-material";
-import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
+import { useEffect, useState } from "react";
 import AppLayout from "../../components/app/AppLayout/AppLayout";
 import Gap from "../../components/Gap";
-import { LoadingButton } from "@mui/lab";
-import { useApiStateEffect } from "../../tech/ApiState";
-import { getPlaylistUrl } from "../../routes/routes";
+import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
+import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import { useApiStateEffect } from "../../tech/ApiState";
+import { useSmartNavigate } from "../../routes";
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -43,7 +36,7 @@ export default function () {
         deletePlaylist: deleteByGuid
     } = usePlaylists();
     const [loaded, setLoaded] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     useWindowTitle("Playlisty");
 
@@ -73,7 +66,11 @@ export default function () {
             const result = await createWithName(
                 "Nový playlist " + playlists?.length
             );
-            navigate(getPlaylistUrl(result.guid));
+            navigate("playlist", {
+                params: {
+                    guid: result.guid
+                }
+            });
             turnOn(result.guid);
         } catch (e: any) {
             console.log("Something went wrong:", e.message);
@@ -93,7 +90,11 @@ export default function () {
     };
 
     const openPlaylist = (guid: string) => {
-        navigate(getPlaylistUrl(guid));
+        navigate("playlist", {
+            params: {
+                guid
+            }
+        });
     };
     const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist();
 

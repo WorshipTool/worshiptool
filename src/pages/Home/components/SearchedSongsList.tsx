@@ -1,34 +1,18 @@
-import { LoadingButton, Masonry } from "@mui/lab";
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Grid,
-    LinearProgress,
-    Typography,
-    useTheme
-} from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import usePagination from "../../../hooks/usePagination";
-import { useIsInViewport } from "../../../hooks/useIsInViewport";
-import Gap from "../../../components/Gap";
-import useSongSearch from "../../../hooks/song/useSongSearch";
-import {
-    SearchSongDataDTO,
-    SongSearchResultDTO
-} from "../../../api/dtos/dtosSong";
+import { Sync } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Box, LinearProgress, Typography, useTheme } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import normalizeSearchText from "../../../tech/normalizeSearchText";
-import ContainerGrid from "../../../components/ContainerGrid";
-import { mapApiToVariant } from "../../../api/dtos/variant/mapApiToVariant";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import OnChangeDelayer from "../../../components/ChangeDelayer";
+import ContainerGrid from "../../../components/ContainerGrid";
+import Gap from "../../../components/Gap";
 import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
-import { Downloading, Sync } from "@mui/icons-material";
+import useSongSearch from "../../../hooks/song/useSongSearch";
+import { useIsInViewport } from "../../../hooks/useIsInViewport";
+import usePagination from "../../../hooks/usePagination";
+import normalizeSearchText from "../../../tech/normalizeSearchText";
 
 import { SongVariantDto } from "../../../api/dtos";
-import { getVariantUrl } from "../../../routes/routes";
 
 interface SearchedSongsListProps {
     searchString: string;
@@ -82,8 +66,6 @@ export default function SearchedSongsList({
             loadNext();
         }
     }, [isInViewport]);
-
-    const navigate = useNavigate();
 
     return (
         <ContainerGrid direction="column">

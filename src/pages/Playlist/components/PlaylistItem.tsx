@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import useInnerPlaylist from "../hooks/useInnerPlaylist";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
-import { useNavigate } from "react-router-dom";
 import {
     Box,
     Button,
@@ -18,7 +17,7 @@ import { PlaylistItemDTO } from "../../../interfaces/playlist/PlaylistDTO";
 import { Sheet } from "@pepavlin/sheet-api";
 import useAuth from "../../../hooks/auth/useAuth";
 import { LoadingButton } from "@mui/lab";
-import { getVariantUrl } from "../../../routes/routes";
+import { parseVariantAlias, useSmartNavigate } from "../../../routes";
 
 const PageBreak = () => {
     return (
@@ -81,10 +80,11 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
         setSaving((s) => s - 1);
     };
 
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const open = () => {
-        navigate(getVariantUrl(item.variant.alias), {
+        navigate("variant", {
+            params: parseVariantAlias(item.variant.alias),
             state: {
                 title: item.variant.preferredTitle
             }

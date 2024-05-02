@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import AppLayout from "../../../../../../components/app/AppLayout/AppLayout";
-import { useLocation, useNavigate } from "react-router-dom";
-import { EasySheet } from "../../Upload";
+import { CloudUpload } from "@mui/icons-material";
 import {
     Box,
     Button,
@@ -10,18 +7,19 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
-import { CloudUpload } from "@mui/icons-material";
-import Gap from "../../../../../../components/Gap";
-import SheetListPreview from "../SheetListPreview";
-import UploadedSongList from "../UploadedSongList/UploadedSongList";
-import { NewSongDataDTO } from "../../../../../../api/dtos/dtosNewSongData";
-import useImport from "../../../../Write/hooks/useImport";
-import useAuth from "../../../../../../hooks/auth/useAuth";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { NewSongDataProcessResult } from "../../../../../../api/generated";
+import AppLayout from "../../../../../../components/app/AppLayout/AppLayout";
+import Gap from "../../../../../../components/Gap";
+import { useApi } from "../../../../../../hooks/api/useApi";
 import { useApiState } from "../../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../../tech/handleApiCall";
-import { useApi } from "../../../../../../hooks/api/useApi";
-import { UPLOAD_URL } from "../../../../../../routes/routes";
+import useImport from "../../../../Write/hooks/useImport";
+import { EasySheet } from "../../Upload";
+import SheetListPreview from "../SheetListPreview";
+import UploadedSongList from "../UploadedSongList/UploadedSongList";
+import { useSmartNavigate } from "../../../../../../routes";
 
 const parsingMessages = [
     "Nahrávám soubor...",
@@ -58,7 +56,7 @@ export default function Parse() {
 
     // const {post, loading:fetching} = useFetch();
     const upload = useImport();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const {
         fetchApiState,
@@ -290,7 +288,8 @@ export default function Parse() {
                                                         }
                                                         onClick={() => {
                                                             navigate(
-                                                                "/add/upload"
+                                                                "upload",
+                                                                {}
                                                             );
                                                         }}>
                                                         <Typography variant="button">
@@ -332,7 +331,7 @@ export default function Parse() {
                                     <Button
                                         variant="contained"
                                         onClick={() => {
-                                            navigate(UPLOAD_URL);
+                                            navigate("upload", {});
                                         }}>
                                         Nahrát další
                                     </Button>

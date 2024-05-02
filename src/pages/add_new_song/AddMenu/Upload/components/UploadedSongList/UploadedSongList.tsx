@@ -2,7 +2,6 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import UploadedSongLink from "./components/UploadedSongLink";
 import Gap from "../../../../../../components/Gap";
-import { useNavigate } from "react-router-dom";
 
 interface UploadedSongListProps {
     songs: {

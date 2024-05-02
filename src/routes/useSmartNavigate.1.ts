@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { getReplacedUrlWithParams, RouterProps, routesPaths } from "./routes";
-import { SmartNavigateOptions, SmartTo } from "./routes.types";
+import { RouterProps, routesPaths, getReplacedUrlWithParams } from "./routes";
+import { SmartTo, SmartNavigateOptions } from "./routes.types";
 
 export const useSmartNavigate = () => {
     const nv = useNavigate();

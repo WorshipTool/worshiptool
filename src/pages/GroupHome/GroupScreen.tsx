@@ -1,18 +1,18 @@
-import { useNavigate, useParams } from "react-router-dom";
 import GroupHome from "./GroupHome";
 import useGroup, { GroupProvider } from "../../hooks/group/useGroup";
 import { useEffect } from "react";
 import useAuth from "../../hooks/auth/useAuth";
-import { useSmartNavigate } from "../../routes/useSmartNavigate";
+import { useSmartNavigate } from "../../routes/useSmartNavigate.1";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
+import { useSmartParams } from "../../routes/useSmartParams";
 
 export default function GroupScreen() {
-    const { groupName } = useParams();
-    const { turnOn, turnOff, isOn } = useGroup();
+    const { groupCode } = useSmartParams("group");
+    const { turnOn, turnOff, isOn, name } = useGroup();
     const { isLoggedIn } = useAuth();
     const navigate = useSmartNavigate();
 
-    useWindowTitle(groupName);
+    useWindowTitle(name);
 
     useEffect(() => {
         if (!isLoggedIn())
@@ -25,12 +25,12 @@ export default function GroupScreen() {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        if (groupName === undefined) {
+        if (groupCode === undefined) {
             turnOff();
         } else {
-            turnOn(groupName);
+            turnOn(groupCode);
         }
-    }, [groupName]);
+    }, [groupCode]);
 
     return <GroupHome />;
 }

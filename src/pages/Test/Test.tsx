@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSmartNavigate } from "../../routes";
 
 export default function Test() {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     return (
         <div>
             baf
             <button
                 onClick={() => {
-                    navigate("/");
+                    navigate("home", {});
                 }}>
                 click
             </button>

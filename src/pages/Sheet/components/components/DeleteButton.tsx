@@ -15,12 +15,13 @@ import {
 import { useSnackbar } from "notistack";
 import React from "react";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
-import { useNavigate } from "react-router-dom";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { SongDeletingApi } from "../../../../api/generated";
 import { useApiState, useApiStateEffect } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { SongVariantDto } from "../../../../api/dtos";
+import { useSmartNavigate } from "../../../../routes";
+import { useNavigate } from "react-router-dom";
 
 interface DeleteButtonProps {
     variant: SongVariantDto;

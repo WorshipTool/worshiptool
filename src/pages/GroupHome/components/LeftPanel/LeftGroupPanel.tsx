@@ -14,17 +14,18 @@ import Gap from "../../../../components/Gap";
 import CreatePlaylistButton from "../CreatePlaylistButton";
 import useGroupSelection from "../../../../hooks/group/useGroupSelection";
 import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
-import { useNavigate } from "react-router-dom";
-import { getPlaylistUrl } from "../../../../routes/routes";
+import { useSmartNavigate } from "../../../../routes";
 
 export default function LeftGroupPanel() {
     const { name } = useGroup();
     const { count } = useGroupSelection();
     const { isOn, turnOff, guid } = useCurrentPlaylist();
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const openActivePlaylist = () => {
-        navigate(getPlaylistUrl(guid));
+        navigate("playlist", {
+            params: { guid }
+        });
     };
 
     return (

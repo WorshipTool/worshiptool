@@ -1,27 +1,10 @@
-import { Box, IconButton, Tooltip, styled } from "@mui/material";
-import React, { ReactElement, ReactNode, useEffect } from "react";
-import { ReactComponent as SvgIcon } from "../../../assets/icon.svg";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import useGroup from "../../../hooks/group/useGroup";
-import {
-    ArrowBack,
-    ExitToApp,
-    ExitToAppOutlined,
-    ExitToAppRounded,
-    ExtensionOff,
-    Home,
-    Logout,
-    Settings
-} from "@mui/icons-material";
-import {
-    getGroupSettingsUrl,
-    getGroupUrl,
-    GROUP_SETTINGS_URL,
-    routesPaths,
-    useSmartNavigate
-} from "../../../routes";
+import { ArrowBack, Home, Settings } from "@mui/icons-material";
+import { Box, IconButton, styled, Tooltip } from "@mui/material";
+import { ReactElement } from "react";
+import { useMatch } from "react-router-dom";
 import { usePermission } from "../../../hooks/auth/usePermission";
-import useAuth from "../../../hooks/auth/useAuth";
+import useGroup from "../../../hooks/group/useGroup";
+import { routesPaths, useSmartNavigate } from "../../../routes";
 
 const Container = styled(Box)(({ theme }) => ({
     width: 56,
@@ -64,16 +47,15 @@ interface SideToolbarProps {
 
 export default function SideToolbar({ component, children }: SideToolbarProps) {
     const navigate = useSmartNavigate();
-    const nvt = useNavigate();
 
-    const onSettings = !!useMatch(GROUP_SETTINGS_URL);
+    const onSettings = !!useMatch(routesPaths.groupSettings);
 
-    const { isOn, url, turnOff, name, guid } = useGroup();
+    const { isOn, turnOff, name, guid, code } = useGroup();
     const isOwner = usePermission("GROUP_OWNER", guid);
 
     const leave = () => {
         turnOff();
-        navigate("home");
+        navigate("home", {});
     };
 
     return (
@@ -104,7 +86,11 @@ export default function SideToolbar({ component, children }: SideToolbarProps) {
                                             disabled={!onSettings}
                                             color={"inherit"}
                                             onClick={() =>
-                                                nvt(getGroupUrl(name))
+                                                navigate("group", {
+                                                    params: {
+                                                        groupCode: code
+                                                    }
+                                                })
                                             }>
                                             <ArrowBack />
                                         </IconButton>
@@ -116,7 +102,11 @@ export default function SideToolbar({ component, children }: SideToolbarProps) {
                                             disabled={onSettings}
                                             color={"inherit"}
                                             onClick={() =>
-                                                nvt(getGroupSettingsUrl(name))
+                                                navigate("groupSettings", {
+                                                    params: {
+                                                        groupCode: code
+                                                    }
+                                                })
                                             }>
                                             <Settings />
                                         </IconButton>

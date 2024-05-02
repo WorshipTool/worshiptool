@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import AppLayout from "../../../../components/app/AppLayout/AppLayout";
 import UploadPanel from "./components/UploadPanel/UploadPanel";
 import { Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { UPLOAD_PARSE_URL } from "../../../../routes/routes";
 import { useWindowTitle } from "../../../../hooks/useWindowTitle";
+import { useSmartNavigate } from "../../../../routes";
 
 export interface EasySheet {
     title: string;
@@ -14,10 +13,10 @@ export interface EasySheet {
 }
 
 export default function Upload() {
-    const navigate = useNavigate();
+    const navigate = useSmartNavigate();
 
     const parseFiles = async (files: File[]) => {
-        navigate(UPLOAD_PARSE_URL, { state: { files: files } });
+        navigate("uploadParse", { state: { files: files } });
         return;
     };
 
