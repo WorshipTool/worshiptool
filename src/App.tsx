@@ -7,7 +7,6 @@ function App() {
         <div>
             <AppProviders>
                 <AppContainer />
-
             </AppProviders>
         </div>
     );

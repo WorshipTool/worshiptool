@@ -17,7 +17,6 @@ export default function GroupHome() {
     }, []);
     return (
         <AppLayout expandable={!home}>
-            {/* <SelectionList /> */}
             <Routes>
                 <Route path={COMMON_SETTINGS_URL} element={<GroupSettings />} />
                 <Route path={"*"} element={<SelectionList />} />
