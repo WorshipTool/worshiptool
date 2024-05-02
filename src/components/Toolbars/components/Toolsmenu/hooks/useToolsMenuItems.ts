@@ -1,11 +1,13 @@
 import { isMobile, isTablet } from "react-device-detect";
 import { useSmartNavigate } from "../../../../../routes";
+import { SxProps } from "@mui/material";
 
 interface MenuItem {
     title: string;
     image: string;
     action: () => void;
     disabled?: boolean;
+    sx?: SxProps;
 }
 
 export const searchGroupsEvent = new Event("searchGroups");
@@ -44,6 +46,9 @@ export default function useToolsMenuItems() {
             image: "https://static.thenounproject.com/png/79376-200.png",
             action: () => {
                 dispatchEvent(searchGroupsEvent);
+            },
+            sx: {
+                filter: "invert(1) brightness(0.1)"
             }
         }
     ];

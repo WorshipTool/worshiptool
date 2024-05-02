@@ -56,6 +56,7 @@ export default function ToolsMenu({ open, onClose }: ToolsMenuProps) {
                                         onClick={item.action}
                                         disabled={item.disabled}
                                         key={`menuitem${item.title}`}
+                                        sx={item.sx}
                                     />
                                 ))}
                         </Box>

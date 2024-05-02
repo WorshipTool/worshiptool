@@ -1,5 +1,5 @@
 import { Height } from "@mui/icons-material";
-import { Box, Typography, styled } from "@mui/material";
+import { Box, SxProps, Typography, styled } from "@mui/material";
 import React from "react";
 
 interface MenuItemProps {
@@ -7,6 +7,7 @@ interface MenuItemProps {
     img: string;
     onClick: () => any;
     disabled?: boolean;
+    sx?: SxProps;
 }
 
 const Container = styled(Box)(({ theme }) => ({
@@ -36,7 +37,8 @@ export default function MenuItem({
     title,
     img,
     onClick,
-    disabled
+    disabled,
+    sx: pr
 }: MenuItemProps) {
     return (
         <Container
@@ -52,6 +54,7 @@ export default function MenuItem({
                 display={"flex"}
                 flexDirection={"column"}
                 sx={{
+                    ...pr,
                     transition: "all 0.4s ease"
                 }}>
                 <Box
