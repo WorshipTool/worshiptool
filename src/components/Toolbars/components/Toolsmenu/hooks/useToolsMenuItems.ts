@@ -49,7 +49,8 @@ export default function useToolsMenuItems() {
             },
             sx: {
                 filter: "invert(1) brightness(0.1)"
-            }
+            },
+            disabled: isMobile && !isTablet
         }
     ];
 
