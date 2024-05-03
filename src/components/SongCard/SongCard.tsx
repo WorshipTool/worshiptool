@@ -36,7 +36,7 @@ type SongCardProps = {
     publicityMode?: PublicityMode;
     flexibleHeght?: boolean;
 };
-export default function SongCard({
+export function SongCard({
     data,
     publicityMode,
     flexibleHeght = true

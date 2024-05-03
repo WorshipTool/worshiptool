@@ -1,10 +1,9 @@
-import React, { useMemo } from "react";
 import { Masonry } from "@mui/lab";
 import { useTheme } from "@mui/material";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import { SongVariantDto } from "../../../api/dtos";
-import SongCard from "../../SongCard/SongCard";
 import { ResponsiveStyleValue } from "@mui/system";
+import { useMemo } from "react";
+import { SongVariantDto } from "../../../api/dtos";
+import { SongCard } from "@components";
 
 type CommmonProps = {
     data: SongVariantDto[];
