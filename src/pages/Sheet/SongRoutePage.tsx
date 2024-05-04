@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { useApiStateEffect } from "../../tech/ApiState";
 import {
     SkeletonLoader,
     SkeletonLoaderCore
-} from "../../components/SkeletonLoader";
+} from "../../common/providers/SkeletonLoader";
 import SongContainer from "./SongContainer";
 import { Helmet } from "react-helmet";
 import { useApi } from "../../hooks/api/useApi";

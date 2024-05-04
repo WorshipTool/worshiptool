@@ -11,8 +11,8 @@ import {
     styled
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
-import Gap from "../../components/Gap";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
+import Gap from "../../common/ui/Gap/Gap";
 import useCurrentPlaylist from "../../hooks/playlist/useCurrentPlaylist";
 import usePlaylists from "../../hooks/playlist/usePlaylists";
 import { useWindowTitle } from "../../hooks/useWindowTitle";

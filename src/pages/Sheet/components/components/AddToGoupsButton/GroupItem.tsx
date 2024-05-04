@@ -5,7 +5,7 @@ import {
     ListItemText,
     MenuItem
 } from "@mui/material";
-import { SkeletonLoader } from "../../../../../components/SkeletonLoader";
+import { SkeletonLoader } from "../../../../../common/providers/SkeletonLoader";
 import { useGroups } from "../../../../../hooks/group/useGroups";
 import usePlaylists from "../../../../../hooks/playlist/usePlaylists";
 import { useApiState, useApiStateEffect } from "../../../../../tech/ApiState";

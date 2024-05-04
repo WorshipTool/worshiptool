@@ -1,11 +1,11 @@
 import { Search } from "@mui/icons-material";
 import { Box, Button, CircularProgress, Grow, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import OnChangeDelayer from "../../../components/ChangeDelayer";
-import Gap from "../../../components/Gap";
-import OnScrollComponent from "../../../components/OnScrollComponent/OnScrollComponent";
-import SearchBar from "../../../components/SearchBar/SearchBar";
-import SongListCards from "../../../components/songLists/SongListCards/SongListCards";
+import OnChangeDelayer from "../../../common/providers/ChangeDelayer/ChangeDelayer";
+import Gap from "../../../common/ui/Gap/Gap";
+import OnScrollComponent from "../../../common/providers/OnScrollComponent/OnScrollComponent";
+import SearchBar from "../../../common/ui/SearchBar/SearchBar";
+import SongListCards from "../../../common/components/songLists/SongListCards/SongListCards";
 import useGroup from "../../../hooks/group/useGroup";
 import useGroupSelection from "../../../hooks/group/useGroupSelection";
 import normalizeSearchText from "../../../tech/normalizeSearchText";

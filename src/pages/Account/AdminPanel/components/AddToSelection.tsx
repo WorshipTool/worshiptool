@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
-import SongSelect from "../../../../components/songLists/SongSelect/SongSelect";
+import SongSelect from "../../../../common/components/songLists/SongSelect/SongSelect";
 import useGroup from "../../../../hooks/group/useGroup";
 import useGroupSelection from "../../../../hooks/group/useGroupSelection";
 import { SongVariantDto } from "../../../../api/dtos";

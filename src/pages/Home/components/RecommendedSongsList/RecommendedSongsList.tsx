@@ -6,11 +6,11 @@ import {
     Typography,
     styled
 } from "@mui/material";
-import ContainerGrid from "../../../../components/ContainerGrid";
-import Gap from "../../../../components/Gap";
+import ContainerGrid from "../../../../common/components/ContainerGrid";
+import Gap from "../../../../common/ui/Gap/Gap";
 import SongListCards, {
     SongListCardsProps
-} from "../../../../components/songLists/SongListCards/SongListCards";
+} from "../../../../common/components/songLists/SongListCards/SongListCards";
 import useRecommendedSongs from "./hooks/useRecommendedSongs";
 import { useSmartNavigate } from "../../../../routes";
 

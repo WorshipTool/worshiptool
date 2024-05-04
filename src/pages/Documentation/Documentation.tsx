@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import useReadme from "./hooks/useReadme";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import ReactMarkdown from "react-markdown";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import ContainerGrid from "../../components/ContainerGrid";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import Toolbar from "../../common/components/Toolbars/Toolbar";
+import ContainerGrid from "../../common/components/ContainerGrid";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import { Feedback } from "@mui/icons-material";
 import FeedbackPanel from "./components/FeedbackPanel";
-import Gap from "../../components/Gap";
+import Gap from "../../common/ui/Gap/Gap";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
 
 export default function Documentation() {

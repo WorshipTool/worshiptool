@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { SongVariantDto } from "../../../api/dtos";
-import Gap from "../../../components/Gap";
+import Gap from "../../../common/ui/Gap/Gap";
 
 interface MySongItemProps {
     variant: SongVariantDto;

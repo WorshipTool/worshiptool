@@ -1,10 +1,10 @@
 import { PushPin } from "@mui/icons-material";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import Card from "../../../../../../components/Card/Card";
+import Card from "../../../../../../common/ui/Card/Card";
 import useGroup from "../../../../../../hooks/group/useGroup";
 import PinnedPlaylist from "./PinnedPlaylist";
-import Gap from "../../../../../../components/Gap";
+import Gap from "../../../../../../common/ui/Gap/Gap";
 import { routesPaths } from "../../../../../../routes";
 import { LoadingButton } from "@mui/lab";
 import { getParamsFromUrl } from "../../../../../../routes/useSmartParams";

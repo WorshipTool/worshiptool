@@ -8,7 +8,7 @@ import {
     SxProps
 } from "@mui/material";
 import React, { useRef } from "react";
-import Gap from "../../../../../../components/Gap";
+import Gap from "../../../../../../common/ui/Gap/Gap";
 import useImport from "../../../../Write/hooks/useImport";
 import DragAndDrop from "./components/DragAndDrop";
 import UploadFileInput from "../UploadFileInput";

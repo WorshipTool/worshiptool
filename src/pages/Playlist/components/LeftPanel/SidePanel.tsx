@@ -13,8 +13,8 @@ import {
     useTheme
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import OnChangeDelayer from "../../../../components/ChangeDelayer";
-import Gap from "../../../../components/Gap";
+import OnChangeDelayer from "../../../../common/providers/ChangeDelayer/ChangeDelayer";
+import Gap from "../../../../common/ui/Gap/Gap";
 import useGroup from "../../../../hooks/group/useGroup";
 import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
 import useInnerPlaylist from "../../hooks/useInnerPlaylist";

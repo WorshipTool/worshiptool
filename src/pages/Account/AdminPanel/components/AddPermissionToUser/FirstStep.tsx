@@ -11,8 +11,8 @@ import React, { useEffect, useState } from "react";
 import { useApiState } from "../../../../../tech/ApiState";
 import { useApi } from "../../../../../hooks/api/useApi";
 import { handleApiCall } from "../../../../../tech/handleApiCall";
-import { SkeletonLoader } from "../../../../../components/SkeletonLoader";
-import Gap from "../../../../../components/Gap";
+import { SkeletonLoader } from "../../../../../common/providers/SkeletonLoader";
+import Gap from "../../../../../common/ui/Gap/Gap";
 import { LoadingButton } from "@mui/lab";
 
 type FirstStepProps = {

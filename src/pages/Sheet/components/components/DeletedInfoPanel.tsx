@@ -3,7 +3,7 @@ import React from "react";
 import { VariantDTO } from "../../../../interfaces/variant/VariantDTO";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { LoadingButton } from "@mui/lab";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 import { Restore } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import { SongDeletingApi } from "../../../../api/generated";

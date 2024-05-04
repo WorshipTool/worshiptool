@@ -4,7 +4,7 @@ import { useApi } from "../../../../hooks/api/useApi";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { useApiStateEffect, useApiState } from "../../../../tech/ApiState";
 import { handleApiCall } from "../../../../tech/handleApiCall";
-import Card from "../../../../components/Card/Card";
+import Card from "../../../../common/ui/Card/Card";
 import { AutoMode } from "@mui/icons-material";
 
 export default function TurnOnGetter() {

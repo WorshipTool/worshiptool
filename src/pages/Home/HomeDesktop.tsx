@@ -13,9 +13,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchedSongsList from "./components/SearchedSongsList";
 import RecommendedSongsList from "./components/RecommendedSongsList/RecommendedSongsList";
-import Toolbar from "../../components/Toolbars/Toolbar";
+import Toolbar from "../../common/components/Toolbars/Toolbar";
 import FloatingAddButton from "./components/FloatingAddButton";
-import ContainerGrid from "../../components/ContainerGrid";
+import ContainerGrid from "../../common/components/ContainerGrid";
 import { useSmartNavigate } from "../../routes";
 
 const SearchContainer = styled(Box)(({ theme }) => ({

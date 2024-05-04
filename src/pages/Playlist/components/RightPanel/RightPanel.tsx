@@ -1,9 +1,9 @@
 import { Box, Divider, Typography, styled, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import SearchBar from "../../../../components/SearchBar/SearchBar";
-import SongSearch from "../../../../components/songLists/SongSearch/SongSearch";
-import Gap from "../../../../components/Gap";
-import SongListCards from "../../../../components/songLists/SongListCards/SongListCards";
+import SearchBar from "../../../../common/ui/SearchBar/SearchBar";
+import SongSearch from "../../../../common/components/songLists/SongSearch/SongSearch";
+import Gap from "../../../../common/ui/Gap/Gap";
+import SongListCards from "../../../../common/components/songLists/SongListCards/SongListCards";
 import PlaylistSearchList from "./PlaylistSearchList";
 import Playlist from "../../../../interfaces/playlist/PlaylistDTO";
 import useRecommendedSongs from "../../../Home/components/RecommendedSongsList/hooks/useRecommendedSongs";

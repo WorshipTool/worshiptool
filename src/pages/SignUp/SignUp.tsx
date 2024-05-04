@@ -9,8 +9,8 @@ import {
     useTheme
 } from "@mui/material";
 import { useState } from "react";
-import Gap from "../../components/Gap";
-import Toolbar from "../../components/Toolbars/Toolbar";
+import Gap from "../../common/ui/Gap/Gap";
+import Toolbar from "../../common/components/Toolbars/Toolbar";
 import useAuth from "../../hooks/auth/useAuth";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
 import GoogleLoginButton from "../Login/components/GoogleLoginButton";

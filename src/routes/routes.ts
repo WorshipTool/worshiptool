@@ -50,6 +50,7 @@ export type RouterProps = {
     usersSongs: undefined;
     songsList: undefined;
     test: undefined;
+    testComponents: undefined;
 };
 
 export const routesParams = {
@@ -78,5 +79,6 @@ export const routesPaths: RoutesPathsType<RouterProps> = {
     usersPlaylists: "/ucet/playlisty",
     usersSongs: "/ucet/pisne",
     songsList: "/seznam",
-    test: "/test"
+    test: "/test",
+    testComponents: "/test/components"
 };

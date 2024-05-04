@@ -3,7 +3,7 @@ import React from "react";
 import usePlaylists from "../../../../../../hooks/playlist/usePlaylists";
 import { useApiStateEffect } from "../../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../../tech/handleApiCall";
-import { SkeletonLoader } from "../../../../../../components/SkeletonLoader";
+import { SkeletonLoader } from "../../../../../../common/providers/SkeletonLoader";
 import { LoadingButton } from "@mui/lab";
 
 type PinnedPlaylistProps = {

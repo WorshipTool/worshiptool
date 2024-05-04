@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import React from "react";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 
 interface AddMenuItemProps {
     title?: string;

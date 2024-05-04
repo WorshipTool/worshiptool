@@ -11,7 +11,7 @@ import {
     Typography
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
+import DefaultStyle from "../../../common/components/SheetDisplay/styles/DefaultStyle";
 import { PlaylistItemDTO } from "../../../interfaces/playlist/PlaylistDTO";
 
 import { Sheet } from "@pepavlin/sheet-api";

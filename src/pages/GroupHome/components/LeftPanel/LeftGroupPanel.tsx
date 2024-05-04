@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import useGroup from "../../../../hooks/group/useGroup";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 import CreatePlaylistButton from "../CreatePlaylistButton";
 import useGroupSelection from "../../../../hooks/group/useGroupSelection";
 import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";

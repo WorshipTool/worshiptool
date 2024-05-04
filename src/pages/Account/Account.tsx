@@ -1,12 +1,12 @@
 import { Box, useTheme } from "@mui/material";
 import { useEffect } from "react";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { useSmartNavigate } from "../../routes/useSmartNavigate.1";
 import BasicInfo from "./components/BasicInfo";
 import TabsPanel from "./components/TabsPanel";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
-import Card from "../../components/Card/Card";
+import Card from "../../common/ui/Card/Card";
 
 export default function Account() {
     const { isLoggedIn } = useAuth();

@@ -8,7 +8,7 @@ import {
     useTheme
 } from "@mui/material";
 import React from "react";
-import Gap from "../../../components/Gap";
+import Gap from "../../../common/ui/Gap/Gap";
 import { PostSendMessageDTO } from "../../../api/dtos/feedbackDtos";
 import useAuth from "../../../hooks/auth/useAuth";
 import { LoadingButton } from "@mui/lab";

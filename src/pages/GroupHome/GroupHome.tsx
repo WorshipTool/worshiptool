@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Route, Routes, useMatch } from "react-router-dom";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import GroupSettings from "./components/Settings/GroupSettings";
 import SelectionList from "./components/SelectionList";
 import { COMMON_SETTINGS_URL, routesPaths } from "../../routes";

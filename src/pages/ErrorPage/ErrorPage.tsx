@@ -1,7 +1,7 @@
 import { Typography, Box, Button } from "@mui/material";
-import Toolbar from "../../components/Toolbars/Toolbar";
-import Gap from "../../components/Gap";
-import Snow from "../../components/Snow";
+import Toolbar from "../../common/components/Toolbars/Toolbar";
+import Gap from "../../common/ui/Gap/Gap";
+import Snow from "../../common/components/Snow";
 import { Home } from "@mui/icons-material";
 export const ErrorPage = () => {
     return (

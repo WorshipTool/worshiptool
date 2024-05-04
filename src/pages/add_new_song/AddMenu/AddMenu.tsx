@@ -1,5 +1,5 @@
 import React from "react";
-import AppLayout from "../../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../../common/components/app/AppLayout/AppLayout";
 import AddMenuItem from "./components/AddMenuItem";
 import { Box, Typography } from "@mui/material";
 import { Add, Camera, Edit, UploadFile } from "@mui/icons-material";

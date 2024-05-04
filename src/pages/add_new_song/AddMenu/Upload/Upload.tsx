@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AppLayout from "../../../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../../../common/components/app/AppLayout/AppLayout";
 import UploadPanel from "./components/UploadPanel/UploadPanel";
 import { Box } from "@mui/material";
 import { useWindowTitle } from "../../../../hooks/useWindowTitle";

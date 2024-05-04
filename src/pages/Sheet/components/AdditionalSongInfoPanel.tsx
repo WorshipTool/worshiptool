@@ -2,7 +2,7 @@ import React from "react";
 import Song from "../../../interfaces/song/song";
 import { Box, Chip, Typography } from "@mui/material";
 import { MediaTypes } from "../../../interfaces/song/media";
-import YoutubeVideo from "../../../components/YoutubeVideo";
+import YoutubeVideo from "../../../common/components/YoutubeVideo";
 import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
 import { SourceTypes } from "../../../interfaces/song/source";
 import useAuth from "../../../hooks/auth/useAuth";

@@ -18,7 +18,7 @@ import { PostAddVariantToPlaylistBodyDTO } from "../../../../../api/dtos/playlis
 import { VariantDTO } from "../../../../../interfaces/variant/VariantDTO";
 import usePlaylists from "../../../../../hooks/playlist/usePlaylists";
 import { SongVariantDto } from "../../../../../api/dtos";
-import Gap from "../../../../../components/Gap";
+import Gap from "../../../../../common/ui/Gap/Gap";
 import { getReplacedUrlWithParams, routesPaths } from "../../../../../routes";
 
 interface PlaylistMenuItemProps {

@@ -10,8 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { NewSongDataProcessResult } from "../../../../../../api/generated";
-import AppLayout from "../../../../../../components/app/AppLayout/AppLayout";
-import Gap from "../../../../../../components/Gap";
+import AppLayout from "../../../../../../common/components/app/AppLayout/AppLayout";
+import Gap from "../../../../../../common/ui/Gap/Gap";
 import { useApi } from "../../../../../../hooks/api/useApi";
 import { useApiState } from "../../../../../../tech/ApiState";
 import { handleApiCall } from "../../../../../../tech/handleApiCall";

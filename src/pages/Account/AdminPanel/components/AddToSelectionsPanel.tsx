@@ -1,6 +1,6 @@
 import { Card, Typography } from "@mui/material";
 import React from "react";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 import useGroup from "../../../../hooks/group/useGroup";
 import AddToSelection from "./AddToSelection";
 import RemoveFromSelection from "./RemoveFromSelection";

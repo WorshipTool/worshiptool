@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { LoginResultDTO } from "../../api/dtos/dtosAuth";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
-import Gap from "../../components/Gap";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
+import Gap from "../../common/ui/Gap/Gap";
 import useAuth from "../../hooks/auth/useAuth";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
 import { useSmartLocation, useSmartNavigate } from "../../routes";
