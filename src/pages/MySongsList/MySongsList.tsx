@@ -50,18 +50,7 @@ export default function MySongsList() {
                                     <MySongItem
                                         variant={variant}
                                         index={index}
-                                        key={`mysong${variant.guid}`}
-                                        onClick={() => {
-                                            if (variant)
-                                                navigate("variant", {
-                                                    params: parseVariantAlias(
-                                                        variant.alias
-                                                    ),
-                                                    state: {
-                                                        title: variant.preferredTitle
-                                                    }
-                                                });
-                                        }}></MySongItem>
+                                        key={`mysong${variant.guid}`}></MySongItem>
                                 );
                             })}
 

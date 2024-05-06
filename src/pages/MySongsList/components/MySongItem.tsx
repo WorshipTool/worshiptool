@@ -1,24 +1,29 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { SongVariantDto } from "../../../api/dtos";
 import Gap from "../../../common/ui/Gap/Gap";
+import { Button } from "../../../common/ui";
+import { parseVariantAlias } from "../../../routes";
+import { Link } from "../../../common/ui/Link/CustomLink";
 
 interface MySongItemProps {
     variant: SongVariantDto;
-    onClick?: () => void;
     index: number;
 }
 
 export default function MySongItem(props: MySongItemProps) {
-    const open = () => {
-        props.onClick?.();
-    };
-
     const getHintText = () => {
         return props.variant.sheet.getSections()[0].text;
     };
 
+    const variantParams = parseVariantAlias(props.variant.alias);
+
     return (
-        <div onClick={open}>
+        <Link
+            to="variant"
+            params={variantParams}
+            state={{
+                title: props.variant.preferredTitle
+            }}>
             <Box
                 sx={{
                     display: "flex",
@@ -55,8 +60,16 @@ export default function MySongItem(props: MySongItemProps) {
                         {props.variant.verified ? "Veřejné" : "Soukromé"}
                     </Typography>
                 </Box>
-                <Button onClick={open}>Otevřít</Button>
+                <Button
+                    to={"variant"}
+                    toParams={variantParams}
+                    variant="text"
+                    toState={{
+                        title: props.variant.preferredTitle
+                    }}>
+                    Otevřít
+                </Button>
             </Box>
-        </div>
+        </Link>
     );
 }
