@@ -1,9 +1,9 @@
 import { Lock, Public } from "@mui/icons-material";
-import { Box, Link, styled, Typography, useTheme } from "@mui/material";
+import { Box, styled, Typography, useTheme } from "@mui/material";
 import { SongVariantDto } from "../../../api/dtos";
 import useAuth from "../../../hooks/auth/useAuth";
 import CustomChip from "../CustomChip/CustomChip";
-import { CustomLink } from "../Link/CustomLink";
+import { Link } from "../Link/CustomLink";
 import { parseVariantAlias } from "../../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -80,7 +80,7 @@ export function SongCard({
         .slice(0, 4);
 
     return (
-        <CustomLink
+        <Link
             to={"variant"}
             params={parseVariantAlias(data.alias)}
             state={{
@@ -156,6 +156,6 @@ export function SongCard({
                     }}
                 />
             </StyledContainer>
-        </CustomLink>
+        </Link>
     );
 }

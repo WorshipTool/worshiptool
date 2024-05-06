@@ -1,9 +1,10 @@
-import { Button as Btn, SxProps, Theme } from "@mui/material";
+import { SxProps } from "@mui/material";
 import { CustomLink } from "../Link";
-import { CommonLinkProps, CustomLinkProps } from "../Link/CustomLink";
+import { CommonLinkProps, LinkProps } from "../Link/CustomLink";
 import { RouterProps } from "../../../routes";
 import Tooltip from "../CustomTooltip/Tooltip";
-import { ComponentProps } from "react";
+import { ComponentProps, useMemo } from "react";
+import { LoadingButton } from "@mui/lab";
 
 type ButtonProps<T extends keyof RouterProps> = {
     children?: string;
@@ -16,10 +17,13 @@ type ButtonProps<T extends keyof RouterProps> = {
     to?: CommonLinkProps<T>["to"];
     toParams?: CommonLinkProps<T>["params"];
     toState?: CommonLinkProps<T>["state"];
-    sx?: SxProps<Theme>;
+    sx?: SxProps<{}>;
 
     startIcon?: React.ReactNode;
     endIcon?: React.ReactNode;
+
+    loading?: boolean;
+    disabled?: boolean;
 };
 
 export const Button = <T extends keyof RouterProps>({
@@ -31,17 +35,26 @@ export const Button = <T extends keyof RouterProps>({
 
     ...props
 }: ButtonProps<T>) => {
+    const disabled = useMemo(
+        () => props.loading || props.disabled,
+        [props.loading, props.disabled]
+    );
+
     const ButtonComponent = () => (
-        <Btn
+        <LoadingButton
+            loading={props.loading}
+            disabled={disabled}
             variant={variant}
             color={color}
             size={size}
             onClick={onClick}
             startIcon={props.startIcon}
             endIcon={props.endIcon}
-            sx={props.sx}>
+            sx={{
+                ...props.sx
+            }}>
             {children}
-        </Btn>
+        </LoadingButton>
     );
 
     const typedParams: CommonLinkProps<T>["params"] =
@@ -50,15 +63,22 @@ export const Button = <T extends keyof RouterProps>({
         props.toState as CommonLinkProps<T>["state"];
 
     const LinkComponent = () =>
-        props.to ? (
-            <CustomLink to={props.to} state={typedState} params={typedParams}>
+        props.to && !disabled ? (
+            <CustomLink
+                to={props.to}
+                state={typedState}
+                params={typedParams}
+                sx={{
+                    display: "flex",
+                    ...props.sx
+                }}>
                 <ButtonComponent />
             </CustomLink>
         ) : (
             <ButtonComponent />
         );
 
-    return props.tooltip ? (
+    return props.tooltip && !disabled ? (
         <Tooltip title={props.tooltip} placement={props.tooltipPlacement}>
             <LinkComponent />
         </Tooltip>

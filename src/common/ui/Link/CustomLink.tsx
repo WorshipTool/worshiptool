@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import {
     getReplacedUrlWithParams,
@@ -7,6 +7,8 @@ import {
     routesPaths,
     SmartParams
 } from "../../../routes";
+import { SxProps, styled } from "@mui/material";
+import { Theme } from "@mui/system";
 
 export type CommonLinkProps<T extends keyof RouterProps> = {
     to: T;
@@ -14,20 +16,57 @@ export type CommonLinkProps<T extends keyof RouterProps> = {
     params: T extends keyof typeof routesParams ? SmartParams<T> : {};
 };
 
-export type CustomLinkProps<T extends keyof RouterProps> =
-    CommonLinkProps<T> & {
-        children: React.ReactNode;
-    } & Omit<NavLinkProps, "to" | "state">;
+export type LinkProps<T extends keyof RouterProps> = CommonLinkProps<T> & {
+    children: React.ReactNode;
+    onlyWithShift?: boolean;
+    sx?: SxProps<{}>;
+} & Omit<NavLinkProps, "to" | "state">;
 
-export function CustomLink<T extends keyof RouterProps>(
-    props: CustomLinkProps<T>
-) {
+const StyledLink = styled(NavLink)({});
+
+export function Link<T extends keyof RouterProps>(props: LinkProps<T>) {
     const to = useMemo(() => {
         return getReplacedUrlWithParams(routesPaths[props.to], props.params);
     }, [props.to, props.params]);
 
-    return (
-        <NavLink
+    const [shiftOn, setShiftOn] = React.useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (
+                e.key === "Control" ||
+                e.key === "Shift" ||
+                e.key === "Alt" ||
+                e.key === "Meta"
+            ) {
+                setShiftOn(true);
+            }
+        };
+
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (
+                e.key === "Control" ||
+                e.key === "Shift" ||
+                e.key === "Alt" ||
+                e.key === "Meta"
+            ) {
+                setShiftOn(false);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("keyup", handleKeyUp);
+        };
+    }, []);
+
+    return props.onlyWithShift && !shiftOn ? (
+        <>{props.children}</>
+    ) : (
+        <StyledLink
             {...props}
             to={to}
             style={{
@@ -36,6 +75,6 @@ export function CustomLink<T extends keyof RouterProps>(
                 ...props.style
             }}>
             {props.children}
-        </NavLink>
+        </StyledLink>
     );
 }

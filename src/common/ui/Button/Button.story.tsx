@@ -19,6 +19,17 @@ const ButtonStory = () => {
                 tooltipPlacement="right">
                 Button with tooltip
             </Button>
+
+            <Gap />
+            <Button
+                size="small"
+                tooltip="Helloo"
+                to="home"
+                variant="outlined"
+                tooltipPlacement="right"
+                loading>
+                Loading Button
+            </Button>
         </div>
     );
 };

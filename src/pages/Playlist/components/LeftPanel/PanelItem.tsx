@@ -10,6 +10,8 @@ import {
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { PlaylistItemDTO } from "../../../../interfaces/playlist/PlaylistDTO";
 import useInnerPlaylist from "../../hooks/useInnerPlaylist";
+import { Link } from "../../../../common/ui/Link/CustomLink";
+import { parseVariantAlias } from "../../../../routes";
 
 const PanelItemContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[50],
@@ -67,65 +69,73 @@ export default function PanelItem({
     };
 
     return (
-        <PanelItemContainer id={"panelItem_" + item.guid}>
-            {!loading ? (
-                <>
-                    <Typography
-                        sx={{
-                            padding: "9px",
-                            paddingLeft: "14px"
-                        }}
-                        fontWeight={900}>
-                        {item.order + 1}.
-                    </Typography>
-                    <StyledPanelButton onClick={onClick}>
-                        {item.variant.preferredTitle}
-                    </StyledPanelButton>
-                </>
-            ) : (
-                <Skeleton
-                    variant="text"
-                    width={200}
-                    sx={{ marginLeft: 2 }}
-                    key={"skelet" + item.guid}></Skeleton>
-            )}
-
-            <Box display={"flex"} flexDirection={"row"} height={35}>
-                {moving ? (
-                    <IconButton>
-                        <CircularProgress color="inherit" size={"1rem"} />
-                    </IconButton>
-                ) : (
+        <Link
+            to="variant"
+            params={parseVariantAlias(item.variant.alias)}
+            state={{
+                title: item.variant.preferredTitle
+            }}
+            onlyWithShift>
+            <PanelItemContainer id={"panelItem_" + item.guid}>
+                {!loading ? (
                     <>
-                        {someIsMoving || !isOwner ? (
-                            <></>
-                        ) : (
-                            <>
-                                {items.indexOf(item) != 0 && (
-                                    <IconButton
-                                        onClick={() => {
-                                            move(-1);
-                                        }}
-                                        size="small">
-                                        <KeyboardArrowUp />
-                                    </IconButton>
-                                )}
-                                {items.indexOf(item) + 1 != items.length ? (
-                                    <IconButton
-                                        onClick={() => {
-                                            move(1);
-                                        }}
-                                        size="small">
-                                        <KeyboardArrowDown />
-                                    </IconButton>
-                                ) : (
-                                    <Box width={35}></Box>
-                                )}
-                            </>
-                        )}
+                        <Typography
+                            sx={{
+                                padding: "9px",
+                                paddingLeft: "14px"
+                            }}
+                            fontWeight={900}>
+                            {item.order + 1}.
+                        </Typography>
+                        <StyledPanelButton onClick={onClick}>
+                            {item.variant.preferredTitle}
+                        </StyledPanelButton>
                     </>
+                ) : (
+                    <Skeleton
+                        variant="text"
+                        width={200}
+                        sx={{ marginLeft: 2 }}
+                        key={"skelet" + item.guid}></Skeleton>
                 )}
-            </Box>
-        </PanelItemContainer>
+
+                <Box display={"flex"} flexDirection={"row"} height={35}>
+                    {moving ? (
+                        <IconButton>
+                            <CircularProgress color="inherit" size={"1rem"} />
+                        </IconButton>
+                    ) : (
+                        <>
+                            {someIsMoving || !isOwner ? (
+                                <></>
+                            ) : (
+                                <>
+                                    {items.indexOf(item) != 0 && (
+                                        <IconButton
+                                            onClick={() => {
+                                                move(-1);
+                                            }}
+                                            size="small">
+                                            <KeyboardArrowUp />
+                                        </IconButton>
+                                    )}
+                                    {items.indexOf(item) + 1 != items.length ? (
+                                        <IconButton
+                                            onClick={() => {
+                                                move(1);
+                                            }}
+                                            size="small">
+                                            <KeyboardArrowDown />
+                                        </IconButton>
+                                    ) : (
+                                        <Box width={35}></Box>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
+                </Box>
+            </PanelItemContainer>
+        </Link>
     );
 }

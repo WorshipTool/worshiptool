@@ -268,8 +268,6 @@ export default function SidePanel({}: {}) {
                             {items.length > 0 && (
                                 <Button
                                     variant="outlined"
-                                    // startIcon={<Dashboard />}
-                                    // onClick={openCards}
                                     to="playlistCards"
                                     toParams={{ guid: playlistGuid }}
                                     color={isGroupOn ? "primary" : "primary"}

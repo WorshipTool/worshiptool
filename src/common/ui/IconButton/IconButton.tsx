@@ -2,7 +2,7 @@ import React, { ComponentProps } from "react";
 import { IconButton as IconBtn } from "@mui/material";
 import { ColorType } from "../ui.types";
 import { Clickable } from "../Clickable";
-import { CommonLinkProps, CustomLink } from "../Link/CustomLink";
+import { CommonLinkProps, Link } from "../Link/CustomLink";
 import { RouterProps } from "../../../routes";
 import Tooltip from "../CustomTooltip/Tooltip";
 
@@ -23,7 +23,9 @@ export const IconButton = <T extends keyof RouterProps>({
     ...props
 }: IconButtonProps<T>) => {
     const ButtonComponent = () => (
-        <IconBtn color={color}>{props.children}</IconBtn>
+        <IconBtn color={color} onClick={props.onClick}>
+            {props.children}
+        </IconBtn>
     );
 
     const typedParams: CommonLinkProps<T>["params"] =
@@ -33,9 +35,9 @@ export const IconButton = <T extends keyof RouterProps>({
 
     const LinkComponent = () =>
         props.to ? (
-            <CustomLink to={props.to} state={typedState} params={typedParams}>
+            <Link to={props.to} state={typedState} params={typedParams}>
                 <ButtonComponent />
-            </CustomLink>
+            </Link>
         ) : (
             <ButtonComponent />
         );
