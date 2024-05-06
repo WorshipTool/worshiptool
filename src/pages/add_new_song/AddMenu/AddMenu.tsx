@@ -44,18 +44,14 @@ export default function AddMenu() {
                         title="Nahrát soubor"
                         subtitle="Automaticky převeďte píseň z obrázku"
                         icon={<UploadFile fontSize="inherit" />}
-                        onClick={() => {
-                            navigate("upload", {});
-                        }}
+                        to="upload"
                     />
                     <AddMenuItem
                         title="Sepsat ručně"
                         // subtitle='Použijte editor pro psaní textu písně'
                         icon={<Edit fontSize="inherit" />}
                         iconSize={40}
-                        onClick={() => {
-                            navigate("writeSong", {});
-                        }}
+                        to="writeSong"
                     />
                 </Box>
             </Box>

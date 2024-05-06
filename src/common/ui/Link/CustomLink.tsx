@@ -8,7 +8,6 @@ import {
     SmartParams
 } from "../../../routes";
 import { SxProps, styled } from "@mui/material";
-import { Theme } from "@mui/system";
 
 export type CommonLinkProps<T extends keyof RouterProps> = {
     to: T;
@@ -21,6 +20,7 @@ export type LinkProps<T extends keyof RouterProps> = CommonLinkProps<T> & {
     onlyWithShift?: boolean;
     sx?: SxProps<{}>;
     newTab?: boolean;
+    disabled?: boolean;
 } & Omit<NavLinkProps, "to" | "state">;
 
 const StyledLink = styled(NavLink)({});
@@ -64,7 +64,7 @@ export function Link<T extends keyof RouterProps>(props: LinkProps<T>) {
         };
     }, []);
 
-    return props.onlyWithShift && !shiftOn ? (
+    return (props.onlyWithShift && !shiftOn) || props.disabled ? (
         <>{props.children}</>
     ) : (
         <StyledLink
