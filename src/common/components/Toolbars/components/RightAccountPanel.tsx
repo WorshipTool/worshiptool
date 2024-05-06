@@ -1,20 +1,13 @@
 import { AddBox, Apps, HelpOutline, Login, Search } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import {
-    Avatar,
-    Box,
-    IconButton,
-    SxProps,
-    Theme,
-    Tooltip,
-    styled
-} from "@mui/material";
+import { Avatar, Box, SxProps, Theme, Tooltip, styled } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { isMobile, isTablet } from "react-device-detect";
 import useAuth from "../../../../hooks/auth/useAuth";
 import useGroup from "../../../../hooks/group/useGroup";
 import UploadFileInput from "../../../../pages/add_new_song/AddMenu/Upload/components/UploadFileInput";
 import { useSmartNavigate } from "../../../../routes/useSmartNavigate.1";
+import { IconButton } from "../../../ui";
 import AccountMenu from "./AccountMenu";
 import GroupChip from "./GroupChip";
 import ToolsMenu from "./Toolsmenu/ToolsMenu";
@@ -153,76 +146,67 @@ export default function RightAccountPanel({
 
                 {isHome ? (
                     <>
-                        <Tooltip title={"O aplikaci"}>
-                            <IconButton
-                                color="inherit"
-                                sx={iconButtonStyle}
-                                onClick={openDocumentation}>
-                                <HelpOutline
-                                    sx={iconStyle}
-                                    fontSize={fontSize}
-                                />
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton
+                            tooltip="O aplikaci"
+                            color="inherit"
+                            sx={iconButtonStyle}
+                            onClick={openDocumentation}>
+                            <HelpOutline sx={iconStyle} fontSize={fontSize} />
+                        </IconButton>
                     </>
                 ) : (
                     <>
-                        <Tooltip title={"Hledat"}>
-                            <IconButton
-                                color="inherit"
-                                sx={iconButtonStyle}
-                                onClick={goHomeClick}>
-                                <Search sx={iconStyle} fontSize={fontSize} />
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton
+                            tooltip="Hledat"
+                            color="inherit"
+                            sx={iconButtonStyle}
+                            onClick={goHomeClick}>
+                            <Search sx={iconStyle} fontSize={fontSize} />
+                        </IconButton>
                     </>
                 )}
 
                 {isLoggedIn() ? (
                     <>
-                        <Tooltip title={"Přidat novou píseň"}>
-                            <IconButton
-                                color="inherit"
-                                sx={iconButtonStyle}
-                                onClick={onCreateSongClick}
-                                disabled={false}>
-                                <AddBox sx={iconStyle} fontSize={fontSize} />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"Nástroje"}>
-                            <IconButton
-                                color="inherit"
-                                sx={iconButtonStyle}
-                                onClick={onToolsMenuClick}>
-                                <Apps sx={iconStyle} fontSize={fontSize} />
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton
+                            tooltip={"Přidat novou píseň"}
+                            color="inherit"
+                            sx={iconButtonStyle}
+                            onClick={onCreateSongClick}
+                            disabled={false}>
+                            <AddBox sx={iconStyle} fontSize={fontSize} />
+                        </IconButton>
+                        <IconButton
+                            tooltip="Nástroje"
+                            color="inherit"
+                            sx={iconButtonStyle}
+                            onClick={onToolsMenuClick}>
+                            <Apps sx={iconStyle} fontSize={fontSize} />
+                        </IconButton>
 
                         {isOn ? (
                             <GroupChip
                                 avatar={
-                                    <Tooltip title={"Účet"}>
-                                        <IconButton
-                                            color="inherit"
-                                            sx={iconButtonStyle}
-                                            onClick={onAccountClick}>
-                                            <ProfileImage
-                                                size={26}
-                                                sx={iconStyle}
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <IconButton
+                                        tooltip="Účet"
+                                        color="inherit"
+                                        sx={iconButtonStyle}
+                                        onClick={onAccountClick}>
+                                        <ProfileImage
+                                            size={26}
+                                            sx={iconStyle}
+                                        />
+                                    </IconButton>
                                 }
                             />
                         ) : (
-                            <Tooltip title={"Účet"}>
-                                <IconButton
-                                    color="inherit"
-                                    sx={iconButtonStyle}
-                                    onClick={onAccountClick}>
-                                    <ProfileImage size={26} sx={iconStyle} />
-                                </IconButton>
-                            </Tooltip>
+                            <IconButton
+                                tooltip="Účet"
+                                color="inherit"
+                                sx={iconButtonStyle}
+                                onClick={onAccountClick}>
+                                <ProfileImage size={26} sx={iconStyle} />
+                            </IconButton>
                         )}
 
                         <AccountMenu

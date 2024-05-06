@@ -5,19 +5,18 @@ type CustomTooltipProps = {
     children?: ReactElement;
 } & TooltipProps;
 
-export default function Tooltip(props: CustomTooltipProps) {
-    const MyComponent = React.forwardRef(function MyComponent(innerProps, ref) {
-        //  Spread the props to the underlying DOM element.
-        return (
-            <div {...innerProps} ref={ref as any}>
-                {props.children}
-            </div>
-        );
-    });
+const MyComponent = React.forwardRef((innerProps: any, ref) => {
+    return (
+        <div {...innerProps} ref={ref as any}>
+            {innerProps.children}
+        </div>
+    );
+});
 
+export default function Tooltip(props: CustomTooltipProps) {
     return (
         <Tltp {...props}>
-            <MyComponent />
+            <MyComponent>{props.children}</MyComponent>
         </Tltp>
     );
 }

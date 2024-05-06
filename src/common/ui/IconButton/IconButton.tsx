@@ -1,5 +1,5 @@
-import React, { ComponentProps } from "react";
-import { IconButton as IconBtn } from "@mui/material";
+import React, { ComponentProps, useCallback, useMemo } from "react";
+import { IconButton as IconBtn, SxProps } from "@mui/material";
 import { ColorType } from "../ui.types";
 import { Clickable } from "../Clickable";
 import { CommonLinkProps, Link } from "../Link/CustomLink";
@@ -8,7 +8,7 @@ import Tooltip from "../CustomTooltip/Tooltip";
 
 type IconButtonProps<T extends keyof RouterProps> = {
     children: React.ReactNode;
-    onClick?: () => void;
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
     color?: ColorType;
 
     tooltip?: string;
@@ -16,42 +16,71 @@ type IconButtonProps<T extends keyof RouterProps> = {
     to?: CommonLinkProps<T>["to"];
     toParams?: CommonLinkProps<T>["params"];
     toState?: CommonLinkProps<T>["state"];
+
+    sx?: SxProps<{}>;
+    disabled?: boolean;
 };
 
-export const IconButton = <T extends keyof RouterProps>({
+const ButtonComponent = ({
     color = "primary",
     ...props
-}: IconButtonProps<T>) => {
-    const ButtonComponent = () => (
-        <IconBtn color={color} onClick={props.onClick}>
+}: IconButtonProps<keyof RouterProps>) => {
+    return (
+        <IconBtn
+            color={color}
+            onClick={(e: any) => props.onClick?.(e)}
+            sx={props.sx}
+            disabled={props.disabled}>
             {props.children}
         </IconBtn>
     );
+};
 
-    const typedParams: CommonLinkProps<T>["params"] =
-        props.toParams as CommonLinkProps<T>["params"];
-    const typedState: CommonLinkProps<T>["state"] =
-        props.toState as CommonLinkProps<T>["state"];
+const LinkComponent = <T extends keyof RouterProps>(
+    props: IconButtonProps<T>
+) => {
+    const typedParams: CommonLinkProps<T>["params"] = useMemo(
+        () => props.toParams as CommonLinkProps<T>["params"],
+        [props.toParams]
+    );
+    const typedState: CommonLinkProps<T>["state"] = useMemo(
+        () => props.toState as CommonLinkProps<T>["state"],
+        [props.toState]
+    );
 
-    const LinkComponent = () =>
-        props.to ? (
-            <Link to={props.to} state={typedState} params={typedParams}>
-                <ButtonComponent />
-            </Link>
-        ) : (
-            <ButtonComponent />
-        );
+    return props.to ? (
+        <Link
+            to={props.to}
+            state={typedState}
+            params={typedParams}
+            sx={props.sx}>
+            <ButtonComponent {...props} />
+        </Link>
+    ) : (
+        <ButtonComponent {...props} />
+    );
+};
+
+const ClickableComponent = <T extends keyof RouterProps>({
+    ...props
+}: IconButtonProps<T>) => {
     return (
         <Clickable>
             {props.tooltip ? (
                 <Tooltip
                     title={props.tooltip}
                     placement={props.tooltipPlacement}>
-                    <LinkComponent />
+                    <LinkComponent {...props} />
                 </Tooltip>
             ) : (
-                <LinkComponent />
+                <LinkComponent {...props} />
             )}
         </Clickable>
     );
+};
+
+export const IconButton = <T extends keyof RouterProps>({
+    ...props
+}: IconButtonProps<T>) => {
+    return <ClickableComponent {...props} />;
 };
