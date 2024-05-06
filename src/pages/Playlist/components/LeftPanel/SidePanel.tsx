@@ -2,8 +2,6 @@ import { Dashboard, Edit, Print } from "@mui/icons-material";
 import { Masonry } from "@mui/lab";
 import {
     Box,
-    Button,
-    ButtonGroup,
     Chip,
     CircularProgress,
     IconButton,
@@ -20,6 +18,7 @@ import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
 import useInnerPlaylist from "../../hooks/useInnerPlaylist";
 import PanelItem from "./PanelItem";
 import { useSmartNavigate } from "../../../../routes";
+import { Button, ButtonGroup } from "../../../../common/ui";
 
 const Container = styled(Box)(({ theme }) => ({
     width: 300,
@@ -77,13 +76,13 @@ export default function SidePanel({}: {}) {
         });
     };
 
-    const openCards = () => {
-        navigate("playlistCards", {
-            params: {
-                guid: playlistGuid
-            }
-        });
-    };
+    // const openCards = () => {
+    //     navigate("playlistCards", {
+    //         params: {
+    //             guid: playlistGuid
+    //         }
+    //     });
+    // };
 
     const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -270,9 +269,19 @@ export default function SidePanel({}: {}) {
                                 <Button
                                     variant="outlined"
                                     // startIcon={<Dashboard />}
-                                    onClick={openCards}
+                                    // onClick={openCards}
+                                    to="playlistCards"
+                                    toParams={{ guid: playlistGuid }}
                                     color={isGroupOn ? "primary" : "primary"}
-                                    sx={{ pointerEvents: "auto" }}>
+                                    sx={{
+                                        pointerEvents: "auto",
+                                        backgroundColor:
+                                            theme.palette.grey[100],
+                                        ":hover": {
+                                            backgroundColor:
+                                                theme.palette.grey[100]
+                                        }
+                                    }}>
                                     Prezentace
                                 </Button>
                             )}

@@ -1,4 +1,4 @@
-import { Button as Btn } from "@mui/material";
+import { Button as Btn, SxProps, Theme } from "@mui/material";
 import { CustomLink } from "../Link";
 import { CommonLinkProps, CustomLinkProps } from "../Link/CustomLink";
 import { RouterProps } from "../../../routes";
@@ -16,6 +16,10 @@ type ButtonProps<T extends keyof RouterProps> = {
     to?: CommonLinkProps<T>["to"];
     toParams?: CommonLinkProps<T>["params"];
     toState?: CommonLinkProps<T>["state"];
+    sx?: SxProps<Theme>;
+
+    startIcon?: React.ReactNode;
+    endIcon?: React.ReactNode;
 };
 
 export const Button = <T extends keyof RouterProps>({
@@ -28,7 +32,14 @@ export const Button = <T extends keyof RouterProps>({
     ...props
 }: ButtonProps<T>) => {
     const ButtonComponent = () => (
-        <Btn variant={variant} color={color} size={size} onClick={onClick}>
+        <Btn
+            variant={variant}
+            color={color}
+            size={size}
+            onClick={onClick}
+            startIcon={props.startIcon}
+            endIcon={props.endIcon}
+            sx={props.sx}>
             {children}
         </Btn>
     );
