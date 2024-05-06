@@ -20,6 +20,7 @@ export type LinkProps<T extends keyof RouterProps> = CommonLinkProps<T> & {
     children: React.ReactNode;
     onlyWithShift?: boolean;
     sx?: SxProps<{}>;
+    newTab?: boolean;
 } & Omit<NavLinkProps, "to" | "state">;
 
 const StyledLink = styled(NavLink)({});
@@ -69,6 +70,7 @@ export function Link<T extends keyof RouterProps>(props: LinkProps<T>) {
         <StyledLink
             {...props}
             to={to}
+            target={props.newTab ? "_blank" : undefined}
             style={{
                 color: "inherit",
                 textDecoration: "none",

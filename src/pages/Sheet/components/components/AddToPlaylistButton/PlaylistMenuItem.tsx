@@ -20,6 +20,7 @@ import usePlaylists from "../../../../../hooks/playlist/usePlaylists";
 import { SongVariantDto } from "../../../../../api/dtos";
 import Gap from "../../../../../common/ui/Gap/Gap";
 import { getReplacedUrlWithParams, routesPaths } from "../../../../../routes";
+import { Link } from "../../../../../common/ui/Link/CustomLink";
 
 interface PlaylistMenuItemProps {
     variant: SongVariantDto;
@@ -82,22 +83,19 @@ export default function PlaylistMenuItem({
             console.log(e);
         }
     };
-    const openPlaylist = () => {
-        window.open(
-            getReplacedUrlWithParams(routesPaths.playlist, {
-                guid: playlistGuid
-            }),
-            "_blank"
-        );
+    const openPlaylist = (e: React.MouseEvent) => {
+        e.stopPropagation();
     };
 
     return (
-        <MenuItem key={playlistGuid + "pl"} disabled={loading}>
+        <MenuItem
+            key={playlistGuid + "pl"}
+            disabled={loading}
+            onClick={() => {
+                if (!isInPlaylist) addVariantToPlaylist(playlistGuid);
+                else removeVariantFromPlaylist(playlistGuid);
+            }}>
             <Box
-                onClick={() => {
-                    if (!isInPlaylist) addVariantToPlaylist(playlistGuid);
-                    else removeVariantFromPlaylist(playlistGuid);
-                }}
                 sx={{
                     flexDirection: "row",
                     display: "flex"
@@ -119,16 +117,25 @@ export default function PlaylistMenuItem({
                 <ListItemText primary={title} />
             </Box>
             <Gap horizontal value={1} />
-            <IconButton
-                onClick={openPlaylist}
-                size="small"
-                sx={{
-                    marginY: "-5px",
-                    marginX: "-4px",
-                    transform: "scale(0.8)"
-                }}>
-                <Launch fontSize="small" />
-            </IconButton>
+
+            <Link
+                to="playlist"
+                params={{
+                    guid: playlistGuid
+                }}
+                state={undefined}
+                newTab>
+                <IconButton
+                    onClick={openPlaylist}
+                    size="small"
+                    sx={{
+                        marginY: "-5px",
+                        marginX: "-4px",
+                        transform: "scale(0.8)"
+                    }}>
+                    <Launch fontSize="small" />
+                </IconButton>
+            </Link>
         </MenuItem>
     );
 }
