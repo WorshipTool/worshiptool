@@ -78,10 +78,6 @@ export default function RightAccountPanel({
 
     const fontSize = "medium";
 
-    const openDocumentation = () => {
-        navigate("documentation", {});
-    };
-
     const onToolsMenuClick = () => {
         setToolsOpen((o) => !o);
     };
@@ -92,14 +88,6 @@ export default function RightAccountPanel({
     };
 
     const uploadInputRef = React.useRef<HTMLInputElement>(null);
-
-    const onCreateSongClick = async () => {
-        if (isMobile && !isTablet) {
-            uploadInputRef.current?.click();
-        } else {
-            navigate("addMenu", {});
-        }
-    };
 
     const onLoginClick = () => {
         navigate("login", {
@@ -150,7 +138,7 @@ export default function RightAccountPanel({
                             tooltip="O aplikaci"
                             color="inherit"
                             sx={iconButtonStyle}
-                            onClick={openDocumentation}>
+                            to="documentation">
                             <HelpOutline sx={iconStyle} fontSize={fontSize} />
                         </IconButton>
                     </>
@@ -168,14 +156,25 @@ export default function RightAccountPanel({
 
                 {isLoggedIn() ? (
                     <>
-                        <IconButton
-                            tooltip={"Přidat novou píseň"}
-                            color="inherit"
-                            sx={iconButtonStyle}
-                            onClick={onCreateSongClick}
-                            disabled={false}>
-                            <AddBox sx={iconStyle} fontSize={fontSize} />
-                        </IconButton>
+                        {isMobile && !isTablet ? (
+                            <IconButton
+                                tooltip={"Přidat novou píseň"}
+                                color="inherit"
+                                sx={iconButtonStyle}
+                                onClick={() => uploadInputRef.current?.click()}
+                                disabled={false}>
+                                <AddBox sx={iconStyle} fontSize={fontSize} />
+                            </IconButton>
+                        ) : (
+                            <IconButton
+                                tooltip={"Přidat novou píseň"}
+                                color="inherit"
+                                sx={iconButtonStyle}
+                                to="addMenu"
+                                disabled={false}>
+                                <AddBox sx={iconStyle} fontSize={fontSize} />
+                            </IconButton>
+                        )}
                         <IconButton
                             tooltip="Nástroje"
                             color="inherit"

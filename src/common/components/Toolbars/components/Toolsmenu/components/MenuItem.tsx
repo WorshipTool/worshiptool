@@ -1,14 +1,9 @@
 import { Height } from "@mui/icons-material";
 import { Box, SxProps, Typography, styled } from "@mui/material";
 import React from "react";
-
-interface MenuItemProps {
-    title: string;
-    img: string;
-    onClick: () => any;
-    disabled?: boolean;
-    sx?: SxProps;
-}
+import { MenuItemProps } from "../hooks/useToolsMenuItems";
+import { RouterProps } from "../../../../../../routes";
+import { CommonLinkProps, Link } from "../../../../../ui/Link/CustomLink";
 
 const Container = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -33,20 +28,16 @@ const Container = styled(Box)(({ theme }) => ({
     }
 }));
 
-export default function MenuItem({
-    title,
-    img,
-    onClick,
-    disabled,
-    sx: pr
-}: MenuItemProps) {
-    return (
+export default function MenuItem<T extends keyof RouterProps>(
+    props: MenuItemProps<T>
+) {
+    const Component = () => (
         <Container
-            onClick={onClick}
+            onClick={props.action}
             sx={{
-                pointerEvents: disabled ? " none" : "auto",
-                filter: disabled ? "grayscale(100%)" : "",
-                opacity: disabled ? 0.5 : 1,
+                pointerEvents: props.disabled ? " none" : "auto",
+                filter: props.disabled ? "grayscale(100%)" : "",
+                opacity: props.disabled ? 0.5 : 1,
                 userSelect: "none"
             }}>
             <Box
@@ -54,7 +45,7 @@ export default function MenuItem({
                 display={"flex"}
                 flexDirection={"column"}
                 sx={{
-                    ...pr,
+                    ...props.sx,
                     transition: "all 0.4s ease"
                 }}>
                 <Box
@@ -66,7 +57,7 @@ export default function MenuItem({
                         filter: "drop-shadow(1px 4px 2px #00000033)"
                     }}>
                     <img
-                        src={img}
+                        src={props.image}
                         height={"50px"}
                         width={"60px"}
                         style={{
@@ -89,9 +80,22 @@ export default function MenuItem({
                         paddingBottom: 0.4,
                         paddingTop: 0.3
                     }}>
-                    {title}
+                    {props.title}
                 </Typography>
             </Box>
         </Container>
+    );
+
+    const typedParams: CommonLinkProps<T>["params"] =
+        props.toParams as CommonLinkProps<T>["params"];
+    const typedState: CommonLinkProps<T>["state"] =
+        props.toState as CommonLinkProps<T>["state"];
+
+    return props.to ? (
+        <Link to={props.to} params={typedParams} state={typedState}>
+            {Component()}
+        </Link>
+    ) : (
+        Component()
     );
 }

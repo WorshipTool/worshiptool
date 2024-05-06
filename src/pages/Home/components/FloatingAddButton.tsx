@@ -10,6 +10,7 @@ import {
 import React, { useCallback, useMemo } from "react";
 import useAuth from "../../../hooks/auth/useAuth";
 import { useSmartNavigate } from "../../../routes";
+import { Link } from "../../../common/ui/Link/CustomLink";
 
 interface FloatingAddButtonProps {
     extended?: boolean;
@@ -21,14 +22,10 @@ export default function FloatingAddButton({
     const { isLoggedIn } = useAuth();
     const navigate = useSmartNavigate();
 
-    const onClickAddSong = useCallback(() => {
-        navigate("addMenu", {});
-    }, []);
-
     const transition = "all 0.2s ease";
     const titleWidth = "90px";
     return (
-        <div>
+        <Link to="addMenu" state={undefined} params={{}}>
             {isLoggedIn() && (
                 <Tooltip title={"Přidat novou píseň"} placement="left">
                     <Fab
@@ -46,7 +43,6 @@ export default function FloatingAddButton({
                                   })
                         }}
                         color="primary"
-                        onClick={onClickAddSong}
                         variant={extended ? "extended" : "circular"}>
                         <Add
                             sx={{
@@ -94,6 +90,6 @@ export default function FloatingAddButton({
                             
                     </SpeedDial>
                 </>} */}
-        </div>
+        </Link>
     );
 }

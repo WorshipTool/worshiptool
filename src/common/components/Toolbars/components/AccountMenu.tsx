@@ -1,6 +1,7 @@
 import { ListItemText, Menu, MenuItem } from "@mui/material";
 import useAuth from "../../../../hooks/auth/useAuth";
 import { useSmartNavigate } from "../../../../routes";
+import { Link } from "../../../ui/Link/CustomLink";
 
 interface AccountMenuProps {
     anchor: Element | null;
@@ -14,15 +15,10 @@ export default function AccountMenu({
     onClose
 }: AccountMenuProps) {
     const { logout, user } = useAuth();
-    const navigate = useSmartNavigate();
 
     const onLogoutClick = () => {
         logout();
         onClose();
-    };
-
-    const onSettingClick = () => {
-        navigate("account", {});
     };
 
     return (
@@ -42,12 +38,14 @@ export default function AccountMenu({
                 vertical: "top",
                 horizontal: "right"
             }}>
-            <MenuItem onClick={onSettingClick}>
-                <ListItemText
-                    primary={user?.firstName + " " + user?.lastName}
-                    secondary={"Spravovat"}
-                />
-            </MenuItem>
+            <Link to="account" state={undefined} params={{}}>
+                <MenuItem>
+                    <ListItemText
+                        primary={user?.firstName + " " + user?.lastName}
+                        secondary={"Spravovat"}
+                    />
+                </MenuItem>
+            </Link>
             <MenuItem onClick={onLogoutClick}>Odhlásit se</MenuItem>
         </Menu>
     );

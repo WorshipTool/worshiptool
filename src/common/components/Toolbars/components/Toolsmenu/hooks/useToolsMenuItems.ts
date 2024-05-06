@@ -1,18 +1,22 @@
 import { isMobile, isTablet } from "react-device-detect";
-import { useSmartNavigate } from "../../../../../../routes";
+import { RouterProps, useSmartNavigate } from "../../../../../../routes";
 import { SxProps } from "@mui/material";
 import useAuth from "../../../../../../hooks/auth/useAuth";
 import { useMemo } from "react";
 import { isDevelopment } from "../../../../../../tech/development.tech";
+import { LinkProps } from "../../../../../ui/Link/CustomLink";
 
-interface MenuItem {
+export type MenuItemProps<T extends keyof RouterProps> = {
     title: string;
     image: string;
-    action: () => void;
+    action?: () => void;
+    to?: LinkProps<T>["to"];
+    toParams?: LinkProps<T>["params"];
+    toState?: LinkProps<T>["state"];
     disabled?: boolean;
     hidden?: boolean;
     sx?: SxProps;
-}
+};
 
 export const searchGroupsEvent = new Event("searchGroups");
 
@@ -21,31 +25,26 @@ export default function useToolsMenuItems() {
 
     const { isAdmin, isLoggedIn } = useAuth();
 
-    const items: MenuItem[] = useMemo(() => {
+    const items: MenuItemProps<any>[] = useMemo(() => {
         return [
             {
                 title: "Playlisty",
                 image: "https://cdn-icons-png.flaticon.com/512/636/636224.png",
-                action: () => {
-                    navigate("usersPlaylists", {});
-                },
+                to: "usersPlaylists",
                 disabled: isMobile && !isTablet
             },
             {
                 title: "Moje",
                 image: "https://cdn-icons-png.flaticon.com/512/10627/10627120.png",
-                action: () => {
-                    navigate("usersSongs", {});
-                },
+                to: "usersSongs",
                 disabled: isMobile && !isTablet
             },
 
             {
                 title: "13ka",
                 image: "/static/assets/13ka-icon.png",
-                action: () => {
-                    navigate("group", { params: { groupCode: "13ka" } });
-                },
+                to: "group",
+                toParams: { groupCode: "13ka" },
                 disabled: isMobile && !isTablet
             },
             {
@@ -64,17 +63,13 @@ export default function useToolsMenuItems() {
                       {
                           title: "Test",
                           image: "https://cdn-icons-png.flaticon.com/512/5334/5334823.png",
-                          action: () => {
-                              navigate("test", {});
-                          },
+                          to: "test",
                           hidden: !isAdmin()
                       },
                       {
                           title: "Components",
                           image: "https://icons.veryicon.com/png/o/miscellaneous/tymon/basic-components.png",
-                          action: () => {
-                              navigate("testComponents", {});
-                          },
+                          to: "testComponents",
                           hidden: !isAdmin()
                       }
                   ]

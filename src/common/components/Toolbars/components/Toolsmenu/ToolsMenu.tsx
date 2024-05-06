@@ -52,12 +52,8 @@ export default function ToolsMenu({ open, onClose }: ToolsMenuProps) {
                                 )
                                 .map((item, j) => (
                                     <MenuItem
-                                        title={item.title}
-                                        img={item.image}
-                                        onClick={item.action}
-                                        disabled={item.disabled}
+                                        {...item}
                                         key={`menuitem${item.title}`}
-                                        sx={item.sx}
                                     />
                                 ))}
                         </Box>
