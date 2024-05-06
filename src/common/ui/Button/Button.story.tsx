@@ -7,8 +7,17 @@ const ButtonStory = () => {
         <div>
             <Button>Hello Button</Button>
             <Gap />
-            <Button size="small" color="secondary">
-                Hello Button
+            <Button size="small" color="secondary" to="home">
+                Button with link
+            </Button>
+            <Gap />
+            <Button
+                size="small"
+                tooltip="Helloo"
+                to="home"
+                variant="outlined"
+                tooltipPlacement="right">
+                Button with tooltip
             </Button>
         </div>
     );

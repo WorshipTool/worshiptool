@@ -15,10 +15,14 @@ const Container = styled(Box)(({ theme }) => ({
     pointerEvents: "auto"
 }));
 
-interface ButtonComponentProps extends React.HTMLAttributes<HTMLDivElement> {
-    children?: React.ReactNode;
-}
+// interface ButtonComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+//     children?: React.ReactNode;
+// }
 
-export function Clickable(props: ButtonComponentProps) {
+type ClickableProps = {
+    children?: React.ReactNode;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+export function Clickable(props: ClickableProps) {
     return <Container {...props}>{props.children}</Container>;
 }

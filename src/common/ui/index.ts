@@ -8,3 +8,4 @@ export * from "./Gap";
 export * from "./SongCard";
 export * from "./Button";
 export * from "./ButtonGroup";
+export * from "./IconButton";

@@ -8,3 +8,4 @@ export * from "./SearchBar/SearchBar.story";
 // export * from "./Link/CustomLink.story";
 export * from "./SongCard/SongCard.story";
 export * from "./Clickable/Clickable.story";
+export * from "./IconButton/IconButton.story";

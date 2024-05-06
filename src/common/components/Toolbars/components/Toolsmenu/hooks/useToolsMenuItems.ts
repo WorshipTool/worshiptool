@@ -75,7 +75,7 @@ export default function useToolsMenuItems() {
                           action: () => {
                               navigate("testComponents", {});
                           },
-                          hidden: !isLoggedIn
+                          hidden: !isAdmin()
                       }
                   ]
                 : [])

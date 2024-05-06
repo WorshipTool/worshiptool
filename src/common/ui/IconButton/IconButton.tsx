@@ -1,16 +1,16 @@
-import { Button as Btn } from "@mui/material";
-import { CustomLink } from "../Link";
-import { CommonLinkProps, CustomLinkProps } from "../Link/CustomLink";
+import React, { ComponentProps } from "react";
+import { IconButton as IconBtn } from "@mui/material";
+import { ColorType } from "../ui.types";
+import { Clickable } from "../Clickable";
+import { CommonLinkProps, CustomLink } from "../Link/CustomLink";
 import { RouterProps } from "../../../routes";
 import Tooltip from "../CustomTooltip/Tooltip";
-import { ComponentProps } from "react";
 
-type ButtonProps<T extends keyof RouterProps> = {
-    children?: string;
-    variant?: "contained" | "outlined" | "text";
-    color?: "primary" | "secondary" | "success" | "error" | "inherit";
-    size?: "small" | "medium" | "large";
+type IconButtonProps<T extends keyof RouterProps> = {
+    children: React.ReactNode;
     onClick?: () => void;
+    color?: ColorType;
+
     tooltip?: string;
     tooltipPlacement?: ComponentProps<typeof Tooltip>["placement"];
     to?: CommonLinkProps<T>["to"];
@@ -18,19 +18,12 @@ type ButtonProps<T extends keyof RouterProps> = {
     toState?: CommonLinkProps<T>["state"];
 };
 
-export const Button = <T extends keyof RouterProps>({
-    children = "",
-    variant = "contained",
+export const IconButton = <T extends keyof RouterProps>({
     color = "primary",
-    size = "medium",
-    onClick,
-
     ...props
-}: ButtonProps<T>) => {
+}: IconButtonProps<T>) => {
     const ButtonComponent = () => (
-        <Btn variant={variant} color={color} size={size} onClick={onClick}>
-            {children}
-        </Btn>
+        <IconBtn color={color}>{props.children}</IconBtn>
     );
 
     const typedParams: CommonLinkProps<T>["params"] =
@@ -46,12 +39,17 @@ export const Button = <T extends keyof RouterProps>({
         ) : (
             <ButtonComponent />
         );
-
-    return props.tooltip ? (
-        <Tooltip title={props.tooltip} placement={props.tooltipPlacement}>
-            <LinkComponent />
-        </Tooltip>
-    ) : (
-        <LinkComponent />
+    return (
+        <Clickable>
+            {props.tooltip ? (
+                <Tooltip
+                    title={props.tooltip}
+                    placement={props.tooltipPlacement}>
+                    <LinkComponent />
+                </Tooltip>
+            ) : (
+                <LinkComponent />
+            )}
+        </Clickable>
     );
 };

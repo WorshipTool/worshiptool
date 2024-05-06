@@ -3,7 +3,7 @@ import { Box, Link, styled, Typography, useTheme } from "@mui/material";
 import { SongVariantDto } from "../../../api/dtos";
 import useAuth from "../../../hooks/auth/useAuth";
 import CustomChip from "../CustomChip/CustomChip";
-import CustomLink from "../Link/CustomLink";
+import { CustomLink } from "../Link/CustomLink";
 import { parseVariantAlias } from "../../../routes";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
