@@ -6,6 +6,8 @@ import {
     useTheme
 } from "@mui/material";
 import React from "react";
+import { CommonLinkProps, Link, LinkProps } from "../../../ui/Link/CustomLink";
+import { RouterProps } from "../../../../routes";
 
 const Container = styled(Box)(({ theme }) => ({
     width: 180,
@@ -30,7 +32,7 @@ const Container = styled(Box)(({ theme }) => ({
     pointerEvents: "auto"
 }));
 
-interface GroupToolbarActionButtonProps {
+type GroupToolbarActionButtonProps<T extends keyof RouterProps> = {
     label?: string;
     secondaryLabel?: string;
     icon?: React.ReactNode;
@@ -39,22 +41,24 @@ interface GroupToolbarActionButtonProps {
     visible?: boolean;
     id?: number;
     loading?: boolean;
-}
+    to?: LinkProps<T>["to"];
+    toParams?: LinkProps<T>["params"];
+    toState?: LinkProps<T>["state"];
+};
 
-export default function GroupToolbarActionButton({
+export default function GroupToolbarActionButton<T extends keyof RouterProps>({
     label = "",
     icon,
     onClick,
     variant = "white",
-    visible = true,
-    id = 0,
     secondaryLabel,
-    loading
-}: GroupToolbarActionButtonProps) {
+    loading,
+    ...props
+}: GroupToolbarActionButtonProps<T>) {
     const theme = useTheme();
 
-    let bg;
-    let color;
+    let bg: any;
+    let color: any;
     switch (variant) {
         case "primary":
             bg = `linear-gradient(130deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`;
@@ -71,7 +75,7 @@ export default function GroupToolbarActionButton({
     }
 
     const duration = 200;
-    return (
+    const Component = () => (
         <Container
             sx={{
                 background: bg,
@@ -134,5 +138,18 @@ export default function GroupToolbarActionButton({
                 </Box>
             )}
         </Container>
+    );
+
+    const typedParams: CommonLinkProps<T>["params"] =
+        props.toParams as CommonLinkProps<T>["params"];
+    const typedState: CommonLinkProps<T>["state"] =
+        props.toState as CommonLinkProps<T>["state"];
+
+    return props.to ? (
+        <Link to={props.to} params={typedParams} state={typedState}>
+            <Component />
+        </Link>
+    ) : (
+        Component()
     );
 }

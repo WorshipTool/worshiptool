@@ -189,7 +189,11 @@ export default function RightAccountPanel({
                                     <IconButton
                                         tooltip="Účet"
                                         color="inherit"
-                                        sx={iconButtonStyle}
+                                        sx={{
+                                            ...iconButtonStyle,
+                                            marginRight: -2,
+                                            marginLeft: "-0.35rem"
+                                        }}
                                         onClick={onAccountClick}>
                                         <ProfileImage
                                             size={26}

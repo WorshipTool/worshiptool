@@ -6,7 +6,7 @@ import useCurrentPlaylist from "../../../../hooks/playlist/useCurrentPlaylist";
 import usePlaylists from "../../../../hooks/playlist/usePlaylists";
 import GroupToolbarActionButton from "./GroupToolbarActionButton";
 import { useApiStateEffect } from "../../../../tech/ApiState";
-import { useSmartNavigate } from "../../../../routes";
+import { SmartParams, useSmartNavigate } from "../../../../routes";
 
 interface QuickActionsProps {
     visible?: boolean;
@@ -47,11 +47,6 @@ export default function QuickActions({ visible }: QuickActionsProps) {
 
     const openPlaylistToEdit = () => {
         navigate("playlist", { params: { guid } });
-    };
-
-    const openPinnedPlaylist = () => {
-        if (!pinnedState.data) return;
-        navigate("playlist", { params: { guid: pinnedState.data.guid } });
     };
 
     return (
@@ -106,7 +101,10 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                             secondaryLabel="Připnuté"
                             variant="secondary"
                             icon={<PushPin />}
-                            onClick={openPinnedPlaylist}
+                            to={"playlist"}
+                            toParams={{
+                                guid: pinnedState.data.guid
+                            }}
                             visible={visible}
                             id={4}
                         />
