@@ -1,9 +1,9 @@
 import React from "react";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import useMySongs from "./hooks/useMySongs";
 import MySongItem from "./components/MySongItem";
-import Gap from "../../components/Gap";
+import Gap from "../../common/ui/Gap/Gap";
 import { useWindowTitle } from "../../hooks/useWindowTitle";
 import { parseVariantAlias, useSmartNavigate } from "../../routes";
 
@@ -50,18 +50,7 @@ export default function MySongsList() {
                                     <MySongItem
                                         variant={variant}
                                         index={index}
-                                        key={`mysong${variant.guid}`}
-                                        onClick={() => {
-                                            if (variant)
-                                                navigate("variant", {
-                                                    params: parseVariantAlias(
-                                                        variant.alias
-                                                    ),
-                                                    state: {
-                                                        title: variant.preferredTitle
-                                                    }
-                                                });
-                                        }}></MySongItem>
+                                        key={`mysong${variant.guid}`}></MySongItem>
                                 );
                             })}
 

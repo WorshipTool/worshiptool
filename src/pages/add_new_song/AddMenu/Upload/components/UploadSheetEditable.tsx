@@ -1,6 +1,6 @@
 import { Sheet } from "@pepavlin/sheet-api";
 import React, { useMemo, useState } from "react";
-import DefaultStyle from "../../../../../components/SheetDisplay/styles/DefaultStyle";
+import DefaultStyle from "../../../../../common/components/SheetDisplay/styles/DefaultStyle";
 import {
     Box,
     Button,

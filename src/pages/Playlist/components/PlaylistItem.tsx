@@ -1,23 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import useInnerPlaylist from "../hooks/useInnerPlaylist";
 import useCurrentPlaylist from "../../../hooks/playlist/useCurrentPlaylist";
-import {
-    Box,
-    Button,
-    Chip,
-    IconButton,
-    Paper,
-    Skeleton,
-    Typography
-} from "@mui/material";
+import { Box, Paper, Skeleton, Typography } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-import DefaultStyle from "../../../components/SheetDisplay/styles/DefaultStyle";
+import DefaultStyle from "../../../common/components/SheetDisplay/styles/DefaultStyle";
 import { PlaylistItemDTO } from "../../../interfaces/playlist/PlaylistDTO";
 
 import { Sheet } from "@pepavlin/sheet-api";
 import useAuth from "../../../hooks/auth/useAuth";
 import { LoadingButton } from "@mui/lab";
 import { parseVariantAlias, useSmartNavigate } from "../../../routes";
+import { Button, IconButton } from "../../../common/ui";
 
 const PageBreak = () => {
     return (
@@ -82,15 +75,6 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 
     const navigate = useSmartNavigate();
 
-    const open = () => {
-        navigate("variant", {
-            params: parseVariantAlias(item.variant.alias),
-            state: {
-                title: item.variant.preferredTitle
-            }
-        });
-    };
-
     const rerender = () => {
         setNumber((prev) => prev + 1);
     };
@@ -128,17 +112,19 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
                     flexDirection={"row"}
                     justifyContent={"space-between"}>
                     {isOwner ? (
-                        <Box>
+                        <Box display={"flex"}>
                             <IconButton
                                 onClick={() => {
                                     transpose(1);
-                                }}>
+                                }}
+                                color="inherit">
                                 <Add />
                             </IconButton>
                             <IconButton
                                 onClick={() => {
                                     transpose(-1);
-                                }}>
+                                }}
+                                color="inherit">
                                 <Remove />
                             </IconButton>
                         </Box>
@@ -164,15 +150,21 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 
                     <Box display={"flex"} flexDirection={"row"}>
                         {isOwner && (
-                            <LoadingButton
+                            <Button
                                 loading={removing}
                                 variant="text"
                                 color="error"
                                 onClick={onRemove}>
                                 Odebrat z playlistu
-                            </LoadingButton>
+                            </Button>
                         )}
-                        <Button variant="text" onClick={open}>
+                        <Button
+                            variant="text"
+                            to="variant"
+                            toParams={parseVariantAlias(item.variant.alias)}
+                            toState={{
+                                title: item.variant.preferredTitle
+                            }}>
                             Otevřít
                         </Button>
                     </Box>

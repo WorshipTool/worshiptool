@@ -1,6 +1,6 @@
 import { Box, Divider, LinearProgress, Typography } from "@mui/material";
-import Card from "../../../../components/Card/Card";
-import Gap from "../../../../components/Gap";
+import Card from "../../../../common/ui/Card/Card";
+import Gap from "../../../../common/ui/Gap/Gap";
 import { usePermission } from "../../../../hooks/auth/usePermission";
 import useGroup from "../../../../hooks/group/useGroup";
 import UsersPanel from "./UsersPanel";

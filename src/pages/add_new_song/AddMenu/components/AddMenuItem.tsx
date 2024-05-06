@@ -1,10 +1,12 @@
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import React from "react";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
+import { Link, LinkProps } from "../../../../common/ui/Link/CustomLink";
+import { RouterProps } from "../../../../routes";
 
 interface AddMenuItemProps {
     title?: string;
-    onClick?: () => void;
+    to: LinkProps<keyof RouterProps>["to"];
     icon?: React.ReactNode;
     iconSize?: number;
     disabled?: boolean;
@@ -15,11 +17,11 @@ interface AddMenuItemProps {
 export default function AddMenuItem(props: AddMenuItemProps) {
     const size = 200;
     return (
-        <div
-            onClick={() => {
-                if (props.disabled) return;
-                props?.onClick?.();
-            }}>
+        <Link
+            to={props.to}
+            params={{}}
+            state={undefined}
+            disabled={props.disabled}>
             <Paper
                 sx={{
                     width: size,
@@ -100,6 +102,6 @@ export default function AddMenuItem(props: AddMenuItemProps) {
                     <CircularProgress color="inherit" size={40} />
                 </Box>
             )}
-        </div>
+        </Link>
     );
 }

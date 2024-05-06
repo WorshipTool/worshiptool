@@ -1,8 +1,8 @@
 import React from "react";
-import Card from "../../../../../components/Card/Card";
+import Card from "../../../../../common/ui/Card/Card";
 import { Groups } from "@mui/icons-material";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import Gap from "../../../../../components/Gap";
+import Gap from "../../../../../common/ui/Gap/Gap";
 import { useApiState } from "../../../../../tech/ApiState";
 import { useApi } from "../../../../../hooks/api/useApi";
 import { handleApiCall } from "../../../../../tech/handleApiCall";

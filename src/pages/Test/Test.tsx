@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
 import { useSmartNavigate } from "../../routes";
+import { Button, IconButton } from "../../common/ui";
 
 export default function Test() {
-    const navigate = useSmartNavigate();
-
+    const onClick = (e: any) => {};
     return (
-        <div>
-            baf
-            <button
-                onClick={() => {
-                    navigate("home", {});
-                }}>
-                click
-            </button>
+        <div
+            style={{
+                backgroundColor: "red",
+                padding: 20
+            }}>
+            <IconButton onClick={onClick}>Ahoj</IconButton>
         </div>
     );
 }

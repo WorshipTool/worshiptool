@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import {
     Box,
-    Button,
     Divider,
     Skeleton,
     Typography,
@@ -17,6 +16,8 @@ import Playlist from "../../../../interfaces/playlist/PlaylistDTO";
 import { useApiState } from "../../../../tech/ApiState";
 import useInnerPlaylist from "../../hooks/useInnerPlaylist";
 import { parseVariantAlias, useSmartNavigate } from "../../../../routes";
+import { Link } from "../../../../common/ui/Link/CustomLink";
+import { Button } from "../../../../common/ui";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
@@ -77,106 +78,123 @@ export default function SearchItem({
 
     const navigate = useSmartNavigate();
 
-    const open = () => {
-        navigate("variant", {
-            params: parseVariantAlias(variant.alias),
-            state: { title: variant.preferredTitle }
-        });
-    };
     const { user } = useAuth();
     const theme = useTheme();
 
+    const variantParams = parseVariantAlias(variant.alias);
+
     return (
-        <Box>
-            {false ? (
-                <Box
-                    justifyContent={"center"}
-                    display={"flex"}
-                    flexDirection={"column"}>
-                    <Skeleton variant="text" width={"100%"}></Skeleton>
-                    {Array(2)
-                        .fill(1)
-                        .map((a, index) => {
-                            return (
-                                <Skeleton
-                                    variant="text"
-                                    width={Math.round(Math.random() * 80) + "%"}
-                                    key={variant.guid + "s" + index}></Skeleton>
-                            );
-                        })}
-                </Box>
-            ) : (
-                <StyledContainer
-                    onClick={onSongClick}
-                    sx={{
-                        borderColor:
-                            variant.verified || variant.createdByLoader
-                                ? "transparent"
-                                : "grey"
-                    }}>
-                    <Box padding={"1rem"}>
-                        {variant.createdBy == user?.guid && (
-                            <Typography variant="subtitle2">
-                                Vytvořeno vámi.
-                            </Typography>
-                        )}
-
-                        <Box display={"flex"}>
-                            <Typography fontWeight={"bold"} flex={1}>
-                                {variant.preferredTitle}
-                            </Typography>
-                            {!variant.verified ? (
-                                <>
-                                    {variant.createdByLoader ? (
-                                        <Typography variant="caption">
-                                            Nahráno programem
-                                        </Typography>
-                                    ) : (
-                                        <>
-                                            <Typography variant="caption">
-                                                Neověřeno
-                                            </Typography>
-                                        </>
-                                    )}
-                                </>
-                            ) : (
-                                <></>
-                            )}
-                        </Box>
-
-                        <StyledBox>
-                            {sheet
-                                .getSections()[0]
-                                ?.text?.split("\n")
-                                .slice(0, 4)
-                                .map((line, index) => {
-                                    return (
-                                        <Typography
-                                            noWrap
-                                            key={"SearchItemText" + line}>
-                                            {line}
-                                        </Typography>
-                                    );
-                                })}
-                        </StyledBox>
+        <Link
+            to="variant"
+            params={variantParams}
+            state={{
+                title: variant.preferredTitle
+            }}
+            onlyWithShift>
+            <Box>
+                {false ? (
+                    <Box
+                        justifyContent={"center"}
+                        display={"flex"}
+                        flexDirection={"column"}>
+                        <Skeleton variant="text" width={"100%"}></Skeleton>
+                        {Array(2)
+                            .fill(1)
+                            .map((a, index) => {
+                                return (
+                                    <Skeleton
+                                        variant="text"
+                                        width={
+                                            Math.round(Math.random() * 80) + "%"
+                                        }
+                                        key={
+                                            variant.guid + "s" + index
+                                        }></Skeleton>
+                                );
+                            })}
                     </Box>
+                ) : (
+                    <StyledContainer
+                        onClick={onSongClick}
+                        sx={{
+                            borderColor:
+                                variant.verified || variant.createdByLoader
+                                    ? "transparent"
+                                    : "grey"
+                        }}>
+                        <Box padding={"1rem"}>
+                            {variant.createdBy == user?.guid && (
+                                <Typography variant="subtitle2">
+                                    Vytvořeno vámi.
+                                </Typography>
+                            )}
 
-                    {bottomPanelOpen && (
-                        <Box display={"flex"} flexDirection={"column"}>
-                            <Divider />
-                            <Button variant="text" onClick={open}>
-                                Otevřít
-                            </Button>
-                            <LoadingButton
-                                variant="contained"
-                                onClick={addToPlaylist}
-                                loading={loading}>
-                                Přidat do playlistu
-                            </LoadingButton>
+                            <Box display={"flex"}>
+                                <Typography fontWeight={"bold"} flex={1}>
+                                    {variant.preferredTitle}
+                                </Typography>
+                                {!variant.verified ? (
+                                    <>
+                                        {variant.createdByLoader ? (
+                                            <Typography variant="caption">
+                                                Nahráno programem
+                                            </Typography>
+                                        ) : (
+                                            <>
+                                                <Typography variant="caption">
+                                                    Neověřeno
+                                                </Typography>
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
+                            </Box>
+
+                            <StyledBox>
+                                {sheet
+                                    .getSections()[0]
+                                    ?.text?.split("\n")
+                                    .slice(0, 4)
+                                    .map((line, index) => {
+                                        return (
+                                            <Typography
+                                                noWrap
+                                                key={"SearchItemText" + line}>
+                                                {line}
+                                            </Typography>
+                                        );
+                                    })}
+                            </StyledBox>
                         </Box>
-                    )}
-                </StyledContainer>
-            )}
-        </Box>
+
+                        {bottomPanelOpen && (
+                            <Box display={"flex"} flexDirection={"column"}>
+                                <Divider />
+                                <Button
+                                    variant="text"
+                                    to="variant"
+                                    toParams={variantParams}
+                                    toState={{
+                                        title: variant.preferredTitle
+                                    }}
+                                    sx={{
+                                        flex: 1
+                                    }}>
+                                    Otevřít
+                                </Button>
+                                <LoadingButton
+                                    variant="contained"
+                                    onClick={addToPlaylist}
+                                    loading={loading}>
+                                    Přidat do playlistu
+                                </LoadingButton>
+                            </Box>
+                        )}
+                    </StyledContainer>
+                )}
+            </Box>
+        </Link>
     );
 }

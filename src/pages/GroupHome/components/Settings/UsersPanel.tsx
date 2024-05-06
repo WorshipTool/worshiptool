@@ -9,9 +9,9 @@ import {
     LinearProgress,
     Typography
 } from "@mui/material";
-import { SkeletonLoader } from "../../../../components/SkeletonLoader";
+import { SkeletonLoader } from "../../../../common/providers/SkeletonLoader";
 import GroupUserItem from "./components/GroupUserItem";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 import AddUserItem from "./components/AddUserItem";
 import { Add } from "@mui/icons-material";
 

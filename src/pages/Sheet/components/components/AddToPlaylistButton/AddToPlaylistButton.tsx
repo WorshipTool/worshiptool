@@ -143,7 +143,13 @@ export default function AddToPlaylistButton({
 
                 {playlists && playlists.length > maxItems && (
                     <>
-                        <Divider />
+                        <div
+                            style={{
+                                paddingTop: theme.spacing(1),
+                                paddingBottom: theme.spacing(1)
+                            }}>
+                            <Divider />
+                        </div>
 
                         <MenuItem onClick={() => setOpenDialog(true)}>
                             <ListItemIcon>

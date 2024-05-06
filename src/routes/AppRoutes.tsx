@@ -18,6 +18,7 @@ import Login from "../pages/Login/Login";
 import Upload from "../pages/add_new_song/AddMenu/Upload/Upload";
 import Create from "../pages/add_new_song/Write/Create";
 import List from "../pages/List/List";
+import TestComponents from "../pages/TestComponents/TestComponents";
 
 export const AppRoutes = () => {
     return (
@@ -39,6 +40,7 @@ export const AppRoutes = () => {
             <Route path={p.documentation} element={<Documentation />} />
             <Route path={p.group + "/*"} element={<GroupScreen />} />
             <Route path={p.test} element={<Test />} />
+            <Route path={p.testComponents} element={<TestComponents />} />
             <Route path="*" element={<ErrorPage />} />
         </Routes>
     );

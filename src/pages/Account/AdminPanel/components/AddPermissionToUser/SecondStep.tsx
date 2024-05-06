@@ -8,9 +8,9 @@ import {
     Typography
 } from "@mui/material";
 import { usePermissions } from "../../../../../hooks/auth/usePermissions";
-import Gap from "../../../../../components/Gap";
+import Gap from "../../../../../common/ui/Gap/Gap";
 import PermissionItem from "./PermissionItem";
-import { SkeletonLoader } from "../../../../../components/SkeletonLoader";
+import { SkeletonLoader } from "../../../../../common/providers/SkeletonLoader";
 import { useState } from "react";
 
 type SecondStepProps = {

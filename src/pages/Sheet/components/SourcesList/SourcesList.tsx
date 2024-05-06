@@ -2,7 +2,7 @@ import React from "react";
 import { SongVariantDto } from "../../../../api/dtos";
 import SourceListItem from "./SourceListItem";
 import { Box, Typography } from "@mui/material";
-import Gap from "../../../../components/Gap";
+import Gap from "../../../../common/ui/Gap/Gap";
 
 export type SongPageProps = {
     variant: SongVariantDto;

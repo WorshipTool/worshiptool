@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { BaseUserInfoOutDto } from "../../../../../api/generated";
 import { Close, Delete, Remove } from "@mui/icons-material";
-import CustomChip from "../../../../../components/CustomChip/CustomChip";
+import CustomChip from "../../../../../common/ui/CustomChip/CustomChip";
 import { useUserProfileImage } from "../../../../../hooks/useUserProfileImage";
 import { useApi } from "../../../../../hooks/api/useApi";
 import { useApiState } from "../../../../../tech/ApiState";

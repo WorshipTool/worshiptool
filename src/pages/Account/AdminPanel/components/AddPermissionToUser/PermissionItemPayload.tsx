@@ -6,7 +6,7 @@ import {
 import { Box, CircularProgress, NativeSelect, Typography } from "@mui/material";
 import { useGroups } from "../../../../../hooks/group/useGroups";
 import { useApiStateEffect } from "../../../../../tech/ApiState";
-import { SkeletonLoader } from "../../../../../components/SkeletonLoader";
+import { SkeletonLoader } from "../../../../../common/providers/SkeletonLoader";
 
 type PermissionItemPayloadProps<T extends PermissionType> = {
     type: T;

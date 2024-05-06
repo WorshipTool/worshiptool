@@ -10,13 +10,13 @@ import {
     styled
 } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Gap from "../../components/Gap";
+import Gap from "../../common/ui/Gap/Gap";
 import SidePanel from "./components/LeftPanel/SidePanel";
 import RightPanel from "./components/RightPanel/RightPanel";
 import useInnerPlaylist, {
     InnerPlaylistProvider
 } from "./hooks/useInnerPlaylist";
-import AppLayout from "../../components/app/AppLayout/AppLayout";
+import AppLayout from "../../common/components/app/AppLayout/AppLayout";
 import useAuth from "../../hooks/auth/useAuth";
 import { PlaylistItem } from "./components/PlaylistItem";
 import { useWindowTitle } from "../../hooks/useWindowTitle";

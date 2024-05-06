@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ListSongData } from "../../api/generated";
-import Gap from "../../components/Gap";
-import Toolbar from "../../components/Toolbars/Toolbar";
+import Gap from "../../common/ui/Gap/Gap";
+import Toolbar from "../../common/components/Toolbars/Toolbar";
 import { useApi } from "../../hooks/api/useApi";
 import usePagination from "../../hooks/usePagination";
 import { handleApiCall } from "../../tech/handleApiCall";

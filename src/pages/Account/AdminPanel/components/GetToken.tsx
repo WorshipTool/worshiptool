@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { useApi } from "../../../../hooks/api/useApi";
 import { LoginRequestDTO } from "../../../../api/dtos/dtosAuth";
-import Card from "../../../../components/Card/Card";
+import Card from "../../../../common/ui/Card/Card";
 import { Token } from "@mui/icons-material";
 import useAuth from "../../../../hooks/auth/useAuth";
 

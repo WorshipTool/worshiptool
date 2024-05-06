@@ -17,8 +17,8 @@ import {
 import { sectionNameToText } from "../../../tech/sectionNameToText";
 import { PlaylistItemDTO } from "../../../interfaces/playlist/PlaylistDTO";
 import { Sheet } from "@pepavlin/sheet-api";
-import Gap from "../../../components/Gap";
-import OnChangeDelayer from "../../../components/ChangeDelayer";
+import Gap from "../../../common/ui/Gap/Gap";
+import OnChangeDelayer from "../../../common/providers/ChangeDelayer/ChangeDelayer";
 import { Section } from "@pepavlin/sheet-api/lib/models/song/section";
 
 const sectionPart = (section: Section, fontSize: number) => {

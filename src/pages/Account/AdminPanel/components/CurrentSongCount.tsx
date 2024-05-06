@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../../../components/Card/Card";
+import Card from "../../../../common/ui/Card/Card";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { handleApiCall } from "../../../../tech/handleApiCall";
 import { useApi } from "../../../../hooks/api/useApi";

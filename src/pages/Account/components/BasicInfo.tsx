@@ -3,8 +3,8 @@ import React from "react";
 import useAuth from "../../../hooks/auth/useAuth";
 import AccountImage from "../../../assets/images/account.webp";
 import { ROLES } from "../../../interfaces/user";
-import Gap from "../../../components/Gap";
-import Card from "../../../components/Card/Card";
+import Gap from "../../../common/ui/Gap/Gap";
+import Card from "../../../common/ui/Card/Card";
 
 export default function BasicInfo() {
     const { info } = useAuth();

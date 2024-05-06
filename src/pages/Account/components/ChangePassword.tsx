@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useWindowTitle } from "../../../hooks/useWindowTitle";
-import Card from "../../../components/Card/Card";
+import Card from "../../../common/ui/Card/Card";
 
 export default function ChangePassword() {
     useWindowTitle("Změna hesla");
