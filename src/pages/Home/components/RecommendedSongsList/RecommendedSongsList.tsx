@@ -1,11 +1,4 @@
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Grid,
-    Typography,
-    styled
-} from "@mui/material";
+import { Box, CircularProgress, Grid, Typography, styled } from "@mui/material";
 import ContainerGrid from "../../../../common/components/ContainerGrid";
 import Gap from "../../../../common/ui/Gap/Gap";
 import SongListCards, {
@@ -13,6 +6,7 @@ import SongListCards, {
 } from "../../../../common/components/songLists/SongListCards/SongListCards";
 import useRecommendedSongs from "./hooks/useRecommendedSongs";
 import { useSmartNavigate } from "../../../../routes";
+import { Button } from "../../../../common/ui";
 
 const GridContainer = styled(Grid)(({ theme }) => ({
     padding: 10,
@@ -29,10 +23,6 @@ export default function RecommendedSongsList({
     const { data, isLoading, isError, isSuccess } = useRecommendedSongs();
 
     const navigate = useSmartNavigate();
-
-    const openList = () => {
-        navigate("songsList", {});
-    };
 
     return (
         <ContainerGrid>
@@ -69,7 +59,7 @@ export default function RecommendedSongsList({
 
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
                 <Typography variant="subtitle2">Nebo si vyberte ze </Typography>
-                <Button size="small" variant="text" onClick={openList}>
+                <Button size="small" variant="text" to="songsList">
                     Seznamu
                 </Button>
                 <Typography variant="subtitle2">

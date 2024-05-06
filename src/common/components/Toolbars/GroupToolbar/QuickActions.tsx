@@ -45,10 +45,6 @@ export default function QuickActions({ visible }: QuickActionsProps) {
         window.dispatchEvent(new Event("searchBarFocus"));
     };
 
-    const openPlaylistToEdit = () => {
-        navigate("playlist", { params: { guid } });
-    };
-
     return (
         <Box>
             <Box display={"flex"} flexDirection={"row"} gap={1}>
@@ -116,7 +112,8 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                         secondaryLabel={playlist?.title}
                         variant="secondary"
                         icon={<Edit></Edit>}
-                        onClick={openPlaylistToEdit}
+                        to="playlist"
+                        toParams={{ guid }}
                         visible={visible}
                         id={3}
                     />
