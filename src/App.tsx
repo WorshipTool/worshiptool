@@ -1,13 +1,18 @@
+import { lazy, Suspense } from "react";
 import "./App.css";
-import AppContainer from "./common/components/app/AppContainer";
-import AppProviders from "./common/components/app/AppProviders";
+import LoadingScreen from "./common/components/app/LoadingApp/LoadingScreen";
+
+const AppContainer = lazy(() => import("./common/components/app/AppContainer"));
+const AppProviders = lazy(() => import("./common/components/app/AppProviders"));
 
 function App() {
     return (
         <div>
-            <AppProviders>
-                <AppContainer />
-            </AppProviders>
+            <Suspense fallback={<LoadingScreen />}>
+                <AppProviders>
+                    <AppContainer />
+                </AppProviders>
+            </Suspense>
         </div>
     );
 }
