@@ -1,11 +1,11 @@
-import { Box, Button } from "@mui/material";
-import Tooltip from "./Tooltip";
-import { createStory } from "../../../pages/TestComponents/createStory";
+import { Button } from '@mui/material'
+import { createStory } from '../../../app/storybook/createStory'
+import Tooltip from './Tooltip'
 
 const CustomToolkipStory = () => (
-    <Tooltip title="This is a custom tooltip" placement="top-start">
-        <Button>Hover me</Button>
-    </Tooltip>
-);
+	<Tooltip title="This is a custom tooltip" placement="top-start">
+		<Button>Hover me</Button>
+	</Tooltip>
+)
 
-createStory(Tooltip, CustomToolkipStory);
+createStory(Tooltip, CustomToolkipStory)

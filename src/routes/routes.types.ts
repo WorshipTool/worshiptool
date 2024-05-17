@@ -1,41 +1,34 @@
-import { NavigateOptions } from "react-router-dom";
-import { RouterProps, routesParams } from "./routes";
+import { DynamicRoute, Route } from 'nextjs-routes'
 
-export type RoutesPropsType = Record<string, undefined | Record<string, any>>;
-export type RoutesPathsType<TRouterProps extends RoutesPropsType> = Record<
-    keyof TRouterProps,
-    string
->;
-export type RoutesParamsType<TRouterProps extends RoutesPropsType> = Record<
-    keyof TRouterProps,
-    string[] | undefined
->;
+import { routesPaths, routesSearchParams } from './routes'
 
-export type SmartTo<T extends keyof RoutesPropsType> = T;
-export type SmartState<T extends keyof RouterProps> = T extends string
-    ? RouterProps[T]
-    : undefined;
+export type RoutesKeys =
+	| keyof typeof routesPaths
+	| keyof typeof routesSearchParams
+type Path<T extends RoutesKeys> = (typeof routesPaths)[T]
+type SmartRoute<T extends RoutesKeys> = Extract<Route, { pathname: Path<T> }>
 
-// from record, for example: group: {T: ["groupName", "groupCode"]}, I want to get {groupName: string, groupCode: string}
-type PartParams<T extends keyof typeof routesParams> = (typeof routesParams)[T];
+type DynamicRouteParams<T extends Route> = T extends DynamicRoute<
+	any,
+	infer Params
+>
+	? Params
+	: never
 
-export type SmartParams<T extends keyof typeof routesParams> = Record<
-    PartParams<T>[number],
-    string
->;
+export type SmartParams<T extends RoutesKeys> =
+	SmartRoute<T> extends DynamicRoute<any, any>
+		? DynamicRouteParams<SmartRoute<T>>
+		: {}
 
-type NavigateOptionsNoState = Omit<NavigateOptions, "state">;
+export type SmartSearchParams<T extends RoutesKeys> =
+	T extends keyof typeof routesSearchParams
+		? (typeof routesSearchParams)[T]
+		: {}
 
-// If SmartState<T> is undefined join state?, otherwise join state: SmartState<T>
-export type SmartNavigateOptions<T extends keyof RouterProps> =
-    NavigateOptionsNoState & SmartNavigatePartOptions<T>;
-type SmartNavigatePartOptions<T extends keyof RouterProps> = RemoveUndefined<{
-    state: SmartState<T>;
-    params: T extends keyof typeof routesParams ? SmartParams<T> : undefined;
-}>;
+export type SmartAllParams<T extends RoutesKeys> = SmartParams<T> &
+	SmartSearchParams<T>
 
-type RemoveUndefined<T> = {
-    [K in keyof T as T[K] extends undefined ? never : K]: T[K];
-};
-
-type test = SmartNavigatePartOptions<"home">;
+export type PageParams<T extends RoutesKeys> = {
+	params: SmartParams<T>
+	searchParams: SmartSearchParams<T>
+}
