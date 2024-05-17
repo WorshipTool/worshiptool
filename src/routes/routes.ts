@@ -1,10 +1,10 @@
+import { FRONTEND_URL } from '../api/constants'
+import { RoutesKeys, SmartParams } from './routes.types'
+
 export const getReplacedUrlWithParams = (
 	url: string,
 	params: { [key: string]: string }
 ) => {
-	if (typeof window === 'undefined') {
-		return url
-	}
 	const queryParams: Record<string, string> = {}
 
 	let result = url
@@ -17,7 +17,7 @@ export const getReplacedUrlWithParams = (
 	}
 
 	if (Object.keys(queryParams).length > 0) {
-		const url = new URL(result, window?.location.origin || '')
+		const url = new URL(result)
 		for (const key in queryParams) {
 			url.searchParams.set(key, queryParams[key])
 		}
@@ -25,6 +25,14 @@ export const getReplacedUrlWithParams = (
 	}
 
 	return result
+}
+
+export const getRouteUrlWithParams = <T extends RoutesKeys>(
+	page: T,
+	params: SmartParams<T>
+) => {
+	const url = routesPaths[page]
+	return getReplacedUrlWithParams(FRONTEND_URL + url, params)
 }
 
 export const parseVariantAlias = (variantAlias: string) => {

@@ -6199,13 +6199,11 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @param {number} page 
+         * @param {number} [page] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetList: async (page: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'page' is not null or undefined
-            assertParamExists('songGettingControllerGetList', 'page', page)
+        songGettingControllerGetList: async (page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/song/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6393,11 +6391,11 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} page 
+         * @param {number} [page] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songGettingControllerGetList(page: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ListSongData>>> {
+        async songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ListSongData>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetList(page, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetList']?.[localVarOperationServerIndex]?.url;
@@ -6470,11 +6468,11 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
-         * @param {number} page 
+         * @param {number} [page] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetList(page: number, options?: any): AxiosPromise<Array<ListSongData>> {
+        songGettingControllerGetList(page?: number, options?: any): AxiosPromise<Array<ListSongData>> {
             return localVarFp.songGettingControllerGetList(page, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6534,12 +6532,12 @@ export class SongGettingApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} page 
+     * @param {number} [page] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongGettingApi
      */
-    public songGettingControllerGetList(page: number, options?: RawAxiosRequestConfig) {
+    public songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetList(page, options).then((request) => request(this.axios, this.basePath));
     }
 
