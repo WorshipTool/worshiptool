@@ -17,7 +17,7 @@ export const getReplacedUrlWithParams = (
 	}
 
 	if (Object.keys(queryParams).length > 0) {
-		const url = new URL(result)
+		const url = new URL(result, FRONTEND_URL)
 		for (const key in queryParams) {
 			url.searchParams.set(key, queryParams[key])
 		}

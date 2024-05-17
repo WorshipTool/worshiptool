@@ -18,6 +18,7 @@ type ButtonProps<T extends RoutesKeys> = {
 	to?: CommonLinkProps<T>['to']
 	toParams?: CommonLinkProps<T>['params']
 	sx?: SxProps<{}>
+	alt?: string
 
 	startIcon?: React.ReactNode
 	endIcon?: React.ReactNode
@@ -41,6 +42,8 @@ export const Button = <T extends RoutesKeys>({
 		[props.loading, props.disabled]
 	)
 
+	props.alt = props.alt || props.tooltip
+
 	const ButtonComponent = () => (
 		<Box
 			sx={{
@@ -57,6 +60,7 @@ export const Button = <T extends RoutesKeys>({
 				onClick={onClick}
 				startIcon={props.startIcon}
 				endIcon={props.endIcon}
+				aria-label={props.alt}
 			>
 				{children}
 			</LoadingButton>

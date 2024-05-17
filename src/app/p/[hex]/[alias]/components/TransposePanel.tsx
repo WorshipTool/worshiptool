@@ -1,6 +1,7 @@
 import { Add, Remove } from '@mui/icons-material'
-import { Box, IconButton, Typography, alpha, styled } from '@mui/material'
+import { Box, Typography, alpha, styled } from '@mui/material'
 import { Gap } from '../../../../../common/ui/Gap'
+import { IconButton } from '../../../../../common/ui/IconButton'
 
 const StyledButton = styled(IconButton)(({ theme }) => ({
 	color: 'black',
@@ -48,6 +49,7 @@ export default function TransposePanel({
 						transpose(1)
 					}}
 					size="small"
+					tooltip="Zvýšit o půltón"
 				>
 					<Add />
 				</StyledButton>
@@ -57,6 +59,7 @@ export default function TransposePanel({
 						transpose(-1)
 					}}
 					size="small"
+					tooltip="Snížit o půltón"
 				>
 					<Remove />
 				</StyledButton>

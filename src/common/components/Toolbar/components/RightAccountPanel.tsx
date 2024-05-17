@@ -31,6 +31,7 @@ function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {
 		<Box sx={{ ...sx }}>
 			<Avatar
 				src="/assets/profile-image-default.png"
+				alt="Profilový obrázek"
 				sx={{
 					width: size,
 					height: size,

@@ -10,6 +10,9 @@ type IconButtonProps<T extends RoutesKeys> = {
 	children: React.ReactNode
 	onClick?: React.MouseEventHandler<HTMLDivElement>
 	color?: ColorType
+	size?: 'small' | 'medium' | 'large'
+
+	alt?: string
 
 	tooltip?: string
 	tooltipPlacement?: ComponentProps<typeof Tooltip>['placement']
@@ -20,21 +23,27 @@ type IconButtonProps<T extends RoutesKeys> = {
 	disabled?: boolean
 }
 
-const ButtonComponent = ({
-	color = 'primary',
-	...props
-}: IconButtonProps<RoutesKeys>) => {
+const ButtonComponent = ({ color, ...props }: IconButtonProps<RoutesKeys>) => {
+	props.alt = props.alt || props.tooltip
 	return (
 		<Box
 			sx={{
 				...props.sx,
-				color: isColorOfThemeType(color) ? undefined : color,
+				color: color
+					? isColorOfThemeType(color)
+						? undefined
+						: color
+					: (props.sx as any)?.color,
 			}}
 		>
 			<IconBtn
-				color={isColorOfThemeType(color) ? color : 'inherit'}
+				color={
+					color ? (isColorOfThemeType(color) ? color : 'inherit') : undefined
+				}
 				onClick={(e: any) => props.onClick?.(e)}
 				disabled={props.disabled}
+				aria-label={props.alt}
+				size={props.size}
 			>
 				{props.children}
 			</IconBtn>
