@@ -32,7 +32,9 @@ export default function MenuItem<T extends RoutesKeys>(
 ) {
 	const Component = () => (
 		<Container
-			onClick={props.action}
+			onClick={(e) => {
+				props.action?.()
+			}}
 			sx={{
 				pointerEvents: props.disabled ? ' none' : 'auto',
 				filter: props.disabled ? 'grayscale(100%)' : '',

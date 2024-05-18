@@ -31,10 +31,9 @@ export default function useToolsMenuItems() {
 				title: 'Playlisty',
 				image: 'https://cdn-icons-png.flaticon.com/512/636/636224.png',
 				to: 'usersPlaylists',
-				disabled: isMobile && !isTablet,
 			},
 			{
-				title: 'Moje',
+				title: 'Moje písně',
 				image: 'https://cdn-icons-png.flaticon.com/512/10627/10627120.png',
 				to: 'usersSongs',
 				disabled: isMobile && !isTablet,

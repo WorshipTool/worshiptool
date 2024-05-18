@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import Typography from '../../../../common/ui/Typography/Typography'
+import { Typography } from '../../../../common/ui/Typography/Typography'
 
 export default function NotFound() {
 	return (

@@ -29,6 +29,9 @@ const Container = styled(Box)(({ theme }) => ({
 	height: 'calc(100vh - 56px)',
 	position: 'sticky',
 	top: 56,
+	[theme.breakpoints.down('sm')]: {
+		display: 'none',
+	},
 }))
 
 export default function SidePanel({}: {}) {
@@ -258,8 +261,8 @@ export default function SidePanel({}: {}) {
 						sx={{
 							position: 'absolute',
 							bottom: 30,
-							right: 30,
-							left: 30,
+							right: 20,
+							left: 20,
 							displayPrint: 'none',
 							pointerEvents: 'none',
 						}}

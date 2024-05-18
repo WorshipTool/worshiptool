@@ -6,6 +6,7 @@ import SearchBar from '../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../hooks/group/useGroupSelection'
 import Playlist from '../../../../../interfaces/playlist/PlaylistDTO'
+import { isMobile } from '../../../../../tech/device.tech'
 import useRecommendedSongs from '../../../../components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 import PlaylistSearchList from './PlaylistSearchList'
@@ -52,7 +53,9 @@ export default function RightPanel({ playlist }: RightPanelProps) {
 		const index = Math.floor(Math.random() * arr.length)
 		return arr[index]?.preferredTitle
 	}, [ideaArr])
-	return (
+	return isMobile ? (
+		<></>
+	) : (
 		<>
 			<Container>
 				<Box padding={1} paddingTop={0}>

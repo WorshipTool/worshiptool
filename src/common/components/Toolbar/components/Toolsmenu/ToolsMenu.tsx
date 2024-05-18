@@ -44,7 +44,14 @@ export default function ToolsMenu({ open, onClose }: ToolsMenuProps) {
 								.filter((a) => !a.hidden)
 								.slice(i * maxRowCount, i * maxRowCount + maxRowCount)
 								.map((item, j) => (
-									<MenuItem {...item} key={`menuitem${item.title}`} />
+									<MenuItem
+										{...item}
+										key={`menuitem${item.title}`}
+										action={() => {
+											item.action?.()
+											if (!item.disabled) onClose?.()
+										}}
+									/>
 								))}
 						</Box>
 					))}

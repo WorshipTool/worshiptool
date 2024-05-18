@@ -115,7 +115,12 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 					justifyContent={'space-between'}
 				>
 					{isOwner ? (
-						<Box display={'flex'}>
+						<Box
+							display={{
+								xs: 'none',
+								sm: 'flex',
+							}}
+						>
 							<IconButton
 								onClick={() => {
 									transpose(1)
@@ -136,6 +141,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 					) : (
 						<Box />
 					)}
+					<Box />
 
 					{saving > 0 && (
 						<Box
@@ -154,14 +160,21 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 
 					<Box display={'flex'} flexDirection={'row'}>
 						{isOwner && (
-							<Button
-								loading={removing}
-								variant="text"
-								color="error"
-								onClick={onRemove}
+							<Box
+								display={{
+									xs: 'none',
+									sm: 'block',
+								}}
 							>
-								Odebrat z playlistu
-							</Button>
+								<Button
+									loading={removing}
+									variant="text"
+									color="error"
+									onClick={onRemove}
+								>
+									Odebrat z playlistu
+								</Button>
+							</Box>
 						)}
 						<Button
 							variant="text"

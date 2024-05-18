@@ -61,6 +61,10 @@ export const Button = <T extends RoutesKeys>({
 				startIcon={props.startIcon}
 				endIcon={props.endIcon}
 				aria-label={props.alt}
+				sx={{
+					width: '100%',
+					height: '100%',
+				}}
 			>
 				{children}
 			</LoadingButton>

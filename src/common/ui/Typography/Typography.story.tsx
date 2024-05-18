@@ -1,7 +1,7 @@
 // Create function that is default exported
 
 import { createStory } from '../../../app/storybook/createStory'
-import Typography from './Typography'
+import { Typography } from './Typography'
 
 const TypographyStory = () => {
 	return (

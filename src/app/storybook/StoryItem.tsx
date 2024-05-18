@@ -1,6 +1,6 @@
 import { Box, Divider } from '@mui/material'
 import { Gap } from '../../common/ui/Gap'
-import Typography from '../../common/ui/Typography/Typography'
+import { Typography } from '../../common/ui/Typography/Typography'
 import { StoryBookItem } from './createStory'
 
 type StoryItemProps = {

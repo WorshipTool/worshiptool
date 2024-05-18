@@ -1,14 +1,19 @@
+import { Info, Print } from '@mui/icons-material'
 import {
 	Box,
-	Button,
 	LinearProgress,
 	Skeleton,
 	Typography,
 	styled,
 } from '@mui/material'
+import { Typography as Tp } from '@ui/Typography'
 import { useMemo } from 'react'
+import { Button } from '../../../../common/ui/Button'
+import Card from '../../../../common/ui/Card/Card'
 import { Gap } from '../../../../common/ui/Gap'
+import { IconButton } from '../../../../common/ui/IconButton'
 import useAuth from '../../../../hooks/auth/useAuth'
+import { isMobile } from '../../../../tech/device.tech'
 import useInnerPlaylist from '../hooks/useInnerPlaylist'
 import SidePanel from './LeftPanel/SidePanel'
 import { PlaylistItem } from './PlaylistItem'
@@ -73,7 +78,76 @@ export default function PlaylistPreview() {
 				) : (
 					<>
 						{
-							<Container flex={1}>
+							<Box
+								flex={1}
+								padding={{
+									xs: 2,
+									md: 2,
+									lg: 4,
+								}}
+							>
+								<Box
+									display={{
+										xs: 'block',
+										sm: 'none',
+										lg: 'none',
+									}}
+								>
+									<Box
+										display={'flex'}
+										flexDirection={'row'}
+										justifyContent={'space-between'}
+										alignItems={'center'}
+										gap={1}
+										flexWrap={'wrap'}
+									>
+										<Box>
+											<Tp>Název playlistu</Tp>
+											<Tp variant="h5" strong>
+												{playlist?.title}
+											</Tp>
+										</Box>
+										<Box display={'flex'} flexDirection={'row'} gap={1}>
+											{items.length > 0 && (
+												<Button
+													variant="outlined"
+													to="playlistCards"
+													toParams={{ guid: playlist?.guid || '' }}
+													color={'inherit'}
+												>
+													Prezentace
+												</Button>
+											)}
+											<IconButton
+												onClick={() => window.print()}
+												sx={{ pointerEvents: 'auto', flex: 1 }}
+												color="inherit"
+											>
+												<Print />
+											</IconButton>
+										</Box>
+									</Box>
+									<Gap />
+									{isMobile ? (
+										<>
+											<Card
+												title="Playlist nelze na telefonu editovat. Pro editaci použij
+                                            prosím počítač."
+												icon={<Info />}
+											></Card>
+											<Gap />
+										</>
+									) : (
+										<Box>
+											<Card
+												title="Abys mohl playlist upravovat, zvětši prosím okno prohlížeče."
+												icon={<Info />}
+											></Card>
+											<Gap />
+										</Box>
+									)}
+								</Box>
+
 								{items.length == 0 && (
 									<Box display={'flex'} flexDirection={'column'}>
 										<Typography variant="subtitle1">
@@ -98,13 +172,14 @@ export default function PlaylistPreview() {
 								{items.map((item) => {
 									return <PlaylistItem item={item} key={item.guid} />
 								})}
-							</Container>
+							</Box>
 						}
 
 						{isOwner && (
 							<Box
 								displayPrint={'none'}
 								display={{
+									xs: 'none',
 									md: 'none',
 									lg: 'block',
 								}}
