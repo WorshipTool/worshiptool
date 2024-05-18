@@ -1,5 +1,5 @@
 'use client'
-import { Box, Grid, Typography, styled } from '@mui/material'
+import { Box, Grid, Typography, styled, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import SongListCards, {
@@ -21,6 +21,7 @@ type RecommendedSongsListProps = {
 export default function RecommendedSongsList({
 	listType = 'row',
 }: RecommendedSongsListProps) {
+	const theme = useTheme()
 	const { data, isLoading, isError, isSuccess } = useRecommendedSongs()
 
 	// const navigate = useSmartNavigate()
@@ -54,7 +55,7 @@ export default function RecommendedSongsList({
 						columns={{ xs: 1, md: 2, lg: 4 }}
 						spacing={1}
 						sx={{
-							width: `100%`,
+							width: `calc(100% + ${theme.spacing(2)})`,
 						}}
 					>
 						{Array.from({ length: 4 }).map((_, i) => (

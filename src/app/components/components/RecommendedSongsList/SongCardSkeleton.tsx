@@ -7,8 +7,7 @@ export default function SongCardSkeleton() {
 				height: 200,
 				backgroundColor: 'grey.200',
 				borderRadius: 2,
-				padding: 1,
-				minWidth: 200,
+				padding: 2,
 			}}
 		>
 			<Skeleton width={'60%'} height={'2rem'} />
