@@ -36,7 +36,6 @@ export default function useToolsMenuItems() {
 				title: 'Moje písně',
 				image: 'https://cdn-icons-png.flaticon.com/512/10627/10627120.png',
 				to: 'usersSongs',
-				disabled: isMobile && !isTablet,
 			},
 
 			{
