@@ -4,7 +4,6 @@ import useAuth from '../../../../../../hooks/auth/useAuth'
 import { RoutesKeys } from '../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import { isDevelopment } from '../../../../../../tech/development.tech'
-import { isMobile, isTablet } from '../../../../../../tech/device.tech'
 import { LinkProps } from '../../../../../ui/Link/CustomLink'
 
 export type MenuItemProps<T extends RoutesKeys> = {
@@ -43,7 +42,6 @@ export default function useToolsMenuItems() {
 				image: '/assets/13ka-icon.png',
 				to: 'group',
 				toParams: { groupCode: '13ka' },
-				disabled: isMobile && !isTablet,
 			},
 			{
 				title: 'Hledat skupinu',
@@ -54,7 +52,6 @@ export default function useToolsMenuItems() {
 				sx: {
 					filter: 'invert(1) brightness(0.1)',
 				},
-				disabled: isMobile && !isTablet,
 			},
 			...(isDevelopment
 				? [

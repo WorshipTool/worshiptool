@@ -1,7 +1,15 @@
 'use client'
 
 import { AddBox, Apps, HelpOutline, Login, Search } from '@mui/icons-material'
-import { Avatar, Box, SxProps, Theme, Tooltip, styled } from '@mui/material'
+import {
+	Avatar,
+	Box,
+	SxProps,
+	Theme,
+	Tooltip,
+	styled,
+	useTheme,
+} from '@mui/material'
 import { usePathname } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 import UploadFileInput from '../../../../app/nahrat/components/UploadFileInput'
@@ -114,6 +122,8 @@ export default function RightAccountPanel({
 	const isHome = useSmartMatch('home')
 	const pathname = usePathname()
 
+	const theme = useTheme()
+
 	return (
 		<>
 			<Container color={color}>
@@ -180,7 +190,14 @@ export default function RightAccountPanel({
 							<Apps sx={iconStyle} fontSize={fontSize} />
 						</IconButton>
 
-						{isOn ? (
+						<Box
+							sx={{
+								display: isOn ? 'flex' : 'none',
+								[theme.breakpoints.down('sm')]: {
+									display: 'none',
+								},
+							}}
+						>
 							<GroupChip
 								avatar={
 									<IconButton
@@ -197,7 +214,15 @@ export default function RightAccountPanel({
 									</IconButton>
 								}
 							/>
-						) : (
+						</Box>
+						<Box
+							sx={{
+								display: !isOn ? 'flex' : 'none',
+								[theme.breakpoints.down('sm')]: {
+									display: 'flex',
+								},
+							}}
+						>
 							<IconButton
 								tooltip="Účet"
 								color="inherit"
@@ -206,7 +231,7 @@ export default function RightAccountPanel({
 							>
 								<ProfileImage size={26} sx={iconStyle} />
 							</IconButton>
-						)}
+						</Box>
 
 						<AccountMenu
 							open={accountMenuOpen}

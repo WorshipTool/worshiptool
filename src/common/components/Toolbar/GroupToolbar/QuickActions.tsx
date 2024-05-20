@@ -91,36 +91,52 @@ export default function QuickActions({ visible }: QuickActionsProps) {
                     id={2}
                     loading={createSongLoading}
                 /> */}
-				{pinnedState.data && (
-					<>
+				<Box
+					display={{
+						xs: 'none',
+						sm: 'none',
+						md: 'block',
+					}}
+				>
+					{pinnedState.data && (
+						<>
+							<GroupToolbarActionButton
+								label={pinnedState.data?.title}
+								secondaryLabel="Připnuté"
+								variant="secondary"
+								icon={<PushPin />}
+								to={'playlist'}
+								toParams={{
+									guid: pinnedState.data.guid,
+								}}
+								visible={visible}
+								id={4}
+							/>
+						</>
+					)}
+				</Box>
+				<Box
+					display={{
+						xs: 'none',
+						sm: 'none',
+						md: 'block',
+					}}
+				>
+					{isOn ? (
 						<GroupToolbarActionButton
-							label={pinnedState.data?.title}
-							secondaryLabel="Připnuté"
+							label="Editovat playlist"
+							secondaryLabel={playlist?.title}
 							variant="secondary"
-							icon={<PushPin />}
-							to={'playlist'}
-							toParams={{
-								guid: pinnedState.data.guid,
-							}}
+							icon={<Edit></Edit>}
+							to="playlist"
+							toParams={{ guid }}
 							visible={visible}
-							id={4}
+							id={3}
 						/>
-					</>
-				)}
-				{isOn ? (
-					<GroupToolbarActionButton
-						label="Editovat playlist"
-						secondaryLabel={playlist?.title}
-						variant="secondary"
-						icon={<Edit></Edit>}
-						to="playlist"
-						toParams={{ guid }}
-						visible={visible}
-						id={3}
-					/>
-				) : (
-					<></>
-				)}
+					) : (
+						<></>
+					)}
+				</Box>
 			</Box>
 		</Box>
 	)

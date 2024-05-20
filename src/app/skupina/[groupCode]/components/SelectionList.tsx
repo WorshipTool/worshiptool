@@ -1,5 +1,12 @@
 import { Search } from '@mui/icons-material'
-import { Box, Button, CircularProgress, Grow, Typography } from '@mui/material'
+import {
+	Box,
+	Button,
+	CircularProgress,
+	Grow,
+	Typography,
+	useTheme,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import SongListCards from '../../../../common/components/songLists/SongListCards/SongListCards'
 import OnChangeDelayer from '../../../../common/providers/ChangeDelayer/ChangeDelayer'
@@ -8,14 +15,26 @@ import { Gap } from '../../../../common/ui/Gap'
 import SearchBar from '../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../hooks/group/useGroupSelection'
+import usePlaylists from '../../../../hooks/playlist/usePlaylists'
+import { useApiStateEffect } from '../../../../tech/ApiState'
 import normalizeSearchText from '../../../../tech/normalizeSearchText'
 import Loading from '../loading'
+import PinnedPlaylistAlternativeDisplay from './PinnedPlaylistAlternativeDisplay'
 
-export default function SelectionList() {
+type SelectionListProps = {}
+
+export default function SelectionList(props: SelectionListProps) {
 	const { items, search, reload, loading } = useGroupSelection()
-	const { name } = useGroup()
+	const { name, payload } = useGroup()
+	const { getPlaylistByGuid } = usePlaylists()
 
 	// const navigate = useSmartNavigate()
+
+	const pinnedPlaylistGuid = payload?.pinnedPlaylist
+	const [pinnedState] = useApiStateEffect(async () => {
+		if (!pinnedPlaylistGuid) return
+		return await getPlaylistByGuid(pinnedPlaylistGuid)
+	}, [pinnedPlaylistGuid])
 
 	const [searchString, setSearchString] = React.useState<string>('')
 	const [stillString, setStillString] = useState<string>('')
@@ -46,6 +65,8 @@ export default function SelectionList() {
 		setInit(true)
 	}, [])
 
+	const theme = useTheme()
+
 	return !init ? (
 		<Loading />
 	) : (
@@ -61,6 +82,13 @@ export default function SelectionList() {
 							position: 'absolute',
 							right: 0,
 							left: 56,
+
+							paddingX: 5,
+							[theme.breakpoints.down('sm')]: {
+								left: 0,
+								top: 112,
+								paddingX: 2,
+							},
 							...(top
 								? {
 										top: 310,
@@ -69,16 +97,32 @@ export default function SelectionList() {
 										top: 56,
 								  }),
 							minHeight: 'calc(100vh - 56px + 15px)',
-							paddingX: 5,
 						}}
 					>
 						<OnChangeDelayer
 							value={normalizeSearchText(searchString)}
 							onChange={onChange}
 						/>
+
+						<Box
+							display={{
+								xs: 'block',
+								sm: 'block',
+								md: 'none',
+							}}
+							width={'100%'}
+						>
+							{pinnedState.data && (
+								<PinnedPlaylistAlternativeDisplay playlist={pinnedState.data} />
+							)}
+						</Box>
 						<Grow in={!top} timeout={top ? 100 : 300}>
 							<Box
-								display={'flex'}
+								display={{
+									xs: 'none',
+									sm: 'none',
+									md: 'flex',
+								}}
 								flexDirection={'row'}
 								justifyContent={'end'}
 								sx={{
@@ -87,7 +131,6 @@ export default function SelectionList() {
 									top: 28,
 									zIndex: 1,
 									// left:0, right:0,
-									display: 'flex',
 									flexDirection: 'row',
 									justifyContent: 'center',
 								}}
@@ -97,11 +140,43 @@ export default function SelectionList() {
 								</Box>
 							</Box>
 						</Grow>
+						<Box
+							display={{
+								xs: 'flex',
+								sm: 'flex',
+								md: 'none',
+							}}
+							sx={{
+								zIndex: 1,
+								marginTop: 2,
+								flexDirection: 'row',
+								width: '100%',
+								position: 'sticky',
+								top: 60,
+								[theme.breakpoints.down('sm')]: {
+									top: 120,
+									marginBottom: 1,
+								},
+								[theme.breakpoints.down('md')]: {
+									marginTop: 0,
+								},
+							}}
+						>
+							<SearchBar
+								onChange={(s) => setSearchString(s)}
+								sx={{ width: '100%' }}
+							/>
+						</Box>
+
 						<Gap value={0.5} />
 						<Box
+							display={{
+								xs: 'none',
+								sm: 'none',
+								md: 'flex',
+							}}
 							sx={{
 								width: '100%',
-								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'end',
 								position: 'relative',
