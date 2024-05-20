@@ -84,7 +84,6 @@ export function SongCard({
 			to={'variant'}
 			params={{
 				...parseVariantAlias(data.alias),
-				title: data.preferredTitle,
 			}}
 		>
 			<StyledContainer

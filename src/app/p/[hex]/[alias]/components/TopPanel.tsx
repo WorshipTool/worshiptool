@@ -91,7 +91,6 @@ export default function TopPanel(props: TopPanelProps) {
 				)
 				navigate('variant', {
 					...parseVariantAlias(result.alias),
-					title: props.title,
 				})
 				setSaving(false)
 			}

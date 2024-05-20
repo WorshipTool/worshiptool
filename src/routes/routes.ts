@@ -72,9 +72,6 @@ export const routesPaths = {
 
 // examples of searchParams, only, string and numbers allowed
 export const routesSearchParams = {
-	variant: {
-		title: 'string',
-	},
 	login: {
 		previousPage: 'string',
 		message: 'string',

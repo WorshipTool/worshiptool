@@ -181,7 +181,6 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 							to="variant"
 							toParams={{
 								...parseVariantAlias(item.variant.alias),
-								title: item.variant.preferredTitle,
 							}}
 						>
 							Otevřít

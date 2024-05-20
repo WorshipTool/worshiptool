@@ -28,6 +28,7 @@ export default async function SongRoutePage({ params }: SongRoutePageProps) {
 
 		const song = mapGetSongDataApiToSongDto(data)
 		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
+		//TODO: Sometime not working when group is turned on
 
 		return (
 			<>

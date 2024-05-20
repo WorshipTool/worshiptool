@@ -84,7 +84,6 @@ export default function Create() {
 					{
 						hex: a.hex,
 						alias: a.alias,
-						title: title,
 					},
 					{
 						replace: false,

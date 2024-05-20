@@ -73,7 +73,6 @@ export default function PanelItem({
 			to="variant"
 			params={{
 				...parseVariantAlias(item.variant.alias),
-				title: item.variant.preferredTitle,
 			}}
 			onlyWithShift
 		>

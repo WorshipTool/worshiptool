@@ -40,7 +40,6 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 			(data) => {
 				navigate('variant', {
 					...parseVariantAlias(data.alias),
-					title: data.variant.prefferedTitle.title || 'Úprava',
 				})
 			}
 		)

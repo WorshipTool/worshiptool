@@ -114,7 +114,6 @@ export default function List() {
 										onClick={() => {
 											navigate('variant', {
 												...parseVariantAlias(s.alias),
-												title: s.title,
 											})
 										}}
 									>
