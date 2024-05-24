@@ -1,11 +1,11 @@
-import { createStory } from "../../../pages/TestComponents/createStory";
-import Typography from "../Typography/Typography";
-import { Clickable } from "./Clickable";
+import { createStory } from '../../../app/storybook/createStory'
+import { Typography } from '../Typography/Typography'
+import { Clickable } from './Clickable'
 
 const ButtonComponentStory = () => (
-    <Clickable>
-        <Typography>Click me</Typography>
-    </Clickable>
-);
+	<Clickable>
+		<Typography>Click me</Typography>
+	</Clickable>
+)
 
-createStory(Clickable, ButtonComponentStory);
+createStory(Clickable, ButtonComponentStory)

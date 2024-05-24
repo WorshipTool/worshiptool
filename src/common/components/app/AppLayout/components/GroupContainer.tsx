@@ -1,35 +1,52 @@
-import React from "react";
-import GroupToolbar from "../../../Toolbars/GroupToolbar/GroupToolbar";
-import { Box } from "@mui/material";
-import OnScrollComponent from "../../../../providers/OnScrollComponent/OnScrollComponent";
-import SideToolbar from "../../../Toolbars/SideToolbar/SideToolbar";
+'use client'
+import { Box } from '@mui/material'
+import React from 'react'
+import OnScrollComponent from '../../../../providers/OnScrollComponent/OnScrollComponent'
+import { SideToolbar } from '../../../Toolbar'
+import GroupToolbarDesktop from '../../../Toolbar/GroupToolbar/GroupToolbarDesktop'
+import GroupToolbarMobile from '../../../Toolbar/GroupToolbar/GroupToolbarMobile'
 
 interface GroupContainerProps {
-    children?: React.ReactNode;
-    expandable?: boolean;
-    header?: React.ReactNode;
+	children?: React.ReactNode
+	expandable?: boolean
+	header?: React.ReactNode
 }
 
 export default function GroupContainer({
-    children,
-    expandable,
-    header
+	children,
+	expandable,
+	header,
 }: GroupContainerProps) {
-    return (
-        <OnScrollComponent
-            component={(top) => {
-                return (
-                    <Box position={"relative"} left={0} right={0}>
-                        <GroupToolbar
-                            expanded={expandable && top}
-                            header={header}
-                        />
-                        <SideToolbar>
-                            <>{children}</>
-                        </SideToolbar>
-                    </Box>
-                );
-            }}
-        />
-    );
+	return (
+		<OnScrollComponent
+			component={(top) => {
+				return (
+					<Box position={'relative'} left={0} right={0}>
+						{/* <GroupToolbar expanded={expandable && top} header={header} /> */}
+						<Box
+							display={{
+								xs: 'none',
+								sm: 'block',
+							}}
+						>
+							<GroupToolbarDesktop expanded={expandable && top} />
+
+							<SideToolbar>
+								<>{children}</>
+							</SideToolbar>
+						</Box>
+						<Box
+							display={{
+								xs: 'block',
+								sm: 'none',
+							}}
+						>
+							<GroupToolbarMobile expanded={expandable && top} />
+							{children}
+						</Box>
+					</Box>
+				)
+			}}
+		/>
+	)
 }

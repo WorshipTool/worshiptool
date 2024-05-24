@@ -1,1 +1,1 @@
-export * as Gap from "./Gap";
+export * from './Gap'

@@ -1,18 +1,16 @@
-import { Icon } from "@mui/material";
-import { createStory } from "../../../pages/TestComponents/createStory";
-import Typography from "../Typography/Typography";
-import Card from "./Card";
-import { Info } from "@mui/icons-material";
+import { Info } from '@mui/icons-material'
+import { createStory } from '../../../app/storybook/createStory'
+import { Typography } from '../Typography/Typography'
+import Card from './Card'
 
 const CardStory = () => {
-    return (
-        <Card title="Ukazka" icon={<Info />}>
-            <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                nec
-            </Typography>
-        </Card>
-    );
-};
+	return (
+		<Card title="Ukazka" icon={<Info />}>
+			<Typography>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+			</Typography>
+		</Card>
+	)
+}
 
-createStory(Card, CardStory);
+createStory(Card, CardStory)

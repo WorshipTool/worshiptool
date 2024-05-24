@@ -1,0 +1,6 @@
+{
+	"javascript.preferences.importModuleSpecifier": "non-relative",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	}
+}

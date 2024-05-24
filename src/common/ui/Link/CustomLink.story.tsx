@@ -1,10 +1,10 @@
-import { createStory } from "../../../pages/TestComponents/createStory";
-import { Link } from "./CustomLink";
+import { createStory } from '../../../app/storybook/createStory'
+import { Link } from './CustomLink'
 
 const CustomLinkStory = () => (
-    <Link to="home" state={undefined} params={{}}>
-        Click me
-    </Link>
-);
+	<Link to="home" params={{}}>
+		Click me
+	</Link>
+)
 
-createStory(Link, CustomLinkStory);
+createStory(Link, CustomLinkStory)

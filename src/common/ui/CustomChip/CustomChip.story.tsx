@@ -1,8 +1,8 @@
-import { createStory } from "../../../pages/TestComponents/createStory";
-import CustomChip from "./CustomChip";
+import { createStory } from '../../../app/storybook/createStory'
+import CustomChip from './CustomChip'
 
 const CustomChipStory = () => {
-    return <CustomChip label={"Chip label"} />;
-};
+	return <CustomChip label={'Chip label'} />
+}
 
-createStory(CustomChip, CustomChipStory);
+createStory(CustomChip, CustomChipStory)
