@@ -7,11 +7,7 @@ env:
   DOCKER_IMAGE_NAME: worshiptool
 
 on:
-  push:
-    branches: ['master']
-  #   pull_request:
-  #     branches: [ "master" ]
-  workflow_dispatch:
+  workflow_dispatch: 
 
 jobs:
   release:
