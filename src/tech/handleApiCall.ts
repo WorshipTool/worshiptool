@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 
-export const networkErrorEvent = new CustomEvent('networkErrorEvent')
-export const unauthorizedEvent = new CustomEvent('unauthorizedEvent')
+export const networkErrorEvent = 'networkErrorEvent'
+export const unauthorizedEvent = 'unauthorizedEvent'
 
 // Handle function for all API calls
 // parameters: request - asynchronous function that returns a promise
@@ -12,13 +12,15 @@ export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
 			return res.data
 		})
 		.catch((err) => {
+			if (typeof window === 'undefined') throw err
+
 			if (err.message == 'Network Error') {
-				window?.dispatchEvent(networkErrorEvent)
+				window?.dispatchEvent(new CustomEvent(networkErrorEvent))
 			} else if (err.response.status === 502) {
-				window?.dispatchEvent(networkErrorEvent)
+				window?.dispatchEvent(new CustomEvent(networkErrorEvent))
 			}
 			if (err.response.status === 401) {
-				window?.dispatchEvent(unauthorizedEvent)
+				window?.dispatchEvent(new CustomEvent(unauthorizedEvent))
 			}
 			throw err
 		})

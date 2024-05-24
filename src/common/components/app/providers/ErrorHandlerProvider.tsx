@@ -47,12 +47,12 @@ export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
 				persist: true,
 			})
 		}
-		window.addEventListener(networkErrorEvent.type, ne)
-		window.addEventListener(unauthorizedEvent.type, ue)
+		window.addEventListener(networkErrorEvent, ne)
+		window.addEventListener(unauthorizedEvent, ue)
 
 		return () => {
-			window.removeEventListener(networkErrorEvent.type, ne)
-			window.removeEventListener(unauthorizedEvent.type, ue)
+			window.removeEventListener(networkErrorEvent, ne)
+			window.removeEventListener(unauthorizedEvent, ue)
 		}
 	}, [])
 	return <>{props.children}</>

@@ -12,6 +12,7 @@ const nextConfig = withRoutes({
 	},
 
 	reactStrictMode: true,
+	output: 'standalone',
 })
 
 export default nextConfig

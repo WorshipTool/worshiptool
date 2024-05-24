@@ -13,9 +13,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const BASE_URL = 'https://chvalotce.cz'
 
 	const api = new SongGettingApi()
-	const songs: ListSongData[] = await handleApiCall(
-		api.songGettingControllerGetList()
-	)
+	let songs: ListSongData[] = []
+	try {
+		songs = await handleApiCall(api.songGettingControllerGetList())
+	} catch (e) {
+		console.warn('Failed to fetch songs for sitemap -> ignoring songs', e)
+	}
 
 	const date = new Date()
 
