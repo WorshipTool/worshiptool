@@ -4,6 +4,8 @@
 name: Deploy to server
 
 env:
+  SERVER_USERNAME: chvalotce-docker
+  SERVER_URL: chvalotce.cz
   DOCKER_IMAGE_NAME: worshiptool
 
 on:
@@ -30,27 +32,22 @@ jobs:
       - name: Push
         run: docker push ${{secrets.DOCKERHUB_USERNAME}}/${{env.DOCKER_IMAGE_NAME}}:latest
 
-      # - name: Install SSH key
-      #   uses: shimataro/ssh-key-action@v2
-      #   with:
-      #         key: ${{ secrets.SSH_KEY }}
-      #         known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
 
-      # - name: Redeploy application
-      #   run: |
-      #         ssh -o ServerAliveInterval=1000 "${SERVER_USERNAME}@${SERVER_URL}" "cd /home/chvalotce.cz-docker/project-deploy/worshiptool && bash ./redeploy.sh"
+      - name: Redeploy application
+        run: |
+          ssh -o ServerAliveInterval=1000 "${SERVER_USERNAME}@${SERVER_URL}" "cd /home/chvalotce.cz-docker/project-deploy/worshiptool/frontend && bash ./redeploy.sh"
 
-      # - name: Sleep for 20 seconds, so the server has time to restart
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #         time: "20s"
-
-      # - name: Send message to Messenger
-      #   uses: fjogeleit/http-request-action@v1
-      #   with:
-      #         url: "https://chvalotce.cz/api/sendmessage"
-      #         method: "POST"
-      #         customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
-      #         data: '{"message": "Nová verze backendu byla právě spuštěna."}'
-      #         timeout: 30000
-      #         preventFailureOnNoResponse: true
+      - name: Send message to Messenger
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://chvalotce.cz/api/sendmessage'
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
+          data: '{"message": "Nová verze frontendu byla právě nasazena."}'
+          timeout: 30000
+          preventFailureOnNoResponse: true
