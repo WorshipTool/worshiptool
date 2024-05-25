@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
+import LoadingScreen from '../../vytvorit/loading'
 
 type LoadingRoutesProviderProps = {
 	children: React.ReactNode
@@ -18,7 +19,7 @@ export default function LoadingRoutesProvider({
 	}, [])
 	return (
 		<div>
-			{/* <LoadingScreen isVisible={loading} /> */}
+			<LoadingScreen isVisible={loading} />
 			{children}
 		</div>
 	)

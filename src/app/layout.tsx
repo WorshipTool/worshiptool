@@ -5,7 +5,17 @@ import './globals.css'
 
 export const metadata: Metadata = {
 	title: 'Chvalotce.cz',
-	description: 'Uživatelsky přívětivá platforma s křesťanskými chválam',
+	description: 'Uživatelsky přívětivá platforma s křesťanskými chválami',
+	keywords: [
+		'zpěvník',
+		'chvály',
+		'akordy',
+		'píseň',
+		'text',
+		'playlist',
+		'křesťanské',
+		'hudba',
+	],
 	manifest: '/src/app/manifest.json',
 }
 

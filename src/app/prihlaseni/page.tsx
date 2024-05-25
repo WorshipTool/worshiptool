@@ -180,9 +180,11 @@ export default function Login() {
 					/>
 					<Gap />
 
-					<Button onClick={onLoginClick} loading={inProgress} variant="text">
-						Přihlásit se
-					</Button>
+					<Box display={'flex'}>
+						<Button onClick={onLoginClick} loading={inProgress} variant="text">
+							Přihlásit se
+						</Button>
+					</Box>
 
 					<Box
 						display={'flex'}
