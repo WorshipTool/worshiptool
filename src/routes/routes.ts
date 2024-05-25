@@ -18,6 +18,7 @@ export const getReplacedUrlWithParams = (
 
 	if (Object.keys(queryParams).length > 0) {
 		const url = new URL(result, FRONTEND_URL)
+		// TODO: Fix this. It not return relative path, if relative is input
 		for (const key in queryParams) {
 			url.searchParams.set(key, queryParams[key])
 		}
