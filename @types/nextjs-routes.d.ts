@@ -14,8 +14,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/dokumentace">
     | StaticRoute<"/nahrat/hledani">
     | StaticRoute<"/nahrat">
-    | DynamicRoute<"/p/[hex]/[alias]", { "hex": string; "alias": string }>
     | StaticRoute<"/">
+    | DynamicRoute<"/pisen/[hex]/[alias]", { "hex": string; "alias": string }>
     | DynamicRoute<"/playlist/[guid]", { "guid": string }>
     | DynamicRoute<"/playlist/[guid]/prezentace", { "guid": string }>
     | StaticRoute<"/prihlaseni">
