@@ -29,6 +29,7 @@ export default function layout(props: LayoutProps) {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
+				position: 'relative',
 			}}
 		>
 			<ContainerGrid
@@ -44,10 +45,22 @@ export default function layout(props: LayoutProps) {
 					flex: 1,
 					display: 'flex',
 					flexDirection: 'column',
+					displayPrint: 'none',
 				}}
 			>
 				{props.children}
 			</ContainerGrid>
+			<Box
+				sx={{
+					display: 'none',
+					displayPrint: 'block',
+					flexDirection: 'column',
+					alignItems: 'start',
+					width: '100%',
+				}}
+			>
+				<Box>{props.children}</Box>
+			</Box>
 		</Box>
 	)
 }

@@ -62,7 +62,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 
 	return (
 		<>
-			<>
+			<Box displayPrint={'none'}>
 				<TopPanel
 					transpose={transpose}
 					variant={variant as SongVariantDto}
@@ -104,7 +104,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 						variant={variant as SongVariantDto}
 					/>
 				)}
-			</>
+			</Box>
 
 			<Box displayPrint={'block'} display={'none'}>
 				{currentSheet && (
