@@ -29,7 +29,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/ucet/pisne">
     | StaticRoute<"/ucet/playlisty">
     | StaticRoute<"/vytvorit/napsat">
-    | StaticRoute<"/vytvorit">;
+    | StaticRoute<"/vytvorit">
+    | DynamicRoute<"/pisen/[hex]/[alias]/tisk", { "hex": string; "alias": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

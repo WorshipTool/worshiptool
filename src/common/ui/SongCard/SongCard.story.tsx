@@ -1,6 +1,6 @@
 import { Sheet } from '@pepavlin/sheet-api'
 import { SongVariantDto } from '../../../api/dtos'
-import { createStory } from '../../../app/storybook/createStory'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 import { SongCard } from './SongCard'
 
 const SongCardStory = () => {

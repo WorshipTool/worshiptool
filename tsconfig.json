@@ -21,12 +21,12 @@
 		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"@/*": ["./src/*"],
-			"@components/*": ["./src/components/*"],
-			"@common/*": ["./src/common/*"],
-			"@assets/*": ["./src/assets/*"],
-			"@hooks/*": ["./src/hooks/*"],
-			"@ui/*": ["./src/common/ui/*"],
-			"@tech/*": ["./src/tech/*"]
+			"@/components/*": ["./src/components/*"],
+			"@/common/*": ["./src/common/*"],
+			"@/assets/*": ["./src/assets/*"],
+			"@/hooks/*": ["./src/hooks/*"],
+			"@/ui/*": ["./src/common/ui/*"],
+			"@/tech/*": ["./src/tech/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

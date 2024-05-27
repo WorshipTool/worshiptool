@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { createStory } from '../../../app/storybook/createStory'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 import Tooltip from './Tooltip'
 
 const CustomToolkipStory = () => (

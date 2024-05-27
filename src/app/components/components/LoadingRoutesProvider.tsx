@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import LoadingScreen from '../../vytvorit/loading'
+import LoadingScreen from '../../(layout)/vytvorit/loading'
 
 type LoadingRoutesProviderProps = {
 	children: React.ReactNode

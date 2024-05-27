@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { usePathname } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
-import UploadFileInput from '../../../../app/nahrat/components/UploadFileInput'
+import UploadFileInput from '../../../../app/(layout)/nahrat/components/UploadFileInput'
 import useAuth from '../../../../hooks/auth/useAuth'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'

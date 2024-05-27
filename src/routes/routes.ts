@@ -1,3 +1,4 @@
+import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
 import { RoutesKeys, SmartParams } from './routes.types'
 
@@ -52,6 +53,7 @@ export const COMMON_SETTINGS_URL = '/nastaveni'
 export const routesPaths = {
 	home: '/',
 	variant: '/pisen/[hex]/[alias]',
+	variantPrint: '/pisen/[hex]/[alias]/tisk',
 	playlist: '/playlist/[guid]',
 	playlistCards: '/playlist/[guid]/prezentace',
 	group: '/skupina/[groupCode]',
@@ -70,6 +72,10 @@ export const routesPaths = {
 	test: '/test',
 	testComponents: '/storybook',
 } as const
+
+// DONT REMOVE
+const testTypes: Record<string, Route['pathname']> = routesPaths
+if (!testTypes) console.log('This checks routes types', testTypes)
 
 // examples of searchParams, only, string and numbers allowed
 export const routesSearchParams = {

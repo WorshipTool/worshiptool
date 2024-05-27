@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { AppContainer } from './components/AppContainer'
-import AppProviders from './components/AppProviders'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,11 +24,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>
-				<AppProviders>
-					<AppContainer>{children}</AppContainer>
-				</AppProviders>
-			</body>
+			<body>{children}</body>
 		</html>
 	)
 }

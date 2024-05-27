@@ -7,13 +7,16 @@ import { sectionNameToText } from '../../../../tech/sectionNameToText'
 import { SheetStyleComponentType } from './config'
 
 const chordHeight = '1.5em'
+const sectionsGap = '2em'
 
 const SegmentElement = ({
 	segment,
 	signature,
+	showChords,
 }: {
 	segment: Segment
 	signature?: signature
+	showChords: boolean
 }) => {
 	const words = useMemo(() => {
 		return segment.text?.split(/(\s+)/) || []
@@ -24,17 +27,18 @@ const SegmentElement = ({
 			{words.map((word, index) => {
 				return (
 					<Box key={word}>
-						{index == 0 ? (
-							<>
-								<Typography sx={{ height: chordHeight }} fontWeight={900}>
-									{segment.chord?.toString(signature)}
-								</Typography>
-							</>
-						) : (
-							<>
-								<Box sx={{ height: chordHeight }} />
-							</>
-						)}
+						{showChords &&
+							(index == 0 ? (
+								<>
+									<Typography sx={{ height: chordHeight }} fontWeight={900}>
+										{segment.chord?.toString(signature)}
+									</Typography>
+								</>
+							) : (
+								<>
+									<Box sx={{ height: chordHeight }} />
+								</>
+							))}
 
 						<Typography>{word}</Typography>
 					</Box>
@@ -55,11 +59,18 @@ const SectionComponent = ({
 		if (!section.name) return undefined
 		return sectionNameToText(section.name)
 	}, [section])
+
+	const hasChords = useMemo(() => {
+		return true
+		return section.lines?.some((line) =>
+			line.segments.some((segment) => segment.chord)
+		)
+	}, [section])
 	return (
 		<>
 			<Box
 				sx={{
-					paddingTop: chordHeight,
+					paddingTop: hasChords ? chordHeight : 0,
 				}}
 			>
 				{sectionName && (
@@ -75,7 +86,11 @@ const SectionComponent = ({
 					</Typography>
 				)}
 			</Box>
-			<Box>
+			<Box
+				sx={{
+					breakInside: 'avoid',
+				}}
+			>
 				{section.lines ? (
 					<>
 						{section.lines.map((line, index) => {
@@ -94,6 +109,7 @@ const SectionComponent = ({
 												key={index}
 												segment={segment}
 												signature={signature}
+												showChords={hasChords}
 											/>
 										)
 									})}
@@ -103,6 +119,11 @@ const SectionComponent = ({
 					</>
 				) : (
 					<></>
+				)}
+				{!hasChords && (
+					<>
+						<Box sx={{ height: sectionsGap }} />
+					</>
 				)}
 			</Box>
 		</>
@@ -121,17 +142,19 @@ const ModernStyle: SheetStyleComponentType = ({ sheet, title, signature }) => {
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					// alignItems: "center",
-					// justifyContent: "center",
+					// alignItems: 'center',
+					// justifyContent: 'center',
 				}}
 			>
 				{title && (
 					<Box
 						sx={{
-							marginBottom: 1,
+							marginBottom: 2,
+							// display: 'flex',
+							// justifyContent: 'center',
 						}}
 					>
-						<Typography variant="h5">
+						<Typography variant="h4">
 							<b>{title}</b>
 						</Typography>
 					</Box>

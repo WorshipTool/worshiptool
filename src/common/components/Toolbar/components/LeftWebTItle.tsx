@@ -1,4 +1,4 @@
-import SvgIcon from '@assets/icon.svg'
+import SvgIcon from '@/assets/icon.svg'
 import { Box, Typography, styled } from '@mui/material'
 import { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'

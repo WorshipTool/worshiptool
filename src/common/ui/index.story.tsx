@@ -6,6 +6,7 @@ export * from './CustomTooltip/Tooltip.story'
 export * from './SearchBar/SearchBar.story'
 export * from './Typography/Typography.story'
 // export * from "./Link/CustomLink.story";
+export * from './Checkbox/Checkbox.story'
 export * from './Clickable/Clickable.story'
 export * from './IconButton/IconButton.story'
 export * from './Image/Image.story'
