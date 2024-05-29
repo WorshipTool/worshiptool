@@ -4,7 +4,8 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 
 type MoreColumnLayoutProps = {
 	children: ReactElement[]
-	startOffset: number // Automatically wasn't working
+	startOffset: number // Automatically wasn't working,
+	columns: number
 }
 
 type Element = {
@@ -27,7 +28,7 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 	// A4
 	const pageHeight = 1048 // Manually found
 	const setHeight = () => {
-		const columnsCount = 2
+		const columnsCount = props.columns
 		const topOffset = props.startOffset
 
 		const pages: Page[] = []
@@ -41,12 +42,12 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 		refs.current.forEach((r) => {
 			const rect = r.getBoundingClientRect()
 			const childHeight = rect.height
-			console.log(
-				currentY + childHeight + currentPageYOffset,
-				currentY,
-				childHeight,
-				currentPageYOffset
-			)
+			// console.log(
+			// 	currentY + childHeight + currentPageYOffset,
+			// 	currentY,
+			// 	childHeight,
+			// 	currentPageYOffset
+			// )
 			if (currentY + childHeight + currentPageYOffset > pageHeight) {
 				// Dont fit in the page
 
@@ -97,7 +98,6 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 		let totalHeight = 0
 		pages.forEach((page) => {
 			totalHeight += page.height
-			console.log(page)
 		})
 
 		// Set the height
@@ -105,7 +105,6 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 	}
 
 	useEffect(() => {
-		setHeight()
 		window.addEventListener('beforeprint', setHeight)
 		return () => {
 			window.removeEventListener('beforeprint', setHeight)

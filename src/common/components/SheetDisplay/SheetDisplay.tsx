@@ -5,6 +5,7 @@ import { SheetStyle, sheetStyles } from './styles/config'
 
 interface SheetDisplayProps {
 	// Type of variant is keys of sheetStyles
+	columns?: number
 	variant?: SheetStyle
 	sheet: Sheet
 	title: string
@@ -46,6 +47,7 @@ export default function SheetDisplay(props: SheetDisplayProps) {
 						sheet: props.sheet,
 						title: props.title,
 						signature: signature,
+						columns: props.columns || 1,
 					})}
 				</>
 			)}

@@ -6,7 +6,7 @@ import './print.css'
 
 export default function layout(props: LayoutProps) {
 	useEffect(() => {
-		// window.print()
+		window.print()
 	}, [])
 	return (
 		<div id="print-layout">

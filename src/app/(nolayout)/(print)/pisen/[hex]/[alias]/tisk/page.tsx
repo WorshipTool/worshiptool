@@ -34,11 +34,12 @@ export default async function page({ params }: PageProps) {
 
 		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
 		return (
-			<div>
+			<Box>
 				<SheetDisplay
 					title={variantData.preferredTitle}
 					sheet={variantData.sheet}
-					variant="modern"
+					variant="printCompact"
+					columns={2}
 				/>
 				<Box
 					sx={{
@@ -51,7 +52,7 @@ export default async function page({ params }: PageProps) {
 				>
 					<PrintOptionsPanel />
 				</Box>
-			</div>
+			</Box>
 		)
 	} catch (e) {
 		return <NotFound />

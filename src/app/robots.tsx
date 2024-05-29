@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
 			allow: '/',
 			disallow: ['/test', '/storybook'],
 		},
-		sitemap: 'https://acme.com/sitemap.xml',
+		sitemap: 'https://chvalotce.cz/sitemap.xml',
 	}
 }
