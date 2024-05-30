@@ -1,15 +1,19 @@
+import { note } from '@pepavlin/sheet-api'
 import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
 import { RoutesKeys, SmartParams } from './routes.types'
 
 export const getReplacedUrlWithParams = (
 	url: string,
-	params: { [key: string]: string }
+	params: { [key: string]: string | undefined }
 ) => {
 	const queryParams: Record<string, string> = {}
 
 	let result = url
 	for (const key in params) {
+		// Ignore undefined values
+		if (params[key] === undefined) continue
+
 		const initial = result
 		result = result.replace(`[${key}]`, params[key])
 		if (initial === result) {
@@ -85,5 +89,8 @@ export const routesSearchParams = {
 	},
 	uploadParse: {
 		files: ['', ''],
+	},
+	variantPrint: {
+		key: 'a' as note | undefined,
 	},
 }

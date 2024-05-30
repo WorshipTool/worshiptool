@@ -1,16 +1,19 @@
 import { Print } from '@mui/icons-material'
 import { useTheme } from '@mui/material'
+import { note } from '@pepavlin/sheet-api'
 import { Button } from '../../../../../../../common/ui/Button'
 import { IconButton } from '../../../../../../../common/ui/IconButton'
 import {
 	getReplacedUrlWithParams,
 	routesPaths,
-	SmartParams,
+	SmartAllParams,
 } from '../../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
 import { useSmartParams } from '../../../../../../../routes/useSmartParams'
 
-interface PrintButtonProps {}
+interface PrintButtonProps {
+	keyNote: note | null
+}
 
 export default function PrintButton(props: PrintButtonProps) {
 	const navigate = useSmartNavigate()
@@ -20,7 +23,10 @@ export default function PrintButton(props: PrintButtonProps) {
 		// navigate('variantPrint', params)
 		// open new window on url
 		const urlPattern = routesPaths.variantPrint
-		const printParams: SmartParams<'variantPrint'> = params
+		const printParams: SmartAllParams<'variantPrint'> = {
+			...params,
+			key: props.keyNote || undefined,
+		}
 		const url = getReplacedUrlWithParams(urlPattern, printParams)
 
 		const width = 800

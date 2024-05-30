@@ -204,7 +204,7 @@ export default function TopPanel(props: TopPanelProps) {
 						</Box>
 					)}
 
-					<PrintButton />
+					<PrintButton keyNote={props.sheet?.getKeyNote() || null} />
 				</>
 			)}
 		</Box>
