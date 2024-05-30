@@ -65,12 +65,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: 'yearly',
 			priority: 0.6,
 		},
-		{
-			url: `${BASE_URL}${routesPaths['upload']}`,
-			lastModified: date,
-			changeFrequency: 'yearly',
-			priority: 0.6,
-		},
+		// {
+		// 	url: `${BASE_URL}${routesPaths['upload']}`,
+		// 	lastModified: date,
+		// 	changeFrequency: 'yearly',
+		// 	priority: 0.6,
+		// },
 
 		...(songsMap as any),
 	]
