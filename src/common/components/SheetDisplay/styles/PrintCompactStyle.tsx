@@ -54,9 +54,11 @@ const SegmentElement = ({
 const SectionComponent = ({
 	section,
 	signature,
+	isLast,
 }: {
 	section: Section
 	signature?: signature
+	isLast: boolean
 }) => {
 	const sectionName = useMemo(() => {
 		if (section.type === SectionType.UNKNOWN) return section.name
@@ -140,7 +142,7 @@ const SectionComponent = ({
 				) : (
 					<></>
 				)}
-				{!hasChords && (
+				{!isLast && (
 					<>
 						<Box sx={{ height: sectionsGap }} />
 					</>
@@ -191,6 +193,7 @@ const PrintCompactStyle: SheetStyleComponentType = ({
 								key={index}
 								section={section}
 								signature={signature}
+								isLast={index === sections.length - 1}
 							/>
 						)
 					})}

@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 import { SheetStyleComponentType } from './config'
 
 const chordHeight = '1.5em'
-const sectionsGap = '1.5rem'
+const sectionsGap = '2rem'
 
 const SegmentElement = ({
 	segment,
@@ -53,9 +53,11 @@ const SegmentElement = ({
 const SectionComponent = ({
 	section,
 	signature,
+	isLast,
 }: {
 	section: Section
 	signature?: signature
+	isLast: boolean
 }) => {
 	const sectionName = useMemo(() => {
 		if (section.type === SectionType.UNKNOWN) return section.name
@@ -96,7 +98,7 @@ const SectionComponent = ({
 					<Typography
 						// fontStyle={'italic'}
 						noWrap
-						fontWeight={500}
+						fontWeight={section.type === SectionType.CHORUS ? 600 : 400}
 						sx={{
 							width: '2rem',
 						}}
@@ -139,7 +141,7 @@ const SectionComponent = ({
 				) : (
 					<></>
 				)}
-				{!hasChords && (
+				{!isLast && (
 					<>
 						<Box sx={{ height: sectionsGap }} />
 					</>
@@ -188,6 +190,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 							key={index}
 							section={section}
 							signature={signature}
+							isLast={index === sections.length - 1}
 						/>
 					)
 				})}
