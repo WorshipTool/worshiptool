@@ -105,6 +105,7 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 	}
 
 	useEffect(() => {
+		setHeight()
 		window.addEventListener('beforeprint', setHeight)
 		return () => {
 			window.removeEventListener('beforeprint', setHeight)

@@ -1,3 +1,4 @@
+import AppProviders from '@/app/components/AppProviders'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -24,7 +25,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body>
+				<AppProviders>{children}</AppProviders>
+			</body>
 		</html>
 	)
 }

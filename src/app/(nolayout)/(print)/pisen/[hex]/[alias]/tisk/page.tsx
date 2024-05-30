@@ -1,3 +1,4 @@
+import PrintHeader from '@/app/(nolayout)/(print)/pisen/[hex]/[alias]/tisk/PrintHeader'
 import { Box } from '@mui/material'
 import { Metadata } from 'next'
 import {
@@ -10,7 +11,6 @@ import { MetadataProps } from '../../../../../../../common/types'
 import { generateMetadataTitle } from '../../../../../../../hooks/window-title/tech'
 import { SmartParams } from '../../../../../../../routes'
 import NotFound from '../../../../../../not-found'
-import PrintOptionsPanel from '../../../../components/PrintOptionsPanel'
 
 type PageProps = {
 	params: SmartParams<'variantPrint'>
@@ -35,22 +35,26 @@ export default async function page({ params }: PageProps) {
 		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
 		return (
 			<Box>
+				<Box
+					sx={{
+						position: 'fixed',
+						right: 0,
+						top: 50,
+						displayPrint: 'none',
+						padding: 1,
+					}}
+				>
+					{/* <PrintOptionsPanel /> */}
+				</Box>
 				<SheetDisplay
 					title={variantData.preferredTitle}
 					sheet={variantData.sheet}
 					variant="printCompact"
 					columns={2}
 				/>
-				<Box
-					sx={{
-						position: 'fixed',
-						right: 0,
-						top: 0,
-						displayPrint: 'none',
-						padding: 1,
-					}}
-				>
-					<PrintOptionsPanel />
+
+				<Box displayPrint={'none'}>
+					<PrintHeader />
 				</Box>
 			</Box>
 		)

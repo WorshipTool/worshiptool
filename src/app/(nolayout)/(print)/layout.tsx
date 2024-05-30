@@ -7,20 +7,23 @@ import './print.css'
 export default function layout(props: LayoutProps) {
 	useEffect(() => {
 		window.print()
+		window.close()
 	}, [])
 	return (
-		<div id="print-layout">
-			{props.children}
+		<div>
+			<div id="print-layout">
+				{props.children}
 
-			<div
-				style={{
-					position: 'fixed',
-					bottom: 0,
-					left: 0,
-					right: 0,
-				}}
-			>
-				<PrintFootbar />
+				<div
+					style={{
+						position: 'fixed',
+						bottom: 0,
+						left: 0,
+						right: 0,
+					}}
+				>
+					<PrintFootbar />
+				</div>
 			</div>
 		</div>
 	)
