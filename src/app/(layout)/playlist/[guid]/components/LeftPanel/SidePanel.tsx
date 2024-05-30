@@ -1,3 +1,5 @@
+import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
+import { getReplacedUrlWithParams, routesPaths, SmartAllParams } from '@/routes'
 import { Edit, Print } from '@mui/icons-material'
 import { Masonry } from '@mui/lab'
 import {
@@ -7,8 +9,8 @@ import {
 	IconButton,
 	InputBase,
 	Skeleton,
-	Typography,
 	styled,
+	Typography,
 	useTheme,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
@@ -69,8 +71,15 @@ export default function SidePanel({}: {}) {
 	}, [playlist?.title])
 
 	const onPrint = () => {
-		window.print()
+		const urlPattern = routesPaths.playlistPrint
+		const printParams: SmartAllParams<'playlistPrint'> = {
+			guid: playlistGuid,
+		}
+		const url = getReplacedUrlWithParams(urlPattern, printParams)
+
+		openNewPrintWindow(url)
 	}
+	const theme = useTheme()
 
 	const onPanelItemClickCall = (guid: string) => {
 		const el = document.getElementById('playlistItem_' + guid)
@@ -93,8 +102,6 @@ export default function SidePanel({}: {}) {
 	const focusTitle = () => {
 		inputRef.current?.focus()
 	}
-
-	const theme = useTheme()
 
 	const doRename = async () => {
 		setSaving((s) => s + 1)

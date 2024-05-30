@@ -1,4 +1,3 @@
-import PrintHeader from '@/app/(nolayout)/(print)/pisen/[hex]/[alias]/tisk/PrintHeader'
 import { Box } from '@mui/material'
 import { Metadata } from 'next'
 import {
@@ -57,10 +56,6 @@ export default async function page({ params, searchParams }: PageProps) {
 					variant="printCompact"
 					columns={2}
 				/>
-
-				<Box displayPrint={'none'}>
-					<PrintHeader />
-				</Box>
 			</Box>
 		)
 	} catch (e) {

@@ -59,6 +59,7 @@ export const routesPaths = {
 	variant: '/pisen/[hex]/[alias]',
 	variantPrint: '/pisen/[hex]/[alias]/tisk',
 	playlist: '/playlist/[guid]',
+	playlistPrint: '/playlist/[guid]/tisk',
 	playlistCards: '/playlist/[guid]/prezentace',
 	group: '/skupina/[groupCode]',
 	groupSettings: '/skupina/[groupCode]/nastaveni',

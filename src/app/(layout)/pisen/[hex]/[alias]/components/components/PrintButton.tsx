@@ -1,3 +1,4 @@
+import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
 import { Print } from '@mui/icons-material'
 import { useTheme } from '@mui/material'
 import { note } from '@pepavlin/sheet-api'
@@ -19,8 +20,6 @@ export default function PrintButton(props: PrintButtonProps) {
 	const navigate = useSmartNavigate()
 	const params = useSmartParams('variant')
 	const onPrintClick = () => {
-		// window.print()
-		// navigate('variantPrint', params)
 		// open new window on url
 		const urlPattern = routesPaths.variantPrint
 		const printParams: SmartAllParams<'variantPrint'> = {
@@ -29,16 +28,7 @@ export default function PrintButton(props: PrintButtonProps) {
 		}
 		const url = getReplacedUrlWithParams(urlPattern, printParams)
 
-		const width = 800
-		const height = 600
-		const left = (window.screen.width - width) / 2
-		const top = (window.screen.height - height) / 4
-
-		window.open(
-			url,
-			'_blank',
-			`width=${width},height=${height},left=${left},top=${top}`
-		)
+		openNewPrintWindow(url)
 	}
 	const theme = useTheme()
 	return (

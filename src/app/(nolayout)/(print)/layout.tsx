@@ -1,4 +1,6 @@
 'use client'
+import PrintClosePanel from '@/app/(nolayout)/(print)/components/PrintClosePanel'
+import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { LayoutProps } from '../../../common/types'
 import PrintFootbar from './components/PrintFootbar'
@@ -13,6 +15,10 @@ export default function layout(props: LayoutProps) {
 		<div>
 			<div id="print-layout">
 				{props.children}
+
+				<Box displayPrint={'none'}>
+					<PrintClosePanel />
+				</Box>
 
 				<div
 					style={{

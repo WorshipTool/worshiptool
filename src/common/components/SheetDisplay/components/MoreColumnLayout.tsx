@@ -119,9 +119,8 @@ export default function MoreColumnLayout(props: MoreColumnLayoutProps) {
 		>
 			<Box
 				sx={{
-					columnCount: 2,
+					columnCount: props.columns,
 					columnFill: 'auto',
-					// bgcolor: 'red',
 				}}
 				ref={ref}
 			>

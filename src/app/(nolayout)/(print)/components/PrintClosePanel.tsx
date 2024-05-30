@@ -4,7 +4,7 @@ import { Typography } from '@/common/ui/Typography'
 import { Close, Info } from '@mui/icons-material'
 import { Box } from '@mui/material'
 
-export default function PrintHeader() {
+export default function PrintClosePanel() {
 	const height = 56
 	return (
 		<>
