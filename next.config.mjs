@@ -11,7 +11,7 @@ const nextConfig = withRoutes({
 		return config
 	},
 
-	reactStrictMode: true,
+	reactStrictMode: false,
 	output: 'standalone',
 })
 

@@ -1,5 +1,5 @@
-import { Button } from '@ui/Button'
-import { createStory } from '../../../app/storybook/createStory'
+import { Button } from '@/ui/Button'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 import { Gap } from '../Gap/Gap'
 
 const ButtonStory = () => {

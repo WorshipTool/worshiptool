@@ -1,4 +1,4 @@
-import { Background } from '@common/components'
+import { Background } from '@/common/components'
 import AppLayout from '../../common/components/app/AppLayout/AppLayout'
 import Snow from '../../common/components/Snow'
 import SearchGroupDialog from '../../common/components/Toolbar/components/Toolsmenu/components/SearchGroupDialog'

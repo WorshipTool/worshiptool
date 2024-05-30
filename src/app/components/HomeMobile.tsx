@@ -1,6 +1,6 @@
 'use client'
 
-import { Toolbar } from '@common/components'
+import { Toolbar } from '@/common/components'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, InputBase, styled, useTheme } from '@mui/material'
 import { useState } from 'react'

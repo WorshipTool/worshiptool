@@ -1,6 +1,6 @@
+import { IconButton } from '@/ui/IconButton'
 import { TextSnippet } from '@mui/icons-material'
-import { IconButton } from '@ui/IconButton'
-import { createStory } from '../../../app/storybook/createStory'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 
 const IconButtonStory = () => {
 	return (

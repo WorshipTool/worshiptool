@@ -1,4 +1,4 @@
-import { createStory } from '../../../app/storybook/createStory'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 import CustomChip from './CustomChip'
 
 const CustomChipStory = () => {

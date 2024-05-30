@@ -1,4 +1,4 @@
-import { createStory } from '../../../app/storybook/createStory'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 import { Typography } from '../Typography/Typography'
 import { Clickable } from './Clickable'
 

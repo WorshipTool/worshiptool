@@ -1,11 +1,20 @@
+import AppProviders from '@/app/components/AppProviders'
 import type { Metadata } from 'next'
-import { AppContainer } from './components/AppContainer'
-import AppProviders from './components/AppProviders'
 import './globals.css'
 
 export const metadata: Metadata = {
 	title: 'Chvalotce.cz',
-	description: 'Uživatelsky přívětivá platforma s křesťanskými chválam',
+	description: 'Uživatelsky přívětivá platforma s křesťanskými chválami',
+	keywords: [
+		'zpěvník',
+		'chvály',
+		'akordy',
+		'píseň',
+		'text',
+		'playlist',
+		'křesťanské',
+		'hudba',
+	],
 	manifest: '/src/app/manifest.json',
 }
 
@@ -17,9 +26,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<AppProviders>
-					<AppContainer>{children}</AppContainer>
-				</AppProviders>
+				<AppProviders>{children}</AppProviders>
 			</body>
 		</html>
 	)

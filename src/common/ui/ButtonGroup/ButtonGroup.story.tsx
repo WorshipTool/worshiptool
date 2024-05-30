@@ -1,6 +1,6 @@
-import { Button } from '@ui/Button'
-import { ButtonGroup } from '@ui/ButtonGroup'
-import { createStory } from '../../../app/storybook/createStory'
+import { Button } from '@/ui/Button'
+import { ButtonGroup } from '@/ui/ButtonGroup'
+import { createStory } from '../../../app/(layout)/storybook/createStory'
 
 const ButtonGroupStory = () => {
 	return (

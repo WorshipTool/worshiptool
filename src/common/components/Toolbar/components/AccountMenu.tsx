@@ -1,5 +1,6 @@
-import { ListItemText, Menu, MenuItem } from '@mui/material'
+import { Divider, ListItemText, Menu, MenuItem } from '@mui/material'
 import useAuth from '../../../../hooks/auth/useAuth'
+import { Gap } from '../../../ui/Gap'
 import { Link } from '../../../ui/Link/CustomLink'
 
 interface AccountMenuProps {
@@ -42,11 +43,39 @@ export default function AccountMenu({
 				<MenuItem>
 					<ListItemText
 						primary={user?.firstName + ' ' + user?.lastName}
-						secondary={'Spravovat'}
+						secondary={'Spravovat účet'}
 					/>
 				</MenuItem>
 			</Link>
-			<MenuItem onClick={onLogoutClick}>Odhlásit se</MenuItem>
+			<Gap value={0.5} />
+			<Divider />
+			<Gap value={0.5} />
+			{/* <Link to="usersPlaylists" params={{}}>
+				<MenuItem>
+					<ListItemIcon>
+						<MenuSharp />
+					</ListItemIcon>
+					Playlisty
+				</MenuItem>
+			</Link>
+			<Link to="usersSongs" params={{}}>
+				<MenuItem>
+					<ListItemIcon>
+						<LibraryMusic />
+					</ListItemIcon>
+					Moje písně
+				</MenuItem>
+			</Link> */}
+
+			{/* <Gap value={0.5} />
+			<Divider />
+			<Gap value={0.5} /> */}
+			<MenuItem onClick={onLogoutClick}>
+				{/* <ListItemIcon>
+					<Logout />
+				</ListItemIcon> */}
+				Odhlásit se
+			</MenuItem>
 		</Menu>
 	)
 }

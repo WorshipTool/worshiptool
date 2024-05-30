@@ -14,7 +14,7 @@
 		"@mui/icons-material": "^5.15.17",
 		"@mui/lab": "^5.0.0-alpha.170",
 		"@mui/material": "^5.15.17",
-		"@pepavlin/sheet-api": "^1.3.4",
+		"@pepavlin/sheet-api": "^1.3.7",
 		"@react-oauth/google": "^0.12.1",
 		"axios": "^1.6.8",
 		"framer-motion": "^11.1.9",
