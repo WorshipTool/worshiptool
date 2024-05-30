@@ -13,11 +13,12 @@ export const getReplacedUrlWithParams = (
 	for (const key in params) {
 		// Ignore undefined values
 		if (params[key] === undefined) continue
+		if (typeof params[key] !== 'string') continue
 
 		const initial = result
-		result = result.replace(`[${key}]`, params[key])
+		result = result.replace(`[${key}]`, params[key] as string)
 		if (initial === result) {
-			queryParams[key] = params[key]
+			queryParams[key] = params[key] as string
 		}
 	}
 
