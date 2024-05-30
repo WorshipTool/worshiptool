@@ -8,6 +8,7 @@ import {
 import { Box, IconButton } from '@mui/material'
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
+import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
 import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
@@ -151,6 +152,15 @@ export default function PlaylistCards() {
 						<FullscreenExit color="inherit" sx={{ color: COLOR }} />
 					</IconButton>
 				)}
+			</Box>
+			<Box
+				sx={{
+					position: 'absolute',
+					top: 0,
+					left: 0,
+				}}
+			>
+				<GoBackButton />
 			</Box>
 			<SlideCard item={items[currentIndex]} order={currentIndex} />
 		</Box>
