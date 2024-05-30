@@ -6,7 +6,7 @@ import { LayoutProps } from '../../../common/types'
 import PrintFootbar from './components/PrintFootbar'
 import './print.css'
 
-export default function layout(props: LayoutProps) {
+export default function Layout(props: LayoutProps) {
 	useEffect(() => {
 		window.print()
 		window.close()

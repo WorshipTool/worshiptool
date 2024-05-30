@@ -215,7 +215,7 @@ export default function Create() {
 										Tady uvidite ukazku...
 									</Typography>
 								)}
-								<DefaultStyle title={title} sheet={sheet} />
+								<DefaultStyle title={title} sheet={sheet} columns={1} />
 							</StyledContainer>
 						)}
 

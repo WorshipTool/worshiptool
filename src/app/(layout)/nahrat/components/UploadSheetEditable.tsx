@@ -82,7 +82,7 @@ export default function UploadSheetEditable(props: UploadSheetEditableProps) {
 					paddingRight: 5,
 				}}
 			>
-				<DefaultStyle sheet={sheet} title={title}></DefaultStyle>
+				<DefaultStyle sheet={sheet} title={title} columns={1}></DefaultStyle>
 			</Box>
 
 			<Box

@@ -188,11 +188,19 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 					</Box>
 				</Box>
 
-				<DefaultStyle sheet={sheet} title={item.variant.preferredTitle} />
+				<DefaultStyle
+					sheet={sheet}
+					title={item.variant.preferredTitle}
+					columns={1}
+				/>
 			</Paper>
 
 			<Box display={'none'} displayPrint={'block'}>
-				<DefaultStyle sheet={sheet} title={item.variant.preferredTitle} />
+				<DefaultStyle
+					sheet={sheet}
+					title={item.variant.preferredTitle}
+					columns={1}
+				/>
 				{items.length > 1 && <PageBreak />}
 			</Box>
 		</>
