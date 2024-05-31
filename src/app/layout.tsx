@@ -1,4 +1,5 @@
 import AppProviders from '@/app/components/AppProviders'
+import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			<GoogleAnalytics />
 			<body>
 				<AppProviders>{children}</AppProviders>
 			</body>
