@@ -9,7 +9,7 @@ import './print.css'
 export default function Layout(props: LayoutProps) {
 	useEffect(() => {
 		window.print()
-		window.close()
+		// window.close()
 	}, [])
 	return (
 		<div>

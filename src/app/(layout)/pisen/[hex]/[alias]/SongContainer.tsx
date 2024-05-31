@@ -99,10 +99,13 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 					)}
 				</>
 				{!inEditMode && variant && !variant.deleted && (
-					<AdditionalSongInfoPanel
-						song={song as SongDto}
-						variant={variant as SongVariantDto}
-					/>
+					<>
+						<Gap value={2} />
+						<AdditionalSongInfoPanel
+							song={song as SongDto}
+							variant={variant as SongVariantDto}
+						/>
+					</>
 				)}
 			</Box>
 		</>
