@@ -17,6 +17,9 @@ export const metadata: Metadata = {
 		'hudba',
 	],
 	manifest: '/src/app/manifest.json',
+	verification: {
+		google: 'yvbr9ieSeuhugyZcK93MS5Mm3DgYMXqK1EUHYXEHEWs',
+	},
 }
 
 export default function RootLayout({
