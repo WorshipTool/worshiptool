@@ -4,7 +4,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { SnackbarProvider } from 'notistack'
 // import { BrowserRouter } from "react-router-dom";
 
-import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
 import React from 'react'
 import ErrorHandlerProvider from '../../common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '../../hooks/auth/useAuth'
@@ -41,7 +40,6 @@ export default function AppProviders(props: AppProvidersProps) {
 					</SnackbarProvider>
 				</ThemeProvider>
 			</GoogleOAuthProvider>
-			<GoogleAnalytics />
 		</>
 	)
 }
