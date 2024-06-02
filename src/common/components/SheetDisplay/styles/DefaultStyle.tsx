@@ -165,8 +165,6 @@ const DefaultStyle: SheetStyleComponentType = ({
 		return sheet?.getSections() || []
 	}, [sheet])
 
-	console.log('sections', sections)
-
 	return (
 		<Box sx={{}}>
 			<Box
