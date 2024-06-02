@@ -76,7 +76,9 @@ const SectionComponent = ({
 				break
 		}
 
-		return section.index + text
+		const index = section.index > 0 ? section.index : ''
+
+		return index + text
 	}, [section])
 
 	const hasChords = useMemo(() => {
