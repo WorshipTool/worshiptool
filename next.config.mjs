@@ -10,6 +10,15 @@ const nextConfig = withRoutes({
 		})
 		return config
 	},
+	async redirects() {
+		return [
+			{
+				source: '/p/:hex/:alias',
+				destination: '/pisen/:hex/:alias',
+				permanent: true,
+			},
+		]
+	},
 
 	reactStrictMode: false,
 	output: 'standalone',
