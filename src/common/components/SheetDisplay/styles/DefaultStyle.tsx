@@ -37,9 +37,7 @@ const SegmentElement = ({
 									</Typography>
 								</>
 							) : (
-								<>
-									<Box sx={{ height: chordHeight }} />
-								</>
+								<Box sx={{ height: chordHeight }} />
 							))}
 
 						<Typography>{word}</Typography>
@@ -78,7 +76,9 @@ const SectionComponent = ({
 				break
 		}
 
-		return section.index + text
+		const index = section.index > 0 ? section.index : ''
+
+		return index + text
 	}, [section])
 
 	const hasChords = useMemo(() => {
@@ -87,11 +87,15 @@ const SectionComponent = ({
 			line.segments.some((segment) => segment.chord)
 		)
 	}, [section])
+
+	const hasFirstLineText = useMemo(() => {
+		return section.lines?.[0]?.text && section.lines?.[0]?.text?.length > 0
+	}, [section])
 	return (
 		<Box display={'flex'} flexDirection={'row'}>
 			<Box
 				sx={{
-					paddingTop: hasChords ? chordHeight : 0,
+					paddingTop: hasChords && hasFirstLineText ? chordHeight : 0,
 				}}
 			>
 				{sectionName && (

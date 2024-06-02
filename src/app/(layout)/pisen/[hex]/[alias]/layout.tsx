@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+import { Sheet } from '@pepavlin/sheet-api'
 import ContainerGrid from '../../../../../common/components/ContainerGrid'
 import { LayoutProps, MetadataProps } from '../../../../../common/types'
 import { generateMetadataTitle } from '../../../../../hooks/window-title/tech'
@@ -9,15 +10,20 @@ export const generateMetadata = async ({
 }: MetadataProps<'variant'>) => {
 	const alias = getVariantAliasFromParams(params.hex, params.alias)
 	try {
-		const variant = await getVariantByAlias(alias)
-		const songTitle = variant.variants[0].prefferedTitle
-		const title = songTitle + ' (Píseň s akordy)'
+		const variantData = await getVariantByAlias(alias)
+		const variant = variantData.variants[0]
+		const songTitle = variant.prefferedTitle
+
+		const sheet = new Sheet(variant.sheetData)
+
+		const title =
+			songTitle + ` (${sheet.getKeyChord() ? 'Píseň s akordy' : 'Text písně'})`
 		return {
 			title: await generateMetadataTitle(title, 'variant', params),
 		}
 	} catch (e) {
 		return {
-			title: await generateMetadataTitle('Píseň s akordy', 'variant', params),
+			title: await generateMetadataTitle('Text písně', 'variant', params),
 		}
 	}
 }
