@@ -37,9 +37,7 @@ const SegmentElement = ({
 									</Typography>
 								</>
 							) : (
-								<>
-									<Box sx={{ height: chordHeight }} />
-								</>
+								<Box sx={{ height: chordHeight }} />
 							))}
 
 						<Typography>{word}</Typography>
@@ -87,11 +85,15 @@ const SectionComponent = ({
 			line.segments.some((segment) => segment.chord)
 		)
 	}, [section])
+
+	const hasFirstLineText = useMemo(() => {
+		return section.lines?.[0]?.text && section.lines?.[0]?.text?.length > 0
+	}, [section])
 	return (
 		<Box display={'flex'} flexDirection={'row'}>
 			<Box
 				sx={{
-					paddingTop: hasChords ? chordHeight : 0,
+					paddingTop: hasChords && hasFirstLineText ? chordHeight : 0,
 				}}
 			>
 				{sectionName && (
@@ -160,6 +162,8 @@ const DefaultStyle: SheetStyleComponentType = ({
 	const sections = useMemo(() => {
 		return sheet?.getSections() || []
 	}, [sheet])
+
+	console.log('sections', sections)
 
 	return (
 		<Box sx={{}}>
