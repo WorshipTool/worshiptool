@@ -6,7 +6,8 @@
 		"dev": "next dev -p 5500",
 		"build": "next build",
 		"start": "next start -p 5500",
-		"lint": "next lint"
+		"lint": "next lint",
+		"generate-api": "bash ./src/api/generate_api.sh"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.4",

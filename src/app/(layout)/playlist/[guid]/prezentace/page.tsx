@@ -12,7 +12,6 @@ import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/G
 import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
-import { useWindowTitle } from '../../../../../hooks/window-title/useWindowTitle'
 import SlideCard from './components/SlideCard'
 
 export default function PlaylistCards() {
@@ -111,10 +110,6 @@ export default function PlaylistCards() {
 			document.removeEventListener('keydown', onKeyDown)
 		}
 	}, [items])
-
-	useWindowTitle(
-		playlist?.title ? playlist.title + ' - Prezentace' : 'Prezentace'
-	)
 
 	return (
 		<Box>
