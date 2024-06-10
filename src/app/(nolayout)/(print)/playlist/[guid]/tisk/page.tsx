@@ -3,7 +3,7 @@ import NotFound from '@/app/not-found'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartParams } from '@/routes'
 import { Box } from '@mui/material'
-import { Sheet } from '@pepavlin/sheet-api'
+import { note, Sheet } from '@pepavlin/sheet-api'
 
 type PageProps = {
 	params: SmartParams<'playlistPrint'>
@@ -18,6 +18,7 @@ export default async function Page({ params }: PageProps) {
 					.sort((a, b) => a.order - b.order)
 					.map((item, index) => {
 						const sheet = new Sheet(item.variant.sheetData)
+						sheet.setKey(item.toneKey as note)
 						const title = `${item.order + 1}.  ${item.variant.prefferedTitle}`
 
 						return (
