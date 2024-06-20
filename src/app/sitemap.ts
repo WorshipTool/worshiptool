@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { ListSongData, SongGettingApi } from '../api/generated'
+import { GetListSongData, SongGettingApi } from '../api/generated'
 import {
 	getRouteUrlWithParams,
 	parseVariantAlias,
@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const BASE_URL = 'https://chvalotce.cz'
 
 	const api = new SongGettingApi()
-	let songs: ListSongData[] = []
+	let songs: GetListSongData[] = []
 	try {
 		songs = await handleApiCall(api.songGettingControllerGetList())
 	} catch (e) {

@@ -301,6 +301,31 @@ export interface GetGroupsCountResult {
 /**
  * 
  * @export
+ * @interface GetListSongData
+ */
+export interface GetListSongData {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetListSongData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetListSongData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetListSongData
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface GetOrCreatePermissionInDto
  */
 export interface GetOrCreatePermissionInDto {
@@ -502,31 +527,6 @@ export interface JwtResult {
 /**
  * 
  * @export
- * @interface ListSongData
- */
-export interface ListSongData {
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSongData
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSongData
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSongData
-     */
-    'alias': string;
-}
-/**
- * 
- * @export
  * @interface LoginInputData
  */
 export interface LoginInputData {
@@ -647,57 +647,6 @@ export const MediaTypeEnum = {
 
 export type MediaTypeEnum = typeof MediaTypeEnum[keyof typeof MediaTypeEnum];
 
-/**
- * 
- * @export
- * @interface NewSongDataCreator
- */
-export interface NewSongDataCreator {
-    /**
-     * 
-     * @type {number}
-     * @memberof NewSongDataCreator
-     */
-    'type': NewSongDataCreatorTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewSongDataCreator
-     */
-    'name': string;
-}
-
-export const NewSongDataCreatorTypeEnum = {
-    NUMBER_0: 0
-} as const;
-
-export type NewSongDataCreatorTypeEnum = typeof NewSongDataCreatorTypeEnum[keyof typeof NewSongDataCreatorTypeEnum];
-
-/**
- * 
- * @export
- * @interface NewSongDataProcessResult
- */
-export interface NewSongDataProcessResult {
-    /**
-     * 
-     * @type {string}
-     * @memberof NewSongDataProcessResult
-     */
-    'message': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewSongDataProcessResult
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewSongDataProcessResult
-     */
-    'alias': string;
-}
 /**
  * 
  * @export
@@ -913,68 +862,6 @@ export interface PlaylistItemOutDto {
 /**
  * 
  * @export
- * @interface PostAddSongDataBody
- */
-export interface PostAddSongDataBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddSongDataBody
-     */
-    'songGuid'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddSongDataBody
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddSongDataBody
-     */
-    'sheetData'?: string;
-    /**
-     * 
-     * @type {SongDataSource}
-     * @memberof PostAddSongDataBody
-     */
-    'source'?: SongDataSource;
-    /**
-     * 
-     * @type {Array<SongDataMedia>}
-     * @memberof PostAddSongDataBody
-     */
-    'media'?: Array<SongDataMedia>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostAddSongDataBody
-     */
-    'tags'?: Array<string>;
-    /**
-     * 
-     * @type {Array<NewSongDataCreator>}
-     * @memberof PostAddSongDataBody
-     */
-    'creators'?: Array<NewSongDataCreator>;
-}
-/**
- * 
- * @export
- * @interface PostAddSubUrlDomainDto
- */
-export interface PostAddSubUrlDomainDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostAddSubUrlDomainDto
-     */
-    'page': string;
-}
-/**
- * 
- * @export
  * @interface PostCreateCopyInDto
  */
 export interface PostCreateCopyInDto {
@@ -1070,6 +957,65 @@ export interface PostCreatePlaylistResult {
 /**
  * 
  * @export
+ * @interface PostCreateVariantInDto
+ */
+export interface PostCreateVariantInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateVariantInDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateVariantInDto
+     */
+    'sheetData': string;
+    /**
+     * 
+     * @type {SongDataSource}
+     * @memberof PostCreateVariantInDto
+     */
+    'source'?: SongDataSource;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostCreateVariantInDto
+     */
+    'createdType': PostCreateVariantInDtoCreatedTypeEnum;
+}
+
+export const PostCreateVariantInDtoCreatedTypeEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type PostCreateVariantInDtoCreatedTypeEnum = typeof PostCreateVariantInDtoCreatedTypeEnum[keyof typeof PostCreateVariantInDtoCreatedTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface PostCreateVariantOutDto
+ */
+export interface PostCreateVariantOutDto {
+    /**
+     * 
+     * @type {SongVariant}
+     * @memberof PostCreateVariantOutDto
+     */
+    'variant': SongVariant;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateVariantOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface PostEditVariantInDto
  */
 export interface PostEditVariantInDto {
@@ -1091,7 +1037,22 @@ export interface PostEditVariantInDto {
      * @memberof PostEditVariantInDto
      */
     'title'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostEditVariantInDto
+     */
+    'createdType': PostEditVariantInDtoCreatedTypeEnum;
 }
+
+export const PostEditVariantInDtoCreatedTypeEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type PostEditVariantInDtoCreatedTypeEnum = typeof PostEditVariantInDtoCreatedTypeEnum[keyof typeof PostEditVariantInDtoCreatedTypeEnum];
+
 /**
  * 
  * @export
@@ -1126,28 +1087,15 @@ export interface PostGoogleLoginBody {
 /**
  * 
  * @export
- * @interface PostProcessSourceLoopDto
+ * @interface PostSendCustomMessageBody
  */
-export interface PostProcessSourceLoopDto {
+export interface PostSendCustomMessageBody {
     /**
      * 
-     * @type {number}
-     * @memberof PostProcessSourceLoopDto
+     * @type {object}
+     * @memberof PostSendCustomMessageBody
      */
-    'time': number;
-}
-/**
- * 
- * @export
- * @interface PostProcessSubUrlDto
- */
-export interface PostProcessSubUrlDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostProcessSubUrlDto
-     */
-    'url': string;
+    'data': object;
 }
 /**
  * 
@@ -1184,15 +1132,61 @@ export interface PostSendMessageBody {
 /**
  * 
  * @export
- * @interface PostSubUrlLoopDto
+ * @interface ProgramSongData
  */
-export interface PostSubUrlLoopDto {
+export interface ProgramSongData {
     /**
      * 
      * @type {number}
-     * @memberof PostSubUrlLoopDto
+     * @memberof ProgramSongData
      */
-    'time': number;
+    'confidence': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProgramSongData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProgramSongData
+     */
+    'sheetData': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProgramSongData
+     */
+    'url': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProgramSongData
+     */
+    'createdType': ProgramSongDataCreatedTypeEnum;
+}
+
+export const ProgramSongDataCreatedTypeEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type ProgramSongDataCreatedTypeEnum = typeof ProgramSongDataCreatedTypeEnum[keyof typeof ProgramSongDataCreatedTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface RegisterWebhookExtensionBody
+ */
+export interface RegisterWebhookExtensionBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterWebhookExtensionBody
+     */
+    'url': string;
 }
 /**
  * 
@@ -1321,10 +1315,10 @@ export interface Song {
     'mainTitle': SongTitle;
     /**
      * 
-     * @type {Array<SongVariant>}
+     * @type {Array<SongVariantHistoryPack>}
      * @memberof Song
      */
-    'variants': Array<SongVariant>;
+    'variantPacks': Array<SongVariantHistoryPack>;
     /**
      * 
      * @type {Array<Media>}
@@ -1603,12 +1597,6 @@ export interface SongVariant {
     'titles': Array<SongTitle>;
     /**
      * 
-     * @type {Song}
-     * @memberof SongVariant
-     */
-    'song': Song;
-    /**
-     * 
      * @type {User}
      * @memberof SongVariant
      */
@@ -1649,6 +1637,12 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'parent': SongVariant;
+    /**
+     * 
+     * @type {SongVariantHistoryPack}
+     * @memberof SongVariant
+     */
+    'historyPack': SongVariantHistoryPack;
 }
 
 export const SongVariantTypeEnum = {
@@ -1759,6 +1753,49 @@ export const SongVariantDataOutDtoCreatedTypeEnum = {
 
 export type SongVariantDataOutDtoCreatedTypeEnum = typeof SongVariantDataOutDtoCreatedTypeEnum[keyof typeof SongVariantDataOutDtoCreatedTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface SongVariantHistoryPack
+ */
+export interface SongVariantHistoryPack {
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {SongVariant}
+     * @memberof SongVariantHistoryPack
+     */
+    'last': SongVariant;
+    /**
+     * 
+     * @type {Array<SongVariant>}
+     * @memberof SongVariantHistoryPack
+     */
+    'variants': Array<SongVariant>;
+    /**
+     * 
+     * @type {Song}
+     * @memberof SongVariantHistoryPack
+     */
+    'song': Song;
+    /**
+     * 
+     * @type {Array<UrlAlias>}
+     * @memberof SongVariantHistoryPack
+     */
+    'aliases': Array<UrlAlias>;
+    /**
+     * 
+     * @type {UrlAlias}
+     * @memberof SongVariantHistoryPack
+     */
+    'alias': UrlAlias;
+}
 /**
  * 
  * @export
@@ -1897,6 +1934,12 @@ export interface UrlAlias {
      * @memberof UrlAlias
      */
     'type': UrlAliasTypeEnum;
+    /**
+     * 
+     * @type {SongVariantHistoryPack}
+     * @memberof UrlAlias
+     */
+    'pack': SongVariantHistoryPack;
     /**
      * 
      * @type {Array<PlaylistItem>}
@@ -2488,834 +2531,6 @@ export class DefaultApi extends BaseAPI {
      */
     public statusMonitorControllerRoot(options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).statusMonitorControllerRoot(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * DomainApprovalApi - axios parameter creator
- * @export
- */
-export const DomainApprovalApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainApprovalControllerSendNextApproval: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/approval/sendApproval`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * DomainApprovalApi - functional programming interface
- * @export
- */
-export const DomainApprovalApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DomainApprovalApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainApprovalControllerSendNextApproval(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DomainApprovalApi.domainApprovalControllerSendNextApproval']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * DomainApprovalApi - factory interface
- * @export
- */
-export const DomainApprovalApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DomainApprovalApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainApprovalControllerSendNextApproval(options?: any): AxiosPromise<boolean> {
-            return localVarFp.domainApprovalControllerSendNextApproval(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * DomainApprovalApi - object-oriented interface
- * @export
- * @class DomainApprovalApi
- * @extends {BaseAPI}
- */
-export class DomainApprovalApi extends BaseAPI {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainApprovalApi
-     */
-    public domainApprovalControllerSendNextApproval(options?: RawAxiosRequestConfig) {
-        return DomainApprovalApiFp(this.configuration).domainApprovalControllerSendNextApproval(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * GetterApi - axios parameter creator
- * @export
- */
-export const GetterApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {PostAddSubUrlDomainDto} postAddSubUrlDomainDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerAddSubUrlPage: async (postAddSubUrlDomainDto: PostAddSubUrlDomainDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postAddSubUrlDomainDto' is not null or undefined
-            assertParamExists('domainExploreControllerAddSubUrlPage', 'postAddSubUrlDomainDto', postAddSubUrlDomainDto)
-            const localVarPath = `/getter/explore/suburl/add`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postAddSubUrlDomainDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetDomainCheck: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/explore/check`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} url 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetDomainExplore: async (url: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'url' is not null or undefined
-            assertParamExists('domainExploreControllerGetDomainExplore', 'url', url)
-            const localVarPath = `/getter/explore`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (url !== undefined) {
-                localVarQueryParameter['url'] = url;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerProcess: async (postProcessSubUrlDto: PostProcessSubUrlDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postProcessSubUrlDto' is not null or undefined
-            assertParamExists('domainExploreControllerProcess', 'postProcessSubUrlDto', postProcessSubUrlDto)
-            const localVarPath = `/getter/explore/suburl/process`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postProcessSubUrlDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {PostSubUrlLoopDto} postSubUrlLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerSubUrlLoop: async (postSubUrlLoopDto: PostSubUrlLoopDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postSubUrlLoopDto' is not null or undefined
-            assertParamExists('domainExploreControllerSubUrlLoop', 'postSubUrlLoopDto', postSubUrlLoopDto)
-            const localVarPath = `/getter/explore/suburl/loop`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postSubUrlLoopDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainSearchControllerSearch: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/search`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerActivate: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/activate`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerDeactivate: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/deactivate`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerIsActive: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/isactive`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {PostProcessSourceLoopDto} postProcessSourceLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sourceProcessControllerProcessLoop: async (postProcessSourceLoopDto: PostProcessSourceLoopDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postProcessSourceLoopDto' is not null or undefined
-            assertParamExists('sourceProcessControllerProcessLoop', 'postProcessSourceLoopDto', postProcessSourceLoopDto)
-            const localVarPath = `/getter/source/process-loop`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postProcessSourceLoopDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sourceProcessControllerProcessNextSource: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/getter/source/process-next`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * GetterApi - functional programming interface
- * @export
- */
-export const GetterApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = GetterApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {PostAddSubUrlDomainDto} postAddSubUrlDomainDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto: PostAddSubUrlDomainDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainExploreControllerAddSubUrlPage']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerGetDomainCheck(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerGetDomainCheck(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainExploreControllerGetDomainCheck']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} url 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerGetDomainExplore(url: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerGetDomainExplore(url, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainExploreControllerGetDomainExplore']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerProcess(postProcessSubUrlDto: PostProcessSubUrlDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerProcess(postProcessSubUrlDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainExploreControllerProcess']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {PostSubUrlLoopDto} postSubUrlLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainExploreControllerSubUrlLoop(postSubUrlLoopDto: PostSubUrlLoopDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainExploreControllerSubUrlLoop(postSubUrlLoopDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainExploreControllerSubUrlLoop']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async domainSearchControllerSearch(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.domainSearchControllerSearch(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.domainSearchControllerSearch']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getterControllerActivate(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getterControllerActivate(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.getterControllerActivate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getterControllerDeactivate(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getterControllerDeactivate(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.getterControllerDeactivate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getterControllerIsActive(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getterControllerIsActive(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.getterControllerIsActive']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {PostProcessSourceLoopDto} postProcessSourceLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sourceProcessControllerProcessLoop(postProcessSourceLoopDto: PostProcessSourceLoopDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sourceProcessControllerProcessLoop(postProcessSourceLoopDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.sourceProcessControllerProcessLoop']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sourceProcessControllerProcessNextSource(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sourceProcessControllerProcessNextSource(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GetterApi.sourceProcessControllerProcessNextSource']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * GetterApi - factory interface
- * @export
- */
-export const GetterApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = GetterApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {PostAddSubUrlDomainDto} postAddSubUrlDomainDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto: PostAddSubUrlDomainDto, options?: any): AxiosPromise<object> {
-            return localVarFp.domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetDomainCheck(options?: any): AxiosPromise<Array<object>> {
-            return localVarFp.domainExploreControllerGetDomainCheck(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} url 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerGetDomainExplore(url: string, options?: any): AxiosPromise<object> {
-            return localVarFp.domainExploreControllerGetDomainExplore(url, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerProcess(postProcessSubUrlDto: PostProcessSubUrlDto, options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.domainExploreControllerProcess(postProcessSubUrlDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {PostSubUrlLoopDto} postSubUrlLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainExploreControllerSubUrlLoop(postSubUrlLoopDto: PostSubUrlLoopDto, options?: any): AxiosPromise<string> {
-            return localVarFp.domainExploreControllerSubUrlLoop(postSubUrlLoopDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        domainSearchControllerSearch(options?: any): AxiosPromise<void> {
-            return localVarFp.domainSearchControllerSearch(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerActivate(options?: any): AxiosPromise<boolean> {
-            return localVarFp.getterControllerActivate(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerDeactivate(options?: any): AxiosPromise<boolean> {
-            return localVarFp.getterControllerDeactivate(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getterControllerIsActive(options?: any): AxiosPromise<boolean> {
-            return localVarFp.getterControllerIsActive(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {PostProcessSourceLoopDto} postProcessSourceLoopDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sourceProcessControllerProcessLoop(postProcessSourceLoopDto: PostProcessSourceLoopDto, options?: any): AxiosPromise<void> {
-            return localVarFp.sourceProcessControllerProcessLoop(postProcessSourceLoopDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sourceProcessControllerProcessNextSource(options?: any): AxiosPromise<boolean> {
-            return localVarFp.sourceProcessControllerProcessNextSource(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * GetterApi - object-oriented interface
- * @export
- * @class GetterApi
- * @extends {BaseAPI}
- */
-export class GetterApi extends BaseAPI {
-    /**
-     * 
-     * @param {PostAddSubUrlDomainDto} postAddSubUrlDomainDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto: PostAddSubUrlDomainDto, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerAddSubUrlPage(postAddSubUrlDomainDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerGetDomainCheck(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerGetDomainCheck(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} url 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerGetDomainExplore(url: string, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerGetDomainExplore(url, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {PostProcessSubUrlDto} postProcessSubUrlDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerProcess(postProcessSubUrlDto: PostProcessSubUrlDto, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerProcess(postProcessSubUrlDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {PostSubUrlLoopDto} postSubUrlLoopDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainExploreControllerSubUrlLoop(postSubUrlLoopDto: PostSubUrlLoopDto, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainExploreControllerSubUrlLoop(postSubUrlLoopDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public domainSearchControllerSearch(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).domainSearchControllerSearch(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public getterControllerActivate(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).getterControllerActivate(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public getterControllerDeactivate(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).getterControllerDeactivate(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public getterControllerIsActive(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).getterControllerIsActive(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {PostProcessSourceLoopDto} postProcessSourceLoopDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public sourceProcessControllerProcessLoop(postProcessSourceLoopDto: PostProcessSourceLoopDto, options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).sourceProcessControllerProcessLoop(postProcessSourceLoopDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GetterApi
-     */
-    public sourceProcessControllerProcessNextSource(options?: RawAxiosRequestConfig) {
-        return GetterApiFp(this.configuration).sourceProcessControllerProcessNextSource(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4020,6 +3235,42 @@ export const MessengerApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Sends a formatted message to the messenger.
+         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messengerControllerSendCustomMessage: async (postSendCustomMessageBody: PostSendCustomMessageBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postSendCustomMessageBody' is not null or undefined
+            assertParamExists('messengerControllerSendCustomMessage', 'postSendCustomMessageBody', postSendCustomMessageBody)
+            const localVarPath = `/sendCustomMessage`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postSendCustomMessageBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -4056,6 +3307,19 @@ export const MessengerApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerPostMessage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Sends a formatted message to the messenger.
+         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messengerControllerSendCustomMessage(postSendCustomMessageBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerSendCustomMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -4085,6 +3349,16 @@ export const MessengerApiFactory = function (configuration?: Configuration, base
          */
         messengerControllerPostMessage(postSendMessageBody: PostSendMessageBody, options?: any): AxiosPromise<boolean> {
             return localVarFp.messengerControllerPostMessage(postSendMessageBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Sends a formatted message to the messenger.
+         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: any): AxiosPromise<boolean> {
+            return localVarFp.messengerControllerSendCustomMessage(postSendCustomMessageBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4118,6 +3392,18 @@ export class MessengerApi extends BaseAPI {
      */
     public messengerControllerPostMessage(postSendMessageBody: PostSendMessageBody, options?: RawAxiosRequestConfig) {
         return MessengerApiFp(this.configuration).messengerControllerPostMessage(postSendMessageBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Sends a formatted message to the messenger.
+     * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MessengerApi
+     */
+    public messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: RawAxiosRequestConfig) {
+        return MessengerApiFp(this.configuration).messengerControllerSendCustomMessage(postSendCustomMessageBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5419,6 +4705,116 @@ export class PlaylistGettingApi extends BaseAPI {
 
 
 /**
+ * ProgramSongAddingApi - axios parameter creator
+ * @export
+ */
+export const ProgramSongAddingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {ProgramSongData} programSongData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        programSongAddingControllerProcessDataStream: async (programSongData: ProgramSongData, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'programSongData' is not null or undefined
+            assertParamExists('programSongAddingControllerProcessDataStream', 'programSongData', programSongData)
+            const localVarPath = `/song/processdatastream`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(programSongData, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ProgramSongAddingApi - functional programming interface
+ * @export
+ */
+export const ProgramSongAddingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProgramSongAddingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {ProgramSongData} programSongData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async programSongAddingControllerProcessDataStream(programSongData: ProgramSongData, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.programSongAddingControllerProcessDataStream(programSongData, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProgramSongAddingApi.programSongAddingControllerProcessDataStream']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ProgramSongAddingApi - factory interface
+ * @export
+ */
+export const ProgramSongAddingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ProgramSongAddingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {ProgramSongData} programSongData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        programSongAddingControllerProcessDataStream(programSongData: ProgramSongData, options?: any): AxiosPromise<boolean> {
+            return localVarFp.programSongAddingControllerProcessDataStream(programSongData, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ProgramSongAddingApi - object-oriented interface
+ * @export
+ * @class ProgramSongAddingApi
+ * @extends {BaseAPI}
+ */
+export class ProgramSongAddingApi extends BaseAPI {
+    /**
+     * 
+     * @param {ProgramSongData} programSongData 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProgramSongAddingApi
+     */
+    public programSongAddingControllerProcessDataStream(programSongData: ProgramSongData, options?: RawAxiosRequestConfig) {
+        return ProgramSongAddingApiFp(this.configuration).programSongAddingControllerProcessDataStream(programSongData, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * SongAddingApi - axios parameter creator
  * @export
  */
@@ -5426,13 +4822,13 @@ export const SongAddingApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
-         * @param {PostAddSongDataBody} postAddSongDataBody 
+         * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songAddingControllerCreate: async (postAddSongDataBody: PostAddSongDataBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postAddSongDataBody' is not null or undefined
-            assertParamExists('songAddingControllerCreate', 'postAddSongDataBody', postAddSongDataBody)
+        songAddingControllerCreate: async (postCreateVariantInDto: PostCreateVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postCreateVariantInDto' is not null or undefined
+            assertParamExists('songAddingControllerCreate', 'postCreateVariantInDto', postCreateVariantInDto)
             const localVarPath = `/song`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5456,7 +4852,7 @@ export const SongAddingApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postAddSongDataBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(postCreateVariantInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5576,12 +4972,12 @@ export const SongAddingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {PostAddSongDataBody} postAddSongDataBody 
+         * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songAddingControllerCreate(postAddSongDataBody: PostAddSongDataBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewSongDataProcessResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerCreate(postAddSongDataBody, options);
+        async songAddingControllerCreate(postCreateVariantInDto: PostCreateVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreateVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerCreate(postCreateVariantInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongAddingApi.songAddingControllerCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5632,12 +5028,12 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
-         * @param {PostAddSongDataBody} postAddSongDataBody 
+         * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songAddingControllerCreate(postAddSongDataBody: PostAddSongDataBody, options?: any): AxiosPromise<NewSongDataProcessResult> {
-            return localVarFp.songAddingControllerCreate(postAddSongDataBody, options).then((request) => request(axios, basePath));
+        songAddingControllerCreate(postCreateVariantInDto: PostCreateVariantInDto, options?: any): AxiosPromise<PostCreateVariantOutDto> {
+            return localVarFp.songAddingControllerCreate(postCreateVariantInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5676,13 +5072,13 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
 export class SongAddingApi extends BaseAPI {
     /**
      * 
-     * @param {PostAddSongDataBody} postAddSongDataBody 
+     * @param {PostCreateVariantInDto} postCreateVariantInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongAddingApi
      */
-    public songAddingControllerCreate(postAddSongDataBody: PostAddSongDataBody, options?: RawAxiosRequestConfig) {
-        return SongAddingApiFp(this.configuration).songAddingControllerCreate(postAddSongDataBody, options).then((request) => request(this.axios, this.basePath));
+    public songAddingControllerCreate(postCreateVariantInDto: PostCreateVariantInDto, options?: RawAxiosRequestConfig) {
+        return SongAddingApiFp(this.configuration).songAddingControllerCreate(postCreateVariantInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6366,6 +5762,43 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetVariantFromAlias: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('songGettingControllerGetVariantFromAlias', 'alias', alias)
+            const localVarPath = `/song/alias/variant/{alias}`
+                .replace(`{${"alias"}}`, encodeURIComponent(String(alias)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -6395,7 +5828,7 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ListSongData>>> {
+        async songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetListSongData>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetList(page, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetList']?.[localVarOperationServerIndex]?.url;
@@ -6446,6 +5879,18 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetSongsCount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetVariantFromAlias(alias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetVariantFromAlias']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -6472,7 +5917,7 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetList(page?: number, options?: any): AxiosPromise<Array<ListSongData>> {
+        songGettingControllerGetList(page?: number, options?: any): AxiosPromise<Array<GetListSongData>> {
             return localVarFp.songGettingControllerGetList(page, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6507,6 +5952,15 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          */
         songGettingControllerGetSongsCount(options?: any): AxiosPromise<number> {
             return localVarFp.songGettingControllerGetSongsCount(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetVariantFromAlias(alias: string, options?: any): AxiosPromise<string> {
+            return localVarFp.songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6581,109 +6035,16 @@ export class SongGettingApi extends BaseAPI {
     public songGettingControllerGetSongsCount(options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetSongsCount(options).then((request) => request(this.axios, this.basePath));
     }
-}
 
-
-
-/**
- * UrlAliasApi - axios parameter creator
- * @export
- */
-export const UrlAliasApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} alias 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        urlAliasControllerGetVariantFromAlias: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'alias' is not null or undefined
-            assertParamExists('urlAliasControllerGetVariantFromAlias', 'alias', alias)
-            const localVarPath = `/alias/variant/{alias}`
-                .replace(`{${"alias"}}`, encodeURIComponent(String(alias)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * UrlAliasApi - functional programming interface
- * @export
- */
-export const UrlAliasApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = UrlAliasApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} alias 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async urlAliasControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.urlAliasControllerGetVariantFromAlias(alias, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UrlAliasApi.urlAliasControllerGetVariantFromAlias']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * UrlAliasApi - factory interface
- * @export
- */
-export const UrlAliasApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = UrlAliasApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} alias 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        urlAliasControllerGetVariantFromAlias(alias: string, options?: any): AxiosPromise<string> {
-            return localVarFp.urlAliasControllerGetVariantFromAlias(alias, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * UrlAliasApi - object-oriented interface
- * @export
- * @class UrlAliasApi
- * @extends {BaseAPI}
- */
-export class UrlAliasApi extends BaseAPI {
     /**
      * 
      * @param {string} alias 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UrlAliasApi
+     * @memberof SongGettingApi
      */
-    public urlAliasControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig) {
-        return UrlAliasApiFp(this.configuration).urlAliasControllerGetVariantFromAlias(alias, options).then((request) => request(this.axios, this.basePath));
+    public songGettingControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6695,6 +6056,41 @@ export class UrlAliasApi extends BaseAPI {
  */
 export const WebhookApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webhookControllerRegisterWebhookExtension: async (registerWebhookExtensionBody: RegisterWebhookExtensionBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registerWebhookExtensionBody' is not null or undefined
+            assertParamExists('webhookControllerRegisterWebhookExtension', 'registerWebhookExtensionBody', registerWebhookExtensionBody)
+            const localVarPath = `/webhook/registerWebhookExtension`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerWebhookExtensionBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -6765,6 +6161,18 @@ export const WebhookApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebhookApi.webhookControllerRegisterWebhookExtension']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6797,6 +6205,15 @@ export const WebhookApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: any): AxiosPromise<object> {
+            return localVarFp.webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6821,6 +6238,17 @@ export const WebhookApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class WebhookApi extends BaseAPI {
+    /**
+     * 
+     * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebhookApi
+     */
+    public webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: RawAxiosRequestConfig) {
+        return WebhookApiFp(this.configuration).webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.

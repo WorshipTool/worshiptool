@@ -1,4 +1,4 @@
-import { SongGettingApi, UrlAliasApi } from '../../../../../api/generated'
+import { SongGettingApi } from '../../../../../api/generated'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 export const getVariantAliasFromParams = (hex: string, code: string) => {
@@ -6,11 +6,11 @@ export const getVariantAliasFromParams = (hex: string, code: string) => {
 }
 
 export const getVariantByAlias = async (alias: string) => {
-	const aliasApi = new UrlAliasApi()
+	// const aliasApi = new UrlAliasApi()
 	const variantApi = new SongGettingApi()
 
 	const variantGuid = await handleApiCall(
-		aliasApi.urlAliasControllerGetVariantFromAlias(alias)
+		variantApi.songGettingControllerGetVariantFromAlias(alias)
 	)
 
 	const variant = await handleApiCall(

@@ -1,4 +1,5 @@
 'use client'
+import { GetListSongData } from '@/api/generated'
 import {
 	Box,
 	CircularProgress,
@@ -11,7 +12,6 @@ import {
 	Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { ListSongData } from '../../../api/generated'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import { useApi } from '../../../hooks/api/useApi'
 import usePagination from '../../../hooks/usePagination'
@@ -40,7 +40,7 @@ export default function List() {
 		loadPage,
 		data: songs,
 		nextExists,
-	} = usePagination<ListSongData>((page, resolve, arr) => {
+	} = usePagination<GetListSongData>((page, resolve, arr) => {
 		handleApiCall(songGettingApi.songGettingControllerGetList(page))
 			.then((data) => {
 				const uniq = data.filter((v) => {
