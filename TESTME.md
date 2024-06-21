@@ -22,6 +22,7 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - validita uprávy
 - vygenerování nového url při velké změně jména
 - rezponzivnost
+- lze smazat neveřejnou písen, veřejnou nelze
   
 
 ## Vytvořit píseň
