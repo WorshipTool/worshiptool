@@ -2,7 +2,7 @@ import { ColorType } from '@/common/ui/ui.types'
 import { Typography as Typo } from '@mui/material'
 
 type CustomTypographyProps = {
-	children?: string
+	children?: React.ReactNode
 	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
 	strong?: boolean | number
 	color?: ColorType
