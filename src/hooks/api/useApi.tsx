@@ -1,6 +1,5 @@
 import {
 	AuthApi,
-	GetterApi,
 	GroupApi,
 	PermissionsApi,
 	PlaylistEditingApi,
@@ -9,7 +8,6 @@ import {
 	SongDeletingApi,
 	SongEditingApi,
 	SongGettingApi,
-	UrlAliasApi,
 } from '../../api/generated'
 import useAuth from '../auth/useAuth'
 
@@ -23,8 +21,6 @@ export const useApi = () => {
 		songAddingApi: new SongAddingApi(apiConfiguration),
 		songEditingApi: new SongEditingApi(apiConfiguration),
 		songDeletingApi: new SongDeletingApi(apiConfiguration),
-		urlAliasApi: new UrlAliasApi(apiConfiguration),
-		getterApi: new GetterApi(apiConfiguration),
 		groupApi: new GroupApi(apiConfiguration),
 		authApi: new AuthApi(apiConfiguration),
 		permissionApi: new PermissionsApi(apiConfiguration),

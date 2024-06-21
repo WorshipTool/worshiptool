@@ -1,4 +1,6 @@
 'use client'
+import { PostCreateVariantOutDto } from '@/api/generated'
+import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import {
 	Box,
 	Button,
@@ -11,7 +13,6 @@ import {
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { NewSongDataProcessResult } from '../../../../api/generated'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import DefaultStyle from '../../../../common/components/SheetDisplay/styles/DefaultStyle'
 import { Gap } from '../../../../common/ui/Gap'
@@ -45,7 +46,7 @@ export default function Create() {
 	const {
 		fetchApiState,
 		apiState: { loading: posting, error },
-	} = useApiState<NewSongDataProcessResult>()
+	} = useApiState<PostCreateVariantOutDto>()
 
 	const [preview, setPreview] = useState(false)
 
@@ -74,6 +75,7 @@ export default function Create() {
 					songAddingApi.songAddingControllerCreate({
 						title,
 						sheetData,
+						createdType: CreatedType.Manual,
 					})
 				)
 			},

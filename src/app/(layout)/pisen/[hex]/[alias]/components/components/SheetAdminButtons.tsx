@@ -17,9 +17,6 @@ import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
-import AddCreator from '../../../../../../../common/components/AddCreator'
-import AddTag from '../../../../../../../common/components/AddTag'
-import AddVideo from '../../../../../../../common/components/AddVideo'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import DeleteButton from './DeleteButton'
 import EditButton from './EditButton'
@@ -158,31 +155,6 @@ export default function SheetAdminButtons({
 					<ListItemText>Přidat tag</ListItemText>
 				</MenuItem>
 			</Menu>
-
-			<AddVideo
-				open={addVideoOpen}
-				handleClose={() => setAddVideoOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload()
-				}}
-			/>
-			<AddTag
-				open={addTagOpen}
-				handleClose={() => setAddTagOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload()
-				}}
-			/>
-			<AddCreator
-				open={addCreatorOpen}
-				handleClose={() => setAddCreatorOpen(false)}
-				songGuid={song?.guid}
-				afterUpload={() => {
-					reload()
-				}}
-			/>
 		</>
 	)
 }

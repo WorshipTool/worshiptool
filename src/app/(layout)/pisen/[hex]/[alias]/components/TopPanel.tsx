@@ -1,3 +1,4 @@
+import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { Box, Button, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
@@ -77,6 +78,7 @@ export default function TopPanel(props: TopPanelProps) {
 			variantAlias: props.variant.alias,
 			sheetData: props.sheet.getOriginalSheetData(),
 			title: props.title,
+			createdType: CreatedType.Manual,
 		}
 		fetchApiState(
 			async () => {

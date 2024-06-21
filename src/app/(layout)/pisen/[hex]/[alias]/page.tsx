@@ -1,7 +1,11 @@
 'use client'
+import { Typography } from '@/common/ui/Typography'
+import { useEffect, useState } from 'react'
 import {
 	mapGetSongDataApiToSongDto,
 	mapSongDataVariantApiToSongVariantDto,
+	SongDto,
+	SongVariantDto,
 } from '../../../../../api/dtos'
 import { SongGettingApi } from '../../../../../api/generated'
 import { SmartParams } from '../../../../../routes'
@@ -14,25 +18,43 @@ type SongRoutePageProps = {
 	params: SmartParams<'variant'>
 }
 
-export default async function SongRoutePage({ params }: SongRoutePageProps) {
+export default function SongRoutePage({ params }: SongRoutePageProps) {
+	const [song, setSong] = useState<SongDto>()
+	const [variantData, setVariantData] = useState<SongVariantDto>()
+	useEffect(() => {
+		const doFetchStuff = async () => {
+			const alias = getVariantAliasFromParams(params.hex, params.alias)
+			const v = await getVariantByAlias(alias)
+			const variant = v.variants[0]
+
+			const songGettingApi = new SongGettingApi()
+
+			const data = await handleApiCall(
+				songGettingApi.songGettingControllerGetSongDataByVariantGuid(
+					variant.guid
+				)
+			)
+
+			const song = mapGetSongDataApiToSongDto(data)
+			const variantData = mapSongDataVariantApiToSongVariantDto(variant)
+
+			setSong(song)
+			setVariantData(variantData)
+		}
+		doFetchStuff()
+	}, [params.hex, params.alias])
 	try {
-		const alias = getVariantAliasFromParams(params.hex, params.alias)
-		const v = await getVariantByAlias(alias)
-		const variant = v.variants[0]
-
-		const songGettingApi = new SongGettingApi()
-
-		const data = await handleApiCall(
-			songGettingApi.songGettingControllerGetSongDataByVariantGuid(variant.guid)
-		)
-
-		const song = mapGetSongDataApiToSongDto(data)
-		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
 		//TODO: Sometime not working when group is turned on
 
 		return (
 			<>
-				<SongContainer variant={variantData} song={song} />
+				{song && variantData ? (
+					<SongContainer variant={variantData} song={song} />
+				) : (
+					<>
+						<Typography>Načítání...</Typography>
+					</>
+				)}
 			</>
 		)
 	} catch (e) {

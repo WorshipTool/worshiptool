@@ -1,4 +1,6 @@
 'use client'
+import { PostCreateVariantOutDto } from '@/api/generated'
+import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { CloudUpload } from '@mui/icons-material'
 import {
 	Box,
@@ -9,7 +11,6 @@ import {
 	useTheme,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { NewSongDataProcessResult } from '../../../../api/generated'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
@@ -61,7 +62,7 @@ export default function Parse() {
 	const {
 		fetchApiState,
 		apiState: { loading: fetching },
-	} = useApiState<NewSongDataProcessResult>()
+	} = useApiState<PostCreateVariantOutDto>()
 
 	const startParsing = async (files: File[]) => {
 		setLoading(true)
@@ -119,15 +120,14 @@ export default function Parse() {
 				async () => {
 					return await handleApiCall(
 						songAddingApi.songAddingControllerCreate({
-							songGuid: undefined,
 							title: sheet.title,
 							sheetData: sheet.data,
-							media: [],
+							createdType: CreatedType.Parsed,
 						})
 					)
 				},
 				(data) => {
-					guids.push(data.guid)
+					guids.push(data.variant.guid)
 					setUploadingMessage('Hotovo')
 					setTimeout(() => {
 						setUploadedSongs(
