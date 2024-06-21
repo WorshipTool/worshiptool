@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import useAuth from '../../../../hooks/auth/useAuth'
 import useGroup from '../../../../hooks/group/useGroup'
-import { useWindowTitle } from '../../../../hooks/window-title/useWindowTitle'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useSmartParams } from '../../../../routes/useSmartParams'
 import GroupHome from './GroupHome'
@@ -15,8 +14,6 @@ export default function GroupCustomLayout(props: GroupCustomLayoutProps) {
 	const { turnOn, turnOff, isOn, name } = useGroup()
 	const { isLoggedIn } = useAuth()
 	const navigate = useSmartNavigate()
-
-	useWindowTitle(name)
 
 	useEffect(() => {
 		if (!isLoggedIn())
