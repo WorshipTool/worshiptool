@@ -9,6 +9,7 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - doporučení vždy vratí výsledky
 - funguje proklik na píseň vyhledaných i doporučených písní.
 - proklik na seznam vsech pisni
+- po úpravě písně, lze při vyhledání vidět jen nejnovější verzi
 
 ## Stránka písně
 - transpozice
@@ -21,6 +22,8 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - validita uprávy
 - vygenerování nového url při velké změně jména
 - rezponzivnost
+- lze smazat neveřejnou písen, veřejnou nelze
+  
 
 ## Vytvořit píseň
 - Přidání ručně psané písně
@@ -36,7 +39,8 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - odebírání písní
 - proklik na jednotlivé písně
 - tisk
-- mód karty
+- mód prezentace
+- tranpozice i pořádí sedí pro tisk i prezentaci
 
 ## Feedback
 
@@ -44,6 +48,9 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - fungují prokliky
   
 ## Seznam playlistů
+- vytvareni playlistu
+- mazani, objevi se okno
 ## Seznam mých písní
 ## Mód skupiny
+- Funguje vyhledávání, stejně jako na domácí stránce
 
