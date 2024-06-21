@@ -48,6 +48,8 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - fungují prokliky
   
 ## Seznam playlistů
+- vytvareni playlistu
+- mazani, objevi se okno
 ## Seznam mých písní
 ## Mód skupiny
 - Funguje vyhledávání, stejně jako na domácí stránce
