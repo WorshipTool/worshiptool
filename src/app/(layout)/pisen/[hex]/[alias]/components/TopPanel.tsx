@@ -1,5 +1,8 @@
+import OnlyAdmin from '@/common/components/OnlyAdmin'
+import { Button } from '@/common/ui/Button'
+import { Typography } from '@/common/ui/Typography'
 import { CreatedType } from '@/interfaces/variant/VariantDTO'
-import { Box, Button, useTheme } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
@@ -147,6 +150,27 @@ export default function TopPanel(props: TopPanelProps) {
 					/>
 
 					{isOwner && <VisibilityLabel public={props.variant.public} />}
+
+					<OnlyAdmin>
+						<Typography strong>
+							{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
+						</Typography>
+						<Button
+							size="small"
+							to="variantPublish"
+							toParams={parseVariantAlias(props.variant.alias)}
+						>
+							Publish
+						</Button>
+					</OnlyAdmin>
+
+					<OnlyAdmin>
+						{props.variant.public ? (
+							<Typography>Píseň je public</Typography>
+						) : (
+							<Typography>Píseň NENI public</Typography>
+						)}
+					</OnlyAdmin>
 
 					<Box flex={1} />
 

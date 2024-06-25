@@ -58,6 +58,7 @@ export const COMMON_SETTINGS_URL = '/nastaveni'
 export const routesPaths = {
 	home: '/',
 	variant: '/pisen/[hex]/[alias]',
+	variantPublish: '/pisen/[hex]/[alias]/zverejnit',
 	variantPrint: '/pisen/[hex]/[alias]/tisk',
 	playlist: '/playlist/[guid]',
 	playlistPrint: '/playlist/[guid]/tisk',

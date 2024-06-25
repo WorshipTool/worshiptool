@@ -8,6 +8,8 @@ import {
 	SongDeletingApi,
 	SongEditingApi,
 	SongGettingApi,
+	SongPublishingApi,
+	SongValidationApi,
 } from '../../api/generated'
 import useAuth from '../auth/useAuth'
 
@@ -21,6 +23,8 @@ export const useApi = () => {
 		songAddingApi: new SongAddingApi(apiConfiguration),
 		songEditingApi: new SongEditingApi(apiConfiguration),
 		songDeletingApi: new SongDeletingApi(apiConfiguration),
+		songPublishingApi: new SongPublishingApi(apiConfiguration),
+		songValidationApi: new SongValidationApi(apiConfiguration),
 		groupApi: new GroupApi(apiConfiguration),
 		authApi: new AuthApi(apiConfiguration),
 		permissionApi: new PermissionsApi(apiConfiguration),

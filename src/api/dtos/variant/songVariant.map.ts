@@ -1,31 +1,28 @@
-import { Sheet } from "@pepavlin/sheet-api";
-import { SongDataVariant, SongVariantDataOutDto } from "../../generated";
-import { SongVariantDto } from "./songVariant.dto";
-import { mapApiToVariant } from "./mapApiToVariant";
+import { Sheet } from '@pepavlin/sheet-api'
+import { SongDataVariant, SongVariantDataOutDto } from '../../generated'
+import { SongVariantDto } from './songVariant.dto'
 
 export const mapSongDataVariantApiToSongVariantDto = (
-    api: SongDataVariant
+	api: SongDataVariant
 ): SongVariantDto => {
-    return {
-        ...api,
-        preferredTitle: api.prefferedTitle,
-        sheet: new Sheet(api.sheetData),
-        createdBy: api.createdByGuid,
-        public: api.verified || api.createdByLoader
-    };
-};
+	return {
+		...api,
+		preferredTitle: api.prefferedTitle,
+		sheet: new Sheet(api.sheetData),
+		createdBy: api.createdByGuid,
+	}
+}
 
 export const mapSongVariantDataOutDtoToSongVariantDto = (
-    api: SongVariantDataOutDto
+	api: SongVariantDataOutDto
 ): SongVariantDto => {
-    return {
-        ...api,
-        preferredTitle: api.prefferedTitle,
-        sheet: new Sheet(api.sheetData),
-        createdBy: api.createdBy,
-        public: api.verified || api.createdByLoader
-    };
-};
+	return {
+		...api,
+		preferredTitle: api.prefferedTitle,
+		sheet: new Sheet(api.sheetData),
+		createdBy: api.createdBy,
+	}
+}
 
 // export const mapSearchSongDataApiToSongVariantDto = (
 //     data: SearchSongData
