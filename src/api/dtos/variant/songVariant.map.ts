@@ -18,6 +18,7 @@ export const mapSongVariantDataOutDtoToSongVariantDto = (
 ): SongVariantDto => {
 	return {
 		...api,
+
 		preferredTitle: api.prefferedTitle,
 		sheet: new Sheet(api.sheetData),
 		createdBy: api.createdBy,

@@ -4,6 +4,7 @@ import { SourceDto } from '../source/SourceDto'
 
 export type SongVariantDto = {
 	guid: string
+	packGuid: string
 	sheetData: string
 	sheetText: string
 	sheet: Sheet

@@ -30,7 +30,7 @@ export default function DeletedInfoPanel({
 		fetchApiState(
 			async () => {
 				return handleApiCall(
-					songsApi.songDeletingControllerRestore(variant.guid)
+					songsApi.songDeletingControllerRestore(variant.packGuid)
 				)
 			},
 			() => {

@@ -1,3 +1,4 @@
+import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
 import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
@@ -155,18 +156,27 @@ export default function TopPanel(props: TopPanelProps) {
 						<Typography strong>
 							{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
 						</Typography>
-						<Button
-							size="small"
-							to="variantPublish"
-							toParams={parseVariantAlias(props.variant.alias)}
-						>
-							Publish
-						</Button>
 					</OnlyAdmin>
 
 					<OnlyAdmin>
 						{props.variant.public ? (
-							<Typography>Píseň je public</Typography>
+							<>
+								<Typography>Píseň je public</Typography>
+								{props.variant.verified !== null ? (
+									<>
+										{props.variant.verified ? (
+											<Typography>A je manualně ověřena.</Typography>
+										) : (
+											<Typography>A je manualně zamítnuta.</Typography>
+										)}
+									</>
+								) : (
+									<>
+										<Typography>Ale není manualně ověřena</Typography>
+									</>
+								)}
+								<VerifyButton variant={props.variant} />
+							</>
 						) : (
 							<Typography>Píseň NENI public</Typography>
 						)}

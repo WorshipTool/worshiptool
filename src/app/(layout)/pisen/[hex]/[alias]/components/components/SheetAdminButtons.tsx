@@ -20,7 +20,7 @@ import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import DeleteButton from './DeleteButton'
 import EditButton from './EditButton'
-import VerifyButton from './VerifyButton'
+import PublishButton from './PublishButton'
 
 interface AddToPlaylistButtonProps {
 	sheet: Sheet
@@ -107,7 +107,7 @@ export default function SheetAdminButtons({
 				open={open}
 				onClose={handleClose}
 			>
-				<VerifyButton variant={variant} reloadSong={reload} />
+				<PublishButton variant={variant} reloadSong={reload} />
 				<Divider />
 
 				{isAdmin() && variant.createdByLoader && (

@@ -1183,6 +1183,25 @@ export interface PostValidateSheetDataAndTitleInDto {
 /**
  * 
  * @export
+ * @interface PostVerifyVariantInDto
+ */
+export interface PostVerifyVariantInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostVerifyVariantInDto
+     */
+    'variantGuid': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PostVerifyVariantInDto
+     */
+    'verify': boolean | null;
+}
+/**
+ * 
+ * @export
  * @interface ProgramSongData
  */
 export interface ProgramSongData {
@@ -1478,6 +1497,12 @@ export interface SongDataVariant {
      * @type {string}
      * @memberof SongDataVariant
      */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
     'songGuid': string;
     /**
      * 
@@ -1705,12 +1730,6 @@ export interface SongVariant {
      * @type {boolean}
      * @memberof SongVariant
      */
-    'deleted': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariant
-     */
     'inFormat': boolean;
     /**
      * 
@@ -1730,6 +1749,12 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'language': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariant
+     */
+    'hasChords': boolean;
 }
 
 export const SongVariantTypeEnum = {
@@ -1820,12 +1845,6 @@ export interface SongVariantDataOutDto {
     'creators': Array<SongDataCreator>;
     /**
      * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'deleted': boolean;
-    /**
-     * 
      * @type {string}
      * @memberof SongVariantDataOutDto
      */
@@ -1854,6 +1873,12 @@ export interface SongVariantDataOutDto {
      * @memberof SongVariantDataOutDto
      */
     'public': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariantDataOutDto
+     */
+    'deleted': boolean;
 }
 
 export const SongVariantDataOutDtoCreatedTypeEnum = {
@@ -1912,6 +1937,12 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'playlistItems': Array<PlaylistItem>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariantHistoryPack
+     */
+    'deleted': boolean;
 }
 /**
  * 
@@ -4841,7 +4872,8 @@ export class PlaylistGettingApi extends BaseAPI {
 export const ProgramSongAddingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * This function process data stream from loader\'s program. Getter and so on.
+         * @summary 
          * @param {ProgramSongData} programSongData 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4890,7 +4922,8 @@ export const ProgramSongAddingApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ProgramSongAddingApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * This function process data stream from loader\'s program. Getter and so on.
+         * @summary 
          * @param {ProgramSongData} programSongData 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4912,7 +4945,8 @@ export const ProgramSongAddingApiFactory = function (configuration?: Configurati
     const localVarFp = ProgramSongAddingApiFp(configuration)
     return {
         /**
-         * 
+         * This function process data stream from loader\'s program. Getter and so on.
+         * @summary 
          * @param {ProgramSongData} programSongData 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4931,7 +4965,8 @@ export const ProgramSongAddingApiFactory = function (configuration?: Configurati
  */
 export class ProgramSongAddingApi extends BaseAPI {
     /**
-     * 
+     * This function process data stream from loader\'s program. Getter and so on.
+     * @summary 
      * @param {ProgramSongData} programSongData 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5506,80 +5541,6 @@ export const SongEditingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songEditingControllerUnverify: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songEditingControllerUnverify', 'guid', guid)
-            const localVarPath = `/song/variant/unverify/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songEditingControllerVerify: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songEditingControllerVerify', 'guid', guid)
-            const localVarPath = `/song/variant/verify/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -5614,30 +5575,6 @@ export const SongEditingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongEditingApi.songEditingControllerEditVariant']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songEditingControllerUnverify(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songEditingControllerUnverify(guid, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongEditingApi.songEditingControllerUnverify']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songEditingControllerVerify(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songEditingControllerVerify(guid, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongEditingApi.songEditingControllerVerify']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -5665,24 +5602,6 @@ export const SongEditingApiFactory = function (configuration?: Configuration, ba
          */
         songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: any): AxiosPromise<EditVariantOutDto> {
             return localVarFp.songEditingControllerEditVariant(postEditVariantInDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songEditingControllerUnverify(guid: string, options?: any): AxiosPromise<void> {
-            return localVarFp.songEditingControllerUnverify(guid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songEditingControllerVerify(guid: string, options?: any): AxiosPromise<void> {
-            return localVarFp.songEditingControllerVerify(guid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5714,28 +5633,6 @@ export class SongEditingApi extends BaseAPI {
      */
     public songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: RawAxiosRequestConfig) {
         return SongEditingApiFp(this.configuration).songEditingControllerEditVariant(postEditVariantInDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} guid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongEditingApi
-     */
-    public songEditingControllerUnverify(guid: string, options?: RawAxiosRequestConfig) {
-        return SongEditingApiFp(this.configuration).songEditingControllerUnverify(guid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} guid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongEditingApi
-     */
-    public songEditingControllerVerify(guid: string, options?: RawAxiosRequestConfig) {
-        return SongEditingApiFp(this.configuration).songEditingControllerVerify(guid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6296,6 +6193,84 @@ export const SongPublishingApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerUnpublishVariant: async (postPublishVariantInDto: PostPublishVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postPublishVariantInDto' is not null or undefined
+            assertParamExists('songPublishingControllerUnpublishVariant', 'postPublishVariantInDto', postPublishVariantInDto)
+            const localVarPath = `/song/unpublish`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postPublishVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PostVerifyVariantInDto} postVerifyVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerVerifyVariant: async (postVerifyVariantInDto: PostVerifyVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postVerifyVariantInDto' is not null or undefined
+            assertParamExists('songPublishingControllerVerifyVariant', 'postVerifyVariantInDto', postVerifyVariantInDto)
+            const localVarPath = `/song/verifystatus`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postVerifyVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -6318,6 +6293,30 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerPublishVariant']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerUnpublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerUnpublishVariant(postPublishVariantInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerUnpublishVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PostVerifyVariantInDto} postVerifyVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerVerifyVariant(postVerifyVariantInDto: PostVerifyVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SongVariant>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerVerifyVariant(postVerifyVariantInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerVerifyVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -6336,6 +6335,24 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
          */
         songPublishingControllerPublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.songPublishingControllerPublishVariant(postPublishVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerUnpublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songPublishingControllerUnpublishVariant(postPublishVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostVerifyVariantInDto} postVerifyVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerVerifyVariant(postVerifyVariantInDto: PostVerifyVariantInDto, options?: any): AxiosPromise<SongVariant> {
+            return localVarFp.songPublishingControllerVerifyVariant(postVerifyVariantInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6356,6 +6373,28 @@ export class SongPublishingApi extends BaseAPI {
      */
     public songPublishingControllerPublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig) {
         return SongPublishingApiFp(this.configuration).songPublishingControllerPublishVariant(postPublishVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostPublishVariantInDto} postPublishVariantInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerUnpublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerUnpublishVariant(postPublishVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostVerifyVariantInDto} postVerifyVariantInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerVerifyVariant(postVerifyVariantInDto: PostVerifyVariantInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerVerifyVariant(postVerifyVariantInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

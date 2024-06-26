@@ -19,8 +19,8 @@ import AddToPlaylistButton from './AddToPlaylistButton/AddToPlaylistButton'
 import CreateCopyButton from './CreateCopyButton'
 import DeleteButton from './DeleteButton'
 import EditButton from './EditButton'
+import PublishButton from './PublishButton'
 import SheetAdminButtons from './SheetAdminButtons'
-import VerifyButton from './VerifyButton'
 
 type SongsOptionsButtonProps = {
 	reloadSong: () => void
@@ -125,7 +125,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 						{isTrustee() && (
 							<>
 								<Divider />
-								<VerifyButton
+								<PublishButton
 									variant={props.variant}
 									reloadSong={props.reloadSong}
 								/>

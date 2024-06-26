@@ -8,6 +8,7 @@ import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { Button } from '@mui/material'
+import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
@@ -96,6 +97,7 @@ export default function Page() {
 			)
 
 			navigate('variant', { hex, alias })
+			enqueueSnackbar(`Píseň byla zveřejněna.`)
 		} catch (e) {
 			setMessage((e as any).response.data.message)
 		}

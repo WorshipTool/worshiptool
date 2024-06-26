@@ -60,7 +60,7 @@ export default function DeleteButton({
 		fetchApiState(
 			async () => {
 				return handleApiCall(
-					songsApi.songDeletingControllerDelete(variant.guid)
+					songsApi.songDeletingControllerDelete(variant.packGuid)
 				)
 			},
 			(result) => {
