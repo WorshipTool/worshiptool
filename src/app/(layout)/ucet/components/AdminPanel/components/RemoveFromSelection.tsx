@@ -21,7 +21,7 @@ export default function RemoveFromSelection({
 	const onAddClick = async () => {
 		if (selectedVariant === null) return
 
-		await selection.removeVariant(selectedVariant.alias)
+		await selection.removeVariant(selectedVariant.packGuid)
 		onChangeCallback?.()
 
 		// window.location.reload();

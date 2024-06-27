@@ -66,11 +66,13 @@ export default function Page() {
 			try {
 				const lang =
 					variant.language ||
-					(await handleApiCall(
-						songEditingApi.songEditingControllerChangeLanguage({
-							variantGuid: variantGuid,
-						})
-					))
+					(
+						await handleApiCall(
+							songEditingApi.songEditingControllerChangeLanguage({
+								variantGuid: variantGuid,
+							})
+						)
+					).language
 				setLanguage(lang)
 			} catch (e) {
 				console.log(e)

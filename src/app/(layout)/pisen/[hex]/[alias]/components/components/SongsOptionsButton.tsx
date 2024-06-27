@@ -133,7 +133,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					</>
 				)}
 
-				<AddToGroupButton variantAlias={props.variant.alias} />
+				<AddToGroupButton packGuid={props.variant.packGuid} />
 
 				{isAdmin() && (
 					<>

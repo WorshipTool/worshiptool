@@ -107,7 +107,7 @@ export default function SheetAdminButtons({
 				open={open}
 				onClose={handleClose}
 			>
-				<PublishButton variant={variant} reloadSong={reload} />
+				<PublishButton variant={variant} />
 				<Divider />
 
 				{isAdmin() && variant.createdByLoader && (

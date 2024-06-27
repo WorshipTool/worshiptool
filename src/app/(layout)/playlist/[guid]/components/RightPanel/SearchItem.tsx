@@ -68,7 +68,7 @@ export default function SearchItem({
 	const addToPlaylist = async () => {
 		fetchApiState(
 			async () => {
-				return await addVariant(variant.alias)
+				return await addVariant(variant.packGuid)
 			},
 			() => {
 				reload()

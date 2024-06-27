@@ -53,7 +53,7 @@ export interface AddVariantToPlaylistInDto {
      * @type {string}
      * @memberof AddVariantToPlaylistInDto
      */
-    'alias': string;
+    'packGuid': string;
     /**
      * 
      * @type {string}
@@ -1739,12 +1739,6 @@ export interface SongVariant {
     'verified': boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof SongVariant
-     */
-    'public': boolean;
-    /**
-     * 
      * @type {string}
      * @memberof SongVariant
      */
@@ -1943,6 +1937,12 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'deleted': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariantHistoryPack
+     */
+    'public': boolean;
 }
 /**
  * 
@@ -4098,14 +4098,14 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
-         * @param {string} alias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerRemoveVariantFromPlaylistDelete: async (alias: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'alias' is not null or undefined
-            assertParamExists('playlistEditingControllerRemoveVariantFromPlaylistDelete', 'alias', alias)
+        playlistEditingControllerRemoveVariantFromPlaylistDelete: async (packGuid: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('playlistEditingControllerRemoveVariantFromPlaylistDelete', 'packGuid', packGuid)
             // verify required parameter 'playlist' is not null or undefined
             assertParamExists('playlistEditingControllerRemoveVariantFromPlaylistDelete', 'playlist', playlist)
             const localVarPath = `/playlist/remove`;
@@ -4124,8 +4124,8 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (alias !== undefined) {
-                localVarQueryParameter['alias'] = alias;
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
             }
 
             if (playlist !== undefined) {
@@ -4308,13 +4308,13 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} alias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options);
+        async playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid, playlist, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRemoveVariantFromPlaylistDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4394,13 +4394,13 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} alias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options).then((request) => request(axios, basePath));
+        playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid: string, playlist: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid, playlist, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4474,14 +4474,14 @@ export class PlaylistEditingApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} alias 
+     * @param {string} packGuid 
      * @param {string} playlist 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlaylistEditingApi
      */
-    public playlistEditingControllerRemoveVariantFromPlaylistDelete(alias: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRemoveVariantFromPlaylistDelete(alias, playlist, options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid: string, playlist: string, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRemoveVariantFromPlaylistDelete(packGuid, playlist, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5557,7 +5557,7 @@ export const SongEditingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songEditingControllerChangeLanguage(postChangeLanguageInDto: PostChangeLanguageInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async songEditingControllerChangeLanguage(postChangeLanguageInDto: PostChangeLanguageInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SongVariant>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songEditingControllerChangeLanguage(postChangeLanguageInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongEditingApi.songEditingControllerChangeLanguage']?.[localVarOperationServerIndex]?.url;
@@ -5591,7 +5591,7 @@ export const SongEditingApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songEditingControllerChangeLanguage(postChangeLanguageInDto: PostChangeLanguageInDto, options?: any): AxiosPromise<string> {
+        songEditingControllerChangeLanguage(postChangeLanguageInDto: PostChangeLanguageInDto, options?: any): AxiosPromise<SongVariant> {
             return localVarFp.songEditingControllerChangeLanguage(postChangeLanguageInDto, options).then((request) => request(axios, basePath));
         },
         /**

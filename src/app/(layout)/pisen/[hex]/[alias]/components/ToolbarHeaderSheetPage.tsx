@@ -24,12 +24,12 @@ export default function ToolbarHeaderSheetPage(
 	}, [currentPlaylist, props.variant])
 
 	const addToCurrentPlaylist = () => {
-		currentPlaylist.addVariant(props.variant.alias).then((d) => {
+		currentPlaylist.addVariant(props.variant.packGuid).then((d) => {
 			currentPlaylist.reload()
 		})
 	}
 	const removeFromCurrentPlaylist = () => {
-		currentPlaylist.removeVariant(props.variant.alias).then((d) => {
+		currentPlaylist.removeVariant(props.variant.packGuid).then((d) => {
 			currentPlaylist.reload()
 		})
 	}

@@ -52,7 +52,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 	const onRemove = async () => {
 		setRemoving(true)
 		try {
-			await removeVariant(item.variant.alias)
+			await removeVariant(item.variant.packGuid)
 		} catch (e) {
 			console.error(e)
 		}

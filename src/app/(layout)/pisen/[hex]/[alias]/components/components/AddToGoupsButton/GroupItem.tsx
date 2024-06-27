@@ -16,7 +16,7 @@ import {
 
 type GroupItemProps = {
 	groupGuid: string
-	variantAlias: string
+	packGuid: string
 	addable: boolean
 	removable: boolean
 }
@@ -31,7 +31,7 @@ export default function GroupItem(props: GroupItemProps) {
 	const [isInState, reload] = useApiStateEffect(async () => {
 		if (!groupState.data?.selection) return false
 		return selection.isVariantInPlaylist(
-			props.variantAlias || '',
+			props.packGuid || '',
 			groupState.data?.selection || ''
 		)
 	}, [groupState])
@@ -43,10 +43,7 @@ export default function GroupItem(props: GroupItemProps) {
 	const addToSelection = () => {
 		fetchApiState(() =>
 			selection
-				.addVariantToPlaylist(
-					props.variantAlias,
-					groupState.data?.selection || ''
-				)
+				.addVariantToPlaylist(props.packGuid, groupState.data?.selection || '')
 				.then(() => {
 					reload()
 					enqueueSnackbar('Přidáno do skupiny')
@@ -58,7 +55,7 @@ export default function GroupItem(props: GroupItemProps) {
 		fetchApiState(() =>
 			selection
 				.removeVariantFromPlaylist(
-					props.variantAlias,
+					props.packGuid,
 					groupState.data?.selection || ''
 				)
 				.then(() => {
