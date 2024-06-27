@@ -1,37 +1,37 @@
-import { ApiVariantDTO } from "../variant/ApiVariantDTO";
+import { ApiVariantDTO } from '../variant/ApiVariantDTO'
 
 export interface PlaylistDataDTO {
-    guid: string;
-    title: string;
+	guid: string
+	title: string
 }
 
 export interface GetPlaylistsResultDTO {
-    playlists: PlaylistDataDTO[];
+	playlists: PlaylistDataDTO[]
 }
 
 export interface PostCreatePlaylistResultDTO {
-    guid: string;
+	guid: string
 }
 
 export interface PostCreatePlaylistBodyDTO {
-    title: string;
+	title: string
 }
 
 export interface PostDeletePlaylistBodyDTO {
-    guid: string;
+	guid: string
 }
-export type PostDeletePlaylistResultDTO = boolean;
+export type PostDeletePlaylistResultDTO = boolean
 
 export interface GetSongsInPlaylistParamsDTO {
-    guid: string;
+	guid: string
 }
 // export interface GetSongsInPlaylistResultDTO{
 //     items: ApiPlaylistItemDTO[],
 //     title: string
 // }
 export interface SearchResultDTO {
-    guid: string;
-    variant: ApiVariantDTO;
+	guid: string
+	variant: ApiVariantDTO
 }
 
 // export interface GetSearchInPlaylistResultDTO{
@@ -40,21 +40,21 @@ export interface SearchResultDTO {
 // }
 
 export interface PostAddVariantToPlaylistBodyDTO {
-    variant: string;
-    playlist: string;
+	packGuid: string
+	playlist: string
 }
 
 export interface DeleteRemoveVariantFromPlaylistBodyDTO {
-    variant: string;
-    playlist: string;
+	packGuid: string
+	playlist: string
 }
 
 export interface ApiReorderPlaylistItemDTO {
-    guid: string;
-    order: number;
+	guid: string
+	order: number
 }
 
 export interface PostReorderPlaylistBodyDTO {
-    items: ApiReorderPlaylistItemDTO[];
-    guid: string;
+	items: ApiReorderPlaylistItemDTO[]
+	guid: string
 }

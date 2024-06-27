@@ -11,7 +11,7 @@ import { usePermissions } from '../../../../../../../../hooks/auth/usePermission
 import GroupItem from './GroupItem'
 
 type AddToGroupButtonProps = {
-	variantAlias: string
+	packGuid: string
 }
 
 export default function AddToGroupButton(props: AddToGroupButtonProps) {
@@ -87,7 +87,7 @@ export default function AddToGroupButton(props: AddToGroupButtonProps) {
 					<GroupItem
 						key={p.guid}
 						groupGuid={p.guid || ''}
-						variantAlias={props.variantAlias}
+						packGuid={props.packGuid}
 						addable={p.addable}
 						removable={p.removable}
 					/>

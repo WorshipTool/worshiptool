@@ -1,95 +1,64 @@
-import { Public, PublicOff } from '@mui/icons-material'
-import {
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	useTheme,
-} from '@mui/material'
-import { useSnackbar } from 'notistack'
-import { SongVariantDto } from '../../../../../../../api/dtos'
-import { useApi } from '../../../../../../../hooks/api/useApi'
-import { useApiState } from '../../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../../tech/handleApiCall'
+'use client'
+import { SongVariantDto } from '@/api/dtos'
+import { ButtonGroup } from '@/common/ui/ButtonGroup'
+import { useApi } from '@/hooks/api/useApi'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { Button } from '@mui/material'
 
-export interface VerifyButtonProps {
+type VerifyButtonProps = {
 	variant: SongVariantDto
-	reloadSong: () => void
 }
 
 export default function VerifyButton(props: VerifyButtonProps) {
-	const { songEditingApi } = useApi()
-	const {
-		fetchApiState,
-		apiState: { loading },
-	} = useApiState()
+	const { songPublishingApi } = useApi()
 
-	const { enqueueSnackbar } = useSnackbar()
-
-	// const [loading, setLoading] = React.useState(false);
-
-	const reload = () => {
-		props.reloadSong()
-	}
-
-	const unverify = () => {
-		fetchApiState(
-			async () => {
-				return handleApiCall(
-					songEditingApi.songEditingControllerUnverify(props.variant.guid)
-				)
-			},
-			() => {
-				reload()
-				enqueueSnackbar(
-					`Zveřejnění písně ${
-						(props.variant.preferredTitle && ' ') || ''
-					}bylo zrušeno`
-				)
-			}
+	const setVerify = async (status: boolean | null) => {
+		await handleApiCall(
+			songPublishingApi.songPublishingControllerVerifyVariant({
+				variantGuid: props.variant.guid,
+				verify: status,
+			})
 		)
+		window.location.reload()
 	}
-	const verify = () => {
-		fetchApiState(
-			async () => {
-				return handleApiCall(
-					songEditingApi.songEditingControllerVerify(props.variant.guid)
-				)
-			},
-			() => {
-				reload()
-				enqueueSnackbar(
-					`Píseň ${(props.variant.preferredTitle && ' ') || ''}byla zveřejněna.`
-				)
-			}
-		)
-	}
-
-	const theme = useTheme()
-
 	return (
-		<MenuItem
-			onClick={() => {
-				if (props.variant.verified) {
-					unverify()
-				} else {
-					verify()
-				}
-			}}
-			disabled={loading}
-		>
-			<ListItemIcon>
-				{loading ? (
-					<CircularProgress size={24} color="inherit" />
-				) : props.variant.verified ? (
-					<PublicOff />
-				) : (
-					<Public />
-				)}
-			</ListItemIcon>
-			<ListItemText
-				primary={props.variant.verified ? 'Zrušit zveřejnění' : 'Zveřejnit'}
-			/>
-		</MenuItem>
+		<div>
+			{props.variant?.verified !== null ? (
+				<>
+					<Button
+						variant="contained"
+						size="small"
+						onClick={() => {
+							setVerify(null)
+						}}
+					>
+						{props.variant.verified ? 'Zrušit ověření' : 'Zrušit zamítnutí'}
+					</Button>
+				</>
+			) : (
+				<>
+					<ButtonGroup>
+						<Button
+							variant="contained"
+							size="small"
+							onClick={() => {
+								setVerify(true)
+							}}
+						>
+							Ověřit
+						</Button>
+						<Button
+							variant="contained"
+							size="small"
+							onClick={() => {
+								setVerify(false)
+							}}
+						>
+							Zamitnout
+						</Button>
+					</ButtonGroup>
+				</>
+			)}
+		</div>
 	)
 }

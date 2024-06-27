@@ -49,11 +49,11 @@ export default function PlaylistMenuItem({
 		})
 	}
 
-	const addVariantToPlaylist = (guid: string) => {
+	const addVariantToPlaylist = (playlistGuid: string) => {
 		setLoading(true)
 
 		try {
-			addToPlaylist(variant.alias, guid).then(async (result) => {
+			addToPlaylist(variant.packGuid, playlistGuid).then(async (result) => {
 				await reloadPlaylists()
 				setLoading(false)
 			})
@@ -62,11 +62,11 @@ export default function PlaylistMenuItem({
 		}
 	}
 
-	const removeVariantFromPlaylist = (guid: string) => {
+	const removeVariantFromPlaylist = (playlistGuid: string) => {
 		setLoading(true)
 
 		try {
-			removeFromPlaylist(variant.alias, guid).then(async (result) => {
+			removeFromPlaylist(variant.alias, playlistGuid).then(async (result) => {
 				await reloadPlaylists()
 				setLoading(false)
 			})
