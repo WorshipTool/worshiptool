@@ -114,7 +114,7 @@ export default function Page() {
 						<>
 							<Typography>Validace proběhla úspěšně.</Typography>
 							<Typography>
-								Jazyk: <b>{language?.toLocaleUpperCase()}</b>{' '}
+								Jazyk: <b>{language?.toLocaleUpperCase?.()}</b>{' '}
 								{'- Zjištěno automaticky'}
 							</Typography>
 							<Gap />

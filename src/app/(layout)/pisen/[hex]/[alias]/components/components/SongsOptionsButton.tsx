@@ -112,6 +112,8 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 							<AddToPlaylistButton variant={props.variant} asMenuItem />
 						</Box>
 
+						{/* <PublishButton variant={props.variant} /> */}
+
 						<MenuItem disabled>
 							<ListItemIcon>
 								<Dashboard />
@@ -125,10 +127,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 						{isTrustee() && (
 							<>
 								<Divider />
-								<PublishButton
-									variant={props.variant}
-									reloadSong={props.reloadSong}
-								/>
+								<PublishButton variant={props.variant} />
 							</>
 						)}
 					</>

@@ -1,6 +1,7 @@
 import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
 import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Button } from '@/common/ui/Button'
+import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { Box, useTheme } from '@mui/material'
@@ -112,55 +113,124 @@ export default function TopPanel(props: TopPanelProps) {
 	}, [props.sheet, props.sheet?.toString()])
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				gap: 1,
-			}}
-		>
-			{props.isInEditMode ? (
-				<>
-					{isValid ? <Box flex={1} /> : <NotValidWarning />}
+		<>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					gap: 1,
+				}}
+			>
+				{props.isInEditMode ? (
+					<>
+						{isValid ? <Box flex={1} /> : <NotValidWarning />}
 
-					<Button
-						onClick={() => props.cancelEditing()}
-						color="info"
-						variant="outlined"
-					>
-						Zrušit
-					</Button>
+						<Button
+							onClick={() => props.cancelEditing()}
+							color="info"
+							variant="outlined"
+						>
+							Zrušit
+						</Button>
 
-					<EditButton
-						onClick={onEditClick}
-						inEditMode={props.isInEditMode}
-						loading={saving}
-						sheetData={props.sheet?.getOriginalSheetData() || ''}
-						title={props.editedTitle}
-						anyChange={anyChange}
-					/>
-				</>
-			) : props.variant.deleted ? (
-				<></>
-			) : (
-				<>
-					<TransposePanel
-						transpose={props.transpose}
-						disabled={!Boolean(props.sheet?.getKeyChord())}
-					/>
+						<EditButton
+							onClick={onEditClick}
+							inEditMode={props.isInEditMode}
+							loading={saving}
+							sheetData={props.sheet?.getOriginalSheetData() || ''}
+							title={props.editedTitle}
+							anyChange={anyChange}
+						/>
+					</>
+				) : props.variant.deleted ? (
+					<></>
+				) : (
+					<>
+						<TransposePanel
+							transpose={props.transpose}
+							disabled={!Boolean(props.sheet?.getKeyChord())}
+						/>
 
-					{isOwner && <VisibilityLabel public={props.variant.public} />}
+						{isOwner && <VisibilityLabel public={props.variant.public} />}
 
-					<OnlyAdmin>
-						<Typography strong>
-							{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
-						</Typography>
-					</OnlyAdmin>
+						<Box flex={1} />
 
-					<OnlyAdmin>
-						{props.variant.public ? (
-							<>
+						{isOwner && <VisibilityLabel public={props.variant.public} right />}
+						<SongsOptionsButton
+							reloadSong={props.reloadSong}
+							variant={props.variant}
+							sheet={props.sheet}
+							song={props.song}
+							onEditClick={onEditClick}
+							isInEditMode={props.isInEditMode}
+							saving={saving}
+							editedTitle={props.editedTitle}
+							isOwner={isOwner}
+							anyChange={anyChange}
+						/>
+						{isLoggedIn() && !(isOwner && !props.variant.public) && (
+							<Box
+								sx={{
+									[theme.breakpoints.down('md')]: {
+										display: 'none',
+									},
+								}}
+							>
+								<CreateCopyButton variantGuid={props.variant.guid} />
+							</Box>
+						)}
+
+						{isOwner && !props.variant.public && (
+							<Box
+								sx={{
+									[theme.breakpoints.down('md')]: {
+										display: 'none',
+									},
+								}}
+							>
+								<EditButton
+									onClick={onEditClick}
+									inEditMode={props.isInEditMode}
+									loading={saving}
+									sheetData={props.sheet?.getOriginalSheetData() || ''}
+									anyChange={anyChange}
+									title={props.editedTitle}
+								/>
+							</Box>
+						)}
+
+						{isLoggedIn() && (
+							<Box
+								sx={{
+									[theme.breakpoints.down('sm')]: {
+										display: 'none',
+									},
+								}}
+							>
+								<AddToPlaylistButton variant={props.variant} />
+							</Box>
+						)}
+
+						<PrintButton keyNote={props.sheet?.getKeyNote() || null} />
+					</>
+				)}
+			</Box>
+			{isAdmin() && <Gap />}
+			<OnlyAdmin>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={1}
+					alignItems={'center'}
+				>
+					<Typography strong>
+						{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
+					</Typography>
+
+					{props.variant.public ? (
+						<>
+							<div>
 								<Typography>Píseň je public</Typography>
 								{props.variant.verified !== null ? (
 									<>
@@ -175,74 +245,14 @@ export default function TopPanel(props: TopPanelProps) {
 										<Typography>Ale není manualně ověřena</Typography>
 									</>
 								)}
-								<VerifyButton variant={props.variant} />
-							</>
-						) : (
-							<Typography>Píseň NENI public</Typography>
-						)}
-					</OnlyAdmin>
-
-					<Box flex={1} />
-
-					{isOwner && <VisibilityLabel public={props.variant.public} right />}
-					<SongsOptionsButton
-						reloadSong={props.reloadSong}
-						variant={props.variant}
-						sheet={props.sheet}
-						song={props.song}
-						onEditClick={onEditClick}
-						isInEditMode={props.isInEditMode}
-						saving={saving}
-						editedTitle={props.editedTitle}
-						isOwner={isOwner}
-						anyChange={anyChange}
-					/>
-					{isLoggedIn() && !(isOwner && !props.variant.public) && (
-						<Box
-							sx={{
-								[theme.breakpoints.down('md')]: {
-									display: 'none',
-								},
-							}}
-						>
-							<CreateCopyButton variantGuid={props.variant.guid} />
-						</Box>
+							</div>
+							<VerifyButton variant={props.variant} />
+						</>
+					) : (
+						<Typography>Píseň NENI public</Typography>
 					)}
-
-					{isOwner && !props.variant.public && (
-						<Box
-							sx={{
-								[theme.breakpoints.down('md')]: {
-									display: 'none',
-								},
-							}}
-						>
-							<EditButton
-								onClick={onEditClick}
-								inEditMode={props.isInEditMode}
-								loading={saving}
-								sheetData={props.sheet?.getOriginalSheetData() || ''}
-								anyChange={anyChange}
-								title={props.editedTitle}
-							/>
-						</Box>
-					)}
-
-					{isLoggedIn() && (
-						<Box
-							sx={{
-								[theme.breakpoints.down('sm')]: {
-									display: 'none',
-								},
-							}}
-						>
-							<AddToPlaylistButton variant={props.variant} />
-						</Box>
-					)}
-
-					<PrintButton keyNote={props.sheet?.getKeyNote() || null} />
-				</>
-			)}
-		</Box>
+				</Box>
+			</OnlyAdmin>
+		</>
 	)
 }

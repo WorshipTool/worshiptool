@@ -16,7 +16,6 @@ import { useApiState } from '../../../../../../../tech/ApiState'
 
 export interface PublishButtonProps {
 	variant: SongVariantDto
-	reloadSong: () => void
 }
 
 export default function PublishButton(props: PublishButtonProps) {
@@ -33,7 +32,8 @@ export default function PublishButton(props: PublishButtonProps) {
 	// const [loading, setLoading] = React.useState(false);
 
 	const reload = () => {
-		props.reloadSong()
+		// props.reloadSong()
+		window.location.reload()
 	}
 
 	const unverify = () => {
