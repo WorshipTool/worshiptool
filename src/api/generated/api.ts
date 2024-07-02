@@ -358,6 +358,19 @@ export interface GetPlaylistsResult {
 /**
  * 
  * @export
+ * @interface GetRandomVariantOutDto
+ */
+export interface GetRandomVariantOutDto {
+    /**
+     * 
+     * @type {SongVariantDataOutDto}
+     * @memberof GetRandomVariantOutDto
+     */
+    'variant': SongVariantDataOutDto;
+}
+/**
+ * 
+ * @export
  * @interface GetRecommendedSongsOutDto
  */
 export interface GetRecommendedSongsOutDto {
@@ -650,6 +663,25 @@ export type MediaTypeEnum = typeof MediaTypeEnum[keyof typeof MediaTypeEnum];
 /**
  * 
  * @export
+ * @interface MessengerResponseInDto
+ */
+export interface MessengerResponseInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MessengerResponseInDto
+     */
+    'object': string;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof MessengerResponseInDto
+     */
+    'entry': Array<object>;
+}
+/**
+ * 
+ * @export
  * @interface ParserSongData
  */
 export interface ParserSongData {
@@ -862,6 +894,32 @@ export interface PlaylistItemOutDto {
 /**
  * 
  * @export
+ * @interface PostAiRequestInDto
+ */
+export interface PostAiRequestInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostAiRequestInDto
+     */
+    'text': string;
+}
+/**
+ * 
+ * @export
+ * @interface PostAiRequestOutDto
+ */
+export interface PostAiRequestOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostAiRequestOutDto
+     */
+    'outputString': string;
+}
+/**
+ * 
+ * @export
  * @interface PostChangeLanguageInDto
  */
 export interface PostChangeLanguageInDto {
@@ -1003,6 +1061,12 @@ export interface PostCreateVariantInDto {
      * @memberof PostCreateVariantInDto
      */
     'createdType': PostCreateVariantInDtoCreatedTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateVariantInDto
+     */
+    'language'?: string;
 }
 
 export const PostCreateVariantInDtoCreatedTypeEnum = {
@@ -1072,6 +1136,19 @@ export const PostEditVariantInDtoCreatedTypeEnum = {
 
 export type PostEditVariantInDtoCreatedTypeEnum = typeof PostEditVariantInDtoCreatedTypeEnum[keyof typeof PostEditVariantInDtoCreatedTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface PostGetKeywordsInDto
+ */
+export interface PostGetKeywordsInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostGetKeywordsInDto
+     */
+    'variantGuid': string;
+}
 /**
  * 
  * @export
@@ -1256,7 +1333,13 @@ export interface RegisterWebhookExtensionBody {
      * @type {string}
      * @memberof RegisterWebhookExtensionBody
      */
-    'url': string;
+    'extensionName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterWebhookExtensionBody
+     */
+    'extensionPublicUrl': string;
 }
 /**
  * 
@@ -1395,12 +1478,6 @@ export interface Song {
      * @memberof Song
      */
     'media': Array<Media>;
-    /**
-     * 
-     * @type {Array<Tag>}
-     * @memberof Song
-     */
-    'tags': Array<Tag>;
 }
 /**
  * 
@@ -1594,6 +1671,12 @@ export interface SongDataVariant {
      * @memberof SongDataVariant
      */
     'public': boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SongDataVariant
+     */
+    'tags': Array<string>;
 }
 
 export const SongDataVariantCreatedTypeEnum = {
@@ -1701,6 +1784,18 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'sources': Array<Source>;
+    /**
+     * 
+     * @type {Array<Tag>}
+     * @memberof SongVariant
+     */
+    'tags': Array<Tag>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariant
+     */
+    'tagsGenerated': boolean;
     /**
      * 
      * @type {number}
@@ -1873,6 +1968,12 @@ export interface SongVariantDataOutDto {
      * @memberof SongVariantDataOutDto
      */
     'deleted': boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SongVariantDataOutDto
+     */
+    'tags': Array<string>;
 }
 
 export const SongVariantDataOutDtoCreatedTypeEnum = {
@@ -2022,10 +2123,10 @@ export interface Tag {
     'guid': string;
     /**
      * 
-     * @type {Array<Song>}
+     * @type {Array<SongVariant>}
      * @memberof Tag
      */
-    'songs': Array<Song>;
+    'variants': Array<SongVariant>;
     /**
      * 
      * @type {string}
@@ -2204,6 +2305,112 @@ export interface ValidationResult {
      */
     'message': string;
 }
+
+/**
+ * AIApi - axios parameter creator
+ * @export
+ */
+export const AIApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {PostAiRequestInDto} postAiRequestInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aiControllerMakeRequest: async (postAiRequestInDto: PostAiRequestInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postAiRequestInDto' is not null or undefined
+            assertParamExists('aiControllerMakeRequest', 'postAiRequestInDto', postAiRequestInDto)
+            const localVarPath = `/ai/request`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postAiRequestInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AIApi - functional programming interface
+ * @export
+ */
+export const AIApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AIApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {PostAiRequestInDto} postAiRequestInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async aiControllerMakeRequest(postAiRequestInDto: PostAiRequestInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostAiRequestOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.aiControllerMakeRequest(postAiRequestInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AIApi.aiControllerMakeRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AIApi - factory interface
+ * @export
+ */
+export const AIApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AIApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {PostAiRequestInDto} postAiRequestInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        aiControllerMakeRequest(postAiRequestInDto: PostAiRequestInDto, options?: any): AxiosPromise<PostAiRequestOutDto> {
+            return localVarFp.aiControllerMakeRequest(postAiRequestInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AIApi - object-oriented interface
+ * @export
+ * @class AIApi
+ * @extends {BaseAPI}
+ */
+export class AIApi extends BaseAPI {
+    /**
+     * 
+     * @param {PostAiRequestInDto} postAiRequestInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AIApi
+     */
+    public aiControllerMakeRequest(postAiRequestInDto: PostAiRequestInDto, options?: RawAxiosRequestConfig) {
+        return AIApiFp(this.configuration).aiControllerMakeRequest(postAiRequestInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * AuthApi - axios parameter creator
@@ -5730,6 +5937,35 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        songGettingControllerGetRandom: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/random`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         songGettingControllerGetRecommendedSongs: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/song/recommended`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5937,6 +6173,17 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async songGettingControllerGetRandom(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetRandomVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetRandom(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetRandom']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async songGettingControllerGetRecommendedSongs(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetRecommendedSongsOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetRecommendedSongs(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -6023,6 +6270,14 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        songGettingControllerGetRandom(options?: any): AxiosPromise<GetRandomVariantOutDto> {
+            return localVarFp.songGettingControllerGetRandom(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         songGettingControllerGetRecommendedSongs(options?: any): AxiosPromise<GetRecommendedSongsOutDto> {
             return localVarFp.songGettingControllerGetRecommendedSongs(options).then((request) => request(axios, basePath));
         },
@@ -6099,6 +6354,16 @@ export class SongGettingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SongGettingApi
      */
+    public songGettingControllerGetRandom(options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetRandom(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
     public songGettingControllerGetRecommendedSongs(options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetRecommendedSongs(options).then((request) => request(this.axios, this.basePath));
     }
@@ -6154,6 +6419,41 @@ export class SongGettingApi extends BaseAPI {
  */
 export const SongPublishingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGenerateKeywords: async (postGetKeywordsInDto: PostGetKeywordsInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postGetKeywordsInDto' is not null or undefined
+            assertParamExists('songPublishingControllerGenerateKeywords', 'postGetKeywordsInDto', postGetKeywordsInDto)
+            const localVarPath = `/song/generatekeywords`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postGetKeywordsInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
@@ -6283,6 +6583,18 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerGenerateKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerGenerateKeywords(postGetKeywordsInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerGenerateKeywords']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6329,6 +6641,15 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGenerateKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.songPublishingControllerGenerateKeywords(postGetKeywordsInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6364,6 +6685,17 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
  * @extends {BaseAPI}
  */
 export class SongPublishingApi extends BaseAPI {
+    /**
+     * 
+     * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerGenerateKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerGenerateKeywords(postGetKeywordsInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {PostPublishVariantInDto} postPublishVariantInDto 
@@ -6549,10 +6881,13 @@ export const WebhookApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {MessengerResponseInDto} messengerResponseInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhookControllerWebhook: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        webhookControllerWebhook: async (messengerResponseInDto: MessengerResponseInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'messengerResponseInDto' is not null or undefined
+            assertParamExists('webhookControllerWebhook', 'messengerResponseInDto', messengerResponseInDto)
             const localVarPath = `/webhook`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6567,9 +6902,12 @@ export const WebhookApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(messengerResponseInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6629,11 +6967,12 @@ export const WebhookApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {MessengerResponseInDto} messengerResponseInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webhookControllerWebhook(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerWebhook(options);
+        async webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerWebhook(messengerResponseInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebhookApi.webhookControllerWebhook']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6670,11 +7009,12 @@ export const WebhookApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {MessengerResponseInDto} messengerResponseInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhookControllerWebhook(options?: any): AxiosPromise<string> {
-            return localVarFp.webhookControllerWebhook(options).then((request) => request(axios, basePath));
+        webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.webhookControllerWebhook(messengerResponseInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6707,12 +7047,13 @@ export class WebhookApi extends BaseAPI {
 
     /**
      * 
+     * @param {MessengerResponseInDto} messengerResponseInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebhookApi
      */
-    public webhookControllerWebhook(options?: RawAxiosRequestConfig) {
-        return WebhookApiFp(this.configuration).webhookControllerWebhook(options).then((request) => request(this.axios, this.basePath));
+    public webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: RawAxiosRequestConfig) {
+        return WebhookApiFp(this.configuration).webhookControllerWebhook(messengerResponseInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

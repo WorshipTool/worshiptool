@@ -7,7 +7,13 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
-import { Button } from '@mui/material'
+import {
+	Button,
+	FormControl,
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+} from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
@@ -25,7 +31,8 @@ export default function Page() {
 	const [validation, setValidation] = useState<ValidationResult>()
 	const [qualities, setQualities] = useState<any>()
 	const [variantGuid, setVariantGuid] = useState<string>()
-	const [language, setLanguage] = useState<string>()
+	const [language, setLanguage] = useState<string>('cs')
+	const [autoFound, setAutoFound] = useState<boolean>(false)
 
 	const [message, setMessage] = useState<string>()
 	const navigate = useSmartNavigate()
@@ -74,6 +81,7 @@ export default function Page() {
 						)
 					).language
 				setLanguage(lang)
+				setAutoFound(true)
 			} catch (e) {
 				console.log(e)
 			}
@@ -92,6 +100,15 @@ export default function Page() {
 	const handlePublish = async () => {
 		if (!variantGuid) return
 		try {
+			if (!autoFound) {
+				await handleApiCall(
+					songEditingApi.songEditingControllerChangeLanguage({
+						variantGuid: variantGuid,
+						languageString: language,
+					})
+				)
+			}
+
 			const result = await handleApiCall(
 				songPublishingApi.songPublishingControllerPublishVariant({
 					variantGuid: variantGuid,
@@ -106,7 +123,10 @@ export default function Page() {
 
 		// checkLanguage()
 	}
-
+	const handleChange = (event: SelectChangeEvent) => {
+		setLanguage(event.target.value)
+		setAutoFound(false)
+	}
 	return (
 		<div>
 			{validation ? (
@@ -115,10 +135,30 @@ export default function Page() {
 					{validation.success ? (
 						<>
 							<Typography>Validace proběhla úspěšně.</Typography>
-							<Typography>
-								Jazyk: <b>{language?.toLocaleUpperCase?.()}</b>{' '}
-								{'- Zjištěno automaticky'}
-							</Typography>
+							<Gap />
+							<Typography>Jazyk písně:</Typography>
+							{autoFound && (
+								<Typography strong>{'- Zjištěno automaticky'}</Typography>
+							)}
+							<FormControl
+								sx={{
+									width: 200,
+								}}
+							>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={language}
+									// label="Jazyk"
+									onChange={handleChange}
+									size="small"
+								>
+									<MenuItem value={'cs'}>Čeština</MenuItem>
+									<MenuItem value={'sk'}>Slovenština</MenuItem>
+									<MenuItem value={'en'}>Angličtina</MenuItem>
+								</Select>
+							</FormControl>
+
 							<Gap />
 							<Button onClick={handlePublish} variant="contained">
 								Zveřejnit
