@@ -19,4 +19,6 @@ export type SongVariantDto = {
 	sources: SourceDto[]
 	creators: CreatorDto[]
 	alias: string
+	language: string
+	tags: string[]
 }

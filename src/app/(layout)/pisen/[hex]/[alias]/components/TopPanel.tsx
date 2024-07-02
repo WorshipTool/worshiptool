@@ -3,6 +3,7 @@ import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
+import { useApi } from '@/hooks/api/useApi'
 import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { Box, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -56,6 +57,7 @@ export default function TopPanel(props: TopPanelProps) {
 	const navigate = useSmartNavigate()
 
 	const songsApi = new SongEditingApi(apiConfiguration)
+	const { songEditingApi, songPublishingApi } = useApi()
 	const { fetchApiState } = useApiState<EditVariantOutDto>()
 
 	const [saving, setSaving] = React.useState(false)
@@ -66,6 +68,35 @@ export default function TopPanel(props: TopPanelProps) {
 			new Sheet(props.variant?.sheetData).toString() !== props.sheet?.toString()
 		return t || s
 	}, [props.sheet, props.editedTitle, props.variant])
+
+	const generateLanguage = async () => {
+		try {
+			await handleApiCall(
+				songEditingApi.songEditingControllerChangeLanguage({
+					variantGuid: props.variant.guid,
+				})
+			)
+			// Reload page
+			window.location.reload()
+			enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
+		} catch (e) {
+			enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
+		}
+	}
+
+	const generateKeyword = async () => {
+		try {
+			await handleApiCall(
+				songPublishingApi.songPublishingControllerGenerateKeywords({
+					variantGuid: props.variant.guid,
+				})
+			)
+			window.location.reload()
+			enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
+		} catch (e) {
+			enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
+		}
+	}
 
 	const onEditClick = async (editable: boolean) => {
 		if (editable) {
@@ -253,6 +284,52 @@ export default function TopPanel(props: TopPanelProps) {
 					)}
 				</Box>
 			</OnlyAdmin>
+			{props.variant.public && (
+				<>
+					{!props.variant.language && (
+						<>
+							<Gap />
+							<Box display={'flex'}>
+								<OnlyAdmin>
+									<Box display={'flex'} alignItems={'center'} gap={1}>
+										<Typography>
+											Píseň je sice public, ale nemá nastavený jazyk.
+										</Typography>
+										<Button
+											size="small"
+											color="secondary"
+											onClick={generateLanguage}
+										>
+											Dogenerovat
+										</Button>
+									</Box>
+								</OnlyAdmin>
+							</Box>
+						</>
+					)}
+					{(!props.variant.tags || props.variant.tags.length === 0) && (
+						<>
+							<Gap />
+							<Box display={'flex'}>
+								<OnlyAdmin>
+									<Box display={'flex'} alignItems={'center'} gap={1}>
+										<Typography>
+											Píseň je sice public, ale nemá žádná klíčová slova.
+										</Typography>
+										<Button
+											size="small"
+											color="secondary"
+											onClick={generateKeyword}
+										>
+											Dogenerovat
+										</Button>
+									</Box>
+								</OnlyAdmin>
+							</Box>
+						</>
+					)}
+				</>
+			)}
 		</>
 	)
 }
