@@ -21,7 +21,23 @@ const SegmentElement = ({
 	showChords: boolean
 }) => {
 	const words = useMemo(() => {
-		return segment.text?.split(/(\s+)/) || []
+		const arr = segment.text?.split(/(\s+)/) || []
+		// first item must be longer than chord
+		const chord = segment.chord?.toString(signature)
+		const chordLen = chord?.length || 0
+		return arr.reduce((acc, item) => {
+			if (acc.length !== 1) {
+				acc.push(item)
+			} else {
+				const last = acc[0]
+				if (last.replace(/\s/, '').length - 1 < chordLen * 1.2) {
+					acc[0] += item
+				} else {
+					acc.push(item)
+				}
+			}
+			return acc
+		}, [] as string[])
 	}, [segment])
 
 	return (
@@ -30,9 +46,12 @@ const SegmentElement = ({
 				return (
 					<Box key={word}>
 						{showChords &&
-							(index == 0 ? (
+							(index == 0 && segment.chord ? (
 								<>
-									<Typography sx={{ height: chordHeight }} fontWeight={900}>
+									<Typography
+										sx={{ height: chordHeight, paddingRight: '0.5rem' }}
+										fontWeight={900}
+									>
 										{segment.chord?.toString(signature)}
 									</Typography>
 								</>
