@@ -33,6 +33,7 @@ export default async function Page({ params }: PageProps) {
 									sheet={sheet}
 									variant="printCompact"
 									columns={2}
+									hideChords={false}
 								/>
 							</Box>
 						)

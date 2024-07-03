@@ -55,10 +55,12 @@ const SectionComponent = ({
 	section,
 	signature,
 	isLast,
+	hideChords,
 }: {
 	section: Section
 	signature?: signature
 	isLast: boolean
+	hideChords: boolean
 }) => {
 	const sectionName = useMemo(() => {
 		if (section.type === SectionType.UNKNOWN) return section.name
@@ -84,6 +86,7 @@ const SectionComponent = ({
 
 	const hasChords = useMemo(() => {
 		// return true
+		if (hideChords) return false
 		return section.lines?.some((line) =>
 			line.segments.some((segment) => segment.chord)
 		)
@@ -157,6 +160,7 @@ const PrintCompactStyle: SheetStyleComponentType = ({
 	title,
 	signature,
 	columns,
+	hideChords,
 }) => {
 	const sections = useMemo(() => {
 		return sheet?.getSections() || []
@@ -194,6 +198,7 @@ const PrintCompactStyle: SheetStyleComponentType = ({
 								section={section}
 								signature={signature}
 								isLast={index === sections.length - 1}
+								hideChords={hideChords}
 							/>
 						)
 					})}

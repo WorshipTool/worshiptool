@@ -8,8 +8,9 @@ interface SheetDisplayProps {
 	columns?: number
 	variant?: SheetStyle
 	sheet: Sheet
-	title: string
+	title?: string
 	editMode?: boolean
+	hideChords: boolean
 	onChange?: (sheetData: string, title: string) => void
 }
 
@@ -29,27 +30,45 @@ export default function SheetDisplay(props: SheetDisplayProps) {
 	}
 	const signature: signature = getSignature(props.sheet)
 
+	const handleCopy = (e: React.ClipboardEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		const input = window.getSelection()?.toString() || ''
+
+		const text = input.replace(/\s+/g, ' ')
+
+		e.clipboardData.setData('text/plain', text)
+	}
+
 	return (
 		<div>
 			{props.editMode ? (
 				<>
 					<EditSheet
 						sheet={props.sheet}
-						title={props.title}
+						title={props.title || ''}
 						onChange={(data, title) => {
 							props.onChange?.(data, title)
 						}}
 					/>
 				</>
 			) : (
-				<>
-					{sheetStyles[props.variant || 'default']({
-						sheet: props.sheet,
-						title: props.title,
-						signature: signature,
-						columns: props.columns || 1,
-					})}
-				</>
+				<div onCopy={handleCopy}>
+					{props.hideChords
+						? sheetStyles[props.variant || 'default']({
+								sheet: props.sheet,
+								title: props.title,
+								signature: signature,
+								columns: props.columns || 1,
+								hideChords: true,
+						  })
+						: sheetStyles[props.variant || 'default']({
+								sheet: props.sheet,
+								title: props.title,
+								signature: signature,
+								columns: props.columns || 1,
+								hideChords: false,
+						  })}
+				</div>
 			)}
 		</div>
 	)

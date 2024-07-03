@@ -71,10 +71,12 @@ const SectionComponent = ({
 	section,
 	signature,
 	isLast,
+	hideChords,
 }: {
 	section: Section
 	signature?: signature
 	isLast: boolean
+	hideChords: boolean
 }) => {
 	const sectionName = useMemo(() => {
 		if (section.type === SectionType.UNKNOWN) return section.name
@@ -102,10 +104,11 @@ const SectionComponent = ({
 
 	const hasChords = useMemo(() => {
 		// return true
+		if (hideChords) return false
 		return section.lines?.some((line) =>
 			line.segments.some((segment) => segment.chord)
 		)
-	}, [section])
+	}, [section, hideChords])
 
 	const hasFirstLineText = useMemo(() => {
 		return section.lines?.[0]?.text && section.lines?.[0]?.text?.length > 0
@@ -139,9 +142,9 @@ const SectionComponent = ({
 					<>
 						{section.lines.map((line, index) => {
 							return (
-								<Box
+								<div
 									key={index}
-									sx={{
+									style={{
 										display: 'flex',
 										flexDirection: 'row',
 										flexWrap: 'wrap',
@@ -157,7 +160,7 @@ const SectionComponent = ({
 											/>
 										)
 									})}
-								</Box>
+								</div>
 							)
 						})}
 					</>
@@ -179,6 +182,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 	title,
 	signature,
 	columns,
+	hideChords,
 }) => {
 	const sections = useMemo(() => {
 		return sheet?.getSections() || []
@@ -214,6 +218,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 							section={section}
 							signature={signature}
 							isLast={index === sections.length - 1}
+							hideChords={hideChords}
 						/>
 					)
 				})}

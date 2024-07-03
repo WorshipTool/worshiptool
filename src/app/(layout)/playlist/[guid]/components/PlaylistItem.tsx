@@ -192,6 +192,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 					sheet={sheet}
 					title={item.variant.preferredTitle}
 					columns={1}
+					hideChords={false}
 				/>
 			</Paper>
 
@@ -200,6 +201,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 					sheet={sheet}
 					title={item.variant.preferredTitle}
 					columns={1}
+					hideChords={false}
 				/>
 				{items.length > 1 && <PageBreak />}
 			</Box>
