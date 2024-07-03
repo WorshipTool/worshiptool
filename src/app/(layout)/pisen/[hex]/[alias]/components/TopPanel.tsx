@@ -69,7 +69,9 @@ export default function TopPanel(props: TopPanelProps) {
 		return t || s
 	}, [props.sheet, props.editedTitle, props.variant])
 
+	const [languageGenerating, setLanguageGenerating] = React.useState(false)
 	const generateLanguage = async () => {
+		setLanguageGenerating(true)
 		try {
 			await handleApiCall(
 				songEditingApi.songEditingControllerChangeLanguage({
@@ -82,9 +84,11 @@ export default function TopPanel(props: TopPanelProps) {
 		} catch (e) {
 			enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
 		}
+		setLanguageGenerating(false)
 	}
-
+	const [keywordsGenerating, setKeywordsGenerating] = React.useState(false)
 	const generateKeyword = async () => {
+		setKeywordsGenerating(true)
 		try {
 			await handleApiCall(
 				songPublishingApi.songPublishingControllerGenerateKeywords({
@@ -96,6 +100,7 @@ export default function TopPanel(props: TopPanelProps) {
 		} catch (e) {
 			enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
 		}
+		setKeywordsGenerating(false)
 	}
 
 	const onEditClick = async (editable: boolean) => {
@@ -299,6 +304,7 @@ export default function TopPanel(props: TopPanelProps) {
 											size="small"
 											color="secondary"
 											onClick={generateLanguage}
+											loading={languageGenerating}
 										>
 											Dogenerovat
 										</Button>
@@ -320,6 +326,7 @@ export default function TopPanel(props: TopPanelProps) {
 											size="small"
 											color="secondary"
 											onClick={generateKeyword}
+											loading={keywordsGenerating}
 										>
 											Dogenerovat
 										</Button>
