@@ -14,6 +14,7 @@ import { useSmartParams } from '../../../../../../../routes/useSmartParams'
 
 interface PrintButtonProps {
 	keyNote: note | null
+	hideChords: boolean | null
 }
 
 export default function PrintButton(props: PrintButtonProps) {
@@ -25,6 +26,7 @@ export default function PrintButton(props: PrintButtonProps) {
 		const printParams: SmartAllParams<'variantPrint'> = {
 			...params,
 			key: props.keyNote || undefined,
+			hideChords: props.hideChords ? 'true' : 'false' || undefined,
 		}
 		const url = getReplacedUrlWithParams(urlPattern, printParams)
 

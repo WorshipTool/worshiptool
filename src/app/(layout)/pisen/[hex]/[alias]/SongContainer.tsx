@@ -1,3 +1,4 @@
+import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
 import { Box } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
@@ -22,6 +23,8 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 	const title = useMemo(() => {
 		return variant.preferredTitle
 	}, [variant.preferredTitle])
+
+	const [showChords, setShowChords] = useState(true)
 
 	const rerender = useRerender()
 
@@ -74,19 +77,28 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 					onEditClick={onEditClick}
 					isInEditMode={inEditMode}
 					cancelEditing={cancelEditing}
+					hideChords={!showChords}
 				/>
-				<Gap value={2} />
 				<>
 					{variant && variant.deleted ? (
 						<>
+							<Gap value={2} />
 							<DeletedInfoPanel variant={variant} reloadSong={reload} />
 						</>
 					) : (
 						currentSheet && (
 							<>
+								<Gap value={0.5} />
+								<HideChordsButton
+									hiddenValue={!showChords}
+									onChange={(value) => setShowChords(!value)}
+								/>
+								<Gap value={0.5} />
+
 								<SheetDisplay
 									sheet={currentSheet}
 									title={editedTitle}
+									hideChords={!showChords}
 									variant={'default'}
 									editMode={inEditMode}
 									onChange={(sheet, title) => {

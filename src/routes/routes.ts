@@ -95,5 +95,6 @@ export const routesSearchParams = {
 	},
 	variantPrint: {
 		key: 'a' as note | undefined,
+		hideChords: 'false',
 	},
 }

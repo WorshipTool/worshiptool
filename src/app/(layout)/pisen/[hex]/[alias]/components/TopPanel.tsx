@@ -43,6 +43,7 @@ interface TopPanelProps {
 	onEditClick?: (editable: boolean) => Promise<void>
 	cancelEditing: () => void
 	isInEditMode?: boolean
+	hideChords: boolean
 }
 
 export default function TopPanel(props: TopPanelProps) {
@@ -248,7 +249,10 @@ export default function TopPanel(props: TopPanelProps) {
 							</Box>
 						)}
 
-						<PrintButton keyNote={props.sheet?.getKeyNote() || null} />
+						<PrintButton
+							keyNote={props.sheet?.getKeyNote() || null}
+							hideChords={props.hideChords || null}
+						/>
 					</>
 				)}
 			</Box>

@@ -11,6 +11,7 @@ export interface SheetStyleComponentProps {
 	title?: string
 	signature?: signature
 	columns: number
+	hideChords: boolean
 }
 export type SheetStyleComponentType = (
 	props: SheetStyleComponentProps
