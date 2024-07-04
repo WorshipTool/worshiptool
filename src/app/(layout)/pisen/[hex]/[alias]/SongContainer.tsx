@@ -79,6 +79,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 					cancelEditing={cancelEditing}
 					hideChords={!showChords}
 				/>
+
 				<>
 					{variant && variant.deleted ? (
 						<>
@@ -89,10 +90,12 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 						currentSheet && (
 							<>
 								<Gap value={0.5} />
-								<HideChordsButton
-									hiddenValue={!showChords}
-									onChange={(value) => setShowChords(!value)}
-								/>
+								{currentSheet.getKeyChord() && (
+									<HideChordsButton
+										hiddenValue={!showChords}
+										onChange={(value) => setShowChords(!value)}
+									/>
+								)}
 								<Gap value={0.5} />
 
 								<SheetDisplay
