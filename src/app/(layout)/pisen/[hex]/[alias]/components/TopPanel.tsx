@@ -319,7 +319,7 @@ export default function TopPanel(props: TopPanelProps) {
 					)}
 					{(!props.variant.tags || props.variant.tags.length === 0) && (
 						<>
-							<Gap />
+							{isAdmin() && <Gap />}
 							<Box display={'flex'}>
 								<OnlyAdmin>
 									<Box display={'flex'} alignItems={'center'} gap={1}>
