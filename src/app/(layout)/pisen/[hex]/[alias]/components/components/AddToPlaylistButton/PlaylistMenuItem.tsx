@@ -33,21 +33,18 @@ export default function PlaylistMenuItem({
 	const [loading, setLoading] = React.useState(true)
 	const [isInPlaylist, setIsInPlaylist] = React.useState<boolean>(false)
 
-	useEffect(() => {
-		if (variant) {
-			setLoading(true)
-			isVariantInPlaylist(variant.alias, playlistGuid).then((r) => {
-				setIsInPlaylist(r)
-				setLoading(false)
-			})
-		}
-	}, [variant])
-
 	const reloadPlaylists = () => {
-		return isVariantInPlaylist(variant.alias, playlistGuid).then((r) => {
+		return isVariantInPlaylist(variant.packGuid, playlistGuid).then((r) => {
 			setIsInPlaylist(r)
 		})
 	}
+
+	useEffect(() => {
+		if (variant) {
+			setLoading(true)
+			reloadPlaylists().then(() => setLoading(false))
+		}
+	}, [variant])
 
 	const addVariantToPlaylist = (playlistGuid: string) => {
 		setLoading(true)
@@ -66,10 +63,12 @@ export default function PlaylistMenuItem({
 		setLoading(true)
 
 		try {
-			removeFromPlaylist(variant.alias, playlistGuid).then(async (result) => {
-				await reloadPlaylists()
-				setLoading(false)
-			})
+			removeFromPlaylist(variant.packGuid, playlistGuid).then(
+				async (result) => {
+					await reloadPlaylists()
+					setLoading(false)
+				}
+			)
 		} catch (e) {
 			console.log(e)
 		}
