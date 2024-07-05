@@ -4808,14 +4808,14 @@ export const PlaylistGettingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
-         * @param {string} variantAlias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistGettingControllerIsVariantInPlaylist: async (variantAlias: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variantAlias' is not null or undefined
-            assertParamExists('playlistGettingControllerIsVariantInPlaylist', 'variantAlias', variantAlias)
+        playlistGettingControllerIsVariantInPlaylist: async (packGuid: string, playlist: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('playlistGettingControllerIsVariantInPlaylist', 'packGuid', packGuid)
             // verify required parameter 'playlist' is not null or undefined
             assertParamExists('playlistGettingControllerIsVariantInPlaylist', 'playlist', playlist)
             const localVarPath = `/playlist/contains`;
@@ -4834,8 +4834,8 @@ export const PlaylistGettingApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (variantAlias !== undefined) {
-                localVarQueryParameter['variantAlias'] = variantAlias;
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
             }
 
             if (playlist !== undefined) {
@@ -4940,13 +4940,13 @@ export const PlaylistGettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} variantAlias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistGettingControllerIsVariantInPlaylist(variantAlias: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerIsVariantInPlaylist(variantAlias, playlist, options);
+        async playlistGettingControllerIsVariantInPlaylist(packGuid: string, playlist: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerIsVariantInPlaylist(packGuid, playlist, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerIsVariantInPlaylist']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4994,13 +4994,13 @@ export const PlaylistGettingApiFactory = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} variantAlias 
+         * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistGettingControllerIsVariantInPlaylist(variantAlias: string, playlist: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.playlistGettingControllerIsVariantInPlaylist(variantAlias, playlist, options).then((request) => request(axios, basePath));
+        playlistGettingControllerIsVariantInPlaylist(packGuid: string, playlist: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistGettingControllerIsVariantInPlaylist(packGuid, playlist, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5046,14 +5046,14 @@ export class PlaylistGettingApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} variantAlias 
+     * @param {string} packGuid 
      * @param {string} playlist 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlaylistGettingApi
      */
-    public playlistGettingControllerIsVariantInPlaylist(variantAlias: string, playlist: string, options?: RawAxiosRequestConfig) {
-        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerIsVariantInPlaylist(variantAlias, playlist, options).then((request) => request(this.axios, this.basePath));
+    public playlistGettingControllerIsVariantInPlaylist(packGuid: string, playlist: string, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerIsVariantInPlaylist(packGuid, playlist, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6456,6 +6456,41 @@ export const SongPublishingApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGetKeywords: async (postGetKeywordsInDto: PostGetKeywordsInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postGetKeywordsInDto' is not null or undefined
+            assertParamExists('songPublishingControllerGetKeywords', 'postGetKeywordsInDto', postGetKeywordsInDto)
+            const localVarPath = `/song/getkeywords`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postGetKeywordsInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6595,6 +6630,18 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerGetKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerGetKeywords(postGetKeywordsInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerGetKeywords']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6650,6 +6697,15 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGetKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.songPublishingControllerGetKeywords(postGetKeywordsInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostPublishVariantInDto} postPublishVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6694,6 +6750,17 @@ export class SongPublishingApi extends BaseAPI {
      */
     public songPublishingControllerGenerateKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig) {
         return SongPublishingApiFp(this.configuration).songPublishingControllerGenerateKeywords(postGetKeywordsInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerGetKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerGetKeywords(postGetKeywordsInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
