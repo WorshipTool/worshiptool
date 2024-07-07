@@ -1,3 +1,4 @@
+import HandleCopyProvider from '@/common/components/SheetDisplay/components/HandleCopyProvider'
 import { Sheet } from '@pepavlin/sheet-api'
 import { note, signature } from '@pepavlin/sheet-api/lib/models/note'
 import EditSheet from './components/EditSheet'
@@ -30,15 +31,6 @@ export default function SheetDisplay(props: SheetDisplayProps) {
 	}
 	const signature: signature = getSignature(props.sheet)
 
-	const handleCopy = (e: React.ClipboardEvent<HTMLDivElement>) => {
-		e.preventDefault()
-		const input = window.getSelection()?.toString() || ''
-
-		const text = input.replace(/\s+/g, ' ')
-
-		e.clipboardData.setData('text/plain', text)
-	}
-
 	return (
 		<div>
 			{props.editMode ? (
@@ -52,7 +44,7 @@ export default function SheetDisplay(props: SheetDisplayProps) {
 					/>
 				</>
 			) : (
-				<div onCopy={handleCopy}>
+				<HandleCopyProvider>
 					{props.hideChords
 						? sheetStyles[props.variant || 'default']({
 								sheet: props.sheet,
@@ -68,7 +60,7 @@ export default function SheetDisplay(props: SheetDisplayProps) {
 								columns: props.columns || 1,
 								hideChords: false,
 						  })}
-				</div>
+				</HandleCopyProvider>
 			)}
 		</div>
 	)
