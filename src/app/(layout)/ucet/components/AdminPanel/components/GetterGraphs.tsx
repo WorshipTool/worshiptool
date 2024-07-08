@@ -2,7 +2,7 @@
 import Card from '@/common/ui/Card/Card'
 import { useApi } from '@/hooks/api/useApi'
 import { handleApiCall } from '@/tech/handleApiCall'
-import { LineChart, lineElementClasses } from '@mui/x-charts'
+import { LineChart } from '@mui/x-charts'
 import { useEffect, useState } from 'react'
 
 type RecordData = {
@@ -82,10 +82,10 @@ export default function GetterGraphs() {
 									},
 								]}
 								sx={{
-									[`& .${lineElementClasses.root}`]: {
-										strokeDasharray: '10 5',
-										strokeWidth: 2,
-									},
+									// [`& .${lineElementClasses.root}`]: {
+									// 	strokeDasharray: '10 5',
+									// 	strokeWidth: 2,
+									// },
 									width: '100%',
 									minWidth: 400,
 								}}
