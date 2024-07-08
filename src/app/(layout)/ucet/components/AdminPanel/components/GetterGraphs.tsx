@@ -1,15 +1,25 @@
 'use client'
-import { GetAnalyticsOutDto } from '@/api/generated'
 import Card from '@/common/ui/Card/Card'
 import { useApi } from '@/hooks/api/useApi'
 import { handleApiCall } from '@/tech/handleApiCall'
-import { LineChart, LineSeriesType, lineElementClasses } from '@mui/x-charts'
+import { LineChart, lineElementClasses } from '@mui/x-charts'
 import { useEffect, useState } from 'react'
+
+type RecordData = {
+	[key: string]: number | Date
+	date: Date
+}
+
+type Graph = {
+	title: string
+	records: RecordData[]
+	lineTitles: Record<string, string>
+}
 
 export default function GetterGraphs() {
 	const { analyticsApi } = useApi()
 
-	const [data, setData] = useState<GetAnalyticsOutDto>()
+	const [data, setData] = useState<Graph[]>()
 
 	const targetDaysCount = 5
 
@@ -18,7 +28,29 @@ export default function GetterGraphs() {
 			const data = await handleApiCall(
 				analyticsApi.analyticsControllerGetAnalytics(targetDaysCount)
 			)
-			setData(data)
+			setData(
+				data.graphs.map((graph) => {
+					const titles: Record<string, string> = {}
+					const records: RecordData[] = []
+
+					graph.lines.forEach((line) => {
+						line.values.forEach((value) => {
+							const title = line.name
+							records.push({
+								date: new Date(value.date),
+								[title]: value.value,
+							})
+
+							titles[title] = title
+						})
+					})
+					return {
+						title: graph.title,
+						records: records.reverse(),
+						lineTitles: titles,
+					}
+				})
+			)
 		}
 		doStuff()
 	}, [])
@@ -28,7 +60,7 @@ export default function GetterGraphs() {
 			{data && (
 				<>
 					<Card title={'Statistika'} />
-					{data.graphs.map((graph, index) => (
+					{data.map((graph, index) => (
 						<Card
 							key={index}
 							subtitle={`Statistika za posledních ${targetDaysCount} dní`}
@@ -42,11 +74,7 @@ export default function GetterGraphs() {
 								xAxis={[
 									{
 										scaleType: 'time',
-										data: Array.from({ length: data.days }, (_, i) => {
-											const d = new Date()
-											d.setDate(d.getDate() - i)
-											return d
-										}),
+										dataKey: 'date',
 									},
 								]}
 								sx={{
@@ -70,23 +98,15 @@ export default function GetterGraphs() {
 										itemGap: 10,
 									},
 								}}
-								series={[
-									...(data
-										? graph.lines.map(
-												(line): LineSeriesType => ({
-													data: line.values.map((v) => v.value),
-													label: line.name,
-													type: 'line',
-													valueFormatter: (v) =>
-														line.values.find((x) => x.value === v)?.string ||
-														v?.toString() ||
-														'Null',
-												})
-										  )
-										: []),
-								]}
+								series={Object.keys(graph.lineTitles).map((title) => ({
+									dataKey: title,
+									label: title,
+									connectNulls: true,
+									showMark: false,
+								}))}
 								height={200}
 								margin={{ top: 10, bottom: 80 }}
+								dataset={graph.records}
 							/>
 						</Card>
 					))}

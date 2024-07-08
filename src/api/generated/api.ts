@@ -631,6 +631,12 @@ export interface LineValueData {
      * @memberof LineValueData
      */
     'string': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LineValueData
+     */
+    'date': string;
 }
 /**
  * 
