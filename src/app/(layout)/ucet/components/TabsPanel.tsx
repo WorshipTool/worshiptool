@@ -1,7 +1,7 @@
+import AdminPanel from '@/app/(layout)/ucet/components/AdminPanel/AdminPanel'
 import { Box, Tab, Tabs, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import useAuth from '../../../../hooks/auth/useAuth'
-import AdminPanel from './AdminPanel/AdminPanel'
 import BasicInfo from './BasicInfo'
 import ChangePassword from './ChangePassword'
 import TabPanel from './TabPanel'
@@ -16,7 +16,16 @@ export default function TabsPanel() {
 	}
 
 	return (
-		<Box sx={{ flexGrow: 1, display: 'flex', gap: 2 }}>
+		<Box
+			sx={{
+				flexGrow: 1,
+				display: 'flex',
+				gap: 2,
+				position: 'relative',
+				// flexDirection: 'row',
+				// flex,
+			}}
+		>
 			<Tabs
 				orientation="vertical"
 				value={tabValue}
@@ -31,17 +40,22 @@ export default function TabsPanel() {
 				<Tab label="Změnit heslo" />
 				{isAdmin() && <Tab label="ejdmin" />}
 			</Tabs>
+			<div
+				style={{
+					flex: 1,
+				}}
+			>
+				<TabPanel value={tabValue} index={1}>
+					<BasicInfo />
+				</TabPanel>
+				<TabPanel value={tabValue} index={2}>
+					<ChangePassword />
+				</TabPanel>
 
-			<TabPanel value={tabValue} index={1}>
-				<BasicInfo />
-			</TabPanel>
-			<TabPanel value={tabValue} index={2}>
-				<ChangePassword />
-			</TabPanel>
-
-			<TabPanel value={tabValue} index={3}>
-				<AdminPanel />
-			</TabPanel>
+				<TabPanel value={tabValue} index={3}>
+					<AdminPanel />
+				</TabPanel>
+			</div>
 		</Box>
 	)
 }

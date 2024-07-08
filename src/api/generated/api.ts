@@ -213,6 +213,25 @@ export type CreatorDTOTypeEnum = typeof CreatorDTOTypeEnum[keyof typeof CreatorD
 /**
  * 
  * @export
+ * @interface Domain
+ */
+export interface Domain {
+    /**
+     * 
+     * @type {string}
+     * @memberof Domain
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<RecordItem>}
+     * @memberof Domain
+     */
+    'data': Array<RecordItem>;
+}
+/**
+ * 
+ * @export
  * @interface EditVariantOutDto
  */
 export interface EditVariantOutDto {
@@ -228,6 +247,25 @@ export interface EditVariantOutDto {
      * @memberof EditVariantOutDto
      */
     'alias': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetAnalyticsOutDto
+ */
+export interface GetAnalyticsOutDto {
+    /**
+     * 
+     * @type {Array<Graph>}
+     * @memberof GetAnalyticsOutDto
+     */
+    'graphs': Array<Graph>;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAnalyticsOutDto
+     */
+    'days': number;
 }
 /**
  * 
@@ -484,6 +522,25 @@ export interface GetVariantsOfUserOutDto {
 /**
  * 
  * @export
+ * @interface Graph
+ */
+export interface Graph {
+    /**
+     * 
+     * @type {string}
+     * @memberof Graph
+     */
+    'title': string;
+    /**
+     * 
+     * @type {Array<LineData>}
+     * @memberof Graph
+     */
+    'lines': Array<LineData>;
+}
+/**
+ * 
+ * @export
  * @interface Group
  */
 export interface Group {
@@ -536,6 +593,44 @@ export interface JwtResult {
      * @memberof JwtResult
      */
     'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface LineData
+ */
+export interface LineData {
+    /**
+     * 
+     * @type {string}
+     * @memberof LineData
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<LineValueData>}
+     * @memberof LineData
+     */
+    'values': Array<LineValueData>;
+}
+/**
+ * 
+ * @export
+ * @interface LineValueData
+ */
+export interface LineValueData {
+    /**
+     * 
+     * @type {number}
+     * @memberof LineValueData
+     */
+    'value': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof LineValueData
+     */
+    'string': string;
 }
 /**
  * 
@@ -1322,6 +1417,25 @@ export const ProgramSongDataCreatedTypeEnum = {
 
 export type ProgramSongDataCreatedTypeEnum = typeof ProgramSongDataCreatedTypeEnum[keyof typeof ProgramSongDataCreatedTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface RecordItem
+ */
+export interface RecordItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof RecordItem
+     */
+    'date': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RecordItem
+     */
+    'value': number;
+}
 /**
  * 
  * @export
@@ -2112,6 +2226,25 @@ export type SourceDTOTypeEnum = typeof SourceDTOTypeEnum[keyof typeof SourceDTOT
 /**
  * 
  * @export
+ * @interface Statistics
+ */
+export interface Statistics {
+    /**
+     * 
+     * @type {Array<Domain>}
+     * @memberof Statistics
+     */
+    'domains': Array<Domain>;
+    /**
+     * 
+     * @type {Array<RecordItem>}
+     * @memberof Statistics
+     */
+    'all': Array<RecordItem>;
+}
+/**
+ * 
+ * @export
  * @interface Tag
  */
 export interface Tag {
@@ -2407,6 +2540,113 @@ export class AIApi extends BaseAPI {
      */
     public aiControllerMakeRequest(postAiRequestInDto: PostAiRequestInDto, options?: RawAxiosRequestConfig) {
         return AIApiFp(this.configuration).aiControllerMakeRequest(postAiRequestInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * AnalyticsApi - axios parameter creator
+ * @export
+ */
+export const AnalyticsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        analyticsControllerGetAnalytics: async (days: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'days' is not null or undefined
+            assertParamExists('analyticsControllerGetAnalytics', 'days', days)
+            const localVarPath = `/analytics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (days !== undefined) {
+                localVarQueryParameter['days'] = days;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AnalyticsApi - functional programming interface
+ * @export
+ */
+export const AnalyticsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AnalyticsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async analyticsControllerGetAnalytics(days: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAnalyticsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.analyticsControllerGetAnalytics(days, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AnalyticsApi.analyticsControllerGetAnalytics']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AnalyticsApi - factory interface
+ * @export
+ */
+export const AnalyticsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AnalyticsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        analyticsControllerGetAnalytics(days: number, options?: any): AxiosPromise<GetAnalyticsOutDto> {
+            return localVarFp.analyticsControllerGetAnalytics(days, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AnalyticsApi - object-oriented interface
+ * @export
+ * @class AnalyticsApi
+ * @extends {BaseAPI}
+ */
+export class AnalyticsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} days 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AnalyticsApi
+     */
+    public analyticsControllerGetAnalytics(days: number, options?: RawAxiosRequestConfig) {
+        return AnalyticsApiFp(this.configuration).analyticsControllerGetAnalytics(days, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5194,6 +5434,42 @@ export const SongAddingApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getterAddingControllerGetStatistics: async (days: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'days' is not null or undefined
+            assertParamExists('getterAddingControllerGetStatistics', 'days', days)
+            const localVarPath = `/getter/statistics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (days !== undefined) {
+                localVarQueryParameter['days'] = days;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5344,6 +5620,18 @@ export const SongAddingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getterAddingControllerGetStatistics(days: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Statistics>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getterAddingControllerGetStatistics(days, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongAddingApi.getterAddingControllerGetStatistics']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5400,6 +5688,15 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @param {number} days 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getterAddingControllerGetStatistics(days: number, options?: any): AxiosPromise<Statistics> {
+            return localVarFp.getterAddingControllerGetStatistics(days, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostCreateVariantInDto} postCreateVariantInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5442,6 +5739,17 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
  * @extends {BaseAPI}
  */
 export class SongAddingApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} days 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongAddingApi
+     */
+    public getterAddingControllerGetStatistics(days: number, options?: RawAxiosRequestConfig) {
+        return SongAddingApiFp(this.configuration).getterAddingControllerGetStatistics(days, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {PostCreateVariantInDto} postCreateVariantInDto 

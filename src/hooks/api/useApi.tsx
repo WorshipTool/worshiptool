@@ -1,4 +1,5 @@
 import {
+	AnalyticsApi,
 	AuthApi,
 	GroupApi,
 	PermissionsApi,
@@ -28,6 +29,7 @@ export const useApi = () => {
 		groupApi: new GroupApi(apiConfiguration),
 		authApi: new AuthApi(apiConfiguration),
 		permissionApi: new PermissionsApi(apiConfiguration),
+		analyticsApi: new AnalyticsApi(apiConfiguration),
 	}
 
 	return apis
