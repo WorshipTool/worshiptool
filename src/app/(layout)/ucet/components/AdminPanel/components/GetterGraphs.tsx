@@ -6,7 +6,7 @@ import { LineChart, lineElementClasses } from '@mui/x-charts'
 import { useEffect, useState } from 'react'
 
 type RecordData = {
-	[key: string]: number | Date
+	[key: string]: number | Date | undefined
 	date: Date
 }
 
@@ -36,9 +36,12 @@ export default function GetterGraphs() {
 					graph.lines.forEach((line) => {
 						line.values.forEach((value) => {
 							const title = line.name
+							const d = new Date(value.date)
+							d.setSeconds(0)
+							d.setMilliseconds(0)
 							records.push({
-								date: new Date(value.date),
-								[title]: value.value,
+								date: d,
+								[title]: Math.random() > 0.5 ? value.value : undefined,
 							})
 
 							titles[title] = title
