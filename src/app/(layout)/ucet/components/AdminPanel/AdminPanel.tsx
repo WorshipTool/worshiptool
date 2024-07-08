@@ -26,7 +26,7 @@ export default function AdminPanel() {
 			<Box>
 				<Divider orientation={'vertical'} />
 			</Box>
-			<Box flex={1}>
+			<Box flex={1} gap={1} display={'flex'} flexDirection={'column'}>
 				<GetterGraphs />
 			</Box>
 		</Box>
