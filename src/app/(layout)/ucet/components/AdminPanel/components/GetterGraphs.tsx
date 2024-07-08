@@ -31,7 +31,7 @@ export default function GetterGraphs() {
 			setData(
 				data.graphs.map((graph) => {
 					const titles: Record<string, string> = {}
-					const records: RecordData[] = []
+					const records: Record<string, RecordData> = {}
 
 					graph.lines.forEach((line) => {
 						line.values.forEach((value) => {
@@ -39,17 +39,18 @@ export default function GetterGraphs() {
 							const d = new Date(value.date)
 							d.setSeconds(0)
 							d.setMilliseconds(0)
-							records.push({
-								date: d,
-								[title]: Math.random() > 0.5 ? value.value : undefined,
-							})
+							const dstring = d.toISOString()
+
+							if (!records[dstring]) records[dstring] = { date: d }
+
+							records[dstring][title] = value.value
 
 							titles[title] = title
 						})
 					})
 					return {
 						title: graph.title,
-						records: records.reverse(),
+						records: Object.values(records).reverse(),
 						lineTitles: titles,
 					}
 				})
