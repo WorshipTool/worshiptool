@@ -13,6 +13,7 @@ type RecordData = {
 
 type Graph = {
 	title: string
+	subtitle?: string
 	records: RecordData[]
 	lineTitles: Record<string, string>
 }
@@ -57,6 +58,7 @@ export default function GetterGraphs() {
 					})
 					return {
 						title: graph.title,
+						subtitle: graph.subtitle,
 						records: Object.values(records).reverse(),
 						lineTitles: titles,
 					}
@@ -86,7 +88,7 @@ export default function GetterGraphs() {
 					{data.map((graph, index) => (
 						<Card
 							key={index}
-							subtitle={`Statistika`}
+							subtitle={graph.subtitle || 'Statistika'}
 							title={graph.title}
 							style={{
 								width: '100%',
