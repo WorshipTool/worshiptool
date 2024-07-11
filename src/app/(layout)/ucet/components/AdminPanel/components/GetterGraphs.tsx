@@ -1,9 +1,10 @@
 'use client'
 import Card from '@/common/ui/Card/Card'
+import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { LineChart } from '@mui/x-charts'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type RecordData = {
 	[key: string]: number | Date | undefined
@@ -22,6 +23,12 @@ export default function GetterGraphs() {
 	const [data, setData] = useState<Graph[]>()
 
 	const targetDaysCount = 5
+
+	const minDate = useMemo(() => {
+		const d = new Date()
+		d.setDate(d.getDate() - targetDaysCount)
+		return d
+	}, [targetDaysCount])
 
 	useEffect(() => {
 		const doStuff = async () => {
@@ -63,11 +70,23 @@ export default function GetterGraphs() {
 		<>
 			{data && (
 				<>
-					<Card title={'Statistika'} />
+					<Card>
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: 10,
+							}}
+						>
+							<Typography variant="h5">Statistika</Typography>
+							<Typography>Za posledních {targetDaysCount} dní</Typography>
+						</div>
+					</Card>
 					{data.map((graph, index) => (
 						<Card
 							key={index}
-							subtitle={`Statistika za posledních ${targetDaysCount} dní`}
+							subtitle={`Statistika`}
 							title={graph.title}
 							style={{
 								width: '100%',
@@ -79,6 +98,8 @@ export default function GetterGraphs() {
 									{
 										scaleType: 'time',
 										dataKey: 'date',
+										min: minDate,
+										max: new Date(),
 									},
 								]}
 								sx={{
