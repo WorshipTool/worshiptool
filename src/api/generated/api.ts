@@ -533,6 +533,12 @@ export interface Graph {
     'title': string;
     /**
      * 
+     * @type {string}
+     * @memberof Graph
+     */
+    'subtitle'?: string;
+    /**
+     * 
      * @type {Array<LineData>}
      * @memberof Graph
      */
@@ -625,12 +631,6 @@ export interface LineValueData {
      * @memberof LineValueData
      */
     'value': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof LineValueData
-     */
-    'string': string;
     /**
      * 
      * @type {string}
