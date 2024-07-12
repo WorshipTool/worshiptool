@@ -36,34 +36,38 @@ export default function GetterGraphs() {
 			const data = await handleApiCall(
 				analyticsApi.analyticsControllerGetAnalytics(targetDaysCount)
 			)
-			setData(
-				data.graphs.map((graph) => {
-					const titles: Record<string, string> = {}
-					const records: Record<string, RecordData> = {}
+			const arr = data.graphs.map((graph) => {
+				const titles: Record<string, string> = {}
+				const records: Record<string, RecordData> = {}
 
-					graph.lines.forEach((line) => {
-						line.values.forEach((value) => {
-							const title = line.name
-							const d = new Date(value.date)
-							d.setSeconds(0)
-							d.setMilliseconds(0)
-							const dstring = d.toISOString()
+				graph.lines.forEach((line) => {
+					line.values.forEach((value) => {
+						const title = line.name
+						const d = new Date(value.date)
+						d.setSeconds(0)
+						d.setMilliseconds(0)
+						const dstring = d.toISOString()
 
-							if (!records[dstring]) records[dstring] = { date: d }
+						if (!records[dstring]) records[dstring] = { date: d }
 
-							records[dstring][title] = value.value
+						records[dstring][title] = value.value
 
-							titles[title] = title
-						})
+						titles[title] = title
 					})
-					return {
-						title: graph.title,
-						subtitle: graph.subtitle,
-						records: Object.values(records).reverse(),
-						lineTitles: titles,
-					}
 				})
-			)
+				return {
+					title: graph.title,
+					subtitle: graph.subtitle,
+					records: Object.values(records).sort((a, b) => {
+						if (a.date < b.date) return -1
+						if (a.date > b.date) return 1
+						return 0
+					}),
+					lineTitles: titles,
+				}
+			})
+
+			setData(arr)
 		}
 		doStuff()
 	}, [])
