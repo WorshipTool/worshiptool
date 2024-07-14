@@ -1,7 +1,7 @@
+import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PlaylistMenuList'
 import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
 import { getReplacedUrlWithParams, routesPaths, SmartAllParams } from '@/routes'
 import { Edit, Print } from '@mui/icons-material'
-import { Masonry } from '@mui/lab'
 import {
 	Box,
 	Chip,
@@ -22,7 +22,6 @@ import useGroup from '../../../../../../hooks/group/useGroup'
 import useCurrentPlaylist from '../../../../../../hooks/playlist/useCurrentPlaylist'
 import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
-import PanelItem from './PanelItem'
 
 const Container = styled(Box)(({ theme }) => ({
 	width: 300,
@@ -80,14 +79,6 @@ export default function SidePanel({}: {}) {
 		openNewPrintWindow(url)
 	}
 	const theme = useTheme()
-
-	const onPanelItemClickCall = (guid: string) => {
-		const el = document.getElementById('playlistItem_' + guid)
-		el?.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start',
-		})
-	}
 
 	// const openCards = () => {
 	//     navigate("playlistCards", {
@@ -220,48 +211,51 @@ export default function SidePanel({}: {}) {
 							)}
 						</Box>
 						<Gap value={2} />
-						<Box display={'flex'} flexDirection={'row'}>
+						<Box display={'flex'} flexDirection={'column'}>
 							<Typography variant="h6" fontWeight={'bold'} flex={1}>
 								Pořadí
 							</Typography>
+							<Typography>Změňte přetažením</Typography>
 						</Box>
 						<Gap />
-						{items.length == 0 && (
+						{items.length == 0 ? (
 							<>
 								<Typography variant="subtitle2">
 									V playlistu nejsou žádné písně...
 								</Typography>
 							</>
+						) : (
+							<Box
+								flex={1}
+								display={'flex'}
+								flexDirection={'column'}
+								alignItems={'center'}
+								bgcolor={theme.palette.grey[100]}
+								sx={{
+									'&::-webkit-scrollbar': {
+										display: 'auto',
+									},
+									// paddingTop: 1,
+									paddingBottom: 8,
+									overflowY: 'auto',
+								}}
+							>
+								<PlaylistMenuList items={items} />
+								{/* <Masonry columns={1}>
+                            {items.map((item) => {
+                                return (
+                                    <PanelItem
+                                        setMoving={setSomeIsMoving}
+                                        moving={someIsMoving}
+                                        item={item}
+                                        key={'order_' + item.guid}
+                                        onClick={() => onPanelItemClickCall(item.guid)}
+                                    />
+                                )
+                            })}
+                        </Masonry> */}
+							</Box>
 						)}
-						<Box
-							flex={1}
-							display={'flex'}
-							flexDirection={'column'}
-							alignItems={'center'}
-							bgcolor={theme.palette.grey[100]}
-							sx={{
-								'&::-webkit-scrollbar': {
-									display: 'auto',
-								},
-								paddingTop: 1,
-								paddingBottom: 8,
-								overflowY: 'auto',
-							}}
-						>
-							<Masonry columns={1}>
-								{items.map((item) => {
-									return (
-										<PanelItem
-											setMoving={setSomeIsMoving}
-											moving={someIsMoving}
-											item={item}
-											key={'order_' + item.guid}
-											onClick={() => onPanelItemClickCall(item.guid)}
-										/>
-									)
-								})}
-							</Masonry>
-						</Box>
 					</Box>
 
 					<Box

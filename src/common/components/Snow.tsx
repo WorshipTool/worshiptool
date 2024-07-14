@@ -27,10 +27,9 @@ export default function Snow() {
 	return (
 		<Box displayPrint={'none'}>
 			<OnScrollComponent
-				component={(top, y) => {
+				onChange={(top, y) => {
 					const level = Math.min(1, Math.pow(y / 100, 3))
 					setBlur(level * 10)
-					return <></>
 				}}
 			/>
 			<AnimatePresence>

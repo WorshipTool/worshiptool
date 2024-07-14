@@ -2,17 +2,17 @@
 
 import { useEffect, useRef } from 'react'
 
-interface ChangeDelayerProps {
-	value: any
-	onChange: (value: any) => void
+interface ChangeDelayerProps<T> {
+	value: T
+	onChange: (value: T) => void
 	delay?: number
 }
 
-export default function OnChangeDelayer({
+export default function OnChangeDelayer<T>({
 	value,
 	onChange,
 	delay = 300,
-}: ChangeDelayerProps) {
+}: ChangeDelayerProps<T>) {
 	const loadTimeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(
 		undefined
 	)

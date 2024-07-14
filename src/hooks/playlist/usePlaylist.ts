@@ -95,10 +95,21 @@ export default function usePlaylist(guid: string | undefined) {
 		})
 	}
 
-	const reorder = async (items: ApiReorderPlaylistItemDTO[]) => {
-		const r = await reorderPlaylist(guid || '', items)
+	const reorder = async (reorderItems: ApiReorderPlaylistItemDTO[]) => {
+		const r = await reorderPlaylist(guid || '', reorderItems)
 
-		await reload()
+		setItems(
+			items.map((item) => {
+				const newItem = reorderItems.find((i) => i.guid === item.guid)
+				if (newItem) {
+					return {
+						...item,
+						order: newItem.order,
+					}
+				}
+				return item
+			})
+		)
 
 		return r
 	}
