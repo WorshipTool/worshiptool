@@ -8,7 +8,7 @@ import { useState } from 'react'
  */
 export const useLocalStorage = <T = string>(key: string) => {
 	const get = (): T | undefined => {
-		const raw = localStorage.getItem(key)
+		const raw = localStorage?.getItem(key)
 		if (!raw) return undefined
 		return JSON.parse(raw)
 	}
