@@ -1,4 +1,5 @@
 'use client'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Add, Remove } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -32,7 +33,7 @@ const StyledContainer = styled(Paper)(({ theme }) => ({
 export default function Playlists() {
 	const {
 		getPlaylistsOfUser,
-		createPlaylist: createWithName,
+		createPlaylist: createWithoutName,
 		deletePlaylist: deleteByGuid,
 	} = usePlaylistsGeneral()
 	const [loaded, setLoaded] = useState(false)
@@ -49,7 +50,7 @@ export default function Playlists() {
 
 	const [openDialog, setOpenDialog] = useState(false)
 	const [deletingTitle, setDeletingTitle] = useState('')
-	const [deletingGuid, setDeletingGuid] = useState('')
+	const [deletingGuid, setDeletingGuid] = useState<PlaylistGuid | null>()
 
 	useEffect(() => {
 		if (loaded) return
@@ -65,23 +66,23 @@ export default function Playlists() {
 
 	const createPlaylist = async () => {
 		try {
-			const result = await createWithName('Nový playlist ' + playlists?.length)
+			const result = await createWithoutName()
 			navigate('playlist', {
-				guid: result.guid,
+				guid: result,
 			})
-			turnOn(result.guid)
+			turnOn(result)
 		} catch (e: any) {
 			console.log('Something went wrong:', e.message)
 			setCreateLoading(false)
 		}
 	}
 
-	const askToDeletePlaylist = async (guid: string, title: string) => {
+	const askToDeletePlaylist = async (guid: PlaylistGuid, title: string) => {
 		setDeletingTitle(title)
 		setDeletingGuid(guid)
 		setOpenDialog(true)
 	}
-	const deletePlaylist = async (guid: string) => {
+	const deletePlaylist = async (guid: PlaylistGuid) => {
 		if (playlistGuid === guid) turnOff()
 		deleteByGuid(guid)
 			.then((result) => {
@@ -92,14 +93,20 @@ export default function Playlists() {
 			})
 	}
 
-	const openPlaylist = (guid: string) => {
+	const openPlaylist = (guid: PlaylistGuid) => {
 		navigate('playlist', {
 			guid,
 		})
 	}
 	const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist()
 
-	const ListPlaylistItem = ({ name, guid }: { name: string; guid: string }) => {
+	const ListPlaylistItem = ({
+		name,
+		guid,
+	}: {
+		name: string
+		guid: PlaylistGuid
+	}) => {
 		return (
 			<StyledContainer
 				sx={{
@@ -172,7 +179,11 @@ export default function Playlists() {
 					<>
 						{playlists?.map((p) => {
 							return (
-								<ListPlaylistItem name={p.title} guid={p.guid} key={p.guid} />
+								<ListPlaylistItem
+									name={p.title}
+									guid={p.guid as PlaylistGuid}
+									key={p.guid}
+								/>
 							)
 						})}
 
@@ -198,7 +209,7 @@ export default function Playlists() {
 						</Button>
 						<Button
 							onClick={() => {
-								deletePlaylist(deletingGuid)
+								if (deletingGuid) deletePlaylist(deletingGuid)
 								setOpenDialog(false)
 							}}
 							color="error"

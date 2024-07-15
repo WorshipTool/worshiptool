@@ -82,7 +82,7 @@ export default function PublishButton(props: PublishButtonProps) {
 		// 		)
 		// 	}
 		// )
-		navigate('variantPublish', parseVariantAlias(props.variant.alias))
+		navigate('variantPublish', parseVariantAlias(props.variant.packAlias))
 	}
 
 	const theme = useTheme()

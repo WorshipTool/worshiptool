@@ -1,5 +1,5 @@
+import { VariantPackGuid } from '@/api/dtos'
 import { useApi } from '@/hooks/api/useApi'
-import { VariantPackGuid } from '@/interfaces/variant/VariantDTO'
 import { Chord } from '@pepavlin/sheet-api'
 import { mapPlaylistDataOutDtoToPlaylistDto } from '../../api/dtos/playlist/playlist.map'
 import {
@@ -59,10 +59,11 @@ export default function usePlaylistsGeneral() {
 		)
 	}
 
-	const createPlaylist = async () => {
-		return await handleApiCall(
+	const createPlaylist = async (): Promise<PlaylistGuid> => {
+		const createdApi = await handleApiCall(
 			playlistEditingApi.playlistEditingControllerCreatePlaylist()
 		)
+		return createdApi.guid as PlaylistGuid
 	}
 
 	const deletePlaylist = async (guid: PlaylistGuid) => {

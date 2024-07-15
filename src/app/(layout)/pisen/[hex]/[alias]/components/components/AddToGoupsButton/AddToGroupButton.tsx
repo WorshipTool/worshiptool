@@ -1,3 +1,4 @@
+import { VariantPackGuid } from '@/api/dtos'
 import { Diversity3 } from '@mui/icons-material'
 import {
 	Divider,
@@ -11,7 +12,7 @@ import { usePermissions } from '../../../../../../../../hooks/auth/usePermission
 import GroupItem from './GroupItem'
 
 type AddToGroupButtonProps = {
-	packGuid: string
+	packGuid: VariantPackGuid
 }
 
 export default function AddToGroupButton(props: AddToGroupButtonProps) {

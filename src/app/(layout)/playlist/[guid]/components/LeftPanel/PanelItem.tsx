@@ -72,7 +72,7 @@ export default function PanelItem({
 		<Link
 			to="variant"
 			params={{
-				...parseVariantAlias(item.variant.alias),
+				...parseVariantAlias(item.variant.packAlias),
 			}}
 			onlyWithShift
 		>

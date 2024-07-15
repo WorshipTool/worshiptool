@@ -50,7 +50,7 @@ export default function SearchItem({
 }: SearchItemProps) {
 	const [bottomPanelOpen, setBottomPanelOpen] = useState(false)
 
-	const { addVariant, reload, items } = useInnerPlaylist()
+	const { addVariant, items } = useInnerPlaylist()
 
 	const sheet = new Sheet(variant.sheetData)
 
@@ -71,7 +71,6 @@ export default function SearchItem({
 				return await addVariant(variant.packGuid)
 			},
 			() => {
-				reload()
 				turnOn(playlist.guid)
 			}
 		)
@@ -83,7 +82,7 @@ export default function SearchItem({
 	const theme = useTheme()
 
 	const variantParams = {
-		...parseVariantAlias(variant.alias),
+		...parseVariantAlias(variant.packAlias),
 		title: variant.preferredTitle,
 	}
 

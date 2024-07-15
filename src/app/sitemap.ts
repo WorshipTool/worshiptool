@@ -1,3 +1,4 @@
+import { VariantPackAlias } from '@/api/dtos'
 import type { MetadataRoute } from 'next'
 import { GetListSongData, SongGettingApi } from '../api/generated'
 import {
@@ -23,7 +24,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const date = new Date()
 
 	const songsMap = songs.map((s) => ({
-		url: getRouteUrlWithParams('variant', parseVariantAlias(s.alias)),
+		url: getRouteUrlWithParams(
+			'variant',
+			parseVariantAlias(s.alias as VariantPackAlias)
+		),
 		lastModified: date,
 		changeFrequency: 'monthly',
 		priority: 0.8,

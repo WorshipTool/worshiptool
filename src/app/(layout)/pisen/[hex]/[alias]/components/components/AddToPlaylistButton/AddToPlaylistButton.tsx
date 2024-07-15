@@ -1,3 +1,4 @@
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import {
 	KeyboardArrowDown,
 	MoreHoriz,
@@ -123,7 +124,7 @@ export default function AddToPlaylistButton({
 					return (
 						<PlaylistMenuItem
 							key={p.guid}
-							guid={p.guid}
+							guid={p.guid as PlaylistGuid}
 							title={p.title}
 							variant={variant}
 						/>
@@ -158,7 +159,7 @@ export default function AddToPlaylistButton({
 							return (
 								<PlaylistMenuItem
 									key={p.guid}
-									guid={p.guid}
+									guid={p.guid as PlaylistGuid}
 									title={p.title}
 									variant={variant}
 								/>

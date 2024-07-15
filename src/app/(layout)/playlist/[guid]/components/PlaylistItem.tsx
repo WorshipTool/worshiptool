@@ -35,7 +35,6 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 		loading,
 		setItemsKeyChord,
 		isOwner,
-		reload,
 	} = useInnerPlaylist()
 	const { turnOn } = useCurrentPlaylist()
 
@@ -59,7 +58,6 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 		setRemoving(false)
 
 		turnOn(playlistGuid)
-		await reload()
 	}
 
 	const transpose = async (value: number) => {
@@ -180,7 +178,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 							variant="text"
 							to="variant"
 							toParams={{
-								...parseVariantAlias(item.variant.alias),
+								...parseVariantAlias(item.variant.packAlias),
 							}}
 						>
 							Otevřít

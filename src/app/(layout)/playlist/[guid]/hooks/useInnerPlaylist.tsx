@@ -1,3 +1,4 @@
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { createContext, useContext, useMemo } from 'react'
 import useCurrentPlaylist from '../../../../../hooks/playlist/useCurrentPlaylist'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
@@ -15,7 +16,7 @@ export const InnerPlaylistProvider = ({
 	guid,
 }: {
 	children: any
-	guid: string
+	guid: PlaylistGuid
 }) => {
 	const p = useProvideInnerPlaylist(guid)
 
@@ -30,7 +31,9 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist> {
 	isOn: boolean
 }
 
-export const useProvideInnerPlaylist = (guid: string): useProvidePlaylistI => {
+export const useProvideInnerPlaylist = (
+	guid: PlaylistGuid
+): useProvidePlaylistI => {
 	const playlist = usePlaylist(guid)
 
 	const currentPlaylist = useCurrentPlaylist()

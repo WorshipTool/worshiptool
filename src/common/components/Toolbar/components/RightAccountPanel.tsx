@@ -120,7 +120,7 @@ export default function RightAccountPanel({
 	const [accountMenuOpen, setAccountMenuOpen] = useState(false)
 
 	const isHome = useSmartMatch('home')
-	const pathname = usePathname()
+	const pathname = usePathname() as string
 
 	const theme = useTheme()
 

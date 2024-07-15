@@ -1,14 +1,14 @@
+import { SongVariantDto } from '../variant/songVariant.types'
+import { Creator } from './creator'
+import { Media } from './media'
 
-import { Creator } from "./creator"
-import { Media } from "./media"
-import { VariantDTO } from "../variant/VariantDTO"
+export type SongGuid = string & { readonly brand: unique symbol }
 
-export default interface Song{
-    guid:string,
-    title: string,
-    creators: Creator[],
-    variants: VariantDTO[],
-    media: Media[],
-    tags: string[]
-
+export default interface Song {
+	guid: SongGuid
+	title: string
+	creators: Creator[]
+	variants: SongVariantDto[]
+	media: Media[]
+	tags: string[]
 }

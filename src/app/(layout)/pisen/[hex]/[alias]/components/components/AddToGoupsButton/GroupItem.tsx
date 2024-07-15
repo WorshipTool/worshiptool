@@ -1,3 +1,5 @@
+import { VariantPackGuid } from '@/api/dtos'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
 import {
 	CircularProgress,
@@ -16,7 +18,7 @@ import {
 
 type GroupItemProps = {
 	groupGuid: string
-	packGuid: string
+	packGuid: VariantPackGuid
 	addable: boolean
 	removable: boolean
 }
@@ -31,8 +33,8 @@ export default function GroupItem(props: GroupItemProps) {
 	const [isInState, reload] = useApiStateEffect(async () => {
 		if (!groupState.data?.selection) return false
 		return selection.isVariantInPlaylist(
-			props.packGuid || '',
-			groupState.data?.selection || ''
+			props.packGuid,
+			groupState.data?.selection as PlaylistGuid
 		)
 	}, [groupState])
 
@@ -43,7 +45,10 @@ export default function GroupItem(props: GroupItemProps) {
 	const addToSelection = () => {
 		fetchApiState(() =>
 			selection
-				.addVariantToPlaylist(props.packGuid, groupState.data?.selection || '')
+				.addVariantToPlaylist(
+					props.packGuid,
+					groupState.data?.selection as PlaylistGuid
+				)
 				.then(() => {
 					reload()
 					enqueueSnackbar('Přidáno do skupiny')
@@ -56,7 +61,7 @@ export default function GroupItem(props: GroupItemProps) {
 			selection
 				.removeVariantFromPlaylist(
 					props.packGuid,
-					groupState.data?.selection || ''
+					groupState.data?.selection as PlaylistGuid
 				)
 				.then(() => {
 					reload()

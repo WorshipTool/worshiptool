@@ -1,11 +1,13 @@
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+
 export interface Group {
-    name: string;
-    code: string;
-    guid: string;
-    selection: string;
-    payload: GroupPayloadType;
+	name: string
+	code: string
+	guid: string
+	selection: PlaylistGuid
+	payload: GroupPayloadType
 }
 
 export type GroupPayloadType = Partial<{
-    pinnedPlaylist: string | null;
-}>;
+	pinnedPlaylist: PlaylistGuid | null
+}>

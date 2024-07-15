@@ -24,7 +24,7 @@ import PinnedPlaylistAlternativeDisplay from './PinnedPlaylistAlternativeDisplay
 type SelectionListProps = {}
 
 export default function SelectionList(props: SelectionListProps) {
-	const { items, search, reload, loading } = useGroupSelection()
+	const { items, search, loading } = useGroupSelection()
 	const { name, payload } = useGroup()
 	const { getPlaylistByGuid } = usePlaylistsGeneral()
 
@@ -42,8 +42,8 @@ export default function SelectionList(props: SelectionListProps) {
 	const onChange = async (searchString: string) => {
 		setStillString(searchString)
 
-		if (searchString === '') reload()
-		else search(searchString)
+		if (searchString === '') {
+		} else search(searchString)
 	}
 
 	useEffect(() => {

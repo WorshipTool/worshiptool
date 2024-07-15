@@ -41,7 +41,7 @@ export default function RightPanel({ playlist }: RightPanelProps) {
 		return (
 			isOn
 				? selectionItems
-						.filter((s) => !items.map((v) => v.variant.guid).includes(s.guid))
+						.filter((s) => !items.map((v) => v.guid).includes(s.guid))
 						.map((v) => v.variant)
 				: data.filter((s) => !items.map((v) => v.variant.guid).includes(s.guid))
 		).filter((v) => playlist?.items.every((s) => s.variant.guid != v.guid))

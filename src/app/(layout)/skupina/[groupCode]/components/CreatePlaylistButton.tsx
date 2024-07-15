@@ -27,8 +27,7 @@ export default function CreatePlaylistButton() {
 	const navigate = useSmartNavigate()
 
 	const onClick = () => {
-		createPlaylist().then((r) => {
-			const guid = r.guid
+		createPlaylist().then((guid) => {
 			turnOn(guid)
 			navigate('playlist', { guid })
 		})

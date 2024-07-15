@@ -1,3 +1,4 @@
+import { VariantPackAlias } from '@/api/dtos'
 import { note } from '@pepavlin/sheet-api'
 import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
@@ -42,7 +43,7 @@ export const getRouteUrlWithParams = <T extends RoutesKeys>(
 	return getReplacedUrlWithParams(FRONTEND_URL + url, params)
 }
 
-export const parseVariantAlias = (variantAlias: string) => {
+export const parseVariantAlias = (variantAlias: VariantPackAlias) => {
 	const alias = variantAlias
 
 	// Part before first -

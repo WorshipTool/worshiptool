@@ -32,8 +32,7 @@ export default function QuickActions({ visible }: QuickActionsProps) {
 
 	const onCreatePlaylist = () => {
 		setCreatePlaylistLoading(true)
-		createPlaylist().then((r) => {
-			const guid = r.guid
+		createPlaylist().then((guid) => {
 			turnOn(guid)
 			navigate('playlist', {
 				guid,

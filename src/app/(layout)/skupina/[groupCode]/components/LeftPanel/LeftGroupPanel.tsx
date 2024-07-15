@@ -8,7 +8,7 @@ import CreatePlaylistButton from '../CreatePlaylistButton'
 
 export default function LeftGroupPanel() {
 	const { name } = useGroup()
-	const { count } = useGroupSelection()
+	const { items } = useGroupSelection()
 	const { isOn, turnOff, guid } = useCurrentPlaylist()
 	const navigate = useSmartNavigate()
 
@@ -35,7 +35,7 @@ export default function LeftGroupPanel() {
 					</Typography>
 					<Gap value={2} />
 					<Typography variant="subtitle2">
-						Má v okruhu celkem {count} písní
+						Má v okruhu celkem {items.length} písní
 					</Typography>
 				</Box>
 				<Box

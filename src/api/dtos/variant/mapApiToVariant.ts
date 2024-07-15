@@ -1,22 +1,20 @@
-import { ApiVariantDTO } from "./ApiVariantDTO";
-import { VariantDTO } from "../../../interfaces/variant/VariantDTO";
-import { Sheet } from "@pepavlin/sheet-api";
+// export const mapApiToSongVariantDto = (api: any): SongVariantDto => {
+// 	const sheet = new Sheet(api.sheetData)
+// 	return {
+// 		guid: api.guid as SongVariantGuid,
+// 		songGuid: api.songGuid as SongGuid,
 
-export const mapApiToVariant = (api: ApiVariantDTO): VariantDTO => {
-	const sheet = new Sheet(api.sheetData);
-	return {
-		guid: api.guid,
-		songGuid: api.songGuid,
-		sheetData: api.sheetData,
-		sheetText: api.sheetText,
-		sections: sheet.getSections(),
-		preferredTitle: api.prefferedTitle,
-		titles: api.titles,
-		verified: api.verified,
-		createdBy: api.createdByGuid,
-		createdByLoader: api.createdByLoader,
-		sources: api.sources,
-		creators: api.creators,
-		deleted: api.deleted
-	};
-};
+// 		sheetData: api.sheetData,
+// 		sheetText: api.sheetText,
+// 		sheet: sheet,
+
+// 		preferredTitle: api.prefferedTitle,
+// 		titles: api.titles,
+// 		verified: api.verified,
+// 		createdBy: api.createdByGuid as UserGuid,
+// 		createdByLoader: api.createdByLoader,
+// 		sources: api.sources,
+// 		creators: api.creators,
+// 		deleted: api.deleted,
+// 	}
+// }

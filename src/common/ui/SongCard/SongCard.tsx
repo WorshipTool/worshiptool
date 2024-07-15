@@ -1,7 +1,7 @@
 'use client'
 
 import { Lock, Public } from '@mui/icons-material'
-import { Box, styled, Typography, useTheme } from '@mui/material'
+import { Box, Typography, styled, useTheme } from '@mui/material'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { parseVariantAlias } from '../../../routes'
@@ -83,7 +83,7 @@ export function SongCard({
 		<Link
 			to={'variant'}
 			params={{
-				...parseVariantAlias(data.alias),
+				...parseVariantAlias(data.packAlias),
 			}}
 		>
 			<StyledContainer

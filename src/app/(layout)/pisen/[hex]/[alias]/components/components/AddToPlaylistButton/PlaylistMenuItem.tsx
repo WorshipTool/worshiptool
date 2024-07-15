@@ -1,3 +1,4 @@
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, Launch, PlaylistAdd } from '@mui/icons-material'
 import {
 	Box,
@@ -15,7 +16,7 @@ import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlayl
 
 interface PlaylistMenuItemProps {
 	variant: SongVariantDto
-	guid: string
+	guid: PlaylistGuid
 	title: string
 }
 
@@ -46,7 +47,7 @@ export default function PlaylistMenuItem({
 		}
 	}, [variant])
 
-	const addVariantToPlaylist = (playlistGuid: string) => {
+	const addVariantToPlaylist = (playlistGuid: PlaylistGuid) => {
 		setLoading(true)
 
 		try {
@@ -59,7 +60,7 @@ export default function PlaylistMenuItem({
 		}
 	}
 
-	const removeVariantFromPlaylist = (playlistGuid: string) => {
+	const removeVariantFromPlaylist = (playlistGuid: PlaylistGuid) => {
 		setLoading(true)
 
 		try {

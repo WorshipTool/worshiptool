@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
 import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
-import User, { ROLES } from '../../interfaces/user'
+import { ROLES, UserDto } from '../../interfaces/user'
 import { useSmartNavigate } from '../../routes/useSmartNavigate'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
@@ -16,7 +16,7 @@ export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	signup: () => {},
 	isLoggedIn: () => false,
 	user: undefined,
-	info: {} as User,
+	info: {} as UserDto,
 	getAuthHeader: () => ({}),
 	isTrustee: () => false,
 	isAdmin: () => false,
@@ -38,7 +38,7 @@ export default function useAuth() {
 }
 
 export function useProvideAuth() {
-	const [user, setUser] = useState<User>()
+	const [user, setUser] = useState<UserDto>()
 
 	const { enqueueSnackbar } = useSnackbar()
 	const navigate = useSmartNavigate()
@@ -101,7 +101,7 @@ export function useProvideAuth() {
 			})
 	}
 
-	const innerLogin = (user: User) => {
+	const innerLogin = (user: UserDto) => {
 		enqueueSnackbar(
 			`Ahoj ${user.firstName} ${user.lastName}. Ať najdeš, po čem paseš.`
 		)
@@ -186,7 +186,7 @@ export function useProvideAuth() {
 		loginWithGoogle,
 		isLoggedIn,
 		user,
-		info: user ? user : ({} as User),
+		info: user ? user : ({} as UserDto),
 		getAuthHeader,
 		isTrustee: () => user != undefined && user.role == ROLES.Trustee,
 		isAdmin: () => user != undefined && user.role == ROLES.Admin,

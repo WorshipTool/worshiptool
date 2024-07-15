@@ -1,3 +1,4 @@
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { LoadingButton } from '@mui/lab'
 import { Box, LinearProgress, Typography } from '@mui/material'
 import { SkeletonLoader } from '../../../../../../../common/providers/SkeletonLoader'
@@ -5,7 +6,7 @@ import usePlaylistsGeneral from '../../../../../../../hooks/playlist/usePlaylist
 import { useApiStateEffect } from '../../../../../../../tech/ApiState'
 
 type PinnedPlaylistProps = {
-	guid: string
+	guid: PlaylistGuid
 	onRemove: () => void
 	onTryAgain: () => void
 	loading: boolean

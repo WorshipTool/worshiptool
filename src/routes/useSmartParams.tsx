@@ -8,7 +8,7 @@ export const useSmartParams = <T extends RoutesKeys>(page: T) => {
 
 	const searchParams: Record<string, unknown> = {}
 
-	searchParamsObject.forEach((value, key) => {
+	searchParamsObject?.forEach((value, key) => {
 		searchParams[key] = value.includes(',') ? value.split(',') : value
 	})
 	const p: SmartAllParams<T> = {

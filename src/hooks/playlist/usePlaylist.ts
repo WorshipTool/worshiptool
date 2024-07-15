@@ -1,5 +1,5 @@
+import { VariantPackGuid } from '@/api/dtos'
 import { ReorderPlaylistItem } from '@/api/generated'
-import { VariantPackGuid } from '@/interfaces/variant/VariantDTO'
 import { useApiState } from '@/tech/ApiState'
 import { Chord } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
