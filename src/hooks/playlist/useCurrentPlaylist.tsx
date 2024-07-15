@@ -1,5 +1,6 @@
+import { useLocalStorage } from '@/hooks/localstorage/useLocalStorage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect } from 'react'
 import useAuth from '../auth/useAuth'
 import usePlaylist from './usePlaylist'
 
@@ -26,31 +27,24 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist> {
 }
 
 export const useProvidePlaylist = (): useProvidePlaylistI => {
-	const [guid, setGuid] = useState<PlaylistGuid>()
+	const { value: guid, set: setGuid } =
+		useLocalStorage<PlaylistGuid>('currentPlaylist')
 	const playlist = usePlaylist(guid || ('' as PlaylistGuid))
 
 	const { isLoggedIn } = useAuth()
 
+	const turnOff = useCallback(() => {
+		setGuid(undefined)
+	}, [setGuid])
+
 	useEffect(() => {
 		if (!isLoggedIn()) turnOff()
-	}, [isLoggedIn])
+	}, [isLoggedIn, turnOff])
 
-	const key = 'currentPlaylist'
 	const turnOn = (guid: PlaylistGuid) => {
 		setGuid(guid)
-
-		localStorage.setItem(key, guid)
 	}
 
-	const turnOff = () => {
-		setGuid(undefined)
-		localStorage.removeItem(key)
-	}
-	useEffect(() => {
-		const loadedGuid = localStorage.getItem(key) as PlaylistGuid
-		if (loadedGuid == null) return
-		setGuid(loadedGuid)
-	}, [])
 	return {
 		isOn: guid !== undefined,
 		turnOn,
