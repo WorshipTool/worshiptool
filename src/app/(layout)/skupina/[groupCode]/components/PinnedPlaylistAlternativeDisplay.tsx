@@ -3,11 +3,11 @@ import { Box, Divider, useTheme } from '@mui/material'
 import { Clickable } from '../../../../../common/ui/Clickable'
 import { Gap } from '../../../../../common/ui/Gap'
 import { Typography } from '../../../../../common/ui/Typography'
-import PlaylistDTO from '../../../../../interfaces/playlist/PlaylistDTO'
+import PlaylistDto from '../../../../../interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
 
 type PinnedPlaylistAlternativeDisplayProps = {
-	playlist: PlaylistDTO
+	playlist: PlaylistDto
 }
 
 export default function PinnedPlaylistAlternativeDisplay({

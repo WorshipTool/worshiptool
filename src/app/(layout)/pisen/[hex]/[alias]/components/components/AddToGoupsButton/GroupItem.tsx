@@ -8,7 +8,7 @@ import {
 import { useSnackbar } from 'notistack'
 import { SkeletonLoader } from '../../../../../../../../common/providers'
 import { useGroups } from '../../../../../../../../hooks/group/useGroups'
-import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
 import {
 	useApiState,
 	useApiStateEffect,
@@ -26,7 +26,7 @@ export default function GroupItem(props: GroupItemProps) {
 		return groups.getInfoByGuid(props.groupGuid)
 	}, [props.groupGuid])
 
-	const selection = usePlaylists()
+	const selection = usePlaylistsGeneral()
 
 	const [isInState, reload] = useApiStateEffect(async () => {
 		if (!groupState.data?.selection) return false

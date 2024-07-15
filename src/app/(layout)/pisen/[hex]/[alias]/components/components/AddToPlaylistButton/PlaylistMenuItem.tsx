@@ -11,7 +11,7 @@ import React, { useEffect } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import { Gap } from '../../../../../../../../common/ui/Gap'
 import { Link } from '../../../../../../../../common/ui/Link/CustomLink'
-import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
 
 interface PlaylistMenuItemProps {
 	variant: SongVariantDto
@@ -27,8 +27,8 @@ export default function PlaylistMenuItem({
 	const {
 		addVariantToPlaylist: addToPlaylist,
 		removeVariantFromPlaylist: removeFromPlaylist,
-	} = usePlaylists()
-	const { isVariantInPlaylist } = usePlaylists()
+	} = usePlaylistsGeneral()
+	const { isVariantInPlaylist } = usePlaylistsGeneral()
 
 	const [loading, setLoading] = React.useState(true)
 	const [isInPlaylist, setIsInPlaylist] = React.useState<boolean>(false)

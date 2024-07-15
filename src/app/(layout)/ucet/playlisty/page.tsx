@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import Dialog from '../../../../common/ui/Dialog/Dialog'
 import { Gap } from '../../../../common/ui/Gap'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
-import usePlaylists from '../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../hooks/playlist/usePlaylistsGeneral'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiStateEffect } from '../../../../tech/ApiState'
 
@@ -34,7 +34,7 @@ export default function Playlists() {
 		getPlaylistsOfUser,
 		createPlaylist: createWithName,
 		deletePlaylist: deleteByGuid,
-	} = usePlaylists()
+	} = usePlaylistsGeneral()
 	const [loaded, setLoaded] = useState(false)
 	const navigate = useSmartNavigate()
 

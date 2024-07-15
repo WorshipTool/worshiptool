@@ -8,7 +8,7 @@ import DefaultStyle from '../../../../../common/components/SheetDisplay/styles/D
 import { Button } from '../../../../../common/ui/Button'
 import useAuth from '../../../../../hooks/auth/useAuth'
 import useCurrentPlaylist from '../../../../../hooks/playlist/useCurrentPlaylist'
-import { PlaylistItemDTO } from '../../../../../interfaces/playlist/PlaylistDTO'
+import { PlaylistItemDto } from '../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../routes'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
 
@@ -23,7 +23,7 @@ const PageBreak = () => {
 }
 
 interface PlaylistItemProps {
-	item: PlaylistItemDTO
+	item: PlaylistItemDto
 }
 
 export const PlaylistItem = ({ item }: PlaylistItemProps) => {

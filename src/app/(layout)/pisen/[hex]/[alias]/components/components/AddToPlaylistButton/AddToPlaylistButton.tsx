@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
-import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
 import { useApiStateEffect } from '../../../../../../../../tech/ApiState'
 import PlaylistMenuItem from './PlaylistMenuItem'
 
@@ -53,7 +53,7 @@ export default function AddToPlaylistButton({
 		setAnchorEl(null)
 	}
 
-	const { getPlaylistsOfUser, isVariantInPlaylist } = usePlaylists()
+	const { getPlaylistsOfUser, isVariantInPlaylist } = usePlaylistsGeneral()
 	const [{ data: playlists, loading }] = useApiStateEffect(() => {
 		return getPlaylistsOfUser().then((r) => {
 			return r.playlists

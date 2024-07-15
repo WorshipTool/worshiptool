@@ -9,7 +9,6 @@ import ErrorHandlerProvider from '../../common/components/app/providers/ErrorHan
 import { AuthProvider } from '../../hooks/auth/useAuth'
 import { GroupProvider } from '../../hooks/group/useGroup'
 import { PlaylistProvider } from '../../hooks/playlist/useCurrentPlaylist'
-import { StackProvider } from '../../hooks/playlist/useStack'
 import { ThemeProvider } from '../theme'
 
 type AppProvidersProps = {
@@ -29,11 +28,9 @@ export default function AppProviders(props: AppProvidersProps) {
 						{/* <BrowserRouter> */}
 						<AuthProvider>
 							<ErrorHandlerProvider>
-								<StackProvider>
-									<GroupProvider>
-										<PlaylistProvider>{props.children}</PlaylistProvider>
-									</GroupProvider>
-								</StackProvider>
+								<GroupProvider>
+									<PlaylistProvider>{props.children}</PlaylistProvider>
+								</GroupProvider>
 							</ErrorHandlerProvider>
 						</AuthProvider>
 						{/* </BrowserRouter> */}

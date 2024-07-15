@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
-import usePlaylists from '../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../hooks/playlist/usePlaylistsGeneral'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiStateEffect } from '../../../../tech/ApiState'
 import GroupToolbarActionButton from './GroupToolbarActionButton'
@@ -14,7 +14,7 @@ interface QuickActionsProps {
 }
 
 export default function QuickActions({ visible }: QuickActionsProps) {
-	const { createPlaylist, getPlaylistByGuid } = usePlaylists()
+	const { createPlaylist, getPlaylistByGuid } = usePlaylistsGeneral()
 	const { turnOn, isOn, guid, playlist } = useCurrentPlaylist()
 
 	const navigate = useSmartNavigate()

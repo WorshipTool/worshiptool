@@ -1,61 +1,60 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import usePlaylist from "./usePlaylist";
-import useAuth from "../auth/useAuth";
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { createContext, useContext, useEffect, useState } from 'react'
+import useAuth from '../auth/useAuth'
+import usePlaylist from './usePlaylist'
 
 export const playlistContext = createContext<useProvidePlaylistI>(
-    {} as useProvidePlaylistI
-);
+	{} as useProvidePlaylistI
+)
 
 export default function useCurrentPlaylist() {
-    return useContext(playlistContext);
+	return useContext(playlistContext)
 }
 
 export const PlaylistProvider = ({ children }: { children: any }) => {
-    const p = useProvidePlaylist();
+	const p = useProvidePlaylist()
 
-    return (
-        <playlistContext.Provider value={p}>
-            {children}
-        </playlistContext.Provider>
-    );
-};
+	return (
+		<playlistContext.Provider value={p}>{children}</playlistContext.Provider>
+	)
+}
 
 interface useProvidePlaylistI extends ReturnType<typeof usePlaylist> {
-    isOn: boolean;
-    turnOn: (guid: string) => void;
-    turnOff: () => void;
+	isOn: boolean
+	turnOn: (guid: PlaylistGuid) => void
+	turnOff: () => void
 }
 
 export const useProvidePlaylist = (): useProvidePlaylistI => {
-    const [guid, setGuid] = useState<string>();
-    const playlist = usePlaylist(guid);
+	const [guid, setGuid] = useState<PlaylistGuid>()
+	const playlist = usePlaylist(guid || ('' as PlaylistGuid))
 
-    const { isLoggedIn } = useAuth();
+	const { isLoggedIn } = useAuth()
 
-    useEffect(() => {
-        if (!isLoggedIn()) turnOff();
-    }, [isLoggedIn]);
+	useEffect(() => {
+		if (!isLoggedIn()) turnOff()
+	}, [isLoggedIn])
 
-    const key = "currentPlaylist";
-    const turnOn = (guid: string) => {
-        setGuid(guid);
+	const key = 'currentPlaylist'
+	const turnOn = (guid: PlaylistGuid) => {
+		setGuid(guid)
 
-        localStorage.setItem(key, guid);
-    };
+		localStorage.setItem(key, guid)
+	}
 
-    const turnOff = () => {
-        setGuid(undefined);
-        localStorage.removeItem(key);
-    };
-    useEffect(() => {
-        const loadedGuid = localStorage.getItem(key);
-        if (loadedGuid == null) return;
-        setGuid(loadedGuid);
-    }, []);
-    return {
-        isOn: guid !== undefined,
-        turnOn,
-        turnOff,
-        ...playlist
-    };
-};
+	const turnOff = () => {
+		setGuid(undefined)
+		localStorage.removeItem(key)
+	}
+	useEffect(() => {
+		const loadedGuid = localStorage.getItem(key) as PlaylistGuid
+		if (loadedGuid == null) return
+		setGuid(loadedGuid)
+	}, [])
+	return {
+		isOn: guid !== undefined,
+		turnOn,
+		turnOff,
+		...playlist,
+	}
+}

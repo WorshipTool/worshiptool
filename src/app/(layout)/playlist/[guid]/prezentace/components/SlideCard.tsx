@@ -5,7 +5,7 @@ import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import OnChangeDelayer from '../../../../../../common/providers/ChangeDelayer/ChangeDelayer'
 import { Gap } from '../../../../../../common/ui/Gap'
-import { PlaylistItemDTO } from '../../../../../../interfaces/playlist/PlaylistDTO'
+import { PlaylistItemDto } from '../../../../../../interfaces/playlist/playlist.types'
 import { sectionNameToText } from '../../../../../../tech/sectionNameToText'
 
 const sectionPart = (section: Section, fontSize: number) => {
@@ -71,7 +71,7 @@ const sectionPart = (section: Section, fontSize: number) => {
 }
 
 interface SlideCardProps {
-	item: PlaylistItemDTO
+	item: PlaylistItemDto
 	order: number
 }
 
@@ -99,7 +99,7 @@ export default function SlideCard({
 
 	const PADDING = 40
 
-	const [item, setItem] = useState<PlaylistItemDTO>(originalItem)
+	const [item, setItem] = useState<PlaylistItemDto>(originalItem)
 	const [order, setOrder] = useState<number>(originalOrder)
 
 	useEffect(() => {
@@ -108,7 +108,7 @@ export default function SlideCard({
 		setOrder(originalOrder)
 	}, [originalItem, originalOrder])
 
-	const onItemChange = (item: PlaylistItemDTO) => {
+	const onItemChange = (item: PlaylistItemDto) => {
 		setSizeChanging(true)
 
 		setSize((s) => s - 1)

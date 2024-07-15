@@ -1,7 +1,7 @@
 import { Box, Skeleton, Typography, styled } from '@mui/material'
 import React from 'react'
 import { Link } from '../../../../../../common/ui/Link/CustomLink'
-import { PlaylistItemDTO } from '../../../../../../interfaces/playlist/PlaylistDTO'
+import { PlaylistItemDto } from '../../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../../routes'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 
@@ -31,7 +31,7 @@ const StyledPanelButton = styled(Typography)(({ theme }) => ({
 }))
 
 interface PanelItemProps {
-	item: PlaylistItemDTO
+	item: PlaylistItemDto
 	// onClick: () => void
 	// setMoving?: (moving: boolean) => void
 	moving?: boolean

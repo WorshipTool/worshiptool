@@ -149,19 +149,6 @@ export type CSVLinkTypeEnum = typeof CSVLinkTypeEnum[keyof typeof CSVLinkTypeEnu
 /**
  * 
  * @export
- * @interface CreatePlaylistInDto
- */
-export interface CreatePlaylistInDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePlaylistInDto
-     */
-    'title': string;
-}
-/**
- * 
- * @export
  * @interface Creator
  */
 export interface Creator {
@@ -905,6 +892,12 @@ export interface PlaylistData {
  * @interface PlaylistDataOutDto
  */
 export interface PlaylistDataOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'guid': string;
     /**
      * 
      * @type {string}
@@ -4472,13 +4465,10 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
-         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerCreatePlaylist: async (createPlaylistInDto: CreatePlaylistInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createPlaylistInDto' is not null or undefined
-            assertParamExists('playlistEditingControllerCreatePlaylist', 'createPlaylistInDto', createPlaylistInDto)
+        playlistEditingControllerCreatePlaylist: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/playlist`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4497,12 +4487,9 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createPlaylistInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4729,7 +4716,7 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItem>> {
+        async playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItemOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerAddVariantToPlaylist']?.[localVarOperationServerIndex]?.url;
@@ -4737,12 +4724,11 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreatePlaylistResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerCreatePlaylist(createPlaylistInDto, options);
+        async playlistEditingControllerCreatePlaylist(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreatePlaylistResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerCreatePlaylist(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerCreatePlaylist']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4824,17 +4810,16 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: any): AxiosPromise<PlaylistItem> {
+        playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: any): AxiosPromise<PlaylistItemOutDto> {
             return localVarFp.playlistEditingControllerAddVariantToPlaylist(addVariantToPlaylistInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {CreatePlaylistInDto} createPlaylistInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: any): AxiosPromise<PostCreatePlaylistResult> {
-            return localVarFp.playlistEditingControllerCreatePlaylist(createPlaylistInDto, options).then((request) => request(axios, basePath));
+        playlistEditingControllerCreatePlaylist(options?: any): AxiosPromise<PostCreatePlaylistResult> {
+            return localVarFp.playlistEditingControllerCreatePlaylist(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4905,13 +4890,12 @@ export class PlaylistEditingApi extends BaseAPI {
 
     /**
      * 
-     * @param {CreatePlaylistInDto} createPlaylistInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlaylistEditingApi
      */
-    public playlistEditingControllerCreatePlaylist(createPlaylistInDto: CreatePlaylistInDto, options?: RawAxiosRequestConfig) {
-        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerCreatePlaylist(createPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    public playlistEditingControllerCreatePlaylist(options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerCreatePlaylist(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

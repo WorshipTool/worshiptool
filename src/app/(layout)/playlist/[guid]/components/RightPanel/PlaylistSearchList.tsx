@@ -1,7 +1,7 @@
 import { Masonry } from '@mui/lab'
 import { useTheme } from '@mui/material'
 import { SongVariantDto } from '../../../../../../api/dtos'
-import Playlist from '../../../../../../interfaces/playlist/PlaylistDTO'
+import Playlist from '../../../../../../interfaces/playlist/playlist.types'
 import SearchItem from './SearchItem'
 
 interface PlaylistSearchListProps {

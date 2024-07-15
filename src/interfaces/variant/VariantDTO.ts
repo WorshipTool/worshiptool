@@ -2,6 +2,8 @@ import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
 import { Creator } from '../song/creator'
 import { Source } from '../song/source'
 
+export type VariantPackGuid = string & { readonly brand: unique symbol }
+
 export interface VariantDTO {
 	guid: string
 	songGuid: string

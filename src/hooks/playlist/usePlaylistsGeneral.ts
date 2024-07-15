@@ -1,35 +1,35 @@
+import { useApi } from '@/hooks/api/useApi'
+import { VariantPackGuid } from '@/interfaces/variant/VariantDTO'
 import { Chord } from '@pepavlin/sheet-api'
-import { ApiReorderPlaylistItemDTO } from '../../api/dtos/playlist/dtosPlaylist'
-import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
+import { mapPlaylistDataOutDtoToPlaylistDto } from '../../api/dtos/playlist/playlist.map'
 import {
 	GetSearchInPlaylistResult,
-	PlaylistEditingApi,
-	PlaylistGettingApi,
+	ReorderPlaylistInDto,
 } from '../../api/generated'
-import Playlist from '../../interfaces/playlist/PlaylistDTO'
+import Playlist, {
+	PlaylistGuid,
+	PlaylistItemGuid,
+} from '../../interfaces/playlist/playlist.types'
 import { handleApiCall } from '../../tech/handleApiCall'
-import useAuth from '../auth/useAuth'
 
-export default function usePlaylists() {
-	// const {fetchData, post, loading} = useFetch();
+export default function usePlaylistsGeneral() {
+	const { playlistEditingApi, playlistGettingApi } = useApi()
 
-	// const { playlistEditingApi, playlistGettingApi } = useApi();
-	const { apiConfiguration } = useAuth()
-	const playlistEditingApi = new PlaylistEditingApi(apiConfiguration)
-	const playlistGettingApi = new PlaylistGettingApi(apiConfiguration)
-
-	const addVariantToPlaylist = async (packGuid: string, playlist: string) => {
+	const addVariantToPlaylist = async (
+		packGuid: VariantPackGuid,
+		playlist: PlaylistGuid
+	) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerAddVariantToPlaylist({
 				playlist,
-				packGuid: packGuid,
+				packGuid,
 			})
 		)
 	}
 
 	const removeVariantFromPlaylist = async (
-		packGuid: string,
-		playlist: string
+		packGuid: VariantPackGuid,
+		playlist: PlaylistGuid
 	) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerRemoveVariantFromPlaylistDelete(
@@ -40,12 +40,12 @@ export default function usePlaylists() {
 	}
 
 	const isVariantInPlaylist = async (
-		variantAlias: string,
-		playlist: string
+		packGuid: VariantPackGuid,
+		playlist: PlaylistGuid
 	): Promise<boolean> => {
 		const result = await handleApiCall(
 			playlistGettingApi.playlistGettingControllerIsVariantInPlaylist(
-				variantAlias,
+				packGuid,
 				playlist
 			)
 		)
@@ -59,48 +59,38 @@ export default function usePlaylists() {
 		)
 	}
 
-	const createPlaylist = async (title?: string) => {
-		if (!title) title = 'Nový playlist'
+	const createPlaylist = async () => {
 		return await handleApiCall(
-			playlistEditingApi.playlistEditingControllerCreatePlaylist({
-				title,
-			})
+			playlistEditingApi.playlistEditingControllerCreatePlaylist()
 		)
 	}
 
-	const deletePlaylist = async (guid: string) => {
+	const deletePlaylist = async (guid: PlaylistGuid) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerDeletePlaylist(guid)
 		)
 	}
 
-	const getPlaylistByGuid = async (guid: string): Promise<Playlist> => {
+	const getPlaylistByGuid = async (guid: PlaylistGuid): Promise<Playlist> => {
 		const result = await handleApiCall(
 			playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(guid)
 		)
-		return {
-			guid,
-			title: result.title,
-			items: result.items.map((item) =>
-				mapPlaylistItemOutDtoApiToPlaylistItemDto(item)
-			),
-			ownerGuid: result.ownerGuid,
-		}
+		return mapPlaylistDataOutDtoToPlaylistDto(result)
 	}
 
 	const searchInPlaylistByGuid = async (
-		guid: string,
+		playlistGuid: PlaylistGuid,
 		searchString: string
 	): Promise<GetSearchInPlaylistResult> => {
 		return await handleApiCall(
 			playlistGettingApi.playlistGettingControllerSearchInPlaylist(
 				searchString,
-				guid
+				playlistGuid
 			)
 		)
 	}
 
-	const renamePlaylist = async (guid: string, title: string) => {
+	const renamePlaylist = async (guid: PlaylistGuid, title: string) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerRenamePlaylist({
 				guid,
@@ -110,22 +100,22 @@ export default function usePlaylists() {
 	}
 
 	const reorderPlaylist = async (
-		guid: string,
-		items: ApiReorderPlaylistItemDTO[]
+		playlistGuid: PlaylistGuid,
+		items: ReorderPlaylistInDto['items']
 	) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerReorderPlaylist({
-				guid,
+				guid: playlistGuid,
 				items,
 			})
 		)
 	}
 
-	const setKeyChordOfItem = async (guid: string, keyChord: Chord) => {
+	const setKeyChordOfItem = async (guid: PlaylistItemGuid, keyChord: Chord) => {
 		return await handleApiCall(
 			playlistEditingApi.playlistEditingControllerTransposePlaylistItem({
 				guid,
-				key: keyChord.toString(),
+				key: keyChord.data.rootNote.toString(),
 			})
 		)
 	}

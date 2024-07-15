@@ -15,7 +15,7 @@ import { Gap } from '../../../../../common/ui/Gap'
 import SearchBar from '../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../hooks/group/useGroupSelection'
-import usePlaylists from '../../../../../hooks/playlist/usePlaylists'
+import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
 import normalizeSearchText from '../../../../../tech/normalizeSearchText'
 import Loading from '../loading'
@@ -26,7 +26,7 @@ type SelectionListProps = {}
 export default function SelectionList(props: SelectionListProps) {
 	const { items, search, reload, loading } = useGroupSelection()
 	const { name, payload } = useGroup()
-	const { getPlaylistByGuid } = usePlaylists()
+	const { getPlaylistByGuid } = usePlaylistsGeneral()
 
 	// const navigate = useSmartNavigate()
 

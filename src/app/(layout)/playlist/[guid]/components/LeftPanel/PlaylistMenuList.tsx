@@ -2,19 +2,19 @@
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import OnChangeDelayer from '@/common/providers/ChangeDelayer/ChangeDelayer'
-import { PlaylistItemDTO } from '@/interfaces/playlist/PlaylistDTO'
+import { PlaylistItemDto } from '@/interfaces/playlist/playlist.types'
 import { Reorder } from 'framer-motion'
 import { useState } from 'react'
 
 type PlaylistMenuListProps = {
-	items: PlaylistItemDTO[]
+	items: PlaylistItemDto[]
 }
 
 export default function PlaylistMenuList(props: PlaylistMenuListProps) {
-	const [items, setItems] = useState<PlaylistItemDTO[]>(props.items)
+	const [items, setItems] = useState<PlaylistItemDto[]>(props.items)
 	const { reorder } = useInnerPlaylist()
 
-	const onReorder = (values: PlaylistItemDTO[]) => {
+	const onReorder = (values: PlaylistItemDto[]) => {
 		setItems(values.map((v, i) => ({ ...v, order: i })))
 	}
 	return (
