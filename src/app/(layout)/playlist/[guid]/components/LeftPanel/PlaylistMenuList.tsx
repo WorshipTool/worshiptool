@@ -1,6 +1,5 @@
 'use client'
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
-import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import OnChangeDelayer from '@/common/providers/ChangeDelayer/ChangeDelayer'
 import { PlaylistItemDto } from '@/interfaces/playlist/playlist.types'
 import { Reorder } from 'framer-motion'
@@ -12,7 +11,7 @@ type PlaylistMenuListProps = {
 
 export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 	const [items, setItems] = useState<PlaylistItemDto[]>(props.items)
-	const { reorder } = useInnerPlaylist()
+	// const { reorder } = useInnerPlaylist()
 
 	const onReorder = (values: PlaylistItemDto[]) => {
 		setItems(values.map((v, i) => ({ ...v, order: i })))
@@ -22,7 +21,7 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 			<OnChangeDelayer
 				value={items}
 				onChange={(value) => {
-					reorder(value.map((v, i) => ({ guid: v.guid, order: i })))
+					// reorder(value.map((v, i) => ({ guid: v.guid, order: i })))
 				}}
 			/>
 			<Reorder.Group

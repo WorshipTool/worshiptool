@@ -19,7 +19,7 @@ export function Typography({
 	const typoVariant = variant === 'normal' ? 'body1' : variant
 
 	return (
-		<Typo variant={typoVariant} fontWeight={fontWeight} color={color}>
+		<Typo variant={typoVariant} color={color} fontWeight={fontWeight}>
 			{children}
 		</Typo>
 	)

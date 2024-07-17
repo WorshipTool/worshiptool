@@ -26,16 +26,14 @@ const Container = styled(Box)(({ theme }) => ({
 	top: 56,
 }))
 
-interface RightPanelProps {
-	playlist: Playlist | undefined
-}
-export default function RightPanel({ playlist }: RightPanelProps) {
+interface RightPanelProps {}
+export default function RightPanel({}: RightPanelProps) {
 	const theme = useTheme()
 	const [searchString, setSearchString] = useState('')
 	const { data } = useRecommendedSongs()
 	const { isOn } = useGroup()
 	const { items: selectionItems } = useGroupSelection()
-	const { items } = useInnerPlaylist()
+	const { items, playlist } = useInnerPlaylist()
 
 	const ideaArr = useMemo(() => {
 		return (

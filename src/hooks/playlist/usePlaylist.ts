@@ -11,7 +11,10 @@ import PlaylistDto, {
 import useAuth from '../auth/useAuth'
 import usePlaylistsGeneral from './usePlaylistsGeneral'
 
-export default function usePlaylist(guid: PlaylistGuid) {
+export default function usePlaylist(
+	guid: PlaylistGuid,
+	after?: (data: PlaylistDto) => void
+) {
 	const {
 		addVariantToPlaylist,
 		removeVariantFromPlaylist,
@@ -31,7 +34,7 @@ export default function usePlaylist(guid: PlaylistGuid) {
 
 	useEffect(() => {
 		if (guid && guid.length > 0) {
-			fetchApiState(() => getPlaylistByGuid(guid))
+			fetchApiState(() => getPlaylistByGuid(guid), after)
 		}
 	}, [guid])
 
@@ -126,6 +129,7 @@ export default function usePlaylist(guid: PlaylistGuid) {
 		searchedItems,
 		search,
 		guid,
+		title: playlist?.title,
 		reorder,
 		loading: state.loading,
 		setItemsKeyChord,
