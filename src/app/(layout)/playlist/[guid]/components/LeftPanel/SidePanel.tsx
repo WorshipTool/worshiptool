@@ -1,4 +1,3 @@
-import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PlaylistMenuList'
 import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
 import { getReplacedUrlWithParams, routesPaths, SmartAllParams } from '@/routes'
 import { Edit, Print } from '@mui/icons-material'
@@ -39,7 +38,8 @@ export default function SidePanel({}: {}) {
 	const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist()
 	const {
 		rename,
-		playlist,
+		// playlist,
+		title: playlistTitle,
 		items,
 		guid: playlistGuid,
 		loading,
@@ -57,8 +57,8 @@ export default function SidePanel({}: {}) {
 	const navigate = useSmartNavigate()
 
 	useEffect(() => {
-		setTitle(playlist?.title || '')
-	}, [playlist])
+		setTitle(playlistTitle || '')
+	}, [playlistTitle])
 
 	const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newTitle = e.target.value
@@ -66,8 +66,8 @@ export default function SidePanel({}: {}) {
 	}
 
 	useEffect(() => {
-		if (title === '') setTitle(playlist?.title || '')
-	}, [playlist?.title])
+		if (title === '') setTitle(playlistTitle || '')
+	}, [playlistTitle])
 
 	const onPrint = () => {
 		const urlPattern = routesPaths.playlistPrint
@@ -137,7 +137,7 @@ export default function SidePanel({}: {}) {
 						value={title}
 						onChange={() => {
 							if (!isOwner) return
-							if (title !== playlist?.title && title !== '') {
+							if (title !== playlistTitle && title !== '') {
 								doRename()
 							}
 						}}
@@ -204,7 +204,7 @@ export default function SidePanel({}: {}) {
 									</Typography>
 								</Box>
 							)}
-							{isOn && currentPlaylistGuid === playlist?.guid ? (
+							{isOn && currentPlaylistGuid === playlistGuid ? (
 								<Chip label={'Aktivní'} size="small" color="secondary" />
 							) : (
 								<></>
@@ -240,7 +240,7 @@ export default function SidePanel({}: {}) {
 									overflowY: 'auto',
 								}}
 							>
-								<PlaylistMenuList items={items} />
+								{/* <PlaylistMenuList items={items} /> */}
 								{/* <Masonry columns={1}>
                             {items.map((item) => {
                                 return (

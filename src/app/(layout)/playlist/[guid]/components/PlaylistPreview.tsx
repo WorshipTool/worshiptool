@@ -1,5 +1,6 @@
 import LeftPanel from '@/app/(layout)/playlist/[guid]/components/LeftPanel/LeftPanel'
 import TopPlaylistPanel from '@/app/(layout)/playlist/[guid]/components/TopPanel/TopPlaylistPanel'
+import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
 
 export default function PlaylistPreview() {
@@ -12,7 +13,14 @@ export default function PlaylistPreview() {
 			<TopPlaylistPanel />
 			<Box display={'flex'} flexDirection={'row'}>
 				<LeftPanel />
-				hurahej
+				<div>
+					{Array(100)
+						.fill(0)
+						.map((a, i) => (
+							<Typography key={i}>Ahooj{i}</Typography>
+						))}
+					baf
+				</div>
 			</Box>
 		</Box>
 	)

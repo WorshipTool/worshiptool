@@ -5,11 +5,9 @@ import { Gap } from '../../../../../../common/ui/Gap/Gap'
 import SearchBar from '../../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../../hooks/group/useGroupSelection'
-import Playlist from '../../../../../../interfaces/playlist/playlist.types'
 import { isMobile } from '../../../../../../tech/device.tech'
 import useRecommendedSongs from '../../../../../components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
-import PlaylistSearchList from './PlaylistSearchList'
 
 const Container = styled(Box)(({ theme }) => ({
 	width: 300,
@@ -33,7 +31,7 @@ export default function RightPanel({}: RightPanelProps) {
 	const { data } = useRecommendedSongs()
 	const { isOn } = useGroup()
 	const { items: selectionItems } = useGroupSelection()
-	const { items, playlist } = useInnerPlaylist()
+	const { items } = useInnerPlaylist()
 
 	const ideaArr = useMemo(() => {
 		return (
@@ -42,8 +40,8 @@ export default function RightPanel({}: RightPanelProps) {
 						.filter((s) => !items.map((v) => v.guid).includes(s.guid))
 						.map((v) => v.variant)
 				: data.filter((s) => !items.map((v) => v.variant.guid).includes(s.guid))
-		).filter((v) => playlist?.items.every((s) => s.variant.guid != v.guid))
-	}, [data, selectionItems, isOn, items, playlist])
+		).filter((v) => items.every((s) => s.variant.guid != v.guid))
+	}, [data, selectionItems, isOn, items])
 
 	const idea = useMemo(() => {
 		const arr = ideaArr
@@ -89,17 +87,19 @@ export default function RightPanel({}: RightPanelProps) {
 										)}
 										<Typography fontWeight={900}>Nějaké návrhy:</Typography>
 										<Gap value={0.5} />
-										<PlaylistSearchList
+										{/* <PlaylistSearchList
 											variants={ideaArr}
 											playlist={playlist as Playlist}
-										/>
+										/> */}
+										Tady neco bylo
 									</>
 								)
 							return (
-								<PlaylistSearchList
-									variants={filtered}
-									playlist={playlist as Playlist}
-								/>
+								<>Tady neco bylo</>
+								// <PlaylistSearchList
+								// 	variants={filtered}
+								// 	playlist={playlist as Playlist}
+								// />
 							)
 						}}
 					/>

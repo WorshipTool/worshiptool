@@ -9,6 +9,8 @@ export default function TopPlaylistPanel() {
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',
+				position: 'sticky',
+				top: 56,
 			}}
 		>
 			<TitleBox />

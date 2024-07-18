@@ -1,6 +1,9 @@
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { createContext, useContext, useState } from 'react'
+import {
+	PlaylistGuid,
+	PlaylistItemDto,
+} from '@/interfaces/playlist/playlist.types'
+import { createContext, useContext, useEffect, useState } from 'react'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
 type Rt = ReturnType<typeof useProvideInnerPlaylist>
@@ -28,6 +31,7 @@ export const InnerPlaylistProvider = ({
 
 type PlaylistHistoryStateType = {
 	title: string
+	items: PlaylistItemDto[]
 }
 
 const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
@@ -39,47 +43,85 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		)
 
 	const playlist = usePlaylist(guid, (data) => {
-		setState({ title: data.title })
+		setState({ title: data.title, items: data.items })
 		reset()
 	})
-
-	// const currentPlaylist = useCurrentPlaylist()
-
-	// const same = useMemo(() => {
-	// 	return guid !== undefined && currentPlaylist?.guid === guid
-	// }, [playlist, currentPlaylist])
 
 	const _change = (data: Partial<PlaylistHistoryStateType>) => {
 		setState((prev) => ({ ...prev, ...data } as PlaylistHistoryStateType))
 		setIsSaved(false)
 	}
 
-	const rename = (title: string) => {
-		_change({ title })
-	}
-
 	const save = async () => {
 		playlist.rename(state.title)
+
+		playlist.reorder(
+			state.items.map((item, index) => ({ guid: item.guid, order: index }))
+		)
+
 		reset()
 		setIsSaved(true)
 	}
 
+	// Handle unsaved changes
+	useEffect(() => {
+		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+			if (!isSaved) {
+				e.preventDefault()
+				e.returnValue = ''
+			}
+		}
+
+		window.addEventListener('beforeunload', handleBeforeUnload)
+
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload)
+		}
+	}, [isSaved])
+
+	// Handle ctrl-s
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+				e.preventDefault()
+				save()
+			}
+		}
+
+		window.addEventListener('keydown', handleKeyDown)
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown)
+		}
+	}, [])
+
+	const rename = (title: string) => {
+		_change({ title })
+	}
+
+	const setItems = (items: PlaylistItemDto[]) => {
+		_change({ items })
+	}
+
 	return {
-		items: playlist.items,
-		playlist: playlist.playlist,
+		items: state.items,
+		// playlist: playlist.playlist,
 		title: state.title,
 		loading: playlist.loading,
 		isOwner: playlist.isOwner,
 		guid: playlist.guid,
 
-		save,
-		isSaved,
-
-		rename,
 		undo,
 		hasUndo,
 		redo,
 		hasRedo,
+
+		save,
+		isSaved,
+
+		rename,
+		setItems,
+
 		// // ...playlist,
 		// isOn: guid !== undefined,
 		// ...(same ? currentPlaylist : playlist),
