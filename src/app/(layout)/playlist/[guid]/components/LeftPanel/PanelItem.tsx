@@ -1,6 +1,7 @@
 import { Box, Skeleton, Typography, styled } from '@mui/material'
+import { useMemo } from 'react'
 import { Link } from '../../../../../../common/ui/Link/CustomLink'
-import { PlaylistItemDto } from '../../../../../../interfaces/playlist/playlist.types'
+import { PlaylistItemGuid } from '../../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../../routes'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 
@@ -30,11 +31,16 @@ const StyledPanelButton = styled(Typography)(({ theme }) => ({
 }))
 
 interface PanelItemProps {
-	item: PlaylistItemDto
+	itemGuid: PlaylistItemGuid
+	itemIndex: number
 }
 
-export default function PanelItem({ item }: PanelItemProps) {
-	const { loading } = useInnerPlaylist()
+export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
+	const { loading, items } = useInnerPlaylist()
+
+	const item = useMemo(() => {
+		return items.find((i) => i.guid === itemGuid)!
+	}, [items, itemGuid])
 
 	const onPanelItemClickCall = (guid: string) => {
 		const el = document.getElementById('playlistItem_' + guid)
@@ -62,7 +68,7 @@ export default function PanelItem({ item }: PanelItemProps) {
 							}}
 							fontWeight={900}
 						>
-							{item.order + 1}.
+							{itemIndex + 1}.
 						</Typography>
 						<StyledPanelButton onClick={() => onPanelItemClickCall(item.guid)}>
 							{item.variant.preferredTitle}

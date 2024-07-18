@@ -74,7 +74,6 @@ export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
 					sheet={sheet}
 				/>
 				{sheetDefault}
-				ahoj
 			</Paper>
 		</>
 	)

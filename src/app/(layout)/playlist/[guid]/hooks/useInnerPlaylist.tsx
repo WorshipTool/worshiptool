@@ -52,7 +52,12 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		)
 
 	const playlist = usePlaylist(guid, (data) => {
-		setState({ title: data.title, items: data.items })
+		setState({
+			title: data.title,
+			items: data.items.sort((a, b) => {
+				return a.order - b.order
+			}),
+		})
 		reset()
 	})
 
@@ -69,9 +74,21 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 	)
 
 	const save = async () => {
-		playlist.rename(state.title)
+		// Save name
+		if (playlist.title !== state.title) {
+			await playlist.rename(state.title)
+		}
 
-		playlist.reorder(
+		// Remove items
+		const removedItems = playlist.items.filter(
+			(i) => !state.items.some((j) => j.guid === i.guid)
+		)
+		for (const item of removedItems) {
+			await playlist.removeVariant(item.variant.packGuid)
+		}
+
+		// Save items order
+		await playlist.reorder(
 			state.items.map((item, index) => ({ guid: item.guid, order: index }))
 		)
 
@@ -145,11 +162,10 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 	return {
 		items,
-		// playlist: playlist.playlist,
 		title,
 		loading,
 		isOwner: playlist.isOwner,
-		guid: playlist.guid,
+		guid,
 
 		undo,
 		hasUndo,

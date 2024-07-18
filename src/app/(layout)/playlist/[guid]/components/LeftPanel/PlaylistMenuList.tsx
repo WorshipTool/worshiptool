@@ -1,6 +1,7 @@
 'use client'
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import {
 	PlaylistItemDto,
@@ -33,6 +34,12 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 				</>
 			) : (
 				<>
+					{items.length === 0 && (
+						<>
+							<Gap />
+							<Typography>V playlistu nejsou žádné písně...</Typography>
+						</>
+					)}
 					<Reorder.Group
 						values={itemGuids}
 						onReorder={(values) => onReorder(values, items)}
@@ -46,18 +53,18 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 							flexDirection: 'column',
 						}}
 					>
-						{items?.map((item) => {
+						{itemGuids?.map((item, index) => {
 							return (
 								<Reorder.Item
-									key={item.guid}
-									value={item.guid}
+									key={item}
+									value={item}
 									as="div"
 									style={{
 										paddingLeft: 5,
 										paddingRight: 5,
 									}}
 								>
-									<PanelItem item={item} key={item.guid} />
+									<PanelItem itemGuid={item} key={item} itemIndex={index} />
 								</Reorder.Item>
 							)
 						})}
