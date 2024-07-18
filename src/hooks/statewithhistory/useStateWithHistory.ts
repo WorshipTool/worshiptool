@@ -1,10 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 type InitialValueType<T> = T | ((prev?: T) => T)
 
-//the return value type it's an array with an element
-//of type T, a setter for the element, two functions (undo and redo)
-//the array of history and the current value
 type ReturnValueType<T> = {
 	state: T
 	setState: (value: InitialValueType<T>) => void
@@ -20,6 +17,11 @@ type HistoryPair<T> = {
 	timestamp: number
 }
 
+/**
+ * This hook works like useState, but also holds a history of the values.
+ * It allows you to undo and redo the changes.
+ * Function 'reset' is able to clear the history.
+ */
 export const useStateWithHistory: <T>(
 	initialValue: InitialValueType<T>
 ) => ReturnValueType<T> = <T>(initialValue: InitialValueType<T>) => {
@@ -38,6 +40,9 @@ export const useStateWithHistory: <T>(
 		initialValue !== undefined && initialValue !== null ? 0 : -1
 	)
 
+	/**
+	 * This function is used to set the state
+	 */
 	const setState: (value: InitialValueType<T>) => void = useCallback(
 		(value: InitialValueType<T>) => {
 			let valueToAdd = value
@@ -47,44 +52,56 @@ export const useStateWithHistory: <T>(
 
 			// Check if previous value is time distance is less than 300ms
 			// If so, remove the last value from history
+			const TIME_DISTANCE = 300
 			const removePrevValue =
-				history[pointer] && Date.now() - history[pointer].timestamp < 300
+				history[pointer] &&
+				Date.now() - history[pointer].timestamp < TIME_DISTANCE
+
+			const newItem = {
+				value: valueToAdd,
+				timestamp: Date.now(),
+			}
 
 			setHistory((prev) => [
 				...prev.slice(0, pointer + (removePrevValue ? 0 : 1)),
-				{
-					value: valueToAdd,
-					timestamp: Date.now(),
-				},
+				newItem,
 			])
 			setPointer((prev) => prev + (removePrevValue ? 0 : 1))
 			_setState(value)
 		},
-		[setHistory, setPointer, _setState, state, pointer]
+		[setHistory, setPointer, _setState, state, pointer, history]
 	)
 
+	/**
+	 * This function is used to undo the last change
+	 */
 	const undo: () => void = useCallback(() => {
 		if (pointer <= 0) return
 		_setState(history[pointer - 1].value)
 		setPointer((prev) => prev - 1)
 	}, [history, pointer, setPointer])
 
+	/**
+	 * This function is used to redo the last change
+	 *
+	 */
 	const redo: () => void = useCallback(() => {
 		if (pointer + 1 >= history.length) return
 		_setState(history[pointer + 1].value)
 		setPointer((prev) => prev + 1)
 	}, [pointer, history, setPointer])
 
-	// set last as only value in history
+	/**
+	 * This function clear the history and set last value as current
+	 */
 	const reset = useCallback(() => {
-		setHistory([
-			{
-				value: state,
-				timestamp: Date.now(),
-			},
-		])
+		setHistory((prev) => [prev.at(-1)!])
 		setPointer(0)
 	}, [state, setHistory, setPointer])
+
+	useEffect(() => {
+		console.log('history', history)
+	}, [history])
 
 	return {
 		state,
