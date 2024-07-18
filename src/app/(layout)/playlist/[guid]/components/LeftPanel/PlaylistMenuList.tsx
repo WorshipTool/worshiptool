@@ -2,18 +2,29 @@
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Typography } from '@/common/ui/Typography'
-import { PlaylistItemDto } from '@/interfaces/playlist/playlist.types'
+import {
+	PlaylistItemDto,
+	PlaylistItemGuid,
+} from '@/interfaces/playlist/playlist.types'
 import { Reorder } from 'framer-motion'
+import { useMemo } from 'react'
 
 type PlaylistMenuListProps = {}
 
 export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 	const { items, loading, setItems } = useInnerPlaylist()
-	// const { reorder } = useInnerPlaylist()
 
-	const onReorder = (values: PlaylistItemDto[]) => {
-		setItems(values.map((v, i) => ({ ...v, order: i })))
+	const onReorder = (values: PlaylistItemGuid[], items: PlaylistItemDto[]) => {
+		const newItems = values.map((guid, i) => {
+			const item = items.find((i) => i.guid === guid)!
+			item.order = i
+			return item
+		})
+		setItems(newItems)
 	}
+
+	const itemGuids = useMemo(() => items?.map((i) => i.guid), [items])
+
 	return (
 		<>
 			{loading || !items ? (
@@ -23,8 +34,8 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 			) : (
 				<>
 					<Reorder.Group
-						values={items}
-						onReorder={onReorder}
+						values={itemGuids}
+						onReorder={(values) => onReorder(values, items)}
 						axis="y"
 						style={{
 							padding: 0,
@@ -35,21 +46,18 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 							flexDirection: 'column',
 						}}
 					>
-						{items.map((item) => {
+						{items?.map((item) => {
 							return (
 								<Reorder.Item
 									key={item.guid}
-									value={item}
+									value={item.guid}
 									as="div"
 									style={{
-										// width: '200px',
-										// position: 'relative',
 										paddingLeft: 5,
 										paddingRight: 5,
 									}}
 								>
-									<PanelItem item={item} moving={false} key={item.guid} />
-									{/* <Gap /> */}
+									<PanelItem item={item} key={item.guid} />
 								</Reorder.Item>
 							)
 						})}

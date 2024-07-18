@@ -8,6 +8,7 @@ import { useState } from 'react'
  */
 export const useLocalStorage = <T = string>(key: string) => {
 	const get = (): T | undefined => {
+		if (typeof localStorage === 'undefined') return undefined
 		const raw = localStorage?.getItem(key)
 		if (!raw) return undefined
 		return JSON.parse(raw)
@@ -27,11 +28,13 @@ export const useLocalStorage = <T = string>(key: string) => {
 		}
 
 		const stringValue = JSON.stringify(value)
-		localStorage.setItem(key, stringValue)
+		localStorage?.setItem(key, stringValue)
+
+		setValue(value)
 	}
 
 	const remove = () => {
-		localStorage.removeItem(key)
+		localStorage?.removeItem(key)
 	}
 
 	return {

@@ -11,6 +11,7 @@ export default function TopPlaylistPanel() {
 				justifyContent: 'space-between',
 				position: 'sticky',
 				top: 56,
+				zIndex: 1,
 			}}
 		>
 			<TitleBox />

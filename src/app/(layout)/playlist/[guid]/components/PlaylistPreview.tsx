@@ -1,6 +1,6 @@
 import LeftPanel from '@/app/(layout)/playlist/[guid]/components/LeftPanel/LeftPanel'
+import MiddlePanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/MiddlePanel'
 import TopPlaylistPanel from '@/app/(layout)/playlist/[guid]/components/TopPanel/TopPlaylistPanel'
-import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
 
 export default function PlaylistPreview() {
@@ -9,18 +9,11 @@ export default function PlaylistPreview() {
 	// }
 
 	return (
-		<Box>
+		<Box position={'relative'}>
 			<TopPlaylistPanel />
-			<Box display={'flex'} flexDirection={'row'}>
+			<Box display={'flex'} flexDirection={'row'} position={'relative'}>
 				<LeftPanel />
-				<div>
-					{Array(100)
-						.fill(0)
-						.map((a, i) => (
-							<Typography key={i}>Ahooj{i}</Typography>
-						))}
-					baf
-				</div>
+				<MiddlePanel />
 			</Box>
 		</Box>
 	)

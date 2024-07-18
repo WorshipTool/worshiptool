@@ -2,8 +2,17 @@ import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistor
 import {
 	PlaylistGuid,
 	PlaylistItemDto,
+	PlaylistItemGuid,
 } from '@/interfaces/playlist/playlist.types'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { Chord } from '@pepavlin/sheet-api'
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
 type Rt = ReturnType<typeof useProvideInnerPlaylist>
@@ -47,10 +56,17 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		reset()
 	})
 
-	const _change = (data: Partial<PlaylistHistoryStateType>) => {
-		setState((prev) => ({ ...prev, ...data } as PlaylistHistoryStateType))
-		setIsSaved(false)
-	}
+	const title = useMemo(() => state.title, [state.title])
+	const items = useMemo(() => state.items, [state.items])
+	const loading = useMemo(() => playlist.loading, [playlist.loading])
+
+	const _change = useCallback(
+		(data: Partial<PlaylistHistoryStateType>) => {
+			setState((prev) => ({ ...prev, ...data } as PlaylistHistoryStateType))
+			setIsSaved(false)
+		},
+		[setState]
+	)
 
 	const save = async () => {
 		playlist.rename(state.title)
@@ -95,19 +111,43 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		}
 	}, [])
 
-	const rename = (title: string) => {
-		_change({ title })
+	const rename = useCallback(
+		(title: string) => {
+			_change({ title })
+		},
+		[_change]
+	)
+
+	const setItems = useCallback(
+		(items: PlaylistItemDto[]) => {
+			_change({ items })
+		},
+		[_change]
+	)
+
+	const setItemKeyChord = (itemGuid: PlaylistItemGuid, keyChord: Chord) => {
+		const toneKey = keyChord.data.rootNote.toString()
+		const newItems: PlaylistItemDto[] = state.items.map((i) =>
+			i.guid === itemGuid ? { ...i, toneKey } : i
+		)
+
+		setItems(newItems)
 	}
 
-	const setItems = (items: PlaylistItemDto[]) => {
-		_change({ items })
+	const removeItem = (itemGuid: PlaylistItemGuid) => {
+		const newItems = state.items
+			.filter((i) => i.guid !== itemGuid)
+			.sort((a, b) => a.order - b.order)
+			.map((i, index) => ({ ...i, order: index }))
+
+		setItems(newItems)
 	}
 
 	return {
-		items: state.items,
+		items,
 		// playlist: playlist.playlist,
-		title: state.title,
-		loading: playlist.loading,
+		title,
+		loading,
 		isOwner: playlist.isOwner,
 		guid: playlist.guid,
 
@@ -121,6 +161,8 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 		rename,
 		setItems,
+		setItemKeyChord,
+		removeItem,
 
 		// // ...playlist,
 		// isOn: guid !== undefined,

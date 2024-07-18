@@ -3,6 +3,7 @@ import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
 import { Typography } from '@/common/ui/Typography'
 import { Box, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
+import './LeftPanel.styles.css'
 
 export default function LeftPanel() {
 	const theme = useTheme()
@@ -11,22 +12,36 @@ export default function LeftPanel() {
 			sx={{
 				width: 300,
 				height: 'calc(100vh - 160px)',
-				// boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
 				position: 'sticky',
 				top: 127,
-				// top: 126,
-				// bottom: 0,
 				[theme.breakpoints.down('sm')]: {
 					display: 'none',
 				},
-				// backgroundColor: grey[200],
+				backgroundColor: grey[100],
 			}}
 		>
-			<Box display={'flex'} flexDirection={'column'}>
-				<Typography variant="h4">Pořadí písní</Typography>
-				<Typography variant={'h5'} strong={200} color={grey[600]}>
+			<Box
+				display={'flex'}
+				flexDirection={'row'}
+				justifyContent={'space-between'}
+			>
+				<Typography strong={500}>Pořadí písní:</Typography>
+				<Typography strong={300} color={grey[600]}>
 					Změňte přetažením
 				</Typography>
+			</Box>
+			<Box
+				sx={{
+					'&::-webkit-scrollbar': {
+						display: 'auto',
+					},
+					position: 'relative',
+					paddingBottom: 8,
+					overflowY: 'auto',
+					height: `calc(100vh - 160px - ${theme.spacing(2)})`,
+				}}
+				className={'song-menu-list'}
+			>
 				<PlaylistMenuList />
 			</Box>
 		</Panel>
