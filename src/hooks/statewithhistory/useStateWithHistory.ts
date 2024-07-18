@@ -97,11 +97,34 @@ export const useStateWithHistory: <T>(
 	const reset = useCallback(() => {
 		setHistory((prev) => [prev.at(-1)!])
 		setPointer(0)
-	}, [state, setHistory, setPointer])
+	}, [setHistory, setPointer])
 
 	useEffect(() => {
-		console.log('history', history)
-	}, [history])
+		// Add CTRL+Z and CTRL+Y support for undo and redo
+		const handleKeyDown = (event: KeyboardEvent) => {
+			switch (event.key) {
+				case 'z':
+					if (event.ctrlKey || event.metaKey) {
+						event.preventDefault()
+						undo()
+					}
+					break
+				case 'y':
+					if (event.ctrlKey || event.metaKey) {
+						if (event.shiftKey) {
+							event.preventDefault()
+							undo()
+						} else {
+							event.preventDefault()
+							redo()
+						}
+					}
+					break
+			}
+		}
+		window.addEventListener('keydown', handleKeyDown)
+		return () => window.removeEventListener('keydown', handleKeyDown)
+	}, [redo, undo])
 
 	return {
 		state,
