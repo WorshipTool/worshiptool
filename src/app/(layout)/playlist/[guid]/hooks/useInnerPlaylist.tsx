@@ -74,7 +74,6 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 						...data,
 					} as PlaylistHistoryStateType)
 			)
-			setIsSaved(false)
 		},
 		[setState]
 	)
@@ -98,7 +97,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			state.items.map((item, index) => ({ guid: item.guid, order: index }))
 		)
 
-		reset()
+		// reset()
 		setIsSaved(true)
 	}
 
@@ -133,6 +132,10 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			window.removeEventListener('keydown', handleKeyDown)
 		}
 	}, [])
+
+	useEffect(() => {
+		setIsSaved(false)
+	}, [state])
 
 	const rename = useCallback(
 		(title: string) => {

@@ -5,9 +5,11 @@ import { SmartAllParams, getReplacedUrlWithParams, routesPaths } from '@/routes'
 import { Print } from '@mui/icons-material'
 
 export default function PrintButton() {
-	const { guid } = useInnerPlaylist()
+	const { guid, save } = useInnerPlaylist()
 
-	const onPrint = () => {
+	const onPrint = async () => {
+		await save()
+
 		const urlPattern = routesPaths.playlistPrint
 		const printParams: SmartAllParams<'playlistPrint'> = {
 			guid,

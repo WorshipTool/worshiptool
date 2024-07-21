@@ -6,12 +6,13 @@ import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'
 
 export default function ShareButton() {
-	const { guid, title } = useInnerPlaylist()
+	const { guid, title, save } = useInnerPlaylist()
 	const url = useMemo(() => getRouteUrlWithParams('playlist', { guid }), [guid])
 
 	const { enqueueSnackbar } = useSnackbar()
 
-	const onShare = () => {
+	const onShare = async () => {
+		await save()
 		if (navigator.share) {
 			navigator
 				.share({
