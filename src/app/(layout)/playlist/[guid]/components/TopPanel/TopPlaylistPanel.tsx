@@ -11,8 +11,9 @@ export default function TopPlaylistPanel() {
 	return (
 		<Panel
 			sx={{
-				height: '2.4rem',
+				minHeight: '2.4rem',
 				display: 'flex',
+				flexWrap: 'wrap',
 				alignItems: 'center',
 				justifyContent: 'space-between',
 				position: 'sticky',
@@ -26,10 +27,15 @@ export default function TopPlaylistPanel() {
 				<PrintButton />
 				<ShareButton />
 				{canUserEdit && (
-					<>
+					<Box
+						display={{
+							xs: 'none',
+							sm: 'flex',
+						}}
+					>
 						<Box />
 						<SaveEditButtons />
-					</>
+					</Box>
 				)}
 			</Box>
 		</Panel>

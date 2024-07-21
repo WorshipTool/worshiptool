@@ -46,10 +46,17 @@ type PlaylistHistoryStateType = {
 const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 	const [isSaved, setIsSaved] = useState<boolean>(true)
 
-	const { state, setState, reset, undo, redo, hasRedo, hasUndo } =
-		useStateWithHistory<PlaylistHistoryStateType>(
-			{} as PlaylistHistoryStateType
-		)
+	const {
+		state,
+		setState,
+		reset,
+		undo: _undo,
+		redo: _redo,
+		hasRedo,
+		hasUndo,
+	} = useStateWithHistory<PlaylistHistoryStateType>(
+		{} as PlaylistHistoryStateType
+	)
 
 	const playlist = usePlaylist(guid, (data) => {
 		setState({
@@ -76,9 +83,21 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 						...data,
 					} as PlaylistHistoryStateType)
 			)
+
+			setIsSaved(false)
 		},
 		[setState, canUserEdit]
 	)
+
+	const redo = useCallback(() => {
+		_redo()
+		setIsSaved(false)
+	}, [_redo])
+
+	const undo = useCallback(() => {
+		_undo()
+		setIsSaved(false)
+	}, [_undo])
 
 	const save = async () => {
 		if (!canUserEdit) return
@@ -136,10 +155,6 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			window.removeEventListener('keydown', handleKeyDown)
 		}
 	}, [])
-
-	useEffect(() => {
-		setIsSaved(false)
-	}, [state])
 
 	const rename = useCallback(
 		(title: string) => {
