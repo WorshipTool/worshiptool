@@ -67,7 +67,13 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 	const _change = useCallback(
 		(data: Partial<PlaylistHistoryStateType>) => {
-			setState((prev) => ({ ...prev, ...data } as PlaylistHistoryStateType))
+			setState(
+				(prev) =>
+					({
+						...prev,
+						...data,
+					} as PlaylistHistoryStateType)
+			)
 			setIsSaved(false)
 		},
 		[setState]
@@ -137,7 +143,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 	const setItems = useCallback(
 		(items: PlaylistItemDto[]) => {
-			_change({ items })
+			_change({ items: [...items] })
 		},
 		[_change]
 	)

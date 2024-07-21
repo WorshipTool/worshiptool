@@ -41,7 +41,7 @@ export const useStateWithHistory: <T>(
 	)
 
 	/**
-	 * This function is used to set the state
+	 * This function is used to set the state.
 	 */
 	const setState: (value: InitialValueType<T>) => void = useCallback(
 		(value: InitialValueType<T>) => {

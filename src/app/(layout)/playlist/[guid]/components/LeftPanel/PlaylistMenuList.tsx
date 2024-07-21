@@ -3,28 +3,56 @@ import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/Panel
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import {
-	PlaylistItemDto,
-	PlaylistItemGuid,
-} from '@/interfaces/playlist/playlist.types'
+import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { Reorder } from 'framer-motion'
-import { useMemo } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type PlaylistMenuListProps = {}
 
 export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 	const { items, loading, setItems } = useInnerPlaylist()
 
-	const onReorder = (values: PlaylistItemGuid[], items: PlaylistItemDto[]) => {
-		const newItems = values.map((guid, i) => {
-			const item = items.find((i) => i.guid === guid)!
-			item.order = i
-			return item
-		})
-		setItems(newItems)
-	}
+	const [innerGuids, setInnerGuids] = useState<PlaylistItemGuid[]>(
+		items?.map((i) => i.guid) || []
+	)
 
-	const itemGuids = useMemo(() => items?.map((i) => i.guid), [items])
+	const startReordering = useRef(false)
+
+	useEffect(() => {
+		if (items) {
+			setInnerGuids(items.map((i) => i.guid))
+		}
+	}, [items])
+
+	useEffect(() => {
+		const handleMouseUp = () => {
+			if (startReordering.current) {
+				const itemsCopy = [...items]
+				const newItems = innerGuids.map((guid, i) => {
+					const rawItem = itemsCopy.find((i) => i.guid === guid)!
+					const item = { ...rawItem }
+
+					item.order = i
+
+					return item
+				})
+				setItems(newItems)
+
+				startReordering.current = false
+			}
+		}
+
+		document.addEventListener('mouseup', handleMouseUp)
+
+		return () => {
+			document.removeEventListener('mouseup', handleMouseUp)
+		}
+	}, [innerGuids, items, setItems, startReordering])
+
+	const onReorder = (values: PlaylistItemGuid[]) => {
+		setInnerGuids(values)
+		startReordering.current = true
+	}
 
 	return (
 		<>
@@ -41,8 +69,8 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 						</>
 					)}
 					<Reorder.Group
-						values={itemGuids}
-						onReorder={(values) => onReorder(values, items)}
+						values={innerGuids}
+						onReorder={(values) => onReorder(values)}
 						axis="y"
 						style={{
 							padding: 0,
@@ -53,7 +81,7 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 							flexDirection: 'column',
 						}}
 					>
-						{itemGuids?.map((item, index) => {
+						{innerGuids?.map((item, index) => {
 							return (
 								<Reorder.Item
 									key={item}

@@ -4,10 +4,6 @@ import TopPlaylistPanel from '@/app/(layout)/playlist/[guid]/components/TopPanel
 import { Box } from '@mui/material'
 
 export default function PlaylistPreview() {
-	// const onSearchClick = () => {
-	// 	window.dispatchEvent(new Event('searchBarFocus'))
-	// }
-
 	return (
 		<Box position={'relative'}>
 			<TopPlaylistPanel />

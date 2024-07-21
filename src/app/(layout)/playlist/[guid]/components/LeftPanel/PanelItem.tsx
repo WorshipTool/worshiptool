@@ -50,7 +50,9 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 		})
 	}
 
-	return (
+	return !item ? (
+		<></>
+	) : (
 		<Link
 			to="variant"
 			params={{
