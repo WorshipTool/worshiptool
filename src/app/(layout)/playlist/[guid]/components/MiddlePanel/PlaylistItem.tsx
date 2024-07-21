@@ -40,6 +40,7 @@ export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
 
 	useEffect(() => {
 		const note = item.toneKey
+		if (!note) return
 		sheet.setKey(note)
 		rerender()
 	}, [item])

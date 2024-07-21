@@ -8,42 +8,54 @@ import './LeftPanel.styles.css'
 export default function LeftPanel() {
 	const theme = useTheme()
 	return (
-		<Panel
+		<Box
 			sx={{
-				width: 300,
-				height: 'calc(100vh - 160px)',
-				position: 'sticky',
-				top: 127,
 				[theme.breakpoints.down('sm')]: {
 					display: 'none',
 				},
-				backgroundColor: grey[100],
 			}}
 		>
 			<Box
-				display={'flex'}
-				flexDirection={'row'}
-				justifyContent={'space-between'}
-			>
-				<Typography strong={500}>Pořadí písní:</Typography>
-				<Typography strong={300} color={grey[600]}>
-					Změňte přetažením
-				</Typography>
-			</Box>
-			<Box
 				sx={{
-					'&::-webkit-scrollbar': {
-						display: 'auto',
-					},
-					position: 'relative',
-					paddingBottom: 8,
-					overflowY: 'auto',
-					height: `calc(100vh - 160px - ${theme.spacing(2)})`,
+					width: 335,
 				}}
-				className={'song-menu-list'}
+			/>
+			<Panel
+				sx={{
+					width: 300,
+					// height: 'calc(100vh - 160px)',
+					position: 'fixed',
+					top: 127,
+					bottom: 0,
+					left: 0,
+					backgroundColor: grey[100],
+				}}
 			>
-				<PlaylistMenuList />
-			</Box>
-		</Panel>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					justifyContent={'space-between'}
+				>
+					<Typography strong={500}>Pořadí písní:</Typography>
+					<Typography strong={300} color={grey[600]}>
+						Změňte přetažením
+					</Typography>
+				</Box>
+				<Box
+					sx={{
+						'&::-webkit-scrollbar': {
+							display: 'auto',
+						},
+						position: 'relative',
+						paddingBottom: 8,
+						overflowY: 'auto',
+						height: `calc(100vh - 160px - ${theme.spacing(2)})`,
+					}}
+					className={'song-menu-list'}
+				>
+					<PlaylistMenuList />
+				</Box>
+			</Panel>
+		</Box>
 	)
 }
