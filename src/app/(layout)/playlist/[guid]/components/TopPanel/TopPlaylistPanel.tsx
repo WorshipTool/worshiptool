@@ -1,6 +1,10 @@
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
+import PresentationButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/PresentationButton/PresentationButton'
+import PrintButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/PrintButton/PrintButton'
 import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/SaveEditButtons/SaveEditButtons'
+import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
+import { Box } from '@mui/material'
 export default function TopPlaylistPanel() {
 	return (
 		<Panel
@@ -15,7 +19,13 @@ export default function TopPlaylistPanel() {
 			}}
 		>
 			<TitleBox />
-			<SaveEditButtons />
+			<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+				<PresentationButton />
+				<PrintButton />
+				<ShareButton />
+				<Box />
+				<SaveEditButtons />
+			</Box>
 		</Panel>
 	)
 }
