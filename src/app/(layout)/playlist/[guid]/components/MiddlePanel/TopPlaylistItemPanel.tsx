@@ -19,8 +19,7 @@ type TopPlaylistItemPanelProps = {
 export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 	...props
 }: TopPlaylistItemPanelProps) {
-	const isOwner = true
-	const { setItemKeyChord, removeItem } = useInnerPlaylist()
+	const { setItemKeyChord, removeItem, canUserEdit } = useInnerPlaylist()
 
 	const transpose = async (value: number) => {
 		const c = props.sheet.getKeyChord()
@@ -44,7 +43,7 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 				zIndex: 1,
 			}}
 		>
-			{isOwner ? (
+			{canUserEdit ? (
 				<Box
 					display={{
 						xs: 'none',
@@ -73,8 +72,8 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 			)}
 			<Box />
 
-			<Box display={'flex'} flexDirection={'row'}>
-				{isOwner && (
+			<Box display={'flex'} flexDirection={'row'} sx={{}}>
+				{canUserEdit && (
 					<Box
 						display={{
 							xs: 'none',

@@ -60,6 +60,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		})
 		reset()
 	})
+	const canUserEdit = useMemo(() => playlist.isOwner, [playlist.isOwner])
 
 	const title = useMemo(() => state.title, [state.title])
 	const items = useMemo(() => state.items, [state.items])
@@ -67,6 +68,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 	const _change = useCallback(
 		(data: Partial<PlaylistHistoryStateType>) => {
+			if (!canUserEdit) return
 			setState(
 				(prev) =>
 					({
@@ -75,10 +77,12 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 					} as PlaylistHistoryStateType)
 			)
 		},
-		[setState]
+		[setState, canUserEdit]
 	)
 
 	const save = async () => {
+		if (!canUserEdit) return
+
 		// Save name
 		if (playlist.title !== state.title) {
 			await playlist.rename(state.title)
@@ -173,7 +177,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		items,
 		title,
 		loading,
-		isOwner: playlist.isOwner,
+		canUserEdit,
 		guid,
 
 		undo,

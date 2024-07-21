@@ -4,8 +4,10 @@ import PrintButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/comp
 import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/SaveEditButtons/SaveEditButtons'
 import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Box } from '@mui/material'
 export default function TopPlaylistPanel() {
+	const { canUserEdit } = useInnerPlaylist()
 	return (
 		<Panel
 			sx={{
@@ -23,8 +25,12 @@ export default function TopPlaylistPanel() {
 				<PresentationButton />
 				<PrintButton />
 				<ShareButton />
-				<Box />
-				<SaveEditButtons />
+				{canUserEdit && (
+					<>
+						<Box />
+						<SaveEditButtons />
+					</>
+				)}
 			</Box>
 		</Panel>
 	)

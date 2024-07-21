@@ -1,11 +1,13 @@
 import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PlaylistMenuList'
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Typography } from '@/common/ui/Typography'
 import { Box, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './LeftPanel.styles.css'
 
 export default function LeftPanel() {
+	const { canUserEdit } = useInnerPlaylist()
 	const theme = useTheme()
 	return (
 		<Box
@@ -37,9 +39,11 @@ export default function LeftPanel() {
 					justifyContent={'space-between'}
 				>
 					<Typography strong={500}>Pořadí písní:</Typography>
-					<Typography strong={300} color={grey[600]}>
-						Změňte přetažením
-					</Typography>
+					{canUserEdit && (
+						<Typography strong={300} color={grey[600]}>
+							Změňte přetažením
+						</Typography>
+					)}
 				</Box>
 				<Box
 					sx={{

@@ -4,13 +4,14 @@ import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlayl
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
+import { Box } from '@mui/material'
 import { Reorder } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 
 type PlaylistMenuListProps = {}
 
 export default function PlaylistMenuList(props: PlaylistMenuListProps) {
-	const { items, loading, setItems } = useInnerPlaylist()
+	const { items, loading, setItems, canUserEdit } = useInnerPlaylist()
 
 	const [innerGuids, setInnerGuids] = useState<PlaylistItemGuid[]>(
 		items?.map((i) => i.guid) || []
@@ -68,35 +69,64 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 							<Typography>V playlistu nejsou žádné písně...</Typography>
 						</>
 					)}
-					<Reorder.Group
-						values={innerGuids}
-						onReorder={(values) => onReorder(values)}
-						axis="y"
-						style={{
-							padding: 0,
-							position: 'relative',
-							width: '100%',
-							gap: '8px',
-							display: 'flex',
-							flexDirection: 'column',
-						}}
-					>
-						{innerGuids?.map((item, index) => {
-							return (
-								<Reorder.Item
-									key={item}
-									value={item}
-									as="div"
-									style={{
-										paddingLeft: 5,
-										paddingRight: 5,
-									}}
-								>
-									<PanelItem itemGuid={item} key={item} itemIndex={index} />
-								</Reorder.Item>
-							)
-						})}
-					</Reorder.Group>
+					{canUserEdit ? (
+						<>
+							<Reorder.Group
+								values={innerGuids}
+								onReorder={(values) => onReorder(values)}
+								axis="y"
+								style={{
+									padding: 0,
+									position: 'relative',
+									width: '100%',
+									gap: '8px',
+									display: 'flex',
+									flexDirection: 'column',
+								}}
+							>
+								{innerGuids?.map((item, index) => {
+									return (
+										<Reorder.Item
+											key={item}
+											value={item}
+											as="div"
+											style={{
+												paddingLeft: 5,
+												paddingRight: 5,
+											}}
+										>
+											<PanelItem itemGuid={item} key={item} itemIndex={index} />
+										</Reorder.Item>
+									)
+								})}
+							</Reorder.Group>
+						</>
+					) : (
+						<Box
+							sx={{
+								padding: 0,
+								paddingTop: 1,
+								position: 'relative',
+								width: '100%',
+								gap: '8px',
+								display: 'flex',
+								flexDirection: 'column',
+							}}
+						>
+							{innerGuids?.map((item, index) => {
+								return (
+									<Box
+										key={item}
+										sx={{
+											paddingX: 0.5,
+										}}
+									>
+										<PanelItem itemGuid={item} key={item} itemIndex={index} />
+									</Box>
+								)
+							})}
+						</Box>
+					)}
 				</>
 			)}
 		</>
