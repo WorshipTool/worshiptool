@@ -115,10 +115,28 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			await playlist.removeVariant(item.variant.packGuid)
 		}
 
+		// Add new items
+		const newItems = state.items.filter(
+			(i) => !playlist.items.some((j) => j.guid === i.guid)
+		)
+		for (const item of newItems) {
+			await playlist.addVariant(item.variant.packGuid)
+		}
+
 		// Save items order
 		await playlist.reorder(
 			state.items.map((item, index) => ({ guid: item.guid, order: index }))
 		)
+
+		// Transpose items
+		const transposedItems = state.items.filter(
+			(i) =>
+				i.toneKey !== playlist.items.find((j) => j.guid === i.guid)?.toneKey
+		)
+
+		for (const item of transposedItems) {
+			await playlist.setItemsKeyChord(item, new Chord(item.toneKey))
+		}
 
 		// reset()
 		setIsSaved(true)
