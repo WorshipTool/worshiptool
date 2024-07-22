@@ -25,14 +25,14 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/skupina/[groupCode]/nastaveni", { "groupCode": string }>
     | DynamicRoute<"/skupina/[groupCode]", { "groupCode": string }>
     | StaticRoute<"/storybook">
-    | StaticRoute<"/test">
     | StaticRoute<"/ucet">
     | StaticRoute<"/ucet/pisne">
     | StaticRoute<"/ucet/playlisty">
     | StaticRoute<"/vytvorit/napsat">
     | StaticRoute<"/vytvorit">
     | DynamicRoute<"/pisen/[hex]/[alias]/tisk", { "hex": string; "alias": string }>
-    | DynamicRoute<"/playlist/[guid]/tisk", { "guid": string }>;
+    | DynamicRoute<"/playlist/[guid]/tisk", { "guid": string }>
+    | StaticRoute<"/test">;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;
