@@ -5,17 +5,13 @@ import { UserDto } from '@/interfaces/user'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-const excludedPaths = [
-	'/_next',
-	'/static',
-	'/manifest',
-	'/favicon.ico',
-	'/robots.txt',
-	'/sitemap.xml',
-	'/public',
-]
+const excludedPaths = ['/_next', '/static', '/manifest', '/public']
 
-// This function can be marked `async` if using `await` inside
+/**
+ * This middleware checks if the user is authenticated.
+ * All paths with dot in the path are excluded.
+ * If the user is not authenticated, it redirects to the login page.
+ */
 export async function middleware(request: NextRequest) {
 	const {
 		cookies,
@@ -40,16 +36,12 @@ export async function middleware(request: NextRequest) {
 		accessToken: token,
 	})
 
-	console.log('Token: ', token)
 	try {
 		const fetchData = await creator.authControllerCheckTokenExpiration()
 		const url = BASE_PATH + fetchData.url
 		const result = await fetch(url, { ...(fetchData.options as any) })
-		console.log('Result: ', await result.json())
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
-		console.log('Token expired')
-
 		let response: NextResponse = NextResponse.redirect(
 			new URL('/prihlaseni', request.url)
 		)
