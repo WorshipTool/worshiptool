@@ -161,8 +161,46 @@ export default function Login() {
 						</>
 					)}
 
-					<Typography variant="subtitle2">Email</Typography>
-					<TextField
+					<form
+						onSubmit={(e) => {
+							e.preventDefault()
+							onLoginClick()
+						}}
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<Typography variant="subtitle2">Email</Typography>
+						<TextField
+							size="small"
+							value={email}
+							onChange={onEmailChange}
+							error={!isEmailOk}
+							helperText={emailMessage}
+							disabled={inProgress}
+							type="email"
+						/>
+						<Gap />
+						<Typography variant="subtitle2">Heslo</Typography>
+						<TextField
+							size="small"
+							fullWidth
+							value={password}
+							onChange={onPasswordChange}
+							error={!isPasswordOk}
+							helperText={passwordMessage}
+							disabled={inProgress}
+							type="password"
+						/>
+						<Gap />
+						<Box display={'flex'}>
+							<Button type="submit" loading={inProgress} variant="text">
+								Přihlásit se
+							</Button>
+						</Box>
+					</form>
+					{/* <TextField
 						size="small"
 						fullWidth
 						value={email}
@@ -190,7 +228,7 @@ export default function Login() {
 						<Button onClick={onLoginClick} loading={inProgress} variant="text">
 							Přihlásit se
 						</Button>
-					</Box>
+					</Box> */}
 
 					<Box
 						display={'flex'}
