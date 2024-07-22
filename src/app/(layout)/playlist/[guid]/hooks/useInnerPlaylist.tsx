@@ -70,7 +70,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 	const canUserEdit = useMemo(() => playlist.isOwner, [playlist.isOwner])
 
 	const title = useMemo(() => state.title, [state.title])
-	const items = useMemo(() => state.items, [state.items])
+	const items = useMemo(() => state.items || [], [state.items])
 	const loading = useMemo(() => playlist.loading, [playlist.loading])
 
 	const _change = useCallback(
@@ -124,9 +124,11 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		}
 
 		// Save items order
-		await playlist.reorder(
-			state.items.map((item, index) => ({ guid: item.guid, order: index }))
-		)
+		if (state.items.length > 0) {
+			await playlist.reorder(
+				state.items.map((item, index) => ({ guid: item.guid, order: index }))
+			)
+		}
 
 		// Transpose items
 		const transposedItems = state.items.filter(
@@ -225,9 +227,5 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems,
 		setItemKeyChord,
 		removeItem,
-
-		// // ...playlist,
-		// isOn: guid !== undefined,
-		// ...(same ? currentPlaylist : playlist),
 	}
 }

@@ -5,7 +5,7 @@ import { SmartAllParams, getReplacedUrlWithParams, routesPaths } from '@/routes'
 import { Print } from '@mui/icons-material'
 
 export default function PrintButton() {
-	const { guid, save } = useInnerPlaylist()
+	const { guid, save, items } = useInnerPlaylist()
 
 	const onPrint = async () => {
 		await save()
@@ -19,7 +19,12 @@ export default function PrintButton() {
 		openNewPrintWindow(url)
 	}
 	return (
-		<Button startIcon={<Print />} size="small" onClick={onPrint}>
+		<Button
+			startIcon={<Print />}
+			size="small"
+			onClick={onPrint}
+			disabled={items.length === 0}
+		>
 			Tiskout
 		</Button>
 	)

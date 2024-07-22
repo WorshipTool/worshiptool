@@ -2,7 +2,7 @@ import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlayl
 import { Button } from '@/common/ui/Button'
 
 export default function PresentationButton() {
-	const { guid, save } = useInnerPlaylist()
+	const { guid, save, items } = useInnerPlaylist()
 	return (
 		<>
 			<Button
@@ -11,6 +11,7 @@ export default function PresentationButton() {
 				to="playlistCards"
 				toParams={{ guid }}
 				onClick={save}
+				disabled={items.length === 0}
 			>
 				Prezentace
 			</Button>
