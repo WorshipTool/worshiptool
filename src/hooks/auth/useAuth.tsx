@@ -1,27 +1,27 @@
 'use client'
 
 import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google'
+// import Cookies from 'js-cookie'
+import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { jwtDecode } from 'jwt-decode'
+import { useCookies } from 'next-client-cookies'
 import { useSnackbar } from 'notistack'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
 import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
 import { ROLES, UserDto } from '../../interfaces/user'
-import { useSmartNavigate } from '../../routes/useSmartNavigate'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	login: async () => {},
 	loginWithGoogle: () => {},
-	logout: () => {},
+	logout: async () => {},
 	signup: () => {},
 	isLoggedIn: () => false,
 	user: undefined,
 	info: {} as UserDto,
-	getAuthHeader: () => ({}),
 	isTrustee: () => false,
 	isAdmin: () => false,
 	loading: false,
-	initialized: false,
 	apiConfiguration: {
 		isJsonMime: () => true,
 	},
@@ -38,43 +38,56 @@ export default function useAuth() {
 }
 
 export function useProvideAuth() {
-	const [user, setUser] = useState<UserDto>()
+	// Cookies
+	const cookies = useCookies()
+	const _setCookie = (user: UserDto) => {
+		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user))
+	}
+	const _getCookie = (): UserDto | undefined => {
+		const value = cookies.get(AUTH_COOKIE_NAME)
+		if (value) {
+			return JSON.parse(value)
+		}
+		return undefined
+	}
+	const _emptyCookie = () => {
+		cookies.remove(AUTH_COOKIE_NAME)
+	}
 
-	const { enqueueSnackbar } = useSnackbar()
-	const navigate = useSmartNavigate()
+	// User state
+	const [user, setUser] = useState<UserDto | undefined>(_getCookie())
+	const token = useMemo(() => user?.token, [user])
 
-	const [init, setInit] = useState<boolean>(false)
+	// API configuration
+	const apiConfiguration: Configuration = useMemo(
+		() => ({
+			isJsonMime: () => true,
+			accessToken: token,
+		}),
+		[token]
+	)
 
-	const [loading, setLoading] = useState<boolean>(true)
-
-	const authApi = new AuthApi()
-
+	// If not logged in, enable Google login
 	const [googleShouldLogin, setGoogleShouldLogin] = useState<boolean>(false)
-	const autoGoogleLogin = useGoogleOneTapLogin({
+	useGoogleOneTapLogin({
 		disabled: !googleShouldLogin,
 		onSuccess: (credentialResponse: CredentialResponse) => {
 			loginWithGoogle(credentialResponse)
 		},
 	})
-
 	useEffect(() => {
-		const u = localStorage.getItem('user')
-		if (u != null) {
-			setUser(JSON.parse(u))
-		} else {
+		if (user != null) {
 			setGoogleShouldLogin(true)
 		}
-
-		setLoading(false)
-		setInit(true)
 	}, [])
 
-	useEffect(() => {
-		if (user !== undefined) {
-			localStorage.setItem('user', JSON.stringify(user))
-		}
-	}, [user])
+	// Snackbar
+	const { enqueueSnackbar } = useSnackbar()
 
+	// API
+	const authApi = new AuthApi(apiConfiguration)
+
+	const [loading, setLoading] = useState<boolean>(false)
 	const login = async (
 		{ email, password }: { email: string; password: string },
 		after?: (r: any) => void
@@ -89,7 +102,7 @@ export function useProvideAuth() {
 		return authApi
 			.authControllerLogin(body)
 			.then((result) => {
-				innerLogin(loginResultDTOToUser(result.data))
+				_innerLogin(loginResultDTOToUser(result.data))
 				if (after) after(result.data)
 			})
 			.catch((err) => {
@@ -101,16 +114,18 @@ export function useProvideAuth() {
 			})
 	}
 
-	const innerLogin = (user: UserDto) => {
+	const _innerLogin = (user: UserDto) => {
 		enqueueSnackbar(
 			`Ahoj ${user.firstName} ${user.lastName}. Ať najdeš, po čem paseš.`
 		)
 		setUser(user)
+		_setCookie(user)
 	}
-	const logout = () => {
+	const logout = async () => {
 		setLoading(false)
 		setUser(undefined)
-		localStorage.removeItem('user')
+		await authApi.authControllerLogout()
+		_emptyCookie()
 		enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 		setLoading(false)
 	}
@@ -150,7 +165,7 @@ export function useProvideAuth() {
 		authApi
 			.authControllerLoginWithGoogle(data)
 			.then((result) => {
-				innerLogin(loginResultDTOToUser(result.data))
+				_innerLogin(loginResultDTOToUser(result.data))
 				if (after) after(result.data)
 			})
 			.catch((err) => {
@@ -162,22 +177,7 @@ export function useProvideAuth() {
 			})
 	}
 
-	const isLoggedIn = () => {
-		return user !== undefined
-	}
-
-	const getAuthHeader = () => {
-		if (user) return { Authorization: 'Bearer ' + user.token }
-		return {}
-	}
-
-	const apiConfiguration: Configuration = useMemo(
-		() => ({
-			isJsonMime: () => true,
-			accessToken: user?.token,
-		}),
-		[user]
-	)
+	const isLoggedIn = () => user != undefined
 
 	return {
 		login,
@@ -187,11 +187,9 @@ export function useProvideAuth() {
 		isLoggedIn,
 		user,
 		info: user ? user : ({} as UserDto),
-		getAuthHeader,
 		isTrustee: () => user != undefined && user.role == ROLES.Trustee,
 		isAdmin: () => user != undefined && user.role == ROLES.Admin,
 		loading,
 		apiConfiguration,
-		initialized: init,
 	}
 }

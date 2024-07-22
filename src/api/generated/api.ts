@@ -576,10 +576,10 @@ export interface Group {
 export interface JwtResult {
     /**
      * 
-     * @type {LoginUserItemResult}
+     * @type {BaseUserInfoOutDto}
      * @memberof JwtResult
      */
-    'user': LoginUserItemResult;
+    'user': BaseUserInfoOutDto;
     /**
      * 
      * @type {string}
@@ -652,10 +652,10 @@ export interface LoginInputData {
 export interface LoginResult {
     /**
      * 
-     * @type {LoginUserItemResult}
+     * @type {BaseUserInfoOutDto}
      * @memberof LoginResult
      */
-    'user': LoginUserItemResult;
+    'user': BaseUserInfoOutDto;
     /**
      * 
      * @type {string}
@@ -663,53 +663,6 @@ export interface LoginResult {
      */
     'token': string;
 }
-/**
- * 
- * @export
- * @interface LoginUserItemResult
- */
-export interface LoginUserItemResult {
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginUserItemResult
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginUserItemResult
-     */
-    'firstName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginUserItemResult
-     */
-    'lastName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginUserItemResult
-     */
-    'email': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LoginUserItemResult
-     */
-    'role': LoginUserItemResultRoleEnum;
-}
-
-export const LoginUserItemResultRoleEnum = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3
-} as const;
-
-export type LoginUserItemResultRoleEnum = typeof LoginUserItemResultRoleEnum[keyof typeof LoginUserItemResultRoleEnum];
-
 /**
  * 
  * @export
@@ -2395,6 +2348,12 @@ export interface User {
      * @memberof User
      */
     'permissions': Array<Permission>;
+    /**
+     * 
+     * @type {Array<UserToken>}
+     * @memberof User
+     */
+    'tokens': Array<UserToken>;
 }
 
 export const UserLoginTypeEnum = {
@@ -2412,6 +2371,49 @@ export const UserRoleEnum = {
 
 export type UserRoleEnum = typeof UserRoleEnum[keyof typeof UserRoleEnum];
 
+/**
+ * 
+ * @export
+ * @interface UserToken
+ */
+export interface UserToken {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserToken
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserToken
+     */
+    'token': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserToken
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserToken
+     */
+    'expiresAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserToken
+     */
+    'revokedAt': string;
+    /**
+     * 
+     * @type {User}
+     * @memberof UserToken
+     */
+    'user': User;
+}
 /**
  * 
  * @export
@@ -2659,6 +2661,39 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerCheckTokenExpiration: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/checktokenexpiration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} email 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2770,6 +2805,39 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerLogout: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * The function allows the user to sign up using email and password.
          * @summary Signs up the user using email and password.
          * @param {SignUpInputData} signUpInputData 
@@ -2853,6 +2921,17 @@ export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerCheckTokenExpiration(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerCheckTokenExpiration(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerCheckTokenExpiration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} email 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2887,6 +2966,17 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLoginWithGoogle(postGoogleLoginBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerLoginWithGoogle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerLogout(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogout(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerLogout']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2927,6 +3017,14 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerCheckTokenExpiration(options?: any): AxiosPromise<boolean> {
+            return localVarFp.authControllerCheckTokenExpiration(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} email 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2953,6 +3051,14 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         authControllerLoginWithGoogle(postGoogleLoginBody: PostGoogleLoginBody, options?: any): AxiosPromise<JwtResult> {
             return localVarFp.authControllerLoginWithGoogle(postGoogleLoginBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerLogout(options).then((request) => request(axios, basePath));
         },
         /**
          * The function allows the user to sign up using email and password.
@@ -2986,6 +3092,16 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
 export class AuthApi extends BaseAPI {
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerCheckTokenExpiration(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerCheckTokenExpiration(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} email 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3017,6 +3133,16 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerLoginWithGoogle(postGoogleLoginBody: PostGoogleLoginBody, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerLoginWithGoogle(postGoogleLoginBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerLogout(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

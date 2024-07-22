@@ -1,5 +1,6 @@
 'use client'
-import { Link } from '../../../common/ui/Link/CustomLink'
+
+import { Link } from '@/common/ui/Link/CustomLink'
 
 export default function page() {
 	return (
