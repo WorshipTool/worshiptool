@@ -1,3 +1,4 @@
+'use client'
 import { useLocalStorage } from '@/hooks/localstorage/useLocalStorage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { createContext, useCallback, useContext, useEffect } from 'react'

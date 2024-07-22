@@ -25,6 +25,7 @@ export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	apiConfiguration: {
 		isJsonMime: () => true,
 	},
+	checkIfCookieExists: () => false,
 })
 
 export const AuthProvider = ({ children }: { children: any }) => {
@@ -123,8 +124,8 @@ export function useProvideAuth() {
 	}
 	const logout = async () => {
 		setLoading(false)
+		if (checkIfCookieExists()) await authApi.authControllerLogout()
 		setUser(undefined)
-		await authApi.authControllerLogout()
 		_emptyCookie()
 		enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 		setLoading(false)
@@ -179,6 +180,11 @@ export function useProvideAuth() {
 
 	const isLoggedIn = () => user != undefined
 
+	// Check if cookie still exists
+	const checkIfCookieExists = (): boolean => {
+		return _getCookie() !== undefined
+	}
+
 	return {
 		login,
 		logout,
@@ -191,5 +197,6 @@ export function useProvideAuth() {
 		isAdmin: () => user != undefined && user.role == ROLES.Admin,
 		loading,
 		apiConfiguration,
+		checkIfCookieExists,
 	}
 }

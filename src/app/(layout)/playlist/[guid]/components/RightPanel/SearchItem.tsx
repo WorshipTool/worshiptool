@@ -18,7 +18,6 @@ import Playlist from '../../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../tech/ApiState'
-import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[100],
@@ -50,7 +49,7 @@ export default function SearchItem({
 }: SearchItemProps) {
 	const [bottomPanelOpen, setBottomPanelOpen] = useState(false)
 
-	const { addVariant, items } = useInnerPlaylist()
+	// const { addVariant, items } = useInnerPlaylist()
 
 	const sheet = new Sheet(variant.sheetData)
 
@@ -68,7 +67,7 @@ export default function SearchItem({
 	const addToPlaylist = async () => {
 		fetchApiState(
 			async () => {
-				return await addVariant(variant.packGuid)
+				// return await addVariant(variant.packGuid)
 			},
 			() => {
 				turnOn(playlist.guid)

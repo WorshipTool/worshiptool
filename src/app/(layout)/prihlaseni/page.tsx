@@ -9,7 +9,7 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../api/dtos/dtosAuth'
 import { Button } from '../../../common/ui/Button'
 import { Gap } from '../../../common/ui/Gap/Gap'
@@ -47,8 +47,14 @@ export default function Login() {
 	const theme = useTheme()
 	const navigate = useSmartNavigate()
 
-	const { login } = useAuth()
+	const { login, checkIfCookieExists, logout } = useAuth()
 	const params = useSmartParams('login')
+
+	useEffect(() => {
+		if (!checkIfCookieExists()) {
+			logout()
+		}
+	}, [])
 
 	const onEmailChange = (e: any) => {
 		setEmail(e.target.value)
