@@ -77,7 +77,7 @@ export function useProvideAuth() {
 		},
 	})
 	useEffect(() => {
-		if (user != null) {
+		if (!_getCookie()) {
 			setGoogleShouldLogin(true)
 		}
 	}, [])
@@ -125,9 +125,11 @@ export function useProvideAuth() {
 	const logout = async () => {
 		setLoading(false)
 		if (checkIfCookieExists()) await authApi.authControllerLogout()
-		setUser(undefined)
-		_emptyCookie()
-		enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+		if (user) {
+			setUser(undefined)
+			_emptyCookie()
+			enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+		}
 		setLoading(false)
 	}
 

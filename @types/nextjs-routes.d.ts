@@ -32,7 +32,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/vytvorit">
     | DynamicRoute<"/pisen/[hex]/[alias]/tisk", { "hex": string; "alias": string }>
     | DynamicRoute<"/playlist/[guid]/tisk", { "guid": string }>
-    | StaticRoute<"/test">;
+    | StaticRoute<"/test">
+    | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
+    | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

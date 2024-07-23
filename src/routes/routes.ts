@@ -79,6 +79,7 @@ export const routesPaths = {
 	songsList: '/seznam',
 	test: '/test',
 	testComponents: '/storybook',
+	subdomain: '/sub/[subdomain]',
 } as const
 
 // DONT REMOVE
