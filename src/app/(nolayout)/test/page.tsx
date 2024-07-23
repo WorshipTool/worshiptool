@@ -1,19 +1,21 @@
 'use client'
 
-import { Link } from '@/common/ui/Link/CustomLink'
+import { Button } from '@/common/ui/Button'
+import { Box } from '@mui/material'
 
 export default function page() {
 	return (
 		<div>
-			<Link
-				to="uploadParse"
-				params={{
-					files: ['file1/1', 'file2/2'],
-				}}
-			>
-				Test
-				{process.env.NEXT_PUBLIC_BACKEND_URL}a
-			</Link>
+			<Box display={'flex'}>
+				<Button
+					to="subdomain"
+					toParams={{
+						subdomain: 'ahoj',
+					}}
+				>
+					Bez na poddomenu
+				</Button>
+			</Box>
 		</div>
 	)
 }

@@ -1,8 +1,9 @@
+import { FRONTEND_URL } from '@/api/constants'
 import { AuthApiAxiosParamCreator } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { UserDto } from '@/interfaces/user'
-import { getRouteUrlWithParams } from '@/routes'
+import { getReplacedUrlWithParams, routesPaths } from '@/routes'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -45,30 +46,17 @@ export const checkSubdomain = async (
 ): Promise<NextResponse | true> => {
 	const url = request.nextUrl.clone()
 	const host = request.headers.get('host')
-	// const subdomain = getValidSubdomain(host)
-	// if (subdomain) {
-	// 	// Subdomain available, rewriting
-	// 	const aWhole = getRouteUrlWithParams('subdomain', { subdomain })
-	// 	// Get pathname from a URL object
-
-	// 	const aUrl = new URL(aWhole)
-	// 	const a = aUrl.pathname
-
-	// 	// console.log(`>>> Rewriting: ${url.pathname} to ${a}${url.pathname}`)
-	// 	url.pathname = a
-
-	// 	return NextResponse.rewrite(url)
-	// }
-
 	const subdomains = getSubdomains(host)
-	console.log(`>>> Subdomains: ${subdomains}`)
 	if (subdomains.length > 0) {
 		let pathname = ''
 
 		for (const subdomain of subdomains) {
-			// Subdomain available, rewriting
-			const aWhole = getRouteUrlWithParams('subdomain', { subdomain })
-			// Get pathname from a URL object
+			const url = routesPaths['subdomain']
+			const aWhole = getReplacedUrlWithParams(
+				FRONTEND_URL + url,
+				{ subdomain },
+				{ subdomains: false }
+			)
 
 			const aUrl = new URL(aWhole)
 			const a = aUrl.pathname
