@@ -100,9 +100,8 @@ export default function AddToPlaylistButton({
 					'aria-labelledby': 'basic-button',
 				}}
 			>
-				[
 				{loading ? (
-					<MenuItem disabled>
+					<MenuItem disabled key={'loading-aoihh'}>
 						<ListItemIcon>
 							<CircularProgress size={`1rem`} color="inherit" />
 						</ListItemIcon>
@@ -110,11 +109,9 @@ export default function AddToPlaylistButton({
 					</MenuItem>
 				) : (
 					playlists?.length === 0 && (
-						<>
-							<MenuItem disabled>
-								<ListItemText>Nemáte žádné playlisty</ListItemText>
-							</MenuItem>
-						</>
+						<MenuItem disabled key={'no-playlists-title-aflkj'}>
+							<ListItemText>Nemáte žádné playlisty</ListItemText>
+						</MenuItem>
 					)
 				)}
 				{playlists?.slice(0, maxItems).map((p, i) => {
@@ -127,26 +124,25 @@ export default function AddToPlaylistButton({
 						/>
 					)
 				})}
-				{playlists && playlists.length > maxItems && (
-					<>
+				{playlists &&
+					playlists.length > maxItems && [
 						<div
+							key={'div-with-divider'}
 							style={{
 								paddingTop: theme.spacing(1),
 								paddingBottom: theme.spacing(1),
 							}}
 						>
 							<Divider />
-						</div>
+						</div>,
 
-						<MenuItem onClick={() => setOpenDialog(true)}>
+						<MenuItem onClick={() => setOpenDialog(true)} key={'more-titel'}>
 							<ListItemIcon>
 								<MoreHoriz fontSize="small" />
 							</ListItemIcon>
 							<ListItemText>Další</ListItemText>
-						</MenuItem>
-					</>
-				)}
-				]
+						</MenuItem>,
+					]}
 			</Menu>
 			<Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
 				<DialogTitle>Přidat do playlistu</DialogTitle>
