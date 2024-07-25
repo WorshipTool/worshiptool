@@ -100,25 +100,22 @@ export default function AddToPlaylistButton({
 					'aria-labelledby': 'basic-button',
 				}}
 			>
+				[
 				{loading ? (
-					<>
-						<MenuItem disabled>
-							<ListItemIcon>
-								<CircularProgress size={`1rem`} color="inherit" />
-							</ListItemIcon>
-							<ListItemText>Načítání...</ListItemText>
-						</MenuItem>
-					</>
+					<MenuItem disabled>
+						<ListItemIcon>
+							<CircularProgress size={`1rem`} color="inherit" />
+						</ListItemIcon>
+						<ListItemText>Načítání...</ListItemText>
+					</MenuItem>
 				) : (
-					<>
-						{playlists?.length === 0 && (
-							<>
-								<MenuItem disabled>
-									<ListItemText>Nemáte žádné playlisty</ListItemText>
-								</MenuItem>
-							</>
-						)}
-					</>
+					playlists?.length === 0 && (
+						<>
+							<MenuItem disabled>
+								<ListItemText>Nemáte žádné playlisty</ListItemText>
+							</MenuItem>
+						</>
+					)
 				)}
 				{playlists?.slice(0, maxItems).map((p, i) => {
 					return (
@@ -130,7 +127,6 @@ export default function AddToPlaylistButton({
 						/>
 					)
 				})}
-
 				{playlists && playlists.length > maxItems && (
 					<>
 						<div
@@ -150,6 +146,7 @@ export default function AddToPlaylistButton({
 						</MenuItem>
 					</>
 				)}
+				]
 			</Menu>
 			<Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
 				<DialogTitle>Přidat do playlistu</DialogTitle>

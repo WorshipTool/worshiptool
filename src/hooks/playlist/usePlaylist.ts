@@ -2,7 +2,7 @@ import { VariantPackGuid } from '@/api/dtos'
 import { ReorderPlaylistItem } from '@/api/generated'
 import { useApiState } from '@/tech/ApiState'
 import { Chord } from '@pepavlin/sheet-api'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
 import PlaylistDto, {
 	PlaylistGuid,
@@ -47,17 +47,20 @@ export default function usePlaylist(
 		}
 	}, [state])
 
-	const search = async (searchString: string) => {
-		await searchInPlaylistByGuid(guid, searchString)
-			.then((r) => {
-				const items = r.items.map(mapPlaylistItemOutDtoApiToPlaylistItemDto)
-				setSearchedItems(items)
-				return items
-			})
-			.catch((e) => {
-				console.error(e)
-			})
-	}
+	const search = useCallback(
+		async (searchString: string) => {
+			await searchInPlaylistByGuid(guid, searchString)
+				.then((r) => {
+					const items = r.items.map(mapPlaylistItemOutDtoApiToPlaylistItemDto)
+					setSearchedItems(items)
+					return items
+				})
+				.catch((e) => {
+					console.error(e)
+				})
+		},
+		[searchInPlaylistByGuid, guid]
+	)
 
 	const addVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
 		try {

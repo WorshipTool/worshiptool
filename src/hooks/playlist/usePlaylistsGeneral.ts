@@ -1,6 +1,7 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { useApi } from '@/hooks/api/useApi'
 import { Chord } from '@pepavlin/sheet-api'
+import { useCallback } from 'react'
 import { mapPlaylistDataOutDtoToPlaylistDto } from '../../api/dtos/playlist/playlist.map'
 import {
 	GetSearchInPlaylistResult,
@@ -79,17 +80,20 @@ export default function usePlaylistsGeneral() {
 		return mapPlaylistDataOutDtoToPlaylistDto(result)
 	}
 
-	const searchInPlaylistByGuid = async (
-		playlistGuid: PlaylistGuid,
-		searchString: string
-	): Promise<GetSearchInPlaylistResult> => {
-		return await handleApiCall(
-			playlistGettingApi.playlistGettingControllerSearchInPlaylist(
-				searchString,
-				playlistGuid
+	const searchInPlaylistByGuid = useCallback(
+		async (
+			playlistGuid: PlaylistGuid,
+			searchString: string
+		): Promise<GetSearchInPlaylistResult> => {
+			return await handleApiCall(
+				playlistGettingApi.playlistGettingControllerSearchInPlaylist(
+					searchString,
+					playlistGuid
+				)
 			)
-		)
-	}
+		},
+		[playlistGettingApi]
+	)
 
 	const renamePlaylist = async (guid: PlaylistGuid, title: string) => {
 		return await handleApiCall(

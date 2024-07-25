@@ -2,6 +2,7 @@
 
 import { Lock, Public } from '@mui/icons-material'
 import { Box, Typography, styled, useTheme } from '@mui/material'
+import { memo } from 'react'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { parseVariantAlias } from '../../../routes'
@@ -38,7 +39,7 @@ type SongCardProps = {
 	publicityMode?: PublicityMode
 	flexibleHeght?: boolean
 }
-export function SongCard({
+export const SongCard = memo(function S({
 	data,
 	publicityMode,
 	flexibleHeght = true,
@@ -123,7 +124,7 @@ export function SongCard({
 				<StyledBox>
 					{dataLines.map((line, index) => {
 						return (
-							<Box display={'flex'} flexDirection={'row'} key={line}>
+							<Box display={'flex'} flexDirection={'row'} key={line + index}>
 								<Typography noWrap key={'SearchItemText' + index} flex={1}>
 									{line}
 								</Typography>
@@ -147,4 +148,4 @@ export function SongCard({
 			</StyledContainer>
 		</Link>
 	)
-}
+})
