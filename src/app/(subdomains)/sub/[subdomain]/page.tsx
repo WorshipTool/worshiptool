@@ -1,3 +1,8 @@
+'use client'
+
+import { useSmartParams } from '@/routes/useSmartParams'
+
 export default function SubdomainPage() {
-	return <div>ahoj</div>
+	const a = useSmartParams('subdomain')
+	return <div>ahoj {a.subdomain}</div>
 }

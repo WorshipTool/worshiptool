@@ -3,8 +3,8 @@ import { Box, CircularProgress, Typography } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import OnChangeDelayer from '../../../../../../common/providers/ChangeDelayer/ChangeDelayer'
 import { Gap } from '../../../../../../common/ui/Gap'
+import { useChangeDelayer } from '../../../../../../hooks/changedelay/useChangeDelayer'
 import { PlaylistItemDto } from '../../../../../../interfaces/playlist/playlist.types'
 import { sectionNameToText } from '../../../../../../tech/sectionNameToText'
 
@@ -195,6 +195,8 @@ export default function SlideCard({
 
 	const COLOR = 'white'
 
+	useChangeDelayer(item, onItemChange, [onItemChange], 1000)
+
 	return (
 		<Box
 			display={'flex'}
@@ -206,7 +208,6 @@ export default function SlideCard({
 				userSelect: 'none',
 			}}
 		>
-			<OnChangeDelayer value={item} onChange={onItemChange} delay={1000} />
 			<Box
 				display={'flex'}
 				flexDirection={'column'}

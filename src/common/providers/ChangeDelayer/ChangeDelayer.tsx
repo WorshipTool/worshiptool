@@ -14,7 +14,7 @@ export const OnChangeDelayer = memo(function OnChangeDelayer<T>({
 	onChange,
 	delay = 300,
 }: ChangeDelayerProps<T>) {
-	useChangeDelayer(value, onChange, delay)
+	useChangeDelayer(value, onChange, [onChange], delay)
 	return <></>
 })
 
