@@ -25,11 +25,9 @@ export default function LeftPanel() {
 			<Panel
 				sx={{
 					width: 300,
-					// height: 'calc(100vh - 160px)',
 					position: 'fixed',
 					top: 127,
 					bottom: 0,
-					left: 0,
 					backgroundColor: grey[100],
 				}}
 			>

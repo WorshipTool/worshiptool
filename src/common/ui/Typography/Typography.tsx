@@ -6,6 +6,7 @@ type CustomTypographyProps = {
 	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
 	strong?: boolean | number
 	color?: ColorType
+	size?: number | string
 }
 
 export function Typography({
@@ -13,13 +14,21 @@ export function Typography({
 	variant = 'normal',
 	strong = false,
 	color,
+	size,
 }: CustomTypographyProps) {
 	const fontWeight = strong ? (strong === true ? 700 : strong) : undefined
 
 	const typoVariant = variant === 'normal' ? 'body1' : variant
 
 	return (
-		<Typo variant={typoVariant} color={color} fontWeight={fontWeight}>
+		<Typo
+			variant={typoVariant}
+			color={color}
+			fontWeight={fontWeight}
+			sx={{
+				fontSize: size,
+			}}
+		>
 			{children}
 		</Typo>
 	)

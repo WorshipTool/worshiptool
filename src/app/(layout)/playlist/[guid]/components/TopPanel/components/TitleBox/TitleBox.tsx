@@ -1,28 +1,57 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import TextField from '@/common/ui/TextField/TextField'
+import { Typography } from '@/common/ui/Typography'
+import { Box, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './TitleBox.styles.css'
 
 export default function TitleBox() {
-	const { title, rename } = useInnerPlaylist()
+	const { title, rename, canUserEdit } = useInnerPlaylist()
 
+	const theme = useTheme()
 	return (
 		<div>
-			<Tooltip label="Přejmenovat" placement="bottom">
-				<TextField
-					sx={{
-						borderColor: `${grey[400]}`,
-						outlineColor: `${grey[400]}`,
-						fontSize: '1.5rem',
-						fontWeight: 600,
-					}}
-					placeholder="Název playlistu"
-					value={title}
-					className={'playlist-title-box'}
-					onChange={rename}
-				/>
-			</Tooltip>
+			{canUserEdit ? (
+				<>
+					<Tooltip label="Přejmenovat" placement="bottom">
+						<TextField
+							sx={{
+								borderColor: `${grey[400]}`,
+								outlineColor: `${grey[400]}`,
+								fontSize: '1.5rem',
+								fontWeight: 600,
+								[theme.breakpoints.down('sm')]: {
+									display: 'none',
+								},
+							}}
+							placeholder="Název playlistu"
+							value={title}
+							className={'playlist-title-box'}
+							onChange={rename}
+						/>
+					</Tooltip>
+
+					<Box
+						padding={0.5}
+						paddingLeft={1}
+						display={{
+							sx: 'block',
+							sm: 'none',
+						}}
+					>
+						<Typography strong={600} size={'1.5rem'}>
+							{title}
+						</Typography>
+					</Box>
+				</>
+			) : (
+				<Box padding={0.5} paddingLeft={1}>
+					<Typography strong={600} size={'1.5rem'}>
+						{title}
+					</Typography>
+				</Box>
+			)}
 		</div>
 	)
 }
