@@ -18,7 +18,7 @@ export default async function Page({ params }: PageProps) {
 					.sort((a, b) => a.order - b.order)
 					.map((item, index) => {
 						const sheet = new Sheet(item.variant.sheetData)
-						sheet.setKey(item.toneKey as note)
+						if (item.toneKey) sheet.setKey(item.toneKey as note)
 						const title = `${item.order + 1}.  ${item.variant.prefferedTitle}`
 
 						return (
