@@ -10,8 +10,7 @@ import {
 	styled,
 	useTheme,
 } from '@mui/material'
-import { usePathname } from 'next/navigation'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import UploadFileInput from '../../../../app/(layout)/nahrat/components/UploadFileInput'
 import useAuth from '../../../../hooks/auth/useAuth'
 import useGroup from '../../../../hooks/group/useGroup'
@@ -120,9 +119,13 @@ export default function RightAccountPanel({
 	const [accountMenuOpen, setAccountMenuOpen] = useState(false)
 
 	const isHome = useSmartMatch('home')
-	const pathname = usePathname() as string
 
 	const theme = useTheme()
+
+	const [loginNextUrl, setLoginNextUrl] = useState<string>('')
+	useEffect(() => {
+		setLoginNextUrl(window.location.href)
+	}, [])
 
 	return (
 		<>
@@ -253,7 +256,7 @@ export default function RightAccountPanel({
 								}}
 								to="login"
 								toParams={{
-									previousPage: pathname,
+									previousPage: loginNextUrl,
 									message: '',
 								}}
 								loading={loading}

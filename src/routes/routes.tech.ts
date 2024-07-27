@@ -1,2 +1,2 @@
-export const shouldUseSubdomains = () => true
-// process.env.DONT_USE_SUBDOMAINS !== 'true'
+export const shouldUseSubdomains = () =>
+	process.env.NEXT_PUBLIC_DONT_USE_SUBDOMAINS !== 'true'

@@ -4,6 +4,7 @@ import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { UserDto } from '@/interfaces/user'
 import { getReplacedUrlWithParams, routesPaths } from '@/routes'
+import { shouldUseSubdomains } from '@/routes/routes.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -30,8 +31,10 @@ export async function middleware(request: NextRequest) {
 	if (checkAuth !== true) return checkAuth
 
 	// Subdomains
-	const checkSub = await checkSubdomain(request)
-	if (checkSub !== true) return checkSub
+	if (shouldUseSubdomains()) {
+		const checkSub = await checkSubdomain(request)
+		if (checkSub !== true) return checkSub
+	}
 
 	return NextResponse.next()
 }

@@ -25,6 +25,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/skupina/[groupCode]/nastaveni", { "groupCode": string }>
     | DynamicRoute<"/skupina/[groupCode]", { "groupCode": string }>
     | StaticRoute<"/storybook">
+    | StaticRoute<"/sub/test">
     | StaticRoute<"/ucet">
     | StaticRoute<"/ucet/pisne">
     | StaticRoute<"/ucet/playlisty">
