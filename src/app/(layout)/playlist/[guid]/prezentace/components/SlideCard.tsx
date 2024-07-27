@@ -124,7 +124,7 @@ export default function SlideCard({
 
 	useEffect(() => {
 		if (!sheet) return
-		sheet.setKey(item.toneKey)
+		if (item.toneKey) sheet.setKey(item.toneKey)
 	}, [sheet])
 
 	useEffect(() => {
