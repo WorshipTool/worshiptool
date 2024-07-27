@@ -81,7 +81,7 @@ export const PlaylistItem = ({ item }: PlaylistItemProps) => {
 	}
 
 	useEffect(() => {
-		sheet.setKey(item.toneKey)
+		if (item.toneKey) sheet.setKey(item.toneKey)
 		rerender()
 	}, [item])
 
