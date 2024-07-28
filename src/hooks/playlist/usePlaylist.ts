@@ -62,15 +62,19 @@ export default function usePlaylist(
 		[searchInPlaylistByGuid, guid]
 	)
 
-	const addVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
+	const addVariant = async (
+		packGuid: VariantPackGuid
+	): Promise<PlaylistItemDto | false> => {
 		try {
-			await addVariantToPlaylist(packGuid, guid).then(async (r) => {
-				if (!r) return false
-				const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
-				setItems((items) => [...items, item])
-				return r
-			})
-			return true
+			const data = await addVariantToPlaylist(packGuid, guid).then(
+				async (r) => {
+					if (!r) return false
+					const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
+					setItems((items) => [...items, item])
+					return item
+				}
+			)
+			return data
 		} catch (e) {
 			console.log(e)
 			return false

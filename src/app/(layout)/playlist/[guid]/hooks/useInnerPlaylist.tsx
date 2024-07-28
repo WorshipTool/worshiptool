@@ -1,3 +1,4 @@
+import { VariantPackGuid } from '@/api/dtos'
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
 import {
 	PlaylistGuid,
@@ -208,6 +209,14 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems(newItems)
 	}
 
+	const addItem = async (packGuid: VariantPackGuid) => {
+		const item = await playlist.addVariant(packGuid)
+		if (!item) return
+
+		const newItems = [...state.items, item].sort((a, b) => a.order - b.order)
+		setItems(newItems)
+	}
+
 	return {
 		items,
 		title,
@@ -227,5 +236,6 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems,
 		setItemKeyChord,
 		removeItem,
+		addItem,
 	}
 }

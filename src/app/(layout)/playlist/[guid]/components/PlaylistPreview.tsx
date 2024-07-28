@@ -22,6 +22,7 @@ export default function PlaylistPreview() {
 			<Box display={'flex'} flexDirection={'row'} position={'relative'}>
 				<LeftPanel />
 				<MiddlePanel />
+				{/* <RightPanel /> */}
 			</Box>
 		</Box>
 	)

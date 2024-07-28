@@ -1,22 +1,13 @@
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { LoadingButton } from '@mui/lab'
-import {
-	Box,
-	Divider,
-	Skeleton,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material'
+import { Box, Divider, Skeleton, Typography, styled } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useState } from 'react'
 import { SongVariantDto } from '../../../../../../api/dtos'
 import { Button } from '../../../../../../common/ui/Button'
 import { Link } from '../../../../../../common/ui/Link/CustomLink'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import useCurrentPlaylist from '../../../../../../hooks/playlist/useCurrentPlaylist'
-import Playlist from '../../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../../routes'
-import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../tech/ApiState'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -40,16 +31,14 @@ const StyledBox = styled(Typography)(({ theme }) => ({
 interface SearchItemProps {
 	variant: SongVariantDto
 	onClick?: (variant: SongVariantDto) => void
-	playlist: Playlist
 }
 export default function SearchItem({
 	variant,
 	onClick: onClickCallback,
-	playlist,
 }: SearchItemProps) {
 	const [bottomPanelOpen, setBottomPanelOpen] = useState(false)
 
-	// const { addVariant, items } = useInnerPlaylist()
+	const { addItem } = useInnerPlaylist()
 
 	const sheet = new Sheet(variant.sheetData)
 
@@ -58,27 +47,18 @@ export default function SearchItem({
 		apiState: { loading },
 	} = useApiState()
 
-	const { turnOn } = useCurrentPlaylist()
 	const onSongClick = () => {
 		onClickCallback?.(variant)
 		setBottomPanelOpen(true)
 	}
 
 	const addToPlaylist = async () => {
-		fetchApiState(
-			async () => {
-				// return await addVariant(variant.packGuid)
-			},
-			() => {
-				turnOn(playlist.guid)
-			}
-		)
+		fetchApiState(async () => {
+			return await addItem(variant.packGuid)
+		})
 	}
 
-	const navigate = useSmartNavigate()
-
 	const { user } = useAuth()
-	const theme = useTheme()
 
 	const variantParams = {
 		...parseVariantAlias(variant.packAlias),

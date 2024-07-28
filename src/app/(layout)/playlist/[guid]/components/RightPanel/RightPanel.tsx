@@ -1,3 +1,4 @@
+import PlaylistSearchList from '@/app/(layout)/playlist/[guid]/components/RightPanel/PlaylistSearchList'
 import { Box, Typography, styled, useTheme } from '@mui/material'
 import { useMemo, useState } from 'react'
 import SongSearch from '../../../../../../common/components/songLists/SongSearch/SongSearch'
@@ -12,7 +13,7 @@ import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 const Container = styled(Box)(({ theme }) => ({
 	width: 300,
 	// position:"relative",
-	height: 'calc(100vh - 56px)',
+	height: 'calc(100vh - 133px)',
 	// top:56,
 	overflowY: 'auto',
 	boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
@@ -21,7 +22,10 @@ const Container = styled(Box)(({ theme }) => ({
 	pointerEvents: 'auto',
 
 	position: 'sticky',
-	top: 56,
+	top: 133,
+	[theme.breakpoints.down('lg')]: {
+		display: 'none',
+	},
 }))
 
 interface RightPanelProps {}
@@ -87,20 +91,10 @@ export default function RightPanel({}: RightPanelProps) {
 										)}
 										<Typography fontWeight={900}>Nějaké návrhy:</Typography>
 										<Gap value={0.5} />
-										{/* <PlaylistSearchList
-											variants={ideaArr}
-											playlist={playlist as Playlist}
-										/> */}
-										Tady neco bylo
+										<PlaylistSearchList variants={ideaArr} />
 									</>
 								)
-							return (
-								<>Tady neco bylo</>
-								// <PlaylistSearchList
-								// 	variants={filtered}
-								// 	playlist={playlist as Playlist}
-								// />
-							)
+							return <PlaylistSearchList variants={filtered} />
 						}}
 					/>
 
