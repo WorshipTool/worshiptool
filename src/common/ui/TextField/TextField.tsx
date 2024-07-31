@@ -1,5 +1,8 @@
 import { InputBase, SxProps } from '@mui/material'
 
+// Get props of input element
+type TextFieldType = 'text' | 'password' | 'email'
+
 type TextFieldProps = {
 	value?: string
 	startValue?: string
@@ -7,6 +10,7 @@ type TextFieldProps = {
 	placeholder?: string
 	sx?: SxProps<{}>
 	className?: string
+	type?: TextFieldType
 }
 
 export default function TextField({
@@ -24,6 +28,8 @@ export default function TextField({
 			onChange={onChangeHandler}
 			className={props.className}
 			sx={props.sx}
+			type={props.type}
+			fullWidth
 		/>
 	)
 }

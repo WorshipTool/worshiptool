@@ -1,7 +1,7 @@
 import { AutoMode, FiberManualRecord, Numbers } from '@mui/icons-material'
 import { IconButton, Tooltip } from '@mui/material'
 import { useEffect, useState } from 'react'
-import Card from '../../../../../../common/ui/Card/Card'
+import { Card } from '../../../../../../common/ui/Card/Card'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 

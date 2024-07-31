@@ -6,10 +6,18 @@ import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { jwtDecode } from 'jwt-decode'
 import { useCookies } from 'next-client-cookies'
 import { useSnackbar } from 'notistack'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react'
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
 import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
 import { ROLES, UserDto } from '../../interfaces/user'
+import { handleApiCall } from '../../tech/handleApiCall'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	login: async () => {},
@@ -26,6 +34,7 @@ export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 		isJsonMime: () => true,
 	},
 	checkIfCookieExists: () => false,
+	changePassword: async (oldPassword: string, newPassword: string) => {},
 })
 
 export const AuthProvider = ({ children }: { children: any }) => {
@@ -187,6 +196,16 @@ export function useProvideAuth() {
 		return _getCookie() !== undefined
 	}
 
+	const changePassword = useCallback(
+		async (oldPassword: string, newPassword: string) => {
+			if (!user) return
+			await handleApiCall(
+				authApi.authControllerChangePassword({ newPassword, oldPassword })
+			)
+		},
+		[authApi, user]
+	)
+
 	return {
 		login,
 		logout,
@@ -200,5 +219,6 @@ export function useProvideAuth() {
 		loading,
 		apiConfiguration,
 		checkIfCookieExists,
+		changePassword,
 	}
 }

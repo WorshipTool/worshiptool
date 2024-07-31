@@ -1,5 +1,5 @@
 'use client'
-import Card from '@/common/ui/Card/Card'
+import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { handleApiCall } from '@/tech/handleApiCall'

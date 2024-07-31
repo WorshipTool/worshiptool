@@ -1,7 +1,7 @@
 import LeftPanel from '@/app/(layout)/playlist/[guid]/components/LeftPanel/LeftPanel'
 import MiddlePanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/MiddlePanel'
 import TopPlaylistPanel from '@/app/(layout)/playlist/[guid]/components/TopPanel/TopPlaylistPanel'
-import Card from '@/common/ui/Card/Card'
+import { Card } from '@/common/ui/Card/Card'
 import { Info } from '@mui/icons-material'
 import { Box } from '@mui/material'
 
