@@ -47,7 +47,7 @@ export default function Login() {
 	const theme = useTheme()
 	const navigate = useSmartNavigate()
 
-	const { login, checkIfCookieExists, logout } = useAuth()
+	const { login, checkIfCookieExists, logout, generateResetToken } = useAuth()
 	const params = useSmartParams('login')
 
 	useEffect(() => {
@@ -119,6 +119,10 @@ export default function Login() {
 				navigate('home', {})
 			}
 		})
+	}
+
+	const resetPassword = async () => {
+		navigate('resetPassword', {})
 	}
 
 	return (
@@ -193,42 +197,28 @@ export default function Login() {
 							disabled={inProgress}
 							type="password"
 						/>
+						<Box
+							display={'flex'}
+							flexDirection={'row'}
+							alignItems={'center'}
+							justifyContent={'start'}
+						>
+							<Button
+								size={'small'}
+								variant="text"
+								color="grey.600"
+								onClick={resetPassword}
+							>
+								Zapomněli jste heslo?
+							</Button>
+						</Box>
 						<Gap />
-						<Box display={'flex'}>
-							<Button type="submit" loading={inProgress} variant="text">
+						<Box>
+							<Button type="submit" loading={inProgress} variant="contained">
 								Přihlásit se
 							</Button>
 						</Box>
 					</form>
-					{/* <TextField
-						size="small"
-						fullWidth
-						value={email}
-						onChange={onEmailChange}
-						error={!isEmailOk}
-						helperText={emailMessage}
-						disabled={inProgress}
-						type="email"
-					/>
-					<Gap />
-					<Typography variant="subtitle2">Heslo</Typography>
-					<TextField
-						size="small"
-						fullWidth
-						value={password}
-						onChange={onPasswordChange}
-						error={!isPasswordOk}
-						helperText={passwordMessage}
-						disabled={inProgress}
-						type="password"
-					/>
-					<Gap />
-
-					<Box display={'flex'}>
-						<Button onClick={onLoginClick} loading={inProgress} variant="text">
-							Přihlásit se
-						</Button>
-					</Box> */}
 
 					<Box
 						display={'flex'}

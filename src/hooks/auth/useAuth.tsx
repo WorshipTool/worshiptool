@@ -35,6 +35,8 @@ export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	},
 	checkIfCookieExists: () => false,
 	changePassword: async (oldPassword: string, newPassword: string) => {},
+	resetPassword: async (resetToken: string, newPassword: string) => {},
+	generateResetToken: async (email: string) => '',
 })
 
 export const AuthProvider = ({ children }: { children: any }) => {
@@ -206,6 +208,25 @@ export function useProvideAuth() {
 		[authApi, user]
 	)
 
+	const resetPassword = useCallback(
+		async (resetToken: string, newPassword: string) => {
+			await handleApiCall(
+				authApi.authControllerResetPassword({ resetToken, newPassword })
+			)
+		},
+		[authApi]
+	)
+
+	const generateResetToken = useCallback(
+		async (email: string) => {
+			const result = await handleApiCall(
+				authApi.authControllerGetResetToken(email)
+			)
+			return result
+		},
+		[authApi]
+	)
+
 	return {
 		login,
 		logout,
@@ -220,5 +241,7 @@ export function useProvideAuth() {
 		apiConfiguration,
 		checkIfCookieExists,
 		changePassword,
+		resetPassword,
+		generateResetToken,
 	}
 }

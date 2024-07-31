@@ -119,6 +119,8 @@ export const routesPaths = {
 	login: '/prihlaseni',
 	signup: '/registrace',
 	account: '/ucet',
+	resetPassword: '/reset-hesla',
+	resetPasswordToken: '/reset-hesla/[token]',
 	usersPlaylists: '/ucet/playlisty',
 	usersSongs: '/ucet/pisne',
 	songsList: '/seznam',
@@ -134,7 +136,7 @@ if (!testTypes) console.log('This checks routes types', testTypes)
 // examples of searchParams, only, string and numbers allowed
 export const routesSearchParams = {
 	login: {
-		previousPage: 'string',
+		previousPage: 'string' as keyof typeof routesPaths,
 		message: 'string',
 	},
 	uploadParse: {

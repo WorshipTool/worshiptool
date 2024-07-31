@@ -21,6 +21,8 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/playlist/[guid]/prezentace", { "guid": string }>
     | StaticRoute<"/prihlaseni">
     | StaticRoute<"/registrace">
+    | DynamicRoute<"/reset-hesla/[token]", { "token": string }>
+    | StaticRoute<"/reset-hesla">
     | StaticRoute<"/seznam">
     | DynamicRoute<"/skupina/[groupCode]/nastaveni", { "groupCode": string }>
     | DynamicRoute<"/skupina/[groupCode]", { "groupCode": string }>
