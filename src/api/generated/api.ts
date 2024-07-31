@@ -2781,42 +2781,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGenerateResetToken: async (email: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'email' is not null or undefined
-            assertParamExists('authControllerGenerateResetToken', 'email', email)
-            const localVarPath = `/auth/reset-token`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (email !== undefined) {
-                localVarQueryParameter['email'] = email;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} email 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         authControllerGetUserGuidFromEmail: async (email: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'email' is not null or undefined
             assertParamExists('authControllerGetUserGuidFromEmail', 'email', email)
@@ -2992,6 +2956,42 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * 
+         * @param {string} email 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerSendResetToken: async (email: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'email' is not null or undefined
+            assertParamExists('authControllerSendResetToken', 'email', email)
+            const localVarPath = `/auth/send-reset-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (email !== undefined) {
+                localVarQueryParameter['email'] = email;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * The function allows the user to sign up using email and password.
          * @summary Signs up the user using email and password.
          * @param {SignUpInputData} signUpInputData 
@@ -3102,18 +3102,6 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerGenerateResetToken(email: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGenerateResetToken(email, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerGenerateResetToken']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} email 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         async authControllerGetUserGuidFromEmail(email: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetUserGuidFromEmail(email, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -3167,6 +3155,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerResetPassword(resetPasswordInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerResetPassword']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} email 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerSendResetToken(email: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerSendResetToken(email, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerSendResetToken']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3228,15 +3228,6 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGenerateResetToken(email: string, options?: any): AxiosPromise<string> {
-            return localVarFp.authControllerGenerateResetToken(email, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} email 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         authControllerGetUserGuidFromEmail(email: string, options?: any): AxiosPromise<string> {
             return localVarFp.authControllerGetUserGuidFromEmail(email, options).then((request) => request(axios, basePath));
         },
@@ -3276,6 +3267,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         authControllerResetPassword(resetPasswordInDto: ResetPasswordInDto, options?: any): AxiosPromise<void> {
             return localVarFp.authControllerResetPassword(resetPasswordInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} email 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerSendResetToken(email: string, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerSendResetToken(email, options).then((request) => request(axios, basePath));
         },
         /**
          * The function allows the user to sign up using email and password.
@@ -3335,17 +3335,6 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerGenerateResetToken(email: string, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerGenerateResetToken(email, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} email 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthApi
-     */
     public authControllerGetUserGuidFromEmail(email: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerGetUserGuidFromEmail(email, options).then((request) => request(this.axios, this.basePath));
     }
@@ -3393,6 +3382,17 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerResetPassword(resetPasswordInDto: ResetPasswordInDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerResetPassword(resetPasswordInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} email 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerSendResetToken(email: string, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerSendResetToken(email, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

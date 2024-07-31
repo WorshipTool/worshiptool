@@ -136,7 +136,7 @@ if (!testTypes) console.log('This checks routes types', testTypes)
 // examples of searchParams, only, string and numbers allowed
 export const routesSearchParams = {
 	login: {
-		previousPage: 'string' as keyof typeof routesPaths,
+		previousPage: 'string',
 		message: 'string',
 	},
 	uploadParse: {

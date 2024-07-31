@@ -47,7 +47,7 @@ export default function Login() {
 	const theme = useTheme()
 	const navigate = useSmartNavigate()
 
-	const { login, checkIfCookieExists, logout, generateResetToken } = useAuth()
+	const { login, checkIfCookieExists, logout } = useAuth()
 	const params = useSmartParams('login')
 
 	useEffect(() => {
@@ -109,7 +109,12 @@ export default function Login() {
 			}
 
 			if (params?.previousPage) {
-				navigate(params.previousPage, {})
+				navigate(
+					{
+						url: params.previousPage,
+					},
+					{}
+				)
 			} else {
 				navigate('home', {})
 			}

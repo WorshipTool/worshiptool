@@ -4,6 +4,7 @@ import { Card } from '@/common/ui/Card/Card'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import useAuth from '@/hooks/auth/useAuth'
+import { routesPaths } from '@/routes'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { Box } from '@mui/material'
@@ -45,7 +46,7 @@ export default function Page() {
 			reset()
 			navigate('login', {
 				message: 'Heslo bylo úspěšně nastaveno. Nyní se můžete přihlásit.',
-				previousPage: 'account',
+				previousPage: routesPaths.account,
 			})
 		} catch (e) {
 			setError('Tento link je neplatný.')

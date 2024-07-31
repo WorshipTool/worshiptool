@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/common/ui/Button'
 import { Card } from '@/common/ui/Card/Card'
+import { Gap } from '@/common/ui/Gap'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import useAuth from '@/hooks/auth/useAuth'
@@ -21,7 +22,7 @@ export default function Page() {
 
 	const { enqueueSnackbar } = useSnackbar()
 
-	const { generateResetToken } = useAuth()
+	const { sendResetLink } = useAuth()
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -32,8 +33,7 @@ export default function Page() {
 		}
 
 		try {
-			const token = await generateResetToken(email)
-			navigate('resetPasswordToken', { token })
+			await sendResetLink(email)
 
 			setDone(true)
 		} catch (e) {}
@@ -59,6 +59,10 @@ export default function Page() {
 							{error && error.length > 0 && (
 								<Typography color={'error'}>{error}</Typography>
 							)}
+							<Typography>
+								Na váš email pošleme odkaz, který vám umožní změnit heslo
+							</Typography>
+							<Gap />
 							<Box>
 								<Typography>Email</Typography>
 								<TextField
@@ -83,8 +87,7 @@ export default function Page() {
 					}}
 				>
 					<Typography>
-						Pro nastavení hesla, běžte do emailu a klikněte na vygenerovaný
-						link.
+						Nyní běžte do emailu a klikněte na vygenerovaný odkaz.
 					</Typography>
 				</Card>
 			)}

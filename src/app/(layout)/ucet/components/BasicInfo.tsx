@@ -56,14 +56,6 @@ export default function BasicInfo() {
 
 				<Typography variant="subtitle2">Email</Typography>
 				<TextField size="small" fullWidth value={info.email} disabled />
-
-				<Gap value={3} />
-				<Typography variant="caption">
-					Informace uživatele zatím nelze změnit.
-				</Typography>
-				<Typography variant="caption">
-					Na této funkcionalitě se zatím stále pracuje...
-				</Typography>
 			</Card>
 		</>
 	)
