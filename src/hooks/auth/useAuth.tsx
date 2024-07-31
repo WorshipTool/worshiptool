@@ -220,7 +220,7 @@ export function useProvideAuth() {
 	const generateResetToken = useCallback(
 		async (email: string) => {
 			const result = await handleApiCall(
-				authApi.authControllerGetResetToken(email)
+				authApi.authControllerGenerateResetToken(email)
 			)
 			return result
 		},

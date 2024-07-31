@@ -109,12 +109,7 @@ export default function Login() {
 			}
 
 			if (params?.previousPage) {
-				navigate(
-					{
-						url: params.previousPage,
-					},
-					{}
-				)
+				navigate(params.previousPage, {})
 			} else {
 				navigate('home', {})
 			}

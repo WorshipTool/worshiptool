@@ -48,7 +48,7 @@ export default function Page() {
 				previousPage: 'account',
 			})
 		} catch (e) {
-			setError('Omlouváme se, ale tento link je neplatný.')
+			setError('Tento link je neplatný.')
 		}
 	}
 

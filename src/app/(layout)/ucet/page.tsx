@@ -14,11 +14,11 @@ export default function Account() {
 	useEffect(() => {
 		if (!isLoggedIn()) {
 			navigate('login', {
-				previousPage: window.location.pathname,
+				previousPage: 'account',
 				message: 'Pro zobrazeni účtu se musíte přihlásit.',
 			})
 		}
-	}, [isLoggedIn])
+	}, [isLoggedIn()])
 
 	const theme = useTheme()
 

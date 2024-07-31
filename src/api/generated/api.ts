@@ -2392,6 +2392,12 @@ export interface User {
      * @memberof User
      */
     'tokens': Array<UserToken>;
+    /**
+     * 
+     * @type {Array<UserToken>}
+     * @memberof User
+     */
+    'resetTokens': Array<UserToken>;
 }
 
 export const UserLoginTypeEnum = {
@@ -2775,9 +2781,9 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetResetToken: async (email: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        authControllerGenerateResetToken: async (email: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'email' is not null or undefined
-            assertParamExists('authControllerGetResetToken', 'email', email)
+            assertParamExists('authControllerGenerateResetToken', 'email', email)
             const localVarPath = `/auth/reset-token`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3096,10 +3102,10 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerGetResetToken(email: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetResetToken(email, options);
+        async authControllerGenerateResetToken(email: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGenerateResetToken(email, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerGetResetToken']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerGenerateResetToken']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3222,8 +3228,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetResetToken(email: string, options?: any): AxiosPromise<string> {
-            return localVarFp.authControllerGetResetToken(email, options).then((request) => request(axios, basePath));
+        authControllerGenerateResetToken(email: string, options?: any): AxiosPromise<string> {
+            return localVarFp.authControllerGenerateResetToken(email, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3329,8 +3335,8 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerGetResetToken(email: string, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerGetResetToken(email, options).then((request) => request(this.axios, this.basePath));
+    public authControllerGenerateResetToken(email: string, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerGenerateResetToken(email, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
