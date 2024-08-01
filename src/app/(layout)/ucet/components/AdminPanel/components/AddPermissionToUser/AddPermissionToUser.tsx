@@ -1,7 +1,7 @@
 import { SupervisedUserCircle } from '@mui/icons-material'
 import { Step, Stepper } from '@mui/material'
 import React from 'react'
-import { Card } from '../../../../../../../common/ui/Card/Card'
+import Card from '../../../../../../../common/ui/Card/Card'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 

@@ -9,14 +9,13 @@ import { Box, IconButton } from '@mui/material'
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
-import SlideCard from '@/app/(layout)/playlist/[guid]/prezentace/components/SlideCard'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
+import SlideCard from './components/SlideCard'
 
 export default function PlaylistCards() {
-	const { guid } = useParams() as { guid: PlaylistGuid }
+	const { guid }: { guid: string } = useParams()
 	const { items, playlist } = usePlaylist(guid)
 
 	const [currentIndex, setCurrentIndex] = useState(0)

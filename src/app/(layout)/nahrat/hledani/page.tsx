@@ -1,6 +1,6 @@
 'use client'
-import { CreatedType } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { CloudUpload } from '@mui/icons-material'
 import {
 	Box,

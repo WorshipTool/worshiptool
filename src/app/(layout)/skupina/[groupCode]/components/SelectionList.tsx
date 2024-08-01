@@ -1,4 +1,3 @@
-import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { Search } from '@mui/icons-material'
 import {
 	Box,
@@ -8,14 +7,15 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SongListCards from '../../../../../common/components/songLists/SongListCards/SongListCards'
+import OnChangeDelayer from '../../../../../common/providers/ChangeDelayer/ChangeDelayer'
 import OnScrollComponent from '../../../../../common/providers/OnScrollComponent/OnScrollComponent'
 import { Gap } from '../../../../../common/ui/Gap'
 import SearchBar from '../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../hooks/group/useGroupSelection'
-import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../hooks/playlist/usePlaylists'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
 import normalizeSearchText from '../../../../../tech/normalizeSearchText'
 import Loading from '../loading'
@@ -24,12 +24,13 @@ import PinnedPlaylistAlternativeDisplay from './PinnedPlaylistAlternativeDisplay
 type SelectionListProps = {}
 
 export default function SelectionList(props: SelectionListProps) {
-	const { items, search, loading, searchedItems } = useGroupSelection()
+	const { items, search, reload, loading } = useGroupSelection()
 	const { name, payload } = useGroup()
-	const { getPlaylistByGuid } = usePlaylistsGeneral()
+	const { getPlaylistByGuid } = usePlaylists()
+
+	// const navigate = useSmartNavigate()
 
 	const pinnedPlaylistGuid = payload?.pinnedPlaylist
-
 	const [pinnedState] = useApiStateEffect(async () => {
 		if (!pinnedPlaylistGuid) return
 		return await getPlaylistByGuid(pinnedPlaylistGuid)
@@ -38,15 +39,12 @@ export default function SelectionList(props: SelectionListProps) {
 	const [searchString, setSearchString] = React.useState<string>('')
 	const [stillString, setStillString] = useState<string>('')
 
-	const onChange = useCallback(
-		async (searchString: string) => {
-			setStillString(searchString)
+	const onChange = async (searchString: string) => {
+		setStillString(searchString)
 
-			if (searchString === '') {
-			} else search(searchString)
-		},
-		[search]
-	)
+		if (searchString === '') reload()
+		else search(searchString)
+	}
 
 	useEffect(() => {
 		const onFocus = () => {
@@ -68,14 +66,6 @@ export default function SelectionList(props: SelectionListProps) {
 	}, [])
 
 	const theme = useTheme()
-
-	const itemsArr = useMemo(
-		() =>
-			searchedItems.length > 0 && searchString !== '' ? searchedItems : items,
-		[items, searchedItems, searchString]
-	)
-
-	useChangeDelayer(normalizeSearchText(searchString), onChange, [onChange])
 
 	return !init ? (
 		<Loading />
@@ -109,6 +99,11 @@ export default function SelectionList(props: SelectionListProps) {
 							minHeight: 'calc(100vh - 56px + 15px)',
 						}}
 					>
+						<OnChangeDelayer
+							value={normalizeSearchText(searchString)}
+							onChange={onChange}
+						/>
+
 						<Box
 							display={{
 								xs: 'block',
@@ -217,8 +212,8 @@ export default function SelectionList(props: SelectionListProps) {
 							</Box>
 						) : (
 							<>
-								<SongListCards data={itemsArr.map((v) => v.variant)} />
-								{itemsArr.length == 0 && stillString !== '' && (
+								<SongListCards data={items.map((v) => v.variant)} />
+								{items.length == 0 && stillString !== '' && (
 									<Typography>
 										{`Ve skupině ${name} nebyly nalezeny žádné písně s výrazem "
 										${stillString}"`}

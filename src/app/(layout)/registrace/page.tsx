@@ -146,66 +146,59 @@ export default function SignUp() {
 							<Gap />
 						</>
 					)}
-					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							onSignupClick()
-						}}
-					>
-						<Typography variant="subtitle2">Křestní jméno</Typography>
-						<TextField
-							size="small"
-							fullWidth
-							value={firstName}
-							onChange={onFirstNameChange}
-							error={!isFirstNameOk}
-							helperText={firstNameMessage}
-						/>
-						<Gap />
-						<Typography variant="subtitle2">Příjmení</Typography>
-						<TextField
-							size="small"
-							fullWidth
-							value={lastName}
-							onChange={onLastNameChange}
-							error={!isLastNameOk}
-							helperText={lastNameMessage}
-						/>
-						<Gap />
-						<Typography variant="subtitle2">Email</Typography>
-						<TextField
-							size="small"
-							fullWidth
-							value={email}
-							onChange={onEmailChange}
-							error={!isEmailOk}
-							helperText={emailMessage}
-							type="email"
-						/>
-						<Gap />
-						<Typography variant="subtitle2">Heslo</Typography>
-						<TextField
-							size="small"
-							fullWidth
-							value={password}
-							onChange={onPasswordChange}
-							error={!isPasswordOk}
-							helperText={passwordMessage}
-							type="password"
-						/>
-						<Gap />
+					<Typography variant="subtitle2">Křestní jméno</Typography>
+					<TextField
+						size="small"
+						fullWidth
+						value={firstName}
+						onChange={onFirstNameChange}
+						error={!isFirstNameOk}
+						helperText={firstNameMessage}
+					/>
+					<Gap />
+					<Typography variant="subtitle2">Příjmení</Typography>
+					<TextField
+						size="small"
+						fullWidth
+						value={lastName}
+						onChange={onLastNameChange}
+						error={!isLastNameOk}
+						helperText={lastNameMessage}
+					/>
+					<Gap />
+					<Typography variant="subtitle2">Email</Typography>
+					<TextField
+						size="small"
+						fullWidth
+						value={email}
+						onChange={onEmailChange}
+						error={!isEmailOk}
+						helperText={emailMessage}
+						type="email"
+					/>
+					<Gap />
+					<Typography variant="subtitle2">Heslo</Typography>
+					<TextField
+						size="small"
+						fullWidth
+						value={password}
+						onChange={onPasswordChange}
+						error={!isPasswordOk}
+						helperText={passwordMessage}
+						type="password"
+					/>
+					<Gap />
 
-						<Button type="submit">
-							Vytvořit účet
-							{inProgress && (
-								<CircularProgress
-									color={'inherit'}
-									size={16}
-									sx={{ marginLeft: 1 }}
-								/>
-							)}
-						</Button>
-					</form>
+					<Button onClick={onSignupClick}>
+						Vytvořit účet
+						{inProgress && (
+							<CircularProgress
+								color={'inherit'}
+								size={16}
+								sx={{ marginLeft: 1 }}
+							/>
+						)}
+					</Button>
 
 					<Gap value={2} />
 					<Box

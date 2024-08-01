@@ -1,5 +1,5 @@
 import { Checkbox } from '@/common/ui/Checkbox'
-import { Card } from '@/ui/Card/Card'
+import Card from '@/ui/Card/Card'
 
 export default function PrintOptionsPanel() {
 	return (

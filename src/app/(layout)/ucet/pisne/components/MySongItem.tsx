@@ -16,7 +16,7 @@ export default function MySongItem(props: MySongItemProps) {
 	}
 
 	const variantParams = {
-		...parseVariantAlias(props.variant.packAlias),
+		...parseVariantAlias(props.variant.alias),
 		title: props.variant.preferredTitle,
 	}
 

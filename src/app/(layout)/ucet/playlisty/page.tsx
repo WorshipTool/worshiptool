@@ -1,5 +1,4 @@
 'use client'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Add, Remove } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -16,7 +15,7 @@ import { useEffect, useState } from 'react'
 import Dialog from '../../../../common/ui/Dialog/Dialog'
 import { Gap } from '../../../../common/ui/Gap'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
-import usePlaylistsGeneral from '../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../hooks/playlist/usePlaylists'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiStateEffect } from '../../../../tech/ApiState'
 
@@ -33,9 +32,9 @@ const StyledContainer = styled(Paper)(({ theme }) => ({
 export default function Playlists() {
 	const {
 		getPlaylistsOfUser,
-		createPlaylist: createWithoutName,
+		createPlaylist: createWithName,
 		deletePlaylist: deleteByGuid,
-	} = usePlaylistsGeneral()
+	} = usePlaylists()
 	const [loaded, setLoaded] = useState(false)
 	const navigate = useSmartNavigate()
 
@@ -50,7 +49,7 @@ export default function Playlists() {
 
 	const [openDialog, setOpenDialog] = useState(false)
 	const [deletingTitle, setDeletingTitle] = useState('')
-	const [deletingGuid, setDeletingGuid] = useState<PlaylistGuid | null>()
+	const [deletingGuid, setDeletingGuid] = useState('')
 
 	useEffect(() => {
 		if (loaded) return
@@ -66,23 +65,23 @@ export default function Playlists() {
 
 	const createPlaylist = async () => {
 		try {
-			const result = await createWithoutName()
+			const result = await createWithName('Nový playlist ' + playlists?.length)
 			navigate('playlist', {
-				guid: result,
+				guid: result.guid,
 			})
-			turnOn(result)
+			turnOn(result.guid)
 		} catch (e: any) {
 			console.log('Something went wrong:', e.message)
 			setCreateLoading(false)
 		}
 	}
 
-	const askToDeletePlaylist = async (guid: PlaylistGuid, title: string) => {
+	const askToDeletePlaylist = async (guid: string, title: string) => {
 		setDeletingTitle(title)
 		setDeletingGuid(guid)
 		setOpenDialog(true)
 	}
-	const deletePlaylist = async (guid: PlaylistGuid) => {
+	const deletePlaylist = async (guid: string) => {
 		if (playlistGuid === guid) turnOff()
 		deleteByGuid(guid)
 			.then((result) => {
@@ -93,20 +92,14 @@ export default function Playlists() {
 			})
 	}
 
-	const openPlaylist = (guid: PlaylistGuid) => {
+	const openPlaylist = (guid: string) => {
 		navigate('playlist', {
 			guid,
 		})
 	}
 	const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist()
 
-	const ListPlaylistItem = ({
-		name,
-		guid,
-	}: {
-		name: string
-		guid: PlaylistGuid
-	}) => {
+	const ListPlaylistItem = ({ name, guid }: { name: string; guid: string }) => {
 		return (
 			<StyledContainer
 				sx={{
@@ -179,11 +172,7 @@ export default function Playlists() {
 					<>
 						{playlists?.map((p) => {
 							return (
-								<ListPlaylistItem
-									name={p.title}
-									guid={p.guid as PlaylistGuid}
-									key={p.guid}
-								/>
+								<ListPlaylistItem name={p.title} guid={p.guid} key={p.guid} />
 							)
 						})}
 
@@ -209,7 +198,7 @@ export default function Playlists() {
 						</Button>
 						<Button
 							onClick={() => {
-								if (deletingGuid) deletePlaylist(deletingGuid)
+								deletePlaylist(deletingGuid)
 								setOpenDialog(false)
 							}}
 							color="error"

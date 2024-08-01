@@ -110,10 +110,9 @@ export default function SheetAdminButtons({
 				<PublishButton variant={variant} />
 				<Divider />
 
-				{isAdmin() &&
-					variant.createdByLoader && [
+				{isAdmin() && variant.createdByLoader && (
+					<>
 						<EditButton
-							key={'edit-button'}
 							asMenuItem
 							onClick={onEditClick}
 							inEditMode={isInEditMode}
@@ -121,16 +120,12 @@ export default function SheetAdminButtons({
 							sheetData={sheet?.getOriginalSheetData() || ''}
 							title={editedTitle}
 							anyChange={anyChange}
-						/>,
-						<DeleteButton
-							reloadSong={reload}
-							variant={variant}
-							asMenuItem
-							key={'delete-button'}
-						/>,
+						/>
+						<DeleteButton reloadSong={reload} variant={variant} asMenuItem />
 
-						<Divider key={'divider'} />,
-					]}
+						<Divider />
+					</>
+				)}
 
 				<MenuItem onClick={onCopyClick}>
 					<ListItemIcon>

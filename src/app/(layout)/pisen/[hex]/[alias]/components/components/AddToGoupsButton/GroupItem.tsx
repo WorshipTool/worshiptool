@@ -1,5 +1,3 @@
-import { VariantPackGuid } from '@/api/dtos'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
 import {
 	CircularProgress,
@@ -10,7 +8,7 @@ import {
 import { useSnackbar } from 'notistack'
 import { SkeletonLoader } from '../../../../../../../../common/providers'
 import { useGroups } from '../../../../../../../../hooks/group/useGroups'
-import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
 import {
 	useApiState,
 	useApiStateEffect,
@@ -18,7 +16,7 @@ import {
 
 type GroupItemProps = {
 	groupGuid: string
-	packGuid: VariantPackGuid
+	packGuid: string
 	addable: boolean
 	removable: boolean
 }
@@ -28,13 +26,13 @@ export default function GroupItem(props: GroupItemProps) {
 		return groups.getInfoByGuid(props.groupGuid)
 	}, [props.groupGuid])
 
-	const selection = usePlaylistsGeneral()
+	const selection = usePlaylists()
 
 	const [isInState, reload] = useApiStateEffect(async () => {
 		if (!groupState.data?.selection) return false
 		return selection.isVariantInPlaylist(
-			props.packGuid,
-			groupState.data?.selection as PlaylistGuid
+			props.packGuid || '',
+			groupState.data?.selection || ''
 		)
 	}, [groupState])
 
@@ -45,10 +43,7 @@ export default function GroupItem(props: GroupItemProps) {
 	const addToSelection = () => {
 		fetchApiState(() =>
 			selection
-				.addVariantToPlaylist(
-					props.packGuid,
-					groupState.data?.selection as PlaylistGuid
-				)
+				.addVariantToPlaylist(props.packGuid, groupState.data?.selection || '')
 				.then(() => {
 					reload()
 					enqueueSnackbar('Přidáno do skupiny')
@@ -61,7 +56,7 @@ export default function GroupItem(props: GroupItemProps) {
 			selection
 				.removeVariantFromPlaylist(
 					props.packGuid,
-					groupState.data?.selection as PlaylistGuid
+					groupState.data?.selection || ''
 				)
 				.then(() => {
 					reload()

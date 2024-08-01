@@ -1,5 +1,4 @@
 'use client'
-import { routesPaths } from '@/routes'
 import { Box, useTheme } from '@mui/material'
 import { useEffect } from 'react'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -15,11 +14,11 @@ export default function Account() {
 	useEffect(() => {
 		if (!isLoggedIn()) {
 			navigate('login', {
-				previousPage: routesPaths.account,
+				previousPage: window.location.pathname,
 				message: 'Pro zobrazeni účtu se musíte přihlásit.',
 			})
 		}
-	}, [isLoggedIn()])
+	}, [isLoggedIn])
 
 	const theme = useTheme()
 

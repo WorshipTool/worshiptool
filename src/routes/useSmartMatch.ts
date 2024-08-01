@@ -22,7 +22,7 @@ const urlMatchPatterns = (pathname: string, pattern: string) => {
 }
 
 export const useSmartMatch = <T extends RoutesKeys>(location: T) => {
-	const url = usePathname() as string
+	const url = usePathname()
 	const pattern = routesPaths[location]
 
 	return urlMatchPatterns(url, pattern)

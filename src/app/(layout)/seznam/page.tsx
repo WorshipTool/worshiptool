@@ -1,5 +1,4 @@
 'use client'
-import { VariantPackAlias } from '@/api/dtos'
 import { GetListSongData } from '@/api/generated'
 import {
 	Box,
@@ -114,7 +113,7 @@ export default function List() {
 									<StyledPaper
 										onClick={() => {
 											navigate('variant', {
-												...parseVariantAlias(s.alias as VariantPackAlias),
+												...parseVariantAlias(s.alias),
 											})
 										}}
 									>

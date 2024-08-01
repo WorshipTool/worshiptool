@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import {
 	AnalyticsApi,
 	AuthApi,
@@ -16,25 +15,22 @@ import {
 import useAuth from '../auth/useAuth'
 
 export const useApi = () => {
-	const { apiConfiguration } = useAuth()
+	const { apiConfiguration, user } = useAuth()
 
-	const apis = useMemo(
-		() => ({
-			playlistGettingApi: new PlaylistGettingApi(apiConfiguration),
-			playlistEditingApi: new PlaylistEditingApi(apiConfiguration),
-			songGettingApi: new SongGettingApi(apiConfiguration),
-			songAddingApi: new SongAddingApi(apiConfiguration),
-			songEditingApi: new SongEditingApi(apiConfiguration),
-			songDeletingApi: new SongDeletingApi(apiConfiguration),
-			songPublishingApi: new SongPublishingApi(apiConfiguration),
-			songValidationApi: new SongValidationApi(apiConfiguration),
-			groupApi: new GroupApi(apiConfiguration),
-			authApi: new AuthApi(apiConfiguration),
-			permissionApi: new PermissionsApi(apiConfiguration),
-			analyticsApi: new AnalyticsApi(apiConfiguration),
-		}),
-		[apiConfiguration]
-	)
+	const apis = {
+		playlistGettingApi: new PlaylistGettingApi(apiConfiguration),
+		playlistEditingApi: new PlaylistEditingApi(apiConfiguration),
+		songGettingApi: new SongGettingApi(apiConfiguration),
+		songAddingApi: new SongAddingApi(apiConfiguration),
+		songEditingApi: new SongEditingApi(apiConfiguration),
+		songDeletingApi: new SongDeletingApi(apiConfiguration),
+		songPublishingApi: new SongPublishingApi(apiConfiguration),
+		songValidationApi: new SongValidationApi(apiConfiguration),
+		groupApi: new GroupApi(apiConfiguration),
+		authApi: new AuthApi(apiConfiguration),
+		permissionApi: new PermissionsApi(apiConfiguration),
+		analyticsApi: new AnalyticsApi(apiConfiguration),
+	}
 
 	return apis
 }

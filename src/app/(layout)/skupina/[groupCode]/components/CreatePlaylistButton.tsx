@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from '@mui/material'
 import useCurrentPlaylist from '../../../../../hooks/playlist/useCurrentPlaylist'
-import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../hooks/playlist/usePlaylists'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
 
 const Container = styled(Box)(({ theme }) => ({
@@ -21,13 +21,14 @@ const Container = styled(Box)(({ theme }) => ({
 }))
 
 export default function CreatePlaylistButton() {
-	const { createPlaylist } = usePlaylistsGeneral()
+	const { createPlaylist } = usePlaylists()
 	const { turnOn } = useCurrentPlaylist()
 
 	const navigate = useSmartNavigate()
 
 	const onClick = () => {
-		createPlaylist().then((guid) => {
+		createPlaylist().then((r) => {
+			const guid = r.guid
 			turnOn(guid)
 			navigate('playlist', { guid })
 		})

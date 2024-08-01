@@ -1,1 +1,1 @@
-export * from './Card'
+export * as Card from "./Card";

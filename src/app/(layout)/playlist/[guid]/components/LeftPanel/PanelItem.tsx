@@ -1,7 +1,15 @@
-import { Box, Skeleton, Typography, styled } from '@mui/material'
-import { useMemo } from 'react'
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import {
+	Box,
+	CircularProgress,
+	IconButton,
+	Skeleton,
+	Typography,
+	styled,
+} from '@mui/material'
+import React from 'react'
 import { Link } from '../../../../../../common/ui/Link/CustomLink'
-import { PlaylistItemGuid } from '../../../../../../interfaces/playlist/playlist.types'
+import { PlaylistItemDTO } from '../../../../../../interfaces/playlist/PlaylistDTO'
 import { parseVariantAlias } from '../../../../../../routes'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
 
@@ -31,32 +39,40 @@ const StyledPanelButton = styled(Typography)(({ theme }) => ({
 }))
 
 interface PanelItemProps {
-	itemGuid: PlaylistItemGuid
-	itemIndex: number
+	item: PlaylistItemDTO
+	onClick: () => void
+	setMoving?: (moving: boolean) => void
+	moving?: boolean
 }
 
-export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
-	const { loading, items } = useInnerPlaylist()
+export default function PanelItem({
+	item,
+	onClick,
+	setMoving: sm,
+	moving: someIsMoving,
+}: PanelItemProps) {
+	const { loading, items, reorder, isOwner } = useInnerPlaylist()
 
-	const item = useMemo(() => {
-		return items.find((i) => i.guid === itemGuid)!
-	}, [items, itemGuid])
+	const [moving, setMoving] = React.useState(false)
 
-	const onPanelItemClickCall = (guid: string) => {
-		const el = document.getElementById('playlistItem_' + guid)
-		el?.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start',
+	const move = (offset: number) => {
+		setMoving(true)
+		sm?.(true)
+		const itemToSwap = items[items.indexOf(item) + offset]
+		reorder([
+			{ guid: item.guid, order: itemToSwap.order },
+			{ guid: itemToSwap.guid, order: item.order },
+		]).then(() => {
+			setMoving(false)
+			sm?.(false)
 		})
 	}
 
-	return !item ? (
-		<></>
-	) : (
+	return (
 		<Link
 			to="variant"
 			params={{
-				...parseVariantAlias(item.variant.packAlias),
+				...parseVariantAlias(item.variant.alias),
 			}}
 			onlyWithShift
 		>
@@ -70,9 +86,9 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 							}}
 							fontWeight={900}
 						>
-							{itemIndex + 1}.
+							{item.order + 1}.
 						</Typography>
-						<StyledPanelButton onClick={() => onPanelItemClickCall(item.guid)}>
+						<StyledPanelButton onClick={onClick}>
 							{item.variant.preferredTitle}
 						</StyledPanelButton>
 					</>
@@ -84,6 +100,45 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 						key={'skelet' + item.guid}
 					></Skeleton>
 				)}
+
+				<Box display={'flex'} flexDirection={'row'} height={35}>
+					{moving ? (
+						<IconButton>
+							<CircularProgress color="inherit" size={'1rem'} />
+						</IconButton>
+					) : (
+						<>
+							{someIsMoving || !isOwner ? (
+								<></>
+							) : (
+								<>
+									{items.indexOf(item) != 0 && (
+										<IconButton
+											onClick={() => {
+												move(-1)
+											}}
+											size="small"
+										>
+											<KeyboardArrowUp />
+										</IconButton>
+									)}
+									{items.indexOf(item) + 1 != items.length ? (
+										<IconButton
+											onClick={() => {
+												move(1)
+											}}
+											size="small"
+										>
+											<KeyboardArrowDown />
+										</IconButton>
+									) : (
+										<Box width={35}></Box>
+									)}
+								</>
+							)}
+						</>
+					)}
+				</Box>
 			</PanelItemContainer>
 		</Link>
 	)

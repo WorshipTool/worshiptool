@@ -1,9 +1,8 @@
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { PushPin } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Box, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Card } from '../../../../../../../common/ui/Card/Card'
+import Card from '../../../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../../../common/ui/Gap'
 import useGroup from '../../../../../../../hooks/group/useGroup'
 import { routesPaths } from '../../../../../../../routes'
@@ -13,8 +12,9 @@ import PinnedPlaylist from './PinnedPlaylist'
 export default function PinPlaylistPanel() {
 	const { payload, setPayload } = useGroup()
 
-	const [pinnedPlaylist, setPinnedPlaylist] =
-		React.useState<PlaylistGuid | null>(payload.pinnedPlaylist || null)
+	const [pinnedPlaylist, setPinnedPlaylist] = React.useState<string | null>(
+		payload.pinnedPlaylist || null
+	)
 
 	useEffect(() => {
 		setPinnedPlaylist(payload.pinnedPlaylist || null)
@@ -30,7 +30,7 @@ export default function PinPlaylistPanel() {
 	const onPinClick = () => {
 		// setChoosing(false);
 		const params = getParamsFromUrl(value, routesPaths.playlist)
-		const playlistGuid = params.guid as PlaylistGuid | null
+		const playlistGuid = params.guid
 
 		if (!playlistGuid) {
 			setError('Neplatná url playlistu.')

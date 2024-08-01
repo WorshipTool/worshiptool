@@ -6,7 +6,7 @@ Tato webová aplikace vznikla jako pomůcka pro vedoucí chval. V současné dob
 
 Stránka obsahuje databázi křesťanských chval, umožňuje snadné vyhledávání a rychlé tvoření playlistů.
 
-> **V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na chvalotce@chvalotce.cz**
+> **V případě nalezení jakékoliv chyby, přípomínky, dotazu nebo i nějakého nápadu napište prosím na pe.pavlin@gmail.com**
 
 ## Nepřihlášený uživatel
 

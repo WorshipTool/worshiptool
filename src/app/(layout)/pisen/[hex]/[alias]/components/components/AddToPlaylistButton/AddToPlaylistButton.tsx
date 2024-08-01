@@ -1,4 +1,3 @@
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import {
 	KeyboardArrowDown,
 	MoreHoriz,
@@ -21,7 +20,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
-import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
 import { useApiStateEffect } from '../../../../../../../../tech/ApiState'
 import PlaylistMenuItem from './PlaylistMenuItem'
 
@@ -54,7 +53,7 @@ export default function AddToPlaylistButton({
 		setAnchorEl(null)
 	}
 
-	const { getPlaylistsOfUser, isVariantInPlaylist } = usePlaylistsGeneral()
+	const { getPlaylistsOfUser, isVariantInPlaylist } = usePlaylists()
 	const [{ data: playlists, loading }] = useApiStateEffect(() => {
 		return getPlaylistsOfUser().then((r) => {
 			return r.playlists
@@ -101,48 +100,55 @@ export default function AddToPlaylistButton({
 				}}
 			>
 				{loading ? (
-					<MenuItem disabled key={'loading-aoihh'}>
-						<ListItemIcon>
-							<CircularProgress size={`1rem`} color="inherit" />
-						</ListItemIcon>
-						<ListItemText>Načítání...</ListItemText>
-					</MenuItem>
-				) : (
-					playlists?.length === 0 && (
-						<MenuItem disabled key={'no-playlists-title-aflkj'}>
-							<ListItemText>Nemáte žádné playlisty</ListItemText>
+					<>
+						<MenuItem disabled>
+							<ListItemIcon>
+								<CircularProgress size={`1rem`} color="inherit" />
+							</ListItemIcon>
+							<ListItemText>Načítání...</ListItemText>
 						</MenuItem>
-					)
+					</>
+				) : (
+					<>
+						{playlists?.length === 0 && (
+							<>
+								<MenuItem disabled>
+									<ListItemText>Nemáte žádné playlisty</ListItemText>
+								</MenuItem>
+							</>
+						)}
+					</>
 				)}
 				{playlists?.slice(0, maxItems).map((p, i) => {
 					return (
 						<PlaylistMenuItem
 							key={p.guid}
-							guid={p.guid as PlaylistGuid}
+							guid={p.guid}
 							title={p.title}
 							variant={variant}
 						/>
 					)
 				})}
-				{playlists &&
-					playlists.length > maxItems && [
+
+				{playlists && playlists.length > maxItems && (
+					<>
 						<div
-							key={'div-with-divider'}
 							style={{
 								paddingTop: theme.spacing(1),
 								paddingBottom: theme.spacing(1),
 							}}
 						>
 							<Divider />
-						</div>,
+						</div>
 
-						<MenuItem onClick={() => setOpenDialog(true)} key={'more-titel'}>
+						<MenuItem onClick={() => setOpenDialog(true)}>
 							<ListItemIcon>
 								<MoreHoriz fontSize="small" />
 							</ListItemIcon>
 							<ListItemText>Další</ListItemText>
-						</MenuItem>,
-					]}
+						</MenuItem>
+					</>
+				)}
 			</Menu>
 			<Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
 				<DialogTitle>Přidat do playlistu</DialogTitle>
@@ -152,7 +158,7 @@ export default function AddToPlaylistButton({
 							return (
 								<PlaylistMenuItem
 									key={p.guid}
-									guid={p.guid as PlaylistGuid}
+									guid={p.guid}
 									title={p.title}
 									variant={variant}
 								/>

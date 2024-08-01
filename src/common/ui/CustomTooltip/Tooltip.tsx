@@ -3,9 +3,7 @@ import React, { ReactElement } from 'react'
 
 type CustomTooltipProps = {
 	children?: ReactElement
-	label?: string
-	title?: string
-} & Omit<TooltipProps, 'title'>
+} & TooltipProps
 
 const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
 	return (
@@ -17,7 +15,7 @@ const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
 
 export default function Tooltip(props: CustomTooltipProps) {
 	return (
-		<Tltp {...props} title={props.title || props.label}>
+		<Tltp {...props}>
 			<MyComponent>{props.children}</MyComponent>
 		</Tltp>
 	)

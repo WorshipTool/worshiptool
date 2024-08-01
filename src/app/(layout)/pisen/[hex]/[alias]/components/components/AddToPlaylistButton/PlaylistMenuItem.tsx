@@ -1,4 +1,3 @@
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, Launch, PlaylistAdd } from '@mui/icons-material'
 import {
 	Box,
@@ -12,11 +11,11 @@ import React, { useEffect } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import { Gap } from '../../../../../../../../common/ui/Gap'
 import { Link } from '../../../../../../../../common/ui/Link/CustomLink'
-import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../../../../hooks/playlist/usePlaylists'
 
 interface PlaylistMenuItemProps {
 	variant: SongVariantDto
-	guid: PlaylistGuid
+	guid: string
 	title: string
 }
 
@@ -28,8 +27,8 @@ export default function PlaylistMenuItem({
 	const {
 		addVariantToPlaylist: addToPlaylist,
 		removeVariantFromPlaylist: removeFromPlaylist,
-	} = usePlaylistsGeneral()
-	const { isVariantInPlaylist } = usePlaylistsGeneral()
+	} = usePlaylists()
+	const { isVariantInPlaylist } = usePlaylists()
 
 	const [loading, setLoading] = React.useState(true)
 	const [isInPlaylist, setIsInPlaylist] = React.useState<boolean>(false)
@@ -47,7 +46,7 @@ export default function PlaylistMenuItem({
 		}
 	}, [variant])
 
-	const addVariantToPlaylist = (playlistGuid: PlaylistGuid) => {
+	const addVariantToPlaylist = (playlistGuid: string) => {
 		setLoading(true)
 
 		try {
@@ -60,7 +59,7 @@ export default function PlaylistMenuItem({
 		}
 	}
 
-	const removeVariantFromPlaylist = (playlistGuid: PlaylistGuid) => {
+	const removeVariantFromPlaylist = (playlistGuid: string) => {
 		setLoading(true)
 
 		try {

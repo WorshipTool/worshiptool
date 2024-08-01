@@ -1,7 +1,7 @@
 import { Info } from '@mui/icons-material'
 import { createStory } from '../../../app/(layout)/storybook/createStory'
 import { Typography } from '../Typography/Typography'
-import { Card } from './Card'
+import Card from './Card'
 
 const CardStory = () => {
 	return (

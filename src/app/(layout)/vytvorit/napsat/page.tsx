@@ -1,6 +1,6 @@
 'use client'
-import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import {
 	Box,
 	Button,
@@ -80,7 +80,7 @@ export default function Create() {
 				)
 			},
 			(result) => {
-				const a = parseVariantAlias(result.alias as VariantPackAlias)
+				const a = parseVariantAlias(result.alias)
 				navigate(
 					'variant',
 					{

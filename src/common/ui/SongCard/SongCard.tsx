@@ -1,8 +1,7 @@
 'use client'
 
 import { Lock, Public } from '@mui/icons-material'
-import { Box, Typography, styled, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { Box, styled, Typography, useTheme } from '@mui/material'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { parseVariantAlias } from '../../../routes'
@@ -39,7 +38,7 @@ type SongCardProps = {
 	publicityMode?: PublicityMode
 	flexibleHeght?: boolean
 }
-export const SongCard = memo(function S({
+export function SongCard({
 	data,
 	publicityMode,
 	flexibleHeght = true,
@@ -84,7 +83,7 @@ export const SongCard = memo(function S({
 		<Link
 			to={'variant'}
 			params={{
-				...parseVariantAlias(data.packAlias),
+				...parseVariantAlias(data.alias),
 			}}
 		>
 			<StyledContainer
@@ -124,7 +123,7 @@ export const SongCard = memo(function S({
 				<StyledBox>
 					{dataLines.map((line, index) => {
 						return (
-							<Box display={'flex'} flexDirection={'row'} key={line + index}>
+							<Box display={'flex'} flexDirection={'row'} key={line}>
 								<Typography noWrap key={'SearchItemText' + index} flex={1}>
 									{line}
 								</Typography>
@@ -148,4 +147,4 @@ export const SongCard = memo(function S({
 			</StyledContainer>
 		</Link>
 	)
-})
+}

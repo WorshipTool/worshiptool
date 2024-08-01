@@ -1,9 +1,7 @@
 # Pokyny k otestovaní před nasazením
-
 Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. Kromě nevyřešených a nevychytaných chyb, se při aktulizaci aplikace nesmí ztratit žádná data.
 
 ## Domácí stránka
-
 - vrací výsledky i pro řetězec délky 1
 - vyhledá píseň podle názvu
 - vyhledá píseň podle obsahu
@@ -14,7 +12,6 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - po úpravě písně, lze při vyhledání vidět jen nejnovější verzi
 
 ## Stránka písně
-
 - transpozice
 - tisk
 - nelze upravovat, kdyz neni uzivatel prihlasen, nebo je to cizi pisen
@@ -26,46 +23,34 @@ Pro správné fungování aplikace je třeba vždy aplikaci řádně otestovat. 
 - vygenerování nového url při velké změně jména
 - rezponzivnost
 - lze smazat neveřejnou písen, veřejnou nelze
+  
 
 ## Vytvořit píseň
-
 - Přidání ručně psané písně
 - Při ručním psaní písně kontrola validity
 - Pokud je možnost použít Image-Parser aktivní, musí fungovat všechny uvedené formáty
 - Pokud Image-Parser není k dizpozici, neaktivní tlačítko
 
 ## Playlist
-
 - přidávání písní ze stránky písně
-<!-- - přidávání písní z pravého panelu -->
-- změna pořádí přesunutím
+- přidávání písní z pravého panelu
+- změna pořádí
 - změna názvu
 - odebírání písní
-- redo a undo tlačítka
-- ukládání. Po refreshi zůstane uložený:
-  - název
-  - pořadí
-  - transpozice
-  - odebrání písně (i po vzetí zpět)
 - proklik na jednotlivé písně
 - tisk
 - mód prezentace
-- sdílení
 - tranpozice i pořádí sedí pro tisk i prezentaci
 
 ## Feedback
 
 ## Horní líšta
-
 - fungují prokliky
-
+  
 ## Seznam playlistů
-
 - vytvareni playlistu
 - mazani, objevi se okno
-
 ## Seznam mých písní
-
 ## Mód skupiny
-
 - Funguje vyhledávání, stejně jako na domácí stránce
+

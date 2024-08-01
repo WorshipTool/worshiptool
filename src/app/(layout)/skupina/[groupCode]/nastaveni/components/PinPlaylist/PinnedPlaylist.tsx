@@ -1,19 +1,18 @@
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { LoadingButton } from '@mui/lab'
 import { Box, LinearProgress, Typography } from '@mui/material'
 import { SkeletonLoader } from '../../../../../../../common/providers/SkeletonLoader'
-import usePlaylistsGeneral from '../../../../../../../hooks/playlist/usePlaylistsGeneral'
+import usePlaylists from '../../../../../../../hooks/playlist/usePlaylists'
 import { useApiStateEffect } from '../../../../../../../tech/ApiState'
 
 type PinnedPlaylistProps = {
-	guid: PlaylistGuid
+	guid: string
 	onRemove: () => void
 	onTryAgain: () => void
 	loading: boolean
 }
 
 export default function PinnedPlaylist(props: PinnedPlaylistProps) {
-	const { getPlaylistByGuid } = usePlaylistsGeneral()
+	const { getPlaylistByGuid } = usePlaylists()
 	const [state] = useApiStateEffect(async () => {
 		return await getPlaylistByGuid(props.guid)
 	}, [props.guid])

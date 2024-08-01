@@ -1,52 +1,11 @@
-import { VariantPackAlias } from '@/api/dtos'
-import { shouldUseSubdomains } from '@/routes/routes.tech'
 import { note } from '@pepavlin/sheet-api'
 import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
 import { RoutesKeys, SmartParams } from './routes.types'
 
-const changeUrlToSubdomains = (url: string): string => {
-	// if the url is /sub/A/sub/B..., return B.A....
-	const key = routesPaths.subdomain.split('/')[1]
-
-	const uo = new URL(url, FRONTEND_URL)
-	const pathname = uo.pathname
-
-	const urlParts = pathname.split('/').filter((part) => part !== '')
-
-	const subdomains = []
-
-	let lastIndex = -1
-	for (let i = 0; i < urlParts.length; i++) {
-		if (urlParts[i] === key && urlParts[i + 1]) {
-			subdomains.push(urlParts[i + 1])
-			i++
-			lastIndex = i + 1
-		} else {
-			break
-		}
-	}
-
-	const leftParts = urlParts.slice(lastIndex + 1)
-
-	const leftStr = leftParts.join('/')
-
-	const urlObject = new URL(leftStr, FRONTEND_URL)
-	subdomains.reverse()
-	subdomains.push(urlObject.hostname)
-	urlObject.hostname = subdomains.join('.')
-
-	const str = urlObject.toString()
-
-	return str
-}
-
 export const getReplacedUrlWithParams = (
 	url: string,
-	params: { [key: string]: string | undefined },
-	options: { subdomains?: boolean } = {
-		subdomains: true,
-	}
+	params: { [key: string]: string | undefined }
 ) => {
 	const queryParams: Record<string, string> = {}
 
@@ -65,14 +24,11 @@ export const getReplacedUrlWithParams = (
 
 	if (Object.keys(queryParams).length > 0) {
 		const url = new URL(result, FRONTEND_URL)
+		// TODO: Fix this. It not return relative path, if relative is input
 		for (const key in queryParams) {
 			url.searchParams.set(key, queryParams[key])
 		}
 		result = url.toString()
-	}
-
-	if (options?.subdomains && shouldUseSubdomains()) {
-		result = changeUrlToSubdomains(result)
 	}
 
 	return result
@@ -83,12 +39,10 @@ export const getRouteUrlWithParams = <T extends RoutesKeys>(
 	params: SmartParams<T>
 ) => {
 	const url = routesPaths[page]
-	let result = getReplacedUrlWithParams(FRONTEND_URL + url, params)
-
-	return result
+	return getReplacedUrlWithParams(FRONTEND_URL + url, params)
 }
 
-export const parseVariantAlias = (variantAlias: VariantPackAlias) => {
+export const parseVariantAlias = (variantAlias: string) => {
 	const alias = variantAlias
 
 	// Part before first -
@@ -119,14 +73,11 @@ export const routesPaths = {
 	login: '/prihlaseni',
 	signup: '/registrace',
 	account: '/ucet',
-	resetPassword: '/reset-hesla',
-	resetPasswordToken: '/reset-hesla/[token]',
 	usersPlaylists: '/ucet/playlisty',
 	usersSongs: '/ucet/pisne',
 	songsList: '/seznam',
 	test: '/test',
 	testComponents: '/storybook',
-	subdomain: '/sub/[subdomain]',
 } as const
 
 // DONT REMOVE
