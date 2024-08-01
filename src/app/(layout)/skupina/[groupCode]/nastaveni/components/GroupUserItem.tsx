@@ -1,7 +1,7 @@
 import { Close } from '@mui/icons-material'
 import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
-import { BaseUserInfoOutDto } from '../../../../../../api/generated'
+import { PermissionUserBaseOutDto } from '../../../../../../api/generated'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import {
@@ -12,7 +12,7 @@ import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
 type GroupUserItemProps<T extends PermissionType> = {
-	user: BaseUserInfoOutDto
+	user: PermissionUserBaseOutDto
 	editable?: boolean
 	onRemove: () => void
 	permissionType: T
