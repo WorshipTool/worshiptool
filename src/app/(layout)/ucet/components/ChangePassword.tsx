@@ -4,10 +4,11 @@ import { Gap } from '@/common/ui/Gap'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import useAuth from '@/hooks/auth/useAuth'
+import { LOGIN_METHOD_TYPE } from '@/interfaces/user'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import './styles.css'
 
 export default function ChangePassword() {
@@ -22,6 +23,11 @@ export default function ChangePassword() {
 	const navigate = useSmartNavigate()
 
 	const { enqueueSnackbar } = useSnackbar()
+
+	const usingPasswordMethod = useMemo(() => {
+		console.log(user)
+		return user?.loginMethods.includes(LOGIN_METHOD_TYPE.Email)
+	}, [user])
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -67,7 +73,7 @@ export default function ChangePassword() {
 		setError('')
 	}
 
-	return (
+	return usingPasswordMethod ? (
 		<Card title="Změna hesla">
 			<form onSubmit={handleSubmit}>
 				<Box className={'form-div'}>
@@ -108,6 +114,12 @@ export default function ChangePassword() {
 					</Button>
 				</Box>
 			</form>
+		</Card>
+	) : (
+		<Card title="Změna hesla">
+			<Typography>
+				Jsi přihlašen pomocí Google, nemáš heslo, které bys mohl změnit {':('}
+			</Typography>
 		</Card>
 	)
 }

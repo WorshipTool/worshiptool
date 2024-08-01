@@ -7,6 +7,11 @@ export enum ROLES {
 	'Admin',
 }
 
+export enum LOGIN_METHOD_TYPE {
+	'Email' = 0,
+	'Google' = 1,
+}
+
 export type UserDto = {
 	guid: UserGuid
 	firstName: string
@@ -14,4 +19,5 @@ export type UserDto = {
 	email: string
 	role: ROLES
 	token: string
+	loginMethods: LOGIN_METHOD_TYPE[]
 }
