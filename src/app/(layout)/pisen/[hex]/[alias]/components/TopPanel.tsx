@@ -4,12 +4,16 @@ import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
-import { CreatedType } from '@/interfaces/variant/VariantDTO'
 import { Box, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
-import { SongDto, SongVariantDto } from '../../../../../../api/dtos'
+import {
+	CreatedType,
+	SongDto,
+	SongVariantDto,
+	VariantPackAlias,
+} from '../../../../../../api/dtos'
 import {
 	EditVariantOutDto,
 	PostEditVariantInDto,
@@ -22,13 +26,13 @@ import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../../../tech/sheet.tech'
 import NotValidWarning from '../../../../vytvorit/napsat/components/NotValidWarning'
+import TransposePanel from './TransposePanel'
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
 import CreateCopyButton from './components/CreateCopyButton'
 import EditButton from './components/EditButton'
 import PrintButton from './components/PrintButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
 import VisibilityLabel from './components/VisibilityLabel'
-import TransposePanel from './TransposePanel'
 
 interface TopPanelProps {
 	transpose: (i: number) => void
@@ -117,7 +121,7 @@ export default function TopPanel(props: TopPanelProps) {
 		setSaving(true)
 
 		const body: PostEditVariantInDto = {
-			variantAlias: props.variant.alias,
+			variantAlias: props.variant.packAlias,
 			sheetData: props.sheet.getOriginalSheetData(),
 			title: props.title,
 			createdType: CreatedType.Manual,
@@ -134,7 +138,7 @@ export default function TopPanel(props: TopPanelProps) {
 					`Píseň ${(props.variant.preferredTitle && ' ') || ''}byla upravena.`
 				)
 				navigate('variant', {
-					...parseVariantAlias(result.alias),
+					...parseVariantAlias(result.alias as VariantPackAlias),
 				})
 				setSaving(false)
 			}

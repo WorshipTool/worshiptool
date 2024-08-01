@@ -4,6 +4,7 @@ import { apiToGroupPayload } from '../../api/dtos/group'
 import { GroupApi } from '../../api/generated'
 import { Group, GroupPayloadType } from '../../interfaces/group/Group'
 
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '../../routes/useSmartNavigate'
 import { handleApiCall } from '../../tech/handleApiCall'
 import useAuth from '../auth/useAuth'
@@ -26,7 +27,7 @@ interface useProvideGroupI {
 	code: string
 	name: string
 	guid: string
-	selectionGuid: string
+	selectionGuid: PlaylistGuid
 	payload: GroupPayloadType
 	setPayload: (payload: GroupPayloadType) => Promise<void>
 	turnOn: (code: string) => void
@@ -52,6 +53,7 @@ export const useProvideGroup = (): useProvideGroupI => {
 				setGroup({
 					...r,
 					payload: apiToGroupPayload(r.payload),
+					selection: r.selection as PlaylistGuid,
 				})
 				localStorage.setItem(key, code)
 			})
@@ -95,6 +97,6 @@ export const useProvideGroup = (): useProvideGroupI => {
 		guid: group?.guid || '',
 		payload: group?.payload || {},
 		setPayload,
-		selectionGuid: group?.selection || '',
+		selectionGuid: (group?.selection || '') as PlaylistGuid,
 	}
 }

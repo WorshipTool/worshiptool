@@ -1,3 +1,4 @@
+import { VariantPackAlias } from '@/api/dtos'
 import { EggAlt } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -39,7 +40,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 			},
 			(data) => {
 				navigate('variant', {
-					...parseVariantAlias(data.alias),
+					...parseVariantAlias(data.alias as VariantPackAlias),
 				})
 			}
 		)

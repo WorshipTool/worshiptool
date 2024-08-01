@@ -1,4 +1,4 @@
-import Card from '@/common/ui/Card/Card'
+import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
 import { BugReport, Build, PrecisionManufacturing } from '@mui/icons-material'
 import { Box } from '@mui/material'

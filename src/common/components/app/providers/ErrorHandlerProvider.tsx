@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React, { useEffect } from 'react'
@@ -14,7 +15,7 @@ interface ErrorHandlerProviderProps {
 
 export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
 	const { enqueueSnackbar } = useSnackbar()
-	const { isLoggedIn, signup } = useAuth()
+	const { logout } = useAuth()
 	const navigate = useSmartNavigate()
 
 	useEffect(() => {
@@ -39,6 +40,7 @@ export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
 		}
 
 		const ue = () => {
+			logout()
 			navigate('login', {
 				previousPage: window.location.pathname,
 				message: 'Je třeba se znovu přihlásit.',

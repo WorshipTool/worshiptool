@@ -1,10 +1,10 @@
+import { SongVariantDto } from '@/api/dtos'
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import React from 'react'
-import { VariantDTO } from '../../../../../../../interfaces/variant/VariantDTO'
 
 interface ChangeVariantProps {
 	index: number
-	variants: VariantDTO[]
+	variants: SongVariantDto[]
 	onChange: (i: number) => void
 }
 

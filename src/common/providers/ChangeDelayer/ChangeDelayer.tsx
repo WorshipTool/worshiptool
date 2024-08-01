@@ -1,30 +1,21 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { memo } from 'react'
 
-interface ChangeDelayerProps {
-	value: any
-	onChange: (value: any) => void
+interface ChangeDelayerProps<T> {
+	value: T
+	onChange: (value: T) => void
 	delay?: number
 }
 
-export default function OnChangeDelayer({
+export const OnChangeDelayer = memo(function OnChangeDelayer<T>({
 	value,
 	onChange,
 	delay = 300,
-}: ChangeDelayerProps) {
-	const loadTimeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(
-		undefined
-	)
-	useEffect(() => {
-		clearTimeout(loadTimeoutId.current)
-		const INTERVAL = delay
-
-		loadTimeoutId.current = setTimeout(() => {
-			onChange(value)
-		}, INTERVAL)
-
-		return () => clearTimeout(loadTimeoutId.current)
-	}, [value])
+}: ChangeDelayerProps<T>) {
+	useChangeDelayer(value, onChange, [onChange], delay)
 	return <></>
-}
+})
+
+export default OnChangeDelayer

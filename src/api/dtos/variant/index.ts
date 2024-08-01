@@ -1,2 +1,2 @@
-export * from "./songVariant.dto";
-export * from "./songVariant.map";
+export * from '../../../interfaces/variant/songVariant.types'
+export * from './songVariant.map'

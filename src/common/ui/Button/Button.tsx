@@ -26,6 +26,7 @@ type ButtonProps<T extends RoutesKeys> = {
 	loading?: boolean
 	loadingPosition?: ComponentProps<typeof LoadingButton>['loadingPosition']
 	disabled?: boolean
+	type?: ComponentProps<typeof LoadingButton>['type']
 }
 
 export const Button = <T extends RoutesKeys>({
@@ -61,6 +62,7 @@ export const Button = <T extends RoutesKeys>({
 				startIcon={props.startIcon}
 				endIcon={props.endIcon}
 				aria-label={props.alt}
+				type={props.type}
 				sx={{
 					width: '100%',
 					height: '100%',

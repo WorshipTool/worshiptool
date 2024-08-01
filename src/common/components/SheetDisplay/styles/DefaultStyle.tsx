@@ -44,7 +44,7 @@ const SegmentElement = ({
 		<>
 			{words.map((word, index) => {
 				return (
-					<Box key={word}>
+					<Box key={word + index}>
 						{showChords &&
 							(index == 0 && segment.chord ? (
 								<>
@@ -214,7 +214,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 				{sections.map((section, index) => {
 					return (
 						<SectionComponent
-							key={index}
+							key={section.name + index}
 							section={section}
 							signature={signature}
 							isLast={index === sections.length - 1}

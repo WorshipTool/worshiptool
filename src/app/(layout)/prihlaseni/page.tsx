@@ -9,7 +9,7 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../api/dtos/dtosAuth'
 import { Button } from '../../../common/ui/Button'
 import { Gap } from '../../../common/ui/Gap/Gap'
@@ -47,8 +47,14 @@ export default function Login() {
 	const theme = useTheme()
 	const navigate = useSmartNavigate()
 
-	const { login } = useAuth()
+	const { login, checkIfCookieExists, logout } = useAuth()
 	const params = useSmartParams('login')
+
+	useEffect(() => {
+		if (!checkIfCookieExists()) {
+			logout()
+		}
+	}, [])
 
 	const onEmailChange = (e: any) => {
 		setEmail(e.target.value)
@@ -115,6 +121,10 @@ export default function Login() {
 		})
 	}
 
+	const resetPassword = async () => {
+		navigate('resetPassword', {})
+	}
+
 	return (
 		<>
 			<Box
@@ -155,36 +165,60 @@ export default function Login() {
 						</>
 					)}
 
-					<Typography variant="subtitle2">Email</Typography>
-					<TextField
-						size="small"
-						fullWidth
-						value={email}
-						onChange={onEmailChange}
-						error={!isEmailOk}
-						helperText={emailMessage}
-						disabled={inProgress}
-						type="email"
-					/>
-					<Gap />
-					<Typography variant="subtitle2">Heslo</Typography>
-					<TextField
-						size="small"
-						fullWidth
-						value={password}
-						onChange={onPasswordChange}
-						error={!isPasswordOk}
-						helperText={passwordMessage}
-						disabled={inProgress}
-						type="password"
-					/>
-					<Gap />
-
-					<Box display={'flex'}>
-						<Button onClick={onLoginClick} loading={inProgress} variant="text">
-							Přihlásit se
-						</Button>
-					</Box>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault()
+							onLoginClick()
+						}}
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<Typography variant="subtitle2">Email</Typography>
+						<TextField
+							size="small"
+							value={email}
+							onChange={onEmailChange}
+							error={!isEmailOk}
+							helperText={emailMessage}
+							disabled={inProgress}
+							type="email"
+						/>
+						<Gap />
+						<Typography variant="subtitle2">Heslo</Typography>
+						<TextField
+							size="small"
+							fullWidth
+							value={password}
+							onChange={onPasswordChange}
+							error={!isPasswordOk}
+							helperText={passwordMessage}
+							disabled={inProgress}
+							type="password"
+						/>
+						<Box
+							display={'flex'}
+							flexDirection={'row'}
+							alignItems={'center'}
+							justifyContent={'start'}
+						>
+							<Button
+								size={'small'}
+								variant="text"
+								color="grey.600"
+								onClick={resetPassword}
+							>
+								Zapomněli jste heslo?
+							</Button>
+						</Box>
+						<Gap />
+						<Box>
+							<Button type="submit" loading={inProgress} variant="contained">
+								Přihlásit se
+							</Button>
+						</Box>
+					</form>
 
 					<Box
 						display={'flex'}

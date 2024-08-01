@@ -1,3 +1,4 @@
+import PlaylistSearchList from '@/app/(layout)/playlist/[guid]/components/RightPanel/PlaylistSearchList'
 import { Box, Typography, styled, useTheme } from '@mui/material'
 import { useMemo, useState } from 'react'
 import SongSearch from '../../../../../../common/components/songLists/SongSearch/SongSearch'
@@ -5,16 +6,14 @@ import { Gap } from '../../../../../../common/ui/Gap/Gap'
 import SearchBar from '../../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../../hooks/group/useGroupSelection'
-import Playlist from '../../../../../../interfaces/playlist/PlaylistDTO'
 import { isMobile } from '../../../../../../tech/device.tech'
 import useRecommendedSongs from '../../../../../components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'
-import PlaylistSearchList from './PlaylistSearchList'
 
 const Container = styled(Box)(({ theme }) => ({
 	width: 300,
 	// position:"relative",
-	height: 'calc(100vh - 56px)',
+	height: 'calc(100vh - 133px)',
 	// top:56,
 	overflowY: 'auto',
 	boxShadow: `0px 0px 3px ${theme.palette.grey[400]}`,
@@ -23,13 +22,14 @@ const Container = styled(Box)(({ theme }) => ({
 	pointerEvents: 'auto',
 
 	position: 'sticky',
-	top: 56,
+	top: 133,
+	[theme.breakpoints.down('lg')]: {
+		display: 'none',
+	},
 }))
 
-interface RightPanelProps {
-	playlist: Playlist | undefined
-}
-export default function RightPanel({ playlist }: RightPanelProps) {
+interface RightPanelProps {}
+export default function RightPanel({}: RightPanelProps) {
 	const theme = useTheme()
 	const [searchString, setSearchString] = useState('')
 	const { data } = useRecommendedSongs()
@@ -41,11 +41,11 @@ export default function RightPanel({ playlist }: RightPanelProps) {
 		return (
 			isOn
 				? selectionItems
-						.filter((s) => !items.map((v) => v.variant.guid).includes(s.guid))
+						.filter((s) => !items.map((v) => v.guid).includes(s.guid))
 						.map((v) => v.variant)
 				: data.filter((s) => !items.map((v) => v.variant.guid).includes(s.guid))
-		).filter((v) => playlist?.items.every((s) => s.variant.guid != v.guid))
-	}, [data, selectionItems, isOn, items, playlist])
+		).filter((v) => items.every((s) => s.variant.guid != v.guid))
+	}, [data, selectionItems, isOn, items])
 
 	const idea = useMemo(() => {
 		const arr = ideaArr
@@ -91,18 +91,10 @@ export default function RightPanel({ playlist }: RightPanelProps) {
 										)}
 										<Typography fontWeight={900}>Nějaké návrhy:</Typography>
 										<Gap value={0.5} />
-										<PlaylistSearchList
-											variants={ideaArr}
-											playlist={playlist as Playlist}
-										/>
+										<PlaylistSearchList variants={ideaArr} />
 									</>
 								)
-							return (
-								<PlaylistSearchList
-									variants={filtered}
-									playlist={playlist as Playlist}
-								/>
-							)
+							return <PlaylistSearchList variants={filtered} />
 						}}
 					/>
 

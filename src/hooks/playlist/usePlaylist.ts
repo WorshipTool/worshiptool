@@ -1,116 +1,130 @@
+import { VariantPackGuid } from '@/api/dtos'
+import { ReorderPlaylistItem } from '@/api/generated'
+import { useApiState } from '@/tech/ApiState'
 import { Chord } from '@pepavlin/sheet-api'
-import { useEffect, useMemo, useState } from 'react'
-import { ApiReorderPlaylistItemDTO } from '../../api/dtos/playlist/dtosPlaylist'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
-import Playlist, {
-	PlaylistItemDTO,
-} from '../../interfaces/playlist/PlaylistDTO'
+import PlaylistDto, {
+	PlaylistGuid,
+	PlaylistItemDto,
+} from '../../interfaces/playlist/playlist.types'
 import useAuth from '../auth/useAuth'
-import usePlaylists from './usePlaylists'
+import usePlaylistsGeneral from './usePlaylistsGeneral'
 
-export default function usePlaylist(guid: string | undefined) {
+export default function usePlaylist(
+	guid: PlaylistGuid,
+	after?: (data: PlaylistDto) => void
+) {
 	const {
 		addVariantToPlaylist,
 		removeVariantFromPlaylist,
 		getPlaylistByGuid,
 		searchInPlaylistByGuid,
-		renamePlaylist: renamePlaylistByGuid,
+		renamePlaylist,
 		reorderPlaylist,
 		setKeyChordOfItem,
-	} = usePlaylists()
+	} = usePlaylistsGeneral()
 
-	const [playlist, setPlaylist] = useState<Playlist>()
-	const [items, setItems] = useState<PlaylistItemDTO[]>([])
+	const [playlist, setPlaylist] = useState<PlaylistDto>()
+	const [items, setItems] = useState<PlaylistItemDto[]>([])
+	const [searchedItems, setSearchedItems] = useState<PlaylistItemDto[]>([])
 
-	const [count, setCount] = useState(0)
+	// const [state] = useApiStateEffect(async () => getPlaylistByGuid(guid), [guid])
+	const { fetchApiState, apiState: state } = useApiState<PlaylistDto>()
 
-	const [loading, setLoading] = useState(true)
+	useEffect(() => {
+		if (guid && guid.length > 0) {
+			fetchApiState(() => getPlaylistByGuid(guid), after)
+		}
+	}, [guid])
 
 	const { isLoggedIn, user } = useAuth()
 
 	useEffect(() => {
-		if (!guid) return
-		reload()
-	}, [guid])
-
-	const reload = () => {
-		if (!guid) return
-		return getPlaylistByGuid(guid)
-			.then((r) => {
-				setPlaylist(r)
-				setItems(r.items.sort((a, b) => a.order - b.order))
-				setCount(r.items.length)
-				setLoading(false)
-			})
-			.catch((e) => {
-				console.error(e)
-				setLoading(false)
-			})
-	}
-
-	const search = async (searchString: string) => {
-		if (!guid) return
-		searchInPlaylistByGuid(guid, searchString)
-			.then((r) => {
-				console.log(r)
-				setItems(
-					r.items.map((v) => mapPlaylistItemOutDtoApiToPlaylistItemDto(v))
-				)
-			})
-			.catch((e) => {
-				console.error(e)
-			})
-	}
-
-	const addVariant = async (packGuid: string): Promise<boolean> => {
-		if (!guid) {
-			console.error('Guid is undefined')
-			return Promise.reject()
+		if (state.data) {
+			setPlaylist(state.data)
+			setItems(state.data.items.sort((a, b) => a.order - b.order))
 		}
+	}, [state])
 
+	const search = useCallback(
+		async (searchString: string) => {
+			await searchInPlaylistByGuid(guid, searchString)
+				.then((r) => {
+					const items = r.items.map(mapPlaylistItemOutDtoApiToPlaylistItemDto)
+					setSearchedItems(items)
+					return items
+				})
+				.catch((e) => {
+					console.error(e)
+				})
+		},
+		[searchInPlaylistByGuid, guid]
+	)
+
+	const addVariant = async (
+		packGuid: VariantPackGuid
+	): Promise<PlaylistItemDto | false> => {
 		try {
-			await addVariantToPlaylist(packGuid, guid).then(async (r) => {
-				await reload()
-				return r
-			})
-			return true
+			const data = await addVariantToPlaylist(packGuid, guid).then(
+				async (r) => {
+					if (!r) return false
+					const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
+					setItems((items) => [...items, item])
+					return item
+				}
+			)
+			return data
 		} catch (e) {
 			console.log(e)
 			return false
 		}
 	}
-	const removeVariant = async (packGuid: string): Promise<boolean> => {
-		if (!guid) {
-			console.error('Guid is undefined')
-			return Promise.reject()
-		}
-
+	const removeVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
 		const r = await removeVariantFromPlaylist(packGuid, guid)
-		await reload()
+
+		setItems((items) => items.filter((i) => i.variant.packGuid !== packGuid))
+
 		return r
 	}
 	const rename = (title: string) => {
-		return renamePlaylistByGuid(guid || '', title).then((r) => {
-			reload()
+		return renamePlaylist(guid, title).then((r) => {
+			if (r) {
+				setPlaylist({
+					...playlist!,
+					title: title,
+				})
+			}
 		})
 	}
 
-	const reorder = async (items: ApiReorderPlaylistItemDTO[]) => {
-		const r = await reorderPlaylist(guid || '', items)
+	const reorder = async (reorderItems: ReorderPlaylistItem[]) => {
+		const r = await reorderPlaylist(guid, reorderItems)
 
-		await reload()
+		setItems(
+			items.map((item) => {
+				const newItem = reorderItems.find((i) => i.guid === item.guid)
+				if (newItem) {
+					return {
+						...item,
+						order: newItem.order,
+					}
+				}
+				return item
+			})
+		)
 
 		return r
 	}
 
-	const setItemsKeyChord = (item: PlaylistItemDTO, keyChord: Chord) => {
+	const setItemsKeyChord = (item: PlaylistItemDto, keyChord: Chord) => {
 		return setKeyChordOfItem(item.guid, keyChord)
 	}
 
 	const isOwner = useMemo(() => {
-		if (!playlist || !user) return false
+		if (!playlist) return false
 		if (!isLoggedIn()) return false
-		return playlist.ownerGuid === user.guid
+		return playlist.ownerGuid === user?.guid
 	}, [user, isLoggedIn, playlist])
 
 	return {
@@ -119,12 +133,12 @@ export default function usePlaylist(guid: string | undefined) {
 		rename,
 		playlist,
 		items,
-		reload,
+		searchedItems,
 		search,
-		count,
-		guid: playlist?.guid || 'undefined',
+		guid,
+		title: playlist?.title,
 		reorder,
-		loading,
+		loading: state.loading,
 		setItemsKeyChord,
 		isOwner,
 	}

@@ -1,18 +1,18 @@
 'use client'
 import { Sync } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import { Box, LinearProgress, Typography, useTheme } from '@mui/material'
+import { Box, LinearProgress, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../../common/components/ContainerGrid'
 import SongListCards from '../../../common/components/songLists/SongListCards/SongListCards'
-import OnChangeDelayer from '../../../common/providers/ChangeDelayer/ChangeDelayer'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
-import { useIsInViewport } from '../../../hooks/useIsInViewport'
 import usePagination from '../../../hooks/usePagination'
 import normalizeSearchText from '../../../tech/normalizeSearchText'
 
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { SongVariantDto } from '../../../api/dtos'
 
 interface SearchedSongsListProps {
@@ -23,68 +23,75 @@ const controller = new AbortController()
 export default function SearchedSongsList({
 	searchString,
 }: SearchedSongsListProps) {
-	const theme = useTheme()
 	const loadNextLevelRef = useRef(null)
-	const isInViewport = useIsInViewport(loadNextLevelRef, '100px')
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const [nextLoading, setNextLoading] = useState<boolean>(false)
 	const [enableLoadNext, setEnableLoadNext] = useState<boolean>(false)
 
 	const searchSongs = useSongSearch()
+
+	const func = useCallback(
+		(
+			page: number,
+			resolve: (a: SongVariantDto[]) => void,
+			arr: SongVariantDto[]
+		) => {
+			searchSongs({
+				searchKey: searchString,
+				page,
+				signal: controller.signal,
+			}).then((data) => {
+				const filtered = data.filter((v) => {
+					return !arr.find((s) => s.guid == v.guid)
+				})
+				setLoading(false)
+				setNextLoading(false)
+				resolve(filtered)
+			})
+		},
+		[searchString, searchSongs]
+	)
+
 	const {
 		nextPage: loadNext,
 		loadPage,
 		data: songs,
+		pagedData: pagedSongs,
 		nextExists,
-	} = usePagination<SongVariantDto>((page, resolve, arr) => {
-		// controller.abort();
-		searchSongs({
-			searchKey: searchString,
-			page,
-			signal: controller.signal,
-		}).then((data) => {
-			setLoading(false)
-			setNextLoading(false)
-			resolve(
-				data.filter((v) => {
-					return !arr.find((s) => s.guid == v.guid)
-				})
-			)
-		})
-	})
+	} = usePagination<SongVariantDto>(func)
 
 	useEffect(() => {
 		setEnableLoadNext(false)
 		setLoading(true)
 	}, [searchString])
 
-	useEffect(() => {
+	useIsInViewport(loadNextLevelRef, '100px', (intersecting) => {
 		if (!enableLoadNext) return
-		if (!isInViewport) return
+		if (!intersecting) return
 		if (songs.length > 0 && nextExists) {
 			setNextLoading(true)
 			loadNext()
+			console.log('a')
 		}
-	}, [isInViewport, isInViewport, songs, nextExists])
+	})
+	useChangeDelayer(
+		normalizeSearchText(searchString),
+		(value) => {
+			loadPage(0, true).then(() => {
+				setEnableLoadNext(true)
+			})
+		},
+		[]
+	)
 
 	return (
 		<ContainerGrid direction="column">
-			<OnChangeDelayer
-				value={normalizeSearchText(searchString)}
-				onChange={() => {
-					setLoading(true)
-					loadPage(0, true).then(() => {
-						setEnableLoadNext(true)
-					})
-				}}
-			/>
-
 			<>
 				<Typography fontWeight={'bold'}>Výsledky vyhledávání:</Typography>
 
 				{!loading && songs.length > 0 && (
-					<SongListCards data={songs}></SongListCards>
+					<SongListCards data={songs} key={'songlistcards'}></SongListCards>
 				)}
 			</>
 
@@ -111,6 +118,7 @@ export default function SearchedSongsList({
 								loading={nextLoading}
 								loadingPosition="start"
 								onClick={() => {
+									setNextLoading(true)
 									loadNext()
 								}}
 								startIcon={<Sync />}

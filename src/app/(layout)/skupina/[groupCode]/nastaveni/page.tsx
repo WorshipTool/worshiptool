@@ -1,6 +1,6 @@
 'use client'
 import { Box, Divider, LinearProgress, Typography } from '@mui/material'
-import Card from '../../../../../common/ui/Card/Card'
+import { Card } from '../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../common/ui/Gap'
 import { usePermission } from '../../../../../hooks/auth/usePermission'
 import useGroup from '../../../../../hooks/group/useGroup'
