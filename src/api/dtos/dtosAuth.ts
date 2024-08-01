@@ -1,5 +1,5 @@
+import { JwtResult } from '@/api/generated'
 import { UserDto, UserGuid } from '../../interfaces/user'
-import { LoginResult } from '../generated'
 
 export interface LoginRequestDTO {
 	email: string
@@ -18,13 +18,6 @@ export interface SignUpRequestDTO {
 	password: string
 }
 
-export function loginResultDTOToUser(res: LoginResult): UserDto {
+export function loginResultDTOToUser(res: JwtResult): UserDto {
 	return { ...res.user, guid: res.user.guid as UserGuid, token: res.token }
-}
-
-export interface PostLoginGoogleDto {
-	userToken: string
-	email: string
-	firstName: string
-	lastName: string
 }

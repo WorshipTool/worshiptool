@@ -34,9 +34,10 @@ export default function Page() {
 
 		try {
 			await sendResetLink(email)
-
+		} catch (e) {
+		} finally {
 			setDone(true)
-		} catch (e) {}
+		}
 	}
 
 	return (
