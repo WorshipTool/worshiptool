@@ -2,7 +2,13 @@
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react'
 import { Gap } from '../../../../../../common/ui/Gap'
 import { useChangeDelayer } from '../../../../../../hooks/changedelay/useChangeDelayer'
 import { PlaylistItemDto } from '../../../../../../interfaces/playlist/playlist.types'
@@ -72,72 +78,79 @@ const sectionPart = (section: Section, fontSize: number) => {
 
 interface SlideCardProps {
 	item: PlaylistItemDto
-	order: number
+	order?: number
 }
 
-export default function SlideCard({
-	item: originalItem,
-	order: originalOrder,
-}: SlideCardProps) {
+const DEFAULT_FONT_SIZE = 20
+export default function SlideCard({ item, order }: SlideCardProps) {
+	// Sheet
+	const [sheet, setSheet] = useState<Sheet>()
+
+	// Current font-size and padding
+	const [size, setSize] = useState(DEFAULT_FONT_SIZE)
+	const [padding, setPadding] = useState(20)
+
+	// Is size stable? ...state
+	const [isSizeSet, setIsSizeSet] = useState(false)
+
+	// Managing changing songs
+	const [showLoading, setShowLoading] = useState(true)
+	useEffect(() => {
+		setShowLoading(true)
+	}, [item])
+
+	const onItemChange = useCallback((item: PlaylistItemDto) => {
+		if (!item) return
+
+		const newSheet = new Sheet(item.variant.sheetData)
+		if (item.toneKey) newSheet.setKey(item.toneKey)
+
+		setSheet(newSheet)
+
+		setIsSizeSet(false)
+		setSize(DEFAULT_FONT_SIZE)
+		setLastWasOkey(true)
+
+		setTimeout(() => {
+			setShowLoading(false)
+		}, 500)
+	}, [])
+
+	useChangeDelayer(item, onItemChange, [onItemChange], 1000)
+
+	// Managing window size
 	const [windowWidth, setWindowWidth] = useState<number>(
 		typeof window === 'undefined' ? 0 : window?.innerWidth
 	)
 	const [windowHeight, setWindowHeight] = useState<number>(
 		typeof window === 'undefined' ? 0 : window?.innerHeight
 	)
-
-	const [sizeChanging, setSizeChanging] = useState(true)
-
-	const [size, setSize] = useState(20)
-	const [sizeSet, setSizeSet] = useState(false)
-
-	const [sheet, setSheet] = useState<Sheet>()
-
-	const lastSectionRef = useRef()
-
-	const [loading, setLoading] = useState(true)
-
-	const PADDING = 40
-
-	const [item, setItem] = useState<PlaylistItemDto>(originalItem)
-	const [order, setOrder] = useState<number>(originalOrder)
-
 	useEffect(() => {
-		setLoading(true)
-		setItem(originalItem)
-		setOrder(originalOrder)
-	}, [originalItem, originalOrder])
+		setIsSizeSet(false)
+	}, [windowWidth, windowHeight])
 
-	const onItemChange = (item: PlaylistItemDto) => {
-		setSizeChanging(true)
+	useLayoutEffect(() => {
+		function updateSize() {
+			const w = window.innerWidth
+			const h = window.innerHeight
+			setWindowWidth(w)
+			setWindowHeight(h)
 
-		setSize((s) => s - 1)
-		setSizeSet(false)
-
-		if (!item) return
-		setSheet(new Sheet(item.variant.sheetData))
-
-		setTimeout(() => {
-			setLoading(false)
-		}, 500)
-	}
-
-	useEffect(() => {
-		if (!sheet) return
-		if (item.toneKey) sheet.setKey(item.toneKey)
-	}, [sheet])
-
-	useEffect(() => {
-		console.log(size)
-
-		if (!sheet) return
-
-		if (!lastSectionRef?.current) {
-			// Make a loop
-			setSize((s) => s + 0.5)
-			return
+			const calculatedPadding = Math.min(w, h) * 0.05
+			setPadding(calculatedPadding)
 		}
+		window.addEventListener('resize', updateSize)
+		updateSize()
+		return () => window.removeEventListener('resize', updateSize)
+	}, [])
 
+	// Last section ref
+	const lastSectionRef = useRef<HTMLDivElement>()
+
+	// Make loop for changing size
+	const [lastWasOkey, setLastWasOkey] = useState(true)
+	const sizeIsOkey = useCallback((): boolean => {
+		if (!lastSectionRef?.current) return false
 		// Get box position (x,y) and size
 		// @ts-ignore
 		const boxX: number = lastSectionRef.current.offsetLeft
@@ -153,49 +166,38 @@ export default function SlideCard({
 		const cornerX: number = boxX + boxWidth
 		const cornerY: number = boxY + boxHeight
 
-		const maxX = windowWidth - PADDING * 2
-		const maxY = windowHeight - PADDING * 2
+		const maxX = windowWidth - padding * 2
+		const maxY = windowHeight - padding * 2
 
 		const xIsOut = cornerX > maxX
 		const yIsOut = cornerY > maxY
 
 		const cornerIsOut: boolean = xIsOut || yIsOut
 
-		const step = 2
-
-		if (cornerIsOut) {
-			setSizeSet(false)
-			setSizeChanging(true)
-		} else {
-			setSizeChanging(false)
+		return !cornerIsOut
+	}, [windowWidth, windowHeight, lastSectionRef, padding])
+	const step = useCallback(() => {
+		if (isSizeSet) {
+			if (!sizeIsOkey()) setSize((s) => s - 0.5)
+			return
 		}
-		if (sizeSet) return
 
-		if (!cornerIsOut) {
-			setSize((s) => s + step)
+		if (sizeIsOkey()) {
+			setSize((s) => s + 0.5)
+
+			if (!lastWasOkey) setIsSizeSet(true)
+
+			setLastWasOkey(true)
 		} else {
-			setSize((s) => s - step)
-			setSizeSet(true)
+			setSize((s) => s - 0.5)
+			setLastWasOkey(false)
 		}
-	}, [lastSectionRef, size, sizeSet, sheet])
+	}, [sizeIsOkey, lastWasOkey, isSizeSet])
 
 	useEffect(() => {
-		setSizeSet(false)
-	}, [windowWidth, windowHeight])
-
-	useLayoutEffect(() => {
-		function updateSize() {
-			setWindowWidth(window.innerWidth)
-			setWindowHeight(window.innerHeight)
-		}
-		window.addEventListener('resize', updateSize)
-		updateSize()
-		return () => window.removeEventListener('resize', updateSize)
-	}, [])
-
-	const COLOR = 'white'
-
-	useChangeDelayer(item, onItemChange, [onItemChange], 1000)
+		const interval = setInterval(step, 10)
+		return () => clearInterval(interval)
+	}, [step])
 
 	return (
 		<Box
@@ -204,26 +206,26 @@ export default function SlideCard({
 			flex={1}
 			sx={{
 				bgcolor: '#000',
-				color: COLOR,
+				color: 'white',
 				userSelect: 'none',
 			}}
 		>
 			<Box
 				display={'flex'}
 				flexDirection={'column'}
-				height={`calc(100vh - ${PADDING}px - ${PADDING}px)`}
+				height={`calc(100vh - ${padding * 2}px)`}
 				width={'100%'}
 				flexWrap={'wrap'}
 				alignContent={'center'}
 				alignItems={'stretch'}
 				justifyContent={'center'}
 				sx={{
-					paddingTop: PADDING + 'px',
-					paddingBottom: PADDING + 'px',
+					paddingTop: padding + 'px',
+					paddingBottom: padding + 'px',
 				}}
 			>
 				<Typography fontWeight={'bold'} fontSize={size + 5} marginRight={2}>
-					{order + 1 + '. '}
+					{order ? order + 1 + '. ' : ''}
 					{item?.variant?.preferredTitle.toUpperCase()}
 				</Typography>
 				{sheet?.getSections()?.map((section, index) => {
@@ -257,7 +259,7 @@ export default function SlideCard({
 					color: '#fff',
 					zIndex: (theme) => theme.zIndex.drawer + 1,
 				}}
-				display={loading ? 'flex' : 'none'}
+				display={showLoading ? 'flex' : 'none'}
 				justifyContent={'center'}
 				alignItems={'center'}
 			>
