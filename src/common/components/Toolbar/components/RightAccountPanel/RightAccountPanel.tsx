@@ -1,6 +1,6 @@
 'use client'
 
-import { AddBox, Apps, HelpOutline, Login, Search } from '@mui/icons-material'
+import { AddBox, Apps, Login } from '@mui/icons-material'
 import {
 	Avatar,
 	Box,
@@ -11,14 +11,13 @@ import {
 	useTheme,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
-import UploadFileInput from '../../../../app/(layout)/nahrat/components/UploadFileInput'
-import useAuth from '../../../../hooks/auth/useAuth'
-import useGroup from '../../../../hooks/group/useGroup'
-import { useSmartMatch } from '../../../../routes/useSmartMatch'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
-import { isMobile, isTablet } from '../../../../tech/device.tech'
-import { Button } from '../../../ui/Button'
-import { IconButton } from '../../../ui/IconButton'
+import UploadFileInput from '../../../../../app/(layout)/nahrat/components/UploadFileInput'
+import useAuth from '../../../../../hooks/auth/useAuth'
+import useGroup from '../../../../../hooks/group/useGroup'
+import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
+import { isMobile, isTablet } from '../../../../../tech/device.tech'
+import { Button } from '../../../../ui/Button'
+import { IconButton } from '../../../../ui/IconButton'
 import AccountMenu from './AccountMenu'
 import GroupChip from './GroupChip'
 import ToolsMenu from './Toolsmenu/ToolsMenu'
@@ -61,10 +60,6 @@ export default function RightAccountPanel({
 }: RightAccountPanelProps) {
 	const { isLoggedIn, loading } = useAuth()
 
-	const color = useMemo(() => {
-		return transparent ? 'black' : 'white'
-	}, [transparent])
-
 	const shadowColor = useMemo(() => {
 		return transparent ? '#ffffff44' : '#00000044'
 	}, [transparent])
@@ -99,26 +94,12 @@ export default function RightAccountPanel({
 
 	const navigate = useSmartNavigate()
 	const { isOn, code } = useGroup()
-	const goHomeClick = () => {
-		if (isOn) navigate('group', { groupCode: code })
-		else navigate('home', {})
-
-		setTimeout(() => {
-			window?.scroll({
-				top: 100,
-				behavior: 'auto',
-			})
-			window?.dispatchEvent(new Event('searchBarFocus'))
-		}, 10)
-	}
 
 	const [toolsOpen, setToolsOpen] = useState(false)
 
 	const [accountMenuAnchor, setAccountMenuAnchor] =
 		useState<null | HTMLElement>(null)
 	const [accountMenuOpen, setAccountMenuOpen] = useState(false)
-
-	const isHome = useSmartMatch('home')
 
 	const theme = useTheme()
 
@@ -129,7 +110,7 @@ export default function RightAccountPanel({
 
 	return (
 		<>
-			<Container color={color}>
+			<Container>
 				<UploadFileInput
 					onUpload={(files) => {
 						navigate('uploadParse', { files: files.map((f) => f.name) })
@@ -137,36 +118,12 @@ export default function RightAccountPanel({
 					inputRef={uploadInputRef}
 				/>
 
-				{isHome ? (
-					<>
-						<IconButton
-							tooltip="O aplikaci"
-							color={color}
-							sx={iconButtonStyle}
-							to="documentation"
-						>
-							<HelpOutline sx={iconStyle} fontSize={fontSize} />
-						</IconButton>
-					</>
-				) : (
-					<>
-						<IconButton
-							tooltip="Hledat"
-							color={color}
-							sx={iconButtonStyle}
-							onClick={goHomeClick}
-						>
-							<Search sx={iconStyle} fontSize={fontSize} />
-						</IconButton>
-					</>
-				)}
-
 				{isLoggedIn() ? (
 					<>
 						{isMobile && !isTablet ? (
 							<IconButton
 								tooltip={'Přidat novou píseň'}
-								color={color}
+								color={'inherit'}
 								sx={iconButtonStyle}
 								onClick={() => uploadInputRef.current?.click()}
 								disabled={false}
@@ -176,7 +133,7 @@ export default function RightAccountPanel({
 						) : (
 							<IconButton
 								tooltip={'Přidat novou píseň'}
-								color={color}
+								color={'inherit'}
 								sx={iconButtonStyle}
 								to="addMenu"
 								disabled={false}
@@ -186,7 +143,7 @@ export default function RightAccountPanel({
 						)}
 						<IconButton
 							tooltip="Nástroje"
-							color={color}
+							color={'inherit'}
 							sx={iconButtonStyle}
 							onClick={onToolsMenuClick}
 						>
@@ -205,7 +162,7 @@ export default function RightAccountPanel({
 								avatar={
 									<IconButton
 										tooltip="Účet"
-										color={color}
+										color={'inherit'}
 										sx={{
 											...iconButtonStyle,
 											marginRight: -2,
@@ -249,7 +206,7 @@ export default function RightAccountPanel({
 						<Tooltip title={'Příhlásit se'}>
 							<Button
 								variant="text"
-								color={color}
+								color={'inherit'}
 								endIcon={<Login sx={iconStyle} fontSize={fontSize} />}
 								sx={{
 									pointerEvents: 'auto',

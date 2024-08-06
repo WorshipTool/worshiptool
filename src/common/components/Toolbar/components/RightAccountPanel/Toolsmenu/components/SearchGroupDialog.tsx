@@ -1,4 +1,9 @@
 'use client'
+import { Group } from '@/api/generated'
+import { useApi } from '@/hooks/api/useApi'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { useApiState } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
 import { Search } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -10,11 +15,6 @@ import {
 	TextField,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Group } from '../../../../../../api/generated'
-import { useApi } from '../../../../../../hooks/api/useApi'
-import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
-import { useApiState } from '../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import { searchGroupsEvent } from '../hooks/useToolsMenuItems'
 
 export default function SearchGroupDialog() {

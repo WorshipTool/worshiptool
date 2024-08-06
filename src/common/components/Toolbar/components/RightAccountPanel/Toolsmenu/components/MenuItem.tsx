@@ -1,7 +1,7 @@
 'use client'
+import { CommonLinkProps, Link } from '@/common/ui/Link/CustomLink'
+import { RoutesKeys } from '@/routes'
 import { Box, Typography, styled } from '@mui/material'
-import { RoutesKeys } from '../../../../../../routes'
-import { CommonLinkProps, Link } from '../../../../../ui/Link/CustomLink'
 import { MenuItemProps } from '../hooks/useToolsMenuItems'
 
 const Container = styled(Box)(({ theme }) => ({

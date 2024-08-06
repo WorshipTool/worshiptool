@@ -1,7 +1,7 @@
 import { Background } from '@/common/components'
-import AppLayout from '../../common/components/app/AppLayout/AppLayout'
+import SearchGroupDialog from '@/common/components/Toolbar/components/RightAccountPanel/Toolsmenu/components/SearchGroupDialog'
 import Snow from '../../common/components/Snow'
-import SearchGroupDialog from '../../common/components/Toolbar/components/Toolsmenu/components/SearchGroupDialog'
+import AppLayout from '../../common/components/app/AppLayout/AppLayout'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {

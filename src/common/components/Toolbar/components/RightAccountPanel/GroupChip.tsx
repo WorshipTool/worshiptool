@@ -1,7 +1,7 @@
 import { Box, Chip } from '@mui/material'
 import { ReactElement } from 'react'
-import useGroup from '../../../../hooks/group/useGroup'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
+import useGroup from '../../../../../hooks/group/useGroup'
+import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
 
 interface GroupChipProps {
 	avatar?: ReactElement

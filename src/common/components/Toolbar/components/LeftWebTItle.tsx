@@ -1,6 +1,5 @@
 import SvgIcon from '@/assets/icon.svg'
 import { Box, Typography, styled } from '@mui/material'
-import { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { Link } from '../../../ui/Link/CustomLink'
@@ -29,9 +28,6 @@ interface LeftWebTitleProps {
 export default function LeftWebTitle({ transparent }: LeftWebTitleProps) {
 	const navigate = useSmartNavigate()
 
-	const color = useMemo(() => {
-		return transparent ? 'transparent' : 'white'
-	}, [transparent])
 	const size = 36
 
 	const { isOn, code } = useGroup()
@@ -52,11 +48,7 @@ export default function LeftWebTitle({ transparent }: LeftWebTitleProps) {
 					: {}
 			}
 		>
-			<Container
-				color={color}
-				onClick={goHomeClick}
-				display={transparent ? 'none' : 'flex'}
-			>
+			<Container onClick={goHomeClick} display={transparent ? 'none' : 'flex'}>
 				<SvgIcon fill="white" height={size} />
 				<Typography fontWeight={800} fontSize={18} marginLeft={0}>
 					Chvalotce

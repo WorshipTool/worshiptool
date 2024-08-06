@@ -1,10 +1,10 @@
+import { LinkProps } from '@/common/ui/Link/CustomLink'
+import useAuth from '@/hooks/auth/useAuth'
+import { RoutesKeys } from '@/routes'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { isDevelopment } from '@/tech/development.tech'
 import { SxProps } from '@mui/material'
 import { useMemo } from 'react'
-import useAuth from '../../../../../../hooks/auth/useAuth'
-import { RoutesKeys } from '../../../../../../routes'
-import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
-import { isDevelopment } from '../../../../../../tech/development.tech'
-import { LinkProps } from '../../../../../ui/Link/CustomLink'
 
 export type MenuItemProps<T extends RoutesKeys> = {
 	title: string

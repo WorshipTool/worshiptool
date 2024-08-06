@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { Gap } from '../../ui/Gap/Gap'
 import LeftWebTitle from './components/LeftWebTItle'
-import RightAccountPanel from './components/RightAccountPanel'
+import RightAccountPanel from './components/RightAccountPanel/RightAccountPanel'
 
 const TopBar = styled(Box)(() => ({
 	right: 0,
@@ -57,8 +57,9 @@ export function Toolbar({ transparent, white, header }: ToolbarProps) {
 					display={'flex'}
 					flex={1}
 					height={'100%'}
+					color={transparent ? 'black' : 'white'}
 				>
-					<LeftWebTitle transparent={transparent} />
+					<LeftWebTitle />
 					<Gap horizontal value={3} />
 					<Box
 						sx={{
