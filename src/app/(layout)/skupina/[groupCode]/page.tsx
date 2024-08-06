@@ -8,6 +8,7 @@ export default SmartPage(Page, {
 	whiteToolbarVersion: true,
 	hideMiddleNavigation: true,
 	hideFooter: true,
+	hideTitle: true,
 })
 function Page() {
 	return (
