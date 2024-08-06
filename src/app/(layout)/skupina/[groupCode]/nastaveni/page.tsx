@@ -9,8 +9,11 @@ import GroupCustomLayout from '../GroupCustomLayout'
 import UsersPanel from './UsersPanel'
 import PinPlaylistPanel from './components/PinPlaylist/PinPlaylistPanel'
 
-export default SmartPage(GroupSettings)
-
+export default SmartPage(GroupSettings, {
+	transparentToolbar: true,
+	whiteToolbarVersion: true,
+	hideMiddleNavigation: true,
+})
 function GroupSettings() {
 	const { guid } = useGroup()
 	const isOwner = usePermission('GROUP_OWNER', guid)

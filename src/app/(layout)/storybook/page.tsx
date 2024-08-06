@@ -3,8 +3,8 @@
 import { Masonry } from '@mui/lab'
 import { Box, Button, Divider, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { storyBookComponents } from './createStory'
 import StoryItem from './StoryItem'
+import { storyBookComponents } from './createStory'
 
 import {} from '@/ui/index.story'
 import { Gap } from '../../../common/ui/Gap'
@@ -12,7 +12,7 @@ import { Gap } from '../../../common/ui/Gap'
 export default function TestComponents() {
 	const arr = useMemo(() => {
 		return storyBookComponents.sort((a, b) => {
-			return a.name.localeCompare(b.name)
+			return a.name?.localeCompare(b?.name)
 		})
 	}, [])
 	return (
