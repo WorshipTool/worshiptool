@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import React, { useEffect } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
+import Footer from '../../Footer/Footer'
 import { Toolbar } from '../../Toolbar'
 import GroupContainer from './components/GroupContainer'
 
@@ -39,7 +40,7 @@ export default function Inner({ children }: AppContainerProps) {
 	return hidden ? (
 		children
 	) : (
-		<Box>
+		<Box display={'flex'} flexDirection={'column'} minHeight={'100vh'}>
 			{!isOn ? (
 				<>
 					<Toolbar />
@@ -50,6 +51,9 @@ export default function Inner({ children }: AppContainerProps) {
 					<GroupContainer expandable={expandable}>{children}</GroupContainer>
 				</>
 			)}
+
+			<Box flex={1} />
+			<Footer />
 		</Box>
 	)
 }

@@ -66,6 +66,7 @@ export const Button = <T extends RoutesKeys>({
 				sx={{
 					width: '100%',
 					height: '100%',
+					...props.sx,
 				}}
 			>
 				{children}
