@@ -4,9 +4,9 @@ import { Info } from '@mui/icons-material'
 import {
 	Box,
 	Paper,
-	styled,
 	TextField,
 	Typography,
+	styled,
 	useTheme,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -19,15 +19,9 @@ import { useSmartParams } from '../../../routes/useSmartParams'
 import GoogleLoginButton from './components/GoogleLoginButton'
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
-	width: '30%',
-	padding: 30,
-	[theme.breakpoints.down('md')]: {
-		width: '50%',
-	},
-	[theme.breakpoints.down('sm')]: {
-		width: '100%',
-		margin: 10,
-	},
+	width: `clamp(min(100vw, 25rem), 50%, 500px)`,
+	display: 'flex',
+	flexDirection: 'column',
 }))
 
 export default function Login() {
@@ -139,108 +133,120 @@ export default function Login() {
 					<StyledContainer
 						style={{
 							marginBottom: theme.spacing(2),
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							gap: theme.spacing(1),
 						}}
 					>
-						<Info fontSize="large" color="info" />
-						<Typography>{params.message}</Typography>
+						<Box
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: theme.spacing(1),
+								padding: '30px',
+							}}
+						>
+							<Info fontSize="large" color="info" />
+							<Typography>{params.message}</Typography>
+						</Box>
 					</StyledContainer>
 				)}
 				<StyledContainer>
-					<Box display={'flex'} flexDirection={'column'}>
-						<Typography variant={'h5'} fontWeight={'bold'} flex={1}>
-							Která jsi ovce?
-						</Typography>
-					</Box>
-					<Gap />
-					{errorMessage != '' && (
-						<>
-							<Typography variant="subtitle2" color={'red'}>
-								{errorMessage}
-							</Typography>
-							<Gap />
-						</>
-					)}
-
-					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							onLoginClick()
-						}}
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
+					<Box
+						sx={{
+							padding: '30px',
 						}}
 					>
-						<Typography variant="subtitle2">Email</Typography>
-						<TextField
-							size="small"
-							value={email}
-							onChange={onEmailChange}
-							error={!isEmailOk}
-							helperText={emailMessage}
-							disabled={inProgress}
-							type="email"
-						/>
+						<Box display={'flex'} flexDirection={'column'}>
+							<Typography variant={'h5'} fontWeight={'bold'} flex={1}>
+								Která jsi ovce?
+							</Typography>
+						</Box>
 						<Gap />
-						<Typography variant="subtitle2">Heslo</Typography>
-						<TextField
-							size="small"
-							fullWidth
-							value={password}
-							onChange={onPasswordChange}
-							error={!isPasswordOk}
-							helperText={passwordMessage}
-							disabled={inProgress}
-							type="password"
-						/>
+						{errorMessage != '' && (
+							<>
+								<Typography variant="subtitle2" color={'red'}>
+									{errorMessage}
+								</Typography>
+								<Gap />
+							</>
+						)}
+
+						<form
+							onSubmit={(e) => {
+								e.preventDefault()
+								onLoginClick()
+							}}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+							}}
+						>
+							<Typography variant="subtitle2">Email</Typography>
+							<TextField
+								size="small"
+								value={email}
+								onChange={onEmailChange}
+								error={!isEmailOk}
+								helperText={emailMessage}
+								disabled={inProgress}
+								type="email"
+							/>
+							<Gap />
+							<Typography variant="subtitle2">Heslo</Typography>
+							<TextField
+								size="small"
+								fullWidth
+								value={password}
+								onChange={onPasswordChange}
+								error={!isPasswordOk}
+								helperText={passwordMessage}
+								disabled={inProgress}
+								type="password"
+							/>
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								alignItems={'center'}
+								justifyContent={'start'}
+							>
+								<Button
+									size={'small'}
+									variant="text"
+									color="grey.600"
+									onClick={resetPassword}
+								>
+									Zapomněli jste heslo?
+								</Button>
+							</Box>
+							<Gap />
+							<Box>
+								<Button type="submit" loading={inProgress} variant="contained">
+									Přihlásit se
+								</Button>
+							</Box>
+						</form>
+
 						<Box
 							display={'flex'}
 							flexDirection={'row'}
 							alignItems={'center'}
-							justifyContent={'start'}
+							justifyContent={'end'}
 						>
-							<Button
-								size={'small'}
-								variant="text"
-								color="grey.600"
-								onClick={resetPassword}
-							>
-								Zapomněli jste heslo?
+							<Typography variant={'subtitle2'}>Nemáte ještě účet?</Typography>
+							<Button size={'small'} variant="text" to="signup">
+								Vytvořte si ho
 							</Button>
 						</Box>
-						<Gap />
-						<Box>
-							<Button type="submit" loading={inProgress} variant="contained">
-								Přihlásit se
-							</Button>
+						<Gap value={2} />
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'end',
+							}}
+						>
+							<GoogleLoginButton afterLogin={afterGoogleLogin} />
 						</Box>
-					</form>
-
-					<Box
-						display={'flex'}
-						flexDirection={'row'}
-						alignItems={'center'}
-						justifyContent={'end'}
-					>
-						<Typography variant={'subtitle2'}>Nemáte ještě účet?</Typography>
-						<Button size={'small'} variant="text" to="signup">
-							Vytvořte si ho
-						</Button>
-					</Box>
-					<Gap value={2} />
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'end',
-						}}
-					>
-						<GoogleLoginButton afterLogin={afterGoogleLogin} />
 					</Box>
 				</StyledContainer>
 			</Box>
