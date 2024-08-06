@@ -128,7 +128,7 @@ export const routesPaths = {
 	testComponents: '/storybook',
 	subdomain: '/sub/[subdomain]',
 	about: '/o-nas',
-	teams: '/tymy',
+	teams: '/sub/tymy',
 	contact: '/kontakt',
 } as const
 
