@@ -1,5 +1,6 @@
 'use client'
 
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import SearchIcon from '@mui/icons-material/Search'
 import {
 	Box,
@@ -43,6 +44,8 @@ export default function HomeDesktop() {
 	const [showSearchedList, setShowSearchedList] = useState(false)
 
 	const animationDuration = 0.2
+
+	const toolbar = useToolbar()
 
 	/**
 	 * Calculation value to correct window height
@@ -96,6 +99,11 @@ export default function HomeDesktop() {
 			window.removeEventListener('scroll', handleScroll)
 		}
 	}, [])
+
+	useEffect(() => {
+		toolbar.setTransparent(isTop)
+		toolbar.setHideMiddleNavigation(!isTop)
+	}, [isTop])
 
 	return (
 		<>

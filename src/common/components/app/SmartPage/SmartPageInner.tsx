@@ -13,15 +13,19 @@ export const SmartPageInnerProvider = ({
 	const options: SmartPageOptions = useMemo(
 		() => ({
 			transparentToolbar: false,
+			whiteToolbarVersion: false,
+			hideMiddleNavigation: false,
 			...pageOptions,
 		}),
 		[pageOptions]
 	)
 
-	const { setTransparent } = useToolbar()
+	const toolbar = useToolbar()
 
 	useEffect(() => {
-		setTransparent(options.transparentToolbar)
+		toolbar.setTransparent(options.transparentToolbar)
+		toolbar.setWhiteVersion(options.whiteToolbarVersion)
+		toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
 	}, [options])
 
 	return <>{children}</>

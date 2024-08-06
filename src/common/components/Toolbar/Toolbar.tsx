@@ -4,7 +4,7 @@ import MiddleNavigationPanel from '@/common/components/Toolbar/components/Middle
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import LeftWebTitle from './components/LeftWebTItle'
 import RightAccountPanel from './components/RightAccountPanel/RightAccountPanel'
 
@@ -28,7 +28,11 @@ interface ToolbarProps {
 export function Toolbar({}: ToolbarProps) {
 	const theme = useTheme()
 
-	const { transparent } = useToolbar()
+	const { transparent, whiteVersion } = useToolbar()
+
+	const white = useMemo(() => {
+		return whiteVersion || !transparent
+	}, [whiteVersion, transparent])
 
 	const [init, setInit] = useState(false)
 	useEffect(() => {
@@ -61,7 +65,7 @@ export function Toolbar({}: ToolbarProps) {
 					display={'flex'}
 					flex={1}
 					height={'100%'}
-					color={transparent ? 'black' : 'white'}
+					color={!white ? 'black' : 'white'}
 				>
 					<LeftWebTitle />
 					<MiddleNavigationPanel />

@@ -23,10 +23,16 @@ export const ToolbarProvider = ({ children }: { children: ReactNode }) => {
 export const useProvideToolbar = () => {
 	const [showTitle, setShowTitle] = useState(false)
 	const [transparent, setTransparent] = useState(false)
+	const [whiteVersion, setWhiteVersion] = useState(false)
+	const [hideMiddleNavigation, setHideMiddleNavigation] = useState(false)
 
 	return {
 		showTitle,
 		transparent,
 		setTransparent,
+		whiteVersion,
+		setWhiteVersion,
+		hideMiddleNavigation,
+		setHideMiddleNavigation,
 	}
 }

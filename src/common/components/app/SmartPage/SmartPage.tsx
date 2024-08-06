@@ -2,6 +2,8 @@ import { SmartPageInnerProvider } from '@/common/components/app/SmartPage/SmartP
 
 export type SmartPageOptions = {
 	transparentToolbar: boolean
+	whiteToolbarVersion: boolean
+	hideMiddleNavigation: boolean
 }
 
 export function SmartPage<T>(

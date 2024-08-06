@@ -57,10 +57,10 @@ interface RightAccountPanelProps {}
 export default function RightAccountPanel({}: RightAccountPanelProps) {
 	const { isLoggedIn, loading } = useAuth()
 
-	const { transparent } = useToolbar()
+	const { transparent, whiteVersion } = useToolbar()
 
 	const shadowColor = useMemo(() => {
-		return transparent ? '#ffffff44' : '#00000044'
+		return transparent && !whiteVersion ? '#ffffff44' : '#00000044'
 	}, [transparent])
 
 	const iconStyle: SxProps<Theme> = {
