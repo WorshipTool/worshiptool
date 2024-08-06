@@ -18,9 +18,3 @@ export function SmartPage<T>(
 		)
 	}
 }
-
-// export const SmartPage = (PageComponent: React.FC) => {
-// 	return () => {
-// 		return <PageComponent />
-// 	}
-// }
