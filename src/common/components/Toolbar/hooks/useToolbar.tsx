@@ -28,6 +28,7 @@ export const useProvideToolbar = () => {
 
 	return {
 		showTitle,
+		setShowTitle,
 		transparent,
 		setTransparent,
 		whiteVersion,

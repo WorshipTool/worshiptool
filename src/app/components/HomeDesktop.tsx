@@ -103,6 +103,7 @@ export default function HomeDesktop() {
 	useEffect(() => {
 		toolbar.setTransparent(isTop)
 		toolbar.setHideMiddleNavigation(!isTop)
+		toolbar.setShowTitle(!isTop)
 	}, [isTop])
 
 	return (

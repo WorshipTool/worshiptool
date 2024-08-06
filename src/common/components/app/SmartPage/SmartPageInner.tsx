@@ -15,6 +15,7 @@ export const SmartPageInnerProvider = ({
 			transparentToolbar: false,
 			whiteToolbarVersion: false,
 			hideMiddleNavigation: false,
+			hideTitle: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -26,13 +27,8 @@ export const SmartPageInnerProvider = ({
 		toolbar.setTransparent(options.transparentToolbar)
 		toolbar.setWhiteVersion(options.whiteToolbarVersion)
 		toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
+		toolbar.setShowTitle(!options.hideTitle)
 	}, [options])
 
 	return <>{children}</>
 }
-
-// export const SmartPage = (PageComponent: React.FC) => {
-// 	return () => {
-// 		return <PageComponent />
-// 	}
-// }

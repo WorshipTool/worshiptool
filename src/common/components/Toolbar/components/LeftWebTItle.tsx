@@ -54,6 +54,7 @@ export default function LeftWebTitle({}: LeftWebTitleProps) {
 					marginLeft={0}
 					sx={{
 						opacity: !showTitle ? 0 : 1,
+						transition: 'opacity 0.2s ease',
 					}}
 				>
 					Chvalotce
