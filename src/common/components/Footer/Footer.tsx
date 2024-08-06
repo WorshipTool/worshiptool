@@ -1,16 +1,18 @@
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
+import { RoutesKeys } from '@/routes'
+import { Favorite } from '@mui/icons-material'
 import { Box } from '@mui/material'
 
 export default function Footer() {
-	const links = [
-		'Hledat píseň',
-		'Seznam písní',
-		'O aplikaci',
-		'Týmy',
-		'Zpětná vazba',
-		'Nahlásit chybu',
-		'Kontakt',
+	const links: [string, RoutesKeys | undefined][] = [
+		['Hledat píseň', 'home'],
+		['Seznam písní', 'songsList'],
+		['O aplikaci', 'about'],
+		['Týmy', 'teams'],
+		['Zpětná vazba', 'documentation'],
+		['Nahlásit chybu', 'documentation'],
+		['Kontakt', 'contact'],
 	]
 
 	return (
@@ -28,24 +30,34 @@ export default function Footer() {
 		>
 			<Box display={'flex'} flexDirection={'row'} gap={1}>
 				{links.map((link) => {
+					const title = link[0]
+					const to = link[1]
 					return (
 						<Button
 							size={'small'}
-							key={link}
+							key={title}
 							color="grey.500"
 							variant="text"
 							sx={{
 								fontWeight: 400,
 							}}
+							to={to}
 						>
-							{link}
+							{title}
 						</Button>
 					)
 				})}
 			</Box>
 			<Box display={'flex'} flexDirection={'row'} gap={1}>
 				<Typography strong size={'small'}>
-					Vytvořeno s ❤️{' '}
+					Vytvořeno s{' '}
+					<Favorite
+						color={'error'}
+						sx={{
+							fontSize: '0.9rem',
+							transform: 'translateY(0.15rem)',
+						}}
+					/>
 				</Typography>
 				<Typography size={'small'}>-</Typography>
 				<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
