@@ -13,6 +13,7 @@ export default SmartPage(GroupSettings, {
 	transparentToolbar: true,
 	whiteToolbarVersion: true,
 	hideMiddleNavigation: true,
+	hideFooter: true,
 })
 function GroupSettings() {
 	const { guid } = useGroup()

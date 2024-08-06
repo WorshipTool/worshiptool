@@ -1,4 +1,5 @@
 'use client'
+import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { SmartPageOptions } from '@/common/components/app/SmartPage/SmartPage'
 import React, { useEffect, useMemo } from 'react'
@@ -16,18 +17,21 @@ export const SmartPageInnerProvider = ({
 			whiteToolbarVersion: false,
 			hideMiddleNavigation: false,
 			hideTitle: false,
+			hideFooter: false,
 			...pageOptions,
 		}),
 		[pageOptions]
 	)
 
 	const toolbar = useToolbar()
+	const footer = useFooter()
 
 	useEffect(() => {
 		toolbar.setTransparent(options.transparentToolbar)
 		toolbar.setWhiteVersion(options.whiteToolbarVersion)
 		toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
 		toolbar.setShowTitle(!options.hideTitle)
+		footer.setShow(!options.hideFooter)
 	}, [options])
 
 	return <>{children}</>

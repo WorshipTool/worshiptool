@@ -13,7 +13,7 @@ export default function Loading() {
 			>
 				<LinearProgress
 					sx={{
-						height: 60,
+						height: 4,
 					}}
 				/>
 			</Box>

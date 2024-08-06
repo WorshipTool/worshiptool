@@ -104,7 +104,7 @@ export default function HomeDesktop() {
 		toolbar.setTransparent(isTop)
 		toolbar.setHideMiddleNavigation(!isTop)
 		toolbar.setShowTitle(!isTop)
-	}, [isTop])
+	}, [isTop, toolbar])
 
 	return (
 		<>

@@ -1,3 +1,4 @@
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Grid, Paper, Typography } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import ContainerGrid from '../../../common/components/ContainerGrid'
@@ -11,7 +12,8 @@ export const generateMetadata = async () => {
 	}
 }
 
-export default async function Documentation() {
+export default SmartPage(Documentation)
+async function Documentation() {
 	const raw = await getReadmeRawData()
 
 	return (

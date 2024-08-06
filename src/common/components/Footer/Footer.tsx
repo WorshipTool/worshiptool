@@ -1,8 +1,12 @@
+import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { RoutesKeys } from '@/routes'
 import { Favorite } from '@mui/icons-material'
 import { Box } from '@mui/material'
+
+import { Gap } from '@/common/ui/Gap'
+import './footer.styles.css'
 
 export default function Footer() {
 	const links: [string, RoutesKeys | undefined][] = [
@@ -15,53 +19,59 @@ export default function Footer() {
 		['Kontakt', 'contact'],
 	]
 
+	const footer = useFooter()
+
 	return (
-		<Box
-			sx={{
-				bgcolor: 'grey.200',
-				borderTop: '2px solid',
-				borderColor: 'grey.300',
-				marginTop: 1,
-				padding: 1,
-				display: 'flex',
-				alignItems: 'center',
-				flexDirection: 'column',
-			}}
-		>
-			<Box display={'flex'} flexDirection={'row'} gap={1}>
-				{links.map((link) => {
-					const title = link[0]
-					const to = link[1]
-					return (
-						<Button
-							size={'small'}
-							key={title}
-							color="grey.500"
-							variant="text"
+		<footer className={footer.show ? 'footer footer-open ' : 'footer'}>
+			<Box
+				sx={{
+					bgcolor: 'grey.200',
+					borderTop: '2px solid',
+					borderColor: 'grey.300',
+					marginTop: 1,
+					padding: 1,
+					display: 'flex',
+					alignItems: 'center',
+					flexDirection: 'column',
+					height: '100%',
+				}}
+			>
+				<Gap value={0.5} />
+				<Box display={'flex'} flexDirection={'row'} gap={1}>
+					{links.map((link) => {
+						const title = link[0]
+						const to = link[1]
+						return (
+							<Button
+								size={'small'}
+								key={title}
+								color="grey.500"
+								variant="text"
+								sx={{
+									fontWeight: 400,
+								}}
+								to={to}
+							>
+								{title}
+							</Button>
+						)
+					})}
+				</Box>
+				<Box display={'flex'} flexDirection={'row'} gap={1}>
+					<Typography strong size={'small'}>
+						Vytvořeno s{' '}
+						<Favorite
+							color={'error'}
 							sx={{
-								fontWeight: 400,
+								fontSize: '0.9rem',
+								transform: 'translateY(0.15rem)',
 							}}
-							to={to}
-						>
-							{title}
-						</Button>
-					)
-				})}
+						/>
+					</Typography>
+					<Typography size={'small'}>2024</Typography>
+					<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
+				</Box>
 			</Box>
-			<Box display={'flex'} flexDirection={'row'} gap={1}>
-				<Typography strong size={'small'}>
-					Vytvořeno s{' '}
-					<Favorite
-						color={'error'}
-						sx={{
-							fontSize: '0.9rem',
-							transform: 'translateY(0.15rem)',
-						}}
-					/>
-				</Typography>
-				<Typography size={'small'}>-</Typography>
-				<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
-			</Box>
-		</Box>
+		</footer>
 	)
 }

@@ -1,0 +1,9 @@
+.footer {
+	height: 0px;
+	overflow: hidden;
+	transition: height 0.3s ease-in-out;
+}
+
+.footer-open {
+	height: 100px;
+}
