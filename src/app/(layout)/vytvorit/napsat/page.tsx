@@ -1,6 +1,7 @@
 'use client'
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import {
 	Box,
 	Button,
@@ -41,7 +42,8 @@ const SheetInput = styled(InputBase)(({}) => ({
 	alignItems: 'start',
 }))
 
-export default function Create() {
+export default SmartPage(Create)
+function Create() {
 	const { songAddingApi } = useApi()
 	const {
 		fetchApiState,

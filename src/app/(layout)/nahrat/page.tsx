@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box } from '@mui/material'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 import UploadPanel from './components/UploadPanel/UploadPanel'
@@ -9,8 +10,8 @@ export interface EasySheet {
 	randomHash: string
 	originalFile: File
 }
-
-export default function Upload() {
+export default SmartPage(Upload)
+function Upload() {
 	const navigate = useSmartNavigate()
 
 	const parseFiles = async (files: File[]) => {

@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Button } from '@/common/ui/Button'
 import { Card } from '@/common/ui/Card/Card'
 import TextField from '@/common/ui/TextField/TextField'
@@ -12,7 +13,9 @@ import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import '../styles.css'
 
-export default function Page() {
+export default SmartPage(Page)
+
+function Page() {
 	const [newPassword, setNewPassword] = useState('')
 	const [newPasswordAgain, setNewPasswordAgain] = useState('')
 

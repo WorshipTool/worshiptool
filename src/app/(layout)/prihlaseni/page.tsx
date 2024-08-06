@@ -1,5 +1,6 @@
 'use client'
 
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Info } from '@mui/icons-material'
 import {
 	Box,
@@ -24,7 +25,9 @@ const StyledContainer = styled(Paper)(({ theme }) => ({
 	flexDirection: 'column',
 }))
 
-export default function Login() {
+export default SmartPage(Login)
+
+function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 

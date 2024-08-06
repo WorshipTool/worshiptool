@@ -35,7 +35,7 @@ export default function GroupToolbarMobile(props: GroupToolbarMobileProps) {
 				}}
 				zIndex={1}
 			>
-				<Toolbar transparent white />
+				<Toolbar />
 				<Box
 					sx={{
 						// background: '#2f2f2f',

@@ -10,12 +10,15 @@ import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
 import SlideCard from '@/app/(layout)/playlist/[guid]/prezentace/components/SlideCard'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
-export default function PlaylistCards() {
+export default SmartPage(PlaylistCards)
+
+function PlaylistCards() {
 	const { guid } = useParams() as { guid: PlaylistGuid }
 	const { items, playlist } = usePlaylist(guid)
 

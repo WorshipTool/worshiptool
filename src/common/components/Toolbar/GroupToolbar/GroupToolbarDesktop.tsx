@@ -1,3 +1,4 @@
+import { Toolbar } from '@/common'
 import styled from '@emotion/styled'
 import { Box, Fade, SvgIcon, Typography, useTheme, Zoom } from '@mui/material'
 import { useMemo } from 'react'
@@ -5,7 +6,6 @@ import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { Clickable } from '../../../ui/Clickable'
 import { Gap } from '../../../ui/Gap'
-import { Toolbar } from '../Toolbar'
 import QuickActions from './QuickActions'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -49,7 +49,7 @@ export default function GroupToolbarDesktop({
 			position={'relative'}
 			zIndex={1}
 		>
-			<Toolbar transparent white />
+			<Toolbar />
 
 			<Box
 				overflow={'hidden'}

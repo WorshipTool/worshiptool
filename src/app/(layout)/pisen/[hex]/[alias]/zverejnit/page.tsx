@@ -2,6 +2,7 @@
 
 import { ValidationResult } from '@/api/generated'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
@@ -17,8 +18,8 @@ import {
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
-
-export default function Page() {
+export default SmartPage(Page)
+function Page() {
 	const { hex, alias } = useSmartParams('variantPublish')
 
 	const {

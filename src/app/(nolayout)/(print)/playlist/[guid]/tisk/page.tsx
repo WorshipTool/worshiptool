@@ -1,15 +1,18 @@
 import { getPlaylistDataByGuid } from '@/app/(layout)/playlist/[guid]/playlist.tech'
 import NotFound from '@/app/not-found'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { SmartParams } from '@/routes'
 import { Box } from '@mui/material'
-import { note, Sheet } from '@pepavlin/sheet-api'
+import { Sheet, note } from '@pepavlin/sheet-api'
 
 type PageProps = {
 	params: SmartParams<'playlistPrint'>
 }
 
-export default async function Page({ params }: PageProps) {
+export default SmartPage(Page)
+
+async function Page({ params }: PageProps) {
 	try {
 		const data = await getPlaylistDataByGuid(params.guid)
 		return (

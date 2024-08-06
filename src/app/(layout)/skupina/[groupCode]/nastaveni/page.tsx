@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Divider, LinearProgress, Typography } from '@mui/material'
 import { Card } from '../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../common/ui/Gap'
@@ -8,7 +9,9 @@ import GroupCustomLayout from '../GroupCustomLayout'
 import UsersPanel from './UsersPanel'
 import PinPlaylistPanel from './components/PinPlaylist/PinPlaylistPanel'
 
-export default function GroupSettings() {
+export default SmartPage(GroupSettings)
+
+function GroupSettings() {
 	const { guid } = useGroup()
 	const isOwner = usePermission('GROUP_OWNER', guid)
 

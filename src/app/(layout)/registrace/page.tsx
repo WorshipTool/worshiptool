@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import {
 	Box,
 	Button,
@@ -9,7 +10,6 @@ import {
 	styled,
 } from '@mui/material'
 import { useState } from 'react'
-import { Toolbar } from '../../../common'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useAuth from '../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
@@ -28,7 +28,9 @@ const StyledContainer = styled(Paper)(({ theme }) => ({
 	},
 }))
 
-export default function SignUp() {
+export default SmartPage(SignUp)
+
+function SignUp() {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [email, setEmail] = useState('')
@@ -124,7 +126,6 @@ export default function SignUp() {
 
 	return (
 		<Box>
-			<Toolbar transparent={false} />
 			<Box
 				flex={1}
 				display={'flex'}

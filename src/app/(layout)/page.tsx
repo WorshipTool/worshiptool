@@ -1,12 +1,17 @@
 'use client'
 
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, useTheme } from '@mui/material'
 import { useEffect } from 'react'
 import useGroup from '../../hooks/group/useGroup'
 import HomeDesktop from '../components/HomeDesktop'
 import HomeMobile from '../components/HomeMobile'
 
-export default function Home() {
+export default SmartPage(Home, {
+	transparentToolbar: true,
+})
+
+function Home() {
 	const theme = useTheme()
 	const { turnOff } = useGroup()
 

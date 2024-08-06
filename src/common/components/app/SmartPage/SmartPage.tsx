@@ -1,18 +1,17 @@
 import { SmartPageInnerProvider } from '@/common/components/app/SmartPage/SmartPageInner'
-import React from 'react'
 
 export type SmartPageOptions = {
 	transparentToolbar: boolean
 }
 
-export const SmartPage = (
-	PageComponent: React.FC,
+export function SmartPage<T>(
+	PageComponent: (props: T) => JSX.Element | null | Promise<JSX.Element>,
 	pageOptions?: Partial<SmartPageOptions>
-) => {
-	return () => {
+) {
+	return function SmartPageFunctionName(props: T) {
 		return (
 			<SmartPageInnerProvider pageOptions={pageOptions}>
-				<PageComponent />
+				{PageComponent(props)}
 			</SmartPageInnerProvider>
 		)
 	}

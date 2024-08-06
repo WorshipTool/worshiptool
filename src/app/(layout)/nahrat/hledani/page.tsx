@@ -1,6 +1,7 @@
 'use client'
 import { CreatedType } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { CloudUpload } from '@mui/icons-material'
 import {
 	Box,
@@ -36,7 +37,8 @@ const uploadingMessages = [
 	'Ukládám píseň do databáze...',
 ]
 
-export default function Parse() {
+export default SmartPage(Parse)
+function Parse() {
 	const { files } = useSmartParams('uploadParse')
 
 	const [parsed, setParsed] = React.useState(false)

@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '../../../../api/dtos'
@@ -9,7 +10,9 @@ import { handleApiCall } from '../../../../tech/handleApiCall'
 import MySongItem from './components/MySongItem'
 import Loading from './loading'
 
-export default async function MySongsList() {
+export default SmartPage(MySongsList)
+
+async function MySongsList() {
 	const { isLoggedIn } = useAuth()
 	const { songGettingApi } = useApi()
 	const navigate = useSmartNavigate()

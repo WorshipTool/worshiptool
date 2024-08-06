@@ -1,4 +1,5 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Add, Remove } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
@@ -30,7 +31,9 @@ const StyledContainer = styled(Paper)(({ theme }) => ({
 	cursor: 'pointer',
 }))
 
-export default function Playlists() {
+export default SmartPage(Playlists)
+
+function Playlists() {
 	const {
 		getPlaylistsOfUser,
 		createPlaylist: createWithoutName,

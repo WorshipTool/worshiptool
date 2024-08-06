@@ -7,7 +7,9 @@
 		"build": "next build",
 		"start": "next start -p 5500",
 		"lint": "next lint",
-		"generate-api": "bash ./src/api/generate_api.sh"
+		"generate-api": "bash ./src/api/generate_api.sh",
+		"test": "jest",
+		"test:watch": "jest --watch"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.4",
@@ -34,16 +36,27 @@
 		"react-snowfall": "^2.1.0",
 		"sharp": "^0.33.3",
 		"swipe-event-listener": "^1.2.1",
-		"swr": "^2.2.5"
+		"swr": "^2.2.5",
+		"ts-node": "^10.9.2"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.25.2",
+		"@babel/preset-env": "^7.25.3",
+		"@babel/preset-typescript": "^7.24.7",
 		"@svgr/webpack": "^8.1.0",
+		"@testing-library/jest-dom": "^6.4.8",
+		"@testing-library/react": "^16.0.0",
 		"@types/js-cookie": "^3.0.6",
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
+		"babel-jest": "^29.7.0",
 		"eslint": "^8",
 		"eslint-config-next": "14.2.3",
+		"glob": "^11.0.0",
+		"jest": "^29.7.0",
+		"jest-environment-jsdom": "^29.7.0",
+		"require-context.macro": "^1.2.2",
 		"typescript": "^5"
 	}
 }

@@ -1,24 +1,27 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Typography } from '@/common/ui/Typography'
 import { useEffect, useState } from 'react'
 import {
-	mapGetSongDataApiToSongDto,
-	mapSongDataVariantApiToSongVariantDto,
 	SongDto,
 	SongVariantDto,
+	mapGetSongDataApiToSongDto,
+	mapSongDataVariantApiToSongVariantDto,
 } from '../../../../../api/dtos'
 import { SongGettingApi } from '../../../../../api/generated'
 import { SmartParams } from '../../../../../routes'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
-import NotFound from './not-found'
 import SongContainer from './SongContainer'
+import NotFound from './not-found'
 import { getVariantAliasFromParams, getVariantByAlias } from './tech'
 
 type SongRoutePageProps = {
 	params: SmartParams<'variant'>
 }
 
-export default function SongRoutePage({ params }: SongRoutePageProps) {
+export default SmartPage(SongRoutePage)
+
+function SongRoutePage({ params }: SongRoutePageProps) {
 	const [song, setSong] = useState<SongDto>()
 	const [variantData, setVariantData] = useState<SongVariantDto>()
 	useEffect(() => {

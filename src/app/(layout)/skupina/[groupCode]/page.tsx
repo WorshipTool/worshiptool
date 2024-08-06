@@ -1,8 +1,10 @@
 'use client'
-import SelectionList from './components/SelectionList'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import GroupCustomLayout from './GroupCustomLayout'
+import SelectionList from './components/SelectionList'
 
-export default function page() {
+export default SmartPage(Page)
+function Page() {
 	return (
 		<GroupCustomLayout>
 			<SelectionList />

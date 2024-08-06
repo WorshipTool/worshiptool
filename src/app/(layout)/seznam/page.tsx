@@ -1,6 +1,7 @@
 'use client'
 import { VariantPackAlias } from '@/api/dtos'
 import { GetListSongData } from '@/api/generated'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import {
 	Box,
 	CircularProgress,
@@ -31,7 +32,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 	cursor: 'pointer',
 }))
 
-export default function List() {
+export default SmartPage(List)
+function List() {
 	const [page, setPage] = useState(1)
 	const [pageCount, setPageCount] = useState(1)
 
