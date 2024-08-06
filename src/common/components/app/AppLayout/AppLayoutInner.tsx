@@ -42,7 +42,7 @@ export default function Inner({ children }: AppContainerProps) {
 		<Box>
 			{!isOn ? (
 				<>
-					<Toolbar transparent={transparent && isTop} />
+					<Toolbar />
 					{children}
 				</>
 			) : (

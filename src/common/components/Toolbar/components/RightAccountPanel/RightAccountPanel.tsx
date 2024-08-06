@@ -1,5 +1,6 @@
 'use client'
 
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { AddBox, Apps, Login } from '@mui/icons-material'
 import {
 	Avatar,
@@ -51,14 +52,12 @@ function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {
 	)
 }
 
-interface RightAccountPanelProps {
-	transparent?: boolean
-}
+interface RightAccountPanelProps {}
 
-export default function RightAccountPanel({
-	transparent,
-}: RightAccountPanelProps) {
+export default function RightAccountPanel({}: RightAccountPanelProps) {
 	const { isLoggedIn, loading } = useAuth()
+
+	const { transparent } = useToolbar()
 
 	const shadowColor = useMemo(() => {
 		return transparent ? '#ffffff44' : '#00000044'

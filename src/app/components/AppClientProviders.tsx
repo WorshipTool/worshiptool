@@ -1,5 +1,6 @@
 'use client'
 import { ThemeProvider } from '@/app/theme'
+import { ToolbarProvider } from '@/common/components/Toolbar/hooks/useToolbar'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { GroupProvider } from '@/hooks/group/useGroup'
@@ -23,7 +24,9 @@ export default function AppClientProviders({
 				<AuthProvider>
 					<ErrorHandlerProvider>
 						<GroupProvider>
-							<PlaylistProvider>{children}</PlaylistProvider>
+							<ToolbarProvider>
+								<PlaylistProvider>{children}</PlaylistProvider>
+							</ToolbarProvider>
 						</GroupProvider>
 					</ErrorHandlerProvider>
 				</AuthProvider>

@@ -1,7 +1,7 @@
 import SvgIcon from '@/assets/icon.svg'
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, Typography, styled } from '@mui/material'
 import useGroup from '../../../../hooks/group/useGroup'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { Link } from '../../../ui/Link/CustomLink'
 
 const Container = styled(Box)(({ theme }) => ({
@@ -22,11 +22,9 @@ const Container = styled(Box)(({ theme }) => ({
 	userSelect: 'none',
 	pointerEvents: 'auto',
 }))
-interface LeftWebTitleProps {
-	transparent?: boolean
-}
-export default function LeftWebTitle({ transparent }: LeftWebTitleProps) {
-	const navigate = useSmartNavigate()
+interface LeftWebTitleProps {}
+export default function LeftWebTitle({}: LeftWebTitleProps) {
+	const { showTitle } = useToolbar()
 
 	const size = 36
 
@@ -55,7 +53,7 @@ export default function LeftWebTitle({ transparent }: LeftWebTitleProps) {
 					fontSize={18}
 					marginLeft={0}
 					sx={{
-						opacity: transparent ? 0 : 1,
+						opacity: !showTitle ? 0 : 1,
 					}}
 				>
 					Chvalotce
