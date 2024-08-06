@@ -12,8 +12,10 @@ declare module "nextjs-routes" {
 
   export type Route =
     | StaticRoute<"/dokumentace">
+    | StaticRoute<"/kontakt">
     | StaticRoute<"/nahrat/hledani">
     | StaticRoute<"/nahrat">
+    | StaticRoute<"/o-nas">
     | StaticRoute<"/">
     | DynamicRoute<"/pisen/[hex]/[alias]", { "hex": string; "alias": string }>
     | DynamicRoute<"/pisen/[hex]/[alias]/zverejnit", { "hex": string; "alias": string }>
@@ -28,6 +30,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/skupina/[groupCode]", { "groupCode": string }>
     | StaticRoute<"/storybook">
     | StaticRoute<"/sub/test">
+    | StaticRoute<"/tymy">
     | StaticRoute<"/ucet">
     | StaticRoute<"/ucet/pisne">
     | StaticRoute<"/ucet/playlisty">

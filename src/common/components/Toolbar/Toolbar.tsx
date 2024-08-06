@@ -1,9 +1,9 @@
 'use client'
 
+import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
 import { Box, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
-import { Gap } from '../../ui/Gap/Gap'
+import { useEffect, useState } from 'react'
 import LeftWebTitle from './components/LeftWebTItle'
 import RightAccountPanel from './components/RightAccountPanel/RightAccountPanel'
 
@@ -23,9 +23,8 @@ const TopBar = styled(Box)(() => ({
 interface ToolbarProps {
 	transparent?: boolean
 	white?: boolean
-	header?: React.ReactNode
 }
-export function Toolbar({ transparent, white, header }: ToolbarProps) {
+export function Toolbar({ transparent, white }: ToolbarProps) {
 	const theme = useTheme()
 
 	const [init, setInit] = useState(false)
@@ -54,25 +53,17 @@ export function Toolbar({ transparent, white, header }: ToolbarProps) {
 				<Box
 					zIndex={0}
 					flexDirection={'row'}
+					justifyContent={'space-between'}
+					alignItems={'center'}
 					display={'flex'}
 					flex={1}
 					height={'100%'}
 					color={transparent ? 'black' : 'white'}
 				>
-					<LeftWebTitle />
-					<Gap horizontal value={3} />
+					<LeftWebTitle transparent={transparent} />
+					<MiddleNavigationPanel />
+
 					<Box
-						sx={{
-							pointerEvents: 'auto',
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
-					>
-						{header}
-					</Box>
-					<Box
-						flex={1}
 						sx={{
 							opacity: init ? 1 : 0,
 							transition: 'opacity 0.3s',

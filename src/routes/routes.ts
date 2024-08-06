@@ -127,6 +127,9 @@ export const routesPaths = {
 	test: '/test',
 	testComponents: '/storybook',
 	subdomain: '/sub/[subdomain]',
+	about: '/o-nas',
+	teams: '/tymy',
+	contact: '/kontakt',
 } as const
 
 // DONT REMOVE
