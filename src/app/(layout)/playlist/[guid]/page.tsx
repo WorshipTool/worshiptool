@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import PlaylistPreview from './components/PlaylistPreview'
 import { InnerPlaylistProvider } from './hooks/useInnerPlaylist'
 
-export default SmartPage(PlaylistScreen)
+export default SmartPage(PlaylistScreen, ['fullWidth', 'hideFooter'])
 
 function PlaylistScreen() {
 	const { guid } = useParams() as { guid: PlaylistGuid }
