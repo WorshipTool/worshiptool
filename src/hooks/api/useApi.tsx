@@ -3,6 +3,7 @@ import {
 	AnalyticsApi,
 	AuthApi,
 	GroupApi,
+	MailApi,
 	PermissionsApi,
 	PlaylistEditingApi,
 	PlaylistGettingApi,
@@ -32,6 +33,7 @@ export const useApi = () => {
 			authApi: new AuthApi(apiConfiguration),
 			permissionApi: new PermissionsApi(apiConfiguration),
 			analyticsApi: new AnalyticsApi(apiConfiguration),
+			mailApi: new MailApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

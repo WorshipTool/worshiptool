@@ -13,6 +13,7 @@ type TextFieldProps = {
 	type?: TextFieldType
 	required?: boolean
 	multiline?: boolean
+	disabled?: boolean
 }
 
 export default function TextField({
@@ -34,6 +35,7 @@ export default function TextField({
 			fullWidth
 			required={props.required}
 			multiline={props.multiline}
+			disabled={props.disabled}
 		/>
 	)
 }
