@@ -11,6 +11,8 @@ type TextFieldProps = {
 	sx?: SxProps<{}>
 	className?: string
 	type?: TextFieldType
+	required?: boolean
+	multiline?: boolean
 }
 
 export default function TextField({
@@ -30,6 +32,8 @@ export default function TextField({
 			sx={props.sx}
 			type={props.type}
 			fullWidth
+			required={props.required}
+			multiline={props.multiline}
 		/>
 	)
 }

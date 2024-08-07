@@ -14,8 +14,8 @@ export default function Footer() {
 		['Seznam písní', 'songsList'],
 		['O aplikaci', 'about'],
 		['Týmy', 'teams'],
-		['Zpětná vazba', 'documentation'],
-		['Nahlásit chybu', 'documentation'],
+		['Zpětná vazba', 'contact'],
+		['Nahlásit chybu', 'contact'],
 		['Kontakt', 'contact'],
 	]
 
