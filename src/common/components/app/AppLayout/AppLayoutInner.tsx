@@ -5,11 +5,14 @@ import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
 import Footer from '../../Footer/Footer'
 import { Toolbar } from '../../Toolbar'
+import './applayout.styles.css'
 import GroupContainer from './components/GroupContainer'
 
 interface AppContainerProps {
 	children?: React.ReactNode
 }
+
+export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 
 export default function Inner({ children }: AppContainerProps) {
 	const { isOn } = useGroup()
@@ -45,12 +48,13 @@ export default function Inner({ children }: AppContainerProps) {
 				<>
 					<Toolbar />
 					<Box
-						display={'flex'}
-						flexDirection={'column'}
-						alignItems={'center'}
+						className={'app-body-container'}
 						paddingTop={4}
+						gap={1}
+						flexWrap={'wrap'}
 					>
-						{children}
+						<Box>{children}</Box>
+						<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 					</Box>
 				</>
 			) : (
