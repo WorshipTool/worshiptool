@@ -11,17 +11,20 @@ export default SmartPage(ContactPage)
 
 function ContactPage() {
 	return (
-		<StandaloneCard
-			title="Kontakt"
-			subtitle="Chcete se na něco zeptat nebo máte nějaký nápad? Rádi od vás uslyšíme."
-		>
-			<Gap value={2} />
-			<Box display={'flex'} flexDirection={'row'} gap={1} fontSize={'1.1rem'}>
-				<Typography size={'inherit'}>Napište nám na</Typography>
-				<Typography strong size={'inherit'}>
-					{MAIL.MAIN}
-				</Typography>
-			</Box>
-		</StandaloneCard>
+		<Box display={'flex'} alignItems={'center'} flexDirection={'column'}>
+			<Gap value={3} />
+			<StandaloneCard
+				title="Kontakt"
+				subtitle="Chcete se na něco zeptat nebo máte nějaký nápad? Rádi od vás uslyšíme."
+			>
+				<Gap value={2} />
+				<Box display={'flex'} flexDirection={'row'} gap={1} fontSize={'1.1rem'}>
+					<Typography size={'inherit'}>Napište nám na</Typography>
+					<Typography strong size={'inherit'}>
+						{MAIL.MAIN}
+					</Typography>
+				</Box>
+			</StandaloneCard>
+		</Box>
 	)
 }

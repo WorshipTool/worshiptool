@@ -47,13 +47,10 @@ export default function Inner({ children }: AppContainerProps) {
 			{!isOn ? (
 				<>
 					<Toolbar />
-					<Box
-						className={'app-body-container'}
-						paddingTop={4}
-						gap={1}
-						flexWrap={'wrap'}
-					>
-						<Box>{children}</Box>
+					<Box className={'app-body-container'}>
+						<Box flex={1} className={'app-body'}>
+							{children}
+						</Box>
 						<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 					</Box>
 				</>

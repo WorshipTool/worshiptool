@@ -30,4 +30,11 @@ body {
 	--color-grey-700: #616161;
 	--color-grey-800: #424242;
 	--color-grey-900: #212121;
+
+	--spacing-1: 8px;
+	--spacing-2: 16px;
+	--spacing-3: 24px;
+	--spacing-4: 32px;
+	--spacing-5: 40px;
+	--spacing-6: 48px;
 }
