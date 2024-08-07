@@ -5,6 +5,7 @@ import './textinput.styles.css'
 
 type TextInputProps = {
 	title?: string
+	error?: boolean
 } & React.ComponentProps<typeof TextField>
 
 export function TextInput(props: TextInputProps) {

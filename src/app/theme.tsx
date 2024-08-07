@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material'
 import { ThemeProvider as TP } from '@mui/material/styles'
 import { Roboto } from 'next/font/google'
 
-const theme = createTheme({
+export const theme = createTheme({
 	palette: {
 		primary: {
 			main: '#0085FF',

@@ -18,6 +18,7 @@ export const SmartPageInnerProvider = ({
 			hideMiddleNavigation: false,
 			hideTitle: false,
 			hideFooter: false,
+			hideToolbar: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -31,6 +32,7 @@ export const SmartPageInnerProvider = ({
 		toolbar.setWhiteVersion(options.whiteToolbarVersion)
 		toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
 		toolbar.setShowTitle(!options.hideTitle)
+		toolbar.setHidden(options.hideToolbar)
 		footer.setShow(!options.hideFooter)
 	}, [options])
 

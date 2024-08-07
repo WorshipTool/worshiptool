@@ -1,31 +1,24 @@
 'use client'
 
+import GoogleLoginButton from '@/app/(nolayout)/prihlaseni/components/GoogleLoginButton'
+import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Info } from '@mui/icons-material'
-import {
-	Box,
-	Paper,
-	TextField,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material'
+import { Button } from '@/common/ui/Button'
+import { Gap } from '@/common/ui/Gap'
+import { StandaloneCard } from '@/common/ui/StandaloneCard'
+import { TextInput } from '@/common/ui/TextInput'
+import { Typography } from '@/common/ui/Typography'
+import { Box, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../api/dtos/dtosAuth'
-import { Button } from '../../../common/ui/Button'
-import { Gap } from '../../../common/ui/Gap/Gap'
 import useAuth from '../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 import { useSmartParams } from '../../../routes/useSmartParams'
-import GoogleLoginButton from './components/GoogleLoginButton'
 
-const StyledContainer = styled(Paper)(({ theme }) => ({
-	width: `clamp(min(100vw, 25rem), 50%, 500px)`,
-	display: 'flex',
-	flexDirection: 'column',
-}))
-
-export default SmartPage(Login)
+export default SmartPage(Login, {
+	hideFooter: true,
+	hideToolbar: true,
+})
 
 function Login() {
 	const [email, setEmail] = useState('')
@@ -123,8 +116,144 @@ function Login() {
 	}
 
 	return (
-		<>
-			<Box
+		<Box
+			display={'flex'}
+			flexDirection={'column'}
+			justifyContent={'center'}
+			alignItems={'center'}
+			height={'100vh'}
+			gap={3}
+		>
+			<LogoTitle />
+			<StandaloneCard
+				title="Přihlaste se"
+				subtitle={params.message || 'A používejte aplikaci naplno'}
+			>
+				<Box
+					display={'flex'}
+					flexDirection={'column'}
+					gap={1}
+					width={'100%'}
+					paddingBottom={2}
+				>
+					<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+						<GoogleLoginButton afterLogin={afterGoogleLogin} />
+					</Box>
+					<Box
+						position={'relative'}
+						display={'flex'}
+						justifyContent={'center'}
+						alignItems={'center'}
+					>
+						<Box
+							sx={{
+								height: '2px',
+								width: '100%',
+								bgcolor: 'grey.200',
+								position: 'absolute',
+							}}
+						/>
+						<Typography
+							sx={{
+								bgcolor: 'white',
+								zIndex: 1,
+								padding: 1,
+							}}
+							color="grey.600"
+						>
+							Nebo
+						</Typography>
+					</Box>
+					<Box color={'grey.800'}>
+						{errorMessage != '' && (
+							<>
+								<Typography color={'red'}>{errorMessage}</Typography>
+								<Gap />
+							</>
+						)}
+						<form
+							onSubmit={(e) => {
+								e.preventDefault()
+								onLoginClick()
+							}}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+							}}
+						>
+							<TextInput
+								title="Email"
+								value={email}
+								onChange={(e) => setEmail(e)}
+								error={!isEmailOk}
+								disabled={inProgress}
+								type="email"
+								placeholder="Zadejte e-mail"
+								required
+							/>
+							<Gap />
+							<TextInput
+								title="Heslo"
+								value={password}
+								onChange={(e) => setPassword(e)}
+								error={!isPasswordOk}
+								disabled={inProgress}
+								type="password"
+								placeholder="Zadejte heslo"
+								required
+							/>
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								alignItems={'center'}
+								justifyContent={'start'}
+							>
+								<Button
+									size={'small'}
+									variant="text"
+									color="grey.600"
+									onClick={resetPassword}
+								>
+									Zapomněli jste heslo?
+								</Button>
+							</Box>
+							<Gap />
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								justifyContent={'center'}
+							>
+								<Button
+									type="submit"
+									loading={inProgress}
+									variant="contained"
+									sx={{
+										width: 200,
+										position: 'relative',
+									}}
+									color="primarygradient"
+								>
+									Přihlásit se
+								</Button>
+							</Box>
+							<Gap />
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								alignItems={'center'}
+								justifyContent={'center'}
+							>
+								<Typography size={'0.9rem'}>Nemáte ještě účet?</Typography>
+								<Button size={'small'} variant="text" to="signup">
+									Vytvořte si ho
+								</Button>
+							</Box>
+						</form>
+					</Box>
+				</Box>
+			</StandaloneCard>
+			<Gap value={5} />
+			{/* <Box
 				flex={1}
 				display={'flex'}
 				justifyContent={'center'}
@@ -252,7 +381,7 @@ function Login() {
 						</Box>
 					</Box>
 				</StyledContainer>
-			</Box>
-		</>
+			</Box> */}
+		</Box>
 	)
 }

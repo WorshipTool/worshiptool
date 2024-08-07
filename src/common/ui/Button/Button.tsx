@@ -1,3 +1,4 @@
+import { theme } from '@/app/theme'
 import { LoadingButton } from '@mui/lab'
 import { Box, SxProps } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
@@ -10,7 +11,7 @@ import { ColorType, isColorOfThemeType } from '../ui.types'
 type ButtonProps<T extends RoutesKeys> = {
 	children?: string
 	variant?: 'contained' | 'outlined' | 'text'
-	color?: ColorType
+	color?: ColorType | 'primarygradient'
 	size?: 'small' | 'medium' | 'large'
 	onClick?: () => void
 	tooltip?: string
@@ -66,6 +67,13 @@ export const Button = <T extends RoutesKeys>({
 				sx={{
 					width: '100%',
 					height: '100%',
+					...(color === 'primarygradient'
+						? {
+								background: `linear-gradient(115deg, ${theme.palette.primary.main} 10%, ${theme.palette.primary.dark})`,
+								color: 'white',
+						  }
+						: {}),
+
 					...props.sx,
 				}}
 			>

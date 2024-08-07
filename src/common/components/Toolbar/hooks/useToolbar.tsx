@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from 'react'
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react'
 
 type ToolbarContextType = ReturnType<typeof useProvideToolbar>
 
@@ -22,9 +22,14 @@ export const ToolbarProvider = ({ children }: { children: ReactNode }) => {
 
 export const useProvideToolbar = () => {
 	const [showTitle, setShowTitle] = useState(false)
-	const [transparent, setTransparent] = useState(false)
+	const [_transparent, setTransparent] = useState(false)
 	const [whiteVersion, setWhiteVersion] = useState(false)
 	const [hideMiddleNavigation, setHideMiddleNavigation] = useState(false)
+	const [hidden, setHidden] = useState(false)
+
+	const transparent = useMemo(() => {
+		return _transparent || hidden
+	}, [_transparent, hidden])
 
 	return {
 		showTitle,
@@ -35,5 +40,7 @@ export const useProvideToolbar = () => {
 		setWhiteVersion,
 		hideMiddleNavigation,
 		setHideMiddleNavigation,
+		hidden,
+		setHidden,
 	}
 }

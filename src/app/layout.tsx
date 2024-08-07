@@ -1,6 +1,7 @@
 import AppProviders from '@/app/components/AppProviders'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
+import { Background } from '@/common'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -32,7 +33,10 @@ export default function RootLayout({
 		<html lang="en">
 			<GoogleAnalytics />
 			<body>
-				<AppProviders>{children}</AppProviders>
+				<AppProviders>
+					<Background />
+					{children}
+				</AppProviders>
 				<UnavailableMessage />
 			</body>
 		</html>

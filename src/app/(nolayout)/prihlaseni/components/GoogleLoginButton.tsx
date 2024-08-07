@@ -20,13 +20,12 @@ export default function GoogleLoginButton(props: GoogleLoginButtonProps) {
 	const onFailure = () => {}
 
 	return (
-		<div>
-			<GoogleLogin
-				onSuccess={onSuccess}
-				onError={onFailure}
-				useOneTap
-				auto_select
-			/>
-		</div>
+		<GoogleLogin
+			onSuccess={onSuccess}
+			onError={onFailure}
+			useOneTap
+			auto_select
+			width={300}
+		/>
 	)
 }

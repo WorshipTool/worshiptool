@@ -17,6 +17,7 @@ export function StandaloneCard(props: StandaloneCardProps) {
 		<Box
 			sx={{
 				maxWidth: '500px',
+				minWidth: '400px',
 			}}
 		>
 			<Box
@@ -24,7 +25,7 @@ export function StandaloneCard(props: StandaloneCardProps) {
 					backgroundColor: defaultVariant ? 'white' : 'grey.200',
 					borderRadius: 5,
 					padding: 2,
-					paddingX: 6,
+					paddingX: 8,
 					paddingBottom: 4,
 					display: 'flex',
 					flexDirection: 'column',

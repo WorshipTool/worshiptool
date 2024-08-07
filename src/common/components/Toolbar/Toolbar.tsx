@@ -19,6 +19,7 @@ const TopBar = styled(Box)(() => ({
 	displayPrint: 'none',
 	zIndex: 10,
 	pointerEvents: 'none',
+	transition: 'all 0.3s ease',
 }))
 
 interface ToolbarProps {
@@ -28,7 +29,7 @@ interface ToolbarProps {
 export function Toolbar({}: ToolbarProps) {
 	const theme = useTheme()
 
-	const { transparent, whiteVersion } = useToolbar()
+	const { transparent, whiteVersion, hidden } = useToolbar()
 
 	const white = useMemo(() => {
 		return whiteVersion || !transparent
@@ -41,8 +42,21 @@ export function Toolbar({}: ToolbarProps) {
 
 	return (
 		<>
-			<TopBar displayPrint={'none'} position={'sticky'} zIndex={0}></TopBar>
-			<TopBar displayPrint={'none'} position={'fixed'}>
+			<TopBar
+				displayPrint={'none'}
+				position={'sticky'}
+				zIndex={0}
+				sx={{
+					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+				}}
+			></TopBar>
+			<TopBar
+				displayPrint={'none'}
+				position={'fixed'}
+				sx={{
+					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+				}}
+			>
 				<motion.div
 					style={{
 						background: `linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,

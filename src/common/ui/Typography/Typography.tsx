@@ -1,5 +1,5 @@
 import { ColorType } from '@/common/ui/ui.types'
-import { Typography as Typo } from '@mui/material'
+import { SxProps, Typography as Typo } from '@mui/material'
 
 type CustomTypographyProps = {
 	children?: React.ReactNode
@@ -8,6 +8,7 @@ type CustomTypographyProps = {
 	color?: ColorType
 	size?: number | string
 	align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'
+	sx?: SxProps
 }
 
 export function Typography({
@@ -29,6 +30,7 @@ export function Typography({
 			fontWeight={fontWeight}
 			sx={{
 				fontSize: size,
+				...props.sx,
 			}}
 			align={props.align}
 		>

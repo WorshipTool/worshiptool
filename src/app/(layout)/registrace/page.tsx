@@ -10,10 +10,10 @@ import {
 	styled,
 } from '@mui/material'
 import { useState } from 'react'
+import GoogleLoginButton from '../../(nolayout)/prihlaseni/components/GoogleLoginButton'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useAuth from '../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
-import GoogleLoginButton from '../prihlaseni/components/GoogleLoginButton'
 
 const StyledContainer = styled(Paper)(({ theme }) => ({
 	width: '30%',

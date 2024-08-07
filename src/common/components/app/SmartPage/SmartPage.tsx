@@ -6,6 +6,7 @@ export type SmartPageOptions = {
 	hideMiddleNavigation: boolean
 	hideTitle: boolean
 	hideFooter: boolean
+	hideToolbar: boolean
 }
 
 export function SmartPage<T>(
