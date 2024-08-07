@@ -21,7 +21,7 @@ export function StandaloneCard(props: StandaloneCardProps) {
 		>
 			<Box
 				sx={{
-					backgroundColor: 'white',
+					backgroundColor: defaultVariant ? 'white' : 'grey.200',
 					borderRadius: 5,
 					padding: 2,
 					paddingX: 6,

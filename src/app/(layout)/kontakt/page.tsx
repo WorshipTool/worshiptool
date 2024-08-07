@@ -94,6 +94,9 @@ function ContactPage() {
 									onChange={(e) => setName(e)}
 									value={name}
 									disabled={loading}
+									sx={{
+										backgroundColor: 'grey.100',
+									}}
 								/>
 								<TextInput
 									title="Váš e-mail"
@@ -102,6 +105,9 @@ function ContactPage() {
 									required
 									onChange={(e) => setEmail(e)}
 									value={email}
+									sx={{
+										backgroundColor: 'grey.100',
+									}}
 									disabled={loading}
 								/>
 							</Box>
@@ -113,6 +119,7 @@ function ContactPage() {
 								sx={{
 									height: '100px',
 									overflowY: 'scroll',
+									backgroundColor: 'grey.100',
 								}}
 								onChange={(e) => setMessage(e)}
 								value={message}
