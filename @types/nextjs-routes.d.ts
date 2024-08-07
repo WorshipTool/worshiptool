@@ -21,7 +21,6 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/pisen/[hex]/[alias]/zverejnit", { "hex": string; "alias": string }>
     | DynamicRoute<"/playlist/[guid]", { "guid": string }>
     | DynamicRoute<"/playlist/[guid]/prezentace", { "guid": string }>
-    | StaticRoute<"/registrace">
     | DynamicRoute<"/reset-hesla/[token]", { "token": string }>
     | StaticRoute<"/reset-hesla">
     | StaticRoute<"/seznam">
@@ -38,6 +37,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/pisen/[hex]/[alias]/tisk", { "hex": string; "alias": string }>
     | DynamicRoute<"/playlist/[guid]/tisk", { "guid": string }>
     | StaticRoute<"/prihlaseni">
+    | StaticRoute<"/registrace">
     | StaticRoute<"/test">
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>;

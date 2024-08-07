@@ -229,7 +229,6 @@ function Login() {
 									variant="contained"
 									sx={{
 										width: 200,
-										position: 'relative',
 									}}
 									color="primarygradient"
 								>

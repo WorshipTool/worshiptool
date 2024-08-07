@@ -67,7 +67,10 @@ export const Button = <T extends RoutesKeys>({
 				sx={{
 					width: '100%',
 					height: '100%',
-					...(color === 'primarygradient'
+					...(color === 'primarygradient' &&
+					!disabled &&
+					!props.loading &&
+					variant === 'contained'
 						? {
 								background: `linear-gradient(115deg, ${theme.palette.primary.main} 10%, ${theme.palette.primary.dark})`,
 								color: 'white',

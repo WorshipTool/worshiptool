@@ -16,8 +16,7 @@ export function StandaloneCard(props: StandaloneCardProps) {
 	return (
 		<Box
 			sx={{
-				maxWidth: '500px',
-				minWidth: '400px',
+				width: '480px',
 			}}
 		>
 			<Box
