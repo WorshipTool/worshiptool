@@ -50,7 +50,6 @@ export const SmartPageInnerProvider = ({
 							width: 'min(100%, 1320px)',
 					  }),
 			}}
-			bgcolor={'blue'}
 		>
 			{children}
 		</Box>
