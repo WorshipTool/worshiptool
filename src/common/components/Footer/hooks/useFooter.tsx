@@ -19,7 +19,7 @@ export const FooterProvider = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const useFooterProvide = () => {
-	const [show, setShow] = useState(false)
+	const [show, setShow] = useState(true)
 	return {
 		show,
 		setShow,

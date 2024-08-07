@@ -7,6 +7,7 @@ type CustomTypographyProps = {
 	strong?: boolean | number
 	color?: ColorType
 	size?: number | string
+	align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'
 }
 
 export function Typography({
@@ -15,6 +16,7 @@ export function Typography({
 	strong = false,
 	color,
 	size,
+	...props
 }: CustomTypographyProps) {
 	const fontWeight = strong ? (strong === true ? 700 : strong) : undefined
 
@@ -28,6 +30,7 @@ export function Typography({
 			sx={{
 				fontSize: size,
 			}}
+			align={props.align}
 		>
 			{children}
 		</Typo>
