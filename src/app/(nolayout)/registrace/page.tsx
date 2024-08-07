@@ -15,6 +15,7 @@ import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 export default SmartPage(SignUp, {
 	hideFooter: true,
 	hideToolbar: true,
+	fullWidth: true,
 })
 
 function SignUp() {

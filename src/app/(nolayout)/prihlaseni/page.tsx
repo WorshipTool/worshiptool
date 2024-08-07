@@ -18,6 +18,7 @@ import { useSmartParams } from '../../../routes/useSmartParams'
 export default SmartPage(Login, {
 	hideFooter: true,
 	hideToolbar: true,
+	fullWidth: true,
 })
 
 function Login() {

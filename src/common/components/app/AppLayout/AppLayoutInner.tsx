@@ -1,4 +1,5 @@
 'use client'
+import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
 import { Box } from '@mui/material'
 import React, { useEffect } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
@@ -11,8 +12,6 @@ import GroupContainer from './components/GroupContainer'
 interface AppContainerProps {
 	children?: React.ReactNode
 }
-
-export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 
 export default function Inner({ children }: AppContainerProps) {
 	const { isOn } = useGroup()
@@ -48,9 +47,7 @@ export default function Inner({ children }: AppContainerProps) {
 				<>
 					<Toolbar />
 					<Box className={'app-body-container'}>
-						<Box flex={1} className={'app-body'}>
-							{children}
-						</Box>
+						{children}
 						<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 					</Box>
 				</>

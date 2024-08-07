@@ -1,6 +1,8 @@
 'use client'
+import ContainerGrid from '@/common/components/ContainerGrid'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Typography } from '@/common/ui/Typography'
+import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import {
 	SongDto,
@@ -50,15 +52,39 @@ function SongRoutePage({ params }: SongRoutePageProps) {
 		//TODO: Sometime not working when group is turned on
 
 		return (
-			<>
-				{song && variantData ? (
-					<SongContainer variant={variantData} song={song} />
-				) : (
-					<>
-						<Typography>Načítání...</Typography>
-					</>
-				)}
-			</>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					position: 'relative',
+				}}
+			>
+				<ContainerGrid
+					sx={{
+						marginTop: 2,
+						marginBottom: 2,
+						padding: 3,
+						backgroundColor: 'grey.200',
+						borderStyle: 'solid',
+						borderWidth: 1,
+						borderColor: 'grey.400',
+						borderRadius: 1,
+						flex: 1,
+						display: 'flex',
+						flexDirection: 'column',
+						displayPrint: 'none',
+					}}
+				>
+					{song && variantData ? (
+						<SongContainer variant={variantData} song={song} />
+					) : (
+						<>
+							<Typography>Načítání...</Typography>
+						</>
+					)}
+				</ContainerGrid>
+			</Box>
 		)
 	} catch (e) {
 		return <NotFound />
