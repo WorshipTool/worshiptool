@@ -8,7 +8,7 @@ import { Gap } from '@/common/ui/Gap'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
-import { Box, useTheme } from '@mui/material'
+import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../api/dtos/dtosAuth'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -25,16 +25,13 @@ function Login() {
 	const [password, setPassword] = useState('')
 
 	const [isEmailOk, setIsEmailOk] = useState(true)
-	const [emailMessage, setEmailMessage] = useState('')
 
 	const [isPasswordOk, setIsPasswordOk] = useState(true)
-	const [passwordMessage, setPasswordMessage] = useState('')
 
 	const [errorMessage, setErrorMessage] = useState('')
 
 	const [inProgress, setInProgress] = useState(false)
 
-	const theme = useTheme()
 	const navigate = useSmartNavigate()
 
 	const { login, checkIfCookieExists, logout } = useAuth()
@@ -45,13 +42,6 @@ function Login() {
 			logout()
 		}
 	}, [])
-
-	const onEmailChange = (e: any) => {
-		setEmail(e.target.value)
-	}
-	const onPasswordChange = (e: any) => {
-		setPassword(e.target.value)
-	}
 
 	const afterGoogleLogin = () => {
 		if (params?.previousPage) {
@@ -70,20 +60,16 @@ function Login() {
 		let ok = true
 		if (email == '') {
 			setIsEmailOk(false)
-			setEmailMessage('Zadejte email')
 			ok = false
 		} else {
 			setIsEmailOk(true)
-			setEmailMessage('')
 		}
 
 		if (password == '') {
 			setIsPasswordOk(false)
-			setPasswordMessage('Zadejte heslo')
 			ok = false
 		} else {
 			setIsPasswordOk(true)
-			setPasswordMessage('')
 		}
 
 		if (ok) loginAction()
