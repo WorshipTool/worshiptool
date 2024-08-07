@@ -125,9 +125,11 @@ function ContactPage() {
 								value={message}
 								disabled={loading}
 							/>
-							<Button type="submit" loading={loading}>
-								Poslat zprávu
-							</Button>
+							<Box display={'flex'}>
+								<Button type="submit" loading={loading}>
+									Poslat zprávu
+								</Button>
+							</Box>
 						</Box>
 					</form>
 				) : (
