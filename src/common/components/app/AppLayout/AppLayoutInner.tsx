@@ -44,7 +44,14 @@ export default function Inner({ children }: AppContainerProps) {
 			{!isOn ? (
 				<>
 					<Toolbar />
-					{children}
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						alignItems={'center'}
+						paddingTop={4}
+					>
+						{children}
+					</Box>
 				</>
 			) : (
 				<>

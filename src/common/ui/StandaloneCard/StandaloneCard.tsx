@@ -11,21 +11,31 @@ export function StandaloneCard(props: StandaloneCardProps) {
 	return (
 		<Box
 			sx={{
-				backgroundColor: 'white',
-				borderRadius: 2,
-				padding: 2,
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
+				maxWidth: '500px',
 			}}
 		>
-			<Typography variant="h3" strong={600}>
-				{props.title}
-			</Typography>
-			<Typography align="center" size={'1.2rem'} color="grey.700">
-				{props.subtitle}
-			</Typography>
-			{props.children}
+			<Box
+				sx={{
+					backgroundColor: 'white',
+					borderRadius: 5,
+					padding: 2,
+					paddingX: 6,
+					paddingBottom: 4,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+
+					boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.1)',
+				}}
+			>
+				<Typography size={'2.5rem'} strong={600}>
+					{props.title}
+				</Typography>
+				<Typography align="center" size={'1.1rem'} color="grey.600">
+					{props.subtitle}
+				</Typography>
+				{props.children}
+			</Box>
 		</Box>
 	)
 }
