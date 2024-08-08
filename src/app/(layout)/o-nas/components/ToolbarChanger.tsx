@@ -8,7 +8,7 @@ export default function ToolbarChanger() {
 	const toolbar = useToolbar()
 
 	const { isTop } = useScrollHandler({
-		topThreshold: 30,
+		topThreshold: 40,
 	})
 	useEffect(() => {
 		toolbar.setTransparent(isTop)

@@ -36,7 +36,7 @@ function Page() {
 				display={'flex'}
 				flexDirection={'column'}
 			>
-				<Gap value={4} />
+				<Gap value={8} />
 				<Box display={'flex'} flexDirection={'column'} gap={1}>
 					<Box display={'flex'}>
 						<SectionLabelPill label="Kdo jsme?" />
@@ -74,8 +74,8 @@ function Page() {
 						sx={{
 							position: 'absolute',
 							top: -300,
-							right: -650,
-							transform: 'scale(0.8)',
+							left: '55%',
+							transform: 'scale(0.8) scaleX(1.2)',
 						}}
 					>
 						<Shape2 />
@@ -84,8 +84,8 @@ function Page() {
 						sx={{
 							position: 'absolute',
 							top: -500,
-							right: -650,
-							transform: 'scale(0.8)',
+							left: '65%',
+							transform: 'scale(0.8) scaleX(1.2)',
 						}}
 					>
 						<Shape />
@@ -96,7 +96,7 @@ function Page() {
 					sx={{
 						position: 'absolute',
 						bottom: 0,
-						right: 130,
+						right: '25%',
 						zIndex: 1,
 					}}
 				>
