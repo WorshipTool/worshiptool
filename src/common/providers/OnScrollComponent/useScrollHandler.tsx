@@ -16,6 +16,7 @@ export const useScrollHandler = (props?: HandlerProps) => {
 
 	useEffect(() => {
 		const handleScroll = (event: any) => {
+			if (!window.scrollY) return
 			const isTop = window.scrollY < threshold
 			setIsTop(isTop)
 			setScroll(window.scrollY)
