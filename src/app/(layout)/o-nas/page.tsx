@@ -32,7 +32,6 @@ function Page() {
 			<Box
 				height={'calc(100vh - 56px)'}
 				position={'relative'}
-				paddingX={4}
 				display={'flex'}
 				flexDirection={'column'}
 			>
@@ -244,7 +243,7 @@ function Page() {
 						button={
 							<Button
 								variant="contained"
-								size="small"
+								// size="small"
 								color="primarygradient"
 								to="teams"
 							>

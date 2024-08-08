@@ -1,11 +1,117 @@
-'use client'
-
+import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
+import JoinGroupPanel from '@/app/(layout)/sub/tymy/components/JoinGroupPanel'
+import TeamsToolbarChanger from '@/app/(layout)/sub/tymy/components/ToolbarChanger'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Button } from '@/common/ui/Button'
+import { Gap } from '@/common/ui/Gap'
+import { Typography } from '@/common/ui/Typography'
+import { Box } from '@mui/material'
+import Image from 'next/image'
+import './teams.styles.css'
 
 export default SmartPage(Page, {
 	transparentToolbar: true,
 })
 
 function Page() {
-	return <div>Tymuju tady</div>
+	return (
+		<Box position={'relative'}>
+			<TeamsToolbarChanger />
+			<Gap value={2} />
+			<JoinGroupPanel />
+			<Gap value={4} />
+			<Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
+				<Box display={'flex'} flexDirection={'column'} gap={4}>
+					<Box display={'flex'} flexDirection={'column'} gap={1}>
+						<Box display={'flex'}>
+							<SectionLabelPill label="Chválící týmy" />
+						</Box>
+						<Box display={'flex'} flexDirection={'column'} fontSize={'4rem'}>
+							<Typography size={'inherit'} strong className="about-title">
+								Zjednodušte si
+							</Typography>
+							<Typography size={'inherit'} className="about-title">
+								práci ve vašem
+							</Typography>
+							<Typography size={'inherit'} className="about-title">
+								chválícím týmu
+							</Typography>
+						</Box>
+					</Box>
+					<Typography
+						sx={{
+							width: 400,
+						}}
+						size={'2rem'}
+						strong={400}
+						color="grey.500"
+					>
+						<strong>Zdarma</strong> nabízíme <strong>nástroje</strong>, které
+						vám
+						<strong>usnadní přípravu</strong> na společné hraní
+					</Typography>
+				</Box>
+				<Box
+					flex={1}
+					display={'flex'}
+					flexDirection={'column'}
+					justifyContent={'center'}
+					alignItems={'center'}
+				>
+					<Gap value={4} />
+					<Box
+						sx={{
+							position: 'absolute',
+						}}
+					>
+						<Image
+							src={'/assets/gradient-shapes/shape1.svg'}
+							alt="Náhodný tvar na pozadí"
+							width={500}
+							height={500}
+						/>
+					</Box>
+					<Box
+						sx={{
+							position: 'absolute',
+						}}
+					>
+						<Image
+							src={'/assets/gradient-shapes/shape2.svg'}
+							alt="Náhodný tvar na pozadí"
+							width={500}
+							height={500}
+							style={{
+								transform: ' rotate(180deg) translate(0, 0px) scale(1.0)',
+							}}
+						/>
+					</Box>
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						justifyContent={'center'}
+						alignItems={'center'}
+						zIndex={1}
+					>
+						<Image
+							src={'/assets/group-preview.png'}
+							alt="Ukázka obrazovky týmu"
+							width={450 * 1.2}
+							height={300 * 1.2}
+						/>
+						<Box marginBottom={4}>
+							<Button
+								title="Vyzkoušet"
+								subtitle="Vytvořit tým"
+								color="secondary"
+								sx={{
+									width: 150,
+								}}
+							/>
+						</Box>
+					</Box>
+				</Box>
+			</Box>
+		</Box>
+	)
 }

@@ -1,14 +1,7 @@
-import { SmartPageInnerProvider } from '@/common/components/app/SmartPage/SmartPageInner'
-
-export type SmartPageOptions = {
-	transparentToolbar: boolean
-	whiteToolbarVersion: boolean
-	hideMiddleNavigation: boolean
-	hideTitle: boolean
-	hideFooter: boolean
-	hideToolbar: boolean
-	fullWidth: boolean
-}
+import {
+	SmartPageInnerProvider,
+	SmartPageOptions,
+} from '@/common/components/app/SmartPage/SmartPageInner'
 
 type OptionsArray = Array<keyof SmartPageOptions>
 

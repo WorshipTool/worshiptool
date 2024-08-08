@@ -1,9 +1,19 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { SmartPageOptions } from '@/common/components/app/SmartPage/SmartPage'
 import { Box } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
+
+export type SmartPageOptions = {
+	transparentToolbar: boolean
+	whiteToolbarVersion: boolean
+	hideMiddleNavigation: boolean
+	hideTitle: boolean
+	hideFooter: boolean
+	hideToolbar: boolean
+	fullWidth: boolean
+	hidePadding: boolean
+}
 
 export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 export const SmartPageInnerProvider = ({
@@ -22,6 +32,7 @@ export const SmartPageInnerProvider = ({
 			hideFooter: false,
 			hideToolbar: false,
 			fullWidth: false,
+			hidePadding: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -47,7 +58,9 @@ export const SmartPageInnerProvider = ({
 							flex: 1,
 					  }
 					: {
-							width: 'min(100%, 1320px)',
+							width: options.hidePadding
+								? 'min(100%, 1320px)'
+								: 'min(calc(100% - 4*8*2px), 1320px)',
 					  }),
 			}}
 		>

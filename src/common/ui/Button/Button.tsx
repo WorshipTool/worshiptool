@@ -1,4 +1,5 @@
 import { theme } from '@/common/constants/theme'
+import { Typography } from '@/common/ui/Typography'
 import { LoadingButton } from '@mui/lab'
 import { Box, SxProps } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
@@ -20,6 +21,9 @@ type ButtonProps<T extends RoutesKeys> = {
 	toParams?: CommonLinkProps<T>['params']
 	sx?: SxProps<{}>
 	alt?: string
+
+	title?: string
+	subtitle?: string
 
 	startIcon?: React.ReactNode
 	endIcon?: React.ReactNode
@@ -81,6 +85,32 @@ export const Button = <T extends RoutesKeys>({
 				}}
 			>
 				{children}
+				<Box display={'flex'} flexDirection={'column'}>
+					{props.title && (
+						<Typography
+							size={'1rem'}
+							strong
+							color="inherit"
+							sx={{
+								...(props.subtitle
+									? { lineHeight: '1rem', marginTop: '0.2rem' }
+									: {}),
+							}}
+						>
+							{props.title}
+						</Typography>
+					)}
+					{props.subtitle && (
+						<Typography
+							size={'0.8rem'}
+							strong={500}
+							color="inherit"
+							sx={{ opacity: 0.8 }}
+						>
+							{props.subtitle}
+						</Typography>
+					)}
+				</Box>
 			</LoadingButton>
 		</Box>
 	)
