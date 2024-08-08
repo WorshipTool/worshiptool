@@ -1,4 +1,4 @@
-import { theme } from '@/app/theme'
+import { theme } from '@/common/constants/theme'
 import { LoadingButton } from '@mui/lab'
 import { Box, SxProps } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'

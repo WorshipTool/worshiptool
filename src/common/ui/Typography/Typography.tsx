@@ -9,6 +9,7 @@ type CustomTypographyProps = {
 	size?: number | string
 	align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'
 	sx?: SxProps
+	className?: string
 }
 
 export function Typography({
@@ -33,6 +34,7 @@ export function Typography({
 				...props.sx,
 			}}
 			align={props.align}
+			className={props.className}
 		>
 			{children}
 		</Typo>

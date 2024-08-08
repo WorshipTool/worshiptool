@@ -1,21 +1,9 @@
+import { theme } from '@/common/constants/theme'
 import { createTheme } from '@mui/material'
 import { ThemeProvider as TP } from '@mui/material/styles'
 import { Roboto } from 'next/font/google'
 
-export const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#0085FF',
-			dark: '#532EE7',
-		},
-		secondary: {
-			main: '#EBBC1E',
-		},
-		success: {
-			main: '#43a047',
-		},
-	},
-})
+const muiTheme = createTheme(theme)
 
 // theme.typography.h1 = {
 // 	fontSize: '1.5rem',
@@ -52,7 +40,7 @@ type ThemeProviderProps = {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 	return (
-		<TP theme={theme}>
+		<TP theme={muiTheme}>
 			<div className={roboto.className}>{children}</div>
 		</TP>
 	)
