@@ -29,7 +29,13 @@ function Page() {
 		<Box>
 			<ToolbarChanger />
 			{/* FIRST PAGE - Introduction */}
-			<Box height={'calc(100vh - 56px)'} position={'relative'} paddingX={4}>
+			<Box
+				height={'calc(100vh - 56px)'}
+				position={'relative'}
+				paddingX={4}
+				display={'flex'}
+				flexDirection={'column'}
+			>
 				<Gap value={4} />
 				<Box display={'flex'} flexDirection={'column'} gap={1}>
 					<Box display={'flex'}>
@@ -48,19 +54,20 @@ function Page() {
 					</Box>
 				</Box>
 
-				<Gap value={4} />
+				<Gap value={6} />
 
 				<Typography
 					sx={{
-						width: 270,
+						width: 400,
 					}}
-					size={20}
-					strong={500}
+					size={'2rem'}
+					strong={400}
 					color="grey.500"
 				>
 					Jsme uživatelsky přívětivá platforma, která nabízí široký výběr chval
 					a moderní nástroje
 				</Typography>
+				<Gap value={8} />
 
 				<Box>
 					<Box
@@ -97,7 +104,7 @@ function Page() {
 						src={'/assets/ovce1.svg'}
 						alt="Ovce"
 						width={200}
-						height={200}
+						height={300}
 						style={{
 							transform: 'translateY(15px)',
 						}}
