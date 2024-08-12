@@ -33,5 +33,5 @@ export const useScrollHandler = (props?: HandlerProps) => {
 		}
 	}, [])
 
-	return { isTop, scroll: scrollY }
+	return { isTop, scrollY: scroll }
 }

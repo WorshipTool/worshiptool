@@ -28,44 +28,48 @@ function Page() {
 	return (
 		<Box>
 			<ToolbarChanger />
+
 			{/* FIRST PAGE - Introduction */}
 			<Box
 				height={'calc(100vh - 56px)'}
 				position={'relative'}
 				display={'flex'}
 				flexDirection={'column'}
+				justifyContent={'center'}
 			>
-				<Gap value={8} />
 				<Box display={'flex'} flexDirection={'column'} gap={1}>
-					<Box display={'flex'}>
-						<SectionLabelPill label="Kdo jsme?" />
+					<Box display={'flex'} flexDirection={'column'} gap={1}>
+						<Box display={'flex'}>
+							<SectionLabelPill label="Kdo jsme?" />
+						</Box>
+						<Box display={'flex'} flexDirection={'column'} fontSize={'4rem'}>
+							<Typography size={'inherit'} strong className="about-title">
+								Platforma
+							</Typography>
+							<Typography size={'inherit'} className="about-title">
+								s křesťanskými
+							</Typography>
+							<Typography size={'inherit'} className="about-title">
+								chválami
+							</Typography>
+						</Box>
 					</Box>
-					<Box display={'flex'} flexDirection={'column'} fontSize={'4rem'}>
-						<Typography size={'inherit'} strong className="about-title">
-							Platforma
-						</Typography>
-						<Typography size={'inherit'} className="about-title">
-							s křesťanskými
-						</Typography>
-						<Typography size={'inherit'} className="about-title">
-							chválami
-						</Typography>
+
+					<Typography
+						sx={{
+							width: 400,
+						}}
+						size={'2rem'}
+						strong={400}
+						color="grey.500"
+					>
+						Jsme uživatelsky přívětivá platforma, která nabízí široký výběr
+						chval a moderní nástroje
+					</Typography>
+					<Box display={'flex'}>
+						<Button color="primarygradient">Dozvědět se víc</Button>
 					</Box>
 				</Box>
-
-				<Gap value={6} />
-
-				<Typography
-					sx={{
-						width: 400,
-					}}
-					size={'2rem'}
-					strong={400}
-					color="grey.500"
-				>
-					Jsme uživatelsky přívětivá platforma, která nabízí široký výběr chval
-					a moderní nástroje
-				</Typography>
 				<Gap value={8} />
 
 				<Box>
