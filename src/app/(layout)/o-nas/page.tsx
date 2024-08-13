@@ -183,6 +183,7 @@ function Page() {
 						position={'relative'}
 						minWidth={300}
 						minHeight={300}
+						sx={{}}
 					>
 						<Box
 							style={{
@@ -196,9 +197,41 @@ function Page() {
 							sx={{
 								width: 300,
 								aspectRatio: '3/2',
+								position: 'relative',
 							}}
 						>
-							<Image src={'/assets/sheeps/ovce2.svg'} alt="Ovečka" fill />
+							<Box
+								sx={{
+									width: 200,
+									aspectRatio: '2/1',
+									position: 'relative',
+									zIndex: 1,
+								}}
+							>
+								<Image src={'/assets/bubble.svg'} alt="Bublina" fill />
+								<Typography
+									sx={{
+										position: 'absolute',
+										top: '50%',
+										left: '50%',
+										transform: 'translate(-50%, -50%) scaleX(-1) ',
+									}}
+									align="center"
+									variant="h6"
+								>
+									Velikáá
+								</Typography>
+							</Box>
+							<Box
+								position={'relative'}
+								sx={{
+									width: 300,
+									aspectRatio: '3/2',
+									transform: 'translateY(-25%)',
+								}}
+							>
+								<Image src={'/assets/sheeps/ovce2.svg'} alt="Ovečka" fill />
+							</Box>
 						</Box>
 						<Box
 							sx={{
@@ -380,8 +413,8 @@ function Page() {
 							</Typography>
 						</Box>
 						<Typography variant="h4" color="grey.600" align="center">
-							Celou aplikaci jsme vytvářeli ve svém volném času. Chtěli byste
-							nás finančně podpořit?
+							Celou aplikaci jsme vytvářeli ve svém volném času, zadarmo. Za
+							jakoukoliv finanční podporu budeme rádi.
 						</Typography>
 					</Box>
 					<Box display={'flex'}>

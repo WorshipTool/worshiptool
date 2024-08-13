@@ -25,6 +25,9 @@ let muiTheme = createTheme({
 		h5: {
 			fontSize: '1.25rem',
 		},
+		h6: {
+			fontSize: '1.125rem',
+		},
 	},
 })
 muiTheme = responsiveFontSizes(muiTheme)
