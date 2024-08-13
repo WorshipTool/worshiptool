@@ -3,13 +3,14 @@ import { SxProps, Typography as Typo } from '@mui/material'
 
 type CustomTypographyProps = {
 	children?: React.ReactNode
-	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal' | 'subtitle1'
 	strong?: boolean | number
 	color?: ColorType
 	size?: number | string
 	align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'
 	sx?: SxProps
 	className?: string
+	noWrap?: boolean
 }
 
 export function Typography({
@@ -33,6 +34,7 @@ export function Typography({
 				fontSize: size,
 				...props.sx,
 			}}
+			noWrap={props.noWrap}
 			align={props.align}
 			className={props.className}
 		>

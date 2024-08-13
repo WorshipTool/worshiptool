@@ -4,6 +4,7 @@ import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
 import { Background } from '@/common'
 import type { Metadata } from 'next'
 import './globals.css'
+import './typography.globals.css'
 
 export const metadata: Metadata = {
 	title: 'Chvalotce.cz',
