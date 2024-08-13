@@ -18,21 +18,30 @@ export default function AboutToolCard(props: AboutToolCardProps) {
 			fontSize={'3rem'}
 			color={'primary.main'}
 			flex={1}
-			height={'13rem'}
+			minWidth={200}
 		>
 			{props.icon && (
-				<>
+				<Box
+					sx={{
+						width: 100,
+						height: 100,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						// bgcolor: 'grey.100',
+					}}
+				>
 					{cloneElement(props.icon, {
 						sx: { fontSize: 'inherit' },
 					})}
-				</>
+				</Box>
 			)}
 
-			<Typography align="center" size={'1.4rem'} strong color="black">
+			<Typography align="center" variant="h4" strong color="black">
 				{props.title}
 			</Typography>
 
-			<Typography align="center" color="grey.700">
+			<Typography align="center" variant="h5" color="grey.600">
 				{props.text}
 			</Typography>
 

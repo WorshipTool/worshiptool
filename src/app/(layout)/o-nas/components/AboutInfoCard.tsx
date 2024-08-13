@@ -3,24 +3,19 @@ import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
 import { cloneElement } from 'react'
 
-type AboutInfoCardProps = {
+type AboutInfoDatabaseProps = {
+	order: number
 	title: string
 	text?: string
 	icon?: React.ReactElement
 }
-export default function AboutInfoCard(props: AboutInfoCardProps) {
+export default function AboutInfoDatabase(props: AboutInfoDatabaseProps) {
 	return (
 		<Box
 			sx={{
-				bgcolor: 'grey.200',
-				padding: 2,
-				borderRadius: 2,
-				// width: '10rem',
 				display: 'flex',
 				flexDirection: 'column',
-				alignItems: 'center',
-				color: 'grey.800',
-				fontSize: '2rem',
+				alignItems: 'start',
 			}}
 		>
 			{props.icon && (
@@ -29,10 +24,18 @@ export default function AboutInfoCard(props: AboutInfoCardProps) {
 					<Gap />
 				</>
 			)}
-			<Typography color={'black'} strong>
-				{props.title}
-			</Typography>
-			<Typography color="grey.700" align="center">
+			<Box padding={1}>
+				<Typography
+					variant="h4"
+					strong
+					sx={{
+						textWrap: 'nowrap',
+					}}
+				>
+					{props.order + 1}. {props.title}
+				</Typography>
+			</Box>
+			<Typography variant="h5" color="grey.600">
 				{props.text}
 			</Typography>
 		</Box>
