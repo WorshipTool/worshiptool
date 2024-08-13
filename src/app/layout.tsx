@@ -1,6 +1,7 @@
 import AppProviders from '@/app/components/AppProviders'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
+import HotjarAnalytics from '@/app/components/components/HotjarAnalytics'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<GoogleAnalytics />
+			<HotjarAnalytics />
 			<body>
 				<AppProviders>{children}</AppProviders>
 				<UnavailableMessage />
