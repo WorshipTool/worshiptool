@@ -1,6 +1,7 @@
 import { theme } from '@/common/constants/theme'
 import { Typography } from '@/common/ui/Typography'
-import { LoadingButton } from '@mui/lab'
+// import { LoadingButton } from '@mui/lab'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, SxProps } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
