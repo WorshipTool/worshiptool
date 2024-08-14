@@ -166,10 +166,10 @@ export default function HomeDesktop() {
 											userSelect: 'none',
 										}}
 									>
-										<Typography variant="h4" fontWeight={'200'}>
+										<Typography variant="h3" fontWeight={'200'}>
 											Jsi-li ovce, tak...
 										</Typography>
-										<Typography variant="h2" fontWeight={'bold'}>
+										<Typography variant="h1" fontWeight={'bold'}>
 											Chval Otce
 										</Typography>
 									</motion.div>

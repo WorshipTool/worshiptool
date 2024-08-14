@@ -1,9 +1,10 @@
 'use client'
 
-import { Toolbar } from '@/common/components'
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { Gap } from '@/common/ui/Gap'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, InputBase, styled, useTheme } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
@@ -35,35 +36,38 @@ export default function HomeMobile() {
 		setSearchValue(event.target.value)
 	}
 
+	const toolbar = useToolbar()
+	useEffect(() => {
+		toolbar.setTransparent(false)
+	}, [])
+
 	return (
 		<Box
 			sx={{
 				display: 'none',
 				flex: 1,
 				justifyContent: 'center',
-				alignItems: 'start',
+				alignItems: 'center',
 				flexDirection: 'column',
 				[theme.breakpoints.down('sm')]: {
 					display: 'flex',
 				},
+				position: 'relative',
 			}}
 		>
-			<Toolbar />
-
-			<Box margin={1} width={`calc(100% - ${theme.spacing(2)})`}>
-				{showSearchedList && <SearchedSongsList searchString={searchValue} />}
-				<RecommendedSongsList listType="list" />
-			</Box>
+			<Gap />
 			<Box
 				sx={{
 					display: 'flex',
-					width: '100%',
+					width: `100%`,
+					flex: 1,
 					flexDirection: 'row',
-					position: 'fixed',
-					top: 56,
+					position: 'sticky',
+					top: 60,
+					zIndex: 1,
 				}}
 			>
-				<Box sx={{ flex: 1, margin: 1 }}>
+				<Box sx={{ flex: 1 }}>
 					<SearchContainer
 						sx={{
 							boxShadow: '0px 4px 5px' + theme.palette.grey[400],
@@ -78,6 +82,11 @@ export default function HomeMobile() {
 						></SearchInput>
 					</SearchContainer>
 				</Box>
+			</Box>
+			<Gap />
+			<Box width={`calc(100% - ${theme.spacing(0)})`}>
+				{showSearchedList && <SearchedSongsList searchString={searchValue} />}
+				<RecommendedSongsList listType="list" />
 			</Box>
 		</Box>
 	)

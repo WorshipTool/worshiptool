@@ -1,7 +1,7 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 
 export type SmartPageOptions = {
@@ -49,6 +49,7 @@ export const SmartPageInnerProvider = ({
 		toolbar.setHidden(options.hideToolbar)
 		footer.setShow(!options.hideFooter)
 	}, [options])
+	const theme = useTheme()
 
 	return (
 		<Box
@@ -61,6 +62,10 @@ export const SmartPageInnerProvider = ({
 							width: options.hidePadding
 								? 'min(100%, 1320px)'
 								: 'min(calc(100% - 4*8*2px), 1320px)',
+							// if small remove hidePadding
+							[theme.breakpoints.down('sm')]: {
+								width: 'calc(100% - 1*8*2px)',
+							},
 					  }),
 			}}
 		>
