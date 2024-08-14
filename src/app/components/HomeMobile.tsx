@@ -1,5 +1,6 @@
 'use client'
 
+import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Gap } from '@/common/ui/Gap'
 import SearchIcon from '@mui/icons-material/Search'
@@ -41,6 +42,11 @@ export default function HomeMobile() {
 		toolbar.setTransparent(false)
 	}, [])
 
+	const footer = useFooter()
+	useEffect(() => {
+		footer.setShow(true)
+	}, [])
+
 	return (
 		<Box
 			sx={{
@@ -48,13 +54,18 @@ export default function HomeMobile() {
 				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'center',
-				flexDirection: 'column',
+				flexDirection: 'column-reverse',
 				[theme.breakpoints.down('sm')]: {
 					display: 'flex',
 				},
 				position: 'relative',
 			}}
 		>
+			<Gap />
+			<Box width={`calc(100% - ${theme.spacing(0)})`}>
+				{showSearchedList && <SearchedSongsList searchString={searchValue} />}
+				<RecommendedSongsList listType="list" />
+			</Box>
 			<Gap />
 			<Box
 				sx={{
@@ -64,10 +75,10 @@ export default function HomeMobile() {
 					flexDirection: 'row',
 					position: 'sticky',
 					top: 60,
-					zIndex: 1,
+					// zIndex: 1,
 				}}
 			>
-				<Box sx={{ flex: 1 }}>
+				<Box sx={{ flex: 1 }} position={'relative'}>
 					<SearchContainer
 						sx={{
 							boxShadow: '0px 4px 5px' + theme.palette.grey[400],
@@ -82,11 +93,6 @@ export default function HomeMobile() {
 						></SearchInput>
 					</SearchContainer>
 				</Box>
-			</Box>
-			<Gap />
-			<Box width={`calc(100% - ${theme.spacing(0)})`}>
-				{showSearchedList && <SearchedSongsList searchString={searchValue} />}
-				<RecommendedSongsList listType="list" />
 			</Box>
 		</Box>
 	)

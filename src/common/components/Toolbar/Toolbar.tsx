@@ -1,6 +1,7 @@
 'use client'
 
 import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
+import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, styled, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
@@ -8,14 +9,13 @@ import { useEffect, useMemo, useState } from 'react'
 import LeftWebTitle from './components/LeftWebTItle'
 import RightAccountPanel from './components/RightAccountPanel/RightAccountPanel'
 
-const TopBar = styled(Box)(() => ({
+const TopBar = styled(Box)(({ theme }) => ({
 	right: 0,
 	left: 0,
 	top: 0,
 	height: 56,
-	minHeight: 50,
-	alignItems: 'center',
 	display: 'flex',
+	flexDirection: 'column',
 	displayPrint: 'none',
 	zIndex: 10,
 	pointerEvents: 'none',
@@ -94,6 +94,7 @@ export function Toolbar({}: ToolbarProps) {
 					</Box>
 				</Box>
 			</TopBar>
+			<NavigationMobilePanel />
 		</>
 	)
 }

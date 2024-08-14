@@ -1,5 +1,6 @@
 'use client'
 
+import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import SearchIcon from '@mui/icons-material/Search'
 import {
@@ -46,6 +47,7 @@ export default function HomeDesktop() {
 	const animationDuration = 0.2
 
 	const toolbar = useToolbar()
+	const footer = useFooter()
 
 	/**
 	 * Calculation value to correct window height
@@ -106,6 +108,10 @@ export default function HomeDesktop() {
 		toolbar.setShowTitle(!isTop)
 	}, [isTop, toolbar])
 
+	useEffect(() => {
+		footer.setShow(false)
+	}, [footer])
+
 	return (
 		<>
 			{/* <Toolbar transparent={isTop} /> */}
@@ -161,7 +167,7 @@ export default function HomeDesktop() {
 										style={{
 											display: 'flex',
 											justifyContent: 'center',
-											marginBottom: 2,
+											marginBottom: theme.spacing(1),
 											flexDirection: 'column',
 											userSelect: 'none',
 										}}
@@ -169,7 +175,7 @@ export default function HomeDesktop() {
 										<Typography variant="h3" fontWeight={'200'}>
 											Jsi-li ovce, tak...
 										</Typography>
-										<Typography variant="h1" fontWeight={'bold'}>
+										<Typography variant="h1" fontWeight={'900'}>
 											Chval Otce
 										</Typography>
 									</motion.div>
