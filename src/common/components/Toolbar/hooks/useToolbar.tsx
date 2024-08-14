@@ -23,13 +23,14 @@ export const ToolbarProvider = ({ children }: { children: ReactNode }) => {
 export const useProvideToolbar = () => {
 	const [showTitle, setShowTitle] = useState(false)
 	const [_transparent, setTransparent] = useState(false)
+	const [_tempSolid, _setTempSolid] = useState(false)
 	const [whiteVersion, setWhiteVersion] = useState(false)
 	const [hideMiddleNavigation, setHideMiddleNavigation] = useState(false)
 	const [hidden, setHidden] = useState(false)
 
 	const transparent = useMemo(() => {
-		return _transparent || hidden
-	}, [_transparent, hidden])
+		return (_transparent && !_tempSolid) || hidden
+	}, [_transparent, hidden, _tempSolid])
 
 	return {
 		showTitle,
@@ -42,5 +43,6 @@ export const useProvideToolbar = () => {
 		setHideMiddleNavigation,
 		hidden,
 		setHidden,
+		_setTempSolid,
 	}
 }

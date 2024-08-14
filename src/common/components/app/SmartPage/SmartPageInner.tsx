@@ -4,7 +4,12 @@ import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 
-export type SmartPageOptions = {
+// type of dict or null for every option
+type Nullable<T> = {
+	[P in keyof T]: T[P] | null
+}
+
+export type SmartPageOptions = Nullable<{
 	transparentToolbar: boolean
 	whiteToolbarVersion: boolean
 	hideMiddleNavigation: boolean
@@ -13,7 +18,7 @@ export type SmartPageOptions = {
 	hideToolbar: boolean
 	fullWidth: boolean
 	hidePadding: boolean
-}
+}>
 
 export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 export const SmartPageInnerProvider = ({
@@ -42,12 +47,20 @@ export const SmartPageInnerProvider = ({
 	const footer = useFooter()
 
 	useEffect(() => {
-		toolbar.setTransparent(options.transparentToolbar)
-		toolbar.setWhiteVersion(options.whiteToolbarVersion)
-		toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
-		toolbar.setShowTitle(!options.hideTitle)
-		toolbar.setHidden(options.hideToolbar)
-		footer.setShow(!options.hideFooter)
+		if (options.transparentToolbar !== null)
+			toolbar.setTransparent(options.transparentToolbar)
+
+		if (options.whiteToolbarVersion !== null)
+			toolbar.setWhiteVersion(options.whiteToolbarVersion)
+
+		if (options.hideMiddleNavigation !== null)
+			toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
+
+		if (options.hideTitle !== null) toolbar.setShowTitle(options.hideTitle)
+
+		if (options.hideToolbar !== null) toolbar.setHidden(options.hideToolbar)
+
+		if (options.hideFooter !== null) footer.setShow(options.hideFooter)
 	}, [options])
 	const theme = useTheme()
 

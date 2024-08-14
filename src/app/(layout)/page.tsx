@@ -9,6 +9,7 @@ import HomeMobile from '../components/HomeMobile'
 
 export default SmartPage(Home, {
 	hideTitle: true,
+	transparentToolbar: null,
 })
 
 function Home() {

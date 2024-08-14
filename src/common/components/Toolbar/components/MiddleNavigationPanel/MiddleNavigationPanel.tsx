@@ -16,7 +16,7 @@ const navigationItems: { title: string; to: RoutesKeys | undefined }[] = [
 	{ title: 'Kontakt', to: 'contact' },
 ]
 export default function MiddleNavigationPanel() {
-	const { hideMiddleNavigation } = useToolbar()
+	const { hideMiddleNavigation, _setTempSolid, transparent } = useToolbar()
 
 	useEffect(() => {
 		if (hideMiddleNavigation) {
@@ -25,6 +25,15 @@ export default function MiddleNavigationPanel() {
 	}, [hideMiddleNavigation])
 
 	const [showMobileMenu, setShowMobileMenu] = useState(false)
+
+	useEffect(() => {
+		if (showMobileMenu) {
+			_setTempSolid(true)
+		} else {
+			_setTempSolid(false)
+		}
+	}, [showMobileMenu])
+
 	return (
 		<Box
 			sx={{
