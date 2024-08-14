@@ -30,7 +30,6 @@ const Container = styled(Box)(({ theme }) => ({
 	alignItems: 'center',
 	justifyContent: 'end',
 	gap: 0,
-	paddingRight: theme.spacing(2),
 }))
 
 function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {

@@ -3,7 +3,7 @@
 import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
 import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { Box, styled, useTheme } from '@mui/material'
+import { Box, styled, useMediaQuery, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import LeftWebTitle from './components/LeftWebTItle'
@@ -39,6 +39,8 @@ export function Toolbar({}: ToolbarProps) {
 	useEffect(() => {
 		setInit(true)
 	}, [])
+
+	const navigationInMiddle = useMediaQuery(theme.breakpoints.up('md'))
 
 	return (
 		<>
@@ -82,15 +84,19 @@ export function Toolbar({}: ToolbarProps) {
 					color={!white ? 'black' : 'white'}
 				>
 					<LeftWebTitle />
-					<MiddleNavigationPanel />
+					{navigationInMiddle && <MiddleNavigationPanel />}
 
 					<Box
 						sx={{
 							opacity: init ? 1 : 0,
 							transition: 'opacity 0.3s',
+							display: 'flex',
+							flexDirection: 'row',
+							paddingRight: 2,
 						}}
 					>
 						<RightAccountPanel />
+						{!navigationInMiddle && <MiddleNavigationPanel />}
 					</Box>
 				</Box>
 			</TopBar>

@@ -7,7 +7,7 @@ import { IconButton } from '@/common/ui/IconButton'
 import { RoutesKeys } from '@/routes'
 import { ArrowDropUp, Menu } from '@mui/icons-material'
 import { Box, Divider } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const navigationItems: { title: string; to: RoutesKeys | undefined }[] = [
@@ -17,6 +17,12 @@ const navigationItems: { title: string; to: RoutesKeys | undefined }[] = [
 ]
 export default function MiddleNavigationPanel() {
 	const { hideMiddleNavigation } = useToolbar()
+
+	useEffect(() => {
+		if (hideMiddleNavigation) {
+			setShowMobileMenu(false)
+		}
+	}, [hideMiddleNavigation])
 
 	const [showMobileMenu, setShowMobileMenu] = useState(false)
 	return (
@@ -31,7 +37,8 @@ export default function MiddleNavigationPanel() {
 			<Box
 				display={{
 					xs: 'none',
-					sm: 'flex',
+					sm: 'none',
+					md: 'flex',
 				}}
 				flexDirection={'row'}
 				gap={4}
@@ -43,10 +50,25 @@ export default function MiddleNavigationPanel() {
 
 			<Box
 				display={{
-					xs: 'block',
-					sm: 'none',
+					sm: 'flex',
+					md: 'none',
+				}}
+				flexDirection={'row'}
+				alignItems={'center'}
+				flexWrap={'nowrap'}
+				gap={0.5}
+				sx={{
+					width: hideMiddleNavigation ? 0 : '2.5rem',
+					transition: 'all 0.3s ease',
 				}}
 			>
+				{/* <Box
+					sx={{
+						minWidth: '1px',
+						height: '2rem',
+						bgcolor: 'grey.400',
+					}}
+				/> */}
 				<IconButton
 					color="inherit"
 					onClick={() => {
@@ -61,8 +83,8 @@ export default function MiddleNavigationPanel() {
 				createPortal(
 					<Box
 						display={{
-							xs: 'flex',
-							sm: 'none',
+							sm: 'flex',
+							md: 'none',
 						}}
 						flexDirection={'column'}
 						justifyContent={'space-around'}
@@ -74,6 +96,10 @@ export default function MiddleNavigationPanel() {
 						zIndex={1}
 						boxShadow={2}
 						bgcolor={'grey.200'}
+						sx={{
+							opacity: hideMiddleNavigation ? 0 : 1,
+							transition: 'all 0.3s ease',
+						}}
 					>
 						{navigationItems.map((item) => (
 							<MobileNavigationItem
