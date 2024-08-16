@@ -7,7 +7,7 @@ import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { parseVariantAlias } from '../../../routes'
 import CustomChip from '../CustomChip/CustomChip'
-import { Link } from '../Link/CustomLink'
+import { Link } from '../Link/Link'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[100],

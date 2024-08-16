@@ -1,5 +1,5 @@
 'use client'
-import { CommonLinkProps, Link } from '@/common/ui/Link/CustomLink'
+import { CommonLinkProps, Link } from '@/common/ui/Link/Link'
 import { RoutesKeys } from '@/routes'
 import { Box, Typography, styled } from '@mui/material'
 import { MenuItemProps } from '../hooks/useToolsMenuItems'

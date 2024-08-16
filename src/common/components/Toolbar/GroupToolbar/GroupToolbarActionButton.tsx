@@ -7,7 +7,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { RoutesKeys } from '../../../../routes'
-import { CommonLinkProps, Link, LinkProps } from '../../../ui/Link/CustomLink'
+import { CommonLinkProps, Link, LinkProps } from '../../../ui/Link/Link'
 
 const Container = styled(Box)(({ theme }) => ({
 	width: 180,

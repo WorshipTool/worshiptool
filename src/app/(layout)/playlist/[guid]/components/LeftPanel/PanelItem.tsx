@@ -1,6 +1,6 @@
 import { Box, Skeleton, Typography, styled } from '@mui/material'
 import { useMemo } from 'react'
-import { Link } from '../../../../../../common/ui/Link/CustomLink'
+import { Link } from '../../../../../../common/ui/Link/Link'
 import { PlaylistItemGuid } from '../../../../../../interfaces/playlist/playlist.types'
 import { parseVariantAlias } from '../../../../../../routes'
 import useInnerPlaylist from '../../hooks/useInnerPlaylist'

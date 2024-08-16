@@ -1,7 +1,7 @@
 import { Divider, ListItemText, Menu, MenuItem } from '@mui/material'
 import useAuth from '../../../../../hooks/auth/useAuth'
 import { Gap } from '../../../../ui/Gap'
-import { Link } from '../../../../ui/Link/CustomLink'
+import { Link } from '../../../../ui/Link/Link'
 
 interface AccountMenuProps {
 	anchor: Element | null

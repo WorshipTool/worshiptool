@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import { Gap } from '../../../../../../../../common/ui/Gap'
-import { Link } from '../../../../../../../../common/ui/Link/CustomLink'
+import { Link } from '../../../../../../../../common/ui/Link/Link'
 import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
 
 interface PlaylistMenuItemProps {

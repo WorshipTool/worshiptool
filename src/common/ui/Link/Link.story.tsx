@@ -1,10 +1,10 @@
 import { createStory } from '../../../app/(layout)/storybook/createStory'
-import { Link } from './CustomLink'
+import { Link } from './Link'
 
-const CustomLinkStory = () => (
+const LinkStory = () => (
 	<Link to="home" params={{}}>
 		Click me
 	</Link>
 )
 
-createStory(Link, CustomLinkStory)
+createStory(Link, LinkStory)

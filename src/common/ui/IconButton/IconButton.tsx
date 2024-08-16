@@ -3,7 +3,7 @@ import React, { ComponentProps, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
 import { Clickable } from '../Clickable'
 import Tooltip from '../CustomTooltip/Tooltip'
-import { CommonLinkProps, Link } from '../Link/CustomLink'
+import { CommonLinkProps, Link } from '../Link/Link'
 import { ColorType, isColorOfThemeType } from '../ui.types'
 
 type IconButtonProps<T extends RoutesKeys> = {

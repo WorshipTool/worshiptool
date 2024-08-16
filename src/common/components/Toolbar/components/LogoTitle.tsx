@@ -1,6 +1,6 @@
 import SvgIcon from '@/assets/icon.svg'
 import { Clickable } from '@/common/ui/Clickable'
-import { Link } from '@/common/ui/Link/CustomLink'
+import { Link } from '@/common/ui/Link/Link'
 import { Box, Typography } from '@mui/material'
 type LogoTitleProps = {
 	hideTitle?: boolean

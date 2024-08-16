@@ -22,10 +22,12 @@ const StyledLink = styled(NextLink)({})
 
 export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 	const url = useMemo(() => {
-		return getReplacedUrlWithParams(
+		const a = getReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {}
 		)
+		console.log(a)
+		return a
 	}, [props.to, props.params])
 
 	const [shiftOn, setShiftOn] = React.useState(false)

@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { Gap } from '../../../../common/ui/Gap'
-import { Link, LinkProps } from '../../../../common/ui/Link/CustomLink'
+import { Link, LinkProps } from '../../../../common/ui/Link/Link'
 import { RoutesKeys } from '../../../../routes'
 
 interface AddMenuItemProps {

@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { SongVariantDto } from '../../../../../api/dtos'
 import { Button } from '../../../../../common/ui/Button'
 import { Gap } from '../../../../../common/ui/Gap'
-import { Link } from '../../../../../common/ui/Link/CustomLink'
+import { Link } from '../../../../../common/ui/Link/Link'
 import { parseVariantAlias } from '../../../../../routes'
 
 interface MySongItemProps {

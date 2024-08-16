@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material'
 import { Box, Fab, Tooltip } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link } from '../../../common/ui/Link/CustomLink'
+import { Link } from '../../../common/ui/Link/Link'
 import useAuth from '../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 

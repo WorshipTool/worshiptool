@@ -7,7 +7,7 @@ import { ComponentProps, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
 import Tooltip from '../CustomTooltip/Tooltip'
 import { CustomLink } from '../Link'
-import { CommonLinkProps } from '../Link/CustomLink'
+import { CommonLinkProps } from '../Link/Link'
 import { ColorType, isColorOfThemeType } from '../ui.types'
 
 type ButtonProps<T extends RoutesKeys> = {
