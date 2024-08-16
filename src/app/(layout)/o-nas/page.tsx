@@ -17,17 +17,11 @@ import { Groups2, LibraryMusic, SmartButton } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
-export default SmartPage(Page, ['transparentToolbar'])
+export default SmartPage(Page, {
+	transparentToolbar: true,
+})
 
 function Page() {
-	const onMoreClick = () => {
-		const toY = window.innerHeight - 56
-
-		window.scrollTo({
-			top: toY,
-			behavior: 'smooth',
-		})
-	}
 	return (
 		<Box>
 			<ToolbarChanger />

@@ -26,14 +26,14 @@ function Page() {
 						<Box display={'flex'}>
 							<SectionLabelPill label="Chválící týmy" />
 						</Box>
-						<Box display={'flex'} flexDirection={'column'} fontSize={'4rem'}>
-							<Typography size={'inherit'} strong className="about-title">
+						<Box display={'flex'} flexDirection={'column'}>
+							<Typography strong className="about-title" variant="h1">
 								Zjednodušte si
 							</Typography>
-							<Typography size={'inherit'} className="about-title">
+							<Typography className="about-title" variant="h1">
 								práci ve vašem
 							</Typography>
-							<Typography size={'inherit'} className="about-title">
+							<Typography className="about-title" variant="h1">
 								chválícím týmu
 							</Typography>
 						</Box>
@@ -42,7 +42,7 @@ function Page() {
 						sx={{
 							width: 400,
 						}}
-						size={'2rem'}
+						variant="h3"
 						strong={400}
 						color="grey.500"
 					>
@@ -92,13 +92,23 @@ function Page() {
 						justifyContent={'center'}
 						alignItems={'center'}
 						zIndex={1}
+						width={'100%'}
 					>
-						<Image
-							src={'/assets/group-preview.png'}
-							alt="Ukázka obrazovky týmu"
-							width={450 * 1.2}
-							height={300 * 1.2}
-						/>
+						<Box
+							// maxWidth={450 * 1.2}
+							minWidth={400}
+							width={'70%'}
+							sx={{
+								aspectRatio: '8 / 5',
+							}}
+							position={'relative'}
+						>
+							<Image
+								src={'/assets/group-preview.png'}
+								alt="Ukázka obrazovky týmu"
+								fill
+							/>
+						</Box>
 						<Box marginBottom={4}>
 							<Button
 								title="Vyzkoušet"

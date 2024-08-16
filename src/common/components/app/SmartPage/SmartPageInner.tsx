@@ -60,7 +60,7 @@ export const SmartPageInnerProvider = ({
 
 		if (options.hideToolbar !== null) toolbar.setHidden(options.hideToolbar)
 
-		if (options.hideFooter !== null) footer.setShow(options.hideFooter)
+		if (options.hideFooter !== null) footer.setShow(!options.hideFooter)
 	}, [options])
 	const theme = useTheme()
 
