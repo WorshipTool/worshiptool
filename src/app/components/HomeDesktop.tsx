@@ -2,6 +2,7 @@
 
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import SearchIcon from '@mui/icons-material/Search'
 import {
 	Box,
@@ -67,9 +68,16 @@ export default function HomeDesktop() {
 		}
 	}, [])
 
+	const [searchString, setSearchString] = useUrlState('search')
+
 	const onSearchValueChange = (event: any) => {
+		const value = event.target.value
+
+		// set search params
+		setSearchString(value)
+
 		setShowSearchedList(true)
-		setSearchValue(event.target.value)
+		setSearchValue(value)
 	}
 
 	const scrollLevel = 50

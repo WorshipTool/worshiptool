@@ -10,7 +10,12 @@ type LogoTitleProps = {
 export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 	const size = 36
 	return (
-		<Link to="home" params={{}}>
+		<Link
+			to="home"
+			params={{
+				search: undefined,
+			}}
+		>
 			<Clickable>
 				<Box
 					display={'flex'}

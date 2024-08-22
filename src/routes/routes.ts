@@ -149,4 +149,7 @@ export const routesSearchParams = {
 		key: 'a' as note | undefined,
 		hideChords: 'false',
 	},
+	home: {
+		search: 'string' as string | undefined,
+	},
 }
