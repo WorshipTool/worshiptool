@@ -1,4 +1,5 @@
 'use client'
+import HotjarAnalytics from '@/app/components/components/HotjarAnalytics'
 import { ThemeProvider } from '@/app/theme'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '@/hooks/auth/useAuth'
@@ -21,6 +22,7 @@ export default function AppClientProviders({
 			>
 				{/* <BrowserRouter> */}
 				<AuthProvider>
+					<HotjarAnalytics />
 					<ErrorHandlerProvider>
 						<GroupProvider>
 							<PlaylistProvider>{children}</PlaylistProvider>
