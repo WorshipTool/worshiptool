@@ -1,17 +1,19 @@
 'use client'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { Typography } from '@/common/ui/Typography'
+import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useState } from 'react'
 import {
-	mapGetSongDataApiToSongDto,
-	mapSongDataVariantApiToSongVariantDto,
 	SongDto,
 	SongVariantDto,
+	mapGetSongDataApiToSongDto,
+	mapSongDataVariantApiToSongVariantDto,
 } from '../../../../../api/dtos'
 import { SongGettingApi } from '../../../../../api/generated'
 import { SmartParams } from '../../../../../routes'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
-import NotFound from './not-found'
 import SongContainer from './SongContainer'
+import NotFound from './not-found'
 import { getVariantAliasFromParams, getVariantByAlias } from './tech'
 
 type SongRoutePageProps = {
@@ -40,6 +42,15 @@ export default function SongRoutePage({ params }: SongRoutePageProps) {
 
 			setSong(song)
 			setVariantData(variantData)
+
+			const s = new Sheet(variant.sheetData)
+
+			Analytics.track('VISIT_SONG', {
+				songGuid: song.guid,
+				variantGuid: variant.guid,
+				title: song.title,
+				hasChords: s.getKeyNote() !== null,
+			})
 		}
 		doFetchStuff()
 	}, [params.hex, params.alias])

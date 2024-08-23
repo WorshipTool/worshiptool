@@ -1,5 +1,6 @@
 'use client'
 import HotjarAnalytics from '@/app/components/components/HotjarAnalytics'
+import MixPanelAnalytics from '@/app/components/components/analytics/mixpanel/MixPanelAnalytics'
 import { ThemeProvider } from '@/app/theme'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '@/hooks/auth/useAuth'
@@ -23,6 +24,7 @@ export default function AppClientProviders({
 				{/* <BrowserRouter> */}
 				<AuthProvider>
 					<HotjarAnalytics />
+					<MixPanelAnalytics />
 					<ErrorHandlerProvider>
 						<GroupProvider>
 							<PlaylistProvider>{children}</PlaylistProvider>
