@@ -150,6 +150,6 @@ export const routesSearchParams = {
 		hideChords: 'false',
 	},
 	home: {
-		search: 'string' as string | undefined,
+		hledat: 'string' as string | undefined,
 	},
 }

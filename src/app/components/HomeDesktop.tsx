@@ -22,7 +22,7 @@ export default function HomeDesktop() {
 	const scrollPointRef = useRef(null)
 
 	// Manage search input, and url state with delay
-	const [searchString, setSearchString] = useUrlState('search')
+	const [searchString, setSearchString] = useUrlState('hledat')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
 	const onSearchValueChange = (e: string) => {

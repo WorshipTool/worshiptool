@@ -5,7 +5,7 @@ const LinkStory = () => (
 	<Link
 		to="home"
 		params={{
-			search: undefined,
+			hledat: undefined,
 		}}
 	>
 		Click me

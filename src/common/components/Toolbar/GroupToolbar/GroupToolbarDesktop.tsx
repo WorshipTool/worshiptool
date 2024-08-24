@@ -35,7 +35,7 @@ export default function GroupToolbarDesktop({
 		if (isOn) navigate('group', { groupCode: code })
 		else
 			navigate('home', {
-				search: undefined,
+				hledat: undefined,
 			})
 		window?.scroll({
 			top: 0,

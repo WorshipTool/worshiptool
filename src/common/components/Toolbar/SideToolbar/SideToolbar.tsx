@@ -58,7 +58,7 @@ export function SideToolbar({ component, children }: SideToolbarProps) {
 
 	const leave = () => {
 		navigate('home', {
-			search: undefined,
+			hledat: undefined,
 		})
 	}
 

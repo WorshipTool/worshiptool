@@ -21,7 +21,7 @@ type Links = [
 	ComponentProps<typeof Button<'contact'>>
 ]
 export default function Footer() {
-	const { search: searchString } = useSmartParams('home')
+	const { hledat: searchString } = useSmartParams('home')
 	const isHome = useSmartMatch('home')
 
 	const links: Links = useMemo(
@@ -29,7 +29,7 @@ export default function Footer() {
 			{
 				children: 'Hledat píseň',
 				to: 'home',
-				toParams: { search: isHome ? searchString : '' },
+				toParams: { hledat: isHome ? searchString : '' },
 				onClick: () => {
 					window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
 				},

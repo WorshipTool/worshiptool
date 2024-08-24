@@ -19,6 +19,9 @@ const nextConfig = withRoutes({
 			},
 		]
 	},
+	async rewrites() {
+		return []
+	},
 
 	reactStrictMode: false,
 	output: 'standalone',

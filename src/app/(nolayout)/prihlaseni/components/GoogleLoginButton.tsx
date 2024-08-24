@@ -16,7 +16,7 @@ export default function GoogleLoginButton(props: GoogleLoginButtonProps) {
 			props.afterLogin ||
 				(() =>
 					navigate('home', {
-						search: undefined,
+						hledat: undefined,
 					}))
 		)
 	}

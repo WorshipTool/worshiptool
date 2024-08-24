@@ -26,7 +26,7 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
 		if (isOn) navigate('group', { groupCode: code })
 		else
 			navigate('home', {
-				search: undefined,
+				hledat: undefined,
 			})
 		window?.scroll({
 			top: 0,

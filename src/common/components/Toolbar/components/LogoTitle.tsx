@@ -13,7 +13,7 @@ export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 		<Link
 			to="home"
 			params={{
-				search: undefined,
+				hledat: undefined,
 			}}
 		>
 			<Clickable>

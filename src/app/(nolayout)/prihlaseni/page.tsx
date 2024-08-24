@@ -54,7 +54,7 @@ function Login() {
 			)
 		} else {
 			navigate('home', {
-				search: undefined,
+				hledat: undefined,
 			})
 		}
 	}
@@ -96,7 +96,7 @@ function Login() {
 				)
 			} else {
 				navigate('home', {
-					search: undefined,
+					hledat: undefined,
 				})
 			}
 		})

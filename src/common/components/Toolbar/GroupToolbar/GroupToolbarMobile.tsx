@@ -18,7 +18,7 @@ export default function GroupToolbarMobile(props: GroupToolbarMobileProps) {
 		if (isOn) navigate('group', { groupCode: code })
 		else
 			navigate('home', {
-				search: undefined,
+				hledat: undefined,
 			})
 		window?.scroll({
 			top: 0,

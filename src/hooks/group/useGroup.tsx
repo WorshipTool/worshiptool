@@ -68,7 +68,7 @@ export const useProvideGroup = (): useProvideGroupI => {
 		// TODO: implements better
 		if (window?.location.pathname.includes('skupina')) {
 			navigate('home', {
-				search: undefined,
+				hledat: undefined,
 			})
 		}
 	}

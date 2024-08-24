@@ -22,7 +22,7 @@ type NavigationItems = [
 ]
 
 export default function MiddleNavigationPanel() {
-	const { search: searchString } = useSmartParams('home')
+	const { hledat: searchString } = useSmartParams('home')
 	const isHome = useSmartMatch('home')
 
 	const navigationItems: NavigationItems = useMemo(
@@ -30,7 +30,7 @@ export default function MiddleNavigationPanel() {
 			{
 				title: 'Hledat',
 				to: 'home',
-				toParams: { search: isHome ? searchString : '' },
+				toParams: { hledat: isHome ? searchString : '' },
 				enabled: false,
 				onClick: () => {
 					window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))

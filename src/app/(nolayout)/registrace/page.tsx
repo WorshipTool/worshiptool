@@ -40,7 +40,7 @@ function SignUp() {
 			} else {
 				await login({ email, password })
 				navigate('home', {
-					search: undefined,
+					hledat: undefined,
 				})
 			}
 			setInProgress(false)
