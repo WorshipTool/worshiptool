@@ -80,7 +80,16 @@ export default function Footer() {
 				}}
 			>
 				<Gap value={0.5} />
-				<Box display={'flex'} flexDirection={'row'} gap={1}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={{
+						sm: 0,
+						md: 1,
+					}}
+					flexWrap={'wrap'}
+					justifyContent={'center'}
+				>
 					{links.map((link) => {
 						return (
 							<Button
@@ -110,6 +119,7 @@ export default function Footer() {
 					<Typography size={'small'}>2024</Typography>
 					<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
 				</Box>
+				<Gap />
 			</Box>
 		</footer>
 	)
