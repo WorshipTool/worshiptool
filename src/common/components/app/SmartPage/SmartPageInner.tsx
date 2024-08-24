@@ -56,7 +56,7 @@ export const SmartPageInnerProvider = ({
 		if (options.hideMiddleNavigation !== null)
 			toolbar.setHideMiddleNavigation(options.hideMiddleNavigation)
 
-		if (options.hideTitle !== null) toolbar.setShowTitle(options.hideTitle)
+		if (options.hideTitle !== null) toolbar.setShowTitle(!options.hideTitle)
 
 		if (options.hideToolbar !== null) toolbar.setHidden(options.hideToolbar)
 
