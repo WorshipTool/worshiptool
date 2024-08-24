@@ -7,8 +7,9 @@ import SheetDisplay from '../../../../../common/components/SheetDisplay/SheetDis
 import { Gap } from '../../../../../common/ui/Gap'
 import { useRerender } from '../../../../../hooks/useRerender'
 import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel'
-import DeletedInfoPanel from './components/components/DeletedInfoPanel'
 import TopPanel from './components/TopPanel'
+import DeletedInfoPanel from './components/components/DeletedInfoPanel'
+import './styles.css'
 
 export type SongPageProps = {
 	variant: SongVariantDto
