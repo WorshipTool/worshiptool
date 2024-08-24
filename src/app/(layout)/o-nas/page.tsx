@@ -17,6 +17,10 @@ import { Groups2, LibraryMusic, SmartButton } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
+
+//TODO: fix overflow in better way.
+import './styles.css'
+
 export default SmartPage(Page, {
 	transparentToolbar: true,
 })

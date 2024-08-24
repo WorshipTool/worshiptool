@@ -9,7 +9,6 @@ import { useRerender } from '../../../../../hooks/useRerender'
 import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel'
 import TopPanel from './components/TopPanel'
 import DeletedInfoPanel from './components/components/DeletedInfoPanel'
-import './styles.css'
 
 export type SongPageProps = {
 	variant: SongVariantDto
