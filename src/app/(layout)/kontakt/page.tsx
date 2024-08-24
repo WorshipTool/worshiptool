@@ -118,7 +118,7 @@ function ContactPage() {
 								multiline
 								sx={{
 									height: '100px',
-									overflowY: 'scroll',
+									overflowY: 'auto',
 									backgroundColor: 'grey.100',
 								}}
 								onChange={(e) => setMessage(e)}
