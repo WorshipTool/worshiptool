@@ -72,7 +72,6 @@ export default function SearchedSongsList({
 		if (songs.length > 0 && nextExists) {
 			setNextLoading(true)
 			loadNext()
-			console.log('a')
 		}
 	})
 	useChangeDelayer(

@@ -1,3 +1,4 @@
+import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import MobileNavigationItem from '@/common/components/Toolbar/components/MiddleNavigationPanel/MobileNavigationItem'
 import NavigationItem, {
 	NavigationItemProps,
@@ -29,13 +30,10 @@ export default function MiddleNavigationPanel() {
 			{
 				title: 'Hledat',
 				to: 'home',
-				toParams: { search: isHome ? searchString : undefined },
+				toParams: { search: isHome ? searchString : '' },
 				enabled: false,
 				onClick: () => {
-					window.scrollTo({
-						top: 100,
-						behavior: 'smooth',
-					})
+					window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
 				},
 			},
 			{ title: 'O nás', to: 'about' },

@@ -1,23 +1,66 @@
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
-import { RoutesKeys } from '@/routes'
 import { Favorite } from '@mui/icons-material'
 import { Box } from '@mui/material'
 
+import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import { Gap } from '@/common/ui/Gap'
+import { useSmartMatch } from '@/routes/useSmartMatch'
+import { useSmartParams } from '@/routes/useSmartParams'
+import { ComponentProps, useMemo } from 'react'
 import './footer.styles.css'
 
+type Links = [
+	ComponentProps<typeof Button<'home'>>,
+	ComponentProps<typeof Button<'songsList'>>,
+	ComponentProps<typeof Button<'about'>>,
+	ComponentProps<typeof Button<'teams'>>,
+	ComponentProps<typeof Button<'contact'>>,
+	ComponentProps<typeof Button<'contact'>>,
+	ComponentProps<typeof Button<'contact'>>
+]
 export default function Footer() {
-	const links: [string, RoutesKeys | undefined][] = [
-		['Hledat píseň', 'home'],
-		['Seznam písní', 'songsList'],
-		['O aplikaci', 'about'],
-		['Týmy', 'teams'],
-		['Zpětná vazba', 'contact'],
-		['Nahlásit chybu', 'contact'],
-		['Kontakt', 'contact'],
-	]
+	const { search: searchString } = useSmartParams('home')
+	const isHome = useSmartMatch('home')
+
+	const links: Links = useMemo(
+		() => [
+			{
+				children: 'Hledat píseň',
+				to: 'home',
+				toParams: { search: isHome ? searchString : '' },
+				onClick: () => {
+					window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
+				},
+			},
+			{
+				children: 'Seznam písní',
+				to: 'songsList',
+			},
+			{
+				children: 'O aplikaci',
+				to: 'about',
+			},
+			{
+				children: 'Týmy',
+				to: 'teams',
+			},
+			{
+				children: 'Zpětná vazba',
+				to: 'contact',
+			},
+			{
+				children: 'Nahlásit chybu',
+				to: 'contact',
+			},
+			{
+				children: 'Kontakt',
+				to: 'contact',
+			},
+		],
+		[isHome, searchString]
+	)
 
 	const footer = useFooter()
 
@@ -39,21 +82,17 @@ export default function Footer() {
 				<Gap value={0.5} />
 				<Box display={'flex'} flexDirection={'row'} gap={1}>
 					{links.map((link) => {
-						const title = link[0]
-						const to = link[1]
 						return (
 							<Button
 								size={'small'}
-								key={title}
+								key={link.children}
 								color="grey.500"
 								variant="text"
 								sx={{
 									fontWeight: 400,
 								}}
-								to={to}
-							>
-								{title}
-							</Button>
+								{...link}
+							/>
 						)
 					})}
 				</Box>

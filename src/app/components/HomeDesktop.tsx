@@ -1,11 +1,11 @@
 'use client'
 
+import MainSearchInput from '@/app/components/components/MainSearchInput'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import SearchIcon from '@mui/icons-material/Search'
 import {
 	Box,
 	Grid,
@@ -67,8 +67,8 @@ export default function HomeDesktop() {
 	const [searchString, setSearchString] = useUrlState('search')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
-	const onSearchValueChange = (e: any) => {
-		setSearchInputValue(e.target.value)
+	const onSearchValueChange = (e: string) => {
+		setSearchInputValue(e)
 		if (searchString === null) setSearchString('')
 	}
 
@@ -180,30 +180,11 @@ export default function HomeDesktop() {
 										</Typography>
 									</motion.div>
 
-									<motion.div
-										style={{
-											background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-											boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
-											width: '100%',
-											borderRadius: '0.6rem',
-										}}
-										initial={{
-											padding: 2,
-										}}
-										animate={{
-											padding: isTop ? 2 : 0,
-										}}
-									>
-										<SearchContainer>
-											<SearchIcon />
-											<SearchInput
-												placeholder="Hledej..."
-												onChange={onSearchValueChange}
-												autoFocus
-												value={searchInputValue}
-											></SearchInput>
-										</SearchContainer>
-									</motion.div>
+									<MainSearchInput
+										gradientBorder={isTop}
+										value={searchInputValue}
+										onChange={onSearchValueChange}
+									/>
 								</Grid>
 							</Grid>
 						</Grid>
