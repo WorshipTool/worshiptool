@@ -1,21 +1,50 @@
 import MobileNavigationItem from '@/common/components/Toolbar/components/MiddleNavigationPanel/MobileNavigationItem'
-import NavigationItem from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationItem'
+import NavigationItem, {
+	NavigationItemProps,
+} from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationItem'
 import { MOBILE_NAVIGATION_PANEL_ID } from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
-import { RoutesKeys } from '@/routes'
+import { useSmartMatch } from '@/routes/useSmartMatch'
+import { useSmartParams } from '@/routes/useSmartParams'
 import { ArrowDropUp, Menu } from '@mui/icons-material'
 import { Box, Divider } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-const navigationItems: { title: string; to: RoutesKeys | undefined }[] = [
-	{ title: 'O nás', to: 'about' },
-	{ title: 'Chválící týmy', to: 'teams' },
-	{ title: 'Kontakt', to: 'contact' },
+type NavigationItems = [
+	NavigationItemProps<'home'>,
+	NavigationItemProps<'about'>,
+	NavigationItemProps<'teams'>,
+	NavigationItemProps<'contact'>
 ]
+
 export default function MiddleNavigationPanel() {
+	const { search: searchString } = useSmartParams('home')
+	const isHome = useSmartMatch('home')
+
+	const navigationItems: NavigationItems = useMemo(
+		() => [
+			{
+				title: 'Hledat',
+				to: 'home',
+				toParams: { search: isHome ? searchString : undefined },
+				enabled: false,
+				onClick: () => {
+					window.scrollTo({
+						top: 100,
+						behavior: 'smooth',
+					})
+				},
+			},
+			{ title: 'O nás', to: 'about' },
+			{ title: 'Chválící týmy', to: 'teams' },
+			{ title: 'Kontakt', to: 'contact' },
+		],
+		[isHome, searchString]
+	)
+
 	const { hideMiddleNavigation, _setTempSolid, transparent } = useToolbar()
 
 	useEffect(() => {
@@ -42,7 +71,6 @@ export default function MiddleNavigationPanel() {
 			}}
 			position={'relative'}
 		>
-			{/* <NavigationItem title="Hledat" /> */}
 			<Box
 				display={{
 					xs: 'none',
@@ -53,7 +81,7 @@ export default function MiddleNavigationPanel() {
 				gap={4}
 			>
 				{navigationItems.map((item) => (
-					<NavigationItem title={item.title} to={item.to} key={item.title} />
+					<NavigationItem {...item} key={item.title} />
 				))}
 			</Box>
 
@@ -71,13 +99,6 @@ export default function MiddleNavigationPanel() {
 					transition: 'all 0.3s ease',
 				}}
 			>
-				{/* <Box
-					sx={{
-						minWidth: '1px',
-						height: '2rem',
-						bgcolor: 'grey.400',
-					}}
-				/> */}
 				<IconButton
 					color="inherit"
 					onClick={() => {

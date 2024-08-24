@@ -66,32 +66,19 @@ export default function HomeDesktop() {
 	// Manage search input, and url state with delay
 	const [searchString, setSearchString] = useUrlState('search')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
-	// const [showSearchedList, setShowSearchedList] = useState(
-	// 	searchString !== null
-	// )
 
 	const onSearchValueChange = (e: any) => {
 		setSearchInputValue(e.target.value)
 		if (searchString === null) setSearchString('')
-
-		// setShowSearchedList(true)
 	}
 
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') setSearchString(value)
+			if (value !== '') setSearchString(value.replaceAll(',', ' '))
 		},
 		[]
 	)
-
-	// useEffect(() => {
-	// 	if (searchString === null) {
-	// 		setSearchInputValue('')
-	// 		setShowSearchedList(false)
-	// 	}
-	// }, [searchString])
-
 	// Manage scrolling to search results
 	const scrollLevel = 50
 	const scrollToTop = () => {

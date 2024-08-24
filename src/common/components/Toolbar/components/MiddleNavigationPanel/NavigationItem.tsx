@@ -1,17 +1,20 @@
 import { Button } from '@/common/ui/Button'
-import { RoutesKeys } from '@/routes'
+import { RoutesKeys, SmartAllParams } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
-type NavigationItemProps = {
+export type NavigationItemProps<T extends RoutesKeys> = {
 	title: string
 	enabled?: boolean
 	onClick?: () => void
-	to?: RoutesKeys
+	to?: T
+	toParams?: SmartAllParams<T>
 }
 
-export default function NavigationItem(props: NavigationItemProps) {
+export default function NavigationItem<T extends RoutesKeys>(
+	props: NavigationItemProps<T>
+) {
 	const match = useSmartMatch(props.to || 'home')
 
 	const enabled = useMemo(
@@ -34,6 +37,7 @@ export default function NavigationItem(props: NavigationItemProps) {
 				color="inherit"
 				size="small"
 				to={props.to}
+				toParams={props.toParams}
 				onClick={props.onClick}
 				sx={{
 					borderRadius: 2,
