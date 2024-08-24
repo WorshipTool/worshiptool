@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMotionValueEvent, useScroll } from 'framer-motion'
+import { useMemo, useState } from 'react'
 
 type HandlerProps = {
 	onChange?: (top: boolean, y: number) => void
@@ -7,31 +8,17 @@ type HandlerProps = {
 
 export const useScrollHandler = (props?: HandlerProps) => {
 	const [isTop, setIsTop] = useState(true)
-	const [scroll, setScroll] = useState(0)
+	const [scrollY, setScroll] = useState(0)
 
 	const threshold = useMemo(
 		() => props?.topThreshold || 10,
 		[props?.topThreshold]
 	)
-
-	useEffect(() => {
-		const handleScroll = (event: any) => {
-			if (!window.scrollY) return
-			const isTop = window.scrollY < threshold
-			setIsTop(isTop)
-			setScroll(window.scrollY)
-
-			if (props?.onChange) {
-				props?.onChange(isTop, window.scrollY)
-			}
-		}
-
-		window.addEventListener('scroll', handleScroll)
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll)
-		}
-	}, [])
-
-	return { isTop, scrollY: scroll }
+	const { scrollY: y } = useScroll()
+	useMotionValueEvent(y, 'change', (latest) => {
+		const isTop = latest < threshold
+		setIsTop(isTop)
+		setScroll(latest)
+	})
+	return { isTop, scrollY }
 }

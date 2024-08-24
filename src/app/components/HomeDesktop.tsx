@@ -6,14 +6,7 @@ import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import {
-	Box,
-	Grid,
-	InputBase,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material'
+import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
@@ -21,47 +14,12 @@ import FloatingAddButton from './components/FloatingAddButton'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
-const SearchContainer = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.grey[100],
-	padding: '0.5rem',
-	paddingLeft: '0.8rem',
-	paddingRight: '0.8rem',
-	borderRadius: '0.5rem',
-	display: 'flex',
-
-	justifyContent: 'center',
-	alignItems: 'center',
-}))
-const SearchInput = styled(InputBase)(({ theme }) => ({
-	flex: 1,
-	marginLeft: '0.5em',
-	zIndex: 100,
-}))
-
 export default function HomeDesktop() {
 	const ANIMATION_DURATION = 0.2
 
 	const theme = useTheme()
 
 	const scrollPointRef = useRef(null)
-
-	/**
-	 * Calculation value to correct window height
-	 * ...handles resizing
-	 */
-	const [correctingOffsetForWindowHeight, setcorrectingOffsetForWindowHeight] =
-		useState(1000)
-	useEffect(() => {
-		const onResize = () => {
-			const min = window.innerHeight
-			setcorrectingOffsetForWindowHeight(min)
-		}
-		onResize()
-		window.addEventListener('resize', onResize)
-		return () => {
-			window.removeEventListener('resize', onResize)
-		}
-	}, [])
 
 	// Manage search input, and url state with delay
 	const [searchString, setSearchString] = useUrlState('search')
@@ -80,10 +38,10 @@ export default function HomeDesktop() {
 		[]
 	)
 	// Manage scrolling to search results
-	const scrollLevel = 50
+	const scrollLevel = 20
 	const scrollToTop = () => {
 		window.scroll({
-			top: scrollLevel * 2,
+			top: 90,
 			left: 0,
 			behavior: 'smooth',
 		})
@@ -140,7 +98,7 @@ export default function HomeDesktop() {
 						top: '35%',
 					}}
 					animate={{
-						top: isTop ? '35%' : 28,
+						top: isTop ? `35%` : 'calc(-7rem + 22px)',
 					}}
 					transition={{
 						type: 'keyframes',
@@ -157,7 +115,7 @@ export default function HomeDesktop() {
 											opacity: 1,
 										}}
 										animate={{
-											height: isTop ? '7rem' : '0',
+											height: '7rem',
 											opacity: isTop ? 1 : 0,
 										}}
 										transition={{
@@ -194,34 +152,27 @@ export default function HomeDesktop() {
 
 				<div ref={scrollPointRef}></div>
 
-				<Box sx={{ height: correctingOffsetForWindowHeight }}></Box>
+				<Box sx={{ height: '100vh' }}></Box>
 
-				<motion.div
+				<div
 					style={{
 						left: 0,
 						right: 0,
-						position: 'fixed',
+						position: 'absolute',
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
 						padding: theme.spacing(2),
-					}}
-					initial={{
 						top: '80%',
-						position: 'fixed',
-					}}
-					animate={{
-						top: isTop ? '80%' : 170,
-						position: isTop ? 'fixed' : 'absolute',
-					}}
-					transition={{
-						type: 'keyframes',
-						duration: ANIMATION_DURATION,
+						transform: isTop
+							? 'translateY(0)'
+							: 'translateY(calc(-80vh + 170px))',
+						transition: `transform ${ANIMATION_DURATION}s ease`,
 					}}
 				>
 					{searchString && <SearchedSongsList searchString={searchString} />}
 					<RecommendedSongsList />
-				</motion.div>
+				</div>
 			</Box>
 
 			<FloatingAddButton extended={!isTop} />
