@@ -6,8 +6,8 @@ import SongListCards, {
 	SongListCardsProps,
 } from '../../../../common/components/songLists/SongListCards/SongListCards'
 import { Button } from '../../../../common/ui/Button'
-import useRecommendedSongs from './hooks/useRecommendedSongs'
 import SongCardSkeleton from './SongCardSkeleton'
+import useRecommendedSongs from './hooks/useRecommendedSongs'
 
 const GridContainer = styled(Grid)(({ theme }) => ({
 	padding: 10,

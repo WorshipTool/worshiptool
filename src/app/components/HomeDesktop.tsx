@@ -70,6 +70,16 @@ export default function HomeDesktop() {
 		footer.setShow(false)
 	}, [footer])
 
+	// Calculate inner height of the window
+	const [innerHeight, setInnerHeight] = useState(window.innerHeight)
+	useEffect(() => {
+		const handleResize = () => {
+			setInnerHeight(window.innerHeight)
+		}
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
 	return (
 		<>
 			{/* <Toolbar transparent={isTop} /> */}
@@ -166,7 +176,7 @@ export default function HomeDesktop() {
 						top: '80%',
 						transform: isTop
 							? 'translateY(0)'
-							: 'translateY(calc(-80vh + 170px))',
+							: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
 						transition: `transform ${ANIMATION_DURATION}s ease`,
 					}}
 				>

@@ -1,6 +1,6 @@
 'use client'
 import { Masonry } from '@mui/lab'
-import { useTheme } from '@mui/material'
+import { Grid, useTheme } from '@mui/material'
 import { ResponsiveStyleValue } from '@mui/system'
 import { useMemo } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
@@ -48,6 +48,20 @@ export default function SongListCards(props: SongListCardsProps) {
 
 	return props.data.length === 0 ? (
 		<></>
+	) : props.variant === 'row' ? (
+		<Grid container columns={{ xs: 1, md: 2, lg: 4 }} spacing={spacing}>
+			{props.data.map((v) => {
+				return (
+					<Grid item key={v.guid} xs={1}>
+						<SongCard
+							data={v}
+							publicityMode="privateandloader"
+							flexibleHeght={false}
+						/>
+					</Grid>
+				)
+			})}
+		</Grid>
 	) : (
 		<Masonry
 			columns={columns}
@@ -63,7 +77,7 @@ export default function SongListCards(props: SongListCardsProps) {
 						data={v}
 						key={v.guid}
 						publicityMode="privateandloader"
-						flexibleHeght={props.variant !== 'row'}
+						flexibleHeght
 					/>
 				)
 			})}
