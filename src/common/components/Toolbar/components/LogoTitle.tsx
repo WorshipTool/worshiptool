@@ -1,3 +1,4 @@
+import { RESET_HOME_SCREEN_EVENT_NAME } from '@/app/components/HomeDesktop'
 import SvgIcon from '@/assets/icon.svg'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
@@ -9,6 +10,14 @@ type LogoTitleProps = {
 
 export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 	const size = 36
+
+	const onClick = () => {
+		window?.scroll({
+			top: 0,
+			behavior: 'smooth',
+		})
+		window.dispatchEvent(new Event(RESET_HOME_SCREEN_EVENT_NAME))
+	}
 	return (
 		<Link
 			to="home"
@@ -16,7 +25,7 @@ export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 				hledat: undefined,
 			}}
 		>
-			<Clickable>
+			<Clickable onClick={onClick}>
 				<Box
 					display={'flex'}
 					flexDirection={'row'}

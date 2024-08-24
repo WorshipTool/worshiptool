@@ -14,6 +14,8 @@ import FloatingAddButton from './components/FloatingAddButton'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
+export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
+
 export default function HomeDesktop() {
 	const ANIMATION_DURATION = 0.2
 
@@ -37,12 +39,23 @@ export default function HomeDesktop() {
 		},
 		[]
 	)
+
+	useEffect(() => {
+		const handler = () => {
+			setSearchInputValue('')
+		}
+
+		window.addEventListener(RESET_HOME_SCREEN_EVENT_NAME, handler)
+		return () => {
+			window.removeEventListener(RESET_HOME_SCREEN_EVENT_NAME, handler)
+		}
+	}, [])
+
 	// Manage scrolling to search results
 	const scrollLevel = 20
 	const scrollToTop = () => {
 		window.scroll({
 			top: 90,
-			left: 0,
 			behavior: 'smooth',
 		})
 	}

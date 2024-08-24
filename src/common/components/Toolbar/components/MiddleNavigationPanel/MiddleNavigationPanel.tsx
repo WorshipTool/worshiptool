@@ -30,7 +30,7 @@ export default function MiddleNavigationPanel() {
 			{
 				title: 'Hledat',
 				to: 'home',
-				toParams: { hledat: isHome ? searchString : '' },
+				toParams: { hledat: isHome ? searchString || '' : '' },
 				enabled: false,
 				onClick: () => {
 					window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
@@ -121,7 +121,7 @@ export default function MiddleNavigationPanel() {
 						top={56}
 						left={0}
 						right={0}
-						zIndex={1}
+						zIndex={2}
 						boxShadow={2}
 						bgcolor={'grey.200'}
 						sx={{
@@ -133,9 +133,11 @@ export default function MiddleNavigationPanel() {
 							<MobileNavigationItem
 								title={item.title}
 								to={item.to}
+								toParams={item.toParams}
 								key={item.title}
 								onClick={() => {
 									setShowMobileMenu(false)
+									item.onClick?.()
 								}}
 							/>
 						))}

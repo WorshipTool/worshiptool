@@ -33,7 +33,6 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 	const inputRef = useRef<HTMLInputElement>()
 
 	const [earlyFocused, setEarlyFocused] = useState(false)
-
 	useChangeDelayer(
 		earlyFocused,
 		() => {
@@ -47,7 +46,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 		// This function is called only if its called from home page
 		const handler = () => {
 			window.scrollTo({
-				top: 100,
+				top: 90,
 				behavior: 'smooth',
 			})
 			setTimeout(() => {
