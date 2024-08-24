@@ -19,8 +19,6 @@ interface LeftWebTitleProps {}
 export default function LeftWebTitle({}: LeftWebTitleProps) {
 	const { showTitle } = useToolbar()
 
-	const size = 36
-
 	const { isOn, code } = useGroup()
 	const goHomeClick = () => {
 		window?.scroll({

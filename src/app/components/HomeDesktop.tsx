@@ -2,6 +2,8 @@
 
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import SearchIcon from '@mui/icons-material/Search'
 import {
@@ -37,18 +39,11 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 }))
 
 export default function HomeDesktop() {
+	const ANIMATION_DURATION = 0.2
+
 	const theme = useTheme()
 
-	const [isTop, setTop] = useState(true)
 	const scrollPointRef = useRef(null)
-
-	const [searchValue, setSearchValue] = useState('')
-	const [showSearchedList, setShowSearchedList] = useState(false)
-
-	const animationDuration = 0.2
-
-	const toolbar = useToolbar()
-	const footer = useFooter()
 
 	/**
 	 * Calculation value to correct window height
@@ -68,47 +63,57 @@ export default function HomeDesktop() {
 		}
 	}, [])
 
+	// Manage search input, and url state with delay
 	const [searchString, setSearchString] = useUrlState('search')
+	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
+	// const [showSearchedList, setShowSearchedList] = useState(
+	// 	searchString !== null
+	// )
 
-	const onSearchValueChange = (event: any) => {
-		const value = event.target.value
+	const onSearchValueChange = (e: any) => {
+		setSearchInputValue(e.target.value)
+		if (searchString === null) setSearchString('')
 
-		// set search params
-		setSearchString(value)
-
-		setShowSearchedList(true)
-		setSearchValue(value)
+		// setShowSearchedList(true)
 	}
 
+	useChangeDelayer(
+		searchInputValue,
+		(value) => {
+			if (value !== '') setSearchString(value)
+		},
+		[]
+	)
+
+	// useEffect(() => {
+	// 	if (searchString === null) {
+	// 		setSearchInputValue('')
+	// 		setShowSearchedList(false)
+	// 	}
+	// }, [searchString])
+
+	// Manage scrolling to search results
 	const scrollLevel = 50
+	const scrollToTop = () => {
+		window.scroll({
+			top: scrollLevel * 2,
+			left: 0,
+			behavior: 'smooth',
+		})
+	}
 
 	useEffect(() => {
-		if (searchValue == '') {
-		} else {
-			window.scroll({
-				top: scrollLevel * 2,
-				left: 0,
-				behavior: 'smooth',
-			})
-		}
-	}, [searchValue])
+		if (searchString === null) return
+		scrollToTop()
+	}, [searchString])
 
-	useEffect(() => {
-		const handleScroll = (event: any) => {
-			const sy = window.scrollY
-			if (sy > scrollLevel) {
-				setTop(false)
-			} else {
-				setTop(true)
-			}
-		}
+	// Manage toolbar and footer
+	const { isTop } = useScrollHandler({
+		topThreshold: scrollLevel,
+	})
 
-		window.addEventListener('scroll', handleScroll)
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll)
-		}
-	}, [])
+	const toolbar = useToolbar()
+	const footer = useFooter()
 
 	useEffect(() => {
 		toolbar.setTransparent(isTop)
@@ -152,7 +157,7 @@ export default function HomeDesktop() {
 					}}
 					transition={{
 						type: 'keyframes',
-						duration: animationDuration,
+						duration: ANIMATION_DURATION,
 					}}
 				>
 					<ContainerGrid>
@@ -170,7 +175,7 @@ export default function HomeDesktop() {
 										}}
 										transition={{
 											type: 'keyframes',
-											duration: animationDuration / 2,
+											duration: ANIMATION_DURATION / 2,
 										}}
 										style={{
 											display: 'flex',
@@ -208,7 +213,7 @@ export default function HomeDesktop() {
 												placeholder="Hledej..."
 												onChange={onSearchValueChange}
 												autoFocus
-												value={searchValue}
+												value={searchInputValue}
 											></SearchInput>
 										</SearchContainer>
 									</motion.div>
@@ -243,10 +248,10 @@ export default function HomeDesktop() {
 					}}
 					transition={{
 						type: 'keyframes',
-						duration: animationDuration,
+						duration: ANIMATION_DURATION,
 					}}
 				>
-					{showSearchedList && <SearchedSongsList searchString={searchValue} />}
+					{searchString && <SearchedSongsList searchString={searchString} />}
 					<RecommendedSongsList />
 				</motion.div>
 			</Box>

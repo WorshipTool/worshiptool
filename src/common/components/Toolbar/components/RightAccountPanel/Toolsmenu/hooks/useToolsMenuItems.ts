@@ -1,4 +1,4 @@
-import { LinkProps } from '@/common/ui/Link/CustomLink'
+import { LinkProps } from '@/common/ui/Link/Link'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'

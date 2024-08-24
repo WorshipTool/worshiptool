@@ -13,7 +13,11 @@ export default function GoogleLoginButton(props: GoogleLoginButtonProps) {
 	const onSuccess = (credentialResponse: CredentialResponse) => {
 		loginWithGoogle(
 			credentialResponse,
-			props.afterLogin || (() => navigate('home', {}))
+			props.afterLogin ||
+				(() =>
+					navigate('home', {
+						search: undefined,
+					}))
 		)
 	}
 

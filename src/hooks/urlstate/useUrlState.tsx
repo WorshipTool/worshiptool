@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export const useUrlState = (key: string) => {
 	const [value, _setValue] = useState<string | null>(() => {
@@ -6,16 +7,26 @@ export const useUrlState = (key: string) => {
 		return params.get(key)
 	})
 
-	const setValue = (value: string) => {
+	const setValue = (value: string | null) => {
 		_setValue(value)
 
 		const params = new URLSearchParams(window.location.search)
-		params.set(key, value)
+		if (value === null) {
+			params.delete(key)
+		} else {
+			params.set(key, value)
+		}
 
 		const url = `${window.location.pathname}?${params.toString()}`
 
 		window.history.replaceState({}, '', url)
 	}
+
+	const params = useSearchParams()
+	useEffect(() => {
+		const _value = params.get(key)
+		if (_value !== value) _setValue(_value)
+	}, [params])
 
 	return [value, setValue] as const
 }

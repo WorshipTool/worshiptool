@@ -1,6 +1,6 @@
 'use client'
 import { ArrowBack, Home, Settings } from '@mui/icons-material'
-import { Box, IconButton, styled, Tooltip } from '@mui/material'
+import { Box, IconButton, Tooltip, styled } from '@mui/material'
 import { ReactElement } from 'react'
 import { usePermission } from '../../../../hooks/auth/usePermission'
 import useGroup from '../../../../hooks/group/useGroup'
@@ -57,7 +57,9 @@ export function SideToolbar({ component, children }: SideToolbarProps) {
 	const isOwner = usePermission('GROUP_OWNER', guid)
 
 	const leave = () => {
-		navigate('home', {})
+		navigate('home', {
+			search: undefined,
+		})
 	}
 
 	return (

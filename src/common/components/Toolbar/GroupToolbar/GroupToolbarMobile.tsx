@@ -16,7 +16,10 @@ export default function GroupToolbarMobile(props: GroupToolbarMobileProps) {
 	const navigate = useSmartNavigate()
 	const goHome = () => {
 		if (isOn) navigate('group', { groupCode: code })
-		else navigate('home', {})
+		else
+			navigate('home', {
+				search: undefined,
+			})
 		window?.scroll({
 			top: 0,
 			behavior: 'auto',

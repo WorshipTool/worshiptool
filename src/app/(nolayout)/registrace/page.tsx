@@ -39,7 +39,9 @@ function SignUp() {
 				setErrorMessage('Účet s tímto emailem již existuje')
 			} else {
 				await login({ email, password })
-				navigate('home', {})
+				navigate('home', {
+					search: undefined,
+				})
 			}
 			setInProgress(false)
 		})

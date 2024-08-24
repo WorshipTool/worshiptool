@@ -53,7 +53,9 @@ function Login() {
 				{}
 			)
 		} else {
-			navigate('home', {})
+			navigate('home', {
+				search: undefined,
+			})
 		}
 	}
 
@@ -93,7 +95,9 @@ function Login() {
 					{}
 				)
 			} else {
-				navigate('home', {})
+				navigate('home', {
+					search: undefined,
+				})
 			}
 		})
 	}

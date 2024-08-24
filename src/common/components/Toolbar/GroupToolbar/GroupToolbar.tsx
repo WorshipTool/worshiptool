@@ -24,7 +24,10 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
 	const { isOn, code } = useGroup()
 	const goHome = () => {
 		if (isOn) navigate('group', { groupCode: code })
-		else navigate('home', {})
+		else
+			navigate('home', {
+				search: undefined,
+			})
 		window?.scroll({
 			top: 0,
 			behavior: 'auto',

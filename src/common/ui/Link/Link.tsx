@@ -26,7 +26,6 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {}
 		)
-		console.log(a)
 		return a
 	}, [props.to, props.params])
 

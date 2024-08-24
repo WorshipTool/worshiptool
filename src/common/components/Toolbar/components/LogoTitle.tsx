@@ -1,6 +1,8 @@
 import SvgIcon from '@/assets/icon.svg'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
+import { useSmartMatch } from '@/routes/useSmartMatch'
+import { useSmartParams } from '@/routes/useSmartParams'
 import { Box, Typography } from '@mui/material'
 type LogoTitleProps = {
 	hideTitle?: boolean
@@ -8,12 +10,15 @@ type LogoTitleProps = {
 }
 
 export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
+	const { search } = useSmartParams('home')
+	const isHome = useSmartMatch('home')
+
 	const size = 36
 	return (
 		<Link
 			to="home"
 			params={{
-				search: undefined,
+				search: isHome ? search : undefined,
 			}}
 		>
 			<Clickable>
