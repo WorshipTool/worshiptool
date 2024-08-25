@@ -45,11 +45,11 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 	useEffect(() => {
 		// This function is called only if its called from home page
 		const handler = () => {
-			window.scrollTo({
-				top: 90,
-				behavior: 'smooth',
-			})
 			setTimeout(() => {
+				window.scrollTo({
+					top: 90,
+					behavior: 'smooth',
+				})
 				inputRef.current?.focus()
 				setEarlyFocused(true)
 			}, 200)
