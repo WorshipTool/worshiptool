@@ -6,8 +6,8 @@ import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import { Box, Grid, Typography, useTheme } from '@mui/material'
-import { motion } from 'framer-motion'
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
@@ -20,6 +20,7 @@ export default function HomeDesktop() {
 	const ANIMATION_DURATION = 0.2
 
 	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down('sm'))
 
 	const scrollPointRef = useRef(null)
 
@@ -74,10 +75,10 @@ export default function HomeDesktop() {
 	const footer = useFooter()
 
 	useEffect(() => {
-		toolbar.setTransparent(isTop)
-		toolbar.setHideMiddleNavigation(!isTop)
-		toolbar.setShowTitle(!isTop)
-	}, [isTop, toolbar])
+		toolbar.setTransparent(isTop && !phoneVersion)
+		toolbar.setHideMiddleNavigation(!isTop && !phoneVersion)
+		toolbar.setShowTitle(!isTop || phoneVersion)
+	}, [isTop, toolbar, phoneVersion])
 
 	useEffect(() => {
 		footer.setShow(false)
@@ -104,24 +105,37 @@ export default function HomeDesktop() {
 					alignItems: 'start',
 					display: 'flex',
 					flexDirection: 'column',
+					position: 'relative',
 				}}
 			>
 				<motion.div
 					style={{
 						position: 'fixed',
-						left: 0,
-						right: 0,
 						display: 'flex',
 						flexDirection: 'column',
-						zIndex: 10,
+						zIndex: phoneVersion ? 1 : 10,
 						alignItems: 'center',
 						pointerEvents: 'none',
 					}}
 					initial={{
-						top: '35%',
+						top: !phoneVersion
+							? isTop
+								? `35%`
+								: 'calc(-7rem + 22px)'
+							: 'calc( 64px)',
+
+						left: !phoneVersion ? 0 : theme.spacing(1),
+						right: !phoneVersion ? 0 : theme.spacing(1),
 					}}
 					animate={{
-						top: isTop ? `35%` : 'calc(-7rem + 22px)',
+						top: !phoneVersion
+							? isTop
+								? `35%`
+								: 'calc(-7rem + 22px)'
+							: 'calc( 64px)',
+
+						left: !phoneVersion ? 0 : theme.spacing(1),
+						right: !phoneVersion ? 0 : theme.spacing(1),
 					}}
 					transition={{
 						type: 'keyframes',
@@ -131,38 +145,45 @@ export default function HomeDesktop() {
 					<ContainerGrid>
 						<Grid item xs={12}>
 							<Grid container justifyContent="center">
-								<Grid item xs={6} sx={{ pointerEvents: 'auto' }}>
-									<motion.div
-										initial={{
-											height: '7rem',
-											opacity: 1,
-										}}
-										animate={{
-											height: '7rem',
-											opacity: isTop ? 1 : 0,
-										}}
-										transition={{
-											type: 'keyframes',
-											duration: ANIMATION_DURATION / 2,
-										}}
-										style={{
-											display: 'flex',
-											justifyContent: 'center',
-											marginBottom: theme.spacing(1),
-											flexDirection: 'column',
-											userSelect: 'none',
-										}}
-									>
-										<Typography variant="h3" fontWeight={'200'}>
-											Jsi-li ovce, tak...
-										</Typography>
-										<Typography variant="h1" fontWeight={'900'}>
-											Chval Otce
-										</Typography>
-									</motion.div>
+								<Grid item sm={6} xs={12} sx={{ pointerEvents: 'auto' }}>
+									<AnimatePresence>
+										{!phoneVersion && (
+											<motion.div
+												initial={{
+													height: '7rem',
+													opacity: isTop ? 1 : 0,
+												}}
+												animate={{
+													opacity: isTop ? 1 : 0,
+												}}
+												exit={{
+													opacity: 0,
+												}}
+												transition={{
+													type: 'keyframes',
+													duration: ANIMATION_DURATION / 2,
+												}}
+												style={{
+													display: 'flex',
+													justifyContent: 'center',
+													marginBottom: theme.spacing(1),
+													flexDirection: 'column',
+													userSelect: 'none',
+													pointerEvents: 'none',
+												}}
+											>
+												<Typography variant="h3" fontWeight={'200'}>
+													Jsi-li ovce, tak...
+												</Typography>
+												<Typography variant="h1" fontWeight={'900'} noWrap>
+													Chval Otce
+												</Typography>
+											</motion.div>
+										)}
+									</AnimatePresence>
 
 									<MainSearchInput
-										gradientBorder={isTop}
+										gradientBorder={isTop && !phoneVersion}
 										value={searchInputValue}
 										onChange={onSearchValueChange}
 									/>
@@ -171,11 +192,11 @@ export default function HomeDesktop() {
 						</Grid>
 					</ContainerGrid>
 				</motion.div>
-				<Box sx={{ height: 65 }}></Box>
+				<Box sx={{ height: phoneVersion ? 0 : 65 }}></Box>
 
 				<div ref={scrollPointRef}></div>
 
-				<Box sx={{ height: '100vh' }}></Box>
+				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
 
 				<div
 					style={{
@@ -185,12 +206,14 @@ export default function HomeDesktop() {
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						padding: theme.spacing(2),
-						top: '80%',
+						padding: 0,
+						top: !phoneVersion ? 'calc(100% - 275px)' : '66px',
+						// TODO: fix height jumping on one column preview
 						transform: isTop
-							? 'translateY(0)'
+							? // || phoneVersion
+							  'translateY(0)'
 							: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
-						transition: `transform ${ANIMATION_DURATION}s ease`,
+						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
 					{searchString && <SearchedSongsList searchString={searchString} />}
@@ -198,7 +221,7 @@ export default function HomeDesktop() {
 				</div>
 			</Box>
 
-			<FloatingAddButton extended={!isTop} />
+			{!phoneVersion && <FloatingAddButton extended={!isTop} />}
 		</>
 	)
 }
