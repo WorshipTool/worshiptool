@@ -209,10 +209,10 @@ export default function HomeDesktop() {
 						padding: 0,
 						top: !phoneVersion ? 'calc(100% - 275px)' : '66px',
 						// TODO: fix height jumping on one column preview
-						transform: isTop
-							? // || phoneVersion
-							  'translateY(0)'
-							: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
+						transform:
+							isTop || phoneVersion
+								? 'translateY(0)'
+								: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
 						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
