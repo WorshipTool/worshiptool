@@ -27,7 +27,7 @@ export const changeUrlToSubdomains = (url: string): string => {
 		}
 	}
 
-	const leftParts = urlParts.slice(lastIndex)
+	const leftParts = urlParts.slice(lastIndex < 0 ? 0 : lastIndex)
 
 	const leftStr = leftParts.join('/')
 
@@ -35,6 +35,9 @@ export const changeUrlToSubdomains = (url: string): string => {
 	subdomains.reverse()
 	subdomains.push(urlObject.hostname)
 	urlObject.hostname = subdomains.join('.')
+
+	// add search params
+	urlObject.search = uo.search
 
 	const str = urlObject.toString()
 
@@ -97,7 +100,6 @@ export const getReplacedUrlWithParams = (
 	if (options?.subdomains && shouldUseSubdomains()) {
 		result = changeUrlToSubdomains(result)
 	}
-
 	return result
 }
 

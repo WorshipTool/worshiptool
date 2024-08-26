@@ -30,4 +30,19 @@ describe('changeUrlToSubdomains', () => {
 		const changed = changeUrlFromSubdomains(url)
 		expect(changed).toBe('http://localhost:5500/sub/ahoj/')
 	})
+	it('should not change url without subdomains', () => {
+		const url = 'http://localhost:5500/seznam'
+
+		const changed = changeUrlToSubdomains(url)
+
+		expect(changed).toBe(url)
+	})
+
+	it('should not change url without subdomains', () => {
+		const url = 'http://localhost:5500/seznam/ahoj/cau'
+
+		const changed = changeUrlToSubdomains(url)
+
+		expect(changed).toBe(url)
+	})
 })
