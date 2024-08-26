@@ -13,7 +13,7 @@ export default async function TeamLeftPanel(props: TeamLeftPanelProps) {
 			sx={{
 				width: 250,
 				height: '100%',
-				bgcolor: 'grey.300',
+				bgcolor: 'grey.100',
 			}}
 		>
 			<TeamPanelTitle teamAlias={props.teamAlias} />

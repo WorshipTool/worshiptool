@@ -1,4 +1,3 @@
-'use client'
 import MenuItem from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/components/MenuItem'
 import { Analytics, Dashboard, QueueMusic, Settings } from '@mui/icons-material'
 import { Box } from '@mui/material'
