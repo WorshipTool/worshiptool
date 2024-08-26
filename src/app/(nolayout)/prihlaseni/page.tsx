@@ -44,7 +44,7 @@ function Login() {
 		}
 	}, [])
 
-	const afterGoogleLogin = () => {
+	const goPreviousPage = () => {
 		if (params?.previousPage) {
 			navigate(
 				{
@@ -57,6 +57,10 @@ function Login() {
 				hledat: undefined,
 			})
 		}
+	}
+
+	const afterGoogleLogin = () => {
+		goPreviousPage()
 	}
 
 	const onLoginClick = () => {

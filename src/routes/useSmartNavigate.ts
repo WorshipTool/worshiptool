@@ -21,9 +21,10 @@ export const useSmartNavigate = () => {
 		options?: NavigateOptions
 	) => {
 		const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
-		const urlWithParams = params
-			? getReplacedUrlWithParams(toUrl, params)
-			: toUrl
+		const urlWithParams =
+			Object.keys(params).length > 0
+				? getReplacedUrlWithParams(toUrl, params)
+				: toUrl
 
 		router.push(urlWithParams)
 	}

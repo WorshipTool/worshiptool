@@ -1,3 +1,10 @@
+import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/components/TeamPageTitle'
+
 export default function TeamSettingsPage() {
-	return <div>Nastavenii</div>
+	return (
+		<div>
+			<TeamPageTitle>Nastavení</TeamPageTitle>
+			Nastavenii
+		</div>
+	)
 }
