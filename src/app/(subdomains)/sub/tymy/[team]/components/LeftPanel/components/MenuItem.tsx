@@ -1,0 +1,64 @@
+'use client'
+import { theme } from '@/common/constants/theme'
+import { Link } from '@/common/ui/Link/Link'
+import { Typography } from '@/common/ui/Typography'
+import { RoutesKeys, SmartAllParams } from '@/routes'
+import { useSmartMatch } from '@/routes/useSmartMatch'
+import { Box, alpha } from '@mui/material'
+import { ReactNode, useCallback } from 'react'
+
+type MenuItemProps<T extends RoutesKeys> = {
+	title: string
+	icon: React.ReactNode
+	to: T
+	toParams: SmartAllParams<T>
+}
+
+export default function MenuItem<T extends RoutesKeys>(
+	props: MenuItemProps<T>
+) {
+	const enabled = useSmartMatch(props.to)
+
+	const Envelope = useCallback(
+		function A({ children }: { children: ReactNode }) {
+			return props.to ? (
+				<Link to={props.to} params={props.toParams}>
+					{children}
+				</Link>
+			) : (
+				<>{children}</>
+			)
+		},
+		[props.to]
+	)
+
+	return (
+		<Envelope>
+			<Box
+				display={'flex'}
+				flexDirection={'row'}
+				alignItems={'center'}
+				sx={{
+					padding: 1,
+					paddingX: 3,
+					bgcolor: alpha(theme.palette.primary.main, enabled ? 0.1 : 0),
+					borderRadius: 3,
+					transition: 'all 0.1s ease',
+					[':hover']: {
+						bgcolor: alpha(theme.palette.primary.main, 0.1),
+					},
+					[':active']: {
+						bgcolor: alpha(theme.palette.primary.main, 0.2),
+					},
+					userSelect: 'none',
+				}}
+				color={'grey.800'}
+				gap={2}
+			>
+				<Box>{props.icon}</Box>
+
+				<Typography strong={enabled}>{props.title}</Typography>
+			</Box>
+		</Envelope>
+	)
+}

@@ -1,5 +1,5 @@
 'use client'
-import { usePathname } from 'next/navigation'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from './routes'
 import { RoutesKeys } from './routes.types'
 
@@ -22,8 +22,9 @@ const urlMatchPatterns = (pathname: string, pattern: string) => {
 }
 
 export const useSmartMatch = <T extends RoutesKeys>(location: T) => {
-	const url = usePathname() as string
 	const pattern = routesPaths[location]
 
-	return urlMatchPatterns(url, pattern)
+	const pathname = useClientPathname()
+	console.log(pathname, pattern)
+	return urlMatchPatterns(pathname, pattern)
 }

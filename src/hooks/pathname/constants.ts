@@ -1,0 +1,1 @@
+export const COOKIES_SUBDOMAINS_PATHNAME_NAME = 'x-url'

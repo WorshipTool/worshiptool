@@ -5,7 +5,7 @@ import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
 import { RoutesKeys, SmartParams } from './routes.types'
 
-const changeUrlToSubdomains = (url: string): string => {
+export const changeUrlToSubdomains = (url: string): string => {
 	// if the url is /sub/A/sub/B..., return B.A....
 	const key = routesPaths.subdomain.split('/')[1]
 
@@ -27,7 +27,7 @@ const changeUrlToSubdomains = (url: string): string => {
 		}
 	}
 
-	const leftParts = urlParts.slice(lastIndex + 1)
+	const leftParts = urlParts.slice(lastIndex)
 
 	const leftStr = leftParts.join('/')
 
@@ -39,6 +39,29 @@ const changeUrlToSubdomains = (url: string): string => {
 	const str = urlObject.toString()
 
 	return str
+}
+
+// Input url has to be absolute
+export const changeUrlFromSubdomains = (url: string): string => {
+	const key = routesPaths.subdomain.split('/')[1]
+
+	const uo = new URL(url)
+
+	// get subdomains
+	const subdomains = uo.hostname.split('.')
+	subdomains.pop()
+
+	const additional = subdomains
+		.map((subdomain) => {
+			return `${key}/${subdomain}`
+		})
+		.join('/')
+
+	// Add to begining of pathname
+	const pathname = uo.pathname
+	const newUrl = new URL(additional + pathname, FRONTEND_URL)
+
+	return newUrl.toString()
 }
 
 export const getReplacedUrlWithParams = (
@@ -129,6 +152,10 @@ export const routesPaths = {
 	subdomain: '/sub/[subdomain]',
 	about: '/o-nas',
 	teams: '/sub/tymy',
+	team: '/sub/tymy/[team]',
+	teamSongbook: '/sub/tymy/[team]/zpevnik',
+	teamStatistics: '/sub/tymy/[team]/statistiky',
+	teamSettings: '/sub/tymy/[team]/nastaveni',
 	contact: '/kontakt',
 } as const
 

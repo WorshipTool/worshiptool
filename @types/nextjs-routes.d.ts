@@ -40,7 +40,11 @@ declare module "nextjs-routes" {
     | StaticRoute<"/registrace">
     | StaticRoute<"/test">
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
-    | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>;
+    | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>
+    | DynamicRoute<"/sub/tymy/[team]/nastaveni", { "team": string }>
+    | DynamicRoute<"/sub/tymy/[team]", { "team": string }>
+    | DynamicRoute<"/sub/tymy/[team]/statistiky", { "team": string }>
+    | DynamicRoute<"/sub/tymy/[team]/zpevnik", { "team": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

@@ -2,6 +2,7 @@ import { FRONTEND_URL } from '@/api/constants'
 import { AuthApiAxiosParamCreator } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
+import { COOKIES_SUBDOMAINS_PATHNAME_NAME } from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
 import { getReplacedUrlWithParams, routesPaths } from '@/routes'
 import { shouldUseSubdomains } from '@/routes/routes.tech'
@@ -23,7 +24,7 @@ export async function middleware(request: NextRequest) {
 
 	// Check if the path is in the excluded paths
 	if (excludedPaths.some((path) => pathname.startsWith(path))) {
-		return NextResponse.next()
+		return setResponse(NextResponse.next())
 	}
 
 	// Check authentication
@@ -36,7 +37,20 @@ export async function middleware(request: NextRequest) {
 		if (checkSub !== true) return checkSub
 	}
 
-	return NextResponse.next()
+	return setResponse(NextResponse.next())
+}
+
+const setResponse = (
+	response: NextResponse,
+	subdomainsPrefixPathname?: string
+) => {
+	if (subdomainsPrefixPathname) {
+		response.cookies.set(
+			COOKIES_SUBDOMAINS_PATHNAME_NAME,
+			subdomainsPrefixPathname
+		)
+	}
+	return response
 }
 
 export const config = {
@@ -69,7 +83,7 @@ export const checkSubdomain = async (
 
 		url.pathname = pathname + url.pathname
 
-		return NextResponse.rewrite(url)
+		return setResponse(NextResponse.rewrite(url), pathname)
 	}
 	return true
 }
@@ -97,8 +111,8 @@ export const checkAuthentication = async (
 		const result = await fetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
-		let response: NextResponse = NextResponse.redirect(
-			new URL('/prihlaseni', request.url)
+		let response: NextResponse = setResponse(
+			NextResponse.redirect(new URL('/prihlaseni', request.url))
 		)
 
 		response.cookies.set(AUTH_COOKIE_NAME, '', {
