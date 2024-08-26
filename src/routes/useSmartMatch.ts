@@ -25,6 +25,5 @@ export const useSmartMatch = <T extends RoutesKeys>(location: T) => {
 	const pattern = routesPaths[location]
 
 	const pathname = useClientPathname()
-	console.log(pathname, pattern)
 	return urlMatchPatterns(pathname, pattern)
 }
