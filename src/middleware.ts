@@ -1,5 +1,9 @@
 import { FRONTEND_URL } from '@/api/constants'
-import { AuthApiAxiosParamCreator } from '@/api/generated'
+import {
+	AuthApiAxiosParamCreator,
+	GetTeamAliasFromSubdomainOutDto,
+	TeamGettingApiAxiosParamCreator,
+} from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { COOKIES_SUBDOMAINS_PATHNAME_NAME } from '@/hooks/pathname/constants'
@@ -35,6 +39,13 @@ export async function middleware(request: NextRequest) {
 	if (shouldUseSubdomains()) {
 		const checkSub = await checkSubdomain(request)
 		if (checkSub !== true) return checkSub
+	}
+
+	const url = request.nextUrl.clone()
+	const newPathname = await replaceTeamInSubPathname(url.pathname)
+	if (newPathname !== url.pathname) {
+		url.pathname = newPathname
+		return setResponse(NextResponse.rewrite(url))
 	}
 
 	return setResponse(NextResponse.next())
@@ -82,6 +93,7 @@ export const checkSubdomain = async (
 		}
 
 		url.pathname = pathname + url.pathname
+		url.pathname = await replaceTeamInSubPathname(url.pathname)
 
 		return setResponse(NextResponse.rewrite(url), pathname)
 	}
@@ -144,4 +156,50 @@ export const getSubdomains = (host?: string | null) => {
 		}
 	}
 	return subdomains
+}
+
+const replaceTeamInSubPathname = async (pathname: string) => {
+	const key = routesPaths.subdomain.split('/')[1]
+
+	const getAlias = async (subdomain: string): Promise<string | null> => {
+		const creator = TeamGettingApiAxiosParamCreator({
+			isJsonMime: () => true,
+		})
+		const fetchData = await creator.teamGettingControllerGetAliasBySubdomain(
+			subdomain
+		)
+
+		try {
+			const url = BASE_PATH + fetchData.url
+			const response = await fetch(url, { ...(fetchData.options as any) })
+			if (response.status === 404) return null
+			const result: GetTeamAliasFromSubdomainOutDto = await response.json()
+			return result.alias
+		} catch (e) {
+			return null
+		}
+	}
+
+	const parts = pathname.split('/').filter((part) => part !== '')
+	if (parts.length < 2) return pathname
+
+	if (parts[0] !== key) return pathname // Not a subdomain
+
+	const alias = await getAlias(parts[1])
+	if (!alias) return pathname
+
+	const teamPathname = getReplacedUrlWithParams(
+		routesPaths.team,
+		{ alias },
+		{
+			subdomains: false,
+		}
+	)
+
+	//replace the first two parts of the path with the team url
+
+	const newPath = teamPathname + '/' + parts.slice(2).join('/')
+	console.log(newPath)
+
+	return newPath
 }

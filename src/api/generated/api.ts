@@ -521,6 +521,19 @@ export interface GetSongDataOutDto {
 /**
  * 
  * @export
+ * @interface GetTeamAliasFromSubdomainOutDto
+ */
+export interface GetTeamAliasFromSubdomainOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamAliasFromSubdomainOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface GetTeamInfoOutDto
  */
 export interface GetTeamInfoOutDto {
@@ -7988,6 +8001,42 @@ export const TeamGettingApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAliasBySubdomain: async (subdomain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'subdomain' is not null or undefined
+            assertParamExists('teamGettingControllerGetAliasBySubdomain', 'subdomain', subdomain)
+            const localVarPath = `/submodules/teams/aliasbysubdomain`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (subdomain !== undefined) {
+                localVarQueryParameter['subdomain'] = subdomain;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} alias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8034,6 +8083,18 @@ export const TeamGettingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamAliasFromSubdomainOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetAliasBySubdomain(subdomain, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetAliasBySubdomain']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} alias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8056,6 +8117,15 @@ export const TeamGettingApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: any): AxiosPromise<GetTeamAliasFromSubdomainOutDto> {
+            return localVarFp.teamGettingControllerGetAliasBySubdomain(subdomain, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} alias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8073,6 +8143,17 @@ export const TeamGettingApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class TeamGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} subdomain 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetAliasBySubdomain(subdomain, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} alias 

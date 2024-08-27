@@ -1,7 +1,12 @@
-export default function SubdomainLayout({
+'use server'
+import { LayoutProps } from '@/common/types'
+
+export default async function SubdomainLayout({
 	children,
-}: Readonly<{
-	children: React.ReactNode
-}>) {
+}: LayoutProps<'subdomain'>) {
+
+    
+
+
 	return <>{children}</>
 }

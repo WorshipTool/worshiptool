@@ -23,7 +23,7 @@ export default function TeamPage(props: PageProps<'team'>) {
 							<WavingHand />
 							<Box>
 								<Typography variant="h6" strong>
-									Vítejte na domovské stránce týmu
+									Vítejte na domovské stránce týmu {props.params.alias}
 								</Typography>
 								Ať vám aplikace dobře slouží
 							</Box>
