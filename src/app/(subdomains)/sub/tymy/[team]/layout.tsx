@@ -1,9 +1,18 @@
 'use server'
 import TeamLeftPanel from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/TeamLeftPanel'
 import TeamTopPanel from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/TeamTopPanel'
-import { LayoutProps } from '@/common/types'
+import { LayoutProps, MetadataProps } from '@/common/types'
+import { generateMetadataTitle } from '@/hooks/window-title/tech'
 import { Box } from '@mui/material'
 import { notFound } from 'next/navigation'
+
+export const generateMetadata = async ({ params }: MetadataProps<'team'>) => {
+	const teamName = 'Třináctka'
+
+	return {
+		title: await generateMetadataTitle(`Tým ${teamName}`, 'team', params),
+	}
+}
 
 export default async function TeamLayout(layout: LayoutProps<'team'>) {
 	const team = layout.params.team
