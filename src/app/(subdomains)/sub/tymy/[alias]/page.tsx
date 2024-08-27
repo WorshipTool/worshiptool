@@ -1,14 +1,12 @@
 'use client'
-import TeamCard from '@/app/(subdomains)/sub/tymy/[team]/components/TeamCard/TeamCard'
-import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/components/TeamPageTitle'
+import TeamCard from '@/app/(subdomains)/sub/tymy/[alias]/components/TeamCard/TeamCard'
+import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import { PageProps } from '@/common/types'
 import { Typography } from '@/common/ui/Typography'
-import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { WavingHand } from '@mui/icons-material'
 import { Box, Grid } from '@mui/material'
 
 export default function TeamPage(props: PageProps<'team'>) {
-	const pathname = useClientPathname()
 	return (
 		<div>
 			<TeamPageTitle>Přehled</TeamPageTitle>

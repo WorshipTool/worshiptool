@@ -1,6 +1,6 @@
 'use server'
-import Menu from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/components/Menu'
-import TeamPanelTitle from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/components/TeamPanelTitle'
+import Menu from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/Menu'
+import TeamPanelTitle from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/TeamPanelTitle'
 import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Button } from '@/common/ui/Button'
 import { Box } from '@mui/material'

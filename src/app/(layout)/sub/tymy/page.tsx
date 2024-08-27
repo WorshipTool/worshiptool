@@ -1,8 +1,8 @@
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
+import CreateTeamButton from '@/app/(layout)/sub/tymy/components/CreateTeamButton'
 import JoinGroupPanel from '@/app/(layout)/sub/tymy/components/JoinGroupPanel'
 import TeamsToolbarChanger from '@/app/(layout)/sub/tymy/components/ToolbarChanger'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
@@ -110,14 +110,7 @@ function Page() {
 							/>
 						</Box>
 						<Box marginBottom={4}>
-							<Button
-								title="Vyzkoušet"
-								subtitle="Vytvořit tým"
-								color="secondary"
-								sx={{
-									width: 150,
-								}}
-							/>
+							<CreateTeamButton />
 						</Box>
 					</Box>
 				</Box>

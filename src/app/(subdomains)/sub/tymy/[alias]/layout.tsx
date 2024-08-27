@@ -1,6 +1,6 @@
 'use server'
-import TeamLeftPanel from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/TeamLeftPanel'
-import TeamTopPanel from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/TeamTopPanel'
+import TeamLeftPanel from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
+import TeamTopPanel from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
 import { LayoutProps, MetadataProps } from '@/common/types'
 import { generateMetadataTitle } from '@/hooks/window-title/tech'
 import { Box } from '@mui/material'
@@ -15,7 +15,7 @@ export const generateMetadata = async ({ params }: MetadataProps<'team'>) => {
 }
 
 export default async function TeamLayout(layout: LayoutProps<'team'>) {
-	const team = layout.params.team
+	const team = layout.params.alias
 	if (team !== '13ka') notFound()
 
 	return (

@@ -22,7 +22,7 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 			<Link
 				to="team"
 				params={{
-					team: props.teamAlias,
+					alias: props.teamAlias,
 				}}
 			>
 				<Clickable>

@@ -154,10 +154,10 @@ export const routesPaths = {
 	subdomain: '/sub/[subdomain]',
 	about: '/o-nas',
 	teams: '/sub/tymy',
-	team: '/sub/tymy/[team]',
-	teamSongbook: '/sub/tymy/[team]/zpevnik',
-	teamStatistics: '/sub/tymy/[team]/statistiky',
-	teamSettings: '/sub/tymy/[team]/nastaveni',
+	team: '/sub/tymy/[alias]',
+	teamSongbook: '/sub/tymy/[alias]/zpevnik',
+	teamStatistics: '/sub/tymy/[alias]/statistiky',
+	teamSettings: '/sub/tymy/[alias]/nastaveni',
 	contact: '/kontakt',
 } as const
 

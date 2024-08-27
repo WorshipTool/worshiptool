@@ -1,5 +1,5 @@
 'use server'
-import TeamPageTitleContainer from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/components/TeamPageTitleContainer'
+import TeamPageTitleContainer from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitleContainer'
 import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
 import { Box } from '@mui/material'
 

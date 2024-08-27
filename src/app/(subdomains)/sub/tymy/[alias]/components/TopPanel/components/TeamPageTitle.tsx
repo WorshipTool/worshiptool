@@ -1,5 +1,5 @@
 'use client'
-import { TEAM_PAGE_TITLE_ID } from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/components/TeamPageTitleContainer'
+import { TEAM_PAGE_TITLE_ID } from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitleContainer'
 import { Typography } from '@/common/ui/Typography'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'

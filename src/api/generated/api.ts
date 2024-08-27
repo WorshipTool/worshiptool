@@ -180,6 +180,25 @@ export interface ChangePasswordInDto {
 /**
  * 
  * @export
+ * @interface CreateTeamOutDto
+ */
+export interface CreateTeamOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface Creator
  */
 export interface Creator {
@@ -7836,6 +7855,107 @@ export class SongValidationApi extends BaseAPI {
      */
     public songValidationControllerValidateSheetDataAndTitle(postValidateSheetDataAndTitleInDto: PostValidateSheetDataAndTitleInDto, options?: RawAxiosRequestConfig) {
         return SongValidationApiFp(this.configuration).songValidationControllerValidateSheetDataAndTitle(postValidateSheetDataAndTitleInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamAddingApi - axios parameter creator
+ * @export
+ */
+export const TeamAddingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamAddingControllerCreateNewTeam: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamAddingApi - functional programming interface
+ * @export
+ */
+export const TeamAddingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamAddingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamAddingControllerCreateNewTeam(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamAddingControllerCreateNewTeam(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamAddingApi.teamAddingControllerCreateNewTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamAddingApi - factory interface
+ * @export
+ */
+export const TeamAddingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamAddingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamAddingControllerCreateNewTeam(options?: any): AxiosPromise<CreateTeamOutDto> {
+            return localVarFp.teamAddingControllerCreateNewTeam(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamAddingApi - object-oriented interface
+ * @export
+ * @class TeamAddingApi
+ * @extends {BaseAPI}
+ */
+export class TeamAddingApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamAddingApi
+     */
+    public teamAddingControllerCreateNewTeam(options?: RawAxiosRequestConfig) {
+        return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

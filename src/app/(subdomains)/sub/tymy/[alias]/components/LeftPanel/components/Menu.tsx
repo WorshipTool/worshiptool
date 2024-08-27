@@ -1,4 +1,4 @@
-import MenuItem from '@/app/(subdomains)/sub/tymy/[team]/components/LeftPanel/components/MenuItem'
+import MenuItem from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
 import { Analytics, Dashboard, QueueMusic, Settings } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
@@ -10,32 +10,32 @@ type Props = {
 }
 
 export default function Menu(props: Props) {
-	const team = props.teamAlias
+	const alias = props.teamAlias
 	const items: MenuItem[] = useMemo(
 		() => [
 			{
 				title: 'Přehled',
 				icon: <Dashboard />,
 				to: 'team',
-				toParams: { team },
+				toParams: { alias },
 			},
 			{
 				title: 'Seznam písní',
 				icon: <QueueMusic />,
 				to: 'teamSongbook',
-				toParams: { team },
+				toParams: { alias },
 			},
 			{
 				title: 'Statistiky',
 				icon: <Analytics />,
 				to: 'teamStatistics',
-				toParams: { team },
+				toParams: { alias },
 			},
 			{
 				title: 'Nastavení',
 				icon: <Settings />,
 				to: 'teamSettings',
-				toParams: { team },
+				toParams: { alias },
 			},
 		],
 		[]

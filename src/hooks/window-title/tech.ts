@@ -1,4 +1,4 @@
-import { generateMetadata as team } from '@/app/(subdomains)/sub/tymy/[team]/layout'
+import { generateMetadata as team } from '@/app/(subdomains)/sub/tymy/[alias]/layout'
 import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types'
 import { generateMetadata as documentationMetadata } from '../../app/(layout)/dokumentace/page'
 import { generateMetadata as upload } from '../../app/(layout)/nahrat/layout'
