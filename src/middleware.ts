@@ -199,7 +199,6 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 	//replace the first two parts of the path with the team url
 
 	const newPath = teamPathname + '/' + parts.slice(2).join('/')
-	console.log(newPath)
 
 	return newPath
 }

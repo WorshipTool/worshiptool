@@ -1,4 +1,5 @@
 'use client'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import useAuth from '@/hooks/auth/useAuth'
 import React from 'react'
 
@@ -11,16 +12,18 @@ export default function OnlyAdmin(props: OnlyAdminProps) {
 	return (
 		<>
 			{isAdmin() ? (
-				<div
-					style={{
-						border: '1px dotted black',
-						borderStyle: 'dashed',
-						borderRadius: '5px',
-						padding: '4px',
-					}}
-				>
-					{props.children}
-				</div>
+				<Tooltip title="Toto vidí pouze admin">
+					<div
+						style={{
+							border: '1px dotted black',
+							borderStyle: 'dashed',
+							borderRadius: '5px',
+							padding: '4px',
+						}}
+					>
+						{props.children}
+					</div>
+				</Tooltip>
 			) : null}
 		</>
 	)
