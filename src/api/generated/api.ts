@@ -521,6 +521,25 @@ export interface GetSongDataOutDto {
 /**
  * 
  * @export
+ * @interface GetTeamInfoOutDto
+ */
+export interface GetTeamInfoOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface GetUserPermissionOutDto
  */
 export interface GetUserPermissionOutDto {
@@ -7956,6 +7975,113 @@ export class TeamAddingApi extends BaseAPI {
      */
     public teamAddingControllerCreateNewTeam(options?: RawAxiosRequestConfig) {
         return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamGettingApi - axios parameter creator
+ * @export
+ */
+export const TeamGettingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamBasicInfo: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('teamGettingControllerGetTeamBasicInfo', 'alias', alias)
+            const localVarPath = `/submodules/teams/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (alias !== undefined) {
+                localVarQueryParameter['alias'] = alias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamGettingApi - functional programming interface
+ * @export
+ */
+export const TeamGettingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamGettingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamInfoOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetTeamBasicInfo(alias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetTeamBasicInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamGettingApi - factory interface
+ * @export
+ */
+export const TeamGettingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamGettingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamBasicInfo(alias: string, options?: any): AxiosPromise<GetTeamInfoOutDto> {
+            return localVarFp.teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamGettingApi - object-oriented interface
+ * @export
+ * @class TeamGettingApi
+ * @extends {BaseAPI}
+ */
+export class TeamGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} alias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
