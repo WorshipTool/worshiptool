@@ -43,7 +43,7 @@ export default function Popup({ children, open = true, onClose }: PopupProps) {
 								justifyContent: 'center',
 								alignItems: 'center',
 								backdropFilter: 'blur(2px)',
-								backgroundColor: alpha(theme.palette.grey[800], 0.5),
+								backgroundColor: alpha('#000', 0.5),
 								pointerEvents: 'auto',
 							}}
 							initial={{ opacity: 0 }}

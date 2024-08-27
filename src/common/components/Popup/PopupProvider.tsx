@@ -6,12 +6,13 @@ export default function PopupProvider() {
 		<Box
 			id={POPUP_DIV_CONTAINER_ID}
 			sx={{
-				position: 'absolute',
+				position: 'fixed',
 				top: 0,
 				left: 0,
 				right: 0,
 				bottom: 0,
 				pointerEvents: 'none',
+				zIndex: 10,
 			}}
 		></Box>
 	)

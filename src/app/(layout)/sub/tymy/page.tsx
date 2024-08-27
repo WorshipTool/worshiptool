@@ -57,6 +57,7 @@ function Page() {
 					flexDirection={'column'}
 					justifyContent={'center'}
 					alignItems={'center'}
+					position={'relative'}
 				>
 					<Gap value={4} />
 					<Box
@@ -91,7 +92,7 @@ function Page() {
 						flexDirection={'column'}
 						justifyContent={'center'}
 						alignItems={'center'}
-						zIndex={1}
+						// zIndex={1}
 						width={'100%'}
 					>
 						<Box
