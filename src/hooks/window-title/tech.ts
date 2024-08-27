@@ -1,3 +1,4 @@
+import { generateMetadata as team } from '@/app/(subdomains)/sub/tymy/[team]/layout'
 import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types'
 import { generateMetadata as documentationMetadata } from '../../app/(layout)/dokumentace/page'
 import { generateMetadata as upload } from '../../app/(layout)/nahrat/layout'
@@ -78,6 +79,7 @@ const getTitleOfType = async <T extends RoutesKeys>(
 	if (location === 'playlistCards')
 		return (await playlistCards({ params } as any)).title
 	if (location === 'group') return (await group({ params } as any)).title
+	if (location === 'team') return (await team({ params } as any)).title
 
 	return null
 }

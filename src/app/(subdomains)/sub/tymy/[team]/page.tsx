@@ -2,8 +2,10 @@
 import TeamCard from '@/app/(subdomains)/sub/tymy/[team]/components/TeamCard/TeamCard'
 import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[team]/components/TopPanel/components/TeamPageTitle'
 import { PageProps } from '@/common/types'
+import { Typography } from '@/common/ui/Typography'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
-import { Grid } from '@mui/material'
+import { WavingHand } from '@mui/icons-material'
+import { Box, Grid } from '@mui/material'
 
 export default function TeamPage(props: PageProps<'team'>) {
 	const pathname = useClientPathname()
@@ -13,13 +15,21 @@ export default function TeamPage(props: PageProps<'team'>) {
 
 			<Grid container spacing={2}>
 				<Grid item sm={12} md={6} lg={4}>
-					<TeamCard title="Nejbližší akce">
-						ahojj {props.params.team} {pathname}
-					</TeamCard>
-				</Grid>
-				<Grid item sm={12} md={6} lg={4}>
-					<TeamCard title="Připnuté">
-						ahojj {props.params.team} {pathname}
+					<TeamCard>
+						<Box
+							display={'flex'}
+							flexDirection={'row'}
+							alignItems={'center'}
+							gap={2}
+						>
+							<WavingHand />
+							<Box>
+								<Typography variant="h6" strong>
+									Vítejte na domovské stránce týmu
+								</Typography>
+								Ať vám aplikace dobře slouží
+							</Box>
+						</Box>
 					</TeamCard>
 				</Grid>
 			</Grid>
