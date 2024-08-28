@@ -1,16 +1,14 @@
+'use client'
 import MenuItem from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
 import { Analytics, Dashboard, QueueMusic, Settings } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
 
 type MenuItem = ComponentProps<typeof MenuItem>
 
-type Props = {
-	teamAlias: string
-}
-
-export default function Menu(props: Props) {
-	const alias = props.teamAlias
+export default function Menu() {
+	const { alias } = useInnerTeam()
 	const items: MenuItem[] = useMemo(
 		() => [
 			{

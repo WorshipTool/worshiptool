@@ -2,6 +2,7 @@
 import { TeamGettingApi } from '@/api/generated'
 import TeamLeftPanel from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
 import TeamTopPanel from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
+import { InnerTeamProvider } from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
 import { LayoutProps, MetadataProps } from '@/common/types'
 import { generateMetadataTitle } from '@/hooks/window-title/tech'
 import { Box } from '@mui/material'
@@ -39,11 +40,13 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 
 	return (
 		<Box display={'flex'} flexDirection={'row'} height={'100vh'}>
-			<TeamLeftPanel teamAlias={team} />
-			<Box display={'flex'} flexDirection={'column'} flex={1}>
-				<TeamTopPanel />
-				<Box paddingX={4}>{layout.children}</Box>
-			</Box>
+			<InnerTeamProvider teamAlias={layout.params.alias}>
+				<TeamLeftPanel teamAlias={team} />
+				<Box display={'flex'} flexDirection={'column'} flex={1}>
+					<TeamTopPanel />
+					<Box paddingX={4}>{layout.children}</Box>
+				</Box>
+			</InnerTeamProvider>
 		</Box>
 	)
 }

@@ -1,14 +1,12 @@
+'use client'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
 import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
-import Image from 'next/image'
 
-type TeamPanelTitleProps = {
-	teamAlias: string
-}
-
-export default function TeamPanelTitle(props: TeamPanelTitleProps) {
+export default function TeamPanelTitle() {
+	const { name, alias } = useInnerTeam()
 	return (
 		<Box
 			display={'flex'}
@@ -22,7 +20,7 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 			<Link
 				to="team"
 				params={{
-					alias: props.teamAlias,
+					alias,
 				}}
 			>
 				<Clickable>
@@ -33,7 +31,7 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 						alignItems={'center'}
 						gap={1}
 					>
-						<Box
+						{/* <Box
 							width={'3rem'}
 							sx={{
 								aspectRatio: '2/1',
@@ -46,8 +44,8 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 								fill
 								objectFit={'contain'}
 							/>
-						</Box>
-						<Typography variant="h4">Třináctka</Typography>
+						</Box> */}
+						<Typography variant="h4">{name}</Typography>
 					</Box>
 				</Clickable>
 			</Link>

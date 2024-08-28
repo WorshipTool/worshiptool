@@ -180,6 +180,19 @@ export interface ChangePasswordInDto {
 /**
  * 
  * @export
+ * @interface CreateTeamInDto
+ */
+export interface CreateTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamInDto
+     */
+    'teamName': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateTeamOutDto
  */
 export interface CreateTeamOutDto {
@@ -549,6 +562,12 @@ export interface GetTeamInfoOutDto {
      * @memberof GetTeamInfoOutDto
      */
     'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'name': string;
 }
 /**
  * 
@@ -7900,10 +7919,13 @@ export const TeamAddingApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {CreateTeamInDto} createTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamAddingControllerCreateNewTeam: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        teamAddingControllerCreateNewTeam: async (createTeamInDto: CreateTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTeamInDto' is not null or undefined
+            assertParamExists('teamAddingControllerCreateNewTeam', 'createTeamInDto', createTeamInDto)
             const localVarPath = `/submodules/teams/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -7922,9 +7944,12 @@ export const TeamAddingApiAxiosParamCreator = function (configuration?: Configur
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7943,11 +7968,12 @@ export const TeamAddingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {CreateTeamInDto} createTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamAddingControllerCreateNewTeam(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTeamOutDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.teamAddingControllerCreateNewTeam(options);
+        async teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamAddingControllerCreateNewTeam(createTeamInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamAddingApi.teamAddingControllerCreateNewTeam']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7964,11 +7990,12 @@ export const TeamAddingApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @param {CreateTeamInDto} createTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamAddingControllerCreateNewTeam(options?: any): AxiosPromise<CreateTeamOutDto> {
-            return localVarFp.teamAddingControllerCreateNewTeam(options).then((request) => request(axios, basePath));
+        teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: any): AxiosPromise<CreateTeamOutDto> {
+            return localVarFp.teamAddingControllerCreateNewTeam(createTeamInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7982,12 +8009,13 @@ export const TeamAddingApiFactory = function (configuration?: Configuration, bas
 export class TeamAddingApi extends BaseAPI {
     /**
      * 
+     * @param {CreateTeamInDto} createTeamInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamAddingApi
      */
-    public teamAddingControllerCreateNewTeam(options?: RawAxiosRequestConfig) {
-        return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(options).then((request) => request(this.axios, this.basePath));
+    public teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(createTeamInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

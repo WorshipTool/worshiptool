@@ -21,8 +21,8 @@ export default async function TeamLeftPanel(props: TeamLeftPanelProps) {
 				flexDirection: 'column',
 			}}
 		>
-			<TeamPanelTitle teamAlias={props.teamAlias} />
-			<Menu teamAlias={props.teamAlias} />
+			<TeamPanelTitle />
+			<Menu />
 			<Box flex={1} />
 			<Box padding={2}>
 				<OnlyAdmin>

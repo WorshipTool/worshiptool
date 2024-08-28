@@ -13,11 +13,15 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 
 export default function CreateTeamButton() {
+	// Popup
 	const [popupOpen, setPopupOpen] = useState(false)
 
+	// Apis
 	const { teamAddingApi } = useApi()
-
 	const { apiState, fetchApiState } = useApiState<CreateTeamOutDto>()
+
+	// Input states
+	const [teamName, setTeamName] = useState('')
 
 	const navigate = useSmartNavigate()
 
@@ -31,7 +35,12 @@ export default function CreateTeamButton() {
 
 	const onCreateClick = () => {
 		fetchApiState(
-			() => handleApiCall(teamAddingApi.teamAddingControllerCreateNewTeam()),
+			() =>
+				handleApiCall(
+					teamAddingApi.teamAddingControllerCreateNewTeam({
+						teamName,
+					})
+				),
 			(data) => {
 				navigate('team', {
 					alias: data.alias,
@@ -46,7 +55,19 @@ export default function CreateTeamButton() {
 				<Box width={200}>
 					<Typography variant="h5">Vytvořit tým</Typography>
 					<Gap />
-					<TextField placeholder="Zadejte název týmu" />
+					{apiState.error && (
+						<>
+							<Typography color="error">
+								Nastala chyba. Prosím, zkontrolujte název týmu
+							</Typography>
+							<Gap />
+						</>
+					)}
+					<TextField
+						placeholder="Zadejte název týmu"
+						value={teamName}
+						onChange={setTeamName}
+					/>
 					<Gap />
 					<Box
 						display={'flex'}
@@ -65,6 +86,7 @@ export default function CreateTeamButton() {
 							color="primary"
 							size="small"
 							onClick={onCreateClick}
+							loading={apiState.loading}
 						/>
 					</Box>
 				</Box>
@@ -76,7 +98,6 @@ export default function CreateTeamButton() {
 				sx={{
 					width: 150,
 				}}
-				loading={apiState.loading}
 				onClick={onClick}
 			/>
 		</>
