@@ -16,7 +16,7 @@ const getTeamInfo = async (teamAlias: string) => {
 			gettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
 		)
 		return team
-	} catch (e) {
+	} catch (e: any) {
 		return null
 	}
 }

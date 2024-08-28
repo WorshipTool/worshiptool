@@ -1,35 +1,36 @@
 'use client'
 import TeamCard from '@/app/(subdomains)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
 import { PageProps } from '@/common/types'
 import { Typography } from '@/common/ui/Typography'
 import { WavingHand } from '@mui/icons-material'
 import { Box, Grid } from '@mui/material'
 
 export default function TeamPage(props: PageProps<'team'>) {
+	const { name } = useInnerTeam()
 	return (
 		<div>
 			<TeamPageTitle>Přehled</TeamPageTitle>
 
 			<Grid container spacing={2}>
-				<Grid item sm={12} md={6} lg={4}>
-					<TeamCard>
-						<Box
-							display={'flex'}
-							flexDirection={'row'}
-							alignItems={'center'}
-							gap={2}
-						>
-							<WavingHand />
-							<Box>
-								<Typography variant="h6" strong>
-									Vítejte na domovské stránce týmu {props.params.alias}
-								</Typography>
-								Ať vám aplikace dobře slouží
-							</Box>
+				<TeamCard>
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						alignItems={'center'}
+						gap={2}
+					>
+						<WavingHand />
+						<Box>
+							<Typography variant="h6" strong>
+								Vítejte na domovské stránce týmu <i>{name}</i>
+							</Typography>
+							Ať vám aplikace dobře slouží
 						</Box>
-					</TeamCard>
-				</Grid>
+					</Box>
+				</TeamCard>
+				{/* <Grid item sm={12} md={6} lg={4}></Grid> */}
 			</Grid>
 		</div>
 	)

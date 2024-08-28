@@ -38,5 +38,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 	return {
 		alias: teamAlias,
 		name: apiState.data?.name || '',
+		selectionGuid: apiState.data?.selectionGuid || '',
 	}
 }

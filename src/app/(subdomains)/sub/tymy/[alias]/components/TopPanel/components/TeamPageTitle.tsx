@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type TeamPageTitleProps = {
-	children: string
+	children: any
 }
 
 export function TeamPageTitle(props: TeamPageTitleProps) {

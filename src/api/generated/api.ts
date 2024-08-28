@@ -568,6 +568,12 @@ export interface GetTeamInfoOutDto {
      * @memberof GetTeamInfoOutDto
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'selectionGuid': string;
 }
 /**
  * 
