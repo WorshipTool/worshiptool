@@ -12,6 +12,7 @@ type MenuItemProps<T extends RoutesKeys> = {
 	icon: React.ReactNode
 	to: T
 	toParams: SmartAllParams<T>
+	disabled?: boolean
 }
 
 export default function MenuItem<T extends RoutesKeys>(
@@ -21,7 +22,7 @@ export default function MenuItem<T extends RoutesKeys>(
 
 	const Envelope = useCallback(
 		function A({ children }: { children: ReactNode }) {
-			return props.to ? (
+			return props.to && !props.disabled ? (
 				<Link to={props.to} params={props.toParams}>
 					{children}
 				</Link>
@@ -29,7 +30,7 @@ export default function MenuItem<T extends RoutesKeys>(
 				<>{children}</>
 			)
 		},
-		[props.to]
+		[props.to, props.disabled]
 	)
 
 	return (
@@ -41,15 +42,20 @@ export default function MenuItem<T extends RoutesKeys>(
 				sx={{
 					padding: 1,
 					paddingX: 3,
+					opacity: props.disabled ? 0.5 : 1,
 					bgcolor: alpha(theme.palette.primary.main, enabled ? 0.1 : 0),
 					borderRadius: 3,
 					transition: 'all 0.1s ease',
-					[':hover']: {
-						bgcolor: alpha(theme.palette.primary.main, 0.1),
-					},
-					[':active']: {
-						bgcolor: alpha(theme.palette.primary.main, 0.2),
-					},
+					[':hover']: !props.disabled
+						? {
+								bgcolor: alpha(theme.palette.primary.main, 0.1),
+						  }
+						: {},
+					[':active']: !props.disabled
+						? {
+								bgcolor: alpha(theme.palette.primary.main, 0.2),
+						  }
+						: {},
 					userSelect: 'none',
 				}}
 				color={'grey.800'}

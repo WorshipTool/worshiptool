@@ -28,12 +28,14 @@ export default function Menu() {
 				icon: <Analytics />,
 				to: 'teamStatistics',
 				toParams: { alias },
+				disabled: true,
 			},
 			{
 				title: 'Nastavení',
 				icon: <Settings />,
 				to: 'teamSettings',
 				toParams: { alias },
+				disabled: true,
 			},
 		],
 		[]

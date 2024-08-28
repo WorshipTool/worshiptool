@@ -1,5 +1,6 @@
 'use client'
 import { useApi } from '@/hooks/api/useApi'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { createContext, useContext } from 'react'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
@@ -38,6 +39,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 	return {
 		alias: teamAlias,
 		name: apiState.data?.name || '',
-		selectionGuid: apiState.data?.selectionGuid || '',
+		selectionGuid: (apiState.data?.selectionGuid || '') as PlaylistGuid,
 	}
 }
