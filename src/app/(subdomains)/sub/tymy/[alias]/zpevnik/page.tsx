@@ -16,7 +16,11 @@ import './styles.css'
 export default function TeamSongsPage() {
 	const { selection } = useInnerTeam()
 	const items = useMemo(() => {
-		return selection.items.map((item) => item.variant)
+		const items =
+			selection.searchedItems.length > 0
+				? selection.searchedItems
+				: selection.items
+		return items.map((item) => item.variant)
 	}, [selection])
 
 	const [open, setOpen] = useState(false)

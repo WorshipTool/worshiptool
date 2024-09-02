@@ -2,6 +2,7 @@
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import SelectFromOptions from '@/common/components/SongSelectPopup/components/SelectFromOptions'
 import { Button } from '@/common/ui/Button'
+import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { Box, Skeleton } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
@@ -119,9 +120,16 @@ export default function SongSelectPopup(props: PopupProps) {
 					>
 						<Box padding={4} display={'flex'} flexDirection={'column'} gap={3}>
 							<Box display={'flex'} flexDirection={'column'} gap={1}>
-								<Typography variant="h4" strong>
-									Vyberte píseň
-								</Typography>
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									justifyContent={'space-between'}
+								>
+									<Typography variant="h4" strong>
+										Vyberte píseň
+									</Typography>
+									
+								</Box>
 								<SelectFromOptions />
 							</Box>
 
