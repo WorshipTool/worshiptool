@@ -1,0 +1,5 @@
+.song-select-popup {
+	position: fixed;
+	top: calc(anchor(--song-select-popup-anchor top) + 0.5rem);
+	left: calc(anchor(--song-select-popup-anchor left) + 0.5rem);
+}

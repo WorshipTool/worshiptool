@@ -33,6 +33,9 @@ type ButtonProps<T extends RoutesKeys> = {
 	loadingPosition?: ComponentProps<typeof LoadingButton>['loadingPosition']
 	disabled?: boolean
 	type?: ComponentProps<typeof LoadingButton>['type']
+
+	className?: string
+	ref?: React.RefObject<HTMLButtonElement>
 }
 
 export const Button = <T extends RoutesKeys>({
@@ -57,6 +60,7 @@ export const Button = <T extends RoutesKeys>({
 				...props.sx,
 				color: isColorOfThemeType(color) ? undefined : color,
 			}}
+			ref={props.ref}
 		>
 			<LoadingButton
 				loading={props.loading}
@@ -69,6 +73,7 @@ export const Button = <T extends RoutesKeys>({
 				endIcon={props.endIcon}
 				aria-label={props.alt}
 				type={props.type}
+				className={props.className}
 				sx={{
 					width: '100%',
 					height: '100%',

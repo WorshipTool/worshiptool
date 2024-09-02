@@ -80,6 +80,29 @@ export default function usePlaylist(
 			return false
 		}
 	}
+
+	const addPacks = async (packGuids: VariantPackGuid[]) => {
+		const newItems: PlaylistItemDto[] = []
+		for (const packGuid of packGuids) {
+			try {
+				const data = await addVariantToPlaylist(packGuid, guid).then(
+					async (r) => {
+						if (!r) return false
+						const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
+						return item
+					}
+				)
+				if (data) newItems.push(data)
+			} catch (e) {
+				return false
+			}
+		}
+
+		// Add new items to the list
+
+		setItems((items) => [...items, ...newItems])
+	}
+
 	const removeVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
 		const r = await removeVariantFromPlaylist(packGuid, guid)
 
@@ -129,6 +152,7 @@ export default function usePlaylist(
 
 	return {
 		addVariant,
+		addPacks,
 		removeVariant,
 		rename,
 		playlist,

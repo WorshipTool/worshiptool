@@ -1,5 +1,6 @@
 'use client'
 import { useApi } from '@/hooks/api/useApi'
+import { useSelection } from '@/hooks/playlist/useSelection'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { createContext, useContext } from 'react'
@@ -35,10 +36,12 @@ const useProvideInnerTeam = (teamAlias: string) => {
 			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
 		)
 	})
-
+	const selection = useSelection(
+		(apiState.data?.selectionGuid || '') as PlaylistGuid
+	)
 	return {
 		alias: teamAlias,
 		name: apiState.data?.name || '',
-		selectionGuid: (apiState.data?.selectionGuid || '') as PlaylistGuid,
+		selection,
 	}
 }
