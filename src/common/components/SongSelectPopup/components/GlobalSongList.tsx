@@ -49,6 +49,7 @@ export default function GlobalSongList(props: GlobalSongListProps) {
 					sx={{
 						borderRadius: 3,
 						minWidth: 150,
+						maxWidth: 180,
 						maxHeight: 130,
 						borderStyle: 'solid',
 						cursor: 'pointer',
