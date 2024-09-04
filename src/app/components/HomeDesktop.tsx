@@ -85,7 +85,9 @@ export default function HomeDesktop() {
 	}, [footer])
 
 	// Calculate inner height of the window
-	const [innerHeight, setInnerHeight] = useState(window.innerHeight)
+	const [innerHeight, setInnerHeight] = useState(
+		typeof window !== 'undefined' ? window.innerHeight : 500
+	)
 	useEffect(() => {
 		const handleResize = () => {
 			setInnerHeight(window.innerHeight)

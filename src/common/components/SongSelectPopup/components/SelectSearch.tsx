@@ -1,25 +1,51 @@
-import { Box, TextField } from '@mui/material'
+import TextField from '@/common/ui/TextField/TextField'
+import { Search } from '@mui/icons-material'
+import { Box } from '@mui/material'
+import './SelectSearch.styles.css'
 
-export const SelectSearch = ({}) => {
+type SelectSearchProps = {
+	value?: string
+	onChange?: (value: string) => void
+}
+
+export const SelectSearch = (props: SelectSearchProps) => {
+	const onChangeHandler = (value: string) => {
+		props.onChange?.(value)
+	}
 	return (
-		<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
-			{/* <Box
-        color={'grey.700'}
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-    >
-        <Search color="inherit" />
-    </Box> */}
+		<Box
+			display={'flex'}
+			flexDirection={'row'}
+			alignItems={'center'}
+			flex={1}
+			gap={1}
+		>
 			<TextField
 				placeholder="Vyhledej píseň"
 				sx={{
 					'& input': {
-						// textAlign: 'right',
+						textAlign: 'right',
 					},
-					width: 120,
+					// width: 110,
+
+					paddingLeft: 0.5,
 				}}
+				value={props.value}
+				onChange={onChangeHandler}
+				className="song-select-title-box"
 			/>
+			<Box
+				color={'grey.700'}
+				display={'flex'}
+				alignItems={'center'}
+				justifyContent={'center'}
+			>
+				<Search color="inherit" />
+			</Box>
+
+			{/* <IconButton size="small">
+				<Search />
+			</IconButton> */}
 		</Box>
 	)
 }

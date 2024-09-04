@@ -75,6 +75,7 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 				textDecoration: 'none',
 				...props.style,
 			}}
+			target={props.newTab ? '_blank' : props.target}
 		>
 			{props.children}
 		</StyledLink>

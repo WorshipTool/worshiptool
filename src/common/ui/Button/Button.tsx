@@ -22,6 +22,7 @@ type ButtonProps<T extends RoutesKeys> = {
 	toParams?: CommonLinkProps<T>['params']
 	sx?: SxProps<{}>
 	alt?: string
+	target?: React.HTMLAttributeAnchorTarget
 
 	title?: string
 	subtitle?: string
@@ -133,6 +134,7 @@ export const Button = <T extends RoutesKeys>({
 					display: 'flex',
 					...props.sx,
 				}}
+				target={props.target}
 			>
 				<ButtonComponent />
 			</CustomLink>

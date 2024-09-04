@@ -18,6 +18,7 @@ type IconButtonProps<T extends RoutesKeys> = {
 	tooltipPlacement?: ComponentProps<typeof Tooltip>['placement']
 	to?: CommonLinkProps<T>['to']
 	toParams?: CommonLinkProps<T>['params']
+	target?: React.HTMLAttributeAnchorTarget
 
 	sx?: SxProps<{}>
 	disabled?: boolean
@@ -57,7 +58,12 @@ const LinkComponent = <T extends RoutesKeys>(props: IconButtonProps<T>) => {
 		[props.toParams]
 	)
 	return props.to ? (
-		<Link to={props.to} params={typedParams} sx={props.sx}>
+		<Link
+			to={props.to}
+			params={typedParams}
+			sx={props.sx}
+			target={props.target}
+		>
 			<ButtonComponent {...props} />
 		</Link>
 	) : (

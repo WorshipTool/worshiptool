@@ -1,10 +1,18 @@
 'use client'
+import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
+import GlobalSongList from '@/common/components/SongSelectPopup/components/GlobalSongList'
 import SelectFromOptions from '@/common/components/SongSelectPopup/components/SelectFromOptions'
+import { SelectSearch } from '@/common/components/SongSelectPopup/components/SelectSearch'
+import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
+import UsersSongList from '@/common/components/SongSelectPopup/components/UsersSongList'
 import { Button } from '@/common/ui/Button'
-import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
-import { Box, Skeleton } from '@mui/material'
+import { useApi } from '@/hooks/api/useApi'
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { useApiStateEffect } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { Box } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { VariantPackGuid } from '../../../interfaces/variant/songVariant.types'
 import './styles.css'
@@ -16,30 +24,70 @@ type PopupProps = {
 
 	anchorRef: React.RefObject<HTMLElement>
 	anchorName: string
+
+	filterFunc?: (pack: VariantPackGuid) => boolean
 }
 
-type ChosenSong = {
+export type ChosenSong = {
 	guid: VariantPackGuid
 	title: string
 }
 
-const CHOSEN_SONGS_HARDCODED: ChosenSong[] = [
-	{
-		guid: '0063f878-add7-499f-9e0b-c13cfae198e6' as VariantPackGuid,
-		title: 'Píseň 1',
-	},
-	{
-		guid: '008f7f69-b86f-4231-a45a-93401bbca890' as VariantPackGuid,
-		title: 'Píseň 2',
-	},
-]
-
 export default function SongSelectPopup(props: PopupProps) {
-	const chosen: ChosenSong[] = CHOSEN_SONGS_HARDCODED
+	const [chosen, setChosen] = useState<ChosenSong[]>([])
+
+	const [optionSelected, setOptionSelected] = useState(0)
+
+	const [searchStringRaw, setSearchStringRaw] = useState('')
+	const [searchString, setSearchString] = useState('')
+
+	useChangeDelayer(searchStringRaw, setSearchString, [])
+
+	const { songGettingApi } = useApi()
+
+	const [globalApiState] = useApiStateEffect(async () => {
+		const result = await handleApiCall(
+			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
+		)
+
+		return (
+			result.variants
+				.map((v) => {
+					return mapSongVariantDataOutDtoToSongVariantDto(v)
+				})
+				.filter((v) => {
+					return props.filterFunc?.(v.packGuid) ?? true
+				})
+				// make it unique
+				.filter(
+					(v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i
+				)
+		)
+	}, [searchString, props.filterFunc])
+
+	const [usersApiState] = useApiStateEffect(async () => {
+		const result = await handleApiCall(
+			songGettingApi.songGettingControllerSearchMySongsInPopup(searchString)
+		)
+
+		return (
+			result.variants
+				.map((v) => {
+					return mapSongVariantDataOutDtoToSongVariantDto(v)
+				})
+				.filter((v) => {
+					return props.filterFunc?.(v.packGuid) ?? true
+				})
+				// make it unique
+				.filter(
+					(v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i
+				)
+		)
+	}, [searchString, props.filterFunc])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		props.onClose?.()
 		props.onSubmit?.(chosen.map((c) => c.guid))
+		onClose()
 		e.preventDefault()
 	}
 
@@ -51,9 +99,9 @@ export default function SongSelectPopup(props: PopupProps) {
 	}>({ top: 0, left: 0 })
 
 	const MAX_WIDTH = 500
+	const OFFSET = 8
 
 	useEffect(() => {
-		const OFFSET = 8
 		const updatePopupPosition = () => {
 			if (props.anchorRef?.current) {
 				const rect = props.anchorRef.current.getBoundingClientRect()
@@ -88,6 +136,13 @@ export default function SongSelectPopup(props: PopupProps) {
 		}
 	}, [props.anchorRef, props.anchorName])
 
+	const onClose = () => {
+		props.onClose?.()
+		setChosen([])
+		setOptionSelected(0)
+		setSearchStringRaw('')
+	}
+
 	return !props.open ? null : (
 		<PopupContainer>
 			<Box
@@ -99,15 +154,16 @@ export default function SongSelectPopup(props: PopupProps) {
 					right: 0,
 					pointerEvents: 'auto',
 				}}
-				onClick={props.onClose}
+				onClick={onClose}
 			>
-				<form onSubmit={onSubmit}>
+				<form onSubmit={onSubmit} onReset={onClose}>
 					<Box
 						ref={popupRef}
 						// className={'song-select-popup '}
 						sx={{
 							bgcolor: 'grey.200',
-							maxWidth: MAX_WIDTH,
+							maxWidth: `min(${MAX_WIDTH}px, calc(100% - ${OFFSET * 2}px))`,
+							width: MAX_WIDTH,
 							borderRadius: 3,
 							boxShadow: '0px 0px 15px rgba(0,0,0,0.25)',
 							position: 'fixed',
@@ -124,43 +180,80 @@ export default function SongSelectPopup(props: PopupProps) {
 									display={'flex'}
 									flexDirection={'row'}
 									justifyContent={'space-between'}
+									gap={2}
 								>
 									<Typography variant="h4" strong>
 										Vyberte píseň
 									</Typography>
-									
-								</Box>
-								<SelectFromOptions />
-							</Box>
-
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								overflow={'hidden'}
-								gap={1}
-							>
-								{Array.from({ length: 5 }).map((_, i) => (
-									<Skeleton
-										key={i}
-										variant="rectangular"
-										width={200}
-										height={180}
-										sx={{
-											minWidth: 200,
-										}}
+									<SelectSearch
+										value={searchStringRaw}
+										onChange={setSearchStringRaw}
 									/>
-								))}
+								</Box>
+								<SelectFromOptions
+									options={[
+										{
+											label: 'Z globálního zpěvníku',
+										},
+										{
+											label: 'Z mých písní',
+											count:
+												searchString.length === 0
+													? undefined
+													: usersApiState?.data?.length || 0,
+										},
+									]}
+									initialSelected={optionSelected}
+									onSelect={(item, i) => setOptionSelected(i)}
+								/>
 							</Box>
 
 							<Box>
-								<Box>
-									<Typography strong>Vybrané písně</Typography>
-									<Typography>
-										{chosen.map((c) => c.title).join(', ')}
-									</Typography>
-								</Box>
-								<Box display={'flex'} justifyContent={'end'}>
-									<Button color={'primarygradient'} type="submit">
+								{optionSelected === 0 && (
+									<GlobalSongList
+										onSongSelect={(g, t) => {
+											if (chosen.find((c) => c.guid === g)) return
+											setChosen([...chosen, { guid: g, title: t }])
+										}}
+										onSongDeselect={(g) => {
+											setChosen(chosen.filter((c) => c.guid !== g))
+										}}
+										selectedSongs={chosen.map((v) => v.guid)}
+										apiState={globalApiState}
+									/>
+								)}
+								{optionSelected === 1 && (
+									<UsersSongList
+										onSongSelect={(g, t) => {
+											if (chosen.find((c) => c.guid === g)) return
+											setChosen([...chosen, { guid: g, title: t }])
+										}}
+										onSongDeselect={(g) => {
+											setChosen(chosen.filter((c) => c.guid !== g))
+										}}
+										selectedSongs={chosen.map((v) => v.guid)}
+										apiState={usersApiState}
+									/>
+								)}
+							</Box>
+
+							<Box display={'flex'} flexDirection={'column'} gap={3}>
+								<SelectedPanel
+									selected={chosen}
+									onDeselect={(g) => {
+										setChosen(chosen.filter((c) => c.guid !== g))
+									}}
+								/>
+
+								<Box display={'flex'} justifyContent={'end'} gap={2}>
+									<Button color="grey.700" type="reset" variant="text">
+										Zrušit
+									</Button>
+									<Button
+										color={'primarygradient'}
+										type="submit"
+										disabled={chosen.length === 0}
+									>
 										Přidat vybrané
 									</Button>
 								</Box>

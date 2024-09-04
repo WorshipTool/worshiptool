@@ -320,6 +320,19 @@ export interface GetAnalyticsOutDto {
 /**
  * 
  * @export
+ * @interface GetGlobalSongsOutDto
+ */
+export interface GetGlobalSongsOutDto {
+    /**
+     * 
+     * @type {Array<SongVariantDataOutDto>}
+     * @memberof GetGlobalSongsOutDto
+     */
+    'variants': Array<SongVariantDataOutDto>;
+}
+/**
+ * 
+ * @export
  * @interface GetGroupInfoResult
  */
 export interface GetGroupInfoResult {
@@ -6929,6 +6942,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
             }
@@ -6961,6 +6978,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7097,6 +7118,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7133,6 +7158,84 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchGlobalSongsInPopup: async (searchString?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/teampopupglobalsongssearch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchMySongsInPopup: async (searchString?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/teampopupmysongssearch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
 
 
     
@@ -7248,6 +7351,32 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetVariantFromAlias']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGlobalSongsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerSearchGlobalSongsInPopup(searchString, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerSearchGlobalSongsInPopup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGlobalSongsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerSearchMySongsInPopup(searchString, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerSearchMySongsInPopup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -7326,6 +7455,26 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          */
         songGettingControllerGetVariantFromAlias(alias: string, options?: any): AxiosPromise<string> {
             return localVarFp.songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
+            return localVarFp.songGettingControllerSearchGlobalSongsInPopup(searchString, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchMySongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
+            return localVarFp.songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7420,6 +7569,30 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+     * @summary 
+     * @param {string} [searchString] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerSearchGlobalSongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+     * @summary 
+     * @param {string} [searchString] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

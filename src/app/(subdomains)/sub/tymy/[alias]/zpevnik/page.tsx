@@ -8,7 +8,7 @@ import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { Add } from '@mui/icons-material'
 import { Box } from '@mui/system'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { VariantPackGuid } from '@/api/dtos'
 import './styles.css'
@@ -24,6 +24,26 @@ export default function TeamSongsPage() {
 	}, [selection])
 
 	const [open, setOpen] = useState(false)
+
+	useEffect(() => {
+		if (selection.loading) return
+
+		// after one second, the popup will open
+		const t = setTimeout(() => {
+			if (selection.items.length === 0) setOpen(true)
+		}, 1000)
+
+		return () => {
+			clearTimeout(t)
+		}
+	}, [items])
+
+	const filterFunc = useCallback(
+		(pack: VariantPackGuid) => {
+			return !items.some((i) => i.packGuid === pack)
+		},
+		[items]
+	)
 
 	const anchorRef = useRef(null)
 	const [anchorName, setAnchorName] = useState('')
@@ -46,23 +66,33 @@ export default function TeamSongsPage() {
 						display={'flex'}
 						flexDirection={'row'}
 						justifyContent={'space-between'}
+						gap={1}
 					>
 						<SearchFieldTeamZpevnik />
 						<Box
 							display={'flex'}
-							ref={(r) => {
-								anchorRef.current = r as any
-								setAnchorName('addSongRight')
-							}}
+							flexDirection={'column'}
+							justifyContent={'end'}
 						>
-							<Button
-								startIcon={<Add />}
-								size="small"
-								color="primary"
-								onClick={onAdd}
+							<Box
+								display={'flex'}
+								ref={(r) => {
+									anchorRef.current = r as any
+									setAnchorName('addSongRight')
+								}}
+								position={'relative'}
 							>
-								Přidat píseň
-							</Button>
+								<Button
+									startIcon={<Add />}
+									size="small"
+									onClick={onAdd}
+									variant="text"
+									color="black"
+									sx={{}}
+								>
+									Přidat píseň
+								</Button>
+							</Box>
 						</Box>
 					</Box>
 				)}
@@ -96,6 +126,7 @@ export default function TeamSongsPage() {
 						onSubmit={onSongAddSubmit}
 						anchorRef={anchorRef}
 						anchorName={anchorName}
+						filterFunc={filterFunc}
 					/>
 				</Box>
 			</Box>

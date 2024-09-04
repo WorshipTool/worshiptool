@@ -4,29 +4,29 @@ import { useState } from 'react'
 
 type Item = {
 	label: string
+	count?: number
 }
-
-const options: Item[] = [
-	{
-		label: 'Z globálního zpěvníku',
-	},
-	{
-		label: 'Z mých písní',
-	},
-]
 
 type SelectFromOptionsProps = {
-	onSelect: (index: Item) => void
+	options: Item[]
+	initialSelected: number
+	onSelect: (item: Item, index: number) => void
 }
-export default function SelectFromOptions() {
-	const [selected, setSelected] = useState(0)
+export default function SelectFromOptions(props: SelectFromOptionsProps) {
+	const [selected, setSelected] = useState(props.initialSelected)
+	const options: Item[] = props.options
+
+	const onChange = (index: number) => {
+		setSelected(index)
+		props.onSelect(options[index], index)
+	}
 
 	return (
 		<Box display={'flex'} flexDirection={'row'} gap={1}>
 			{options.map((option, i) => (
 				<Box
 					key={option.label}
-					onClick={() => setSelected(i)}
+					onClick={() => onChange(i)}
 					sx={{
 						cursor: 'pointer',
 					}}
@@ -37,7 +37,7 @@ export default function SelectFromOptions() {
 							userSelect: 'none',
 						}}
 					>
-						{option.label}
+						{option.label} {option.count !== undefined && ` (${option.count})`}
 					</Typography>
 				</Box>
 			))}
