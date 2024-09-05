@@ -90,7 +90,15 @@ export default function SearchedSongsList({
 				<Typography fontWeight={'bold'}>Výsledky vyhledávání:</Typography>
 
 				{!loading && songs.length > 0 && (
-					<SongListCards data={songs} key={'songlistcards'}></SongListCards>
+					<SongListCards
+						data={songs}
+						key={'songlistcards'}
+						properties={[
+							'SHOW_ADDED_BY_LOADER',
+							'SHOW_PRIVATE_LABEL',
+							'SHOW_YOUR_PUBLIC_LABEL',
+						]}
+					></SongListCards>
 				)}
 			</>
 

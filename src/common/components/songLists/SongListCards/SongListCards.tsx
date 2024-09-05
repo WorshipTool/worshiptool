@@ -2,12 +2,20 @@
 import { Masonry } from '@mui/lab'
 import { Grid, useTheme } from '@mui/material'
 import { ResponsiveStyleValue } from '@mui/system'
-import { useMemo } from 'react'
+import { ComponentProps, memo, useMemo } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
 import { SongCard } from '../../../ui/SongCard'
 
 type CommmonProps = {
 	data: SongVariantDto[]
+	properties?: ComponentProps<typeof SongCard>['properties']
+	cardToLinkProps?: ComponentProps<typeof SongCard>['toLinkProps']
+	onCardClick?: (data: SongVariantDto) => void
+
+	// Selecting
+	onCardSelect?: (data: SongVariantDto) => void
+	onCardDeselect?: (data: SongVariantDto) => void
+	selectable?: boolean
 }
 
 type ListProps = CommmonProps & {
@@ -26,7 +34,9 @@ type RowProps = CommmonProps & {
 
 export type SongListCardsProps = ListProps | MasonryGridProps | RowProps
 
-export default function SongListCards(props: SongListCardsProps) {
+export const SongListCard = memo(function SongListCards(
+	props: SongListCardsProps
+) {
 	const theme = useTheme()
 	const spacing = 1
 
@@ -46,6 +56,34 @@ export default function SongListCards(props: SongListCardsProps) {
 		}
 	}, [props])
 
+	const CommonCard = ({
+		v,
+		flexibleHeight = true,
+	}: {
+		v: SongVariantDto
+		flexibleHeight?: boolean
+	}) => {
+		return (
+			<SongCard
+				data={v}
+				key={v.guid}
+				flexibleHeight={flexibleHeight}
+				toLinkProps={props.cardToLinkProps}
+				properties={props.properties}
+				onClick={() => {
+					props.onCardClick && props.onCardClick(v)
+				}}
+				selectable={props.selectable}
+				onSelect={() => {
+					props.onCardSelect && props.onCardSelect(v)
+				}}
+				onDeselect={() => {
+					props.onCardDeselect && props.onCardDeselect(v)
+				}}
+			/>
+		)
+	}
+
 	return props.data.length === 0 ? (
 		<></>
 	) : props.variant === 'row' ? (
@@ -53,11 +91,7 @@ export default function SongListCards(props: SongListCardsProps) {
 			{props.data.map((v) => {
 				return (
 					<Grid item key={v.guid} xs={1}>
-						<SongCard
-							data={v}
-							publicityMode="privateandloader"
-							flexibleHeght={false}
-						/>
+						<CommonCard v={v} flexibleHeight={false} />
 					</Grid>
 				)
 			})}
@@ -72,15 +106,9 @@ export default function SongListCards(props: SongListCardsProps) {
 			spacing={spacing}
 		>
 			{props.data.map((v) => {
-				return (
-					<SongCard
-						data={v}
-						key={v.guid}
-						publicityMode="privateandloader"
-						flexibleHeght
-					/>
-				)
+				return <CommonCard v={v} key={v.guid} />
 			})}
 		</Masonry>
 	)
-}
+})
+export default SongListCard

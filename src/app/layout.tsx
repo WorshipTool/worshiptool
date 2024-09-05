@@ -2,6 +2,7 @@ import AppProviders from '@/app/components/AppProviders'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
 import { Background } from '@/common'
+import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
 import type { Metadata } from 'next'
 import './globals.css'
@@ -39,6 +40,7 @@ export default function RootLayout({
 					<Background />
 					{children}
 					<PopupProvider />
+					<DragTemplatesContainer />
 				</AppProviders>
 				<UnavailableMessage />
 			</body>

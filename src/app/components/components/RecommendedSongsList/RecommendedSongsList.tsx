@@ -65,7 +65,11 @@ export default function RecommendedSongsList({
 						))}
 					</Grid>
 				) : null}
-				<SongListCards data={data.slice(0, 4)} variant={listType} />
+				<SongListCards
+					data={data.slice(0, 4)}
+					variant={listType}
+					properties={['SHOW_ADDED_BY_LOADER']}
+				/>
 			</GridContainer>
 
 			{init && (

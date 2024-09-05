@@ -110,6 +110,24 @@ export default function usePlaylist(
 
 		return r
 	}
+
+	const removePacks = async (packGuids: VariantPackGuid[]) => {
+		const newItems: VariantPackGuid[] = []
+		for (const packGuid of packGuids) {
+			try {
+				const data = await removeVariantFromPlaylist(packGuid, guid)
+				if (data) newItems.push(packGuid)
+			} catch (e) {
+				return false
+			}
+		}
+
+		// Remove items from the list
+		setItems((items) =>
+			items.filter((i) => !newItems.includes(i.variant.packGuid))
+		)
+	}
+
 	const rename = (title: string) => {
 		return renamePlaylist(guid, title).then((r) => {
 			if (r) {
@@ -154,6 +172,7 @@ export default function usePlaylist(
 		addVariant,
 		addPacks,
 		removeVariant,
+		removePacks,
 		rename,
 		playlist,
 		items,
