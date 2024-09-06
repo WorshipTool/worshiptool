@@ -16,7 +16,7 @@ import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
 import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
-export default SmartPage(PlaylistCards)
+export default SmartPage(PlaylistCards, ['fullWidth'])
 
 function PlaylistCards() {
 	const { guid } = useParams() as { guid: PlaylistGuid }

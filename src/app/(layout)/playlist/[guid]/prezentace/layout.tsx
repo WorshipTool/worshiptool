@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import { LayoutProps, MetadataProps } from '../../../../../common/types'
 import { generateMetadataTitle } from '../../../../../hooks/window-title/tech'
 
@@ -10,5 +11,5 @@ export const generateMetadata = async ({
 }
 
 export default function layout(props: LayoutProps) {
-	return <div>{props.children}</div>
+	return <Box>{props.children}</Box>
 }
