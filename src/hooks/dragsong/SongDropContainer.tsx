@@ -1,8 +1,13 @@
-import { isDragObjectSong } from '@/hooks/dragsong/tech'
+import {
+	DragSongDto,
+	getSongDataFromDragEvent,
+	isDragObjectSong,
+} from '@/hooks/dragsong/tech'
 import { useCallback, useMemo, useState } from 'react'
 
 type SongDropContainerProps = {
-	children?: (over?: boolean) => React.ReactNode
+	children?: ((over?: boolean) => React.ReactNode) | React.ReactNode
+	onDrop?: (song: DragSongDto, e: React.DragEvent<HTMLDivElement>) => void
 }
 
 export default function SongDropContainer(props: SongDropContainerProps) {
@@ -18,16 +23,29 @@ export default function SongDropContainer(props: SongDropContainerProps) {
 
 	const onDragEnd = useCallback((e: React.DragEvent) => {
 		e.preventDefault()
-		setIsOver(false)
+		// @ts-ignore
+		if (!e.currentTarget.contains(e.relatedTarget)) {
+			setIsOver(false)
+		}
 	}, [])
 
-	const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-		e.preventDefault()
-		setIsOver(false)
-	}, [])
+	const onDrop = useCallback(
+		(e: React.DragEvent<HTMLDivElement>) => {
+			e.preventDefault()
+			setIsOver(false)
+			const song = getSongDataFromDragEvent(e)
+
+			if (song) {
+				props.onDrop?.(song, e)
+			}
+		},
+		[props.onDrop]
+	)
 
 	const component = useMemo(() => {
-		return props.children?.(isOver)
+		return typeof props.children === 'function'
+			? props.children(isOver)
+			: props.children
 	}, [props.children, isOver])
 
 	return (

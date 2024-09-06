@@ -2,7 +2,6 @@ import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPane
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Typography } from '@/common/ui/Typography'
-import useSongDrag from '@/hooks/dragsong/useSongDrag'
 import { Box, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './LeftPanel.styles.css'
@@ -11,7 +10,6 @@ export default function LeftPanel() {
 	const { canUserEdit } = useInnerPlaylist()
 	const theme = useTheme()
 
-	const { isDragging } = useSongDrag()
 	return (
 		<Box
 			sx={{
@@ -45,16 +43,6 @@ export default function LeftPanel() {
 							Změňte přetažením
 						</Typography>
 					)}
-				</Box>
-				<Box display={'flex'}>
-					<Box
-						sx={{
-							bgcolor: isDragging ? 'red' : 'grey.300',
-							padding: 1,
-						}}
-					>
-						Ahoj
-					</Box>
 				</Box>
 				<Box
 					sx={{
