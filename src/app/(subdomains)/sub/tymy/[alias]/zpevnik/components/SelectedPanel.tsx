@@ -81,9 +81,10 @@ export default function SelectedPanel({
 				})
 			} else {
 				enqueueSnackbar(
-					'Při přidávní písní do playlistu nastala chyba. Nelze přidat duplicitní písně.',
+					'Při přidávání nastala chyba. Do playlistu nelze přidat píseň, která tam už je.',
 					{
 						// variant: 'error',
+						autoHideDuration: 8000,
 					}
 				)
 			}

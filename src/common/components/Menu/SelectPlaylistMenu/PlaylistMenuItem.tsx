@@ -1,4 +1,3 @@
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { IconButton } from '@/common/ui/IconButton'
 import { Link } from '@/common/ui/Link/Link'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
@@ -36,19 +35,19 @@ export default function PlaylistMenuItem({
 			disabled={props.disabled}
 			onClick={onClick}
 		>
-			<Box
-				sx={{
-					flexDirection: 'row',
-					display: 'flex',
-				}}
-			>
-				{props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
+			<Box display={'flex'} flexDirection={'row'} gap={0.5}>
+				<Box
+					sx={{
+						flexDirection: 'row',
+						display: 'flex',
+					}}
+				>
+					{props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
 
-				<ListItemText primary={title} />
-			</Box>
+					<ListItemText primary={title} />
+				</Box>
 
-			{!props.hideLink && (
-				<Tooltip label="Otevřít v nové záložce">
+				{!props.hideLink && (
 					<Link
 						to="playlist"
 						params={{
@@ -58,6 +57,7 @@ export default function PlaylistMenuItem({
 					>
 						<IconButton
 							onClick={openPlaylist}
+							tooltip="Otevřít v nové záložce"
 							size="small"
 							sx={{
 								marginY: '-5px',
@@ -68,8 +68,8 @@ export default function PlaylistMenuItem({
 							<Launch fontSize="small" />
 						</IconButton>
 					</Link>
-				</Tooltip>
-			)}
+				)}
+			</Box>
 		</MenuItem>
 	)
 }

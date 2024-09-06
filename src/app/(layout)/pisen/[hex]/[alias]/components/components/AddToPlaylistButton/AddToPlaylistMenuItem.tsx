@@ -1,7 +1,7 @@
 import PlaylistMenuItem from '@/common/components/Menu/SelectPlaylistMenu/PlaylistMenuItem'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
-import { CircularProgress } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
@@ -93,7 +93,9 @@ export default function AddToPlaylistMenuItem({
 				) : !isInPlaylist ? (
 					<PlaylistAdd fontSize="small" />
 				) : (
-					<CheckCircle fontSize="small" />
+					<Box color={'grey.800'}>
+						<CheckCircle fontSize="small" color="inherit" />
+					</Box>
 				)
 			}
 		/>

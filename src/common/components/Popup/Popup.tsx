@@ -1,16 +1,32 @@
 'use client'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import { POPUP_DIV_CONTAINER_ID } from '@/common/components/Popup/PopupProvider'
+import { Gap } from '@/common/ui/Gap'
+import { Typography } from '@/common/ui/Typography'
 import { Box, alpha } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 
 type PopupProps = {
 	open?: boolean
 	onClose?: () => void
 	children?: React.ReactNode
+
+	title?: string
+	subtitle?: string
+	actions?: React.ReactNode
+
+	onSubmit?: () => void
+	onReset?: () => void
+
+	width?: number
 }
-export default function Popup({ children, open = true, onClose }: PopupProps) {
+export default function Popup({
+	children,
+	open = true,
+	onClose,
+	...props
+}: PopupProps) {
 	const ref = useRef<HTMLDivElement | null>(null)
 
 	const [mounted, setMounted] = useState(false)
@@ -27,6 +43,21 @@ export default function Popup({ children, open = true, onClose }: PopupProps) {
 		}
 
 		e.stopPropagation()
+	}
+	const onSubmitHandle = (e: FormEvent) => {
+		if (props.onSubmit) {
+			props.onSubmit()
+		}
+
+		e.preventDefault()
+	}
+
+	const onResetHandle = (e: FormEvent) => {
+		if (props.onReset) {
+			props.onReset()
+		}
+
+		e.preventDefault()
 	}
 
 	return ref.current && mounted ? (
@@ -50,18 +81,56 @@ export default function Popup({ children, open = true, onClose }: PopupProps) {
 						transition={{ duration: 0.2 }}
 						onClick={onCloseHandle}
 					>
-						<Box
-							sx={{
-								pointerEvents: 'auto',
-								padding: 3,
-								borderRadius: 3,
-								bgcolor: 'white',
-								boxShadow: '0px 0px 4px  rgba(0,0,0,0.1)',
-							}}
-							onClick={(e) => e.stopPropagation()}
-						>
-							{children}
-						</Box>
+						<form onSubmit={onSubmitHandle} onReset={onResetHandle}>
+							<Box
+								sx={{
+									pointerEvents: 'auto',
+									padding: 3,
+									borderRadius: 3,
+									bgcolor: 'white',
+									boxShadow: '0px 0px 4px  rgba(0,0,0,0.1)',
+								}}
+								onClick={(e) => e.stopPropagation()}
+								display={'flex'}
+								flexDirection={'column'}
+								gap={1}
+								width={props.width}
+							>
+								{(props.title || props.subtitle) && (
+									<Box display={'flex'} flexDirection={'column'}>
+										{props.title && (
+											<>
+												<Typography variant="h5" strong>
+													{props.title}
+												</Typography>
+											</>
+										)}
+										{props.subtitle && (
+											<>
+												<Typography variant="subtitle1">
+													{props.subtitle}
+												</Typography>
+											</>
+										)}
+									</Box>
+								)}
+								{children}
+
+								{props.actions && (
+									<Box>
+										<Gap value={1} />
+										<Box
+											display={'flex'}
+											flexDirection={'row'}
+											justifyContent={'space-between'}
+											gap={1}
+										>
+											{props.actions}
+										</Box>
+									</Box>
+								)}
+							</Box>
+						</form>
 					</motion.div>
 				)}
 			</AnimatePresence>

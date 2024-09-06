@@ -2,7 +2,6 @@
 import { CreateTeamOutDto } from '@/api/generated'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
-import { Gap } from '@/common/ui/Gap'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
@@ -10,6 +9,7 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { useState } from 'react'
 
 export default function CreateTeamButton() {
@@ -31,6 +31,7 @@ export default function CreateTeamButton() {
 
 	const onCancel = () => {
 		setPopupOpen(false)
+		setTeamName('')
 	}
 
 	const onCreateClick = () => {
@@ -52,44 +53,52 @@ export default function CreateTeamButton() {
 
 	return (
 		<>
-			<Popup open={popupOpen} onClose={() => setPopupOpen(false)}>
-				<Box width={200}>
-					<Typography variant="h5">Vytvořit tým</Typography>
-					<Gap />
+			<Popup
+				open={popupOpen}
+				onSubmit={onCreateClick}
+				onClose={() => setPopupOpen(false)}
+				onReset={onCancel}
+				width={300}
+				title="Vytvořit tým"
+				subtitle={'Vytvořte soukromý tým'}
+				actions={
+					<>
+						<Button
+							title="Zrušit"
+							color="grey.700"
+							// size="small"
+							variant="text"
+							type="reset"
+						/>
+						<Button
+							title="Vytvořit"
+							color="primary"
+							// size="small"
+							loading={apiState.loading}
+							type="submit"
+						/>
+					</>
+				}
+			>
+				<Box display={'flex'} flexDirection={'column'} gap={1}>
+					<TextField
+						placeholder="Zadejte název týmu"
+						value={teamName}
+						onChange={setTeamName}
+						sx={{
+							bgcolor: 'grey.100',
+							padding: 1,
+							borderRadius: 1,
+							border: `1px solid ${grey[300]}`,
+						}}
+					/>
 					{apiState.error && (
 						<>
 							<Typography color="error">
 								Nastala chyba. Prosím, zkontrolujte název týmu
 							</Typography>
-							<Gap />
 						</>
 					)}
-					<TextField
-						placeholder="Zadejte název týmu"
-						value={teamName}
-						onChange={setTeamName}
-					/>
-					<Gap />
-					<Box
-						display={'flex'}
-						flexDirection={'row'}
-						gap={1}
-						justifyContent={'space-between'}
-					>
-						<Button
-							title="Zrušit"
-							color="inherit"
-							size="small"
-							onClick={onCancel}
-						/>
-						<Button
-							title="Vytvořit"
-							color="primary"
-							size="small"
-							onClick={onCreateClick}
-							loading={apiState.loading}
-						/>
-					</Box>
 				</Box>
 			</Popup>
 			<Button

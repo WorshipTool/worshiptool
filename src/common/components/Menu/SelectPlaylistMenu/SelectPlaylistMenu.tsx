@@ -2,17 +2,15 @@ import { PlaylistData } from '@/api/generated'
 import Menu from '@/common/components/Menu/Menu'
 import PlaylistMenuItem from '@/common/components/Menu/SelectPlaylistMenu/PlaylistMenuItem'
 import Popup from '@/common/components/Popup/Popup'
+import { Button } from '@/common/ui/Button'
+import { Typography } from '@/common/ui/Typography'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { MoreHoriz } from '@mui/icons-material'
 import {
 	Box,
-	Button,
 	CircularProgress,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
 	Divider,
 	ListItemIcon,
 	ListItemText,
@@ -56,6 +54,23 @@ export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 		[props.onPlaylistClick]
 	)
 
+	const component = useCallback(
+		(p: PlaylistData) => {
+			return (
+				props.itemComponent?.(p) || (
+					<PlaylistMenuItem
+						key={p.guid}
+						guid={p.guid as PlaylistGuid}
+						title={p.title}
+						icon={<Typography>{p.title.at(0)?.toUpperCase()}</Typography>}
+						onClick={() => onPlaylistClick(p.guid as PlaylistGuid)}
+					/>
+				)
+			)
+		},
+		[props.itemComponent, onPlaylistClick]
+	)
+
 	return (
 		<>
 			<Menu
@@ -79,16 +94,7 @@ export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 					)
 				)}
 				{playlists?.slice(0, MAX_PLAYLIST_COUNT).map((p, i) => {
-					return (
-						props.itemComponent?.(p) || (
-							<PlaylistMenuItem
-								key={p.guid}
-								guid={p.guid as PlaylistGuid}
-								title={p.title}
-								onClick={() => onPlaylistClick(p.guid as PlaylistGuid)}
-							/>
-						)
-					)
+					return component(p)
 				})}
 				{playlists &&
 					playlists.length > MAX_PLAYLIST_COUNT && [
@@ -110,27 +116,29 @@ export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 						</MenuItem>,
 					]}
 			</Menu>
-			<Popup open={popupOpen} onClose={() => setPopupOpen(false)}>
-				<DialogTitle>Přidat do playlistu</DialogTitle>
-				<DialogContent>
-					<Box>
-						{playlists?.map((p, i) => {
-							return (
-								props.itemComponent?.(p) || (
-									<PlaylistMenuItem
-										key={p.guid}
-										guid={p.guid as PlaylistGuid}
-										title={p.title}
-										onClick={() => onPlaylistClick(p.guid as PlaylistGuid)}
-									/>
-								)
-							)
-						})}
-					</Box>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={() => setPopupOpen(false)}>Zavřít</Button>
-				</DialogActions>
+			<Popup
+				open={popupOpen}
+				onClose={() => setPopupOpen(false)}
+				title="Přidat do playlistu"
+				subtitle="Vyberte playlist ze seznamu"
+				actions={
+					<>
+						<Box />
+						<Button
+							onClick={() => setPopupOpen(false)}
+							variant="text"
+							color="grey.700"
+						>
+							Zavřít
+						</Button>
+					</>
+				}
+			>
+				<Box>
+					{playlists?.map((p, i) => {
+						return component(p)
+					})}
+				</Box>
 			</Popup>
 		</>
 	)
