@@ -1,3 +1,4 @@
+import PopupContainer from '@/common/components/Popup/PopupContainer'
 import { Box, Fade, styled } from '@mui/material'
 import MenuItem from './components/MenuItem'
 import useOutsideClick from './hooks/useOutsideClick'
@@ -34,29 +35,34 @@ export default function ToolsMenu({ open, onClose }: ToolsMenuProps) {
 
 	return (
 		<>
-			<Fade in={open}>
-				<Container ref={ref} sx={{ display: 'flex', flexDirection: 'column' }}>
-					{Array.from({
-						length: Math.ceil(items.length / maxRowCount),
-					}).map((_, i) => (
-						<Box display="flex" key={i}>
-							{items
-								.filter((a) => !a.hidden)
-								.slice(i * maxRowCount, i * maxRowCount + maxRowCount)
-								.map((item, j) => (
-									<MenuItem
-										{...item}
-										key={`menuitem${item.title}`}
-										action={() => {
-											item.action?.()
-											if (!item.disabled) onClose?.()
-										}}
-									/>
-								))}
-						</Box>
-					))}
-				</Container>
-			</Fade>
+			<PopupContainer>
+				<Fade in={open}>
+					<Container
+						ref={ref}
+						sx={{ display: 'flex', flexDirection: 'column' }}
+					>
+						{Array.from({
+							length: Math.ceil(items.length / maxRowCount),
+						}).map((_, i) => (
+							<Box display="flex" key={i}>
+								{items
+									.filter((a) => !a.hidden)
+									.slice(i * maxRowCount, i * maxRowCount + maxRowCount)
+									.map((item, j) => (
+										<MenuItem
+											{...item}
+											key={`menuitem${item.title}`}
+											action={() => {
+												item.action?.()
+												if (!item.disabled) onClose?.()
+											}}
+										/>
+									))}
+							</Box>
+						))}
+					</Container>
+				</Fade>
+			</PopupContainer>
 		</>
 	)
 }
