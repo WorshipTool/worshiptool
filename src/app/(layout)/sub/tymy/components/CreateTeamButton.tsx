@@ -85,6 +85,7 @@ export default function CreateTeamButton() {
 						placeholder="Zadejte název týmu"
 						value={teamName}
 						onChange={setTeamName}
+						autoFocus
 						sx={{
 							bgcolor: 'grey.100',
 							padding: 1,

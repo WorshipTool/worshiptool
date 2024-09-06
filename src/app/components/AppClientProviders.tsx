@@ -4,6 +4,7 @@ import { FooterProvider } from '@/common/components/Footer/hooks/useFooter'
 import { ToolbarProvider } from '@/common/components/Toolbar/hooks/useToolbar'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '@/hooks/auth/useAuth'
+import SongDragProvider from '@/hooks/dragsong/SongDragProvider'
 import { GroupProvider } from '@/hooks/group/useGroup'
 import { PlaylistProvider } from '@/hooks/playlist/useCurrentPlaylist'
 import { SnackbarProvider } from 'notistack'
@@ -27,7 +28,9 @@ export default function AppClientProviders({
 						<GroupProvider>
 							<ToolbarProvider>
 								<FooterProvider>
-									<PlaylistProvider>{children}</PlaylistProvider>
+									<PlaylistProvider>
+										<SongDragProvider>{children}</SongDragProvider>
+									</PlaylistProvider>
 								</FooterProvider>
 							</ToolbarProvider>
 						</GroupProvider>

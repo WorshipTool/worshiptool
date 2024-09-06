@@ -1,6 +1,7 @@
 'use client'
 
 import SongCardDragTemplate from '@/common/ui/SongCard/SongCardDragTemplate'
+import { SONG_DRAG_DATA_TYPE, mapVariantToDragDto } from '@/hooks/dragsong/tech'
 import { Lock, Public } from '@mui/icons-material'
 import { Box, Typography, alpha, styled, useTheme } from '@mui/material'
 import {
@@ -137,6 +138,10 @@ export const SongCard = memo(function S({
 		)
 		e.dataTransfer.setData('text/uri-list', url)
 		e.dataTransfer.setData('text/plain', title)
+		e.dataTransfer.setData(
+			SONG_DRAG_DATA_TYPE,
+			JSON.stringify(mapVariantToDragDto(data))
+		)
 	}
 
 	const onDragEnd = () => {

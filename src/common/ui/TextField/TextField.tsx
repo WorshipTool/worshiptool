@@ -14,6 +14,8 @@ type TextFieldProps = {
 	required?: boolean
 	multiline?: boolean
 	disabled?: boolean
+
+	autoFocus?: boolean
 }
 
 export default function TextField({
@@ -36,6 +38,7 @@ export default function TextField({
 			required={props.required}
 			multiline={props.multiline}
 			disabled={props.disabled}
+			autoFocus={props.autoFocus}
 		/>
 	)
 }
