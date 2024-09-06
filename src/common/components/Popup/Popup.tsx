@@ -1,7 +1,7 @@
 'use client'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import { POPUP_DIV_CONTAINER_ID } from '@/common/components/Popup/PopupProvider'
-import { Box, alpha, useTheme } from '@mui/material'
+import { Box, alpha } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 
@@ -29,11 +29,8 @@ export default function Popup({ children, open = true, onClose }: PopupProps) {
 		e.stopPropagation()
 	}
 
-	const theme = useTheme()
-
 	return ref.current && mounted ? (
 		<PopupContainer>
-			(
 			<AnimatePresence>
 				{open && (
 					<motion.div

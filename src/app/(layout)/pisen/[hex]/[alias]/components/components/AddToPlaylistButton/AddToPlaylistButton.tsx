@@ -1,21 +1,12 @@
+import { PlaylistData } from '@/api/generated'
+import AddToPlaylistMenuItem from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistMenuItem'
+import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { KeyboardArrowDown, PlaylistAddCircle } from '@mui/icons-material'
 import {
-	KeyboardArrowDown,
-	MoreHoriz,
-	PlaylistAddCircle,
-} from '@mui/icons-material'
-import {
-	Box,
 	Button,
-	CircularProgress,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	Divider,
 	ListItemIcon,
 	ListItemText,
-	Menu,
 	MenuItem,
 	useTheme,
 } from '@mui/material'
@@ -23,7 +14,6 @@ import React from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
 import { useApiStateEffect } from '../../../../../../../../tech/ApiState'
-import PlaylistMenuItem from './PlaylistMenuItem'
 
 interface AddToPlaylistButtonProps {
 	variant: SongVariantDto
@@ -64,6 +54,16 @@ export default function AddToPlaylistButton({
 	const theme = useTheme()
 	const maxItems = 4
 
+	const itemComponent = (playlist: PlaylistData) => {
+		return (
+			<AddToPlaylistMenuItem
+				variant={variant}
+				guid={playlist.guid as PlaylistGuid}
+				title={playlist.title}
+			/>
+		)
+	}
+
 	return (
 		<>
 			{' '}
@@ -90,7 +90,13 @@ export default function AddToPlaylistButton({
 					</Button>
 				</>
 			)}
-			<Menu
+			<SelectPlaylistMenu
+				open={open}
+				onClose={handleClose}
+				anchor={anchorEl}
+				itemComponent={itemComponent}
+			/>
+			{/* <Menu
 				id="basic-menu"
 				anchorEl={anchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
@@ -163,7 +169,7 @@ export default function AddToPlaylistButton({
 				<DialogActions>
 					<Button onClick={() => setOpenDialog(false)}>Zavřít</Button>
 				</DialogActions>
-			</Dialog>
+			</Dialog> */}
 		</>
 	)
 }

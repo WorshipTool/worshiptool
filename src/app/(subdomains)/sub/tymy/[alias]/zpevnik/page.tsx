@@ -11,6 +11,7 @@ import { Box } from '@mui/system'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import SelectedPanel from '@/app/(subdomains)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
 import { LinearProgress } from '@mui/material'
 import './styles.css'
 
@@ -89,12 +90,6 @@ export default function TeamSongsPage() {
 		setSelectable(false)
 	}, [])
 
-	const onRemoveSelected = useCallback(() => {
-		selection.removePacks(selected)
-		setSelected([])
-		setSelectable(false)
-	}, [selected])
-
 	return (
 		<div>
 			<TeamPageTitle>Zpěvník</TeamPageTitle>
@@ -152,51 +147,10 @@ export default function TeamSongsPage() {
 					</Box>
 				)}
 				{selectable && (
-					<Box
-						display={'flex'}
-						flexDirection={'row'}
-						gap={1}
-						alignItems={'center'}
-						justifyContent={'space-between'}
-					>
-						<Box
-							display={'flex'}
-							flexDirection={'row'}
-							gap={1}
-							alignItems={'center'}
-						>
-							<Button
-								variant="outlined"
-								color="black"
-								size="small"
-								onClick={cancelSelect}
-							>
-								Zrušit výběr
-							</Button>
-							{selected.length === 0 ? (
-								<Typography>Kliknutím vyberte písně</Typography>
-							) : (
-								<>
-									<Box>
-										<Typography>
-											{selected.length === 1
-												? `Vybrána 1 píseň`
-												: selected.length < 5
-												? `Vybrány ${selected.length} písně`
-												: `Vybráno ${selected.length} písní`}
-										</Typography>
-									</Box>
-								</>
-							)}
-						</Box>
-
-						<Box>
-							{/* Actions */}
-							<Button color="error" size="small" onClick={onRemoveSelected}>
-								Odstranit
-							</Button>
-						</Box>
-					</Box>
+					<SelectedPanel
+						onCancelSelect={cancelSelect}
+						selectedPacks={selected}
+					/>
 				)}
 				<SongListCards
 					data={items}
@@ -205,7 +159,7 @@ export default function TeamSongsPage() {
 					onCardSelect={onCardSelect}
 					onCardDeselect={onCardDeselect}
 				/>
-				{items.length === 0 && (
+				{!selection.loading && items.length === 0 && (
 					<Box gap={1} display={'flex'} flexDirection={'column'}>
 						<Typography>Ve zpěvníku nejsou zatím žádné písně...</Typography>
 						<Box

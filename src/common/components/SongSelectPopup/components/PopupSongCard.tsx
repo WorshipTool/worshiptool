@@ -1,0 +1,120 @@
+import { SongVariantDto } from '@/api/dtos'
+import { theme } from '@/common/constants/theme'
+import { IconButton } from '@/common/ui/IconButton'
+import { Typography } from '@/common/ui/Typography'
+import { parseVariantAlias } from '@/routes'
+import { OpenInNew } from '@mui/icons-material'
+import { alpha, Box } from '@mui/material'
+import { memo, useCallback } from 'react'
+
+type PopupSongCardProps = {
+	selected?: boolean
+	song: SongVariantDto
+	onSelect: () => void
+	onDeselect: () => void
+}
+
+const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
+	const onSongClick = useCallback(() => {
+		if (props.selected) {
+			props.onDeselect()
+			return
+		}
+		props.onSelect()
+	}, [props.selected, props.onSelect, props.onDeselect])
+
+	return (
+		<Box
+			sx={{
+				borderRadius: 3,
+				minWidth: 150,
+				maxWidth: 180,
+				maxHeight: 130,
+				borderStyle: 'solid',
+				cursor: 'pointer',
+				...(props.selected
+					? {
+							// Selected
+
+							borderColor: 'primary.main',
+							bgcolor: alpha(theme.palette.primary.main, 0.1),
+							borderWidth: 2,
+					  }
+					: {
+							// Not selected
+							bgcolor: 'grey.100',
+							borderColor: 'grey.200',
+							borderWidth: 1,
+					  }),
+			}}
+			onClick={onSongClick}
+			position={'relative'}
+			className="global-song-list-item"
+		>
+			<Box
+				sx={{
+					position: 'absolute',
+					top: 0,
+					right: 0,
+					borderRadius: 3,
+					bgcolor: 'grey.100',
+					padding: 1,
+					pointerEvents: 'none',
+				}}
+				className="global-song-list-link-icon"
+			>
+				<IconButton
+					size="small"
+					to="variant"
+					tooltip="Otevřít v novém okně"
+					toParams={parseVariantAlias(props.song.packAlias)}
+					target="_blank"
+					sx={{
+						pointerEvents: 'auto',
+					}}
+					onClick={(e) => e.stopPropagation()}
+				>
+					<OpenInNew
+						sx={{
+							fontSize: '1.1rem',
+						}}
+					/>
+				</IconButton>
+			</Box>
+			<Box
+				padding={2}
+				display={'flex'}
+				flexDirection={'column'}
+				height={'calc(100% - 2*2*8px)'}
+			>
+				<Typography
+					strong
+					sx={{
+						textOverflow: 'ellipsis',
+						overflow: 'hidden',
+						userSelect: 'none',
+						display: '-webkit-box',
+						WebkitBoxOrient: 'vertical',
+						WebkitLineClamp: 2,
+					}}
+				>
+					{props.song.preferredTitle}
+				</Typography>
+
+				<Typography
+					// size={'small'}
+					sx={{
+						textOverflow: 'ellipsis',
+						overflow: 'hidden',
+						userSelect: 'none',
+						flex: 1,
+					}}
+				>
+					{props.song.sheet.getSections()[0].text}
+				</Typography>
+			</Box>
+		</Box>
+	)
+})
+
+export default PopupSongCard

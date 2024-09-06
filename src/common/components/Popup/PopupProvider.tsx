@@ -12,7 +12,8 @@ export default function PopupProvider() {
 				right: 0,
 				bottom: 0,
 				pointerEvents: 'none',
-				zIndex: 10,
+				// zIndex: 10,
+				zIndex: 1360,
 			}}
 		></Box>
 	)

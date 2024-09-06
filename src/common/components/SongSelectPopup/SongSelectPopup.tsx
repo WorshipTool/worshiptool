@@ -98,7 +98,7 @@ export default function SongSelectPopup(props: PopupProps) {
 		right?: number
 	}>({ top: 0, left: 0 })
 
-	const MAX_WIDTH = 500
+	const MAX_WIDTH = 600
 	const OFFSET = 8
 
 	useEffect(() => {

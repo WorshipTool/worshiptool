@@ -1,0 +1,189 @@
+import { VariantPackGuid } from '@/api/dtos'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
+import Menu from '@/common/components/Menu/Menu'
+import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
+import { Button } from '@/common/ui/Button'
+import { Typography } from '@/common/ui/Typography'
+import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { getRouteUrlWithParams } from '@/routes'
+import { Add, LibraryAdd, MoreVert } from '@mui/icons-material'
+import { Box } from '@mui/material'
+import { useSnackbar } from 'notistack'
+import { useCallback, useMemo, useState } from 'react'
+
+type SelectedPanelProps = {
+	selectedPacks: VariantPackGuid[]
+	onCancelSelect: () => void
+}
+
+export default function SelectedPanel({
+	selectedPacks: selected,
+	...props
+}: SelectedPanelProps) {
+	const { selection } = useInnerTeam()
+	const { addPacksToPlaylist, createPlaylist } = usePlaylistsGeneral()
+
+	const [optionsElement, setOptionsElement] = useState<HTMLElement | null>(null)
+	const [optionsMenuOpen, setOptionsMenuOpen] = useState(false)
+
+	const { enqueueSnackbar } = useSnackbar()
+
+	const [playlistMenuAnchor, setPlaylistMenuAnchor] =
+		useState<HTMLElement | null>(null)
+	const [playlistMenuOpen, setPlaylistMenuOpen] = useState(false)
+
+	const closeAll = useCallback(() => {
+		setOptionsMenuOpen(false)
+		setPlaylistMenuOpen(false)
+	}, [])
+
+	const onRemoveSelected = useCallback(() => {
+		selection.removePacks(selected)
+	}, [selected])
+
+	const onOptionClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
+		setOptionsElement(event.currentTarget)
+		setOptionsMenuOpen(true)
+	}, [])
+
+	const onAddToPlaylistClick = useCallback(
+		(e: React.MouseEvent<HTMLElement>) => {
+			setPlaylistMenuOpen(true)
+			setPlaylistMenuAnchor(e.currentTarget)
+		},
+		[]
+	)
+
+	const onCreateNewPlaylistClick = useCallback(
+		async (e: React.MouseEvent) => {
+			// 1. Create new playlist
+			const newGuid = await createPlaylist()
+
+			// 2. Add selected songs to playlist
+			const results = await addPacksToPlaylist(selected, newGuid)
+
+			const url = getRouteUrlWithParams('playlist', { guid: newGuid })
+			window.open(url, '_blank') // Open in new tab
+
+			closeAll()
+		},
+		[selected]
+	)
+
+	const onAddToPlaylist = useCallback(
+		async (playlistGuid: PlaylistGuid) => {
+			// selection.addPacksToPlaylist(selected, playlistId)
+			const results = await addPacksToPlaylist(selected, playlistGuid)
+			if (results.length > 0) {
+				enqueueSnackbar('Písně byly přidány do playlistu', {
+					variant: 'success',
+				})
+			} else {
+				enqueueSnackbar(
+					'Při přidávní písní do playlistu nastala chyba. Nelze přidat duplicitní písně.',
+					{
+						// variant: 'error',
+					}
+				)
+			}
+			closeAll()
+		},
+		[selected, closeAll]
+	)
+
+	const optionIcon = useMemo(() => <MoreVert />, [])
+	return (
+		<>
+			<Box
+				display={'flex'}
+				flexDirection={'row'}
+				gap={1}
+				alignItems={'center'}
+				justifyContent={'space-between'}
+			>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={1}
+					alignItems={'center'}
+				>
+					<Button
+						variant="outlined"
+						color="black"
+						size="small"
+						onClick={props.onCancelSelect}
+					>
+						Zrušit výběr
+					</Button>
+					{selected.length === 0 ? (
+						<Typography>Kliknutím vyberte písně</Typography>
+					) : (
+						<>
+							<Box>
+								<Typography>
+									{selected.length === 1
+										? `Vybrána 1 píseň`
+										: selected.length < 5
+										? `Vybrány ${selected.length} písně`
+										: `Vybráno ${selected.length} písní`}
+								</Typography>
+							</Box>
+						</>
+					)}
+				</Box>
+				<Box display={'flex'} flexDirection={'row'} gap={2}>
+					{/* Actions */}
+					<Button
+						size="small"
+						color="black"
+						variant="text"
+						startIcon={optionIcon}
+						onClick={onOptionClick}
+						disabled={selected.length === 0}
+					>
+						Možnosti
+					</Button>
+					<Button
+						color="error"
+						size="small"
+						onClick={onRemoveSelected}
+						disabled={selected.length === 0}
+					>
+						Odstranit
+					</Button>
+				</Box>
+			</Box>
+			<Menu
+				open={optionsMenuOpen}
+				onClose={() => setOptionsMenuOpen(false)}
+				anchor={optionsElement}
+				items={[
+					// {
+					// 	icon: <Delete />,
+					// 	title: 'Odstranit',
+					// },
+					{
+						title: 'Nový playlist',
+						subtitle: 'Vytvořit z písní nový playlist',
+						icon: <Add />,
+						onClick: onCreateNewPlaylistClick,
+					},
+					{
+						title: 'Přidat do playlistu',
+						subtitle: 'Vyberte z již vytvořených playlistů',
+						icon: <LibraryAdd />,
+						onClick: onAddToPlaylistClick,
+					},
+				]}
+			></Menu>
+
+			<SelectPlaylistMenu
+				open={playlistMenuOpen}
+				onClose={() => setPlaylistMenuOpen(false)}
+				anchor={playlistMenuAnchor}
+				onPlaylistClick={onAddToPlaylist}
+			/>
+		</>
+	)
+}

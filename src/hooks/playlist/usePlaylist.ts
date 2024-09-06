@@ -17,6 +17,7 @@ export default function usePlaylist(
 ) {
 	const {
 		addVariantToPlaylist,
+		addPacksToPlaylist,
 		removeVariantFromPlaylist,
 		getPlaylistByGuid,
 		searchInPlaylistByGuid,
@@ -82,21 +83,10 @@ export default function usePlaylist(
 	}
 
 	const addPacks = async (packGuids: VariantPackGuid[]) => {
-		const newItems: PlaylistItemDto[] = []
-		for (const packGuid of packGuids) {
-			try {
-				const data = await addVariantToPlaylist(packGuid, guid).then(
-					async (r) => {
-						if (!r) return false
-						const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
-						return item
-					}
-				)
-				if (data) newItems.push(data)
-			} catch (e) {
-				return false
-			}
-		}
+		const newItems: PlaylistItemDto[] = await addPacksToPlaylist(
+			packGuids,
+			guid
+		)
 
 		// Add new items to the list
 

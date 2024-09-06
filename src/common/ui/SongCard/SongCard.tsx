@@ -136,6 +136,7 @@ export const SongCard = memo(function S({
 			parseVariantAlias(data.packAlias)
 		)
 		e.dataTransfer.setData('text/uri-list', url)
+		e.dataTransfer.setData('text/plain', title)
 	}
 
 	const onDragEnd = () => {
