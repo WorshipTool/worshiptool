@@ -139,7 +139,7 @@ export default function SelectedPanel({
 						size="small"
 						color="black"
 						variant="text"
-						startIcon={optionIcon}
+						// endIcon={optionIcon}
 						onClick={onOptionClick}
 						disabled={selected.length === 0}
 					>
