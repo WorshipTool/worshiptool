@@ -1,8 +1,9 @@
 import { ColorType } from '@/common/ui/ui.types'
 import { SxProps, Typography as Typo } from '@mui/material'
+import { useMemo } from 'react'
 
 type CustomTypographyProps = {
-	children?: React.ReactNode
+	children?: string | React.ReactNode
 	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal' | 'subtitle1'
 	strong?: boolean | number
 	color?: ColorType
@@ -11,10 +12,11 @@ type CustomTypographyProps = {
 	sx?: SxProps
 	className?: string
 	noWrap?: boolean
+
+	uppercase?: boolean
 }
 
 export function Typography({
-	children,
 	variant = 'normal',
 	strong = false,
 	color,
@@ -24,6 +26,16 @@ export function Typography({
 	const fontWeight = strong ? (strong === true ? 700 : strong) : undefined
 
 	const typoVariant = variant === 'normal' ? 'body1' : variant
+
+	const children = useMemo(() => {
+		if (typeof props.children === 'string') {
+			if (props.uppercase) {
+				return props.children.toUpperCase()
+			}
+			return props.children
+		}
+		return props.children
+	}, [props.children, props.uppercase])
 
 	return (
 		<Typo

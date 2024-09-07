@@ -21,7 +21,12 @@ export default function PlaylistPreview() {
 						display: { xs: 'block', sm: 'none' },
 					}}
 				></Card>
-				<Box display={'flex'} flexDirection={'row'} position={'relative'}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					position={'relative'}
+					minHeight={'calc(100vh - 140px)'}
+				>
 					<LeftPanel />
 					<MiddlePanel />
 					{/* <RightPanel /> */}
