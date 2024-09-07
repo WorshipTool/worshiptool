@@ -12,7 +12,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
 import SelectedPanel from '@/app/(subdomains)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
-import { LinearProgress } from '@mui/material'
+import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
+import { DragSongDto } from '@/hooks/dragsong/tech'
+import { LinearProgress, useTheme } from '@mui/material'
 import './styles.css'
 
 export default function TeamSongsPage() {
@@ -90,119 +92,129 @@ export default function TeamSongsPage() {
 		setSelectable(false)
 	}, [])
 
-	return (
-		<div>
-			<TeamPageTitle>Zpěvník</TeamPageTitle>
+	const onSongDrop = useCallback((data: DragSongDto) => {
+		if (selection.items.some((i) => i.variant.packGuid === data.packGuid))
+			return
+		selection.addPacks([data.packGuid])
+	}, [])
 
-			<Box display={'flex'} flexDirection={'column'} gap={3}>
-				{selection.loading && (
-					<>
-						<LinearProgress />
-					</>
-				)}
-				<Box
-					sx={{
-						minHeight: '3rem',
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-					}}
-				>
-					{!selectable && items.length > 0 && (
+	const theme = useTheme()
+	return (
+		<>
+			<TeamPageTitle>Zpěvník</TeamPageTitle>
+			<SongDropContainer onDrop={onSongDrop}>
+				<Box display={'flex'} flexDirection={'column'} gap={3}>
+					{selection.loading && (
+						<>
+							<LinearProgress />
+						</>
+					)}
+					{((!selectable && items.length > 0) || selectable) && (
 						<Box
-							display={'flex'}
-							flexDirection={'row'}
-							justifyContent={'space-between'}
-							gap={1}
-							flex={1}
+							sx={{
+								minHeight: '3rem',
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+							}}
 						>
-							{<SearchFieldTeamZpevnik />}
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								justifyContent={'end'}
-								gap={2}
-							>
-								{
-									<Button
-										variant="text"
-										color="black"
-										size="small"
-										onClick={() => setSelectable(true)}
-									>
-										Vybrat
-									</Button>
-								}
-								{
+							{!selectable && items.length > 0 && (
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									justifyContent={'space-between'}
+									gap={1}
+									flex={1}
+								>
+									{<SearchFieldTeamZpevnik />}
 									<Box
 										display={'flex'}
-										ref={(r) => {
-											anchorRef.current = r as any
-											setAnchorName('addSongRight')
-										}}
-										position={'relative'}
+										flexDirection={'row'}
+										justifyContent={'end'}
+										gap={2}
 									>
-										<Button
-											startIcon={<Add />}
-											size="small"
-											onClick={onAdd}
-											variant="text"
-											color="black"
-											sx={{}}
-										>
-											Přidat píseň
-										</Button>
+										{
+											<Button
+												variant="text"
+												color="black"
+												size="small"
+												onClick={() => setSelectable(true)}
+											>
+												Vybrat
+											</Button>
+										}
+										{
+											<Box
+												display={'flex'}
+												ref={(r) => {
+													anchorRef.current = r as any
+													setAnchorName('addSongRight')
+												}}
+												position={'relative'}
+											>
+												<Button
+													startIcon={<Add />}
+													size="small"
+													onClick={onAdd}
+													variant="text"
+													color="black"
+													sx={{}}
+												>
+													Přidat píseň
+												</Button>
+											</Box>
+										}
 									</Box>
-								}
+								</Box>
+							)}
+							{selectable && (
+								<SelectedPanel
+									onCancelSelect={cancelSelect}
+									selectedPacks={selected}
+								/>
+							)}
+						</Box>
+					)}
+					<SongListCards
+						data={items}
+						// cardToLinkProps={cardToProps}
+						selectable={selectable}
+						onCardSelect={onCardSelect}
+						onCardDeselect={onCardDeselect}
+					/>
+					{!selection.loading && items.length === 0 && (
+						<Box gap={1} display={'flex'} flexDirection={'column'}>
+							<Typography>Ve zpěvníku nejsou zatím žádné písně...</Typography>
+							<Box
+								display={'flex'}
+								ref={(r) => {
+									anchorRef.current = r as any
+									setAnchorName('addFirstSongs')
+								}}
+							>
+								<Button
+									startIcon={<Add />}
+									size="small"
+									color="primary"
+									onClick={onAdd}
+								>
+									Přidat píseň
+								</Button>
 							</Box>
 						</Box>
 					)}
-					{selectable && (
-						<SelectedPanel
-							onCancelSelect={cancelSelect}
-							selectedPacks={selected}
+					<Box>
+						<SongSelectPopup
+							open={open}
+							onClose={() => setOpen(false)}
+							onSubmit={onSongAddSubmit}
+							anchorRef={anchorRef}
+							anchorName={anchorName}
+							filterFunc={filterFunc}
 						/>
-					)}
-				</Box>
-				<SongListCards
-					data={items}
-					// cardToLinkProps={cardToProps}
-					selectable={selectable}
-					onCardSelect={onCardSelect}
-					onCardDeselect={onCardDeselect}
-				/>
-				{!selection.loading && items.length === 0 && (
-					<Box gap={1} display={'flex'} flexDirection={'column'}>
-						<Typography>Ve zpěvníku nejsou zatím žádné písně...</Typography>
-						<Box
-							display={'flex'}
-							ref={(r) => {
-								anchorRef.current = r as any
-								setAnchorName('addFirstSongs')
-							}}
-						>
-							<Button
-								startIcon={<Add />}
-								size="small"
-								color="primary"
-								onClick={onAdd}
-							>
-								Přidat píseň
-							</Button>
-						</Box>
 					</Box>
-				)}
-				<Box>
-					<SongSelectPopup
-						open={open}
-						onClose={() => setOpen(false)}
-						onSubmit={onSongAddSubmit}
-						anchorRef={anchorRef}
-						anchorName={anchorName}
-						filterFunc={filterFunc}
-					/>
 				</Box>
-			</Box>
-		</div>
+			</SongDropContainer>
+		</>
 	)
 }
