@@ -15,19 +15,9 @@ type UsersSongListProps = {
 }
 
 export default function UsersSongList(props: UsersSongListProps) {
-	const onSongClick = (song: SongVariantDto) => {
-		if (props.selectedSongs.includes(song.packGuid)) {
-			props.onSongDeselect(song.packGuid)
-			return
-		}
-		props.onSongSelect(song.packGuid, song.preferredTitle)
-	}
-
 	const items = useMemo(() => {
 		return props.apiState.data ?? []
 	}, [props.apiState.data])
-
-	const LINK_ICON_OFFSET = 0
 
 	return (
 		<Box>
@@ -36,7 +26,7 @@ export default function UsersSongList(props: UsersSongListProps) {
 				flexDirection={'row'}
 				gap={1}
 				width={'100%'}
-				className="global-song-list-container"
+				className="global-song-list-container  stylized-scrollbar"
 			>
 				{items.map((song) => {
 					const onSelect = () => {

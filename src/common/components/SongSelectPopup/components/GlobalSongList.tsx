@@ -25,7 +25,7 @@ export default function GlobalSongList(props: GlobalSongListProps) {
 			flexDirection={'row'}
 			gap={1}
 			width={'100%'}
-			className="global-song-list-container"
+			className="global-song-list-container stylized-scrollbar"
 		>
 			{items.map((song) => {
 				const onSelect = () => {

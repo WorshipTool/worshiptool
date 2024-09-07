@@ -1,0 +1,20 @@
+/*Classes*/
+
+.stylized-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.stylized-scrollbar::-webkit-scrollbar-thumb {
+	background: var(--color-grey-400);
+	border-radius: 4px;
+}
+
+.stylized-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: var(--color-grey-500);
+}
+
+.stylized-scrollbar::-webkit-scrollbar {
+	background: transparent;
+	height: 8px;
+	width: 8px;
+}

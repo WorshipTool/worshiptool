@@ -2,24 +2,6 @@
 	overflow-x: auto;
 	padding-bottom: 8px;
 }
-.global-song-list-container::-webkit-scrollbar-track {
-	background: transparent;
-}
-
-.global-song-list-container::-webkit-scrollbar-thumb {
-	background: var(--color-grey-400);
-	border-radius: 4px;
-}
-
-.global-song-list-container::-webkit-scrollbar-thumb:hover {
-	background: var(--color-grey-500);
-}
-
-.global-song-list-container::-webkit-scrollbar {
-	background: transparent;
-	height: 8px;
-}
-
 .global-song-list-item {
 }
 

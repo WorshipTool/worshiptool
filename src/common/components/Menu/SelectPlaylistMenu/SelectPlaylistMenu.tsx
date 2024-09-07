@@ -134,7 +134,13 @@ export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 					</>
 				}
 			>
-				<Box>
+				<Box
+					maxHeight={'50vh'}
+					sx={{
+						overflowY: 'auto',
+					}}
+					className={'stylized-scrollbar'}
+				>
 					{playlists?.map((p, i) => {
 						return component(p)
 					})}

@@ -5,6 +5,7 @@ import { Background } from '@/common'
 import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
 import type { Metadata } from 'next'
+import './globals.classes.css'
 import './globals.css'
 import './typography.globals.css'
 

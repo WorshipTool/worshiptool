@@ -10,27 +10,37 @@ type TeamLeftPanelProps = {
 }
 
 export default async function TeamLeftPanel(props: TeamLeftPanelProps) {
+	const WIDTH = 250
 	return (
-		<Box
-			sx={{
-				width: 250,
+		<>
+			<Box
+				sx={{
+					minWidth: WIDTH,
 
-				height: '100%',
-				bgcolor: 'grey.100',
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-		>
-			<TeamPanelTitle />
-			<Menu />
-			<Box flex={1} />
-			<Box padding={2}>
-				<OnlyAdmin>
-					<Button to="home" size="small" color="secondary">
-						Domů
-					</Button>
-				</OnlyAdmin>
+					position: 'fixed',
+					height: '100%',
+					bgcolor: 'grey.100',
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+			>
+				<TeamPanelTitle />
+				<Menu />
+				<Box flex={1} />
+				<Box padding={2}>
+					<OnlyAdmin>
+						<Button to="home" size="small" color="secondary">
+							Domů
+						</Button>
+					</OnlyAdmin>
+				</Box>
 			</Box>
-		</Box>
+			<Box
+				sx={{
+					minWidth: WIDTH,
+					maxWidth: WIDTH,
+				}}
+			></Box>
+		</>
 	)
 }
