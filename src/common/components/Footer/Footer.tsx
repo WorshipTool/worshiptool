@@ -1,5 +1,5 @@
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
-import { Button } from '@/common/ui/Button'
+import { Button, ButtonProps } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { Favorite } from '@mui/icons-material'
 import { Box } from '@mui/material'
@@ -8,17 +8,17 @@ import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchIn
 import { Gap } from '@/common/ui/Gap'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import { useSmartParams } from '@/routes/useSmartParams'
-import { ComponentProps, useMemo } from 'react'
+import { useMemo } from 'react'
 import './footer.styles.css'
 
 type Links = [
-	ComponentProps<typeof Button<'home'>>,
-	ComponentProps<typeof Button<'songsList'>>,
-	ComponentProps<typeof Button<'about'>>,
-	ComponentProps<typeof Button<'teams'>>,
-	ComponentProps<typeof Button<'contact'>>,
-	ComponentProps<typeof Button<'contact'>>,
-	ComponentProps<typeof Button<'contact'>>
+	ButtonProps<'home'>,
+	ButtonProps<'songsList'>,
+	ButtonProps<'about'>,
+	ButtonProps<'teams'>,
+	ButtonProps<'contact'>,
+	ButtonProps<'contact'>,
+	ButtonProps<'contact'>
 ]
 export default function Footer() {
 	const { hledat: searchString } = useSmartParams('home')

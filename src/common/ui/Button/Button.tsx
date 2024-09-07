@@ -10,7 +10,7 @@ import { CustomLink } from '../Link'
 import { CommonLinkProps } from '../Link/Link'
 import { ColorType, isColorOfThemeType } from '../ui.types'
 
-type ButtonProps<T extends RoutesKeys> = {
+export type ButtonProps<T extends RoutesKeys> = {
 	children?: string
 	variant?: 'contained' | 'outlined' | 'text'
 	color?: ColorType | 'primarygradient'
