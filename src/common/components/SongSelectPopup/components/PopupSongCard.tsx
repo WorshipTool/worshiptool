@@ -2,6 +2,7 @@ import { SongVariantDto } from '@/api/dtos'
 import { theme } from '@/common/constants/theme'
 import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes'
 import { OpenInNew } from '@mui/icons-material'
 import { alpha, Box } from '@mui/material'
@@ -51,68 +52,80 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 			position={'relative'}
 			className="global-song-list-item"
 		>
-			<Box
-				sx={{
-					position: 'absolute',
-					top: 0,
-					right: 0,
-					borderRadius: 3,
-					bgcolor: 'grey.100',
-					padding: 1,
-					pointerEvents: 'none',
+			<DraggableSong
+				data={{
+					packGuid: props.song.packGuid,
+					alias: props.song.packAlias,
+					title: props.song.preferredTitle,
 				}}
-				className="global-song-list-link-icon"
+				style={{
+					height: '100%',
+					width: '100%',
+				}}
 			>
-				<IconButton
-					size="small"
-					to="variant"
-					tooltip="Otevřít v novém okně"
-					toParams={parseVariantAlias(props.song.packAlias)}
-					target="_blank"
+				<Box
 					sx={{
-						pointerEvents: 'auto',
+						position: 'absolute',
+						top: 0,
+						right: 0,
+						borderRadius: 3,
+						bgcolor: 'grey.100',
+						padding: 1,
+						pointerEvents: 'none',
 					}}
-					onClick={(e) => e.stopPropagation()}
+					className="global-song-list-link-icon"
 				>
-					<OpenInNew
+					<IconButton
+						size="small"
+						to="variant"
+						tooltip="Otevřít v novém okně"
+						toParams={parseVariantAlias(props.song.packAlias)}
+						target="_blank"
 						sx={{
-							fontSize: '1.1rem',
+							pointerEvents: 'auto',
 						}}
-					/>
-				</IconButton>
-			</Box>
-			<Box
-				padding={2}
-				display={'flex'}
-				flexDirection={'column'}
-				height={'calc(100% - 2*2*8px)'}
-			>
-				<Typography
-					strong
-					sx={{
-						textOverflow: 'ellipsis',
-						overflow: 'hidden',
-						userSelect: 'none',
-						display: '-webkit-box',
-						WebkitBoxOrient: 'vertical',
-						WebkitLineClamp: 2,
-					}}
+						onClick={(e) => e.stopPropagation()}
+					>
+						<OpenInNew
+							sx={{
+								fontSize: '1.1rem',
+							}}
+						/>
+					</IconButton>
+				</Box>
+				<Box
+					padding={2}
+					display={'flex'}
+					flexDirection={'column'}
+					height={'calc(100% - 2*2*8px)'}
 				>
-					{props.song.preferredTitle}
-				</Typography>
+					<Typography
+						strong
+						sx={{
+							textOverflow: 'ellipsis',
+							overflow: 'hidden',
+							userSelect: 'none',
+							display: '-webkit-box',
+							WebkitBoxOrient: 'vertical',
+							WebkitLineClamp: 2,
+						}}
+					>
+						{props.song.preferredTitle}
+					</Typography>
 
-				<Typography
-					// size={'small'}
-					sx={{
-						textOverflow: 'ellipsis',
-						overflow: 'hidden',
-						userSelect: 'none',
-						flex: 1,
-					}}
-				>
-					{props.song.sheet.getSections()[0].text}
-				</Typography>
-			</Box>
+					<Typography
+						// size={'small'}
+						sx={{
+							textOverflow: 'ellipsis',
+							overflow: 'hidden',
+							userSelect: 'none',
+							flex: 1,
+						}}
+					>
+						{props.song.sheet.getSections()[0].text}
+					</Typography>
+				</Box>
+			</DraggableSong>
 		</Box>
 	)
 })

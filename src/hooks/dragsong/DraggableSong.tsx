@@ -8,6 +8,7 @@ type DraggableSongProps = {
 	draggable?: boolean
 
 	data: DragSongDto
+	style?: React.CSSProperties
 }
 
 export default function DraggableSong({
@@ -59,6 +60,7 @@ export default function DraggableSong({
 			draggable={draggable}
 			style={{
 				opacity: dragging ? 0.5 : 1,
+				...props.style,
 			}}
 		>
 			<SongCardDragTemplate title={title} ref={img} />

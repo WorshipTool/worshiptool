@@ -145,8 +145,8 @@ export default function SongSelectPopup(props: PopupProps) {
 
 	return !props.open ? null : (
 		<PopupContainer>
-			<Box
-				sx={{
+			<div
+				style={{
 					position: 'absolute',
 					left: 0,
 					top: 0,
@@ -156,7 +156,13 @@ export default function SongSelectPopup(props: PopupProps) {
 				}}
 				onClick={onClose}
 			>
-				<form onSubmit={onSubmit} onReset={onClose}>
+				<form
+					onSubmit={onSubmit}
+					onReset={onClose}
+					onDragEnter={(e) => e.stopPropagation()}
+					onDragOver={(e) => e.stopPropagation()}
+					onDragLeave={(e) => e.stopPropagation()}
+				>
 					<Box
 						ref={popupRef}
 						// className={'song-select-popup '}
@@ -261,7 +267,7 @@ export default function SongSelectPopup(props: PopupProps) {
 						</Box>
 					</Box>
 				</form>
-			</Box>
+			</div>
 		</PopupContainer>
 	)
 }

@@ -209,23 +209,6 @@ export const SongCard = memo(function S({
 								)
 							})}
 						</StyledBox>
-
-						{/* <Box
-                                  className="songcardgradient"
-                                  sx={{
-                                      background: `linear-gradient(0deg, ${
-                                          selected
-                                              ? lighten(theme.palette.primary.main, 0.8)
-                                              : theme.palette.grey[100]
-                                      } 50%, transparent)`,
-                              
-                                      position: 'absolute',
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      height: '1rem',
-                                  }}
-                              /> */}
 					</Box>
 				</StyledContainer>
 			</Link>
