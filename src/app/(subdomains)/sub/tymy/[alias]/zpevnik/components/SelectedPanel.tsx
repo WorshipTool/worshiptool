@@ -7,10 +7,10 @@ import { Typography } from '@/common/ui/Typography'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { getRouteUrlWithParams } from '@/routes'
-import { Add, LibraryAdd, MoreVert } from '@mui/icons-material'
+import { Add, LibraryAdd } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 type SelectedPanelProps = {
 	selectedPacks: VariantPackGuid[]
@@ -93,7 +93,6 @@ export default function SelectedPanel({
 		[selected, closeAll]
 	)
 
-	const optionIcon = useMemo(() => <MoreVert />, [])
 	return (
 		<>
 			<Box
@@ -102,6 +101,7 @@ export default function SelectedPanel({
 				gap={1}
 				alignItems={'center'}
 				justifyContent={'space-between'}
+				flex={1}
 			>
 				<Box
 					display={'flex'}

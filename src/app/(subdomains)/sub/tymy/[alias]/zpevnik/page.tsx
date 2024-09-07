@@ -100,58 +100,70 @@ export default function TeamSongsPage() {
 						<LinearProgress />
 					</>
 				)}
-				{items.length > 0 && (
-					<Box
-						display={'flex'}
-						flexDirection={'row'}
-						justifyContent={'space-between'}
-						gap={1}
-					>
-						<SearchFieldTeamZpevnik />
+				<Box
+					sx={{
+						minHeight: '3rem',
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+					}}
+				>
+					{!selectable && items.length > 0 && (
 						<Box
 							display={'flex'}
 							flexDirection={'row'}
-							justifyContent={'end'}
-							gap={2}
+							justifyContent={'space-between'}
+							gap={1}
+							flex={1}
 						>
-							{!selectable && (
-								<Button
-									variant="text"
-									color="black"
-									size="small"
-									onClick={() => setSelectable(true)}
-								>
-									Vybrat
-								</Button>
-							)}
+							{<SearchFieldTeamZpevnik />}
 							<Box
 								display={'flex'}
-								ref={(r) => {
-									anchorRef.current = r as any
-									setAnchorName('addSongRight')
-								}}
-								position={'relative'}
+								flexDirection={'row'}
+								justifyContent={'end'}
+								gap={2}
 							>
-								<Button
-									startIcon={<Add />}
-									size="small"
-									onClick={onAdd}
-									variant="text"
-									color="black"
-									sx={{}}
-								>
-									Přidat píseň
-								</Button>
+								{
+									<Button
+										variant="text"
+										color="black"
+										size="small"
+										onClick={() => setSelectable(true)}
+									>
+										Vybrat
+									</Button>
+								}
+								{
+									<Box
+										display={'flex'}
+										ref={(r) => {
+											anchorRef.current = r as any
+											setAnchorName('addSongRight')
+										}}
+										position={'relative'}
+									>
+										<Button
+											startIcon={<Add />}
+											size="small"
+											onClick={onAdd}
+											variant="text"
+											color="black"
+											sx={{}}
+										>
+											Přidat píseň
+										</Button>
+									</Box>
+								}
 							</Box>
 						</Box>
-					</Box>
-				)}
-				{selectable && (
-					<SelectedPanel
-						onCancelSelect={cancelSelect}
-						selectedPacks={selected}
-					/>
-				)}
+					)}
+					{selectable && (
+						<SelectedPanel
+							onCancelSelect={cancelSelect}
+							selectedPacks={selected}
+						/>
+					)}
+				</Box>
 				<SongListCards
 					data={items}
 					// cardToLinkProps={cardToProps}
