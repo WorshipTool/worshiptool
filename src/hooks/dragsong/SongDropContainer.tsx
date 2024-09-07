@@ -8,6 +8,7 @@ import { useCallback, useMemo, useState } from 'react'
 type SongDropContainerProps = {
 	children?: ((over?: boolean) => React.ReactNode) | React.ReactNode
 	onDrop?: (song: DragSongDto, e: React.DragEvent<HTMLDivElement>) => void
+	style?: React.CSSProperties
 }
 
 export default function SongDropContainer(props: SongDropContainerProps) {
@@ -49,7 +50,12 @@ export default function SongDropContainer(props: SongDropContainerProps) {
 	}, [props.children, isOver])
 
 	return (
-		<div onDragEnter={onDrag} onDragLeave={onDragEnd} onDrop={onDrop}>
+		<div
+			onDragEnter={onDrag}
+			onDragLeave={onDragEnd}
+			onDrop={onDrop}
+			style={props.style}
+		>
 			{component}
 		</div>
 	)

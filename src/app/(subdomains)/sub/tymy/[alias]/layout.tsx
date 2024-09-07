@@ -42,9 +42,11 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 		<Box display={'flex'} flexDirection={'row'} height={'100vh'}>
 			<InnerTeamProvider teamAlias={layout.params.alias}>
 				<TeamLeftPanel teamAlias={team} />
-				<Box display={'flex'} flexDirection={'column'} flex={1}>
+				<Box display={'flex'} flexDirection={'column'} flex={1} height={'100%'}>
 					<TeamTopPanel />
-					<Box paddingX={4}>{layout.children}</Box>
+					<Box paddingX={4} flex={1}>
+						{layout.children}
+					</Box>
 				</Box>
 			</InnerTeamProvider>
 		</Box>

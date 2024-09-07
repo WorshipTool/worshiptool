@@ -92,23 +92,66 @@ export default function TeamSongsPage() {
 		setSelectable(false)
 	}, [])
 
-	const onSongDrop = useCallback((data: DragSongDto) => {
-		if (selection.items.some((i) => i.variant.packGuid === data.packGuid))
-			return
-		selection.addPacks([data.packGuid])
-	}, [])
+	const onSongDrop = useCallback(
+		(data: DragSongDto) => {
+			if (selection.items.some((i) => i.variant.packGuid === data.packGuid))
+				return
+			selection.addVariant(data.packGuid)
+		},
+		[selection]
+	)
 
 	const theme = useTheme()
 	return (
 		<>
 			<TeamPageTitle>Zpěvník</TeamPageTitle>
-			<SongDropContainer onDrop={onSongDrop}>
+			<SongDropContainer
+				onDrop={onSongDrop}
+				style={{
+					height: '100%',
+				}}
+			>
+				{/* {(over) => ( */}
 				<Box display={'flex'} flexDirection={'column'} gap={3}>
 					{selection.loading && (
 						<>
 							<LinearProgress />
 						</>
 					)}
+					{/* {over && (
+							<PopupContainer>
+								<Box
+									sx={{
+										position: 'fixed',
+										bottom: 0,
+										left: 0,
+										right: 0,
+										padding: 2,
+										display: 'flex',
+										justifyContent: 'center',
+										flexDirection: 'row',
+									}}
+								>
+									<Box
+										bgcolor={'grey.300'}
+										padding={2}
+										borderRadius={2}
+										sx={{
+											boxShadow: '0px 0px 15px rgba(0,0,0,0.25)',
+										}}
+										display={'flex'}
+										flexDirection={'row'}
+										gap={1}
+										alignItems={'center'}
+									>
+										<Info />
+										<Typography variant="h6">
+											Pro přidání písně do zpěvníku, pustťe
+										</Typography>
+									</Box>
+								</Box>
+							</PopupContainer>
+						)} */}
 					{((!selectable && items.length > 0) || selectable) && (
 						<Box
 							sx={{
@@ -214,6 +257,7 @@ export default function TeamSongsPage() {
 						/>
 					</Box>
 				</Box>
+				{/* )} */}
 			</SongDropContainer>
 		</>
 	)
