@@ -10,7 +10,7 @@ type SongCardDragTemplateProps = {
 const SongCardDragTemplate = forwardRef<
 	HTMLDivElement,
 	SongCardDragTemplateProps
->((props, ref) => {
+>(function SongCardDragTemplate(props, ref) {
 	return (
 		<DragTemplate>
 			<Box display={'flex'}>

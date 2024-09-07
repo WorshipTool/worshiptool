@@ -1,19 +1,13 @@
 'use client'
 import { Group } from '@/api/generated'
+import Popup from '@/common/components/Popup/Popup'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Search } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import {
-	Box,
-	Dialog,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	TextField,
-} from '@mui/material'
+import { Box, DialogContentText, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { searchGroupsEvent } from '../hooks/useToolsMenuItems'
 
@@ -64,39 +58,47 @@ export default function SearchGroupDialog() {
 	}
 
 	return (
-		<Dialog open={open} onClose={() => setOpen(false)}>
-			<DialogTitle>Hledat skupinu</DialogTitle>
-			<DialogContent>
-				<DialogContentText>
-					Zadejte část kódu nebo názvu skupiny, kterou chcete otevřít.
-				</DialogContentText>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 2,
-					}}
-				>
-					<TextField
-						autoFocus
-						placeholder="Kód skupiny"
-						size="small"
-						value={value}
-						onChange={(e) => setValue(e.target.value)}
-						helperText={apiState.error?.message}
-						error={!!apiState.error?.message}
-						disabled={apiState.loading}
-					/>
+		<Popup
+			open={open}
+			onClose={() => setOpen(false)}
+			title={'Hledat skupinu'}
+			width={350}
+			actions={
+				<>
 					<LoadingButton
 						variant="contained"
 						onClick={onSearch}
 						startIcon={<Search />}
 						loading={apiState.loading}
+						sx={{ flex: 1 }}
+						type="submit"
 					>
 						Hledat a otevřít
 					</LoadingButton>
-				</Box>
-			</DialogContent>
-		</Dialog>
+				</>
+			}
+		>
+			<DialogContentText>
+				Zadejte část kódu nebo názvu skupiny, kterou chcete otevřít.
+			</DialogContentText>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 2,
+				}}
+			>
+				<TextField
+					autoFocus
+					placeholder="Kód skupiny"
+					size="small"
+					value={value}
+					onChange={(e) => setValue(e.target.value)}
+					helperText={apiState.error?.message}
+					error={!!apiState.error?.message}
+					disabled={apiState.loading}
+				/>
+			</Box>
+		</Popup>
 	)
 }

@@ -1,21 +1,12 @@
 'use client'
 
-import SongCardDragTemplate from '@/common/ui/SongCard/SongCardDragTemplate'
-import { SONG_DRAG_DATA_TYPE, mapVariantToDragDto } from '@/hooks/dragsong/tech'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { Lock, Public } from '@mui/icons-material'
 import { Box, Typography, alpha, styled, useTheme } from '@mui/material'
-import {
-	ComponentProps,
-	DragEventHandler,
-	memo,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react'
+import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
-import { getRouteUrlWithParams, parseVariantAlias } from '../../../routes'
+import { parseVariantAlias } from '../../../routes'
 import CustomChip from '../CustomChip/CustomChip'
 import { Link } from '../Link/Link'
 
@@ -122,143 +113,122 @@ export const SongCard = memo(function S({
 		}
 	}
 
-	const [dragging, setDragging] = useState(false)
-
-	const img = useRef<HTMLDivElement>(null)
-
-	const onDragStart: DragEventHandler<HTMLDivElement> = (e) => {
-		setDragging(true)
-		if (!img.current) return
-		e.dataTransfer.setDragImage(img.current, 50, 50)
-
-		// set url to data
-		const url = getRouteUrlWithParams(
-			'variant',
-			parseVariantAlias(data.packAlias)
-		)
-		e.dataTransfer.setData('text/uri-list', url)
-		e.dataTransfer.setData('text/plain', title)
-		e.dataTransfer.setData(
-			SONG_DRAG_DATA_TYPE,
-			JSON.stringify(mapVariantToDragDto(data))
-		)
-	}
-
-	const onDragEnd = () => {
-		setDragging(false)
-	}
-
 	const draggable = useMemo(() => {
 		return !props.selectable
 	}, [props.selectable])
 
 	return (
-		<Link
-			to={linkProps?.to || 'variant'}
-			params={
-				linkProps?.params || {
-					...parseVariantAlias(data.packAlias),
-				}
-			}
-			disabled={(props.toLinkProps && !linkProps) || props.selectable}
+		<DraggableSong
+			data={{
+				packGuid: data.packGuid,
+				alias: data.packAlias,
+				title: title,
+			}}
+			draggable={draggable}
 		>
-			<SongCardDragTemplate title={title} ref={img} />
-			<StyledContainer
-				sx={{
-					outlineColor: showPrivate ? theme.palette.grey[300] : 'transparent',
-
-					height: flexibleHeght ? 'auto' : '11rem',
-					overflowY: 'hidden',
-
-					...(selected && {
-						outlineColor: 'primary.main',
-						outlineWidth: 2,
-						outlineStyle: 'solid',
-					}),
-					userSelect: 'none',
-
-					...(dragging && {
-						opacity: 0.5,
-					}),
-				}}
-				onDragStart={onDragStart}
-				onDragEnd={onDragEnd}
-				draggable={draggable}
-				onClick={onClick}
+			<Link
+				to={linkProps?.to || 'variant'}
+				params={
+					linkProps?.params || {
+						...parseVariantAlias(data.packAlias),
+					}
+				}
+				disabled={(props.toLinkProps && !linkProps) || props.selectable}
 			>
-				<Box
+				<StyledContainer
 					sx={{
-						position: 'relative',
-						padding: '1rem',
+						outlineColor: showPrivate ? theme.palette.grey[300] : 'transparent',
+
+						height: flexibleHeght ? 'auto' : '11rem',
+						overflowY: 'hidden',
+
 						...(selected && {
-							borderColor: 'primary.main',
-							borderWidth: 2,
-							bgcolor: alpha(theme.palette.primary.main, 0.1),
-
-							'&:hover': {
-								bgcolor: alpha(theme.palette.primary.main, 0.2),
-							},
+							outlineColor: 'primary.main',
+							outlineWidth: 2,
+							outlineStyle: 'solid',
 						}),
-						height: '100%',
+						userSelect: 'none',
 					}}
+					onClick={onClick}
 				>
-					<Box display={'flex'} flexDirection={'row'} gap={1}>
-						<Typography fontWeight={'bold'} flex={1}>
-							{title}
-						</Typography>
-						<Box>
-							{(showPrivate || showYourPublic) && (
-								<CustomChip
-									icon={showPrivate ? <Lock /> : <Public />}
-									label={showPrivate ? 'Soukromé' : 'Vytvořeno vámi'}
-									color={
-										showPrivate
-											? theme.palette.grey[600]
-											: theme.palette.primary.main
-									}
-									borderColor={
-										showPrivate
-											? theme.palette.grey[400]
-											: theme.palette.primary.main
-									}
-								/>
-							)}
-							{createdByLoaderEnabled && data.createdByLoader && (
-								<Typography variant="caption">Nahráno programem</Typography>
-							)}
+					<Box
+						sx={{
+							position: 'relative',
+							padding: '1rem',
+							...(selected && {
+								borderColor: 'primary.main',
+								borderWidth: 2,
+								bgcolor: alpha(theme.palette.primary.main, 0.1),
+
+								'&:hover': {
+									bgcolor: alpha(theme.palette.primary.main, 0.2),
+								},
+							}),
+							height: '100%',
+						}}
+					>
+						<Box display={'flex'} flexDirection={'row'} gap={1}>
+							<Typography fontWeight={'bold'} flex={1}>
+								{title}
+							</Typography>
+							<Box>
+								{(showPrivate || showYourPublic) && (
+									<CustomChip
+										icon={showPrivate ? <Lock /> : <Public />}
+										label={showPrivate ? 'Soukromé' : 'Vytvořeno vámi'}
+										color={
+											showPrivate
+												? theme.palette.grey[600]
+												: theme.palette.primary.main
+										}
+										borderColor={
+											showPrivate
+												? theme.palette.grey[400]
+												: theme.palette.primary.main
+										}
+									/>
+								)}
+								{createdByLoaderEnabled && data.createdByLoader && (
+									<Typography variant="caption">Nahráno programem</Typography>
+								)}
+							</Box>
 						</Box>
+
+						<StyledBox>
+							{dataLines.map((line, index) => {
+								return (
+									<Box
+										display={'flex'}
+										flexDirection={'row'}
+										key={line + index}
+									>
+										<Typography noWrap key={'SearchItemText' + index} flex={1}>
+											{line}
+										</Typography>
+									</Box>
+								)
+							})}
+						</StyledBox>
+
+						{/* <Box
+                                  className="songcardgradient"
+                                  sx={{
+                                      background: `linear-gradient(0deg, ${
+                                          selected
+                                              ? lighten(theme.palette.primary.main, 0.8)
+                                              : theme.palette.grey[100]
+                                      } 50%, transparent)`,
+                              
+                                      position: 'absolute',
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      height: '1rem',
+                                  }}
+                              /> */}
 					</Box>
-
-					<StyledBox>
-						{dataLines.map((line, index) => {
-							return (
-								<Box display={'flex'} flexDirection={'row'} key={line + index}>
-									<Typography noWrap key={'SearchItemText' + index} flex={1}>
-										{line}
-									</Typography>
-								</Box>
-							)
-						})}
-					</StyledBox>
-
-					{/* <Box
-                        className="songcardgradient"
-                        sx={{
-                            background: `linear-gradient(0deg, ${
-                                selected
-                                    ? lighten(theme.palette.primary.main, 0.8)
-                                    : theme.palette.grey[100]
-                            } 50%, transparent)`,
-                    
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: '1rem',
-                        }}
-                    /> */}
-				</Box>
-			</StyledContainer>
-		</Link>
+				</StyledContainer>
+			</Link>
+		</DraggableSong>
 	)
 })

@@ -1,3 +1,4 @@
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { Box, Typography } from '@mui/material'
 import { SongVariantDto } from '../../../../../api/dtos'
 import { Button } from '../../../../../common/ui/Button'
@@ -21,7 +22,13 @@ export default function MySongItem(props: MySongItemProps) {
 	}
 
 	return (
-		<Box>
+		<DraggableSong
+			data={{
+				packGuid: props.variant.packGuid,
+				alias: props.variant.packAlias,
+				title: props.variant.preferredTitle,
+			}}
+		>
 			<Link to="variant" params={variantParams}>
 				<Box
 					sx={{
@@ -78,6 +85,6 @@ export default function MySongItem(props: MySongItemProps) {
 					</Button>
 				</Box>
 			</Link>
-		</Box>
+		</DraggableSong>
 	)
 }

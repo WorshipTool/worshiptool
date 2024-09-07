@@ -1,7 +1,8 @@
 'use client'
-import { VariantPackAlias } from '@/api/dtos'
+import { VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import { GetListSongData } from '@/api/generated'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import {
 	Box,
 	CircularProgress,
@@ -10,8 +11,8 @@ import {
 	Grid,
 	Pagination,
 	Paper,
-	styled,
 	Typography,
+	styled,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Gap } from '../../../common/ui/Gap/Gap'
@@ -65,7 +66,6 @@ function List() {
 
 	useEffect(() => {
 		nextPage()
-		console.log('loading')
 	}, [songs])
 
 	const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -113,23 +113,31 @@ function List() {
 						.map((s, index) => {
 							return (
 								<Grid item xs={3} md={1.5} lg={1} key={s.guid}>
-									<StyledPaper
-										onClick={() => {
-											navigate('variant', {
-												...parseVariantAlias(s.alias as VariantPackAlias),
-											})
+									<DraggableSong
+										data={{
+											packGuid: s.packGuid as VariantPackGuid,
+											title: s.title,
+											alias: s.alias as VariantPackAlias,
 										}}
 									>
-										<Box display={'flex'} gap={1}>
-											<Typography fontWeight={'bold'}>
-												{(page - 1) * countPerPage + index + 1}
-											</Typography>
-											<Divider orientation="vertical" flexItem />
-											<Typography fontWeight={300} noWrap>
-												{s.title}{' '}
-											</Typography>
-										</Box>
-									</StyledPaper>
+										<StyledPaper
+											onClick={() => {
+												navigate('variant', {
+													...parseVariantAlias(s.alias as VariantPackAlias),
+												})
+											}}
+										>
+											<Box display={'flex'} gap={1}>
+												<Typography fontWeight={'bold'}>
+													{(page - 1) * countPerPage + index + 1}
+												</Typography>
+												<Divider orientation="vertical" flexItem />
+												<Typography fontWeight={300} noWrap>
+													{s.title}{' '}
+												</Typography>
+											</Box>
+										</StyledPaper>
+									</DraggableSong>
 								</Grid>
 							)
 						})}

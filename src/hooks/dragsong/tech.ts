@@ -1,8 +1,8 @@
-import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { SongVariantDto, VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 
 export type DragSongDto = {
 	packGuid: VariantPackGuid
-	alias: string
+	alias: VariantPackAlias
 	title: string
 }
 

@@ -1,13 +1,10 @@
+import Popup from '@/common/components/Popup/Popup'
+import { Typography } from '@/common/ui/Typography'
 import { Delete } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
 	Button,
 	CircularProgress,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
@@ -132,29 +129,32 @@ export default function DeleteButton({
 				</LoadingButton>
 			)}
 
-			<Dialog open={dialogOpen} onClose={noClick}>
-				<DialogTitle>Opravdu chcete smazat píseň?</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						{fetching
-							? 'Probíhá odstraňování písně...'
-							: 'Píseň se smaže natrvalo.'}
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button variant="outlined" onClick={noClick} disabled={fetching}>
-						Ne
-					</Button>
-					<LoadingButton
-						loading={fetching}
-						variant="contained"
-						color="error"
-						onClick={yesClick}
-					>
-						Ano
-					</LoadingButton>
-				</DialogActions>
-			</Dialog>
+			<Popup
+				open={dialogOpen}
+				onClose={noClick}
+				title={'Opravdu chcete smazat píseň?'}
+				actions={
+					<>
+						<Button variant="outlined" onClick={noClick} disabled={fetching}>
+							Ne
+						</Button>
+						<LoadingButton
+							loading={fetching}
+							variant="contained"
+							color="error"
+							onClick={yesClick}
+						>
+							Ano
+						</LoadingButton>
+					</>
+				}
+			>
+				<Typography>
+					{fetching
+						? 'Probíhá odstraňování písně...'
+						: 'Píseň se smaže natrvalo.'}
+				</Typography>
+			</Popup>
 		</>
 	)
 }

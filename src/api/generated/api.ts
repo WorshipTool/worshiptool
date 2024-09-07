@@ -423,6 +423,12 @@ export interface GetListSongData {
      * @memberof GetListSongData
      */
     'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetListSongData
+     */
+    'packGuid': string;
 }
 /**
  * 

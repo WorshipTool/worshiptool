@@ -1,4 +1,5 @@
 'use client'
+import Popup from '@/common/components/Popup/Popup'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Add, Remove } from '@mui/icons-material'
@@ -14,7 +15,6 @@ import {
 	styled,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import Dialog from '../../../../common/ui/Dialog/Dialog'
 import { Gap } from '../../../../common/ui/Gap'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
 import usePlaylistsGeneral from '../../../../hooks/playlist/usePlaylistsGeneral'
@@ -198,10 +198,11 @@ function Playlists() {
 					</>
 				)}
 			</Box>
-			<Dialog
+			<Popup
 				open={openDialog}
 				title="Opravdu chcete odstranit playlist?"
-				buttons={
+				width={400}
+				actions={
 					<>
 						<Button
 							onClick={() => setOpenDialog(false)}
@@ -228,7 +229,7 @@ function Playlists() {
 					Chcete opravdu smazat playlist <strong>{deletingTitle}</strong>? Tato
 					akce je nevratná.
 				</Typography>
-			</Dialog>
+			</Popup>
 		</Box>
 	)
 }
