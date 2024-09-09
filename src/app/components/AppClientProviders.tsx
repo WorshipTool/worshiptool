@@ -21,6 +21,7 @@ export default function AppClientProviders({
 				maxSnack={1}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
 				autoHideDuration={3000}
+				preventDuplicate
 			>
 				{/* <BrowserRouter> */}
 				<AuthProvider>

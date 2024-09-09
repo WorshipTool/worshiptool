@@ -15,6 +15,7 @@ import {
 	SongValidationApi,
 	TeamAddingApi,
 	TeamGettingApi,
+	TeamJoiningApi,
 } from '../../api/generated'
 import useAuth from '../auth/useAuth'
 
@@ -40,6 +41,7 @@ export const useApi = () => {
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),
 			teamGettingApi: new TeamGettingApi(apiConfiguration),
+			teamJoiningApi: new TeamJoiningApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

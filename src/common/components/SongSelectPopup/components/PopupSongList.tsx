@@ -12,9 +12,10 @@ type GlobalSongListProps = {
 	onSongDeselect: (packGuid: VariantPackGuid) => void
 	selectedSongs: VariantPackGuid[]
 	apiState: ApiState<SongVariantDto[]>
+	multiselect?: boolean
 }
 
-export default function GlobalSongList(props: GlobalSongListProps) {
+export default function PopupSongList(props: GlobalSongListProps) {
 	const items = useMemo(() => {
 		return props.apiState.data ?? []
 	}, [props.apiState.data])

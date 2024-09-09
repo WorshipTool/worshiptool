@@ -697,6 +697,51 @@ export interface Group {
 /**
  * 
  * @export
+ * @interface IsUserMemberOfTeamOutDto
+ */
+export interface IsUserMemberOfTeamOutDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IsUserMemberOfTeamOutDto
+     */
+    'isMember': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface JoinTeamInDto
+ */
+export interface JoinTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof JoinTeamInDto
+     */
+    'joinCode': string;
+}
+/**
+ * 
+ * @export
+ * @interface JoinTeamOutDto
+ */
+export interface JoinTeamOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof JoinTeamOutDto
+     */
+    'teamAlias': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof JoinTeamOutDto
+     */
+    'newMember': boolean;
+}
+/**
+ * 
+ * @export
  * @interface JwtResult
  */
 export interface JwtResult {
@@ -8376,6 +8421,227 @@ export class TeamGettingApi extends BaseAPI {
      */
     public teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig) {
         return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamJoiningApi - axios parameter creator
+ * @export
+ */
+export const TeamJoiningApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerJoinTeam: async (joinTeamInDto: JoinTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'joinTeamInDto' is not null or undefined
+            assertParamExists('teamJoiningControllerJoinTeam', 'joinTeamInDto', joinTeamInDto)
+            const localVarPath = `/submodules/teams/join`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(joinTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamJoiningApi - functional programming interface
+ * @export
+ */
+export const TeamJoiningApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamJoiningApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JoinTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamJoiningControllerJoinTeam(joinTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamJoiningApi.teamJoiningControllerJoinTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamJoiningApi - factory interface
+ * @export
+ */
+export const TeamJoiningApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamJoiningApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: any): AxiosPromise<JoinTeamOutDto> {
+            return localVarFp.teamJoiningControllerJoinTeam(joinTeamInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamJoiningApi - object-oriented interface
+ * @export
+ * @class TeamJoiningApi
+ * @extends {BaseAPI}
+ */
+export class TeamJoiningApi extends BaseAPI {
+    /**
+     * 
+     * @param {JoinTeamInDto} joinTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamJoiningApi
+     */
+    public teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamJoiningApiFp(this.configuration).teamJoiningControllerJoinTeam(joinTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamMembersApi - axios parameter creator
+ * @export
+ */
+export const TeamMembersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerIsUserMemberOfTeam: async (teamAlias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamAlias' is not null or undefined
+            assertParamExists('teamMemberControllerIsUserMemberOfTeam', 'teamAlias', teamAlias)
+            const localVarPath = `/submodules/teams/isUserMemberOfTeam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamAlias !== undefined) {
+                localVarQueryParameter['teamAlias'] = teamAlias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamMembersApi - functional programming interface
+ * @export
+ */
+export const TeamMembersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamMembersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IsUserMemberOfTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerIsUserMemberOfTeam(teamAlias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerIsUserMemberOfTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamMembersApi - factory interface
+ * @export
+ */
+export const TeamMembersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamMembersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: any): AxiosPromise<IsUserMemberOfTeamOutDto> {
+            return localVarFp.teamMemberControllerIsUserMemberOfTeam(teamAlias, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamMembersApi - object-oriented interface
+ * @export
+ * @class TeamMembersApi
+ * @extends {BaseAPI}
+ */
+export class TeamMembersApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamAlias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerIsUserMemberOfTeam(teamAlias, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

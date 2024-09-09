@@ -70,11 +70,15 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 		})
 	}
 
-	const dispatchErrorAction = (error: ApiError | string) => {
+	const dispatchErrorAction = (error: ApiError | string | any) => {
+		console.log('error', error)
 		setState({
 			...getState(),
 			error: {
-				status: (typeof error === 'object' ? error.errorCode : 500) || 500,
+				status:
+					(typeof error === 'object'
+						? error.errorCode || error.request.status
+						: 500) || 500,
 				message:
 					(typeof error === 'object' ? error.message : error) ||
 					(error as string),

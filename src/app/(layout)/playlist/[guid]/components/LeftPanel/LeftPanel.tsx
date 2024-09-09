@@ -1,3 +1,4 @@
+import AddSongToPlaylistButton from '@/app/(layout)/playlist/[guid]/components/LeftPanel/AddSongToPlaylistButton'
 import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PlaylistMenuList'
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
@@ -57,6 +58,16 @@ export default function LeftPanel() {
 					className={'song-menu-list'}
 				>
 					<PlaylistMenuList />
+				</Box>
+
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: theme.spacing(3),
+						right: theme.spacing(3),
+					}}
+				>
+					<AddSongToPlaylistButton />
 				</Box>
 			</Panel>
 		</Box>

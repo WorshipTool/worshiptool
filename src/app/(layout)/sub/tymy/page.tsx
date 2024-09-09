@@ -1,12 +1,12 @@
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import CreateTeamButton from '@/app/(layout)/sub/tymy/components/CreateTeamButton'
-import JoinGroupPanel from '@/app/(layout)/sub/tymy/components/JoinGroupPanel'
 import TeamsToolbarChanger from '@/app/(layout)/sub/tymy/components/ToolbarChanger'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
 import Image from 'next/image'
+import JoinGroupPanel from './components/JoinGroupPanel.1'
 import './teams.styles.css'
 
 export default SmartPage(Page, {

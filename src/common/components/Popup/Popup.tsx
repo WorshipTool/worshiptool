@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 
 type PopupProps = {
-	open?: boolean
+	open: boolean
 	onClose?: () => void
 	children?: React.ReactNode
 
@@ -107,7 +107,11 @@ export default function Popup({
 										)}
 										{props.subtitle && (
 											<>
-												<Typography variant="subtitle1">
+												<Typography
+													variant="subtitle1"
+													strong={500}
+													color="grey.600"
+												>
 													{props.subtitle}
 												</Typography>
 											</>

@@ -1,11 +1,10 @@
 'use client'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
-import GlobalSongList from '@/common/components/SongSelectPopup/components/GlobalSongList'
+import PopupSongList from '@/common/components/SongSelectPopup/components/PopupSongList'
 import SelectFromOptions from '@/common/components/SongSelectPopup/components/SelectFromOptions'
 import { SelectSearch } from '@/common/components/SongSelectPopup/components/SelectSearch'
 import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
-import UsersSongList from '@/common/components/SongSelectPopup/components/UsersSongList'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
@@ -13,19 +12,23 @@ import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { VariantPackGuid } from '../../../interfaces/variant/songVariant.types'
 import './styles.css'
 
 type PopupProps = {
 	onClose?: () => void
-	open?: boolean
+	open: boolean
 	onSubmit?: (packs: VariantPackGuid[]) => void
+
+	upDirection?: boolean
 
 	anchorRef: React.RefObject<HTMLElement>
 	anchorName: string
 
 	filterFunc?: (pack: VariantPackGuid) => boolean
+
+	disableMultiselect?: boolean
 }
 
 export type ChosenSong = {
@@ -93,7 +96,8 @@ export default function SongSelectPopup(props: PopupProps) {
 
 	const popupRef = useRef(null)
 	const [position, setPosition] = useState<{
-		top: number
+		top?: number
+		bottom?: number
 		left?: number
 		right?: number
 	}>({ top: 0, left: 0 })
@@ -106,19 +110,24 @@ export default function SongSelectPopup(props: PopupProps) {
 			if (props.anchorRef?.current) {
 				const rect = props.anchorRef.current.getBoundingClientRect()
 				const toRightMode = rect.left < window.innerWidth / 2
+				const t = props.upDirection ? undefined : rect.top + OFFSET
+				const b = props.upDirection
+					? window.innerHeight - rect.bottom + OFFSET
+					: undefined
+
 				if (toRightMode) {
-					const t = rect.top + OFFSET
 					const l = rect.left + OFFSET
 					setPosition({
 						top: t,
+						bottom: b,
 						left: Math.min(l, window.innerWidth - MAX_WIDTH - OFFSET),
 					})
 				} else {
-					const t = rect.top + OFFSET
 					const r = window.innerWidth - rect.right + OFFSET
 
 					setPosition({
 						top: t,
+						bottom: b,
 						right: Math.max(r, OFFSET),
 					})
 				}
@@ -134,7 +143,7 @@ export default function SongSelectPopup(props: PopupProps) {
 			window.removeEventListener('scroll', updatePopupPosition)
 			window.removeEventListener('resize', updatePopupPosition)
 		}
-	}, [props.anchorRef, props.anchorName])
+	}, [props.anchorRef, props.anchorName, props.upDirection])
 
 	const onClose = () => {
 		props.onClose?.()
@@ -142,6 +151,24 @@ export default function SongSelectPopup(props: PopupProps) {
 		setOptionSelected(0)
 		setSearchStringRaw('')
 	}
+
+	const onSongSelect = (g: VariantPackGuid, t: string) => {
+		if (chosen.find((c) => c.guid === g)) return
+		if (!props.disableMultiselect) {
+			setChosen([...chosen, { guid: g, title: t }])
+		} else {
+			setChosen([{ guid: g, title: t }])
+		}
+	}
+
+	const onSongDeselect = (g: VariantPackGuid) => {
+		setChosen(chosen.filter((c) => c.guid !== g))
+	}
+
+	const multiselect = useMemo(
+		() => !props.disableMultiselect,
+		[props.disableMultiselect]
+	)
 
 	return !props.open ? null : (
 		<PopupContainer>
@@ -176,6 +203,7 @@ export default function SongSelectPopup(props: PopupProps) {
 							left: position.left,
 							right: position.right,
 							top: position.top,
+							bottom: position.bottom,
 							transition: 'all 0.2s',
 						}}
 						onClick={(e) => e.stopPropagation()}
@@ -216,29 +244,21 @@ export default function SongSelectPopup(props: PopupProps) {
 
 							<Box>
 								{optionSelected === 0 && (
-									<GlobalSongList
-										onSongSelect={(g, t) => {
-											if (chosen.find((c) => c.guid === g)) return
-											setChosen([...chosen, { guid: g, title: t }])
-										}}
-										onSongDeselect={(g) => {
-											setChosen(chosen.filter((c) => c.guid !== g))
-										}}
+									<PopupSongList
+										onSongSelect={onSongSelect}
+										onSongDeselect={onSongDeselect}
 										selectedSongs={chosen.map((v) => v.guid)}
 										apiState={globalApiState}
+										multiselect={multiselect}
 									/>
 								)}
 								{optionSelected === 1 && (
-									<UsersSongList
-										onSongSelect={(g, t) => {
-											if (chosen.find((c) => c.guid === g)) return
-											setChosen([...chosen, { guid: g, title: t }])
-										}}
-										onSongDeselect={(g) => {
-											setChosen(chosen.filter((c) => c.guid !== g))
-										}}
+									<PopupSongList
+										onSongSelect={onSongSelect}
+										onSongDeselect={onSongDeselect}
 										selectedSongs={chosen.map((v) => v.guid)}
 										apiState={usersApiState}
+										multiselect={multiselect}
 									/>
 								)}
 							</Box>
@@ -249,6 +269,7 @@ export default function SongSelectPopup(props: PopupProps) {
 									onDeselect={(g) => {
 										setChosen(chosen.filter((c) => c.guid !== g))
 									}}
+									multiselect={multiselect}
 								/>
 
 								<Box display={'flex'} justifyContent={'end'} gap={2}>
@@ -260,7 +281,7 @@ export default function SongSelectPopup(props: PopupProps) {
 										type="submit"
 										disabled={chosen.length === 0}
 									>
-										Přidat vybrané
+										{multiselect ? 'Přidat vybrané' : 'Přidat píseň'}
 									</Button>
 								</Box>
 							</Box>
