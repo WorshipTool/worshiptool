@@ -57,6 +57,8 @@ export default function Popup({
 			props.onReset()
 		}
 
+		onClose?.()
+
 		e.preventDefault()
 	}
 

@@ -153,12 +153,15 @@ export const routesPaths = {
 	testComponents: '/storybook',
 	subdomain: '/sub/[subdomain]',
 	about: '/o-nas',
+	contact: '/kontakt',
 	teams: '/sub/tymy',
+
 	team: '/sub/tymy/[alias]',
 	teamSongbook: '/sub/tymy/[alias]/zpevnik',
 	teamStatistics: '/sub/tymy/[alias]/statistiky',
+	teamPeople: '/sub/tymy/[alias]/lide',
 	teamSettings: '/sub/tymy/[alias]/nastaveni',
-	contact: '/kontakt',
+	teamJoin: '/sub/tymy/pripojitse/[code]',
 } as const
 
 // DONT REMOVE

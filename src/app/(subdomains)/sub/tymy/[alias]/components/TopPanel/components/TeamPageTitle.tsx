@@ -20,7 +20,16 @@ export function TeamPageTitle(props: TeamPageTitleProps) {
 
 	return ref.current && mounted
 		? createPortal(
-				<Typography strong variant="h4">
+				<Typography
+					strong
+					variant="h4"
+					sx={{
+						display: 'flex',
+						gap: 2,
+						flexDirection: 'row',
+						alignItems: 'center',
+					}}
+				>
 					{props.children}
 				</Typography>,
 				ref.current

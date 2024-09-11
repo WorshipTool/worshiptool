@@ -1,7 +1,13 @@
 'use client'
 import MenuItem from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
 import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
-import { Analytics, Dashboard, QueueMusic, Settings } from '@mui/icons-material'
+import {
+	Analytics,
+	Dashboard,
+	People,
+	QueueMusic,
+	Settings,
+} from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
 
@@ -29,6 +35,12 @@ export default function Menu() {
 				to: 'teamStatistics',
 				toParams: { alias },
 				disabled: true,
+			},
+			{
+				title: 'Lidé',
+				icon: <People />,
+				to: 'teamPeople',
+				toParams: { alias },
 			},
 			{
 				title: 'Nastavení',

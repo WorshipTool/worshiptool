@@ -98,6 +98,7 @@ export default function JoinGroupPanel() {
 					placeholder="Zadejte kód"
 					value={joinCode}
 					onChange={setJoinCode}
+					autoFocus
 				/>
 			</Popup>
 		</>

@@ -12,10 +12,7 @@ import {
 } from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
 import { getReplacedUrlWithParams, routesPaths } from '@/routes'
-import {
-	getSmartParamsFromRoutePattern,
-	shouldUseSubdomains,
-} from '@/routes/routes.tech'
+import { shouldUseSubdomains } from '@/routes/routes.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -70,9 +67,6 @@ const setResponse = async (
 	}
 
 	response.headers.set(HEADERS_PATHNAME_NAME, pathname)
-
-	const r = await checkMemberTeamMemberShip(pathname)
-	if (r) return r
 
 	return response
 }
@@ -219,13 +213,4 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 	const newPath = teamPathname + '/' + parts.slice(2).join('/')
 
 	return newPath
-}
-
-const checkMemberTeamMemberShip = async (
-	pathname: string,
-	user?: UserDto
-): Promise<NextResponse | null> => {
-	const params = getSmartParamsFromRoutePattern(pathname, 'team')
-	console.log('params', params)
-	return null
 }

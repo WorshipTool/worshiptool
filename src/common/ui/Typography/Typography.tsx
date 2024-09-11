@@ -14,6 +14,7 @@ type CustomTypographyProps = {
 	noWrap?: boolean
 
 	uppercase?: boolean
+	italic?: boolean
 }
 
 export function Typography({
@@ -50,7 +51,7 @@ export function Typography({
 			align={props.align}
 			className={props.className}
 		>
-			{children}
+			{props.italic ? <i>{children}</i> : children}
 		</Typo>
 	)
 }

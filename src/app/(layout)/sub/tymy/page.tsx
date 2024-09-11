@@ -6,7 +6,7 @@ import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { Box } from '@mui/material'
 import Image from 'next/image'
-import JoinGroupPanel from './components/JoinGroupPanel.1'
+import JoinGroupPanel from './components/JoinGroupPanel'
 import './teams.styles.css'
 
 export default SmartPage(Page, {

@@ -41,10 +41,12 @@ declare module "nextjs-routes" {
     | StaticRoute<"/test">
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>
+    | DynamicRoute<"/sub/tymy/[alias]/lide", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/nastaveni", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/statistiky", { "alias": string }>
-    | DynamicRoute<"/sub/tymy/[alias]/zpevnik", { "alias": string }>;
+    | DynamicRoute<"/sub/tymy/[alias]/zpevnik", { "alias": string }>
+    | DynamicRoute<"/sub/tymy/pripojitse/[code]", { "code": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

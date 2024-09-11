@@ -10,10 +10,9 @@ import { Box, Grid } from '@mui/material'
 export default function TeamPage(props: PageProps<'team'>) {
 	const { name } = useInnerTeam()
 	return (
-		<div>
+		<>
 			<TeamPageTitle>Přehled</TeamPageTitle>
-
-			<Grid container spacing={2}>
+			<Grid container spacing={2} padding={2}>
 				<TeamCard>
 					<Box
 						display={'flex'}
@@ -32,6 +31,6 @@ export default function TeamPage(props: PageProps<'team'>) {
 				</TeamCard>
 				{/* <Grid item sm={12} md={6} lg={4}></Grid> */}
 			</Grid>
-		</div>
+		</>
 	)
 }

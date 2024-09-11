@@ -8,10 +8,10 @@ type TextInputProps = {
 	error?: boolean
 } & React.ComponentProps<typeof TextField>
 
-export function TextInput(props: TextInputProps) {
+export function TextInput({ title, ...props }: TextInputProps) {
 	return (
 		<Box display={'flex'} flexDirection={'column'} flex={1}>
-			{props.title && <Typography strong>{props.title}</Typography>}
+			{title && <Typography strong>{title}</Typography>}
 			<TextField {...props} className="custom-text-input" />
 		</Box>
 	)

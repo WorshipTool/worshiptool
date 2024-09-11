@@ -15,8 +15,8 @@ type MenuItemObjectType = {
 
 type MenuProps = {
 	open: boolean
-	onClose?: () => void
-	anchor?: HTMLElement | null
+	onClose: () => void
+	anchor: HTMLElement | null
 	anchorOrigin?: ComponentProps<typeof MuiMenu>['anchorOrigin']
 	transformOrigin?: ComponentProps<typeof MuiMenu>['transformOrigin']
 
@@ -42,6 +42,7 @@ export default function Menu({ ...props }: MenuProps) {
 			transformOrigin={{
 				vertical: 'top',
 				horizontal: 'left',
+				...props.transformOrigin,
 			}}
 			MenuListProps={{
 				'aria-labelledby': 'basic-button',

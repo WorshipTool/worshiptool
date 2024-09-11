@@ -16,6 +16,7 @@ import {
 	TeamAddingApi,
 	TeamGettingApi,
 	TeamJoiningApi,
+	TeamMembersApi,
 } from '../../api/generated'
 import useAuth from '../auth/useAuth'
 
@@ -42,6 +43,7 @@ export const useApi = () => {
 			teamAddingApi: new TeamAddingApi(apiConfiguration),
 			teamGettingApi: new TeamGettingApi(apiConfiguration),
 			teamJoiningApi: new TeamJoiningApi(apiConfiguration),
+			teamMembersApi: new TeamMembersApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

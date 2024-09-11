@@ -102,7 +102,7 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 				<TeamLeftPanel teamAlias={team} />
 				<Box display={'flex'} flexDirection={'column'} flex={1} height={'100%'}>
 					<TeamTopPanel />
-					<Box paddingX={4} flex={1}>
+					<Box paddingX={4} flex={1} paddingBottom={4}>
 						{layout.children}
 					</Box>
 				</Box>
