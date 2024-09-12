@@ -1,6 +1,5 @@
 'use client'
 import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
-import SearchFieldTeamZpevnik from '@/app/(subdomains)/sub/tymy/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
@@ -11,14 +10,17 @@ import { Box } from '@mui/system'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import SearchFieldTeamZpevnik from '@/app/(subdomains)/sub/tymy/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import SelectedPanel from '@/app/(subdomains)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
+import { TeamPermissions } from '@/app/(subdomains)/sub/tymy/tech'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
-import { LinearProgress, useTheme } from '@mui/material'
+import { usePermission } from '@/hooks/permissions/usePermission'
+import { LinearProgress } from '@mui/material'
 import './styles.css'
 
 export default function TeamSongsPage() {
-	const { selection } = useInnerTeam()
+	const { selection, guid: teamGuid } = useInnerTeam()
 	const items = useMemo(() => {
 		const items =
 			selection.searchedItems.length > 0
@@ -101,7 +103,10 @@ export default function TeamSongsPage() {
 		[selection]
 	)
 
-	const theme = useTheme()
+	const addSongPermission = usePermission<TeamPermissions>('team.add_song', {
+		teamGuid,
+	})
+
 	return (
 		<>
 			<TeamPageTitle>Zpěvník</TeamPageTitle>
@@ -118,40 +123,7 @@ export default function TeamSongsPage() {
 							<LinearProgress />
 						</>
 					)}
-					{/* {over && (
-							<PopupContainer>
-								<Box
-									sx={{
-										position: 'fixed',
-										bottom: 0,
-										left: 0,
-										right: 0,
-										padding: 2,
-										display: 'flex',
-										justifyContent: 'center',
-										flexDirection: 'row',
-									}}
-								>
-									<Box
-										bgcolor={'grey.300'}
-										padding={2}
-										borderRadius={2}
-										sx={{
-											boxShadow: '0px 0px 15px rgba(0,0,0,0.25)',
-										}}
-										display={'flex'}
-										flexDirection={'row'}
-										gap={1}
-										alignItems={'center'}
-									>
-										<Info />
-										<Typography variant="h6">
-											Pro přidání písně do zpěvníku, pustťe
-										</Typography>
-									</Box>
-								</Box>
-							</PopupContainer>
-						)} */}
+
 					{((!selectable && items.length > 0) || selectable) && (
 						<Box
 							sx={{
@@ -186,7 +158,7 @@ export default function TeamSongsPage() {
 												Vybrat
 											</Button>
 										}
-										{
+										{addSongPermission && (
 											<Box
 												display={'flex'}
 												ref={(r) => {
@@ -206,7 +178,7 @@ export default function TeamSongsPage() {
 													Přidat píseň
 												</Button>
 											</Box>
-										}
+										)}
 									</Box>
 								</Box>
 							)}
@@ -228,22 +200,24 @@ export default function TeamSongsPage() {
 					{!selection.loading && items.length === 0 && (
 						<Box gap={1} display={'flex'} flexDirection={'column'}>
 							<Typography>Ve zpěvníku nejsou zatím žádné písně...</Typography>
-							<Box
-								display={'flex'}
-								ref={(r) => {
-									anchorRef.current = r as any
-									setAnchorName('addFirstSongs')
-								}}
-							>
-								<Button
-									startIcon={<Add />}
-									size="small"
-									color="primary"
-									onClick={onAdd}
+							{addSongPermission && (
+								<Box
+									display={'flex'}
+									ref={(r) => {
+										anchorRef.current = r as any
+										setAnchorName('addFirstSongs')
+									}}
 								>
-									Přidat píseň
-								</Button>
-							</Box>
+									<Button
+										startIcon={<Add />}
+										size="small"
+										color="primary"
+										onClick={onAdd}
+									>
+										Přidat píseň
+									</Button>
+								</Box>
+							)}
 						</Box>
 					)}
 					<Box>

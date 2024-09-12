@@ -1,9 +1,11 @@
 import { VariantPackGuid } from '@/api/dtos'
 import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
+import { TeamPermissions } from '@/app/(subdomains)/sub/tymy/tech'
 import Menu from '@/common/components/Menu/Menu'
 import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
+import { usePermission } from '@/hooks/permissions/usePermission'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { getRouteUrlWithParams } from '@/routes'
@@ -21,7 +23,7 @@ export default function SelectedPanel({
 	selectedPacks: selected,
 	...props
 }: SelectedPanelProps) {
-	const { selection } = useInnerTeam()
+	const { selection, guid: teamGuid } = useInnerTeam()
 	const { addPacksToPlaylist, createPlaylist } = usePlaylistsGeneral()
 
 	const [optionsElement, setOptionsElement] = useState<HTMLElement | null>(null)
@@ -40,6 +42,7 @@ export default function SelectedPanel({
 
 	const onRemoveSelected = useCallback(() => {
 		selection.removePacks(selected)
+		props.onCancelSelect()
 	}, [selected])
 
 	const onOptionClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
@@ -91,6 +94,13 @@ export default function SelectedPanel({
 			closeAll()
 		},
 		[selected, closeAll]
+	)
+
+	const removeSongPermission = usePermission<TeamPermissions>(
+		'team.remove_song',
+		{
+			teamGuid,
+		}
 	)
 
 	return (
@@ -145,14 +155,16 @@ export default function SelectedPanel({
 					>
 						Možnosti
 					</Button>
-					<Button
-						color="error"
-						size="small"
-						onClick={onRemoveSelected}
-						disabled={selected.length === 0}
-					>
-						Odstranit
-					</Button>
+					{removeSongPermission && (
+						<Button
+							color="error"
+							size="small"
+							onClick={onRemoveSelected}
+							disabled={selected.length === 0}
+						>
+							Odstranit
+						</Button>
+					)}
 				</Box>
 			</Box>
 			<Menu

@@ -9,4 +9,10 @@ export type TeamPermissions = {
 	'team.set_member_role': {
 		teamGuid: string
 	}
+	'team.add_song': {
+		teamGuid: string
+	}
+	'team.remove_song': {
+		teamGuid: string
+	}
 }

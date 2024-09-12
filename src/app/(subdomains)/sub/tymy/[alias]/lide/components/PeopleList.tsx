@@ -100,7 +100,7 @@ export default function PeopleList(props: PeopleListDto) {
 			} catch (e) {
 				console.log(e)
 			}
-
+			await fetchData()
 			enqueueSnackbar('Role byla nastavena.')
 		},
 		[teamGuid]

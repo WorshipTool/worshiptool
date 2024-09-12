@@ -33,6 +33,7 @@ export const SelectSearch = (props: SelectSearchProps) => {
 				value={props.value}
 				onChange={onChangeHandler}
 				className="song-select-title-box"
+				autoFocus
 			/>
 			<Box
 				color={'grey.700'}

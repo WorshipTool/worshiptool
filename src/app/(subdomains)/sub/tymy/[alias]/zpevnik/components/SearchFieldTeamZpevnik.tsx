@@ -21,7 +21,7 @@ export default function SearchFieldTeamZpevnik() {
 		setValue(value)
 	}
 	return (
-		<Box width={500}>
+		<Box maxWidth={500} flex={1}>
 			<SearchBar value={value} onChange={onChange} />
 		</Box>
 	)
