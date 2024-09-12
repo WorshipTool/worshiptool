@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { usePermissions } from '../../../hooks/auth/usePermissions'
-import { PermissionDataType } from '../../../interfaces/permission.types'
+import { PermissionDataType } from '../../../hooks/permissions/permission.types'
+import { usePermissions } from '../../../hooks/permissions/usePermissions'
 import { SkeletonLoader } from '../SkeletonLoader'
 
 export type WithPermissionOnlyProps = {

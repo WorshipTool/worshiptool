@@ -6,11 +6,12 @@ import {
 } from '@mui/material'
 import { ComponentProps, ReactElement, ReactNode } from 'react'
 
-type MenuItemObjectType = {
+export type MenuItemObjectType = {
 	onClick?: (e: React.MouseEvent<HTMLElement>) => void
 	title: string
 	subtitle?: string
 	icon?: ReactElement
+	disabled?: boolean
 }
 
 type MenuProps = {
@@ -51,7 +52,11 @@ export default function Menu({ ...props }: MenuProps) {
 			{props.children}
 			{props.items?.map((item, index) => {
 				return (
-					<MenuItem key={item.title} onClick={item.onClick}>
+					<MenuItem
+						key={item.title}
+						onClick={item.onClick}
+						disabled={item.disabled}
+					>
 						{item.icon && (
 							<ListItemIcon>
 								{/* <MoreHoriz fontSize="small" /> */}

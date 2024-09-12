@@ -8,7 +8,7 @@ import {
 	MenuItem,
 } from '@mui/material'
 import React, { useMemo } from 'react'
-import { usePermissions } from '../../../../../../../../hooks/auth/usePermissions'
+import { usePermissions } from '../../../../../../../../hooks/permissions/usePermissions'
 import GroupItem from './GroupItem'
 
 type AddToGroupButtonProps = {

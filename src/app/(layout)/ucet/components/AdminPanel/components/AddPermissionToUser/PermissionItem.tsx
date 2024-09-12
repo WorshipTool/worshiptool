@@ -11,9 +11,9 @@ import { permissionPayloadToApi } from '../../../../../../../api/dtos/permission
 import { useApi } from '../../../../../../../hooks/api/useApi'
 import {
 	PermissionDataType,
-	Permissions,
 	PermissionType,
-} from '../../../../../../../interfaces/permission.types'
+	Permissions,
+} from '../../../../../../../hooks/permissions/permission.types'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 import PermissionItemPayload from './PermissionItemPayload'
 

@@ -3,11 +3,11 @@ import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
 import { PermissionUserBaseOutDto } from '../../../../../../api/generated'
 import { useApi } from '../../../../../../hooks/api/useApi'
-import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../interfaces/permission.types'
+} from '../../../../../../hooks/permissions/permission.types'
+import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 

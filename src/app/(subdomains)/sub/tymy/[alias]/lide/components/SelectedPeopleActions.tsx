@@ -1,10 +1,15 @@
 import { teamMemberRoles } from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/RolePart'
-import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/tech'
-import Menu from '@/common/components/Menu/Menu'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
+import {
+	TeamMemberRole,
+	TeamPermissions,
+} from '@/app/(subdomains)/sub/tymy/tech'
+import Menu, { MenuItemObjectType } from '@/common/components/Menu/Menu'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import useAuth from '@/hooks/auth/useAuth'
+import { usePermission } from '@/hooks/permissions/usePermission'
 import { UserGuid } from '@/interfaces/user'
 import { ExpandMore } from '@mui/icons-material'
 import { Box } from '@mui/material'
@@ -29,6 +34,8 @@ export default function SelectedPeopleActions(
 		() => user && props.selected.includes(user.guid),
 		[props.selected, user]
 	)
+
+	const { guid: teamGuid } = useInnerTeam()
 
 	const [popupOpen, setPopupOpen] = useState(false)
 
@@ -65,6 +72,31 @@ export default function SelectedPeopleActions(
 		setRoleMenuOpen(false)
 		setPopupOpen(false)
 	}, [])
+	const kickPermission = usePermission<TeamPermissions>('team.kick_member', {
+		teamGuid: teamGuid,
+	})
+	const setRolePermission = usePermission<TeamPermissions>(
+		'team.set_member_role',
+		{
+			teamGuid: teamGuid,
+		}
+	)
+
+	const menuItems: MenuItemObjectType[] = useMemo(
+		() => [
+			{
+				title: 'Odebrat z týmu',
+				onClick: () => setPopupOpen(true),
+				disabled: !kickPermission,
+			},
+			{
+				title: 'Nastavit roli na',
+				onClick: onChangeRoleClick,
+				disabled: !setRolePermission,
+			},
+		],
+		[onChangeRoleClick, setPopupOpen, kickPermission, setRolePermission]
+	)
 
 	const moreIcon = useMemo(() => <ExpandMore />, [])
 
@@ -83,16 +115,7 @@ export default function SelectedPeopleActions(
 				open={open}
 				anchor={anchorEl}
 				onClose={() => setOpen(false)}
-				items={[
-					{
-						title: 'Odebrat z týmu',
-						onClick: () => setPopupOpen(true),
-					},
-					{
-						title: 'Nastavit roli na',
-						onClick: onChangeRoleClick,
-					},
-				]}
+				items={menuItems}
 			/>
 
 			<Menu

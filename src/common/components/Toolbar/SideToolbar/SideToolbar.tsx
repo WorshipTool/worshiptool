@@ -2,8 +2,8 @@
 import { ArrowBack, Home, Settings } from '@mui/icons-material'
 import { Box, IconButton, Tooltip, styled } from '@mui/material'
 import { ReactElement } from 'react'
-import { usePermission } from '../../../../hooks/auth/usePermission'
 import useGroup from '../../../../hooks/group/useGroup'
+import { usePermission } from '../../../../hooks/permissions/usePermission'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 // import { useMatch } from "react-router-dom";

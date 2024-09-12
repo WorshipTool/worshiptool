@@ -1,5 +1,5 @@
-import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/RolePart'
 import SelectedPeopleActions from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/SelectedPeopleActions'
+import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/tech'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { UserGuid } from '@/interfaces/user'

@@ -4,7 +4,7 @@ import { useApi } from '../../../../../../hooks/api/useApi'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../interfaces/permission.types'
+} from '../../../../../../hooks/permissions/permission.types'
 import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import FoundUser from './FoundUser'

@@ -10,7 +10,7 @@ import {
 import { useState } from 'react'
 import { SkeletonLoader } from '../../../../../../../common/providers/SkeletonLoader'
 import { Gap } from '../../../../../../../common/ui/Gap/Gap'
-import { usePermissions } from '../../../../../../../hooks/auth/usePermissions'
+import { usePermissions } from '../../../../../../../hooks/permissions/usePermissions'
 import PermissionItem from './PermissionItem'
 
 type SecondStepProps = {

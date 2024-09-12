@@ -5,7 +5,7 @@ import { useGroups } from '../../../../../../../hooks/group/useGroups'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../../interfaces/permission.types'
+} from '../../../../../../../hooks/permissions/permission.types'
 import { useApiStateEffect } from '../../../../../../../tech/ApiState'
 
 type PermissionItemPayloadProps<T extends PermissionType> = {
