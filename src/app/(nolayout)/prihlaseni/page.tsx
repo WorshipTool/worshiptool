@@ -90,7 +90,6 @@ function Login() {
 				setErrorMessage('Špatný email nebo heslo')
 				return
 			}
-
 			if (params?.previousPage) {
 				navigate(
 					{

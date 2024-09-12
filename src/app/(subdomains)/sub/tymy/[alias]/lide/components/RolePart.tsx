@@ -1,12 +1,8 @@
+import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/tech'
 import { Box, Chip, MenuItem, Select } from '@mui/material'
 
-export enum TeamMemberRole {
-	ADMIN,
-	MEMBER,
-}
-
 export const teamMemberRoles = {
-	[TeamMemberRole.ADMIN]: 'Správce',
+	[TeamMemberRole.MANAGER]: 'Správce',
 	[TeamMemberRole.MEMBER]: 'Uživatel',
 }
 
@@ -14,12 +10,14 @@ type RolePartProps = {
 	editable?: boolean
 	role: TeamMemberRole
 	onRoleChange: (role: TeamMemberRole) => void
+	isOwner: boolean
 }
 
 export default function RolePart({
 	editable = false,
 	role,
 	onRoleChange: setRole,
+	isOwner,
 }: RolePartProps) {
 	return (
 		<>
@@ -40,7 +38,10 @@ export default function RolePart({
 				</Select>
 			) : (
 				<Box display={'flex'} flexDirection={'row'}>
-					<Chip label={teamMemberRoles[role]} color="default" />
+					<Chip
+						label={isOwner ? 'Vlastník' : teamMemberRoles[role]}
+						color="default"
+					/>
 				</Box>
 				// <Box
 				// 	sx={{

@@ -1,6 +1,7 @@
 import ListTopPanelPeople from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/ListTopPanelPeople'
 import PeopleListItem from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/PeopleListItem'
-import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/RolePart'
+import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
+import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/tech'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
@@ -20,6 +21,8 @@ export default function PeopleList(props: PeopleListDto) {
 	const { alias: teamAlias } = useSmartParams('teamPeople')
 	const { user } = useAuth()
 
+	const { guid: teamGuid } = useInnerTeam()
+
 	const [apiState, fetchData] = useApiStateEffect(async () => {
 		const data = await handleApiCall(
 			teamMembersApi.teamMemberControllerGetTeamMembers(teamAlias)
@@ -29,12 +32,12 @@ export default function PeopleList(props: PeopleListDto) {
 
 	const members = useMemo(() => {
 		const arr =
-			apiState.data?.members.filter((m) => m.guid !== user?.guid) ?? []
+			apiState.data?.members.filter((m) => m.userGuid !== user?.guid) ?? []
 		return arr
 	}, [apiState])
 
 	const me = useMemo(() => {
-		return apiState.data?.members.find((m) => m.guid === user?.guid)
+		return apiState.data?.members.find((m) => m.userGuid === user?.guid)
 	}, [apiState, user])
 
 	// Selecting
@@ -55,8 +58,8 @@ export default function PeopleList(props: PeopleListDto) {
 	const onAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.checked) {
 			setSelected([
-				...members.map((m) => m.guid as UserGuid),
-				me?.guid as UserGuid,
+				...members.map((m) => m.userGuid as UserGuid),
+				me?.userGuid as UserGuid,
 			])
 		} else {
 			setSelected([])
@@ -86,9 +89,17 @@ export default function PeopleList(props: PeopleListDto) {
 
 	const onSetRole = useCallback(
 		async (guid: UserGuid, role: TeamMemberRole) => {
-			console.log('set role', guid, role)
+			try {
+				await teamMembersApi.teamMemberControllerSetMemberRole({
+					role: role,
+					teamGuid,
+					userGuid: guid,
+				})
+			} catch (e) {
+				console.log(e)
+			}
 		},
-		[]
+		[teamGuid]
 	)
 
 	// Styles
@@ -150,11 +161,13 @@ export default function PeopleList(props: PeopleListDto) {
 								alignItems={'center'}
 								height={10}
 							>
-								<Checkbox
-									size="small"
-									onChange={onAllChange}
-									checked={allSelected}
-								/>
+								<Tooltip label="Vybrat vše" placement="left">
+									<Checkbox
+										size="small"
+										onChange={onAllChange}
+										checked={allSelected}
+									/>
+								</Tooltip>
 							</Box>
 						)}
 						<Box />
@@ -187,9 +200,9 @@ export default function PeopleList(props: PeopleListDto) {
 								data={me}
 								selectable={selectable}
 								me
-								selected={selected.includes(me.guid as UserGuid)}
+								selected={selected.includes(me.userGuid as UserGuid)}
 								onSelectChange={(selected) =>
-									onSelectChange(me.guid as UserGuid, selected)
+									onSelectChange(me.userGuid as UserGuid, selected)
 								}
 								onMemberRemove={onMemberRemove}
 								onChangeRole={onSetRole}
@@ -219,9 +232,9 @@ export default function PeopleList(props: PeopleListDto) {
 							key={member.email}
 							data={member}
 							selectable={selectable}
-							selected={selected.includes(member.guid as UserGuid)}
+							selected={selected.includes(member.userGuid as UserGuid)}
 							onSelectChange={(selected) =>
-								onSelectChange(member.guid as UserGuid, selected)
+								onSelectChange(member.userGuid as UserGuid, selected)
 							}
 							onMemberRemove={onMemberRemove}
 							onChangeRole={onSetRole}

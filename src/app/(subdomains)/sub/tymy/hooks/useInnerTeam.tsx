@@ -1,9 +1,10 @@
 'use client'
 import { useApi } from '@/hooks/api/useApi'
+import useAuth from '@/hooks/auth/useAuth'
 import { useSelection } from '@/hooks/playlist/useSelection'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 type Rt = ReturnType<typeof useProvideInnerTeam>
@@ -39,9 +40,20 @@ const useProvideInnerTeam = (teamAlias: string) => {
 	const selection = useSelection(
 		(apiState.data?.selectionGuid || '') as PlaylistGuid
 	)
+
+	const { user } = useAuth()
+	const isCreator = useMemo(() => {
+		if (!apiState.data?.createdByGuid) return false
+		if (!user) return false
+		return apiState.data?.createdByGuid === user?.guid
+	}, [apiState, user])
+
 	return {
+		guid: apiState.data?.guid || '',
 		alias: teamAlias,
 		name: apiState.data?.name || '',
 		selection,
+		isCreator,
+		createdByGuid: apiState.data?.createdByGuid || '',
 	}
 }

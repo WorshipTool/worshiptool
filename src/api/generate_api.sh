@@ -1,4 +1,4 @@
-SWAGGER_FILE=http://localhost:3300/docs-json
+SWAGGER_FILE=http://localhost:5501/docs-json
 npx @openapitools/openapi-generator-cli generate -i $SWAGGER_FILE -g typescript-axios -o src/api/generated --skip-validate-spec
 
 replace="import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';"

@@ -1,10 +1,10 @@
-import {
-	TeamMemberRole,
-	teamMemberRoles,
-} from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/RolePart'
+import { teamMemberRoles } from '@/app/(subdomains)/sub/tymy/[alias]/lide/components/RolePart'
+import { TeamMemberRole } from '@/app/(subdomains)/sub/tymy/tech'
 import Menu from '@/common/components/Menu/Menu'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import useAuth from '@/hooks/auth/useAuth'
 import { UserGuid } from '@/interfaces/user'
 import { ExpandMore } from '@mui/icons-material'
 import { Box } from '@mui/material'
@@ -23,6 +23,12 @@ export default function SelectedPeopleActions(
 	const [roleMenuOpen, setRoleMenuOpen] = useState(false)
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 	const [roleAnchorEl, setRoleAnchorEl] = useState<HTMLElement | null>(null)
+
+	const { user } = useAuth()
+	const includesMe = useMemo(
+		() => user && props.selected.includes(user.guid),
+		[props.selected, user]
+	)
 
 	const [popupOpen, setPopupOpen] = useState(false)
 
@@ -117,15 +123,18 @@ export default function SelectedPeopleActions(
 						>
 							Zrušit
 						</Button>
-						<Button
-							size="small"
-							color="error"
-							onClick={() => {
-								onRemoveClick()
-							}}
-						>
-							Odebrat
-						</Button>
+						<Tooltip label={includesMe ? 'Nelze odebrát sám sebe' : ''}>
+							<Button
+								size="small"
+								color="error"
+								onClick={() => {
+									onRemoveClick()
+								}}
+								disabled={includesMe}
+							>
+								Odebrat
+							</Button>
+						</Tooltip>
 					</>,
 				]}
 			/>

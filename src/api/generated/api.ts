@@ -606,6 +606,12 @@ export interface GetTeamInfoOutDto {
      * @memberof GetTeamInfoOutDto
      */
     'selectionGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'createdByGuid': string;
 }
 /**
  * 
@@ -860,57 +866,6 @@ export interface LoginInputData {
      */
     'password': string;
 }
-/**
- * 
- * @export
- * @interface LoginMethod
- */
-export interface LoginMethod {
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LoginMethod
-     */
-    'type': LoginMethodTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'email': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'password': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'googleId': string;
-    /**
-     * 
-     * @type {User}
-     * @memberof LoginMethod
-     */
-    'user': User;
-}
-
-export const LoginMethodTypeEnum = {
-    NUMBER_0: 0,
-    NUMBER_1: 1
-} as const;
-
-export type LoginMethodTypeEnum = typeof LoginMethodTypeEnum[keyof typeof LoginMethodTypeEnum];
-
 /**
  * 
  * @export
@@ -1825,6 +1780,39 @@ export interface SetGroupPayloadInDto {
 /**
  * 
  * @export
+ * @interface SetMemberRoleInDto
+ */
+export interface SetMemberRoleInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SetMemberRoleInDto
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SetMemberRoleInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof SetMemberRoleInDto
+     */
+    'role': SetMemberRoleInDtoRoleEnum;
+}
+
+export const SetMemberRoleInDtoRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type SetMemberRoleInDtoRoleEnum = typeof SetMemberRoleInDtoRoleEnum[keyof typeof SetMemberRoleInDtoRoleEnum];
+
+/**
+ * 
+ * @export
  * @interface SignUpInDto
  */
 export interface SignUpInDto {
@@ -2569,7 +2557,7 @@ export interface TeamMemberDto {
      * @type {string}
      * @memberof TeamMemberDto
      */
-    'guid': string;
+    'userGuid': string;
     /**
      * 
      * @type {string}
@@ -2588,7 +2576,21 @@ export interface TeamMemberDto {
      * @memberof TeamMemberDto
      */
     'lastName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMemberDto
+     */
+    'role': TeamMemberDtoRoleEnum;
 }
+
+export const TeamMemberDtoRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type TeamMemberDtoRoleEnum = typeof TeamMemberDtoRoleEnum[keyof typeof TeamMemberDtoRoleEnum];
+
 /**
  * 
  * @export
@@ -2712,12 +2714,6 @@ export interface User {
      * @memberof User
      */
     'resetTokens': Array<UserToken>;
-    /**
-     * 
-     * @type {LoginMethod}
-     * @memberof User
-     */
-    'loginMethods': LoginMethod;
 }
 
 export const UserRoleEnum = {
@@ -8809,6 +8805,45 @@ export const TeamMembersApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerSetMemberRole: async (setMemberRoleInDto: SetMemberRoleInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'setMemberRoleInDto' is not null or undefined
+            assertParamExists('teamMemberControllerSetMemberRole', 'setMemberRoleInDto', setMemberRoleInDto)
+            const localVarPath = `/submodules/teams/setrole`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(setMemberRoleInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8855,6 +8890,18 @@ export const TeamMembersApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerLeaveTeam']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerSetMemberRole(setMemberRoleInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerSetMemberRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -8891,6 +8938,15 @@ export const TeamMembersApiFactory = function (configuration?: Configuration, ba
          */
         teamMemberControllerLeaveTeam(leaveTeamInDto: LeaveTeamInDto, options?: any): AxiosPromise<void> {
             return localVarFp.teamMemberControllerLeaveTeam(leaveTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamMemberControllerSetMemberRole(setMemberRoleInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8933,6 +8989,17 @@ export class TeamMembersApi extends BaseAPI {
      */
     public teamMemberControllerLeaveTeam(leaveTeamInDto: LeaveTeamInDto, options?: RawAxiosRequestConfig) {
         return TeamMembersApiFp(this.configuration).teamMemberControllerLeaveTeam(leaveTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SetMemberRoleInDto} setMemberRoleInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerSetMemberRole(setMemberRoleInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
