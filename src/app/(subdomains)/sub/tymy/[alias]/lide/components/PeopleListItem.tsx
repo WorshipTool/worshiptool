@@ -104,6 +104,7 @@ export default function PeopleListItem(props: PeopleListItemProps) {
 					onEditableChange={onEditableChange}
 					selectable={Boolean(props.selectable)}
 					onRemove={() => setPopupOpen(true)}
+					isCreator={isCreator}
 				/>
 			) : (
 				<Box display={'flex'} flexDirection={'row'} justifyContent={'end'}>

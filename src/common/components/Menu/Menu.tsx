@@ -1,18 +1,6 @@
-import {
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	Menu as MuiMenu,
-} from '@mui/material'
-import { ComponentProps, ReactElement, ReactNode } from 'react'
-
-export type MenuItemObjectType = {
-	onClick?: (e: React.MouseEvent<HTMLElement>) => void
-	title: string
-	subtitle?: string
-	icon?: ReactElement
-	disabled?: boolean
-}
+import MenuItem, { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
+import { Menu as MuiMenu } from '@mui/material'
+import { ComponentProps, ReactNode } from 'react'
 
 type MenuProps = {
 	open: boolean
@@ -51,24 +39,7 @@ export default function Menu({ ...props }: MenuProps) {
 		>
 			{props.children}
 			{props.items?.map((item, index) => {
-				return (
-					<MenuItem
-						key={item.title}
-						onClick={item.onClick}
-						disabled={item.disabled}
-					>
-						{item.icon && (
-							<ListItemIcon>
-								{/* <MoreHoriz fontSize="small" /> */}
-
-								{/* // set size to icon ... {item.icon} */}
-
-								{item.icon}
-							</ListItemIcon>
-						)}
-						<ListItemText secondary={item.subtitle}>{item.title}</ListItemText>
-					</MenuItem>
-				)
+				return <MenuItem key={index} {...item} />
 			})}
 		</MuiMenu>
 	)

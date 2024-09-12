@@ -174,6 +174,9 @@ export const routesSearchParams = {
 		previousPage: 'string',
 		message: 'string',
 	},
+	signup: {
+		previousPage: 'string',
+	},
 	uploadParse: {
 		files: ['', ''],
 	},

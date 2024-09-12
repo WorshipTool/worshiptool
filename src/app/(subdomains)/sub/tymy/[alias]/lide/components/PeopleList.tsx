@@ -11,6 +11,7 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Box, Checkbox, LinearProgress } from '@mui/material'
+import { useSnackbar } from 'notistack'
 import { useCallback, useMemo, useState } from 'react'
 
 type PeopleListDto = {}
@@ -22,6 +23,7 @@ export default function PeopleList(props: PeopleListDto) {
 	const { user } = useAuth()
 
 	const { guid: teamGuid } = useInnerTeam()
+	const { enqueueSnackbar } = useSnackbar()
 
 	const [apiState, fetchData] = useApiStateEffect(async () => {
 		const data = await handleApiCall(
@@ -98,6 +100,8 @@ export default function PeopleList(props: PeopleListDto) {
 			} catch (e) {
 				console.log(e)
 			}
+
+			enqueueSnackbar('Role byla nastavena.')
 		},
 		[teamGuid]
 	)
@@ -127,6 +131,7 @@ export default function PeopleList(props: PeopleListDto) {
 				loading={apiState.loading}
 				onMemberRemove={onMemberRemove}
 				onRoleChange={onSetRole}
+				role={parseInt(me?.role + '') as TeamMemberRole}
 			/>
 
 			{apiState.loading && (

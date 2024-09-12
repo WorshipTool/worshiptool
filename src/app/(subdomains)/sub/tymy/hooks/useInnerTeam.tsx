@@ -3,6 +3,7 @@ import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useSelection } from '@/hooks/playlist/useSelection'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { UserGuid } from '@/interfaces/user'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { createContext, useContext, useMemo } from 'react'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
@@ -54,6 +55,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		name: apiState.data?.name || '',
 		selection,
 		isCreator,
-		createdByGuid: apiState.data?.createdByGuid || '',
+		createdByGuid: (apiState.data?.createdByGuid || '') as UserGuid,
 	}
 }

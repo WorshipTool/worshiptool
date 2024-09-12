@@ -4,7 +4,8 @@ import {
 	TeamMemberRole,
 	TeamPermissions,
 } from '@/app/(subdomains)/sub/tymy/tech'
-import Menu, { MenuItemObjectType } from '@/common/components/Menu/Menu'
+import Menu from '@/common/components/Menu/Menu'
+import MenuItem, { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
@@ -30,12 +31,8 @@ export default function SelectedPeopleActions(
 	const [roleAnchorEl, setRoleAnchorEl] = useState<HTMLElement | null>(null)
 
 	const { user } = useAuth()
-	const includesMe = useMemo(
-		() => user && props.selected.includes(user.guid),
-		[props.selected, user]
-	)
 
-	const { guid: teamGuid } = useInnerTeam()
+	const { guid: teamGuid, createdByGuid } = useInnerTeam()
 
 	const [popupOpen, setPopupOpen] = useState(false)
 
@@ -82,41 +79,74 @@ export default function SelectedPeopleActions(
 		}
 	)
 
+	const moreIcon = useMemo(() => <ExpandMore />, [])
+
+	const includesMe = useMemo(
+		() => user && props.selected.includes(user.guid),
+		[props.selected, user]
+	)
+	const includesCreator = useMemo(
+		() => props.selected.includes(createdByGuid),
+		[props.selected, teamGuid]
+	)
+	const disabledAction = useMemo(
+		() => includesMe || includesCreator,
+		[includesMe, includesCreator]
+	)
 	const menuItems: MenuItemObjectType[] = useMemo(
 		() => [
-			{
-				title: 'Odebrat z týmu',
-				onClick: () => setPopupOpen(true),
-				disabled: !kickPermission,
-			},
-			{
-				title: 'Nastavit roli na',
-				onClick: onChangeRoleClick,
-				disabled: !setRolePermission,
-			},
+			...(kickPermission
+				? [
+						{
+							title: 'Odebrat z týmu',
+							onClick: () => setPopupOpen(true),
+							disabled: !kickPermission || disabledAction,
+						},
+				  ]
+				: []),
+			...(setRolePermission
+				? [
+						{
+							title: 'Nastavit roli na',
+							onClick: onChangeRoleClick,
+							disabled: !setRolePermission || disabledAction,
+						},
+				  ]
+				: []),
 		],
-		[onChangeRoleClick, setPopupOpen, kickPermission, setRolePermission]
+		[
+			onChangeRoleClick,
+			setPopupOpen,
+			kickPermission,
+			setRolePermission,
+			disabledAction,
+		]
 	)
-
-	const moreIcon = useMemo(() => <ExpandMore />, [])
 
 	return (
 		<Box>
-			<Button
-				size="small"
-				onClick={onClick}
-				disabled={props.selected.length === 0}
-				endIcon={moreIcon}
-			>
-				Akce
-			</Button>
+			{menuItems.length > 0 && (
+				<Button
+					size="small"
+					onClick={onClick}
+					disabled={props.selected.length === 0}
+					endIcon={moreIcon}
+				>
+					Akce
+				</Button>
+			)}
 
-			<Menu
-				open={open}
-				anchor={anchorEl}
-				onClose={() => setOpen(false)}
-				items={menuItems}
-			/>
+			<Menu open={open} anchor={anchorEl} onClose={() => setOpen(false)}>
+				{menuItems.map((item) => (
+					<Tooltip
+						key={item.title}
+						label={disabledAction ? 'Nelze upravit sebe ani vlastníka' : ''}
+						placement="left"
+					>
+						<MenuItem {...item} />
+					</Tooltip>
+				))}
+			</Menu>
 
 			<Menu
 				open={roleMenuOpen}
@@ -153,7 +183,7 @@ export default function SelectedPeopleActions(
 								onClick={() => {
 									onRemoveClick()
 								}}
-								disabled={includesMe}
+								disabled={disabledAction}
 							>
 								Odebrat
 							</Button>

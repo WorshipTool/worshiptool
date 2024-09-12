@@ -237,7 +237,14 @@ function Login() {
 								justifyContent={'center'}
 							>
 								<Typography size={'0.9rem'}>Nemáte ještě účet?</Typography>
-								<Button size={'small'} variant="text" to="signup">
+								<Button
+									size={'small'}
+									variant="text"
+									to="signup"
+									toParams={{
+										previousPage: params.previousPage,
+									}}
+								>
 									Vytvořte si ho
 								</Button>
 							</Box>

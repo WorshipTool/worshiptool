@@ -12,6 +12,8 @@ type ListTopPanelPeopleProps = {
 	peopleCount?: number
 	loading: boolean
 
+	role: TeamMemberRole
+
 	onMemberRemove: (guid: UserGuid) => void
 	onRoleChange: (guid: UserGuid, role: TeamMemberRole) => void
 }
@@ -33,14 +35,16 @@ export default function ListTopPanelPeople(props: ListTopPanelPeopleProps) {
 			{!props.selectable ? (
 				<>
 					<Typography>Celkem {props.peopleCount || 0} uživatelé</Typography>
-					<Button
-						variant="text"
-						color="black"
-						size="small"
-						onClick={() => props.onChange(true)}
-					>
-						Vybrat
-					</Button>
+					{props.role === TeamMemberRole.MANAGER && (
+						<Button
+							variant="text"
+							color="black"
+							size="small"
+							onClick={() => props.onChange(true)}
+						>
+							Vybrat
+						</Button>
+					)}
 				</>
 			) : (
 				<>

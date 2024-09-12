@@ -5,7 +5,6 @@ import { IconButton } from '@/common/ui/IconButton'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { Done, Edit, PersonRemove } from '@mui/icons-material'
 import { Box } from '@mui/material'
-import { useSnackbar } from 'notistack'
 
 type RightSideItemProps = {
 	data: TeamMemberDto
@@ -13,6 +12,7 @@ type RightSideItemProps = {
 	onEditableChange: (editable: boolean) => void
 	selectable: boolean
 	onRemove: () => void
+	isCreator: boolean
 }
 
 export default function ActionsPartPeople(props: RightSideItemProps) {
@@ -20,10 +20,8 @@ export default function ActionsPartPeople(props: RightSideItemProps) {
 		props.onEditableChange(true)
 	}
 
-	const { enqueueSnackbar } = useSnackbar()
 	const onDoneClick = () => {
 		props.onEditableChange(false)
-		enqueueSnackbar('Role byla nastavena')
 	}
 	const { guid: teamGuid } = useInnerTeam()
 	const kickPermission = usePermission<TeamPermissions>('team.kick_member', {
@@ -35,9 +33,11 @@ export default function ActionsPartPeople(props: RightSideItemProps) {
 			teamGuid: teamGuid,
 		}
 	)
-	return (
+	return props.isCreator ? (
+		<Box />
+	) : (
 		<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={2}>
-			{props.editable ? (
+			{!kickPermission ? null : props.editable ? (
 				<>
 					<IconButton
 						onClick={onDoneClick}
@@ -56,7 +56,7 @@ export default function ActionsPartPeople(props: RightSideItemProps) {
 					<Edit />
 				</IconButton>
 			)}
-			{
+			{setRolePermission && (
 				<IconButton
 					disabled={props.selectable || !kickPermission}
 					onClick={props.onRemove}
@@ -64,7 +64,7 @@ export default function ActionsPartPeople(props: RightSideItemProps) {
 				>
 					<PersonRemove />
 				</IconButton>
-			}
+			)}
 		</Box>
 	)
 }

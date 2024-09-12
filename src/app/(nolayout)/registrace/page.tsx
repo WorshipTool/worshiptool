@@ -7,6 +7,7 @@ import { Gap } from '@/common/ui/Gap'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
+import { useSmartParams } from '@/routes/useSmartParams'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -30,6 +31,8 @@ function SignUp() {
 	const navigate = useSmartNavigate()
 
 	const { signup, login } = useAuth()
+
+	const params = useSmartParams('signup')
 
 	const onSignupClick = () => {
 		setInProgress(true)
@@ -169,7 +172,15 @@ function SignUp() {
 							justifyContent={'center'}
 						>
 							<Typography size={'0.9rem'}>Už máte účet?</Typography>
-							<Button size={'small'} variant="text" to="login" color="primary">
+							<Button
+								size={'small'}
+								variant="text"
+								to="login"
+								color="primary"
+								toParams={{
+									previousPage: params.previousPage,
+								}}
+							>
 								Přihlásit se
 							</Button>
 						</Box>
