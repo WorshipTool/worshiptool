@@ -29,6 +29,9 @@ export default function TeamSongsPage() {
 		return items.map((item) => item.variant)
 	}, [selection])
 
+	const addSongPermission = usePermission<TeamPermissions>('team.add_song', {
+		teamGuid,
+	})
 	const [selected, setSelected] = useState<VariantPackGuid[]>([])
 
 	const [selectable, setSelectable] = useState(false)
@@ -41,9 +44,9 @@ export default function TeamSongsPage() {
 
 		// after one second, the popup will open
 		const t = setTimeout(() => {
-			if (selection.items.length === 0 && thereHasBeenItems === false)
-				setOpen(true)
-			else if (thereHasBeenItems === false) {
+			if (selection.items.length === 0 && thereHasBeenItems === false) {
+				if (addSongPermission) setOpen(true)
+			} else if (thereHasBeenItems === false) {
 				setThereHasBeenItems(true)
 			}
 		}, 1000)
@@ -51,7 +54,7 @@ export default function TeamSongsPage() {
 		return () => {
 			clearTimeout(t)
 		}
-	}, [items, thereHasBeenItems])
+	}, [items, thereHasBeenItems, addSongPermission])
 
 	const filterFunc = useCallback(
 		(pack: VariantPackGuid) => {
@@ -85,10 +88,6 @@ export default function TeamSongsPage() {
 		})
 	}, [])
 
-	const cardToProps = useCallback((data: SongVariantDto) => {
-		return null
-	}, [])
-
 	const cancelSelect = useCallback(() => {
 		setSelected([])
 		setSelectable(false)
@@ -102,10 +101,6 @@ export default function TeamSongsPage() {
 		},
 		[selection]
 	)
-
-	const addSongPermission = usePermission<TeamPermissions>('team.add_song', {
-		teamGuid,
-	})
 
 	return (
 		<>

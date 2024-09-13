@@ -4,6 +4,7 @@ import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { UserGuid } from '@/interfaces/user'
 import { Box } from '@mui/material'
+import { useMemo } from 'react'
 
 type ListTopPanelPeopleProps = {
 	selectable: boolean
@@ -23,6 +24,10 @@ export default function ListTopPanelPeople(props: ListTopPanelPeopleProps) {
 		props.onChange(false)
 	}
 
+	const totalCount = useMemo(() => {
+		return props.peopleCount || 0
+	}, [props.peopleCount])
+
 	return (
 		<Box
 			display={'flex'}
@@ -34,7 +39,15 @@ export default function ListTopPanelPeople(props: ListTopPanelPeopleProps) {
 		>
 			{!props.selectable ? (
 				<>
-					<Typography>Celkem {props.peopleCount || 0} uživatelé</Typography>
+					<Typography>
+						{/* V týmu {totalCount < 5 && totalCount > 1 ? 'jsou' : 'je'}  */}
+						Celkem {totalCount}{' '}
+						{totalCount === 1
+							? 'uživatel'
+							: totalCount < 5
+							? 'uživatelé'
+							: 'uživatelů'}
+					</Typography>
 					{props.role === TeamMemberRole.MANAGER && (
 						<Button
 							variant="text"

@@ -1,0 +1,48 @@
+.info-button {
+	position: relative;
+	display: inline-block;
+}
+
+.info-button-text {
+	line-height: 30px;
+}
+
+.info-button:hover .info-button-text {
+	opacity: 1;
+	pointer-events: auto;
+}
+.info-button-text {
+	padding-left: 30px;
+	opacity: 0;
+	/* pointer-events: auto; */
+}
+
+.info-button:hover .info-button-text-box {
+	background-color: var(--color-grey-100);
+	outline: 1px solid #e0e0e0;
+
+	display: block;
+
+	padding-right: 8px;
+}
+
+.info-button-text-box {
+	/* display: none; */
+	border-radius: 15px;
+
+	outline-width: 0px;
+	outline-color: var(--color-grey-200);
+
+	width: 30px;
+	height: 30px;
+
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.info-button,
+.info-button-text-box,
+.info-button-text {
+	transition: 0.3s;
+}

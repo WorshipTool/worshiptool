@@ -1,12 +1,16 @@
 'use client'
+import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
 import ContainerGrid from '@/common/components/ContainerGrid'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Typography } from '@/common/ui/Typography'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import {
 	SongDto,
 	SongVariantDto,
+	VariantPackAlias,
+	VariantPackGuid,
 	mapGetSongDataApiToSongDto,
 	mapSongDataVariantApiToSongVariantDto,
 } from '../../../../../api/dtos'
@@ -52,39 +56,54 @@ function SongRoutePage({ params }: SongRoutePageProps) {
 		//TODO: Sometime not working when group is turned on
 
 		return (
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					position: 'relative',
-				}}
-			>
-				<ContainerGrid
+			<>
+				<Box
 					sx={{
-						marginTop: 2,
-						marginBottom: 2,
-						padding: 3,
-						backgroundColor: 'grey.200',
-						borderStyle: 'solid',
-						borderWidth: 1,
-						borderColor: 'grey.400',
-						borderRadius: 1,
-						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
-						displayPrint: 'none',
+						alignItems: 'center',
+						position: 'relative',
 					}}
 				>
-					{song && variantData ? (
-						<SongContainer variant={variantData} song={song} />
-					) : (
-						<>
-							<Typography>Načítání...</Typography>
-						</>
-					)}
-				</ContainerGrid>
-			</Box>
+					<ContainerGrid
+						sx={{
+							marginTop: 2,
+							marginBottom: 2,
+							padding: 3,
+							backgroundColor: 'grey.200',
+							borderStyle: 'solid',
+							borderWidth: 1,
+							borderColor: 'grey.400',
+							borderRadius: 1,
+							flex: 1,
+							display: 'flex',
+							flexDirection: 'column',
+							displayPrint: 'none',
+							position: 'relative',
+						}}
+					>
+						{Array.from({ length: 4 }).map((_, i) => (
+							<DraggableSong
+								key={i}
+								data={{
+									packGuid: variantData?.packGuid || ('' as VariantPackGuid),
+									title: variantData?.preferredTitle || '',
+									alias: variantData?.packAlias || ('' as VariantPackAlias),
+								}}
+							>
+								<DragCorner index={i} />
+							</DraggableSong>
+						))}
+						{song && variantData ? (
+							<SongContainer variant={variantData} song={song} />
+						) : (
+							<>
+								<Typography>Načítání...</Typography>
+							</>
+						)}
+					</ContainerGrid>
+				</Box>
+			</>
 		)
 	} catch (e) {
 		return <NotFound />
