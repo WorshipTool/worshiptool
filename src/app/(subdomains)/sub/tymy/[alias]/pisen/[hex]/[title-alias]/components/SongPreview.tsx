@@ -20,7 +20,7 @@ export default function SongPreview({ variant, ...props }: SongPreviewProps) {
 			<SheetDisplay
 				sheet={props.sheet}
 				hideChords={false}
-				title={variant.preferredTitle}
+				// title={variant.preferredTitle}
 			/>
 		</Box>
 	)
