@@ -8,7 +8,7 @@ import { TeamPageTitle } from '@/app/(subdomains)/sub/tymy/[alias]/components/To
 import SongPreview from '@/app/(subdomains)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/SongPreview'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { Description } from '@mui/icons-material'
+import { AudioFile } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useState } from 'react'
@@ -60,7 +60,7 @@ export default function TeamPisenPage(props: TeamPisenPageProps) {
 						alignItems={'center'}
 						width={6 * 8}
 					>
-						<Description
+						<AudioFile
 							fontSize="inherit"
 							sx={{
 								fontSize: '1.8rem',

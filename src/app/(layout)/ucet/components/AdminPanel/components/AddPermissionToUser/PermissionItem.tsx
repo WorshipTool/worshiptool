@@ -12,13 +12,13 @@ import { useApi } from '../../../../../../../hooks/api/useApi'
 import {
 	PermissionDataType,
 	PermissionType,
-	Permissions,
+	PermissionsTypes,
 } from '../../../../../../../hooks/permissions/permission.types'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 import PermissionItemPayload from './PermissionItemPayload'
 
 type PermissionItemProps<T extends PermissionType> = {
-	permission: PermissionDataType<T>
+	permission: PermissionDataType<PermissionsTypes, T>
 	editable?: boolean
 	onSubmit?: () => void
 	userGuid: string

@@ -11,10 +11,8 @@
 // }
 
 export type PermissionsTypes = Record<string, any>
-export type PermissionType<A extends PermissionsTypes> = Extract<
-	keyof A,
-	string
->
+export type PermissionType<A extends PermissionsTypes = PermissionsTypes> =
+	Extract<keyof A, string>
 export type PermissionPayloadType<
 	A extends PermissionsTypes,
 	T extends PermissionType<A> = PermissionType<A>

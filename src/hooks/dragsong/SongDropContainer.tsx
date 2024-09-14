@@ -1,3 +1,5 @@
+'use client'
+import { useApi } from '@/hooks/api/useApi'
 import {
 	DragSongDto,
 	getSongDataFromDragEvent,
@@ -14,15 +16,22 @@ type SongDropContainerProps = {
 export default function SongDropContainer(props: SongDropContainerProps) {
 	const [isOver, setIsOver] = useState(false)
 
-	const onDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+	const { songGettingApi } = useApi()
+
+	const onDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+		console.log('onDrag', e)
+		e.preventDefault()
 		const isSong = isDragObjectSong(e)
 		if (isSong) {
-			e.preventDefault()
 			setIsOver(true)
 		}
 	}, [])
 
-	const onDragEnd = useCallback((e: React.DragEvent) => {
+	const onDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+	}, [])
+
+	const onDragLeave = useCallback((e: React.DragEvent) => {
 		e.preventDefault()
 		// @ts-ignore
 		if (!e.currentTarget.contains(e.relatedTarget)) {
@@ -31,16 +40,16 @@ export default function SongDropContainer(props: SongDropContainerProps) {
 	}, [])
 
 	const onDrop = useCallback(
-		(e: React.DragEvent<HTMLDivElement>) => {
+		async (e: React.DragEvent<HTMLDivElement>) => {
 			e.preventDefault()
 			setIsOver(false)
-			const song = getSongDataFromDragEvent(e)
+			const song = await getSongDataFromDragEvent(e, songGettingApi)
 
 			if (song) {
 				props.onDrop?.(song, e)
 			}
 		},
-		[props.onDrop]
+		[props.onDrop, songGettingApi]
 	)
 
 	const component = useMemo(() => {
@@ -51,8 +60,9 @@ export default function SongDropContainer(props: SongDropContainerProps) {
 
 	return (
 		<div
-			onDragEnter={onDrag}
-			onDragLeave={onDragEnd}
+			onDragEnter={onDragEnter}
+			onDragLeave={onDragLeave}
+			onDragOver={onDragOver}
 			onDrop={onDrop}
 			style={props.style}
 		>

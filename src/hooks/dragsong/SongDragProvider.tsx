@@ -1,3 +1,4 @@
+import { useApi } from '@/hooks/api/useApi'
 import {
 	EVENT_NAME_SONG_DRAG_END,
 	EVENT_NAME_SONG_DRAG_START,
@@ -10,6 +11,8 @@ type SongDragProviderProps = {
 }
 
 export default function SongDragProvider(props: SongDragProviderProps) {
+	const { songGettingApi } = useApi()
+
 	const isDragging = useRef(false)
 	const set = (value: boolean) => {
 		if (value === isDragging.current) return
@@ -21,12 +24,12 @@ export default function SongDragProvider(props: SongDragProviderProps) {
 		}
 	}
 
-	const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+	const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
 		const isSong = isDragObjectSong(e)
 		if (isSong) {
-			e.preventDefault()
 			set(true)
 		}
+		e.preventDefault()
 	}
 
 	const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
@@ -37,13 +40,21 @@ export default function SongDragProvider(props: SongDragProviderProps) {
 		}
 	}
 
-	const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+	const onDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+		// const url = e.dataTransfer.getData('text/uri-list')
+		// const o = await getSongDataFromDragEvent(e, songGettingApi)
 		e.preventDefault()
 		set(false)
+
+		// if (!o) {
+		// 	if (url) {
+		// 		window.open(url, '_blank')
+		// 	}
+		// }
 	}
 
 	return (
-		<div onDragOver={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}>
+		<div onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
 			{props.children}
 		</div>
 	)
