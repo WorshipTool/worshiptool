@@ -1,0 +1,42 @@
+import {
+	AnalyticsApi,
+	AuthApi,
+	Configuration,
+	GroupApi,
+	MailApi,
+	PermissionsApi,
+	PlaylistEditingApi,
+	PlaylistGettingApi,
+	SongAddingApi,
+	SongDeletingApi,
+	SongEditingApi,
+	SongGettingApi,
+	SongPublishingApi,
+	SongValidationApi,
+	TeamAddingApi,
+	TeamGettingApi,
+	TeamJoiningApi,
+	TeamMembersApi,
+} from '@/api/generated'
+
+export const getApiClasses = (apiConfiguration: Configuration) => ({
+	playlistGettingApi: new PlaylistGettingApi(apiConfiguration),
+	playlistEditingApi: new PlaylistEditingApi(apiConfiguration),
+	songGettingApi: new SongGettingApi(apiConfiguration),
+	songAddingApi: new SongAddingApi(apiConfiguration),
+	songEditingApi: new SongEditingApi(apiConfiguration),
+	songDeletingApi: new SongDeletingApi(apiConfiguration),
+	songPublishingApi: new SongPublishingApi(apiConfiguration),
+	songValidationApi: new SongValidationApi(apiConfiguration),
+	groupApi: new GroupApi(apiConfiguration),
+	authApi: new AuthApi(apiConfiguration),
+	permissionApi: new PermissionsApi(apiConfiguration),
+	analyticsApi: new AnalyticsApi(apiConfiguration),
+	mailApi: new MailApi(apiConfiguration),
+
+	// submodules
+	teamAddingApi: new TeamAddingApi(apiConfiguration),
+	teamGettingApi: new TeamGettingApi(apiConfiguration),
+	teamJoiningApi: new TeamJoiningApi(apiConfiguration),
+	teamMembersApi: new TeamMembersApi(apiConfiguration),
+})

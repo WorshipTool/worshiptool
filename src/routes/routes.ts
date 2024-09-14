@@ -162,6 +162,7 @@ export const routesPaths = {
 	teamPeople: '/sub/tymy/[alias]/lide',
 	teamSettings: '/sub/tymy/[alias]/nastaveni',
 	teamJoin: '/sub/tymy/pripojitse/[code]',
+	teamSong: '/sub/tymy/[alias]/pisen/[hex]/[title-alias]',
 } as const
 
 // DONT REMOVE

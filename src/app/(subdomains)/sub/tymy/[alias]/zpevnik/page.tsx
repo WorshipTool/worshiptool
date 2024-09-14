@@ -16,11 +16,12 @@ import { TeamPermissions } from '@/app/(subdomains)/sub/tymy/tech'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
 import { usePermission } from '@/hooks/permissions/usePermission'
+import { RoutesKeys, SmartParams, parseVariantAlias } from '@/routes'
 import { LinearProgress } from '@mui/material'
 import './styles.css'
 
 export default function TeamSongsPage() {
-	const { selection, guid: teamGuid } = useInnerTeam()
+	const { selection, guid: teamGuid, alias } = useInnerTeam()
 	const items = useMemo(() => {
 		const items =
 			selection.searchedItems.length > 0
@@ -86,6 +87,21 @@ export default function TeamSongsPage() {
 		setSelected((s) => {
 			return s.filter((v) => v !== d.packGuid)
 		})
+	}, [])
+
+	const cardToProps = useCallback((variant: SongVariantDto) => {
+		const p = parseVariantAlias(variant.packAlias)
+
+		const to: RoutesKeys = 'teamSong'
+		const params: SmartParams<'teamSong'> = {
+			hex: p.hex,
+			'title-alias': p.alias,
+			alias,
+		}
+		return {
+			to,
+			params,
+		}
 	}, [])
 
 	const cancelSelect = useCallback(() => {
@@ -187,7 +203,7 @@ export default function TeamSongsPage() {
 					)}
 					<SongListCards
 						data={items}
-						// cardToLinkProps={cardToProps}
+						cardToLinkProps={cardToProps}
 						selectable={selectable}
 						onCardSelect={onCardSelect}
 						onCardDeselect={onCardDeselect}
