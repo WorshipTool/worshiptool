@@ -8,7 +8,7 @@ type HandlerProps = {
 
 export const useScrollHandler = (props?: HandlerProps) => {
 	const [isTop, setIsTop] = useState(true)
-	const [scrollY, setScroll] = useState(0)
+	// const [scrollY, setScroll] = useState(0)
 
 	const threshold = useMemo(
 		() => props?.topThreshold || 10,
@@ -16,9 +16,12 @@ export const useScrollHandler = (props?: HandlerProps) => {
 	)
 	const { scrollY: y } = useScroll()
 	useMotionValueEvent(y, 'change', (latest) => {
-		const isTop = latest < threshold
-		setIsTop(isTop)
-		setScroll(latest)
+		const newIsTop = latest < threshold
+		if (isTop !== newIsTop) {
+			setIsTop(newIsTop)
+		}
+		// setScroll(latest)
 	})
-	return { isTop, scrollY }
+
+	return { isTop }
 }

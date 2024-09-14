@@ -96,7 +96,7 @@ export default function SearchedSongsList({
 						properties={[
 							'SHOW_ADDED_BY_LOADER',
 							'SHOW_PRIVATE_LABEL',
-							'SHOW_YOUR_PUBLIC_LABEL',
+							// 'SHOW_YOUR_PUBLIC_LABEL',
 						]}
 					></SongListCards>
 				)}

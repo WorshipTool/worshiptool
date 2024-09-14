@@ -4,7 +4,7 @@ import {
 	EVENT_NAME_SONG_DRAG_START,
 } from '@/hooks/dragsong/constants'
 import { isDragObjectSong } from '@/hooks/dragsong/tech'
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 
 type SongDragProviderProps = {
 	children: React.ReactNode
@@ -14,7 +14,7 @@ export default function SongDragProvider(props: SongDragProviderProps) {
 	const { songGettingApi } = useApi()
 
 	const isDragging = useRef(false)
-	const set = (value: boolean) => {
+	const set = useCallback((value: boolean) => {
 		if (value === isDragging.current) return
 		isDragging.current = value
 		if (value) {
@@ -22,36 +22,45 @@ export default function SongDragProvider(props: SongDragProviderProps) {
 		} else {
 			window.dispatchEvent(new Event(EVENT_NAME_SONG_DRAG_END))
 		}
-	}
+	}, [])
 
-	const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-		const isSong = isDragObjectSong(e)
-		if (isSong) {
-			set(true)
-		}
-		e.preventDefault()
-	}
+	const onDragOver = useCallback(
+		(e: React.DragEvent<HTMLDivElement>) => {
+			const isSong = isDragObjectSong(e)
+			if (isSong) {
+				set(true)
+			}
+			e.preventDefault()
+		},
+		[set]
+	)
 
-	const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-		e.preventDefault()
-		// @ts-ignore
-		if (e.relatedTarget === null || e.relatedTarget.nodeName === 'HTML') {
+	const onDragLeave = useCallback(
+		(e: React.DragEvent<HTMLDivElement>) => {
+			e.preventDefault()
+			// @ts-ignore
+			if (e.relatedTarget === null || e.relatedTarget.nodeName === 'HTML') {
+				set(false)
+			}
+		},
+		[set]
+	)
+
+	const onDrop = useCallback(
+		async (e: React.DragEvent<HTMLDivElement>) => {
+			// const url = e.dataTransfer.getData('text/uri-list')
+			// const o = await getSongDataFromDragEvent(e, songGettingApi)
+			e.preventDefault()
 			set(false)
-		}
-	}
 
-	const onDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-		// const url = e.dataTransfer.getData('text/uri-list')
-		// const o = await getSongDataFromDragEvent(e, songGettingApi)
-		e.preventDefault()
-		set(false)
-
-		// if (!o) {
-		// 	if (url) {
-		// 		window.open(url, '_blank')
-		// 	}
-		// }
-	}
+			// if (!o) {
+			// 	if (url) {
+			// 		window.open(url, '_blank')
+			// 	}
+			// }
+		},
+		[set]
+	)
 
 	return (
 		<div onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>

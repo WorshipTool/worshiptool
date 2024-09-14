@@ -85,7 +85,7 @@ export const SongCard = memo(function S({
 
 	// What display
 	const showPrivate = !data.public && createdByYou && privateLabelEnabled
-	const showYourPublic = data.public && !createdByYou && yourPublicLabelEnabled
+	const showYourPublic = data.public && createdByYou && yourPublicLabelEnabled
 
 	// Title and sheet data to display
 	const title = data.preferredTitle

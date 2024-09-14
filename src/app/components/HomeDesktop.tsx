@@ -8,7 +8,7 @@ import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
@@ -16,9 +16,9 @@ import SearchedSongsList from './components/SearchedSongsList'
 
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
 
-export default function HomeDesktop() {
-	const ANIMATION_DURATION = 0.2
+const ANIMATION_DURATION = 0.2
 
+export default function HomeDesktop() {
 	const theme = useTheme()
 	const phoneVersion = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -28,10 +28,10 @@ export default function HomeDesktop() {
 	const [searchString, setSearchString] = useUrlState('hledat')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
-	const onSearchValueChange = (e: string) => {
+	const onSearchValueChange = useCallback((e: string) => {
 		setSearchInputValue(e)
 		if (searchString === null) setSearchString('')
-	}
+	}, [])
 
 	useChangeDelayer(
 		searchInputValue,
@@ -54,12 +54,12 @@ export default function HomeDesktop() {
 
 	// Manage scrolling to search results
 	const scrollLevel = 20
-	const scrollToTop = () => {
+	const scrollToTop = useCallback(() => {
 		window.scroll({
 			top: 90,
 			behavior: 'smooth',
 		})
-	}
+	}, [])
 
 	useEffect(() => {
 		if (searchString === null) return

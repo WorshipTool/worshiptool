@@ -1,7 +1,13 @@
 import SongCardDragTemplate from '@/common/ui/SongCard/SongCardDragTemplate'
 import { DragSongDto, SONG_DRAG_DATA_TYPE } from '@/hooks/dragsong/tech'
 import { getRouteUrlWithParams, parseVariantAlias } from '@/routes'
-import React, { DragEventHandler, useMemo, useRef, useState } from 'react'
+import React, {
+	DragEventHandler,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 
 type DraggableSongProps = {
 	children: React.ReactNode | ((dragging: boolean) => React.ReactNode)
@@ -22,30 +28,33 @@ export default function DraggableSong({
 		return props.data.title
 	}, [props.data.title])
 
-	const onDragStart: DragEventHandler<HTMLDivElement> = (e) => {
-		setDragging(true)
-		if (!img.current) return
-		e.dataTransfer.setDragImage(img.current, 50, 50)
+	const onDragStart: DragEventHandler<HTMLDivElement> = useCallback(
+		(e) => {
+			setDragging(true)
+			if (!img.current) return
+			e.dataTransfer.setDragImage(img.current, 50, 50)
 
-		// set url to data
-		const url = getRouteUrlWithParams(
-			'variant',
-			parseVariantAlias(props.data.alias)
-		)
-		e.dataTransfer.setData('text/uri-list', url)
-		e.dataTransfer.setData('text/plain', title)
+			// set url to data
+			const url = getRouteUrlWithParams(
+				'variant',
+				parseVariantAlias(props.data.alias)
+			)
+			e.dataTransfer.setData('text/uri-list', url)
+			e.dataTransfer.setData('text/plain', title)
 
-		const data: DragSongDto = {
-			packGuid: props.data.packGuid,
-			alias: props.data.alias,
-			title: title,
-		}
-		e.dataTransfer.setData(SONG_DRAG_DATA_TYPE, JSON.stringify(data))
-	}
+			const data: DragSongDto = {
+				packGuid: props.data.packGuid,
+				alias: props.data.alias,
+				title: title,
+			}
+			e.dataTransfer.setData(SONG_DRAG_DATA_TYPE, JSON.stringify(data))
+		},
+		[props.data.alias, props.data.packGuid, title]
+	)
 
-	const onDragEnd = () => {
+	const onDragEnd = useCallback(() => {
 		setDragging(false)
-	}
+	}, [])
 
 	const children = useMemo(() => {
 		return typeof props.children === 'function'
