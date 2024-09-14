@@ -10,8 +10,6 @@ import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { AudioFile } from '@mui/icons-material'
 import { Box } from '@mui/material'
-import { Sheet } from '@pepavlin/sheet-api'
-import { useState } from 'react'
 
 type TeamPisenPageProps = {
 	params: SmartParams<'teamSong'>
@@ -19,12 +17,6 @@ type TeamPisenPageProps = {
 
 export default function TeamPisenPage(props: TeamPisenPageProps) {
 	// const {} = useSmartParams
-	const [sheet, setSheet] = useState<Sheet | null>(null)
-
-	const [justNumber, setJustNumber] = useState(0)
-	const rerender = () => {
-		setJustNumber(justNumber + 1)
-	}
 
 	const [apiState] = useApiStateEffect(async () => {
 		const alias = getVariantAliasFromParams(
@@ -34,7 +26,6 @@ export default function TeamPisenPage(props: TeamPisenPageProps) {
 		const v = await getVariantByAlias(alias)
 		const variant = v.variants[0]
 		const d = mapSongDataVariantApiToSongVariantDto(variant)
-		setSheet(d.sheet)
 		return d
 	}, [props.params.hex, props.params['title-alias']])
 
@@ -70,9 +61,9 @@ export default function TeamPisenPage(props: TeamPisenPageProps) {
 					{apiState.data?.preferredTitle}
 				</Box>
 			</TeamPageTitle>
-			{apiState.data && sheet && (
+			{apiState.data && (
 				<>
-					<SongPreview variant={apiState.data} sheet={sheet} />
+					<SongPreview variant={apiState.data} />
 				</>
 			)}
 		</Box>
