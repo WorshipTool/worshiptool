@@ -1,6 +1,8 @@
 'use client'
 import MenuItem from '@/app/(subdomains)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
 import useInnerTeam from '@/app/(subdomains)/sub/tymy/hooks/useInnerTeam'
+import { TeamPermissions } from '@/app/(subdomains)/sub/tymy/tech'
+import { usePermission } from '@/hooks/permissions/usePermission'
 import {
 	Analytics,
 	Dashboard,
@@ -14,7 +16,14 @@ import { ComponentProps, useMemo } from 'react'
 type MenuItem = ComponentProps<typeof MenuItem>
 
 export default function Menu() {
-	const { alias } = useInnerTeam()
+	const { alias, guid } = useInnerTeam()
+	const hasPermissionToEdit = usePermission<TeamPermissions>(
+		'team.change_base_info',
+		{
+			teamGuid: guid,
+		}
+	)
+
 	const items: MenuItem[] = useMemo(
 		() => [
 			{
@@ -47,10 +56,10 @@ export default function Menu() {
 				icon: <Settings />,
 				to: 'teamSettings',
 				toParams: { alias },
-				disabled: true,
+				disabled: !hasPermissionToEdit,
 			},
 		],
-		[]
+		[hasPermissionToEdit, alias]
 	)
 	return (
 		<Box padding={3} gap={1} display={'flex'} flexDirection={'column'}>

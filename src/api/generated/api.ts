@@ -180,6 +180,31 @@ export interface ChangePasswordInDto {
 /**
  * 
  * @export
+ * @interface ChangeTeamInfoInDto
+ */
+export interface ChangeTeamInfoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'joinCode'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateTeamInDto
  */
 export interface CreateTeamInDto {
@@ -637,6 +662,12 @@ export interface GetTeamInfoOutDto {
      * @memberof GetTeamInfoOutDto
      */
     'createdByGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'joinCode': string;
 }
 /**
  * 
@@ -8412,6 +8443,116 @@ export class TeamAddingApi extends BaseAPI {
      */
     public teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: RawAxiosRequestConfig) {
         return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(createTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamEditingApi - axios parameter creator
+ * @export
+ */
+export const TeamEditingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamInfo: async (changeTeamInfoInDto: ChangeTeamInfoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeTeamInfoInDto' is not null or undefined
+            assertParamExists('teamEditingControllerChangeTeamInfo', 'changeTeamInfoInDto', changeTeamInfoInDto)
+            const localVarPath = `/submodules/teams/changeteaminfo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeTeamInfoInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamEditingApi - functional programming interface
+ * @export
+ */
+export const TeamEditingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamEditingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerChangeTeamInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamEditingApi - factory interface
+ * @export
+ */
+export const TeamEditingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamEditingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamEditingApi - object-oriented interface
+ * @export
+ * @class TeamEditingApi
+ * @extends {BaseAPI}
+ */
+export class TeamEditingApi extends BaseAPI {
+    /**
+     * 
+     * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

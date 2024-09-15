@@ -13,6 +13,7 @@ import {
 	SongPublishingApi,
 	SongValidationApi,
 	TeamAddingApi,
+	TeamEditingApi,
 	TeamGettingApi,
 	TeamJoiningApi,
 	TeamMembersApi,
@@ -42,6 +43,7 @@ export const useApi = () => {
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),
 			teamGettingApi: new TeamGettingApi(apiConfiguration),
+			teamEditingApi: new TeamEditingApi(apiConfiguration),
 			teamJoiningApi: new TeamJoiningApi(apiConfiguration),
 			teamMembersApi: new TeamMembersApi(apiConfiguration),
 		}),

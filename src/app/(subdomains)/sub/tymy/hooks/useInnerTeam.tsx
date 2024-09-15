@@ -33,7 +33,7 @@ export const InnerTeamProvider = ({
 
 const useProvideInnerTeam = (teamAlias: string) => {
 	const { teamGettingApi } = useApi()
-	const [apiState] = useApiStateEffect(() => {
+	const [apiState, reload] = useApiStateEffect(() => {
 		return handleApiCall(
 			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
 		)
@@ -53,8 +53,10 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		guid: apiState.data?.guid || '',
 		alias: teamAlias,
 		name: apiState.data?.name || '',
+		joinCode: apiState.data?.joinCode || '',
 		selection,
 		isCreator,
 		createdByGuid: (apiState.data?.createdByGuid || '') as UserGuid,
+		reload,
 	}
 }
