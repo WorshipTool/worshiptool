@@ -63,9 +63,10 @@ export default function TopPanel(props: TopPanelProps) {
 
 	const songsApi = new SongEditingApi(apiConfiguration)
 	const { songEditingApi, songPublishingApi } = useApi()
-	const { fetchApiState } = useApiState<EditVariantOutDto>()
-
-	const [saving, setSaving] = React.useState(false)
+	const {
+		fetchApiState,
+		apiState: { loading: saving },
+	} = useApiState<EditVariantOutDto>()
 
 	const anyChange = useMemo(() => {
 		const t = props.variant.preferredTitle !== props.editedTitle
@@ -118,8 +119,6 @@ export default function TopPanel(props: TopPanelProps) {
 			return
 		}
 
-		setSaving(true)
-
 		const body: PostEditVariantInDto = {
 			variantAlias: props.variant.packAlias,
 			sheetData: props.sheet.getOriginalSheetData(),
@@ -140,7 +139,6 @@ export default function TopPanel(props: TopPanelProps) {
 				navigate('variant', {
 					...parseVariantAlias(result.alias as VariantPackAlias),
 				})
-				setSaving(false)
 			}
 		)
 	}

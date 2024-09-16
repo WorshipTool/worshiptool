@@ -18,4 +18,7 @@ export type TeamPermissions = {
 	'team.change_base_info': {
 		teamGuid: string
 	}
+	'team.edit_songs': {
+		teamGuid: string
+	}
 }
