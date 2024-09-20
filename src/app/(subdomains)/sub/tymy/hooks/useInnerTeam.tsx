@@ -1,7 +1,8 @@
 'use client'
+import { useTeamSelection } from '@/app/(subdomains)/sub/tymy/hooks/useTeamSelection'
+import { TeamGuid } from '@/app/(subdomains)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
-import { useSelection } from '@/hooks/playlist/useSelection'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { UserGuid } from '@/interfaces/user'
 import { useApiStateEffect } from '@/tech/ApiState'
@@ -38,8 +39,13 @@ const useProvideInnerTeam = (teamAlias: string) => {
 			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
 		)
 	})
-	const selection = useSelection(
-		(apiState.data?.selectionGuid || '') as PlaylistGuid
+	const guid = useMemo(
+		() => (apiState.data?.guid || '') as TeamGuid,
+		[apiState]
+	)
+	const selection = useTeamSelection(
+		(apiState.data?.selectionGuid || '') as PlaylistGuid,
+		guid
 	)
 
 	const { user } = useAuth()
@@ -50,7 +56,7 @@ const useProvideInnerTeam = (teamAlias: string) => {
 	}, [apiState, user])
 
 	return {
-		guid: apiState.data?.guid || '',
+		guid,
 		alias: teamAlias,
 		name: apiState.data?.name || '',
 		joinCode: apiState.data?.joinCode || '',

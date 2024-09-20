@@ -3,7 +3,7 @@ import { shouldUseSubdomains } from '@/routes/routes.tech'
 import { note } from '@pepavlin/sheet-api'
 import { Route } from 'nextjs-routes'
 import { FRONTEND_URL } from '../api/constants'
-import { RoutesKeys, SmartParams } from './routes.types'
+import { ParamValueType, RoutesKeys, SmartParams } from './routes.types'
 
 export const changeUrlToSubdomains = (url: string): string => {
 	// if the url is /sub/A/sub/B..., return B.A....
@@ -69,18 +69,19 @@ export const changeUrlFromSubdomains = (url: string): string => {
 
 export const getReplacedUrlWithParams = (
 	url: string,
-	params: { [key: string]: string | undefined },
+	params: { [key: string]: ParamValueType | undefined },
 	options: { subdomains?: boolean } = {
 		subdomains: true,
 	}
 ) => {
-	const queryParams: Record<string, string> = {}
+	const queryParams: Record<string, ParamValueType> = {}
 
 	let result = url
 	for (const key in params) {
 		// Ignore undefined values
 		if (params[key] === undefined) continue
-		if (typeof params[key] !== 'string') continue
+		if (typeof params[key] !== 'string' && typeof params[key] !== 'boolean')
+			continue
 
 		const initial = result
 		result = result.replace(`[${key}]`, params[key] as string)
@@ -89,10 +90,14 @@ export const getReplacedUrlWithParams = (
 		}
 	}
 
+	// Handling query params
 	if (Object.keys(queryParams).length > 0) {
 		const url = new URL(result, FRONTEND_URL)
 		for (const key in queryParams) {
-			url.searchParams.set(key, queryParams[key])
+			const val = queryParams[key]
+			if (typeof val === 'string') url.searchParams.set(key, val)
+			else if (typeof val === 'boolean')
+				url.searchParams.set(key, val.toString())
 		}
 		result = url.toString()
 	}
@@ -187,5 +192,8 @@ export const routesSearchParams = {
 	},
 	home: {
 		hledat: 'string' as string | undefined,
+	},
+	teamSong: {
+		edit: true,
 	},
 }

@@ -2,6 +2,9 @@ export enum TeamMemberRole {
 	MEMBER,
 	MANAGER,
 }
+
+export type TeamGuid = string & { readonly brand: unique symbol }
+
 export type TeamPermissions = {
 	'team.kick_member': {
 		teamGuid: string

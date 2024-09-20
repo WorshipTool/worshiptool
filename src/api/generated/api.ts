@@ -26,6 +26,44 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AddPackToTeamSelectionInDto
+ */
+export interface AddPackToTeamSelectionInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPackToTeamSelectionInDto
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPackToTeamSelectionInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AddPermissionToGroupInDto
+ */
+export interface AddPermissionToGroupInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPermissionToGroupInDto
+     */
+    'groupGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPermissionToGroupInDto
+     */
+    'permissionGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddPermissionToUserInDto
  */
 export interface AddPermissionToUserInDto {
@@ -1041,6 +1079,12 @@ export interface Permission {
      * @memberof Permission
      */
     'users': Array<User>;
+    /**
+     * 
+     * @type {Array<PermissionUserGroup>}
+     * @memberof Permission
+     */
+    'groups': Array<PermissionUserGroup>;
 }
 /**
  * 
@@ -1089,6 +1133,31 @@ export const PermissionUserBaseOutDtoRoleEnum = {
 
 export type PermissionUserBaseOutDtoRoleEnum = typeof PermissionUserBaseOutDtoRoleEnum[keyof typeof PermissionUserBaseOutDtoRoleEnum];
 
+/**
+ * 
+ * @export
+ * @interface PermissionUserGroup
+ */
+export interface PermissionUserGroup {
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionUserGroup
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Array<User>}
+     * @memberof PermissionUserGroup
+     */
+    'users': Array<User>;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof PermissionUserGroup
+     */
+    'permissions': Array<Permission>;
+}
 /**
  * 
  * @export
@@ -1794,6 +1863,38 @@ export interface ReorderPlaylistItem {
      * @memberof ReorderPlaylistItem
      */
     'order': number;
+}
+/**
+ * 
+ * @export
+ * @interface ReplaceWithCopyInDto
+ */
+export interface ReplaceWithCopyInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReplaceWithCopyInDto
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReplaceWithCopyInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface ReplaceWithCopyOutDto
+ */
+export interface ReplaceWithCopyOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReplaceWithCopyOutDto
+     */
+    'packAlias': string;
 }
 /**
  * 
@@ -4930,6 +5031,45 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerAddPermissionToGroup: async (addPermissionToGroupInDto: AddPermissionToGroupInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPermissionToGroupInDto' is not null or undefined
+            assertParamExists('permissionControllerAddPermissionToGroup', 'addPermissionToGroupInDto', addPermissionToGroupInDto)
+            const localVarPath = `/permissions/group/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPermissionToGroupInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5091,6 +5231,45 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerRemovePermissionFromGroup: async (addPermissionToGroupInDto: AddPermissionToGroupInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPermissionToGroupInDto' is not null or undefined
+            assertParamExists('permissionControllerRemovePermissionFromGroup', 'addPermissionToGroupInDto', addPermissionToGroupInDto)
+            const localVarPath = `/permissions/group/remove`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPermissionToGroupInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5138,6 +5317,18 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
 export const PermissionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PermissionsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionUserGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PermissionsApi.permissionControllerAddPermissionToGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -5189,6 +5380,18 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionUserGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PermissionsApi.permissionControllerRemovePermissionFromGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5209,6 +5412,15 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
 export const PermissionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PermissionsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: any): AxiosPromise<PermissionUserGroup> {
+            return localVarFp.permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -5248,6 +5460,15 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: any): AxiosPromise<PermissionUserGroup> {
+            return localVarFp.permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5265,6 +5486,17 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class PermissionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PermissionsApi
+     */
+    public permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig) {
+        return PermissionsApiFp(this.configuration).permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -5308,6 +5540,17 @@ export class PermissionsApi extends BaseAPI {
      */
     public permissionControllerGetUserPermissions(userGuid?: string, options?: RawAxiosRequestConfig) {
         return PermissionsApiFp(this.configuration).permissionControllerGetUserPermissions(userGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PermissionsApi
+     */
+    public permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig) {
+        return PermissionsApiFp(this.configuration).permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -8493,6 +8736,123 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAddPackToTeam: async (addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPackToTeamSelectionInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerAddPackToTeam', 'addPackToTeamSelectionInDto', addPackToTeamSelectionInDto)
+            const localVarPath = `/submodules/teams/selection/add/pack`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPackToTeamSelectionInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerRemovePackFromTeam: async (addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPackToTeamSelectionInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerRemovePackFromTeam', 'addPackToTeamSelectionInDto', addPackToTeamSelectionInDto)
+            const localVarPath = `/submodules/teams/selection/remove/pack`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPackToTeamSelectionInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerReplaceWithCopy: async (replaceWithCopyInDto: ReplaceWithCopyInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'replaceWithCopyInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerReplaceWithCopy', 'replaceWithCopyInDto', replaceWithCopyInDto)
+            const localVarPath = `/submodules/teams/selection/replacewithcopy`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(replaceWithCopyInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8515,6 +8875,42 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerChangeTeamInfo']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItemOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerAddPackToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerRemovePackFromTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReplaceWithCopyOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerReplaceWithCopy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -8533,6 +8929,33 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
          */
         teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: any): AxiosPromise<void> {
             return localVarFp.teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: any): AxiosPromise<PlaylistItemOutDto> {
+            return localVarFp.teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: any): AxiosPromise<ReplaceWithCopyOutDto> {
+            return localVarFp.teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8553,6 +8976,39 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

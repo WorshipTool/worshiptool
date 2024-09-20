@@ -12,6 +12,7 @@ type PopupProps = {
 	onClose?: () => void
 	children?: React.ReactNode
 
+	icon?: React.ReactNode
 	title?: string
 	subtitle?: string
 	actions?: React.ReactNode
@@ -101,11 +102,17 @@ export default function Popup({
 								{(props.title || props.subtitle) && (
 									<Box display={'flex'} flexDirection={'column'}>
 										{props.title && (
-											<>
+											<Box
+												display={'flex'}
+												flexDirection={'row'}
+												gap={1}
+												alignItems={'center'}
+											>
+												{props.icon}
 												<Typography variant="h5" strong>
 													{props.title}
 												</Typography>
-											</>
+											</Box>
 										)}
 										{props.subtitle && (
 											<>

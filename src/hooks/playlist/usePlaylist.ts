@@ -174,5 +174,7 @@ export default function usePlaylist(
 		loading: state.loading,
 		setItemsKeyChord,
 		isOwner,
+
+		_setItems: setItems,
 	}
 }
