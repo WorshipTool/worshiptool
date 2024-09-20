@@ -2,13 +2,16 @@ import { Box } from '@mui/material'
 import { LayoutProps } from '../../../../common/types'
 import { Gap } from '../../../../common/ui/Gap'
 import { Typography } from '../../../../common/ui/Typography'
-import { generateMetadataTitle } from '../../../../hooks/window-title/tech'
+import { generateSmartMetadata } from '../../../../tech/metadata/metadata'
 
-export const generateMetadata = async () => {
-	return {
-		title: await generateMetadataTitle('Moje písně', 'usersSongs', {}),
+export const generateMetadata = generateSmartMetadata(
+	'usersSongs',
+	async () => {
+		return {
+			title: 'Moje písně',
+		}
 	}
-}
+)
 
 export default function layout(props: LayoutProps) {
 	return (

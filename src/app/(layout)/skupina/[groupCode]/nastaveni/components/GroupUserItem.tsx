@@ -6,6 +6,7 @@ import { useApi } from '../../../../../../hooks/api/useApi'
 import {
 	PermissionPayloadType,
 	PermissionType,
+	PermissionsTypes,
 } from '../../../../../../hooks/permissions/permission.types'
 import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import { useApiState } from '../../../../../../tech/ApiState'
@@ -16,7 +17,7 @@ type GroupUserItemProps<T extends PermissionType> = {
 	editable?: boolean
 	onRemove: () => void
 	permissionType: T
-	permissionPayload: PermissionPayloadType<T>
+	permissionPayload: PermissionPayloadType<PermissionsTypes, T>
 }
 
 export default function GroupUserItem<T extends PermissionType>(

@@ -1,16 +1,16 @@
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Box, Grid, Paper, Typography } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import ContainerGrid from '../../../common/components/ContainerGrid'
-import { generateMetadataTitle } from '../../../hooks/window-title/tech'
 import FeedbackPanel from './components/FeedbackPanel'
 import { getReadmeRawData } from './hooks/useReadme'
 
-export const generateMetadata = async () => {
+export const generateMetadata = generateSmartMetadata('documentation', () => {
 	return {
-		title: await generateMetadataTitle('O aplikaci', 'documentation', {}),
+		title: 'O aplikaci',
 	}
-}
+})
 
 export default SmartPage(Documentation)
 async function Documentation() {

@@ -5,14 +5,15 @@ import { useGroups } from '../../../../../../../hooks/group/useGroups'
 import {
 	PermissionPayloadType,
 	PermissionType,
+	PermissionsTypes,
 } from '../../../../../../../hooks/permissions/permission.types'
 import { useApiStateEffect } from '../../../../../../../tech/ApiState'
 
 type PermissionItemPayloadProps<T extends PermissionType> = {
 	type: T
 	editable?: boolean
-	value?: PermissionPayloadType<T>
-	onChange?: (value: PermissionPayloadType<T>) => void
+	value?: PermissionPayloadType<PermissionsTypes, T>
+	onChange?: (value: PermissionPayloadType<PermissionsTypes, T>) => void
 }
 
 export default function PermissionItemPayload<T extends PermissionType>(
