@@ -1,14 +1,11 @@
 import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
+import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { Print } from '@mui/icons-material'
 import { useTheme } from '@mui/material'
 import { note } from '@pepavlin/sheet-api'
 import { Button } from '../../../../../../../common/ui/Button'
 import { IconButton } from '../../../../../../../common/ui/IconButton'
-import {
-	getReplacedUrlWithParams,
-	routesPaths,
-	SmartAllParams,
-} from '../../../../../../../routes'
+import { routesPaths, SmartAllParams } from '../../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
 import { useSmartParams } from '../../../../../../../routes/useSmartParams'
 

@@ -1,7 +1,8 @@
 // import { useNavigate } from "react-router-dom";
+import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { NavigateOptions as NO } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { getReplacedUrlWithParams, routesPaths } from './routes'
+import { routesPaths } from './routes'
 import { RoutesKeys, SmartAllParams } from './routes.types'
 
 type NavigateOptions = NO & {

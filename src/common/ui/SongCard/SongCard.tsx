@@ -1,12 +1,12 @@
 'use client'
 
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
 import { Box, Typography, alpha, styled, useTheme } from '@mui/material'
 import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
-import { parseVariantAlias } from '../../../routes'
 import CustomChip from '../CustomChip/CustomChip'
 import { Link } from '../Link/Link'
 

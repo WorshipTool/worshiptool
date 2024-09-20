@@ -3,6 +3,7 @@ import { VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import { GetListSongData } from '@/api/generated'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import {
 	Box,
 	CircularProgress,
@@ -18,7 +19,6 @@ import React, { useEffect, useState } from 'react'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import { useApi } from '../../../hooks/api/useApi'
 import usePagination from '../../../hooks/usePagination'
-import { parseVariantAlias } from '../../../routes'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 import { handleApiCall } from '../../../tech/handleApiCall'
 

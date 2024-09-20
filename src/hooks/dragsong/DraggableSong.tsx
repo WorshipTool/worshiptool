@@ -1,6 +1,6 @@
 import SongCardDragTemplate from '@/common/ui/SongCard/SongCardDragTemplate'
 import { DragSongDto, SONG_DRAG_DATA_TYPE } from '@/hooks/dragsong/tech'
-import { getRouteUrlWithParams, parseVariantAlias } from '@/routes'
+import { getRouteUrlWithParams, parseVariantAlias } from '@/routes/routes.tech'
 import React, {
 	DragEventHandler,
 	useCallback,

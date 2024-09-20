@@ -3,7 +3,7 @@ import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlayl
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
-import { parseVariantAlias } from '@/routes'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { Add, Remove } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { Chord, Sheet } from '@pepavlin/sheet-api'

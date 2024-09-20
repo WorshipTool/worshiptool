@@ -1,4 +1,5 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { LoadingButton } from '@mui/lab'
 import { Box, Divider, Skeleton, Typography, styled } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -7,7 +8,6 @@ import { SongVariantDto } from '../../../../../../api/dtos'
 import { Button } from '../../../../../../common/ui/Button'
 import { Link } from '../../../../../../common/ui/Link/Link'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { parseVariantAlias } from '../../../../../../routes'
 import { useApiState } from '../../../../../../tech/ApiState'
 
 const StyledContainer = styled(Box)(({ theme }) => ({

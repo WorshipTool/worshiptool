@@ -1,4 +1,5 @@
 import { VariantPackAlias } from '@/api/dtos'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { EggAlt } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -11,7 +12,6 @@ import {
 } from '@mui/material'
 import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
 import { useApi } from '../../../../../../../hooks/api/useApi'
-import { parseVariantAlias } from '../../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'

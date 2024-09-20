@@ -1,4 +1,4 @@
-import { parseVariantAlias } from '@/routes'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Public, PublicOff } from '@mui/icons-material'

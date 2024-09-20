@@ -2,6 +2,7 @@
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import {
 	Box,
 	Button,
@@ -18,7 +19,6 @@ import ContainerGrid from '../../../../common/components/ContainerGrid'
 import DefaultStyle from '../../../../common/components/SheetDisplay/styles/DefaultStyle'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
-import { parseVariantAlias } from '../../../../routes'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../tech/ApiState'
 import { handleApiCall } from '../../../../tech/handleApiCall'

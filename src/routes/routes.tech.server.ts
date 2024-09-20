@@ -1,4 +1,5 @@
-import { getReplacedUrlWithParams, routesPaths } from '@/routes/routes'
+import { routesPaths } from '@/routes/routes'
+import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 import { redirect } from 'next/navigation'
 

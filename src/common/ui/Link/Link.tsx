@@ -1,8 +1,9 @@
 'use client'
+import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { styled, SxProps } from '@mui/material'
 import NextLink from 'next/link'
 import React, { ComponentProps, useEffect, useMemo } from 'react'
-import { getReplacedUrlWithParams, routesPaths } from '../../../routes'
+import { routesPaths } from '../../../routes'
 import { RoutesKeys, SmartAllParams } from '../../../routes/routes.types'
 
 export type CommonLinkProps<T extends RoutesKeys> = {

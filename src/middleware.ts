@@ -11,8 +11,11 @@ import {
 	HEADERS_PATHNAME_NAME,
 } from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
-import { getReplacedUrlWithParams, routesPaths } from '@/routes'
-import { shouldUseSubdomains } from '@/routes/routes.tech'
+import { routesPaths } from '@/routes'
+import {
+	getReplacedUrlWithParams,
+	shouldUseSubdomains,
+} from '@/routes/routes.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 

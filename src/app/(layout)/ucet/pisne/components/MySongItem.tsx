@@ -1,10 +1,10 @@
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { Box, Typography } from '@mui/material'
 import { SongVariantDto } from '../../../../../api/dtos'
 import { Button } from '../../../../../common/ui/Button'
 import { Gap } from '../../../../../common/ui/Gap'
 import { Link } from '../../../../../common/ui/Link/Link'
-import { parseVariantAlias } from '../../../../../routes'
 
 interface MySongItemProps {
 	variant: SongVariantDto
