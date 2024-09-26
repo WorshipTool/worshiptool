@@ -1,12 +1,14 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { ReorderPlaylistItem } from '@/api/generated'
+import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useApiState } from '@/tech/ApiState'
-import { Chord } from '@pepavlin/sheet-api'
+import { Chord, Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
 import PlaylistDto, {
 	PlaylistGuid,
 	PlaylistItemDto,
+	PlaylistItemGuid,
 } from '../../interfaces/playlist/playlist.types'
 import useAuth from '../auth/useAuth'
 import usePlaylistsGeneral from './usePlaylistsGeneral'
@@ -24,6 +26,7 @@ export default function usePlaylist(
 		renamePlaylist,
 		reorderPlaylist,
 		setKeyChordOfItem,
+		...general
 	} = usePlaylistsGeneral()
 
 	const [playlist, setPlaylist] = useState<PlaylistDto>()
@@ -152,6 +155,31 @@ export default function usePlaylist(
 		return setKeyChordOfItem(item.guid, keyChord)
 	}
 
+	const editItem = async (
+		itemGuid: PlaylistItemGuid,
+		data: EditPlaylistItemData
+	) => {
+		const item = items.find((i) => i.guid === itemGuid)
+		if (!item) return
+		const result = await general.editPlaylistItem(itemGuid, data)
+
+		if (!result) return
+
+		if (data.sheetData) {
+			item.variant.sheetData = data.sheetData
+			item.variant.sheet = new Sheet(data.sheetData)
+			//TODO: do in some better way
+		}
+		if (data.title) item.variant.preferredTitle = data.title
+
+		setItems((items) => {
+			const newItems: PlaylistItemDto[] = [...items]
+			const index = newItems.findIndex((i) => i.guid === itemGuid)
+			newItems[index] = item
+			return newItems
+		})
+	}
+
 	const isOwner = useMemo(() => {
 		if (!playlist) return false
 		if (!isLoggedIn()) return false
@@ -174,6 +202,8 @@ export default function usePlaylist(
 		loading: state.loading,
 		setItemsKeyChord,
 		isOwner,
+		editItem,
+		requireItemEdit: general.requireItemEdit,
 
 		_setItems: setItems,
 	}

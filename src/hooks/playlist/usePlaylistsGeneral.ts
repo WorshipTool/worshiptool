@@ -1,5 +1,6 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { useApi } from '@/hooks/api/useApi'
+import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { Chord } from '@pepavlin/sheet-api'
 import { useCallback } from 'react'
 import {
@@ -15,7 +16,7 @@ import Playlist, {
 	PlaylistItemDto,
 	PlaylistItemGuid,
 } from '../../interfaces/playlist/playlist.types'
-import { handleApiCall } from '../../tech/handleApiCall'
+import { hac, handleApiCall } from '../../tech/handleApiCall'
 
 export default function usePlaylistsGeneral() {
 	const { playlistEditingApi, playlistGettingApi } = useApi()
@@ -150,6 +151,30 @@ export default function usePlaylistsGeneral() {
 		)
 	}
 
+	const editPlaylistItem = async (
+		guid: PlaylistItemGuid,
+		data: EditPlaylistItemData
+	) => {
+		return await hac(
+			playlistEditingApi.playlistEditingControllerEditItem({
+				itemGuid: guid,
+				title: data.title,
+				sheetData: data.sheetData,
+			})
+		)
+	}
+
+	const requireItemEdit = useCallback(
+		async (guid: PlaylistItemGuid) => {
+			return await handleApiCall(
+				playlistEditingApi.playlistEditingControllerRequireItemEdit({
+					itemGuid: guid,
+				})
+			)
+		},
+		[playlistEditingApi]
+	)
+
 	return {
 		addVariantToPlaylist,
 		addPacksToPlaylist,
@@ -163,6 +188,11 @@ export default function usePlaylistsGeneral() {
 		renamePlaylist,
 		reorderPlaylist,
 		setKeyChordOfItem,
+
+		// Item editing
+		editPlaylistItem,
+		requireItemEdit,
+
 		// loading
 	}
 }

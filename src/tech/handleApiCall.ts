@@ -34,3 +34,5 @@ export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
 			throw err
 		})
 }
+
+export const hac = handleApiCall

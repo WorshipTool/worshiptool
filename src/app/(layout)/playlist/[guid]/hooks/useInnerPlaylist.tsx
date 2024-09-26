@@ -1,11 +1,12 @@
 import { VariantPackGuid } from '@/api/dtos'
+import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
 import {
 	PlaylistGuid,
 	PlaylistItemDto,
 	PlaylistItemGuid,
 } from '@/interfaces/playlist/playlist.types'
-import { Chord } from '@pepavlin/sheet-api'
+import { Chord, Sheet } from '@pepavlin/sheet-api'
 import {
 	createContext,
 	useCallback,
@@ -141,6 +142,25 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			await playlist.setItemsKeyChord(item, new Chord(item.toneKey))
 		}
 
+		// Check if title or sheetData has been changed
+		const changedItems = state.items.filter((i) => {
+			const oldItem = playlist.items.find((j) => j.guid === i.guid)
+			return (
+				oldItem?.variant.preferredTitle !== i.variant.preferredTitle ||
+				oldItem?.variant.sheetData !== i.variant.sheetData
+			)
+		})
+		for (const item of changedItems) {
+			// 1. Require item edit
+			await playlist.requireItemEdit(item.guid)
+
+			// 2. Then edit the item
+			await playlist.editItem(item.guid, {
+				title: item.variant.preferredTitle,
+				sheetData: item.variant.sheetData,
+			})
+		}
+
 		// reset()
 		setIsSaved(true)
 	}
@@ -217,6 +237,29 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems(newItems)
 	}
 
+	const editItem = async (
+		itemGuid: PlaylistItemGuid,
+		data: EditPlaylistItemData
+	) => {
+		const item = state.items.find((i) => i.guid === itemGuid)
+		if (!item) return
+
+		const newItems = state.items.map((i) => {
+			if (i.guid !== itemGuid) return i
+
+			const newItem = { ...i }
+			newItem.variant = { ...i.variant }
+			if (data.title) newItem.variant.preferredTitle = data.title
+			if (data.sheetData) {
+				newItem.variant.sheetData = data.sheetData
+				newItem.variant.sheet = new Sheet(data.sheetData)
+			}
+
+			return newItem
+		})
+		setItems(newItems)
+	}
+
 	return {
 		items,
 		title,
@@ -237,5 +280,6 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItemKeyChord,
 		removeItem,
 		addItem,
+		editItem,
 	}
 }

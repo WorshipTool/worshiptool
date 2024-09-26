@@ -345,6 +345,31 @@ export interface Domain {
 /**
  * 
  * @export
+ * @interface EditItemInDto
+ */
+export interface EditItemInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'itemGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'sheetData'?: string;
+}
+/**
+ * 
+ * @export
  * @interface EditVariantOutDto
  */
 export interface EditVariantOutDto {
@@ -1895,6 +1920,19 @@ export interface ReplaceWithCopyOutDto {
      * @memberof ReplaceWithCopyOutDto
      */
     'packAlias': string;
+}
+/**
+ * 
+ * @export
+ * @interface RequireItemEditInDto
+ */
+export interface RequireItemEditInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RequireItemEditInDto
+     */
+    'itemGuid': string;
 }
 /**
  * 
@@ -5687,6 +5725,85 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerEditItem: async (editItemInDto: EditItemInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editItemInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerEditItem', 'editItemInDto', editItemInDto)
+            const localVarPath = `/playlist/edititem`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editItemInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerIsItemEditable: async (itemGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'itemGuid' is not null or undefined
+            assertParamExists('playlistEditingControllerIsItemEditable', 'itemGuid', itemGuid)
+            const localVarPath = `/playlist/isitemeditable`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (itemGuid !== undefined) {
+                localVarQueryParameter['itemGuid'] = itemGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
@@ -5812,6 +5929,45 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerRequireItemEdit: async (requireItemEditInDto: RequireItemEditInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requireItemEditInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerRequireItemEdit', 'requireItemEditInDto', requireItemEditInDto)
+            const localVarPath = `/playlist/requireItemEdit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requireItemEditInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5896,6 +6052,30 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerEditItem(editItemInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerEditItem']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerIsItemEditable(itemGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerIsItemEditable(itemGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerIsItemEditable']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
@@ -5929,6 +6109,18 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerReorderPlaylist']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRequireItemEdit']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5981,6 +6173,24 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerEditItem(editItemInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerIsItemEditable(itemGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerIsItemEditable(itemGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
@@ -6006,6 +6216,15 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
          */
         playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6060,6 +6279,28 @@ export class PlaylistEditingApi extends BaseAPI {
 
     /**
      * 
+     * @param {EditItemInDto} editItemInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerEditItem(editItemInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} itemGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerIsItemEditable(itemGuid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerIsItemEditable(itemGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} packGuid 
      * @param {string} playlist 
      * @param {*} [options] Override http request option.
@@ -6090,6 +6331,17 @@ export class PlaylistEditingApi extends BaseAPI {
      */
     public playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: RawAxiosRequestConfig) {
         return PlaylistEditingApiFp(this.configuration).playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RequireItemEditInDto} requireItemEditInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRequireItemEdit(requireItemEditInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

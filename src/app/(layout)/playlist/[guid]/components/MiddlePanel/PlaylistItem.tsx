@@ -1,8 +1,9 @@
 import { Box, Paper } from '@mui/material'
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 
 import TopPlaylistItemPanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/TopPlaylistItemPanel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import DefaultStyle from '@/common/components/SheetDisplay/styles/DefaultStyle'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -22,16 +23,41 @@ interface PlaylistItemProps {
 }
 
 export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
-	const { items } = useInnerPlaylist()
+	const { items, editItem } = useInnerPlaylist()
+
+	const [inEditMode, setInEditMode] = useState(false)
+
+	const [editedSheetData, setEditedSheetData] = useState<string | null>(null)
+	const [editedTitle, setEditedTitle] = useState<string | null>(null)
+
+	const onEditSave = async () => {
+		await editItem(itemGuid, {
+			sheetData: editedSheetData || undefined,
+			title: editedTitle || undefined,
+		})
+		rerender()
+		setInEditMode(false)
+	}
+
+	const onEditCancel = () => {
+		setInEditMode(false)
+	}
+
+	const onSheetChange = (sheetData: string, title: string) => {
+		setEditedSheetData(sheetData)
+		setEditedTitle(title)
+	}
 
 	const item = useMemo(() => {
 		return items.find((i) => i.guid === itemGuid)!
 	}, [items, itemGuid])
 
-	const [sheet, setSheet] = React.useState<Sheet>(
-		new Sheet(item.variant.sheetData)
-	)
-	const [title, setTitle] = React.useState<string>(item.variant.preferredTitle)
+	const sheet = useMemo(() => {
+		return new Sheet(item.variant.sheetData)
+	}, [item.variant.sheetData])
+	const title = useMemo(() => {
+		return item.variant.preferredTitle
+	}, [item.variant.preferredTitle])
 	const [number, setNumber] = React.useState(0)
 
 	const rerender = () => {
@@ -73,8 +99,24 @@ export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
 					itemGuid={item.guid}
 					packAlias={item.variant.packAlias}
 					sheet={sheet}
+					inEditMode={inEditMode}
+					setInEditMode={setInEditMode}
+					onSave={onEditSave}
+					onCancel={onEditCancel}
 				/>
-				{sheetDefault}
+				{!inEditMode ? (
+					sheetDefault
+				) : (
+					<>
+						<SheetDisplay
+							sheet={sheet}
+							title={title}
+							hideChords={false}
+							editMode
+							onChange={onSheetChange}
+						/>
+					</>
+				)}
 			</Paper>
 		</>
 	)
