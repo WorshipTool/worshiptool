@@ -60,7 +60,7 @@ export const routesSearchParams = {
 	},
 	variantPrint: {
 		key: 'a' as note | undefined,
-		hideChords: 'false',
+		hideChords: false as boolean | undefined,
 	},
 	home: {
 		hledat: 'string' as string | undefined,

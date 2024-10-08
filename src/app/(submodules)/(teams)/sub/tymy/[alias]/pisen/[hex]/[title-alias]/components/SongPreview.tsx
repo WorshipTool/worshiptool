@@ -2,10 +2,12 @@
 import { CreatedType, SongVariantDto } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
 import TransposePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TransposePanel'
+import PrintVariantButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/PrintButton'
 import EditButtonsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/EditButtonsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
+import { Button } from '@/common/ui/Button'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartParams } from '@/routes/useSmartParams'
@@ -23,7 +25,7 @@ type SongPreviewProps = {
 export default function SongPreview({ variant }: SongPreviewProps) {
 	const { guid: teamGuid } = useInnerTeam()
 
-	const { edit } = useSmartParams('teamSong')
+	const { edit, 'title-alias': titleAlias, hex } = useSmartParams('teamSong')
 	const [inEditMode, setInEditMode] = useState(edit || false)
 
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
@@ -32,6 +34,8 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 			teamGuid,
 		}
 	)
+
+	const [hideChords, setHideChords] = useState(false)
 
 	const [sheet, setSheet] = useState<Sheet>(variant.sheet)
 
@@ -107,27 +111,49 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 			}}
 		>
 			<Box display={'flex'} flexDirection={'column'} flex={1} gap={2}>
-				{sheet.getKeyChord() && (
-					<Box display={'flex'}>
-						<TransposePanel
-							disabled={false}
-							transpose={function (i: number): void {
-								sheet.transpose(i)
-								rerender()
-								// throw new Error('Function not implemented.')
-							}}
-						/>
-					</Box>
+				{!inEditMode ? (
+					sheet.getKeyChord() && (
+						<Box display={'flex'} gap={1}>
+							<TransposePanel
+								disabled={hideChords}
+								transpose={function (i: number): void {
+									sheet.transpose(i)
+									rerender()
+									// throw new Error('Function not implemented.')
+								}}
+							/>
+							{hideChords ? (
+								<Button
+									onClick={() => setHideChords(false)}
+									variant="text"
+									size="small"
+								>
+									Zobrazit akordy
+								</Button>
+							) : (
+								<Button
+									onClick={() => setHideChords(true)}
+									variant="text"
+									color="grey.600"
+									size="small"
+								>
+									Skrýt akordy
+								</Button>
+							)}
+						</Box>
+					)
+				) : (
+					<Box height={'1rem'} />
 				)}
 				<SheetDisplay
 					sheet={sheet}
-					hideChords={false}
+					hideChords={hideChords}
 					editMode={inEditMode}
 					title={inEditMode ? variant.preferredTitle : undefined}
 					onChange={onSheetChange}
 				/>
 			</Box>
-			<Box>
+			<Box display={'flex'} flexDirection={'row'} gap={1}>
 				{hasPermissionToEdit && (
 					<EditButtonsPanel
 						inEditMode={inEditMode}
@@ -136,6 +162,17 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 						onSave={onSave}
 						onCancel={onCancel}
 						saving={saving}
+					/>
+				)}
+				{!inEditMode && (
+					<PrintVariantButton
+						params={{
+							hex,
+							alias: titleAlias,
+							hideChords: hideChords,
+							key: sheet.getKeyNote() || undefined,
+						}}
+						size="small"
 					/>
 				)}
 			</Box>

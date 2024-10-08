@@ -8,7 +8,7 @@ import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { BorderColor, FileCopy } from '@mui/icons-material'
+import { BorderColor, Edit, FileCopy } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { VariantPackAlias } from '../../../../../../../../../../interfaces/variant/songVariant.types'
@@ -107,8 +107,9 @@ export default function EditButtonsPanel({
 						color="secondary"
 						size="small"
 						// onClick={() => setInEditMode(true)}
-						endIcon={needToBeCopied ? <BorderColor /> : undefined}
+						startIcon={needToBeCopied ? <BorderColor /> : <Edit />}
 						onClick={onEditButtonClick}
+						tooltip="Upravit píseň pro tento tým"
 					>
 						Upravit
 					</Button>

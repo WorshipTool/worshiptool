@@ -30,7 +30,7 @@ import TransposePanel from './TransposePanel'
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
 import CreateCopyButton from './components/CreateCopyButton'
 import EditButton from './components/EditButton'
-import PrintButton from './components/PrintButton'
+import PrintVariantButton from './components/PrintButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
 import VisibilityLabel from './components/VisibilityLabel'
 
@@ -251,9 +251,12 @@ export default function TopPanel(props: TopPanelProps) {
 							</Box>
 						)}
 
-						<PrintButton
-							keyNote={props.sheet?.getKeyNote() || null}
-							hideChords={props.hideChords || null}
+						<PrintVariantButton
+							params={{
+								...parseVariantAlias(props.variant.packAlias),
+								hideChords: props.hideChords,
+								key: props.sheet?.getKeyNote() || undefined,
+							}}
 						/>
 					</>
 				)}
