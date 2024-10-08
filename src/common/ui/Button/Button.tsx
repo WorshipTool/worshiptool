@@ -3,7 +3,7 @@ import { Typography } from '@/common/ui/Typography'
 // import { LoadingButton } from '@mui/lab'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, SxProps } from '@mui/material'
-import { ComponentProps, forwardRef, useCallback, useMemo } from 'react'
+import { ComponentProps, forwardRef, memo, useCallback, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
 import Tooltip from '../CustomTooltip/Tooltip'
 import { CustomLink } from '../Link'
@@ -15,7 +15,7 @@ export type ButtonProps<T extends RoutesKeys> = {
 	variant?: 'contained' | 'outlined' | 'text'
 	color?: ColorType | 'primarygradient'
 	size?: 'small' | 'medium' | 'large'
-	onClick?: (e: React.MouseEvent<HTMLElement>) => void
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 	tooltip?: string
 	tooltipPlacement?: ComponentProps<typeof Tooltip>['placement']
 	to?: CommonLinkProps<T>['to']
@@ -40,142 +40,144 @@ export type ButtonProps<T extends RoutesKeys> = {
 	className?: string
 }
 
-export const Button = forwardRef(function Button<T extends RoutesKeys>(
-	{
-		children = '',
-		variant = 'contained',
-		color = 'primary',
-		size = 'medium',
-		onClick,
-
-		...props
-	}: ButtonProps<T>,
-	ref: React.Ref<HTMLButtonElement>
-) {
-	const disabled = useMemo(
-		() => props.loading || props.disabled,
-		[props.loading, props.disabled]
-	)
-
-	const ButtonComponent = useCallback(
-		() => (
-			<Box
-				sx={{
-					...props.sx,
-					color: isColorOfThemeType(color) ? undefined : color,
-				}}
-			>
-				<LoadingButton
-					loading={props.loading}
-					disabled={disabled}
-					variant={variant}
-					color={isColorOfThemeType(color) ? color : 'inherit'}
-					size={size}
-					onClick={onClick}
-					startIcon={props.startIcon}
-					endIcon={props.endIcon}
-					aria-label={props.alt || props.tooltip}
-					type={props.type}
-					id={props.id}
-					className={props.className}
-					ref={ref}
-					sx={{
-						width: '100%',
-						height: '100%',
-						...(color === 'primarygradient' &&
-						!disabled &&
-						!props.loading &&
-						variant === 'contained'
-							? {
-									background: `linear-gradient(115deg, ${theme.palette.primary.main} 10%, ${theme.palette.primary.dark})`,
-									color: 'white',
-							  }
-							: {}),
-
-						...props.sx,
-					}}
-				>
-					{children}
-					<Box display={'flex'} flexDirection={'column'}>
-						{props.title && (
-							<Typography
-								size={'1rem'}
-								strong
-								color="inherit"
-								sx={{
-									...(props.subtitle
-										? { lineHeight: '1rem', marginTop: '0.2rem' }
-										: {}),
-								}}
-							>
-								{props.title}
-							</Typography>
-						)}
-						{props.subtitle && (
-							<Typography
-								size={'0.8rem'}
-								strong={500}
-								color="inherit"
-								sx={{ opacity: 0.8 }}
-							>
-								{props.subtitle}
-							</Typography>
-						)}
-					</Box>
-				</LoadingButton>
-			</Box>
-		),
-		[
-			children,
-			props.sx,
-			props.loading,
-			disabled,
-			variant,
-			color,
-			size,
+export const Button = memo(
+	forwardRef(function Button<T extends RoutesKeys>(
+		{
+			children = '',
+			variant = 'contained',
+			color = 'primary',
+			size = 'medium',
 			onClick,
-			props.startIcon,
-			props.endIcon,
-			props.alt,
-			props.type,
-			props.id,
-			props.className,
-			props.title,
-			props.subtitle,
-			ref,
-		]
-	)
 
-	const typedParams: CommonLinkProps<T>['params'] = useMemo(
-		() => props.toParams as CommonLinkProps<T>['params'],
-		[props.toParams]
-	)
+			...props
+		}: ButtonProps<T>,
+		ref: React.Ref<HTMLButtonElement>
+	) {
+		const disabled = useMemo(
+			() => props.loading || props.disabled,
+			[props.loading, props.disabled]
+		)
 
-	const LinkComponent = useCallback(
-		() =>
-			props.to && !disabled ? (
-				<CustomLink
-					to={props.to}
-					params={typedParams}
+		const ButtonComponent = useCallback(
+			() => (
+				<Box
 					sx={{
-						display: 'flex',
 						...props.sx,
+						color: isColorOfThemeType(color) ? undefined : color,
 					}}
-					target={props.target}
 				>
-					<ButtonComponent />
-				</CustomLink>
-			) : (
-				<ButtonComponent />
-			),
-		[props.to, disabled, props.sx, typedParams, props.target, ButtonComponent]
-	)
+					<LoadingButton
+						loading={props.loading}
+						disabled={disabled}
+						variant={variant}
+						color={isColorOfThemeType(color) ? color : 'inherit'}
+						size={size}
+						onClick={onClick}
+						startIcon={props.startIcon}
+						endIcon={props.endIcon}
+						aria-label={props.alt || props.tooltip}
+						type={props.type}
+						id={props.id}
+						className={props.className}
+						ref={ref}
+						sx={{
+							width: '100%',
+							height: '100%',
+							...(color === 'primarygradient' &&
+							!disabled &&
+							!props.loading &&
+							variant === 'contained'
+								? {
+										background: `linear-gradient(115deg, ${theme.palette.primary.main} 10%, ${theme.palette.primary.dark})`,
+										color: 'white',
+								  }
+								: {}),
 
-	return props.tooltip && !disabled ? (
-		<Tooltip title={props.tooltip} placement={props.tooltipPlacement}>
+							...props.sx,
+						}}
+					>
+						{children}
+						<Box display={'flex'} flexDirection={'column'}>
+							{props.title && (
+								<Typography
+									size={'1rem'}
+									strong
+									color="inherit"
+									sx={{
+										...(props.subtitle
+											? { lineHeight: '1rem', marginTop: '0.2rem' }
+											: {}),
+									}}
+								>
+									{props.title}
+								</Typography>
+							)}
+							{props.subtitle && (
+								<Typography
+									size={'0.8rem'}
+									strong={500}
+									color="inherit"
+									sx={{ opacity: 0.8 }}
+								>
+									{props.subtitle}
+								</Typography>
+							)}
+						</Box>
+					</LoadingButton>
+				</Box>
+			),
+			[
+				children,
+				props.sx,
+				props.loading,
+				disabled,
+				variant,
+				color,
+				size,
+				onClick,
+				props.startIcon,
+				props.endIcon,
+				props.alt,
+				props.type,
+				props.id,
+				props.className,
+				props.title,
+				props.subtitle,
+				ref,
+			]
+		)
+
+		const typedParams: CommonLinkProps<T>['params'] = useMemo(
+			() => props.toParams as CommonLinkProps<T>['params'],
+			[props.toParams]
+		)
+
+		const LinkComponent = useCallback(
+			() =>
+				props.to && !disabled ? (
+					<CustomLink
+						to={props.to}
+						params={typedParams}
+						sx={{
+							display: 'flex',
+							...props.sx,
+						}}
+						target={props.target}
+					>
+						<ButtonComponent />
+					</CustomLink>
+				) : (
+					<ButtonComponent />
+				),
+			[props.to, disabled, props.sx, typedParams, props.target, ButtonComponent]
+		)
+
+		return props.tooltip && !disabled ? (
+			<Tooltip title={props.tooltip} placement={props.tooltipPlacement}>
+				<LinkComponent />
+			</Tooltip>
+		) : (
 			<LinkComponent />
-		</Tooltip>
-	) : (
-		<LinkComponent />
-	)
-})
+		)
+	})
+)

@@ -2,6 +2,7 @@
 import { CreatedType, SongVariantDto } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
 import TransposePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TransposePanel'
+import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import PrintVariantButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/PrintButton'
 import EditButtonsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/EditButtonsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -15,7 +16,7 @@ import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 type SongPreviewProps = {
 	// sheet: Sheet
@@ -40,16 +41,16 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 	const [sheet, setSheet] = useState<Sheet>(variant.sheet)
 
 	const [justNumber, setJustNumber] = useState(0)
-	const rerender = () => {
+	const rerender = useCallback(() => {
 		setJustNumber(justNumber + 1)
-	}
+	}, [justNumber])
 
 	const editedSheetData = useRef<string | null>(null)
 	const editedTitle = useRef<string | null>(null)
-	const onSheetChange = (sheetData: string, title: string) => {
+	const onSheetChange = useCallback((sheetData: string, title: string) => {
 		editedSheetData.current = sheetData
 		editedTitle.current = title
-	}
+	}, [])
 
 	const {
 		fetchApiState,
@@ -57,7 +58,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 	} = useApiState<EditVariantOutDto>()
 	const { songEditingApi } = useApi()
 
-	const onSave = () => {
+	const onSave = useCallback(() => {
 		if (editedSheetData.current) {
 			const sheet = new Sheet(editedSheetData.current)
 			setSheet(sheet)
@@ -90,12 +91,12 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 				if (newData.title) window.location.reload()
 			}
 		)
-	}
+	}, [editedSheetData, editedTitle, variant])
 
-	const onCancel = () => {
+	const onCancel = useCallback(() => {
 		editedSheetData.current = null
 		editedTitle.current = null
-	}
+	}, [])
 
 	return (
 		<Box
@@ -108,6 +109,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 				flexDirection: 'row',
 				gap: 2,
 				flexWrap: 'wrap-reverse',
+				alignItems: 'start',
 			}}
 		>
 			<Box display={'flex'} flexDirection={'column'} flex={1} gap={2}>
@@ -119,7 +121,6 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 								transpose={function (i: number): void {
 									sheet.transpose(i)
 									rerender()
-									// throw new Error('Function not implemented.')
 								}}
 							/>
 							{hideChords ? (
@@ -153,7 +154,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 					onChange={onSheetChange}
 				/>
 			</Box>
-			<Box display={'flex'} flexDirection={'row'} gap={1}>
+			<Box display={'flex'} flexDirection={'row'} gap={1} maxHeight={'2rem'}>
 				{hasPermissionToEdit && (
 					<EditButtonsPanel
 						inEditMode={inEditMode}
@@ -164,16 +165,19 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 						saving={saving}
 					/>
 				)}
+				<AddToPlaylistButton variant={variant} />
 				{!inEditMode && (
-					<PrintVariantButton
-						params={{
-							hex,
-							alias: titleAlias,
-							hideChords: hideChords,
-							key: sheet.getKeyNote() || undefined,
-						}}
-						size="small"
-					/>
+					<>
+						<PrintVariantButton
+							params={{
+								hex,
+								alias: titleAlias,
+								hideChords: hideChords,
+								key: sheet.getKeyNote() || undefined,
+							}}
+							size="small"
+						/>
+					</>
 				)}
 			</Box>
 		</Box>

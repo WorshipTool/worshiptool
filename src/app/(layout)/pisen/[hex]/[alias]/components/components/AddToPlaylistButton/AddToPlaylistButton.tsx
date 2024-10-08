@@ -1,19 +1,12 @@
 import { PlaylistData } from '@/api/generated'
 import AddToPlaylistMenuItem from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistMenuItem'
 import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
+import { Button } from '@/common/ui/Button'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { KeyboardArrowDown, PlaylistAddCircle } from '@mui/icons-material'
-import {
-	Button,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	useTheme,
-} from '@mui/material'
-import React from 'react'
+import { ListItemIcon, ListItemText, MenuItem, useTheme } from '@mui/material'
+import React, { useCallback, useMemo } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
-import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'
-import { useApiStateEffect } from '../../../../../../../../tech/ApiState'
 
 interface AddToPlaylistButtonProps {
 	variant: SongVariantDto
@@ -26,43 +19,52 @@ export default function AddToPlaylistButton({
 }: AddToPlaylistButtonProps) {
 	const [open, setOpen] = React.useState(false)
 
-	const [openDialog, setOpenDialog] = React.useState(false)
-
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
 		setOpen(true)
 		setAnchorEl(event.currentTarget)
-	}
+	}, [])
 
-	const handleMenuClick = (event: any) => {
+	const handleMenuClick = useCallback((event: any) => {
 		handleClick(event)
-	}
+	}, [])
 
-	const handleClose = () => {
+	const handleClose = useCallback(() => {
 		setOpen(false)
 		setAnchorEl(null)
-	}
-
-	const { getPlaylistsOfUser, isVariantInPlaylist } = usePlaylistsGeneral()
-	const [{ data: playlists, loading }] = useApiStateEffect(() => {
-		return getPlaylistsOfUser().then((r) => {
-			return r.playlists
-		})
 	}, [])
 
 	const theme = useTheme()
-	const maxItems = 4
 
-	const itemComponent = (playlist: PlaylistData) => {
+	const itemComponent = useCallback((playlist: PlaylistData) => {
 		return (
 			<AddToPlaylistMenuItem
+				key={playlist.guid}
 				variant={variant}
 				guid={playlist.guid as PlaylistGuid}
 				title={playlist.title}
 			/>
 		)
-	}
+	}, [])
+
+	const buttonComponent = useMemo(
+		() => (
+			<Button
+				onClick={handleClick}
+				variant="contained"
+				endIcon={<KeyboardArrowDown />}
+				sx={{
+					[theme.breakpoints.down('sm')]: {
+						display: 'none',
+					},
+				}}
+			>
+				Přidat do playlistu
+			</Button>
+		),
+		[handleClick, theme]
+	)
 
 	return (
 		<>
@@ -75,20 +77,7 @@ export default function AddToPlaylistButton({
 					<ListItemText primary={'Přidat do playlistu'} />
 				</MenuItem>
 			) : (
-				<>
-					<Button
-						onClick={handleClick}
-						variant="contained"
-						endIcon={<KeyboardArrowDown />}
-						sx={{
-							[theme.breakpoints.down('sm')]: {
-								display: 'none',
-							},
-						}}
-					>
-						Přidat do playlistu
-					</Button>
-				</>
+				buttonComponent
 			)}
 			<SelectPlaylistMenu
 				open={open}
