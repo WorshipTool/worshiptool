@@ -29,6 +29,8 @@ export type SongVariantDto = {
 	createdBy: UserGuid
 	createdByLoader: boolean
 
+	createdForPlaylistGuid: string | null
+
 	sources: SourceDto[]
 	creators: CreatorDto[]
 	tags: string[]

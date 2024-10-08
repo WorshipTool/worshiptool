@@ -1,5 +1,5 @@
-import { SongVariantDto, VariantPackAlias } from '@/api/dtos'
-import { ReplaceWithCopyOutDto } from '@/api/generated'
+import { SongVariantDto } from '@/api/dtos'
+import { RequireItemEditOutDto } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
@@ -8,10 +8,10 @@ import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { BorderColor, FileCopy } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useMemo, useState } from 'react'
+import { VariantPackAlias } from '../../../../../../../../../../interfaces/variant/songVariant.types'
 
 type EditButtonsPanelProps = {
 	inEditMode: boolean
@@ -30,11 +30,16 @@ export default function EditButtonsPanel({
 }: EditButtonsPanelProps) {
 	const { selection, reload, guid: teamGuid, alias: teamAlias } = useInnerTeam()
 
+	const playlistItemGuid = useMemo(() => {
+		return selection.items.find((i) => i.variant.packGuid === variant.packGuid)
+			?.guid!
+	}, [selection, variant])
+
 	const needToBeCopied = useMemo(() => {
 		return selection.songNeedToBeCopiedToEdit(variant)
 	}, [])
 	const { teamEditingApi } = useApi()
-	const { fetchApiState, apiState } = useApiState<ReplaceWithCopyOutDto>()
+	const { fetchApiState, apiState } = useApiState<RequireItemEditOutDto>()
 
 	const [copyPopupOpen, setCopyPopupOpen] = useState(false)
 	const navigate = useSmartNavigate()
@@ -50,22 +55,21 @@ export default function EditButtonsPanel({
 	const createCopy = () => {
 		fetchApiState(
 			async () => {
-				const data = await handleApiCall(
-					teamEditingApi.teamSelectionControllerReplaceWithCopy({
-						teamGuid,
-						packGuid: variant.packGuid,
+				const result = await selection.requireItemEdit(playlistItemGuid)
+
+				if (result.createdCopy) {
+					const aliasData = parseVariantAlias(
+						result.packAlias as VariantPackAlias
+					)
+					navigate('teamSong', {
+						alias: teamAlias,
+						hex: aliasData.hex,
+						'title-alias': aliasData.alias,
+						edit: true,
 					})
-				)
+				}
 
-				const aliasData = parseVariantAlias(data.packAlias as VariantPackAlias)
-				navigate('teamSong', {
-					alias: teamAlias,
-					hex: aliasData.hex,
-					'title-alias': aliasData.alias,
-					edit: true,
-				})
-
-				return data
+				return result
 			},
 			(data) => {
 				reload()

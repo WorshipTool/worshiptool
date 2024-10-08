@@ -1,5 +1,6 @@
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
+import { notFound } from 'next/navigation'
 import { LayoutProps } from '../../../../../common/types'
 import { getVariantAliasFromParams, getVariantByAlias } from './tech'
 
@@ -21,9 +22,7 @@ export const generateMetadata = generateSmartMetadata(
 				title: title,
 			}
 		} catch (e) {
-			return {
-				title: 'Text písně',
-			}
+			notFound()
 		}
 	}
 )

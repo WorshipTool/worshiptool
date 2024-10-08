@@ -60,7 +60,7 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 	}
 
 	const songNeedToBeCopiedToEdit = (variant: SongVariantDto): boolean => {
-		return variant.public
+		return variant.createdForPlaylistGuid !== guid
 	}
 
 	return {

@@ -161,9 +161,7 @@ export default function usePlaylist(
 	) => {
 		const item = items.find((i) => i.guid === itemGuid)
 		if (!item) return
-		const result = await general.editPlaylistItem(itemGuid, data)
-
-		if (!result) return
+		await general.editPlaylistItem(itemGuid, data)
 
 		if (data.sheetData) {
 			item.variant.sheetData = data.sheetData

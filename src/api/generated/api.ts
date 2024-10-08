@@ -1219,6 +1219,12 @@ export interface Playlist {
      * @memberof Playlist
      */
     'isSelection': boolean;
+    /**
+     * 
+     * @type {PermissionUserGroup}
+     * @memberof Playlist
+     */
+    'editorsPermissionGroup': PermissionUserGroup;
 }
 /**
  * 
@@ -1892,38 +1898,6 @@ export interface ReorderPlaylistItem {
 /**
  * 
  * @export
- * @interface ReplaceWithCopyInDto
- */
-export interface ReplaceWithCopyInDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ReplaceWithCopyInDto
-     */
-    'packGuid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReplaceWithCopyInDto
-     */
-    'teamGuid': string;
-}
-/**
- * 
- * @export
- * @interface ReplaceWithCopyOutDto
- */
-export interface ReplaceWithCopyOutDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ReplaceWithCopyOutDto
-     */
-    'packAlias': string;
-}
-/**
- * 
- * @export
  * @interface RequireItemEditInDto
  */
 export interface RequireItemEditInDto {
@@ -1933,6 +1907,25 @@ export interface RequireItemEditInDto {
      * @memberof RequireItemEditInDto
      */
     'itemGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface RequireItemEditOutDto
+ */
+export interface RequireItemEditOutDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RequireItemEditOutDto
+     */
+    'createdCopy': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof RequireItemEditOutDto
+     */
+    'packAlias': string;
 }
 /**
  * 
@@ -2265,6 +2258,12 @@ export interface SongDataVariant {
      * @memberof SongDataVariant
      */
     'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'createdForPlaylistGuid': string | null;
 }
 
 export const SongDataVariantCreatedTypeEnum = {
@@ -2562,6 +2561,12 @@ export interface SongVariantDataOutDto {
      * @memberof SongVariantDataOutDto
      */
     'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'createdForPlaylistGuid': string | null;
 }
 
 export const SongVariantDataOutDtoCreatedTypeEnum = {
@@ -2616,12 +2621,6 @@ export interface SongVariantHistoryPack {
     'alias': UrlAlias;
     /**
      * 
-     * @type {Array<PlaylistItem>}
-     * @memberof SongVariantHistoryPack
-     */
-    'playlistItems': Array<PlaylistItem>;
-    /**
-     * 
      * @type {boolean}
      * @memberof SongVariantHistoryPack
      */
@@ -2632,6 +2631,18 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'public': boolean;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof SongVariantHistoryPack
+     */
+    'createdForPlaylist': Playlist;
+    /**
+     * 
+     * @type {Array<PlaylistItem>}
+     * @memberof SongVariantHistoryPack
+     */
+    'playlistItems': Array<PlaylistItem>;
 }
 /**
  * 
@@ -6056,7 +6067,7 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerEditItem(editItemInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerEditItem']?.[localVarOperationServerIndex]?.url;
@@ -6117,7 +6128,7 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequireItemEditOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRequireItemEdit']?.[localVarOperationServerIndex]?.url;
@@ -6177,7 +6188,7 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: any): AxiosPromise<boolean> {
+        playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: any): AxiosPromise<void> {
             return localVarFp.playlistEditingControllerEditItem(editItemInDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6223,7 +6234,7 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: any): AxiosPromise<boolean> {
+        playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: any): AxiosPromise<RequireItemEditOutDto> {
             return localVarFp.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9066,45 +9077,6 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        teamSelectionControllerReplaceWithCopy: async (replaceWithCopyInDto: ReplaceWithCopyInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'replaceWithCopyInDto' is not null or undefined
-            assertParamExists('teamSelectionControllerReplaceWithCopy', 'replaceWithCopyInDto', replaceWithCopyInDto)
-            const localVarPath = `/submodules/teams/selection/replacewithcopy`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(replaceWithCopyInDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -9151,18 +9123,6 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerRemovePackFromTeam']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * 
-         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReplaceWithCopyOutDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerReplaceWithCopy']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -9199,15 +9159,6 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
          */
         teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: any): AxiosPromise<ReplaceWithCopyOutDto> {
-            return localVarFp.teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9250,17 +9201,6 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {ReplaceWithCopyInDto} replaceWithCopyInDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TeamEditingApi
-     */
-    public teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto: ReplaceWithCopyInDto, options?: RawAxiosRequestConfig) {
-        return TeamEditingApiFp(this.configuration).teamSelectionControllerReplaceWithCopy(replaceWithCopyInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

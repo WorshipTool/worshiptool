@@ -1,3 +1,4 @@
+'use client'
 import { CreatedType, SongVariantDto } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
 import TransposePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TransposePanel'
@@ -19,7 +20,7 @@ type SongPreviewProps = {
 	variant: SongVariantDto
 }
 
-export default function SongPreview({ variant, ...props }: SongPreviewProps) {
+export default function SongPreview({ variant }: SongPreviewProps) {
 	const { guid: teamGuid } = useInnerTeam()
 
 	const { edit } = useSmartParams('teamSong')

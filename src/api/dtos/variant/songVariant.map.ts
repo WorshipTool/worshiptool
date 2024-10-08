@@ -20,6 +20,7 @@ export const mapSongDataVariantApiToSongVariantDto = (
 		packAlias: api.alias as VariantPackAlias,
 		sheet: new Sheet(api.sheetData),
 		createdBy: api.createdByGuid as UserGuid,
+		createdForPlaylistGuid: api.createdForPlaylistGuid,
 	}
 }
 
@@ -36,6 +37,7 @@ export const mapSongVariantDataOutDtoToSongVariantDto = (
 		createdBy: api.createdBy as UserGuid,
 		packGuid: api.packGuid as VariantPackGuid,
 		packAlias: api.alias as VariantPackAlias,
+		createdForPlaylistGuid: api.createdForPlaylistGuid,
 	}
 }
 

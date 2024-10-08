@@ -3,6 +3,7 @@ import {
 	getVariantByAlias,
 } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { LayoutProps, MetadataProps } from '@/common/types'
+import { notFound } from 'next/navigation'
 import { generateSmartMetadata } from '../../../../../../../../../tech/metadata/metadata'
 
 export const generateMetadata = generateSmartMetadata(
@@ -20,9 +21,7 @@ export const generateMetadata = generateSmartMetadata(
 				title: title,
 			}
 		} catch (e) {
-			return {
-				title: 'Píseň',
-			}
+			notFound()
 		}
 	}
 )
