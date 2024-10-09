@@ -1,0 +1,49 @@
+'use client'
+import { PostCreatePlaylistResult } from '@/api/generated'
+import TeamQuickActionButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/QuickActions/TeamQuickActionButton'
+import { useApi } from '@/hooks/api/useApi'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
+import { useApiState } from '@/tech/ApiState'
+import { Add } from '@mui/icons-material'
+import { useCallback } from 'react'
+import { handleApiCall } from '../../../../../../../../tech/handleApiCall'
+
+export default function TeamNewPlaylistButton() {
+	const { playlistEditingApi } = useApi()
+
+	const { fetchApiState, apiState } = useApiState<PostCreatePlaylistResult>()
+
+	const onCreateClick = useCallback(() => {
+		fetchApiState(
+			async () => {
+				return await handleApiCall(
+					playlistEditingApi.playlistEditingControllerCreatePlaylist()
+				)
+			},
+			(d) => {
+				const url = getRouteUrlWithParams('playlist', {
+					guid: d.guid,
+				})
+
+				// open on new tab
+				window.open(url, '_blank')
+			}
+		)
+	}, [])
+
+	return (
+		<TeamQuickActionButton
+			onClick={onCreateClick}
+			loading={apiState.loading}
+			label={'Vytvořit playlist'}
+			tooltip={'Vytvořit nový playlist'}
+			icon={
+				<Add
+					sx={{
+						strokeWidth: 2,
+					}}
+				/>
+			}
+		/>
+	)
+}

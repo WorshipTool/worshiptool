@@ -22,8 +22,13 @@ const Container = styled(Box)(({ theme }) => ({
 
 type ClickableProps = {
 	children?: React.ReactNode
+	disabled?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
 export function Clickable(props: ClickableProps) {
-	return <Container {...props}>{props.children}</Container>
+	return props.disabled ? (
+		props.children
+	) : (
+		<Container {...props}>{props.children}</Container>
+	)
 }

@@ -1,10 +1,11 @@
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
+import { Box, SxProps } from '@mui/material'
 import React from 'react'
 
 type TeamCardProps = {
 	title?: string
 	children?: React.ReactNode
+	sx?: SxProps
 }
 
 export default function TeamCard(props: TeamCardProps) {
@@ -15,11 +16,14 @@ export default function TeamCard(props: TeamCardProps) {
 				borderRadius: 3,
 				bgcolor: 'grey.100',
 				// boxShadow: 1,
+				...props.sx,
 			}}
 		>
-			<Typography variant="h6" strong>
-				{props.title}
-			</Typography>
+			{props.title && (
+				<Typography variant="h6" strong>
+					{props.title}
+				</Typography>
+			)}
 			{props.children}
 		</Box>
 	)
