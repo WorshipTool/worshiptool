@@ -13,6 +13,7 @@ type MenuItemProps<T extends RoutesKeys> = {
 	to: T
 	toParams: SmartAllParams<T>
 	disabled?: boolean
+	hidden?: boolean
 }
 
 export default function MenuItem<T extends RoutesKeys>(
@@ -33,7 +34,7 @@ export default function MenuItem<T extends RoutesKeys>(
 		[props.to, props.disabled]
 	)
 
-	return (
+	return props.hidden ? null : (
 		<Envelope>
 			<Box
 				display={'flex'}

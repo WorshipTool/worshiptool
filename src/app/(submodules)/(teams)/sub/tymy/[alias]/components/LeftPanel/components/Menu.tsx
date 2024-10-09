@@ -56,7 +56,7 @@ export default function Menu() {
 				icon: <Settings />,
 				to: 'teamSettings',
 				toParams: { alias },
-				disabled: !hasPermissionToEdit,
+				hidden: !hasPermissionToEdit,
 			},
 		],
 		[hasPermissionToEdit, alias]
