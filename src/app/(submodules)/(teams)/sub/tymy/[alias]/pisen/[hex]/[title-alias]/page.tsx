@@ -4,6 +4,7 @@ import {
 	getVariantAliasFromParams,
 	getVariantByAlias,
 } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import SongPreview from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/SongPreview'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -20,7 +21,8 @@ type TeamPisenPageProps = {
 	params: SmartParams<'teamSong'>
 }
 
-export default function TeamPisenPage(props: TeamPisenPageProps) {
+export default SmartTeamPage(TeamPisenPage)
+function TeamPisenPage(props: TeamPisenPageProps) {
 	// const {} = useSmartParams
 
 	const { selection } = useInnerTeam()

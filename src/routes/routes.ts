@@ -40,6 +40,7 @@ export const routesPaths = {
 	teamSettings: '/sub/tymy/[alias]/nastaveni',
 	teamJoin: '/sub/tymy/pripojitse/[code]',
 	teamSong: '/sub/tymy/[alias]/pisen/[hex]/[title-alias]',
+	teamPlaylist: '/sub/tymy/[alias]/playlist/[guid]',
 } as const
 
 // DONT REMOVE

@@ -1,5 +1,6 @@
 'use client'
 import { theme } from '@/common/constants/theme'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Link } from '@/common/ui/Link/Link'
 import { Typography } from '@/common/ui/Typography'
 import { RoutesKeys, SmartAllParams } from '@/routes'
@@ -14,6 +15,8 @@ type MenuItemProps<T extends RoutesKeys> = {
 	toParams: SmartAllParams<T>
 	disabled?: boolean
 	hidden?: boolean
+
+	collapsed?: boolean
 }
 
 export default function MenuItem<T extends RoutesKeys>(
@@ -24,9 +27,15 @@ export default function MenuItem<T extends RoutesKeys>(
 	const Envelope = useCallback(
 		function A({ children }: { children: ReactNode }) {
 			return props.to && !props.disabled ? (
-				<Link to={props.to} params={props.toParams}>
-					{children}
-				</Link>
+				<Tooltip
+					label={props.title}
+					disabled={!props.collapsed}
+					placement="right"
+				>
+					<Link to={props.to} params={props.toParams}>
+						{children}
+					</Link>
+				</Tooltip>
 			) : (
 				<>{children}</>
 			)
@@ -42,7 +51,7 @@ export default function MenuItem<T extends RoutesKeys>(
 				alignItems={'center'}
 				sx={{
 					padding: 1,
-					paddingX: 3,
+					paddingX: props.collapsed ? 1.3 : 3,
 					opacity: props.disabled ? 0.5 : 1,
 					bgcolor: alpha(theme.palette.primary.main, enabled ? 0.1 : 0),
 					borderRadius: 3,
@@ -62,9 +71,15 @@ export default function MenuItem<T extends RoutesKeys>(
 				color={'grey.800'}
 				gap={2}
 			>
-				<Box>{props.icon}</Box>
+				<Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
+					{props.icon}
+				</Box>
 
-				<Typography strong={enabled}>{props.title}</Typography>
+				{
+					<Typography strong={enabled} noWrap>
+						{props.title}
+					</Typography>
+				}
 			</Box>
 		</Envelope>
 	)

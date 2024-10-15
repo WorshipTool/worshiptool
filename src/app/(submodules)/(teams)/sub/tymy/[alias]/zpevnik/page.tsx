@@ -10,6 +10,7 @@ import { Box } from '@mui/system'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import SearchFieldTeamZpevnik from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import SelectedPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
@@ -21,7 +22,9 @@ import { parseVariantAlias } from '@/routes/routes.tech'
 import { LinearProgress } from '@mui/material'
 import './styles.css'
 
-export default function TeamSongsPage() {
+export default SmartTeamPage(TeamSongsPage)
+
+function TeamSongsPage() {
 	const { selection, guid: teamGuid, alias } = useInnerTeam()
 	const items = useMemo(() => {
 		const items =

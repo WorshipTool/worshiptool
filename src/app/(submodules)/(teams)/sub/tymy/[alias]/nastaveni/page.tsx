@@ -1,4 +1,5 @@
 'use client'
+import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import TeamEditableCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/nastaveni/components/TeamEditableCard'
 import TeamEditableField from '@/app/(submodules)/(teams)/sub/tymy/[alias]/nastaveni/components/TeamEditableField'
@@ -10,7 +11,9 @@ import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-export default function TeamSettingsPage() {
+export default SmartTeamPage(TeamSettingsPage)
+
+function TeamSettingsPage() {
 	const { name: _name, joinCode: _joinCode, guid, reload } = useInnerTeam()
 
 	const hasPermissionToEdit = usePermission<TeamPermissions>(

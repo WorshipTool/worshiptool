@@ -35,7 +35,7 @@ export default function TeamQuickActionButton({
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
-						width: 120,
+						width: 130,
 						height: '5.5rem',
 
 						transition: 'all 0.3s',

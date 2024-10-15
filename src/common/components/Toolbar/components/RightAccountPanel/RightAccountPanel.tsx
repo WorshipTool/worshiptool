@@ -24,7 +24,7 @@ import GroupChip from './GroupChip'
 import ToolsMenu from './Toolsmenu/ToolsMenu'
 
 const Container = styled(Box)(({ theme }) => ({
-	flex: 1,
+	// flex: 1,
 	height: '100%',
 	display: 'flex',
 	alignItems: 'center',

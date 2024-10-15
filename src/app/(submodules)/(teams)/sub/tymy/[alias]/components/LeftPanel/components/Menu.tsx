@@ -15,7 +15,12 @@ import { ComponentProps, useMemo } from 'react'
 
 type MenuItem = ComponentProps<typeof MenuItem>
 
-export default function Menu() {
+type MenuProps = {
+	collapsed: boolean
+	transition: string
+}
+
+export default function Menu(props: MenuProps) {
 	const { alias, guid } = useInnerTeam()
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.change_base_info',
@@ -62,9 +67,19 @@ export default function Menu() {
 		[hasPermissionToEdit, alias]
 	)
 	return (
-		<Box padding={3} gap={1} display={'flex'} flexDirection={'column'}>
+		<Box
+			paddingX={props.collapsed ? 0 : 3}
+			paddingY={3}
+			sx={{
+				transition: props.transition,
+			}}
+			gap={1}
+			display={'flex'}
+			flexDirection={'column'}
+			maxWidth={props.collapsed ? 45 : 200}
+		>
 			{items.map((item, index) => (
-				<MenuItem key={index} {...item} />
+				<MenuItem key={index} {...item} collapsed={props.collapsed} />
 			))}
 		</Box>
 	)

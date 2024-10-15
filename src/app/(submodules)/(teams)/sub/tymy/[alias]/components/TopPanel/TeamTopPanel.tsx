@@ -15,6 +15,7 @@ export default async function TeamTopPanel() {
 			display={'flex'}
 			flexDirection={'row'}
 			alignItems={'center'}
+			gap={4}
 		>
 			<TeamPageTitleContainer />
 			<RightAccountPanel />

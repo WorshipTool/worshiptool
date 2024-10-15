@@ -1,5 +1,6 @@
 'use client'
 import TeamQuickActions from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/QuickActions/TeamQuickActions'
+import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -9,7 +10,9 @@ import { Typography } from '@/common/ui/Typography'
 import { WavingHand } from '@mui/icons-material'
 import { Box, Grid, useTheme } from '@mui/material'
 
-export default function TeamPage(props: PageProps<'team'>) {
+export default SmartTeamPage(TeamPage)
+
+function TeamPage(props: PageProps<'team'>) {
 	const { name } = useInnerTeam()
 	const theme = useTheme()
 	return (

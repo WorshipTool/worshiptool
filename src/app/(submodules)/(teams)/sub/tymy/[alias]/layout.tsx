@@ -5,7 +5,9 @@ import {
 	TeamMembersApiAxiosParamCreator,
 } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
+import FloatingPlaylist from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/FloatingPlaylist/FloatingPlaylist'
 import TeamLeftPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
+import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamPageProviders'
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
 import { InnerTeamProvider } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { LayoutProps } from '@/common/types'
@@ -70,7 +72,7 @@ export const generateMetadata = generateSmartMetadata(
 	'team',
 	async ({ params }) => {
 		const info = await getTeamInfo(params.alias)
-		const teamName = 'Helemese'
+		const teamName = info?.name
 
 		const title = info ? `Tým ${teamName}` : 'Tým'
 		return {
@@ -99,15 +101,29 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 	const team = layout.params.alias
 
 	return (
-		<Box display={'flex'} flexDirection={'row'} height={'100vh'}>
+		<Box
+			display={'flex'}
+			flexDirection={'row'}
+			height={'100vh'}
+			position={'relative'}
+		>
 			<InnerTeamProvider teamAlias={layout.params.alias}>
-				<TeamLeftPanel teamAlias={team} />
-				<Box display={'flex'} flexDirection={'column'} flex={1} height={'100%'}>
-					<TeamTopPanel />
-					<Box paddingX={4} flex={1} paddingBottom={4}>
-						{layout.children}
+				<TeamPageProviders>
+					<TeamLeftPanel />
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						flex={1}
+						height={'100%'}
+						// bgcolor={'blue'}
+					>
+						<TeamTopPanel />
+						<Box flex={1} paddingBottom={4}>
+							{layout.children}
+						</Box>
 					</Box>
-				</Box>
+					<FloatingPlaylist />
+				</TeamPageProviders>
 			</InnerTeamProvider>
 		</Box>
 	)

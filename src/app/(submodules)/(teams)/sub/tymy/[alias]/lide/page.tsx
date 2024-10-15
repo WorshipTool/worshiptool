@@ -1,4 +1,5 @@
 'use client'
+import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import InvitationPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/lide/components/InvitationPanel'
 import PeopleList from '@/app/(submodules)/(teams)/sub/tymy/[alias]/lide/components/PeopleList'
 import { encodeTeamCode } from '@/app/(submodules)/(teams)/sub/tymy/pripojitse/[code]/tech'
@@ -16,7 +17,8 @@ import { useSnackbar } from 'notistack'
 import { useCallback, useMemo, useState } from 'react'
 import { TeamPageTitle } from '../components/TopPanel/components/TeamPageTitle'
 
-export default function TeamPeoplePage() {
+export default SmartTeamPage(TeamPeoplePage)
+function TeamPeoplePage() {
 	const [popupOpen, setPopupOpen] = useState(false)
 
 	const { alias } = useSmartParams('teamPeople')

@@ -8,7 +8,7 @@ import { Typography } from '@/common/ui/Typography'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { getRouteUrlWithParams } from '@/routes/routes.tech'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Add, LibraryAdd } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
@@ -23,7 +23,7 @@ export default function SelectedPanel({
 	selectedPacks: selected,
 	...props
 }: SelectedPanelProps) {
-	const { selection, guid: teamGuid } = useInnerTeam()
+	const { selection, guid: teamGuid, alias } = useInnerTeam()
 	const { addPacksToPlaylist, createPlaylist } = usePlaylistsGeneral()
 
 	const [optionsElement, setOptionsElement] = useState<HTMLElement | null>(null)
@@ -58,6 +58,8 @@ export default function SelectedPanel({
 		[]
 	)
 
+	const navigate = useSmartNavigate()
+
 	const onCreateNewPlaylistClick = useCallback(
 		async (e: React.MouseEvent) => {
 			// 1. Create new playlist
@@ -66,8 +68,9 @@ export default function SelectedPanel({
 			// 2. Add selected songs to playlist
 			const results = await addPacksToPlaylist(selected, newGuid)
 
-			const url = getRouteUrlWithParams('playlist', { guid: newGuid })
-			window.open(url, '_blank') // Open in new tab
+			// const url = getRouteUrlWithParams('playlist', { guid: newGuid })
+			navigate('teamPlaylist', { guid: newGuid, alias })
+			// window.open(url, '_blank') // Open in new tab
 
 			closeAll()
 		},
