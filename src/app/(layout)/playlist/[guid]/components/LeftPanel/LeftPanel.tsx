@@ -3,11 +3,15 @@ import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPane
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Typography } from '@/common/ui/Typography'
-import { Box, useTheme } from '@mui/material'
+import { Box, SxProps, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './LeftPanel.styles.css'
 
-export default function LeftPanel() {
+type LeftPanelProps = {
+	sx?: SxProps
+}
+
+export default function LeftPanel(props: LeftPanelProps) {
 	const { canUserEdit } = useInnerPlaylist()
 	const theme = useTheme()
 
@@ -31,6 +35,7 @@ export default function LeftPanel() {
 					top: 127,
 					bottom: 0,
 					backgroundColor: grey[100],
+					...props.sx,
 				}}
 			>
 				<Box

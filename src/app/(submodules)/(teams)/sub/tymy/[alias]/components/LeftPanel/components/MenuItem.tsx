@@ -29,7 +29,7 @@ export default function MenuItem<T extends RoutesKeys>(
 			return props.to && !props.disabled ? (
 				<Tooltip
 					label={props.title}
-					disabled={!props.collapsed}
+					// disabled={!props.collapsed}
 					placement="right"
 				>
 					<Link to={props.to} params={props.toParams}>
@@ -67,6 +67,7 @@ export default function MenuItem<T extends RoutesKeys>(
 						  }
 						: {},
 					userSelect: 'none',
+					minWidth: props.collapsed ? 0 : 150,
 				}}
 				color={'grey.800'}
 				gap={2}

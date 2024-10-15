@@ -10,7 +10,9 @@ import { Typography } from '@/common/ui/Typography'
 import { WavingHand } from '@mui/icons-material'
 import { Box, Grid, useTheme } from '@mui/material'
 
-export default SmartTeamPage(TeamPage)
+export default SmartTeamPage(TeamPage, {
+	collapseSideBar: false,
+})
 
 function TeamPage(props: PageProps<'team'>) {
 	const { name } = useInnerTeam()

@@ -24,7 +24,15 @@ export default function TeamPlaylistContainer() {
 					minHeight={'calc(100vh - 140px)'}
 					// bgcolor={'blue'}
 				>
-					<LeftPanel />
+					<LeftPanel
+						sx={{
+							top: 92,
+							position: 'fixed',
+							// borderTopRightRadius: 4,
+							// borderTop: '1px solid ',
+							// borderColor: 'grey.400',
+						}}
+					/>
 					<TeamPlaylistMiddlePanel />
 					{/* <MiddlePanel /> */}
 					{/* <RightPanel /> */}

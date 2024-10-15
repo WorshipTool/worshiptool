@@ -1,13 +1,13 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 
-type FooterType = ReturnType<typeof useTeamSideBarProvide>
+type SideBarType = ReturnType<typeof useTeamSideBarProvide>
 
-const sidebarContext = createContext({} as FooterType)
+const sidebarContext = createContext({} as SideBarType)
 
 export const useTeamSideBar = () => {
 	const c = useContext(sidebarContext)
 	if (!c) {
-		throw new Error('useFooter must be used within FooterProvider')
+		throw new Error('useTeamSideBar must be used within TeamSideBarProvider')
 	}
 	return c
 }

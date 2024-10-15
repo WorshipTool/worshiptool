@@ -1,10 +1,14 @@
 import PresentationButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/PresentationButton/PresentationButton'
 import PrintButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/PrintButton/PrintButton'
+import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/SaveEditButtons/SaveEditButtons'
 import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Gap } from '@/common/ui/Gap'
 import { Box } from '@mui/material'
 
 export default function TeamPlaylistTopPanel() {
+	const { canUserEdit } = useInnerPlaylist()
 	return (
 		<Box
 			flex={1}
@@ -17,17 +21,18 @@ export default function TeamPlaylistTopPanel() {
 				<PresentationButton />
 				<PrintButton />
 				<ShareButton />
-				{/* {canUserEdit && (
+				{canUserEdit && (
 					<Box
 						display={{
 							xs: 'none',
 							sm: 'flex',
 						}}
 					>
-						<Box />
+						{/* <Box /> */}
+						<Gap horizontal />
 						<SaveEditButtons />
 					</Box>
-				)} */}
+				)}
 			</Box>
 		</Box>
 	)

@@ -3,7 +3,7 @@ import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
 import { Typography } from '@/common/ui/Typography'
 import { ApiState } from '@/tech/ApiState'
-import { Box, LinearProgress } from '@mui/material'
+import { Box, Skeleton } from '@mui/material'
 import { useMemo } from 'react'
 import './GlobalSongList.styles.css'
 
@@ -60,8 +60,22 @@ export default function PopupSongList(props: GlobalSongListProps) {
 			)}
 
 			{props.apiState.loading && (
-				<Box flex={1}>
-					<LinearProgress />
+				<Box flex={1} display={'flex'} flexDirection={'column'}>
+					{/* <LinearProgress /> */}
+					<Box flex={1} display={'flex'} flexDirection={'row'}>
+						{Array.from({ length: 4 }).map((_, i) => (
+							<Box key={i} padding={1}>
+								<Skeleton
+									variant="rectangular"
+									height={116}
+									width={140}
+									sx={{
+										borderRadius: 2,
+									}}
+								/>
+							</Box>
+						))}
+					</Box>
 				</Box>
 			)}
 		</Box>

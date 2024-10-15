@@ -12,7 +12,7 @@ import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VariantPackGuid } from '../../../interfaces/variant/songVariant.types'
 import './styles.css'
 
@@ -105,35 +105,35 @@ export default function SongSelectPopup(props: PopupProps) {
 	const MAX_WIDTH = 600
 	const OFFSET = 8
 
-	useEffect(() => {
-		const updatePopupPosition = () => {
-			if (props.anchorRef?.current) {
-				const rect = props.anchorRef.current.getBoundingClientRect()
-				const toRightMode = rect.left < window.innerWidth / 2
-				const t = props.upDirection ? undefined : rect.top + OFFSET
-				const b = props.upDirection
-					? window.innerHeight - rect.bottom + OFFSET
-					: undefined
+	const updatePopupPosition = useCallback(() => {
+		if (props.anchorRef?.current) {
+			const rect = props.anchorRef.current.getBoundingClientRect()
+			const toRightMode = rect.left < window.innerWidth / 2
+			const t = props.upDirection ? undefined : rect.top + OFFSET
+			const b = props.upDirection
+				? window.innerHeight - rect.bottom + OFFSET
+				: undefined
 
-				if (toRightMode) {
-					const l = rect.left + OFFSET
-					setPosition({
-						top: t,
-						bottom: b,
-						left: Math.min(l, window.innerWidth - MAX_WIDTH - OFFSET),
-					})
-				} else {
-					const r = window.innerWidth - rect.right + OFFSET
+			if (toRightMode) {
+				const l = rect.left + OFFSET
+				setPosition({
+					top: t,
+					bottom: b,
+					left: Math.min(l, window.innerWidth - MAX_WIDTH - OFFSET),
+				})
+			} else {
+				const r = window.innerWidth - rect.right + OFFSET
 
-					setPosition({
-						top: t,
-						bottom: b,
-						right: Math.max(r, OFFSET),
-					})
-				}
+				setPosition({
+					top: t,
+					bottom: b,
+					right: Math.max(r, OFFSET),
+				})
 			}
 		}
+	}, [props.anchorRef, props.anchorName, props.upDirection])
 
+	useEffect(() => {
 		updatePopupPosition() // Initial position
 
 		window.addEventListener('scroll', updatePopupPosition)
@@ -143,7 +143,11 @@ export default function SongSelectPopup(props: PopupProps) {
 			window.removeEventListener('scroll', updatePopupPosition)
 			window.removeEventListener('resize', updatePopupPosition)
 		}
-	}, [props.anchorRef, props.anchorName, props.upDirection])
+	}, [updatePopupPosition])
+
+	useEffect(() => {
+		updatePopupPosition()
+	}, [props.open, updatePopupPosition])
 
 	const onClose = () => {
 		props.onClose?.()

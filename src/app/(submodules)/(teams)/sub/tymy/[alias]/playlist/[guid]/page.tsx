@@ -7,10 +7,16 @@ import TeamPlaylistTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pl
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { Box } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
 export default SmartTeamPage(TeamPlaylistPage, {
 	hidePadding: true,
 	collapseSideBar: true,
+	fixedTopBar: true,
+	topBarSx: {
+		bgcolor: 'grey.200',
+		borderBottom: `1px solid ${grey[400]}`,
+	},
 })
 
 function TeamPlaylistPage() {

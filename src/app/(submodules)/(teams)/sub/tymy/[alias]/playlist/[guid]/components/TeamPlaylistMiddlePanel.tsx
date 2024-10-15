@@ -20,7 +20,7 @@ export default function TeamPlaylistMiddlePanel() {
 	)
 
 	return (
-		<Box flex={1} position={'relative'} paddingRight={4} paddingLeft={1}>
+		<Box flex={1} position={'relative'} padding={2} paddingRight={4}>
 			{loading || !items ? <>Načítání...</> : <>{itemsArr}</>}
 		</Box>
 	)

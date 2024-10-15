@@ -115,7 +115,6 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 						flexDirection={'column'}
 						flex={1}
 						height={'100%'}
-						// bgcolor={'blue'}
 					>
 						<TeamTopPanel />
 						<Box flex={1} paddingBottom={4}>
