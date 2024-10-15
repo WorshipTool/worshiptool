@@ -1,7 +1,9 @@
 'use client'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { IconButton } from '@/common/ui/IconButton'
 import useAuth from '@/hooks/auth/useAuth'
-import React from 'react'
+import { AdminPanelSettings } from '@mui/icons-material'
+import React, { useState } from 'react'
 
 type OnlyAdminProps = {
 	children?: React.ReactNode
@@ -9,19 +11,40 @@ type OnlyAdminProps = {
 
 export default function OnlyAdmin(props: OnlyAdminProps) {
 	const { isAdmin } = useAuth()
+
+	const [collapsed, setCollapsed] = useState(true)
 	return (
 		<>
 			{isAdmin() ? (
-				<Tooltip title="Toto vidí pouze admin">
+				<Tooltip
+					title={
+						collapsed
+							? 'Klikni pro zobrazení obsahu pro admina'
+							: 'Toto vidí pouze admin'
+					}
+				>
 					<div
 						style={{
-							border: '1px dotted black',
+							borderWidth: '1px',
 							borderStyle: 'dashed',
 							borderRadius: '5px',
-							padding: '4px',
+							padding: collapsed ? 0 : '4px',
+							borderColor: collapsed ? 'grey' : 'black',
 						}}
+						onMouseOver={() => setCollapsed(false)}
 					>
-						{props.children}
+						{collapsed ? (
+							<IconButton
+								size="small"
+								// onClick={() => setCollapsed(false)}
+
+								color="black"
+							>
+								<AdminPanelSettings />
+							</IconButton>
+						) : (
+							props.children
+						)}
 					</div>
 				</Tooltip>
 			) : null}

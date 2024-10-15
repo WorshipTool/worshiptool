@@ -1,11 +1,11 @@
 'use client'
-import { theme } from '@/common/constants/theme'
+import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Link } from '@/common/ui/Link/Link'
 import { Typography } from '@/common/ui/Typography'
 import { RoutesKeys, SmartAllParams } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
-import { Box, alpha } from '@mui/material'
+import { Box, alpha, useTheme } from '@mui/material'
 import { ReactNode, useCallback } from 'react'
 
 type MenuItemProps<T extends RoutesKeys> = {
@@ -23,6 +23,10 @@ export default function MenuItem<T extends RoutesKeys>(
 	props: MenuItemProps<T>
 ) {
 	const enabled = useSmartMatch(props.to)
+
+	const { darkMode } = useTeamSideBar()
+
+	const theme = useTheme()
 
 	const Envelope = useCallback(
 		function A({ children }: { children: ReactNode }) {
@@ -53,23 +57,32 @@ export default function MenuItem<T extends RoutesKeys>(
 					padding: 1,
 					paddingX: props.collapsed ? 1.3 : 3,
 					opacity: props.disabled ? 0.5 : 1,
-					bgcolor: alpha(theme.palette.primary.main, enabled ? 0.1 : 0),
+					bgcolor: alpha(
+						theme.palette.primary.main,
+						enabled ? (darkMode ? 0.3 : 0.1) : 0
+					),
 					borderRadius: 3,
 					transition: 'all 0.1s ease',
 					[':hover']: !props.disabled
 						? {
-								bgcolor: alpha(theme.palette.primary.main, 0.1),
+								bgcolor: alpha(
+									theme.palette.primary.main,
+									darkMode ? 0.3 : 0.1
+								),
 						  }
 						: {},
 					[':active']: !props.disabled
 						? {
-								bgcolor: alpha(theme.palette.primary.main, 0.2),
+								bgcolor: alpha(
+									theme.palette.primary.main,
+									darkMode ? 0.4 : 0.2
+								),
 						  }
 						: {},
 					userSelect: 'none',
 					minWidth: props.collapsed ? 0 : 150,
 				}}
-				color={'grey.800'}
+				color={darkMode ? 'grey.100' : 'grey.800'}
 				gap={2}
 			>
 				<Box display={'flex'} justifyContent={'center'} alignItems={'center'}>

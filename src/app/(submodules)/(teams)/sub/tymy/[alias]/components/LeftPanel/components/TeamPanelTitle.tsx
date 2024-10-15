@@ -1,4 +1,5 @@
 'use client'
+import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
@@ -11,6 +12,7 @@ type TeamPanelTitleProps = {
 
 export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 	const { name, alias } = useInnerTeam()
+	const { darkMode } = useTeamSideBar()
 	return (
 		<Box
 			display={'flex'}
@@ -21,10 +23,10 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 			gap={1}
 			sx={{
 				opacity: props.collapsed ? 0 : 1,
-				// transition: 'all 0.1s',
+				transition: 'all 0.1s',
 			}}
 		>
-			<Typography color="grey.800" noWrap>
+			<Typography color={darkMode ? 'grey.300' : 'grey.800'} noWrap>
 				Chválící tým
 			</Typography>
 			<Link

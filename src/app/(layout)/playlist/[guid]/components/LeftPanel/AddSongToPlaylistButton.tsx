@@ -4,7 +4,10 @@ import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Add } from '@mui/icons-material'
 import { Box, Fab } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+export const OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME =
+	'openPlaylistAddSongPopup'
 
 export default function AddSongToPlaylistButton() {
 	const { addItem, items, ...playlist } = useInnerPlaylist()
@@ -12,13 +15,27 @@ export default function AddSongToPlaylistButton() {
 	const anchorRef = useRef<HTMLButtonElement>(null)
 
 	const [open, setOpen] = useState(false)
-	const onClick = (e: React.MouseEvent) => {
+	const onClick = useCallback((e: React.MouseEvent) => {
 		setOpen(true)
-	}
+	}, [])
 
-	const onClose = () => {
+	useEffect(() => {
+		const open = () => {
+			setOpen(true)
+		}
+		document.addEventListener(OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME, open)
+
+		return () => {
+			document.removeEventListener(
+				OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME,
+				open
+			)
+		}
+	}, [])
+
+	const onClose = useCallback(() => {
 		setOpen(false)
-	}
+	}, [])
 
 	const onSubmit = async (packs: VariantPackGuid[]) => {
 		for (const pack of packs) {

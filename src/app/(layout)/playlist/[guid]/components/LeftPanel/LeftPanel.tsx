@@ -38,18 +38,20 @@ export default function LeftPanel(props: LeftPanelProps) {
 					...props.sx,
 				}}
 			>
-				<Box
-					display={'flex'}
-					flexDirection={'row'}
-					justifyContent={'space-between'}
-				>
-					<Typography strong={500}>Pořadí písní:</Typography>
-					{canUserEdit && (
-						<Typography strong={300} color={grey[600]}>
-							Změňte přetažením
-						</Typography>
-					)}
-				</Box>
+				{
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						justifyContent={'space-between'}
+					>
+						<Typography strong={500}>Pořadí písní:</Typography>
+						{canUserEdit && (
+							<Typography strong={300} color={grey[600]}>
+								Změňte přetažením
+							</Typography>
+						)}
+					</Box>
+				}
 				<Box
 					sx={{
 						'&::-webkit-scrollbar': {

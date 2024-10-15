@@ -13,7 +13,7 @@ type TeamLeftPanelProps = {}
 
 const TRANSITION = 'all 0.2s'
 export default function TeamLeftPanel(props: TeamLeftPanelProps) {
-	const { collapsed, setCollapsedManually } = useTeamSideBar()
+	const { collapsed, setCollapsedManually, darkMode } = useTeamSideBar()
 
 	const WIDTH = useMemo(() => (collapsed ? 60 : 250), [collapsed])
 	return (
@@ -25,27 +25,52 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 
 					position: 'fixed',
 					height: '100%',
-					bgcolor: 'grey.100',
+					bgcolor: darkMode ? 'grey.900' : 'grey.100',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 					transition: TRANSITION,
 					boxShadow: '0px 0px 4px 0px rgba(0,0,0,0.1)',
 					zIndex: 1,
+					color: darkMode ? 'grey.100' : 'grey.800',
+					overflow: 'hidden',
 				}}
 			>
 				<TeamPanelTitle collapsed={collapsed} />
 				<Menu collapsed={collapsed} transition={TRANSITION} />
 				<Box flex={1} />
-				<IconButton onClick={() => setCollapsedManually(!collapsed)}>
-					{collapsed ? <ChevronRight /> : <ChevronLeft />}
-				</IconButton>
 				<Box padding={2}>
 					<OnlyAdmin>
 						<Button to="home" size="small" color="secondary">
 							Domů
 						</Button>
 					</OnlyAdmin>
+				</Box>
+				<Box paddingBottom={2}>
+					{collapsed ? (
+						<IconButton
+							onClick={() => setCollapsedManually(!collapsed)}
+							color="inherit"
+							tooltip={'Rozbalit menu'}
+							tooltipPlacement="right"
+						>
+							{collapsed ? <ChevronRight /> : <ChevronLeft />}
+						</IconButton>
+					) : (
+						<Button
+							onClick={() => setCollapsedManually(!collapsed)}
+							color="inherit"
+							tooltip={'Sbalit menu'}
+							tooltipPlacement="right"
+							startIcon={<ChevronLeft />}
+							variant="text"
+							sx={{
+								minWidth: 150,
+							}}
+						>
+							Sbalit menu
+						</Button>
+					)}
 				</Box>
 			</Box>
 			<Box
