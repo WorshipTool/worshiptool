@@ -1,3 +1,4 @@
+import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { note } from '@pepavlin/sheet-api'
 import { SongVariantDto } from '../../api/dtos'
 
@@ -9,6 +10,9 @@ export default interface PlaylistDto {
 	title: string
 	items: PlaylistItemDto[]
 	ownerGuid: string
+
+	teamAlias?: string
+	teamGuid?: TeamGuid
 }
 
 export interface PlaylistItemDto {

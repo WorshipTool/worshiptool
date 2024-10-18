@@ -1,4 +1,5 @@
 'use client'
+import AppSongSelectSpecifierProvider from '@/app/components/components/AppSongSelectSpecifierProvider'
 import { ThemeProvider } from '@/app/theme'
 import { FooterProvider } from '@/common/components/Footer/hooks/useFooter'
 import { ToolbarProvider } from '@/common/components/Toolbar/hooks/useToolbar'
@@ -6,7 +7,7 @@ import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandler
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import SongDragProvider from '@/hooks/dragsong/SongDragProvider'
 import { GroupProvider } from '@/hooks/group/useGroup'
-import { PlaylistProvider } from '@/hooks/playlist/useCurrentPlaylist'
+import { CurrentPlaylistProvider } from '@/hooks/playlist/useCurrentPlaylist'
 import { SnackbarProvider } from 'notistack'
 
 type AppClientProvidersProps = {
@@ -29,9 +30,11 @@ export default function AppClientProviders({
 						<GroupProvider>
 							<ToolbarProvider>
 								<FooterProvider>
-									<PlaylistProvider>
-										<SongDragProvider>{children}</SongDragProvider>
-									</PlaylistProvider>
+									<AppSongSelectSpecifierProvider>
+										<CurrentPlaylistProvider>
+											<SongDragProvider>{children}</SongDragProvider>
+										</CurrentPlaylistProvider>
+									</AppSongSelectSpecifierProvider>
 								</FooterProvider>
 							</ToolbarProvider>
 						</GroupProvider>

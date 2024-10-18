@@ -25,7 +25,7 @@ export const TeamSideBarProvider = ({
 const useTeamSideBarProvide = () => {
 	const [collapsed, setCollapsed] = useState(false)
 	const [manualMode, setManualMode] = useState(false)
-	const darkMode = false
+	const [darkMode, setDarkMode] = useState(false)
 
 	const setCollapsedManually = useCallback((value: boolean) => {
 		setCollapsed(value)
@@ -46,5 +46,6 @@ const useTeamSideBarProvide = () => {
 		setCollapsedAuto,
 		setCollapsedManually,
 		darkMode,
+		setDarkMode,
 	}
 }

@@ -165,6 +165,42 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setIsSaved(true)
 	}
 
+	// Shortcuts
+	useEffect(() => {
+		// Add CTRL+Z and CTRL+Y support for undo and redo
+		const handleKeyDown = (event: KeyboardEvent) => {
+			switch (event.key) {
+				case 'z':
+					if (event.ctrlKey || event.metaKey) {
+						event.preventDefault()
+						undo()
+					}
+					break
+				case 'y':
+					if (event.ctrlKey || event.metaKey) {
+						if (event.shiftKey) {
+							event.preventDefault()
+							undo()
+						} else {
+							event.preventDefault()
+							redo()
+						}
+					}
+					break
+
+				// Save with shortcut
+				case 's':
+					if (event.ctrlKey || event.metaKey) {
+						event.preventDefault()
+						save()
+					}
+					break
+			}
+		}
+		window.addEventListener('keydown', handleKeyDown)
+		return () => window.removeEventListener('keydown', handleKeyDown)
+	}, [redo, undo])
+
 	// Handle unsaved changes
 	useEffect(() => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {

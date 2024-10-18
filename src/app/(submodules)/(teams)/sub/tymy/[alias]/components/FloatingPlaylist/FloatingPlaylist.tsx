@@ -3,9 +3,11 @@ import { Typography } from '@/common/ui/Typography'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import useSongDrag from '@/hooks/dragsong/useSongDrag'
-import { Check, PlaylistAdd } from '@mui/icons-material'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { Check, OpenInNew, PlaylistAdd } from '@mui/icons-material'
 import { Box } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function FloatingPlaylist() {
 	const { isDragging } = useSongDrag()
@@ -13,6 +15,16 @@ export default function FloatingPlaylist() {
 	const [afterDropped, setAfterDropped] = useState(false)
 
 	const [dropped, setDropped] = useState(false)
+
+	const {
+		isOn,
+		title,
+		addPacks,
+		guid: playlistGuid,
+		playlist,
+	} = useCurrentPlaylist()
+
+	const [isMouseOver, setIsOver] = useState(false)
 
 	useChangeDelayer(
 		dropped,
@@ -35,9 +47,21 @@ export default function FloatingPlaylist() {
 		[]
 	)
 
-	return (
+	const navigate = useSmartNavigate()
+	const openPlaylist = useCallback(() => {
+		navigate('playlist', {
+			guid: playlistGuid,
+		})
+	}, [])
+
+	const width = useMemo(() => {
+		return Math.max(200, 100 + (title?.length || 0) * 8)
+	}, [title])
+
+	return !isOn || !playlist?.teamAlias ? null : (
 		<SongDropContainer
-			onDrop={() => {
+			onDrop={(song) => {
+				addPacks([song.packGuid])
 				setDropped(true)
 			}}
 		>
@@ -47,7 +71,7 @@ export default function FloatingPlaylist() {
 						sx={{
 							padding: '1rem',
 							position: 'fixed',
-							bottom: isDragging || dropped ? 16 : -100,
+							bottom: isDragging || dropped || isMouseOver ? 16 : -100,
 							// bottom: 0,
 							right: '50%',
 							transform: `translateX(50%) scale(${over ? 1.05 : 1})`,
@@ -59,6 +83,8 @@ export default function FloatingPlaylist() {
 							alignItems: 'center',
 							justifyContent: 'center',
 							gap: 1,
+							userSelect: 'none',
+							cursor: 'pointer',
 
 							// borderColor: 'grey.900',
 							// borderStyle: 'solid',
@@ -68,17 +94,33 @@ export default function FloatingPlaylist() {
 							boxShadow: '0px 2px 10px 0px rgba(0,0,0,0.1)',
 
 							bgcolor: over ? 'secondary.dark' : 'secondary.main',
-							width: 200,
+							width,
 						}}
+						onMouseEnter={() => setIsOver(true)}
+						onMouseLeave={() => setIsOver(false)}
+						onClick={openPlaylist}
 					>
 						{!afterDropped || over ? (
-							<>
-								<PlaylistAdd />
-								<Box display={'flex'} flexDirection={'row'} gap={0.5}>
-									<Typography strong>Přidat do</Typography>
-									<Typography>Neděle 21.7.</Typography>
-								</Box>
-							</>
+							isMouseOver ? (
+								<>
+									<OpenInNew />
+									<Box display={'flex'} flexDirection={'row'} gap={0.5}>
+										<Typography strong noWrap>
+											Otevřít
+										</Typography>
+									</Box>
+								</>
+							) : (
+								<>
+									<PlaylistAdd />
+									<Box display={'flex'} flexDirection={'row'} gap={0.5}>
+										<Typography strong noWrap>
+											Přidat do
+										</Typography>
+										<Typography noWrap>{title}</Typography>
+									</Box>
+								</>
+							)
 						) : (
 							<>
 								<Check fontSize="small" />

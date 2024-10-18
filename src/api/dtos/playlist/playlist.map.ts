@@ -28,5 +28,7 @@ export const mapPlaylistDataOutDtoToPlaylistDto = (
 			mapPlaylistItemOutDtoApiToPlaylistItemDto(item)
 		),
 		ownerGuid: api.ownerGuid,
+		teamAlias: api.teamAlias,
+		teamGuid: api.teamGuid,
 	}
 }

@@ -5,7 +5,13 @@ import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/comp
 import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
+import {
+	ChevronLeft,
+	ChevronRight,
+	DarkMode,
+	Home,
+	LightMode,
+} from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
@@ -13,7 +19,8 @@ type TeamLeftPanelProps = {}
 
 const TRANSITION = 'all 0.2s'
 export default function TeamLeftPanel(props: TeamLeftPanelProps) {
-	const { collapsed, setCollapsedManually, darkMode } = useTeamSideBar()
+	const { collapsed, setCollapsedManually, darkMode, setDarkMode } =
+		useTeamSideBar()
 
 	const WIDTH = useMemo(() => (collapsed ? 60 : 250), [collapsed])
 	return (
@@ -31,7 +38,7 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 					alignItems: 'center',
 					transition: TRANSITION,
 					boxShadow: '0px 0px 4px 0px rgba(0,0,0,0.1)',
-					zIndex: 1,
+					zIndex: 2,
 					color: darkMode ? 'grey.100' : 'grey.800',
 					overflow: 'hidden',
 				}}
@@ -41,9 +48,28 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 				<Box flex={1} />
 				<Box padding={2}>
 					<OnlyAdmin>
-						<Button to="home" size="small" color="secondary">
-							Domů
-						</Button>
+						<IconButton
+							size={'small'}
+							color="inherit"
+							tooltip={
+								darkMode
+									? 'Přepnout na světlý režim'
+									: 'Přepnout na tmavý režim'
+							}
+							tooltipPlacement="right"
+							onClick={() => setDarkMode(!darkMode)}
+						>
+							{darkMode ? <LightMode /> : <DarkMode />}
+						</IconButton>
+						<IconButton
+							size={'small'}
+							color="inherit"
+							to="home"
+							tooltip="Jít na hlavní stránku, mimo tým"
+							tooltipPlacement="right"
+						>
+							<Home />
+						</IconButton>
 					</OnlyAdmin>
 				</Box>
 				<Box paddingBottom={2}>

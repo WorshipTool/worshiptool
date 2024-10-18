@@ -9,6 +9,7 @@ import React, { useMemo } from 'react'
 
 type TeamQuickActionButtonProps = {
 	label: string
+	secondaryLabel?: string
 	tooltip: string
 	icon: React.ReactNode
 
@@ -72,7 +73,26 @@ export default function TeamQuickActionButton({
 							{props.label}
 						</Typography>
 					</Box>
-					<Box display={'flex'} flexDirection={'row'} justifyContent={'end'}>
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						justifyContent={'space-between'}
+						alignItems={'end'}
+						gap={1}
+					>
+						{props.secondaryLabel ? (
+							<Typography
+								strong={500}
+								sx={{ userSelect: 'none', opacity: 0.5 }}
+								noWrap
+								// lineHeight={'inherit'}
+							>
+								{props.secondaryLabel}
+							</Typography>
+						) : (
+							<Box />
+						)}
+
 						{disabled ? (
 							<CircularProgress size={'2rem'} color="inherit" />
 						) : (

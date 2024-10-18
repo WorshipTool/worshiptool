@@ -1,18 +1,21 @@
 'use client'
+import { PlaylistData } from '@/api/generated'
 import Popup from '@/common/components/Popup/Popup'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Button } from '@/common/ui/Button'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Add, Remove } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
 	Box,
-	Button,
 	Chip,
 	CircularProgress,
 	IconButton,
 	Paper,
 	Typography,
 	styled,
+	useTheme,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Gap } from '../../../../common/ui/Gap'
@@ -103,13 +106,9 @@ function Playlists() {
 	}
 	const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist()
 
-	const ListPlaylistItem = ({
-		name,
-		guid,
-	}: {
-		name: string
-		guid: PlaylistGuid
-	}) => {
+	const theme = useTheme()
+
+	const ListPlaylistItem = ({ data }: { data: PlaylistData }) => {
 		return (
 			<StyledContainer
 				sx={{
@@ -118,17 +117,38 @@ function Playlists() {
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
+					position: 'relative',
 				}}
 			>
-				<Button onClick={() => openPlaylist(guid)} fullWidth color="warning">
-					{name}
+				<Button
+					onClick={() => openPlaylist(data.guid as PlaylistGuid)}
+					color={theme.palette.warning.main}
+					sx={{
+						flex: 1,
+					}}
+					variant="text"
+				>
+					{data.title}
 				</Button>
 				<IconButton>
-					<Remove onClick={() => askToDeletePlaylist(guid, name)} />
+					<Remove
+						onClick={() =>
+							askToDeletePlaylist(data.guid as PlaylistGuid, data.title)
+						}
+					/>
 				</IconButton>
 				<Box position={'absolute'} marginLeft={1}>
-					{isOn && currentPlaylistGuid == guid ? (
+					{isOn && currentPlaylistGuid == data.guid ? (
 						<Chip label={'Aktivní'} size="small" color="secondary" />
+					) : (
+						<></>
+					)}
+				</Box>
+				<Box position={'absolute'} right={40}>
+					{data.teamName ? (
+						<Tooltip label={`Playlist je vytvořen pro tým`}>
+							<Chip label={data.teamName} color="secondary" size="small" />
+						</Tooltip>
 					) : (
 						<></>
 					)}
@@ -181,13 +201,7 @@ function Playlists() {
 				) : (
 					<>
 						{playlists?.map((p) => {
-							return (
-								<ListPlaylistItem
-									name={p.title}
-									guid={p.guid as PlaylistGuid}
-									key={p.guid}
-								/>
-							)
+							return <ListPlaylistItem data={p} key={p.guid} />
 						})}
 
 						{playlists?.length == 0 && (

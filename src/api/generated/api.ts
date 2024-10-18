@@ -102,6 +102,25 @@ export interface AddVariantToPlaylistInDto {
 /**
  * 
  * @export
+ * @interface AttachPlaylistToTeamInDto
+ */
+export interface AttachPlaylistToTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AttachPlaylistToTeamInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttachPlaylistToTeamInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface BaseUserInfoOutDto
  */
 export interface BaseUserInfoOutDto {
@@ -1225,6 +1244,12 @@ export interface Playlist {
      * @memberof Playlist
      */
     'editorsPermissionGroup': PermissionUserGroup;
+    /**
+     * 
+     * @type {Team}
+     * @memberof Playlist
+     */
+    'belongsToTeam': Team;
 }
 /**
  * 
@@ -1244,6 +1269,18 @@ export interface PlaylistData {
      * @memberof PlaylistData
      */
     'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'teamGuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'teamName'?: string;
 }
 /**
  * 
@@ -1275,6 +1312,18 @@ export interface PlaylistDataOutDto {
      * @memberof PlaylistDataOutDto
      */
     'ownerGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'teamGuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'teamAlias'?: string;
 }
 /**
  * 
@@ -2752,6 +2801,106 @@ export interface Tag {
      */
     'value': string;
 }
+/**
+ * 
+ * @export
+ * @interface Team
+ */
+export interface Team {
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'joinCode': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof Team
+     */
+    'selection': Playlist;
+    /**
+     * 
+     * @type {Array<TeamMember>}
+     * @memberof Team
+     */
+    'members': Array<TeamMember>;
+    /**
+     * 
+     * @type {User}
+     * @memberof Team
+     */
+    'createdBy': User;
+    /**
+     * 
+     * @type {PermissionUserGroup}
+     * @memberof Team
+     */
+    'managersPermissionGroup': PermissionUserGroup;
+    /**
+     * 
+     * @type {Array<Playlist>}
+     * @memberof Team
+     */
+    'playlists': Array<Playlist>;
+}
+/**
+ * 
+ * @export
+ * @interface TeamMember
+ */
+export interface TeamMember {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMember
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Team}
+     * @memberof TeamMember
+     */
+    'team': Team;
+    /**
+     * 
+     * @type {User}
+     * @memberof TeamMember
+     */
+    'user': User;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMember
+     */
+    'role': TeamMemberRoleEnum;
+}
+
+export const TeamMemberRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type TeamMemberRoleEnum = typeof TeamMemberRoleEnum[keyof typeof TeamMemberRoleEnum];
+
 /**
  * 
  * @export
@@ -9040,6 +9189,45 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAttachPlaylistToTeam: async (attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'attachPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerAttachPlaylistToTeam', 'attachPlaylistToTeamInDto', attachPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/selection/attachPlaylistToTeam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attachPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9113,6 +9301,18 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerAttachPlaylistToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9153,6 +9353,15 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9190,6 +9399,17 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

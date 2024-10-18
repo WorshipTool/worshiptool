@@ -31,7 +31,7 @@ export default function OnlyAdmin(props: OnlyAdminProps) {
 							padding: collapsed ? 0 : '4px',
 							borderColor: collapsed ? 'grey' : 'black',
 						}}
-						onMouseOver={() => setCollapsed(false)}
+						onClick={() => setCollapsed(false)}
 					>
 						{collapsed ? (
 							<IconButton

@@ -1,4 +1,5 @@
 'use client'
+import TeamSelectSpecifierProvider from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamSelectSpecifierProvider'
 import { TeamSideBarProvider } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import { TeamTopBarProvider } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamTopBar'
 import React from 'react'
@@ -9,8 +10,10 @@ type SmartTeamPageProvidersProps = {
 
 export default function TeamPageProviders(props: SmartTeamPageProvidersProps) {
 	return (
-		<TeamSideBarProvider>
-			<TeamTopBarProvider>{props.children}</TeamTopBarProvider>
-		</TeamSideBarProvider>
+		<TeamSelectSpecifierProvider>
+			<TeamSideBarProvider>
+				<TeamTopBarProvider>{props.children}</TeamTopBarProvider>
+			</TeamSideBarProvider>
+		</TeamSelectSpecifierProvider>
 	)
 }

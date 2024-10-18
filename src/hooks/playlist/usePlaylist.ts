@@ -13,10 +13,21 @@ import PlaylistDto, {
 import useAuth from '../auth/useAuth'
 import usePlaylistsGeneral from './usePlaylistsGeneral'
 
+const PLAYLIST_CHANGE_EVENT_NAME = 'playlist-change'
+type PlaylistChangeEventData = {
+	hookId: string
+	playlistGuid: PlaylistGuid
+}
+
 export default function usePlaylist(
 	guid: PlaylistGuid,
 	after?: (data: PlaylistDto) => void
 ) {
+	const uniqueHookId = useMemo(
+		() => Math.random().toString(36).substr(2, 9),
+		[]
+	)
+
 	const {
 		addVariantToPlaylist,
 		addPacksToPlaylist,
@@ -51,19 +62,45 @@ export default function usePlaylist(
 		}
 	}, [state])
 
+	// Event, connect more same hooks
+	const changeCallback = useCallback(() => {
+		const data: PlaylistChangeEventData = {
+			hookId: uniqueHookId,
+			playlistGuid: guid,
+		}
+		window.dispatchEvent(
+			new CustomEvent(PLAYLIST_CHANGE_EVENT_NAME, {
+				detail: data,
+			})
+		)
+	}, [guid, uniqueHookId])
+
+	useEffect(() => {
+		window.addEventListener(PLAYLIST_CHANGE_EVENT_NAME, (e) => {
+			const data = (e as CustomEvent).detail as PlaylistChangeEventData
+			if (data.hookId !== uniqueHookId && data.playlistGuid === guid) {
+				fetchApiState(() => getPlaylistByGuid(guid))
+			}
+		})
+		return () => {
+			window.removeEventListener(PLAYLIST_CHANGE_EVENT_NAME, () => {})
+		}
+	}, [])
+
 	const search = useCallback(
 		async (searchString: string) => {
 			await searchInPlaylistByGuid(guid, searchString)
 				.then((r) => {
 					const items = r.items.map(mapPlaylistItemOutDtoApiToPlaylistItemDto)
 					setSearchedItems(items)
+					changeCallback()
 					return items
 				})
 				.catch((e) => {
 					console.error(e)
 				})
 		},
-		[searchInPlaylistByGuid, guid]
+		[searchInPlaylistByGuid, guid, changeCallback]
 	)
 
 	const addVariant = async (
@@ -78,6 +115,7 @@ export default function usePlaylist(
 					return item
 				}
 			)
+			changeCallback()
 			return data
 		} catch (e) {
 			console.log(e)
@@ -94,6 +132,7 @@ export default function usePlaylist(
 		// Add new items to the list
 
 		setItems((items) => [...items, ...newItems])
+		changeCallback()
 	}
 
 	const removeVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
@@ -101,6 +140,7 @@ export default function usePlaylist(
 
 		setItems((items) => items.filter((i) => i.variant.packGuid !== packGuid))
 
+		changeCallback()
 		return r
 	}
 
@@ -119,6 +159,7 @@ export default function usePlaylist(
 		setItems((items) =>
 			items.filter((i) => !newItems.includes(i.variant.packGuid))
 		)
+		changeCallback()
 	}
 
 	const rename = (title: string) => {
@@ -129,6 +170,7 @@ export default function usePlaylist(
 					title: title,
 				})
 			}
+			changeCallback()
 		})
 	}
 
@@ -147,6 +189,7 @@ export default function usePlaylist(
 				return item
 			})
 		)
+		changeCallback()
 
 		return r
 	}
@@ -176,6 +219,7 @@ export default function usePlaylist(
 			newItems[index] = item
 			return newItems
 		})
+		changeCallback()
 	}
 
 	const isOwner = useMemo(() => {

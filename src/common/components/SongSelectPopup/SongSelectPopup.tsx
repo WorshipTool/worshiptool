@@ -1,19 +1,20 @@
 'use client'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import PopupSongList from '@/common/components/SongSelectPopup/components/PopupSongList'
 import SelectFromOptions from '@/common/components/SongSelectPopup/components/SelectFromOptions'
 import { SelectSearch } from '@/common/components/SongSelectPopup/components/SelectSearch'
 import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
+import { useSongSelectSpecifier } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Box } from '@mui/material'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { VariantPackGuid } from '../../../interfaces/variant/songVariant.types'
+import {
+	SongVariantDto,
+	VariantPackGuid,
+} from '../../../interfaces/variant/songVariant.types'
 import './styles.css'
 
 type PopupProps = {
@@ -26,6 +27,7 @@ type PopupProps = {
 	anchorRef: React.RefObject<HTMLElement>
 	anchorName: string
 
+	// Filter function, for example to filter out previously selected songs
 	filterFunc?: (pack: VariantPackGuid) => boolean
 
 	disableMultiselect?: boolean
@@ -36,57 +38,62 @@ export type ChosenSong = {
 	title: string
 }
 
-export default function SongSelectPopup(props: PopupProps) {
+export default function SongSelectPopup({ ...props }: PopupProps) {
+	const selectSpecifier = useSongSelectSpecifier()
+
 	const [chosen, setChosen] = useState<ChosenSong[]>([])
 
 	const [optionSelected, setOptionSelected] = useState(0)
+	const options = useMemo(() => {
+		return [
+			...selectSpecifier.custom.map((c) => {
+				return {
+					label: c.label,
+				}
+			}),
+		]
+	}, [selectSpecifier])
 
 	const [searchStringRaw, setSearchStringRaw] = useState('')
 	const [searchString, setSearchString] = useState('')
 
 	useChangeDelayer(searchStringRaw, setSearchString, [])
 
-	const { songGettingApi } = useApi()
+	useEffect(() => {
+		selectSpecifier.custom.forEach((c) => {
+			c.onSearch?.(searchString)
+		})
+	}, [searchString])
 
-	const [globalApiState] = useApiStateEffect(async () => {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
+	const [customApiState] = useApiStateEffect<SongVariantDto[]>(async () => {
+		const variants = (
+			await Promise.all(
+				selectSpecifier.custom
+					.filter((i) => {
+						return i.label === options[optionSelected].label
+					})
+					.map((c) => {
+						if (c.apiState || !c.getData) return []
+						return c.getData(searchString)
+					})
+			)
 		)
+			.flat()
+			// make it unique
+			.filter((v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i)
 
-		return (
-			result.variants
-				.map((v) => {
-					return mapSongVariantDataOutDtoToSongVariantDto(v)
-				})
-				.filter((v) => {
-					return props.filterFunc?.(v.packGuid) ?? true
-				})
-				// make it unique
-				.filter(
-					(v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i
-				)
-		)
-	}, [searchString, props.filterFunc])
+		const filteredVariants = variants.filter((v) => {
+			return props.filterFunc?.(v.packGuid) ?? true
+		})
 
-	const [usersApiState] = useApiStateEffect(async () => {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchMySongsInPopup(searchString)
-		)
-
-		return (
-			result.variants
-				.map((v) => {
-					return mapSongVariantDataOutDtoToSongVariantDto(v)
-				})
-				.filter((v) => {
-					return props.filterFunc?.(v.packGuid) ?? true
-				})
-				// make it unique
-				.filter(
-					(v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i
-				)
-		)
-	}, [searchString, props.filterFunc])
+		return filteredVariants
+	}, [
+		searchString,
+		props.filterFunc,
+		selectSpecifier.custom,
+		optionSelected,
+		options,
+	])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		props.onSubmit?.(chosen.map((c) => c.guid))
@@ -94,6 +101,7 @@ export default function SongSelectPopup(props: PopupProps) {
 		e.preventDefault()
 	}
 
+	// Positioning
 	const popupRef = useRef(null)
 	const [position, setPosition] = useState<{
 		top?: number
@@ -230,16 +238,34 @@ export default function SongSelectPopup(props: PopupProps) {
 								</Box>
 								<SelectFromOptions
 									options={[
-										{
-											label: 'Z globálního zpěvníku',
-										},
-										{
-											label: 'Z mých písní',
-											count:
-												searchString.length === 0
+										// ...(selectSpecifier.disableGlobal
+										// 	? []
+										// 	: [
+										// 			{
+										// 				label: 'Z globálního zpěvníku',
+										// 			},
+										// 	  ]),
+										// ...(selectSpecifier.disableUsers
+										// 	? []
+										// 	: [
+										// 			{
+										// 				label: 'Z mých písní',
+										// 				count:
+										// 					searchString.length === 0
+										// 						? undefined
+										// 						: usersApiState?.data?.length || 0,
+										// 			},
+										// 	  ]),
+										...selectSpecifier.custom.map((c) => {
+											return {
+												label: c.label,
+												count: !c.showCount
 													? undefined
-													: usersApiState?.data?.length || 0,
-										},
+													: searchString.length === 0
+													? undefined
+													: c.apiState?.data?.length || 0,
+											}
+										}),
 									]}
 									initialSelected={optionSelected}
 									onSelect={(item, i) => setOptionSelected(i)}
@@ -247,23 +273,44 @@ export default function SongSelectPopup(props: PopupProps) {
 							</Box>
 
 							<Box>
-								{optionSelected === 0 && (
-									<PopupSongList
-										onSongSelect={onSongSelect}
-										onSongDeselect={onSongDeselect}
-										selectedSongs={chosen.map((v) => v.guid)}
-										apiState={globalApiState}
-										multiselect={multiselect}
-									/>
-								)}
-								{optionSelected === 1 && (
-									<PopupSongList
-										onSongSelect={onSongSelect}
-										onSongDeselect={onSongDeselect}
-										selectedSongs={chosen.map((v) => v.guid)}
-										apiState={usersApiState}
-										multiselect={multiselect}
-									/>
+								{options[optionSelected] && (
+									<>
+										{/* {options[optionSelected].label ===
+											'Z globálního zpěvníku' && (
+											<PopupSongList
+												onSongSelect={onSongSelect}
+												onSongDeselect={onSongDeselect}
+												selectedSongs={chosen.map((v) => v.guid)}
+												apiState={globalApiState}
+												multiselect={multiselect}
+											/>
+										)}
+										{options[optionSelected].label === 'Z mých písní' && (
+											<PopupSongList
+												onSongSelect={onSongSelect}
+												onSongDeselect={onSongDeselect}
+												selectedSongs={chosen.map((v) => v.guid)}
+												apiState={usersApiState}
+												multiselect={multiselect}
+											/>
+										)} */}
+										{selectSpecifier.custom.map((c, i) => {
+											if (options[optionSelected].label === c.label) {
+												return (
+													<PopupSongList
+														key={c.label}
+														onSongSelect={onSongSelect}
+														onSongDeselect={onSongDeselect}
+														selectedSongs={chosen.map((v) => v.guid)}
+														apiState={c.apiState || customApiState}
+														multiselect={multiselect}
+													/>
+												)
+											}
+
+											return null
+										})}
+									</>
 								)}
 							</Box>
 

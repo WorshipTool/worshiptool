@@ -13,7 +13,7 @@ export default function useCurrentPlaylist() {
 	return useContext(playlistContext)
 }
 
-export const PlaylistProvider = ({ children }: { children: any }) => {
+export const CurrentPlaylistProvider = ({ children }: { children: any }) => {
 	const p = useProvidePlaylist()
 
 	return (
@@ -27,7 +27,7 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist> {
 	turnOff: () => void
 }
 
-export const useProvidePlaylist = (): useProvidePlaylistI => {
+const useProvidePlaylist = (): useProvidePlaylistI => {
 	const { value: guid, set: setGuid } =
 		useLocalStorage<PlaylistGuid>('currentPlaylist')
 	const playlist = usePlaylist(guid || ('' as PlaylistGuid))
