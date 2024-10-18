@@ -7,6 +7,7 @@ import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
@@ -62,6 +63,7 @@ export default function SelectedPanel({
 	)
 
 	const navigate = useSmartNavigate()
+	const { turnOn } = useCurrentPlaylist()
 
 	const onCreateNewPlaylistClick = useCallback(
 		async (e: React.MouseEvent) => {
@@ -81,6 +83,7 @@ export default function SelectedPanel({
 			// window.open(url, '_blank') // Open in new tab
 
 			closeAll()
+			turnOn(newGuid)
 		},
 		[selected, teamGuid]
 	)
