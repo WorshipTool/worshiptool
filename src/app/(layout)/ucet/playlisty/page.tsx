@@ -146,8 +146,8 @@ function Playlists() {
 				</Box>
 				<Box position={'absolute'} right={40}>
 					{data.teamName ? (
-						<Tooltip label={`Playlist je vytvořen pro tým`}>
-							<Chip label={data.teamName} color="secondary" size="small" />
+						<Tooltip label={`Playlist vytvořen v rámci týmu`}>
+							<Chip label={data.teamName} color="primary" size="small" />
 						</Tooltip>
 					) : (
 						<></>

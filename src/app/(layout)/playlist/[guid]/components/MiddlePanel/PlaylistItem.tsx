@@ -1,5 +1,5 @@
 import { Box, Paper } from '@mui/material'
-import React, { memo, useEffect, useMemo, useState } from 'react'
+import React, { ReactNode, memo, useEffect, useMemo, useState } from 'react'
 
 import TopPlaylistItemPanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/TopPlaylistItemPanel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
@@ -20,9 +20,13 @@ const PageBreak = () => {
 
 interface PlaylistItemProps {
 	itemGuid: PlaylistItemGuid
+	openButton?: ReactNode
 }
 
-export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
+export const PlaylistItem = memo(function A({
+	itemGuid,
+	...props
+}: PlaylistItemProps) {
 	const { items, editItem } = useInnerPlaylist()
 
 	const [inEditMode, setInEditMode] = useState(false)
@@ -103,6 +107,7 @@ export const PlaylistItem = memo(function A({ itemGuid }: PlaylistItemProps) {
 					setInEditMode={setInEditMode}
 					onSave={onEditSave}
 					onCancel={onEditCancel}
+					openButton={props.openButton}
 				/>
 				{!inEditMode ? (
 					sheetDefault

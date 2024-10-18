@@ -85,7 +85,7 @@ export default function usePlaylist(
 		return () => {
 			window.removeEventListener(PLAYLIST_CHANGE_EVENT_NAME, () => {})
 		}
-	}, [])
+	}, [guid, uniqueHookId])
 
 	const search = useCallback(
 		async (searchString: string) => {

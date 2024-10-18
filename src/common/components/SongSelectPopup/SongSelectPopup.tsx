@@ -65,7 +65,9 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 		})
 	}, [searchString])
 
-	const [customApiState] = useApiStateEffect<SongVariantDto[]>(async () => {
+	const [customApiState, reinvalidate] = useApiStateEffect<
+		SongVariantDto[]
+	>(async () => {
 		const variants = (
 			await Promise.all(
 				selectSpecifier.custom
@@ -87,18 +89,13 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 		})
 
 		return filteredVariants
-	}, [
-		searchString,
-		props.filterFunc,
-		selectSpecifier.custom,
-		optionSelected,
-		options,
-	])
+	}, [searchString, props.filterFunc, selectSpecifier, optionSelected, options])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		props.onSubmit?.(chosen.map((c) => c.guid))
 		onClose()
 		e.preventDefault()
+		// reinvalidate()
 	}
 
 	// Positioning
@@ -192,6 +189,7 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 					bottom: 0,
 					right: 0,
 					pointerEvents: 'auto',
+					zIndex: 1,
 				}}
 				onClick={onClose}
 			>
@@ -304,6 +302,20 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 														selectedSongs={chosen.map((v) => v.guid)}
 														apiState={c.apiState || customApiState}
 														multiselect={multiselect}
+														items={
+															(c.apiState || customApiState)?.data
+																?.filter((a) => {
+																	return props.filterFunc?.(a.packGuid) ?? true
+																})
+																.filter((a, i, arr) => {
+																	// Make unique
+																	return (
+																		arr.findIndex(
+																			(t) => t.packGuid === a.packGuid
+																		) === i
+																	)
+																}) || []
+														}
 													/>
 												)
 											}

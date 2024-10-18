@@ -19,7 +19,6 @@ export default function SongDropContainer(props: SongDropContainerProps) {
 	const { songGettingApi } = useApi()
 
 	const onDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-		console.log('onDrag', e)
 		e.preventDefault()
 		const isSong = isDragObjectSong(e)
 		if (isSong) {

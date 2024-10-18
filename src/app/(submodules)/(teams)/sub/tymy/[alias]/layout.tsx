@@ -5,7 +5,6 @@ import {
 	TeamMembersApiAxiosParamCreator,
 } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
-import FloatingPlaylist from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/FloatingPlaylist/FloatingPlaylist'
 import TeamLeftPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
 import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamPageProviders'
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
@@ -98,8 +97,6 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 		}
 	}
 
-	const team = layout.params.alias
-
 	return (
 		<Box
 			display={'flex'}
@@ -121,7 +118,6 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 							{layout.children}
 						</Box>
 					</Box>
-					<FloatingPlaylist />
 				</TeamPageProviders>
 			</InnerTeamProvider>
 		</Box>

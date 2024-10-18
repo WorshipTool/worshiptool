@@ -1,4 +1,6 @@
 import { VariantPackGuid } from '@/api/dtos'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import usePlaylist from '@/hooks/playlist/usePlaylist'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
 import {
@@ -15,7 +17,6 @@ import {
 	useMemo,
 	useState,
 } from 'react'
-import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
 type Rt = ReturnType<typeof useProvideInnerPlaylist>
 export const innerPlaylistContext = createContext<Rt>({} as Rt)
@@ -60,15 +61,23 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		{} as PlaylistHistoryStateType
 	)
 
-	const playlist = usePlaylist(guid, (data) => {
-		setState({
-			title: data.title,
-			items: data.items.sort((a, b) => {
-				return a.order - b.order
-			}),
-		})
-		reset()
-	})
+	const current = useCurrentPlaylist()
+	const isCurrent = useMemo(() => current.guid === guid, [current.guid, guid])
+	const playlist = isCurrent ? current : usePlaylist(guid)
+
+	const [hasInitialized, setHasInitialized] = useState(false)
+
+	useEffect(() => {
+		if (playlist.playlist && !playlist.loading && !hasInitialized) {
+			setState({
+				title: playlist.title || '',
+				items: playlist.items.sort((a, b) => a.order - b.order),
+			})
+			reset()
+			setHasInitialized(true)
+		}
+	}, [playlist, hasInitialized])
+
 	const canUserEdit = useMemo(() => playlist.isOwner, [playlist.isOwner])
 
 	const title = useMemo(() => state.title, [state.title])
@@ -105,7 +114,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		if (!canUserEdit) return
 
 		// Save name
-		if (playlist.title !== state.title) {
+		if (playlist.title !== state.title && state.title) {
 			await playlist.rename(state.title)
 		}
 

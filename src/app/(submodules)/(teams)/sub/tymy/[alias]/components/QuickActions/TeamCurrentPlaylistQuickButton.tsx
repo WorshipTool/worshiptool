@@ -9,7 +9,9 @@ export default function TeamCurrentPlaylistQuickButton() {
 	const { alias } = useSmartParams('team')
 	const { guid, title, isOn, playlist } = useCurrentPlaylist()
 
-	return !isOn || !playlist?.teamAlias ? null : (
+	return !isOn ||
+		!playlist?.teamAlias ||
+		playlist.teamAlias !== alias ? null : (
 		<Link to="teamPlaylist" params={{ alias, guid }}>
 			<TeamQuickActionButton
 				color="secondary"

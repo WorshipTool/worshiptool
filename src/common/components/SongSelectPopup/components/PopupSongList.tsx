@@ -4,7 +4,6 @@ import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupS
 import { Typography } from '@/common/ui/Typography'
 import { ApiState } from '@/tech/ApiState'
 import { Box, Skeleton } from '@mui/material'
-import { useMemo } from 'react'
 import './GlobalSongList.styles.css'
 
 type GlobalSongListProps = {
@@ -13,13 +12,10 @@ type GlobalSongListProps = {
 	selectedSongs: VariantPackGuid[]
 	apiState: ApiState<SongVariantDto[]>
 	multiselect?: boolean
+	items: SongVariantDto[]
 }
 
 export default function PopupSongList(props: GlobalSongListProps) {
-	const items = useMemo(() => {
-		return props.apiState.data ?? []
-	}, [props.apiState.data])
-
 	return (
 		<Box
 			display={'flex'}
@@ -28,7 +24,7 @@ export default function PopupSongList(props: GlobalSongListProps) {
 			width={'100%'}
 			className="global-song-list-container stylized-scrollbar"
 		>
-			{items.map((song) => {
+			{props.items.map((song) => {
 				const onSelect = () => {
 					props.onSongSelect(song.packGuid, song.preferredTitle)
 				}
@@ -46,7 +42,7 @@ export default function PopupSongList(props: GlobalSongListProps) {
 				)
 			})}
 
-			{!props.apiState.loading && items.length === 0 && (
+			{!props.apiState.loading && props.items.length === 0 && (
 				<Box
 					bgcolor={'grey.300'}
 					padding={1}

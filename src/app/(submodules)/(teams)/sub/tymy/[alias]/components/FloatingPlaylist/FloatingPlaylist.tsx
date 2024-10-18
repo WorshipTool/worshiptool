@@ -1,4 +1,5 @@
 'use client'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Typography } from '@/common/ui/Typography'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
@@ -23,6 +24,8 @@ export default function FloatingPlaylist() {
 		guid: playlistGuid,
 		playlist,
 	} = useCurrentPlaylist()
+
+	const { alias } = useInnerTeam()
 
 	const [isMouseOver, setIsOver] = useState(false)
 
@@ -49,7 +52,8 @@ export default function FloatingPlaylist() {
 
 	const navigate = useSmartNavigate()
 	const openPlaylist = useCallback(() => {
-		navigate('playlist', {
+		navigate('teamPlaylist', {
+			alias,
 			guid: playlistGuid,
 		})
 	}, [])
@@ -58,7 +62,9 @@ export default function FloatingPlaylist() {
 		return Math.max(200, 100 + (title?.length || 0) * 8)
 	}, [title])
 
-	return !isOn || !playlist?.teamAlias ? null : (
+	return !isOn ||
+		!playlist?.teamAlias ||
+		playlist.teamAlias !== alias ? null : (
 		<SongDropContainer
 			onDrop={(song) => {
 				addPacks([song.packGuid])

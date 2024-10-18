@@ -16,7 +16,7 @@ export const mapSongDataVariantApiToSongVariantDto = (
 		guid: api.guid as SongVariantGuid,
 		packGuid: api.packGuid as VariantPackGuid,
 
-		preferredTitle: api.prefferedTitle,
+		preferredTitle: api?.prefferedTitle,
 		packAlias: api.alias as VariantPackAlias,
 		sheet: new Sheet(api.sheetData),
 		createdBy: api.createdByGuid as UserGuid,

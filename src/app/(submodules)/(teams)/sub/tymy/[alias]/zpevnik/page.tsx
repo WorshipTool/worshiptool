@@ -10,6 +10,7 @@ import { Box } from '@mui/system'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import FloatingPlaylist from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/FloatingPlaylist/FloatingPlaylist'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import SearchFieldTeamZpevnik from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import SelectedPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
@@ -63,9 +64,9 @@ function TeamSongsPage() {
 
 	const filterFunc = useCallback(
 		(pack: VariantPackGuid) => {
-			return !items.some((i) => i.packGuid === pack)
+			return !selection.items.some((i) => i.variant.packGuid === pack)
 		},
-		[items]
+		[selection.items]
 	)
 
 	const anchorRef = useRef(null)
@@ -248,6 +249,8 @@ function TeamSongsPage() {
 				</Box>
 				{/* )} */}
 			</SongDropContainer>
+
+			<FloatingPlaylist />
 		</>
 	)
 }

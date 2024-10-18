@@ -18,6 +18,7 @@ type TopPlaylistItemPanelProps = {
 	onSave: () => void
 	onCancel: () => void
 	// rerender: () => void
+	openButton?: React.ReactNode
 }
 
 export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
@@ -126,18 +127,19 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 						</Button>
 					</Box>
 				)}
-				{!props.inEditMode && (
-					<Button
-						variant="text"
-						to="variant"
-						toParams={{
-							...parseVariantAlias(props.packAlias),
-						}}
-						size="small"
-					>
-						Otevřít
-					</Button>
-				)}
+				{!props.inEditMode &&
+					(props.openButton || (
+						<Button
+							variant="text"
+							to="variant"
+							toParams={{
+								...parseVariantAlias(props.packAlias),
+							}}
+							size="small"
+						>
+							Otevřít
+						</Button>
+					))}
 			</Box>
 		</Box>
 	)
