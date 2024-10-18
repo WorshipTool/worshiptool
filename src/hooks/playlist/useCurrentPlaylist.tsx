@@ -28,8 +28,10 @@ interface useProvidePlaylistI extends ReturnType<typeof usePlaylist> {
 }
 
 const useProvidePlaylist = (): useProvidePlaylistI => {
-	const { value: guid, set: setGuid } =
-		useLocalStorage<PlaylistGuid>('currentPlaylist')
+	const { user } = useAuth()
+	const { value: guid, set: setGuid } = useLocalStorage<PlaylistGuid>(
+		'currentPlaylist' + (user?.guid || '')
+	)
 	const playlist = usePlaylist(guid || ('' as PlaylistGuid))
 
 	const { isLoggedIn } = useAuth()

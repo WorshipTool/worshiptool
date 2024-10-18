@@ -54,7 +54,7 @@ export default async function page({ params, searchParams }: PageProps) {
 					sheet={sheet}
 					variant="printCompact"
 					columns={2}
-					hideChords={searchParams.hideChords === 'true'}
+					hideChords={searchParams.hideChords === true}
 				/>
 			</Box>
 		)

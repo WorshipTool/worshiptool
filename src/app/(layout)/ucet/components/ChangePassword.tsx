@@ -25,7 +25,6 @@ export default function ChangePassword() {
 	const { enqueueSnackbar } = useSnackbar()
 
 	const usingPasswordMethod = useMemo(() => {
-		console.log(user)
 		return user?.loginMethods.includes(LOGIN_METHOD_TYPE.Email)
 	}, [user])
 

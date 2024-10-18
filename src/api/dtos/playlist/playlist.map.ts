@@ -1,4 +1,5 @@
 import { note } from '@pepavlin/sheet-api'
+import { TeamGuid } from '../../../app/(submodules)/(teams)/sub/tymy/tech'
 import PlaylistDto, {
 	PlaylistGuid,
 	PlaylistItemDto,
@@ -29,6 +30,6 @@ export const mapPlaylistDataOutDtoToPlaylistDto = (
 		),
 		ownerGuid: api.ownerGuid,
 		teamAlias: api.teamAlias,
-		teamGuid: api.teamGuid,
+		teamGuid: api.teamGuid as TeamGuid | undefined,
 	}
 }

@@ -35,7 +35,6 @@ export default function CreateTeamButton() {
 	}
 
 	const onCreateClick = () => {
-		console.log('teamName', teamName)
 		fetchApiState(
 			() =>
 				handleApiCall(

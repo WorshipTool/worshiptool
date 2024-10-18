@@ -21,7 +21,8 @@ type PlaylistChangeEventData = {
 
 export default function usePlaylist(
 	guid: PlaylistGuid,
-	after?: (data: PlaylistDto) => void
+	after?: (data: PlaylistDto) => void,
+	notFetch?: boolean
 ) {
 	const uniqueHookId = useMemo(
 		() => Math.random().toString(36).substr(2, 9),
@@ -48,6 +49,7 @@ export default function usePlaylist(
 	const { fetchApiState, apiState: state } = useApiState<PlaylistDto>()
 
 	useEffect(() => {
+		if (notFetch) return
 		if (guid && guid.length > 0) {
 			fetchApiState(() => getPlaylistByGuid(guid), after)
 		}

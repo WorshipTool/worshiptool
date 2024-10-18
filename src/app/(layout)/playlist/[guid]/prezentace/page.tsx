@@ -159,7 +159,7 @@ function PlaylistCards() {
 					left: 0,
 				}}
 			>
-				<GoBackButton />
+				<GoBackButton teamAlias={playlist?.teamAlias} />
 			</Box>
 			<SlideCard item={items[currentIndex]} order={currentIndex} />
 		</Box>

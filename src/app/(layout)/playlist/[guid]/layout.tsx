@@ -1,5 +1,6 @@
 'use server'
 import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerPathname } from '@/hooks/pathname/useServerPathname'
 import { smartRedirect } from '@/routes/routes.tech.server'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps, MetadataProps } from '../../../../common/types'
@@ -35,10 +36,16 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 			props.params.guid
 		)
 	)
-	if (playlist.teamAlias)
+
+	const pathname = useServerPathname()
+	const afterPlaylist = pathname.split('playlist')[1]
+	const isSomethingAfter = afterPlaylist.split('/').length > 2
+
+	if (playlist.teamAlias && !isSomethingAfter) {
 		smartRedirect('teamPlaylist', {
-			guid: playlist.guid,
 			alias: playlist.teamAlias,
+			guid: props.params.guid,
 		})
+	}
 	return <>{props.children}</>
 }

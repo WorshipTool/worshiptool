@@ -51,7 +51,7 @@ export default function TeamNewPlaylistButton() {
 				})
 			}
 		)
-	}, [])
+	}, [guid])
 
 	return (
 		<TeamQuickActionButton

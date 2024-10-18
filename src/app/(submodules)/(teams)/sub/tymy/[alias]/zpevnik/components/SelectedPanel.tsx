@@ -5,6 +5,7 @@ import Menu from '@/common/components/Menu/Menu'
 import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
+import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
@@ -25,6 +26,8 @@ export default function SelectedPanel({
 }: SelectedPanelProps) {
 	const { selection, guid: teamGuid, alias } = useInnerTeam()
 	const { addPacksToPlaylist, createPlaylist } = usePlaylistsGeneral()
+
+	const { teamEditingApi } = useApi()
 
 	const [optionsElement, setOptionsElement] = useState<HTMLElement | null>(null)
 	const [optionsMenuOpen, setOptionsMenuOpen] = useState(false)
@@ -65,6 +68,11 @@ export default function SelectedPanel({
 			// 1. Create new playlist
 			const newGuid = await createPlaylist()
 
+			await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+				playlistGuid: newGuid,
+				teamGuid,
+			})
+
 			// 2. Add selected songs to playlist
 			const results = await addPacksToPlaylist(selected, newGuid)
 
@@ -74,7 +82,7 @@ export default function SelectedPanel({
 
 			closeAll()
 		},
-		[selected]
+		[selected, teamGuid]
 	)
 
 	const onAddToPlaylist = useCallback(

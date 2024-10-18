@@ -27,13 +27,12 @@ export default SmartTeamPage(TeamSongsPage)
 
 function TeamSongsPage() {
 	const { selection, guid: teamGuid, alias } = useInnerTeam()
+	const [searchString, setSearchString] = useState('')
 	const items = useMemo(() => {
 		const items =
-			selection.searchedItems.length > 0
-				? selection.searchedItems
-				: selection.items
+			searchString.length > 0 ? selection.searchedItems : selection.items
 		return items.map((item) => item.variant)
-	}, [selection])
+	}, [selection, searchString])
 
 	const addSongPermission = usePermission<TeamPermissions>('team.add_song', {
 		teamGuid,
@@ -60,7 +59,7 @@ function TeamSongsPage() {
 		return () => {
 			clearTimeout(t)
 		}
-	}, [items, thereHasBeenItems, addSongPermission])
+	}, [selection.items, thereHasBeenItems, addSongPermission])
 
 	const filterFunc = useCallback(
 		(pack: VariantPackGuid) => {
@@ -140,7 +139,7 @@ function TeamSongsPage() {
 						</>
 					)}
 
-					{((!selectable && items.length > 0) || selectable) && (
+					{((!selectable && selection.items.length > 0) || selectable) && (
 						<Box
 							sx={{
 								minHeight: '3rem',
@@ -149,7 +148,7 @@ function TeamSongsPage() {
 								alignItems: 'center',
 							}}
 						>
-							{!selectable && items.length > 0 && (
+							{!selectable && selection.items.length > 0 && (
 								<Box
 									display={'flex'}
 									flexDirection={'row'}
@@ -157,7 +156,7 @@ function TeamSongsPage() {
 									gap={1}
 									flex={1}
 								>
-									{<SearchFieldTeamZpevnik />}
+									{<SearchFieldTeamZpevnik onSearch={setSearchString} />}
 									<Box
 										display={'flex'}
 										flexDirection={'row'}
@@ -213,7 +212,7 @@ function TeamSongsPage() {
 						onCardSelect={onCardSelect}
 						onCardDeselect={onCardDeselect}
 					/>
-					{!selection.loading && items.length === 0 && (
+					{!selection.loading && selection.items.length === 0 && (
 						<Box gap={1} display={'flex'} flexDirection={'column'}>
 							<Typography>Ve zpěvníku nejsou zatím žádné písně...</Typography>
 							{addSongPermission && (

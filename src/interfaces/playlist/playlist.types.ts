@@ -1,6 +1,6 @@
-import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { note } from '@pepavlin/sheet-api'
 import { SongVariantDto } from '../../api/dtos'
+import { TeamGuid } from '../../app/(submodules)/(teams)/sub/tymy/tech'
 
 export type PlaylistGuid = string & { readonly brand: unique symbol }
 export type PlaylistItemGuid = string & { readonly brand: unique symbol }

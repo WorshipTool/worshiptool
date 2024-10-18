@@ -4,7 +4,13 @@ import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 
-export default function SearchFieldTeamZpevnik() {
+type SearchFieldTeamZpevnikProps = {
+	onSearch: (value: string) => void
+}
+
+export default function SearchFieldTeamZpevnik(
+	props: SearchFieldTeamZpevnikProps
+) {
 	const [value, setValue] = useState('')
 
 	const { selection } = useInnerTeam()
@@ -13,6 +19,7 @@ export default function SearchFieldTeamZpevnik() {
 		value,
 		(value) => {
 			selection.search(value)
+			props.onSearch(value)
 		},
 		[]
 	)

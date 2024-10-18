@@ -24,7 +24,6 @@ function ContactPage() {
 
 	const onSubmitHandle = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		console.log('submit')
 
 		setLoading(true)
 		mailApi

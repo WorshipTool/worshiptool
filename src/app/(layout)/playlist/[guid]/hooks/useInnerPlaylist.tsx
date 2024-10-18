@@ -62,8 +62,12 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 	)
 
 	const current = useCurrentPlaylist()
-	const isCurrent = useMemo(() => current.guid === guid, [current.guid, guid])
-	const playlist = isCurrent ? current : usePlaylist(guid)
+	const isCurrent = useMemo(
+		() => current.guid === guid && Boolean(guid),
+		[current.guid, guid]
+	)
+	const _playlist = usePlaylist(guid, undefined, isCurrent)
+	const playlist = isCurrent ? current : _playlist
 
 	const [hasInitialized, setHasInitialized] = useState(false)
 
