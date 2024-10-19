@@ -35,6 +35,7 @@ export default function TeamEditableCard(props: TeamEditableCardProps) {
 				display={'flex'}
 				flexDirection={'row'}
 				justifyContent={'space-between'}
+				flexWrap={'wrap'}
 			>
 				<Typography variant="h6" strong>
 					{props.title}

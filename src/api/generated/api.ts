@@ -345,6 +345,19 @@ export type CreatorDTOTypeEnum = typeof CreatorDTOTypeEnum[keyof typeof CreatorD
 /**
  * 
  * @export
+ * @interface DeleteTeamInDto
+ */
+export interface DeleteTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeleteTeamInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface Domain
  */
 export interface Domain {
@@ -9150,6 +9163,45 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerDeleteTeam: async (deleteTeamInDto: DeleteTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deleteTeamInDto' is not null or undefined
+            assertParamExists('teamEditingControllerDeleteTeam', 'deleteTeamInDto', deleteTeamInDto)
+            const localVarPath = `/submodules/teams/deleteteam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9289,6 +9341,18 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerDeleteTeam(deleteTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerDeleteTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9344,6 +9408,15 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9388,6 +9461,17 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {DeleteTeamInDto} deleteTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

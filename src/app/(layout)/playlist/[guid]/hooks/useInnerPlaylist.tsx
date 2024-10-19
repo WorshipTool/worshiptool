@@ -131,9 +131,10 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		}
 
 		// Add new items
-		const newItems = state.items.filter(
-			(i) => !playlist.items.some((j) => j.guid === i.guid)
-		)
+		const newItems =
+			state.items?.filter(
+				(i) => !playlist.items.some((j) => j.guid === i.guid)
+			) || []
 		for (const item of newItems) {
 			await playlist.addVariant(item.variant.packGuid)
 		}
