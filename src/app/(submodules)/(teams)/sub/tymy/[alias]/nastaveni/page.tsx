@@ -62,6 +62,7 @@ function TeamSettingsPage() {
 	const navigate = useSmartNavigate()
 	const { enqueueSnackbar } = useSnackbar()
 	const onTeamPermanentRemove = async () => {
+		setDeletePopupOpen(false)
 		await handleApiCall(
 			teamEditingApi.teamEditingControllerDeleteTeam({
 				teamGuid: guid,
@@ -144,6 +145,7 @@ function TeamSettingsPage() {
 					icon={<Delete />}
 					actions={[
 						<Button
+							key={'delete'}
 							variant="text"
 							color="error"
 							onClick={onTeamPermanentRemove}
@@ -151,6 +153,7 @@ function TeamSettingsPage() {
 							Ano, nevratně odstranit
 						</Button>,
 						<Button
+							key={'cancel'}
 							type="reset"
 							tooltip="Zavřít vyskakovací okno bez jakékoliv akce"
 						>

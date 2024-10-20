@@ -57,9 +57,10 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		redo: _redo,
 		hasRedo,
 		hasUndo,
-	} = useStateWithHistory<PlaylistHistoryStateType>(
-		{} as PlaylistHistoryStateType
-	)
+	} = useStateWithHistory<PlaylistHistoryStateType>({
+		title: '',
+		items: [],
+	})
 
 	const current = useCurrentPlaylist()
 	const isCurrent = useMemo(
@@ -131,10 +132,9 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		}
 
 		// Add new items
-		const newItems =
-			state.items?.filter(
-				(i) => !playlist.items.some((j) => j.guid === i.guid)
-			) || []
+		const newItems = state.items.filter(
+			(i) => !playlist.items.some((j) => j.guid === i.guid)
+		)
 		for (const item of newItems) {
 			await playlist.addVariant(item.variant.packGuid)
 		}

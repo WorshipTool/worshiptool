@@ -5,6 +5,7 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { isDevelopment } from '@/tech/development.tech'
 import { SxProps } from '@mui/material'
 import { useMemo } from 'react'
+import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy/hooks/useUserTeams'
 
 export type MenuItemProps<T extends RoutesKeys> = {
 	title: string
@@ -24,6 +25,21 @@ export default function useToolsMenuItems() {
 
 	const { isAdmin, isLoggedIn } = useAuth()
 
+	const { teams } = useUserTeams()
+
+	const teamsItems: MenuItemProps<any>[] = useMemo(() => {
+		if (!teams) return []
+		return teams.map((team) => ({
+			title: team.name,
+			image:
+				'https://cdn0.iconfinder.com/data/icons/social-media-glyph-1/64/Facebook_Social_Media_User_Interface-38-512.png',
+			to: 'team',
+			toParams: {
+				alias: team.alias,
+			},
+		}))
+	}, [teams])
+
 	const items: MenuItemProps<any>[] = useMemo(() => {
 		return [
 			{
@@ -37,14 +53,14 @@ export default function useToolsMenuItems() {
 				to: 'usersSongs',
 			},
 
+			// {
+			// 	title: '13ka',
+			// 	image: '/assets/13ka-icon.png',
+			// 	to: 'group',
+			// 	toParams: { groupCode: '13ka' },
+			// },
 			{
-				title: '13ka',
-				image: '/assets/13ka-icon.png',
-				to: 'group',
-				toParams: { groupCode: '13ka' },
-			},
-			{
-				title: 'Hledat skupinu',
+				title: 'Hledat tým',
 				image: 'https://static.thenounproject.com/png/79376-200.png',
 				action: () => {
 					dispatchEvent(searchGroupsEvent)
@@ -70,8 +86,9 @@ export default function useToolsMenuItems() {
 						},
 				  ]
 				: []),
+			...teamsItems,
 		]
-	}, [isAdmin, isLoggedIn])
+	}, [isAdmin, isLoggedIn, teamsItems])
 
 	return {
 		items,

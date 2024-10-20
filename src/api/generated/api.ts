@@ -780,6 +780,19 @@ export interface GetTeamMembersOutDto {
 /**
  * 
  * @export
+ * @interface GetTeamsOfUserOutDto
+ */
+export interface GetTeamsOfUserOutDto {
+    /**
+     * 
+     * @type {Array<TeamOfUserDto>}
+     * @memberof GetTeamsOfUserOutDto
+     */
+    'teams': Array<TeamOfUserDto>;
+}
+/**
+ * 
+ * @export
  * @interface GetUserPermissionOutDto
  */
 export interface GetUserPermissionOutDto {
@@ -2959,6 +2972,25 @@ export const TeamMemberDtoRoleEnum = {
 
 export type TeamMemberDtoRoleEnum = typeof TeamMemberDtoRoleEnum[keyof typeof TeamMemberDtoRoleEnum];
 
+/**
+ * 
+ * @export
+ * @interface TeamOfUserDto
+ */
+export interface TeamOfUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'name': string;
+}
 /**
  * 
  * @export
@@ -9915,6 +9947,39 @@ export const TeamMembersApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamsOfUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/ofuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10055,6 +10120,17 @@ export const TeamMembersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerGetTeamsOfUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamsOfUserOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerGetTeamsOfUser(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerGetTeamsOfUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10110,6 +10186,14 @@ export const TeamMembersApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamsOfUser(options?: any): AxiosPromise<GetTeamsOfUserOutDto> {
+            return localVarFp.teamMemberControllerGetTeamsOfUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10154,6 +10238,16 @@ export class TeamMembersApi extends BaseAPI {
      */
     public teamMemberControllerGetTeamMembers(teamAlias: string, options?: RawAxiosRequestConfig) {
         return TeamMembersApiFp(this.configuration).teamMemberControllerGetTeamMembers(teamAlias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerGetTeamsOfUser(options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerGetTeamsOfUser(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
