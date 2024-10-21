@@ -9,3 +9,8 @@ export const getAbsoluteUrl = (relativeUrl: string) => {
 	const frontendUrl = window.location.origin
 	return `${frontendUrl}${relativeUrl}`
 }
+
+export const getImageUrl = (imageGuid: string) => {
+	if (!imageGuid) return null
+	return BACKEND_URL + '/images/' + imageGuid
+}

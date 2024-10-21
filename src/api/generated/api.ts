@@ -156,6 +156,12 @@ export interface BaseUserInfoOutDto {
     'role': BaseUserInfoOutDtoRoleEnum;
     /**
      * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'pictureGuid': string;
+    /**
+     * 
      * @type {Array<number>}
      * @memberof BaseUserInfoOutDto
      */
@@ -1229,6 +1235,12 @@ export interface PermissionUserBaseOutDto {
      * @memberof PermissionUserBaseOutDto
      */
     'role': PermissionUserBaseOutDtoRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionUserBaseOutDto
+     */
+    'pictureGuid': string;
 }
 
 export const PermissionUserBaseOutDtoRoleEnum = {
@@ -1744,6 +1756,12 @@ export interface PostGoogleLoginBody {
      * @memberof PostGoogleLoginBody
      */
     'lastName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostGoogleLoginBody
+     */
+    'picture': string;
 }
 /**
  * 
@@ -3195,6 +3213,12 @@ export interface User {
      * @memberof User
      */
     'resetTokens': Array<UserToken>;
+    /**
+     * 
+     * @type {Image}
+     * @memberof User
+     */
+    'picture': Image;
 }
 
 export const UserRoleEnum = {

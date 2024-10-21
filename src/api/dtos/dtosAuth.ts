@@ -1,4 +1,5 @@
 import { JwtResult } from '@/api/generated'
+import { getImageUrl } from '@/api/urls'
 import { UserDto, UserGuid } from '../../interfaces/user'
 
 export interface LoginRequestDTO {
@@ -19,5 +20,11 @@ export interface SignUpRequestDTO {
 }
 
 export function loginResultDTOToUser(res: JwtResult): UserDto {
-	return { ...res.user, guid: res.user.guid as UserGuid, token: res.token }
+	const pictureUrl = getImageUrl(res.user.pictureGuid)
+	return {
+		...res.user,
+		guid: res.user.guid as UserGuid,
+		token: res.token,
+		// pictureUrl: pictureUrl || undefined,
+	}
 }

@@ -12,11 +12,11 @@ export default function BasicInfo() {
 			<Card>
 				<Box display={'flex'} flexDirection={'row'}>
 					<Image
-						src={'/assets/account.webp'}
+						src={info.pictureUrl || '/assets/account.webp'}
 						alt="account"
 						width={70}
 						height={70}
-						style={{ opacity: 0.3 }}
+						style={{ opacity: info.pictureUrl ? 1 : 0.3 }}
 					/>
 					<Box
 						marginLeft={3}

@@ -33,10 +33,11 @@ const Container = styled(Box)(({ theme }) => ({
 }))
 
 function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {
+	const { info } = useAuth()
 	return (
 		<Box sx={{ ...sx }}>
 			<Avatar
-				src="/assets/profile-image-default.png"
+				src={info.pictureUrl || '/assets/profile-image-default.png'}
 				alt="Profilový obrázek"
 				sx={{
 					width: size,

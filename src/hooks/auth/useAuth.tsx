@@ -174,6 +174,7 @@ export function useProvideAuth() {
 			email: decoded.email,
 			firstName: decoded.given_name,
 			lastName: decoded.family_name,
+			picture: decoded.picture,
 		}
 
 		authApi

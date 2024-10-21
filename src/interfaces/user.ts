@@ -20,4 +20,5 @@ export type UserDto = {
 	role: ROLES
 	token: string
 	loginMethods: LOGIN_METHOD_TYPE[]
+	pictureUrl?: string
 }

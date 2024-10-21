@@ -23,6 +23,10 @@ const nextConfig = withRoutes({
 		return []
 	},
 
+	images: {
+		domains: ['localhost'],
+	},
+
 	reactStrictMode: false,
 	output: 'standalone',
 })
