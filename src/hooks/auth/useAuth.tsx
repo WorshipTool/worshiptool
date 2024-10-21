@@ -139,7 +139,7 @@ export function useProvideAuth() {
 		if (user) {
 			setUser(undefined)
 			_emptyCookie()
-			enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 		}
 		setLoading(false)
 	}
