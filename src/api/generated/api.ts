@@ -763,6 +763,12 @@ export interface GetTeamInfoOutDto {
      * @memberof GetTeamInfoOutDto
      */
     'joinCode': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'logoGuid': string | null;
 }
 /**
  * 
@@ -889,6 +895,37 @@ export interface Group {
      * @memberof Group
      */
     'payload': string;
+}
+/**
+ * 
+ * @export
+ * @interface Image
+ */
+export interface Image {
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof Image
+     */
+    'data': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'fileName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'mimeType': string;
 }
 /**
  * 
@@ -1916,6 +1953,19 @@ export interface RegisterWebhookExtensionBody {
 /**
  * 
  * @export
+ * @interface RemoveTeamLogoInDto
+ */
+export interface RemoveTeamLogoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RemoveTeamLogoInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface RenamePlaylistInDto
  */
 export interface RenamePlaylistInDto {
@@ -2887,6 +2937,12 @@ export interface Team {
      * @memberof Team
      */
     'playlists': Array<Playlist>;
+    /**
+     * 
+     * @type {Image}
+     * @memberof Team
+     */
+    'logo': Image;
 }
 /**
  * 
@@ -2990,6 +3046,12 @@ export interface TeamOfUserDto {
      * @memberof TeamOfUserDto
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'logoGuid': string | null;
 }
 /**
  * 
@@ -3009,6 +3071,25 @@ export interface TransposePlaylistItemInDto {
      * @memberof TransposePlaylistItemInDto
      */
     'key': string;
+}
+/**
+ * 
+ * @export
+ * @interface UploadImageOutDto
+ */
+export interface UploadImageOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadImageOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadImageOutDto
+     */
+    'fileName': string;
 }
 /**
  * 
@@ -4845,6 +4926,176 @@ export class GroupApi extends BaseAPI {
      */
     public groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).groupControllerUpdateGroupPayload(setGroupPayloadInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * ImagesApi - axios parameter creator
+ * @export
+ */
+export const ImagesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerGetImage: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'guid' is not null or undefined
+            assertParamExists('imagesControllerGetImage', 'guid', guid)
+            const localVarPath = `/images/{guid}`
+                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerUploadFile: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/images/upload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ImagesApi - functional programming interface
+ * @export
+ */
+export const ImagesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ImagesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async imagesControllerGetImage(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.imagesControllerGetImage(guid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ImagesApi.imagesControllerGetImage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async imagesControllerUploadFile(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadImageOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.imagesControllerUploadFile(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ImagesApi.imagesControllerUploadFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ImagesApi - factory interface
+ * @export
+ */
+export const ImagesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ImagesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerGetImage(guid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.imagesControllerGetImage(guid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerUploadFile(options?: any): AxiosPromise<UploadImageOutDto> {
+            return localVarFp.imagesControllerUploadFile(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ImagesApi - object-oriented interface
+ * @export
+ * @class ImagesApi
+ * @extends {BaseAPI}
+ */
+export class ImagesApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} guid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImagesApi
+     */
+    public imagesControllerGetImage(guid: string, options?: RawAxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).imagesControllerGetImage(guid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImagesApi
+     */
+    public imagesControllerUploadFile(options?: RawAxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).imagesControllerUploadFile(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9195,6 +9446,39 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamLogo: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/changelogo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {DeleteTeamInDto} deleteTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9226,6 +9510,45 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(deleteTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerRemoveTeamLogo: async (removeTeamLogoInDto: RemoveTeamLogoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'removeTeamLogoInDto' is not null or undefined
+            assertParamExists('teamEditingControllerRemoveTeamLogo', 'removeTeamLogoInDto', removeTeamLogoInDto)
+            const localVarPath = `/submodules/teams/removeLogo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(removeTeamLogoInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9373,6 +9696,17 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerChangeTeamLogo(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerChangeTeamLogo(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerChangeTeamLogo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {DeleteTeamInDto} deleteTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9381,6 +9715,18 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerDeleteTeam(deleteTeamInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerDeleteTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerRemoveTeamLogo']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -9440,12 +9786,29 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamLogo(options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerChangeTeamLogo(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {DeleteTeamInDto} deleteTeamInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: any): AxiosPromise<void> {
             return localVarFp.teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9497,6 +9860,16 @@ export class TeamEditingApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerChangeTeamLogo(options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamLogo(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {DeleteTeamInDto} deleteTeamInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9504,6 +9877,17 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

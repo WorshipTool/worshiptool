@@ -1,7 +1,9 @@
 'use client'
 import { CommonLinkProps, Link } from '@/common/ui/Link/Link'
 import { RoutesKeys } from '@/routes'
+import { useApiStateEffect } from '@/tech/ApiState'
 import { Box, Typography, styled } from '@mui/material'
+import { useMemo } from 'react'
 import { MenuItemProps } from '../hooks/useToolsMenuItems'
 
 const Container = styled(Box)(({ theme }) => ({
@@ -30,6 +32,15 @@ const Container = styled(Box)(({ theme }) => ({
 export default function MenuItem<T extends RoutesKeys>(
 	props: MenuItemProps<T>
 ) {
+	const [apiState] = useApiStateEffect<string | null>(async () => {
+		if (!props.asyncImage) return null
+		return await props.asyncImage()
+	})
+
+	const imageUrl = useMemo(() => {
+		return apiState.data || props.image
+	}, [apiState.data, props.image])
+
 	const Component = () => (
 		<Container
 			onClick={(e) => {
@@ -61,7 +72,7 @@ export default function MenuItem<T extends RoutesKeys>(
 					}}
 				>
 					<img
-						src={props.image}
+						src={imageUrl}
 						height={'50px'}
 						width={'60px'}
 						style={{

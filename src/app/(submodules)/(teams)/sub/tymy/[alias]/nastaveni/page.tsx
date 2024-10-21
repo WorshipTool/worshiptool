@@ -2,6 +2,8 @@
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
+import { useTeamLogo } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useTeamLogo'
+import LogoPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/nastaveni/components/LogoPanel'
 import TeamEditableCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/nastaveni/components/TeamEditableCard'
 import TeamEditableField from '@/app/(submodules)/(teams)/sub/tymy/[alias]/nastaveni/components/TeamEditableField'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -16,7 +18,7 @@ import { handleApiCall } from '@/tech/handleApiCall'
 import { Delete } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default SmartTeamPage(TeamSettingsPage)
 
@@ -46,6 +48,21 @@ function TeamSettingsPage() {
 	const onCancel = () => {
 		setName(_name)
 		setJoinCode(_joinCode)
+		setChosenFile(null)
+	}
+
+	const logo = useTeamLogo()
+	const [chosenFile, setChosenFile] = useState<File | null>(null)
+
+	const logoUrl = useMemo(() => {
+		if (chosenFile) {
+			return URL.createObjectURL(chosenFile)
+		}
+		return logo.logoUrl
+	}, [logo.logoUrl, chosenFile])
+
+	const onLogoSelect = async (file: File | null) => {
+		setChosenFile(file)
 	}
 
 	const onSave = async () => {
@@ -56,6 +73,9 @@ function TeamSettingsPage() {
 				joinCode,
 			})
 		)
+
+		if (chosenFile) logo.changeLogo(chosenFile)
+
 		reload()
 	}
 
@@ -85,20 +105,41 @@ function TeamSettingsPage() {
 				editable={Boolean(hasPermissionToEdit)}
 			>
 				{(editMode) => (
-					<Box display={'flex'} flexDirection={'column'} gap={2} maxWidth={300}>
-						<Box />
-						<TeamEditableField
-							label="Název týmu"
-							value={name}
-							editable={editMode}
-							onChange={setName}
-						/>
-						<TeamEditableField
-							label="Připojovací kód"
-							value={joinCode}
-							editable={editMode}
-							onChange={setJoinCode}
-						/>
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						marginTop={2}
+						flexWrap={'wrap'}
+					>
+						<Box flex={1}>
+							<Box
+								display={'flex'}
+								flexDirection={'column'}
+								gap={2}
+								maxWidth={300}
+							>
+								<TeamEditableField
+									label="Název týmu"
+									value={name}
+									editable={editMode}
+									onChange={setName}
+								/>
+								<TeamEditableField
+									label="Připojovací kód"
+									value={joinCode}
+									editable={editMode}
+									onChange={setJoinCode}
+								/>
+							</Box>
+						</Box>
+						<Box>
+							<LogoPanel
+								editable={editMode}
+								imageUrl={logoUrl}
+								onChange={onLogoSelect}
+								loading={logo.loading}
+							/>
+						</Box>
 					</Box>
 				)}
 			</TeamEditableCard>

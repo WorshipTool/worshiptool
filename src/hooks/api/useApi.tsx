@@ -2,6 +2,7 @@ import {
 	AnalyticsApi,
 	AuthApi,
 	GroupApi,
+	ImagesApi,
 	MailApi,
 	PermissionsApi,
 	PlaylistEditingApi,
@@ -39,6 +40,7 @@ export const useApi = () => {
 			permissionApi: new PermissionsApi(apiConfiguration),
 			analyticsApi: new AnalyticsApi(apiConfiguration),
 			mailApi: new MailApi(apiConfiguration),
+			imagesApi: new ImagesApi(apiConfiguration),
 
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),

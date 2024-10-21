@@ -1,3 +1,5 @@
+import { BACKEND_URL } from '@/api/constants'
+import { ImagesApiAxiosParamCreator } from '@/api/generated'
 import { LinkProps } from '@/common/ui/Link/Link'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
@@ -10,6 +12,7 @@ import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy
 export type MenuItemProps<T extends RoutesKeys> = {
 	title: string
 	image: string
+	asyncImage?: () => Promise<string>
 	action?: () => void
 	to?: LinkProps<T>['to']
 	toParams?: LinkProps<T>['params']
@@ -27,17 +30,33 @@ export default function useToolsMenuItems() {
 
 	const { teams } = useUserTeams()
 
+	const imagesApi = ImagesApiAxiosParamCreator({
+		isJsonMime: () => true,
+	})
+
 	const teamsItems: MenuItemProps<any>[] = useMemo(() => {
 		if (!teams) return []
-		return teams.map((team) => ({
-			title: team.name,
-			image:
-				'https://cdn0.iconfinder.com/data/icons/social-media-glyph-1/64/Facebook_Social_Media_User_Interface-38-512.png',
-			to: 'team',
-			toParams: {
-				alias: team.alias,
-			},
-		}))
+		return teams.map((team) => {
+			const hasLogo = team.logoGuid !== null
+
+			return {
+				title: team.name,
+				image:
+					'https://cdn0.iconfinder.com/data/icons/social-media-glyph-1/64/Facebook_Social_Media_User_Interface-38-512.png',
+				asyncImage: hasLogo
+					? async () => {
+							const url =
+								BACKEND_URL +
+								(await imagesApi.imagesControllerGetImage(team.logoGuid!)).url
+							return url
+					  }
+					: undefined,
+				to: 'team',
+				toParams: {
+					alias: team.alias,
+				},
+			}
+		})
 	}, [teams])
 
 	const items: MenuItemProps<any>[] = useMemo(() => {
