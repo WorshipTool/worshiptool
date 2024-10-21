@@ -52,18 +52,5 @@ export const useApi = () => {
 		[apiConfiguration]
 	)
 
-	// const apis = useMemo(() => {
-	// 	const dict = apiClassesRecord
-
-	// 	const apiClasses = Object.keys(dict).map((key) => {
-	// 		const ApiClass = (dict as any)[key]
-	// 		return new ApiClass(apiConfiguration)
-	// 	})
-
-	// 	return Object.fromEntries(
-	// 		Object.keys(dict).map((key, index) => [key, apiClasses[index]])
-	// 	)
-	// }, [apiConfiguration])
-
 	return apis
 }
