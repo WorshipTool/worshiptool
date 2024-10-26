@@ -8,8 +8,11 @@ import { AuthProvider } from '@/hooks/auth/useAuth'
 import SongDragProvider from '@/hooks/dragsong/SongDragProvider'
 import { GroupProvider } from '@/hooks/group/useGroup'
 import { CurrentPlaylistProvider } from '@/hooks/playlist/useCurrentPlaylist'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
+import 'dayjs/locale/cs'
 type AppClientProvidersProps = {
 	children?: React.ReactNode
 }
@@ -18,30 +21,32 @@ export default function AppClientProviders({
 }: AppClientProvidersProps) {
 	return (
 		<ThemeProvider>
-			<SnackbarProvider
-				maxSnack={1}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-				autoHideDuration={3000}
-				preventDuplicate
-			>
-				{/* <BrowserRouter> */}
-				<AuthProvider>
-					<ErrorHandlerProvider>
-						<GroupProvider>
-							<ToolbarProvider>
-								<FooterProvider>
-									<AppSongSelectSpecifierProvider>
-										<CurrentPlaylistProvider>
-											<SongDragProvider>{children}</SongDragProvider>
-										</CurrentPlaylistProvider>
-									</AppSongSelectSpecifierProvider>
-								</FooterProvider>
-							</ToolbarProvider>
-						</GroupProvider>
-					</ErrorHandlerProvider>
-				</AuthProvider>
-				{/* </BrowserRouter> */}
-			</SnackbarProvider>
+			<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
+				<SnackbarProvider
+					maxSnack={1}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+					autoHideDuration={3000}
+					preventDuplicate
+				>
+					{/* <BrowserRouter> */}
+					<AuthProvider>
+						<ErrorHandlerProvider>
+							<GroupProvider>
+								<ToolbarProvider>
+									<FooterProvider>
+										<AppSongSelectSpecifierProvider>
+											<CurrentPlaylistProvider>
+												<SongDragProvider>{children}</SongDragProvider>
+											</CurrentPlaylistProvider>
+										</AppSongSelectSpecifierProvider>
+									</FooterProvider>
+								</ToolbarProvider>
+							</GroupProvider>
+						</ErrorHandlerProvider>
+					</AuthProvider>
+					{/* </BrowserRouter> */}
+				</SnackbarProvider>
+			</LocalizationProvider>
 		</ThemeProvider>
 	)
 }

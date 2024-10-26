@@ -1,0 +1,603 @@
+import {
+	CreateTeamEventInDto,
+	PlaylistData,
+	TeamEventMemberData,
+} from '@/api/generated'
+import EventPopupGridRow from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/EventPopupGridRow'
+import TeamEventPopupEditableInput from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopupEditableInput'
+import TeamMemberSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamMemberSelect/TeamMemberSelect'
+import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamPlaylistSelect/TeamPlaylistSelect'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import Popup from '@/common/components/Popup/Popup'
+import { Button } from '@/common/ui/Button'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Gap } from '@/common/ui/Gap'
+import { IconButton } from '@/common/ui/IconButton'
+import TextField from '@/common/ui/TextField/TextField'
+import { Typography } from '@/common/ui/Typography'
+import { usePermission } from '@/hooks/permissions/usePermission'
+import { useSmartParams } from '@/routes/useSmartParams'
+import {
+	Add,
+	ChangeCircle,
+	Close,
+	EditCalendar,
+	EventNote,
+	QueueMusic,
+	Warning,
+} from '@mui/icons-material'
+import { Avatar, Box, Chip, Divider, Grid, useTheme } from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers'
+import dayjs from 'dayjs'
+import { useSnackbar } from 'notistack'
+import { useEffect, useState } from 'react'
+type Member = TeamEventMemberData
+export type TeamEventPopupData = {
+	guid?: string
+	title: string
+	description: string
+	date: Date
+	leader: Member
+	members: Member[]
+	playlist: PlaylistData
+}
+
+type TeamEventPopupProps = {
+	open: boolean
+	onClose: () => void
+	editable?: boolean
+	data?: Partial<TeamEventPopupData>
+
+	onSubmit?: () => Promise<void>
+
+	createMode?: boolean
+	submitting?: boolean
+}
+
+export default function TeamEventPopup({
+	data = {},
+	editable: editableProp,
+	...props
+}: TeamEventPopupProps) {
+	const theme = useTheme()
+
+	const [editable, setEditable] = useState(editableProp)
+	useEffect(() => {
+		setEditable(editableProp)
+	}, [editableProp])
+
+	const {
+		guid,
+		events: { deleteEvent, editEvent, addEvent },
+	} = useInnerTeam()
+
+	const { alias } = useSmartParams('team')
+
+	const [leaderSelectOpen, setLeaderSelectOpen] = useState(false)
+	const [leaderSelectAnchor, setLeaderSelectAnchor] =
+		useState<HTMLElement | null>(null)
+
+	const [leader, setLeader] = useState<Member | null>(data.leader || null)
+
+	const onLeaderSelect = (member: Member) => {
+		setLeader(member)
+		setLeaderSelectOpen(false)
+	}
+	const openLeaderSelect = (e: React.MouseEvent<HTMLElement>) => {
+		setLeaderSelectOpen(true)
+		setLeaderSelectAnchor(e.currentTarget)
+	}
+
+	const [memberSelectOpen, setMemberSelectOpen] = useState(false)
+	const [memberSelectAnchor, setMemberSelectAnchor] =
+		useState<HTMLElement | null>(null)
+
+	const [members, setMembers] = useState<Member[]>(data.members || [])
+
+	const onMemberRemove = (member: Member) => {
+		setMembers(members.filter((m) => m.userGuid !== member.userGuid))
+	}
+	const onMemberAdd = (member: Member) => {
+		setMembers([...members, member])
+	}
+	const openMemberSelect = (e: React.MouseEvent<HTMLElement>) => {
+		setMemberSelectOpen(true)
+		setMemberSelectAnchor(e.currentTarget)
+	}
+
+	const [title, setTitle] = useState(data.title)
+	const [description, setDescription] = useState(data.description)
+
+	const onTitleChange = (value: string) => {
+		setTitle(value)
+	}
+	const onDescriptionChange = (value: string) => {
+		setDescription(value)
+	}
+
+	const [playlistSelectOpen, setPlaylistSelectOpen] = useState(false)
+	const [playlistSelectAnchor, setPlaylistSelectAnchor] =
+		useState<HTMLElement | null>(null)
+
+	const [playlist, setPlaylist] = useState<PlaylistData | null>(
+		data.playlist || null
+	)
+	const onPlaylistSelect = (playlist: PlaylistData) => {
+		setPlaylist(playlist)
+		setPlaylistSelectOpen(false)
+	}
+
+	const openPlaylistSelect = (e: React.MouseEvent<HTMLElement>) => {
+		setPlaylistSelectOpen(true)
+		setPlaylistSelectAnchor(e.currentTarget)
+	}
+
+	const [date, setDate] = useState<Date | null>(data.date || null)
+	const onDateChange = (date: Date | null) => {
+		setDate(date)
+	}
+	// Check if the date is in the past, today is ok
+	const isPastDate = date ? dayjs(date).isBefore(dayjs(), 'day') : false
+
+	const canSubmit = Boolean(
+		title && description && date && leader && members && playlist
+	)
+
+	const allData: CreateTeamEventInDto = {
+		teamGuid: guid,
+		playlistGuid: playlist?.guid || '',
+		memberUserGuids: members.map((m) => m.userGuid),
+		leaderUserGuid: leader?.userGuid || '',
+		eventDate: date?.toISOString() || '',
+		eventTitle: title || '',
+		eventDescription: description || '',
+	}
+
+	const { enqueueSnackbar } = useSnackbar()
+
+	const onSubmit = async () => {
+		if (!title || !description || !date || !leader || !playlist) return
+		if (props.createMode) {
+			if (await addEvent(allData)) {
+				onReset()
+				props.onSubmit?.()
+				enqueueSnackbar('Událost byla vytvořena')
+			}
+		} else {
+			if (
+				await editEvent({
+					...allData,
+					eventGuid: data.guid || '',
+				})
+			) {
+				onReset()
+				props.onSubmit?.()
+			}
+		}
+	}
+
+	const onReset = () => {
+		setTitle(data.title)
+		setDescription(data.description)
+		setDate(data.date || null)
+		setLeader(data.leader || null)
+		setMembers(data.members || [])
+		setPlaylist(data.playlist || null)
+		setEditable(editableProp)
+		setDeleteSecond(false)
+	}
+
+	const [deleteSecond, setDeleteSecond] = useState(false)
+
+	const hasPermissionToEdit = usePermission<TeamPermissions>(
+		'team.edit_event',
+		{
+			eventGuid: data.guid || '',
+		}
+	)
+	const hasPermissionToDelete = usePermission<TeamPermissions>(
+		'team.delete_event',
+		{
+			eventGuid: data.guid || '',
+		}
+	)
+
+	return (
+		<>
+			<Popup
+				open={props.open}
+				onClose={props.onClose}
+				width={600}
+				onSubmit={onSubmit}
+				onReset={onReset}
+				actions={[
+					...(editable
+						? [
+								!props.createMode && hasPermissionToDelete && (
+									<Button
+										key={'deletebutton'}
+										color="error"
+										variant={deleteSecond ? 'contained' : 'text'}
+										onClick={() => {
+											if (deleteSecond) {
+												deleteEvent(data.guid || '')
+												props.onClose()
+												setDeleteSecond(false)
+											} else {
+												setDeleteSecond(true)
+											}
+										}}
+									>
+										{deleteSecond ? 'Opravdu smazat?' : 'Smazat'}
+									</Button>
+								),
+								<Box key={'gap1'} />,
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									gap={1}
+									key={'buttons1'}
+								>
+									<Button
+										onClick={onReset}
+										variant="text"
+										color="grez.700"
+										key={'cancel'}
+										type="reset"
+										loading={props.submitting}
+									>
+										Zrušit
+									</Button>
+
+									<Button
+										key={'asdfalsdfalk'}
+										type="submit"
+										disabled={!canSubmit}
+										loading={props.submitting}
+									>
+										{props.createMode ? 'Vytvořit' : 'Uložit'}
+									</Button>
+								</Box>,
+						  ]
+						: [
+								<Box key={'gap2'} />,
+								playlist && (
+									<Button
+										key={'playlist'}
+										variant={editable ? 'outlined' : 'contained'}
+										startIcon={<QueueMusic />}
+										tooltip="Otevřít playlist přiřazený k této události"
+										color={editable ? undefined : 'primarygradient'}
+										to="teamPlaylist"
+										toParams={{ alias: alias, guid: playlist.guid }}
+										target="_blank"
+										disabled={props.submitting}
+									>
+										Otevřít playlist
+									</Button>
+								),
+								<Box key={'gap3'} />,
+						  ]),
+				]}
+			>
+				{/* Header */}
+				<Box
+					sx={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						height: theme.spacing(4),
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-between',
+						bgcolor: 'grey.100',
+						borderTopLeftRadius: theme.spacing(2),
+						borderTopRightRadius: theme.spacing(2),
+					}}
+				>
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						alignItems={'center'}
+						justifyContent={'center'}
+						flex={1}
+						paddingX={4}
+						color={'grey.700'}
+						gap={1}
+						sx={{
+							userSelect: 'none',
+						}}
+						position={'relative'}
+					>
+						{editable ? (
+							<EditCalendar
+								fontSize="inherit"
+								sx={{
+									fontSize: '1rem',
+								}}
+							/>
+						) : (
+							<EventNote
+								fontSize="inherit"
+								sx={{
+									fontSize: '1rem',
+								}}
+							/>
+						)}
+						<Typography size={'small'}>Detail události</Typography>
+
+						<Box
+							sx={{
+								position: 'absolute',
+								right: 3,
+								opacity: 0.7,
+							}}
+						>
+							<IconButton size="small" onClick={props.onClose}>
+								<Close
+									fontSize="inherit"
+									sx={{
+										fontSize: '1rem',
+									}}
+								/>
+							</IconButton>
+						</Box>
+					</Box>
+					<Divider />
+				</Box>
+
+				{!editable && hasPermissionToEdit && (
+					<Box
+						sx={{
+							position: 'absolute',
+							right: theme.spacing(2),
+							top: theme.spacing(6),
+						}}
+					>
+						{data.guid && (
+							<Button
+								variant="outlined"
+								startIcon={<EditCalendar />}
+								onClick={() => {
+									setEditable(true)
+								}}
+							>
+								Upravit
+							</Button>
+						)}
+					</Box>
+				)}
+
+				{/* Content */}
+				<Box display={'flex'} flexDirection={'row'} gap={3} marginTop={3}>
+					<Box display={'flex'} flexDirection={'column'} gap={2}>
+						{/* Title, Description */}
+						<Box display={'flex'} flexDirection={'column'}>
+							<>
+								<TeamEventPopupEditableInput
+									placeholder="Zadejte název"
+									tooltip="Přejmenovat událost"
+									value={title}
+									editable={editable}
+									autoFocus
+									onChange={onTitleChange}
+								/>
+							</>
+							<Gap value={0.5} />
+							<Tooltip label="Změnit popisek" disabled={!editable}>
+								<TextField
+									placeholder="Přidejte popisek"
+									// tooltip="Změnit popisek"
+									value={description}
+									sx={{
+										fontWeight: 400,
+										fontSize: '1rem',
+										color: 'grey.700',
+										borderRadius: 1,
+										'&:hover': editable
+											? {
+													bgcolor: 'grey.100',
+											  }
+											: {},
+										'&:focus-within': editable ? { bgcolor: 'grey.100' } : {},
+										paddingX: 1,
+										paddingY: 0.5,
+										userSelect: 'none',
+									}}
+									onChange={onDescriptionChange}
+									disabled={!editable}
+								/>
+							</Tooltip>
+							{/* <Gap />
+							<Divider
+								sx={{
+									marginX: 1,
+								}}
+							/> */}
+						</Box>
+
+						{/* Details */}
+						<Grid container spacing={3} padding={1}>
+							<EventPopupGridRow label="Datum">
+								{/* <Typography strong>25.7. 2024 9:00</Typography> */}
+								<Box display={'flex'} flexDirection={'row'} gap={1}>
+									<DatePicker
+										label={'Datum akce'}
+										slotProps={{
+											popper: {
+												disablePortal: true,
+											},
+											textField: { size: 'small' },
+										}}
+										format="LL"
+										disabled={!editable}
+										value={date && dayjs(date)}
+										onChange={(date) => onDateChange(date?.toDate() || null)}
+										sx={{
+											minWidth: 240,
+										}}
+									/>
+
+									{isPastDate && editable ? (
+										<Box
+											display={'flex'}
+											flexDirection={'row'}
+											alignItems={'center'}
+											gap={1}
+										>
+											<Warning color="warning" fontSize="small" />
+											<Typography size={'small'}>
+												Jedná se o datum v minulosti
+											</Typography>
+										</Box>
+									) : null}
+								</Box>
+							</EventPopupGridRow>
+
+							{/* Leader*/}
+							<EventPopupGridRow label="Vedoucí">
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									alignItems={'center'}
+									gap={0.5}
+								>
+									{leader && (
+										<Chip
+											avatar={<Avatar />}
+											label={leader.firstName + ' ' + leader.lastName}
+											// size="small"
+											// color="primary"
+											onClick={() => {}}
+											deleteIcon={<ChangeCircle />}
+											onDelete={editable ? openLeaderSelect : undefined}
+										/>
+									)}
+
+									{editable && !leader && (
+										<Tooltip label="Zvolit vedoucího">
+											<Chip
+												label={'Zvolit'}
+												variant="outlined"
+												icon={<Add />}
+												// size="small"
+												onClick={openLeaderSelect}
+											/>
+										</Tooltip>
+									)}
+								</Box>
+
+								<TeamMemberSelect
+									open={leaderSelectOpen}
+									onClose={() => setLeaderSelectOpen(false)}
+									anchor={leaderSelectAnchor}
+									onSelect={(member) => onLeaderSelect(member)}
+								/>
+							</EventPopupGridRow>
+
+							{/* Members */}
+							<EventPopupGridRow label="Členové">
+								{members?.map((member, index) => (
+									<Chip
+										key={member.userGuid}
+										avatar={<Avatar />}
+										label={member.firstName + ' ' + member.lastName}
+										// size="small"
+										onDelete={
+											editable ? () => onMemberRemove(member) : undefined
+										}
+										onClick={() => {}}
+									/>
+								))}
+								{editable && (
+									<Tooltip label="Přidat člena">
+										<Chip
+											label="Přidat"
+											icon={<Add />}
+											// size="small"
+											onClick={openMemberSelect}
+											variant="outlined"
+										/>
+									</Tooltip>
+								)}
+
+								<TeamMemberSelect
+									open={memberSelectOpen}
+									onClose={() => setMemberSelectOpen(false)}
+									anchor={memberSelectAnchor}
+									onSelect={onMemberAdd}
+									filterFunc={(member) => {
+										const alreadyAdded = members.find(
+											(m) => m.userGuid === member.userGuid
+										)
+										const isLeader = leader?.userGuid === member.userGuid
+										return !alreadyAdded && !isLeader
+									}}
+								/>
+							</EventPopupGridRow>
+
+							<EventPopupGridRow label="Playlist">
+								{/* <Box
+									sx={{
+										bgcolor: 'grey.200',
+										paddingY: 0.5,
+										paddingX: 1,
+										borderRadius: 2,
+										// border: '1px solid',
+										borderColor: 'grey.400',
+									}}
+								>
+									<Typography size={'small'}>Neděle 25.7.</Typography>
+								</Box> */}
+
+								{playlist && (
+									<Chip
+										label={playlist?.title}
+										onClick={() => {}}
+										icon={<QueueMusic />}
+										// size="small"
+										deleteIcon={<ChangeCircle />}
+										onDelete={editable ? openPlaylistSelect : undefined}
+									/>
+								)}
+
+								{/* {editable && (
+									<IconButton size="small" tooltip="Zvolit playlist">
+										<Edit
+											fontSize="inherit"
+											sx={{
+												fontSize: '1rem',
+											}}
+										/>
+									</IconButton>
+								)} */}
+
+								{editable && !playlist && (
+									<Tooltip label="Vybrat playlist ze seznamu">
+										<Chip
+											label={'Zvolit'}
+											variant="outlined"
+											icon={<Add />}
+											// size="small"
+											onClick={openPlaylistSelect}
+										/>
+									</Tooltip>
+								)}
+
+								<TeamPlaylistSelect
+									open={playlistSelectOpen}
+									onClose={() => setPlaylistSelectOpen(false)}
+									anchor={playlistSelectAnchor}
+									onSelect={onPlaylistSelect}
+								/>
+							</EventPopupGridRow>
+						</Grid>
+					</Box>
+				</Box>
+				<Gap />
+			</Popup>
+		</>
+	)
+}

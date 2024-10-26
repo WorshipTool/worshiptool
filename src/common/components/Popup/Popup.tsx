@@ -92,6 +92,7 @@ export default function Popup({
 									borderRadius: 3,
 									bgcolor: 'white',
 									boxShadow: '0px 0px 4px  rgba(0,0,0,0.1)',
+									position: 'relative',
 								}}
 								onClick={(e) => e.stopPropagation()}
 								display={'flex'}

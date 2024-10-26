@@ -8,7 +8,7 @@ interface UseApiState<T> {
 	fetchApiState: (
 		fetchPromise: () => Promise<T>,
 		callback?: (data: T) => void
-	) => void
+	) => Promise<T | null>
 	invalidateApiState: () => void
 }
 interface UseApiStateProps<T> {
@@ -42,21 +42,23 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 		})
 	}
 
-	const fetchApiState = (
+	const fetchApiState = async (
 		fetchPromise: () => Promise<T>,
 		callback?: (data: T) => void
 	) => {
-		;(async () => {
-			dispatchLoadingAction()
-			try {
-				const data: T = await fetchPromise()
-				dispatchSuccessAction(data)
-				if (callback) callback(data)
-			} catch (err) {
-				console.log(err)
-				dispatchErrorAction(err as ApiError | string)
-			}
-		})()
+		dispatchLoadingAction()
+		try {
+			const data: T = await fetchPromise()
+			dispatchSuccessAction(data)
+			if (callback) callback(data)
+
+			return data
+		} catch (err) {
+			console.log(err)
+			dispatchErrorAction(err as ApiError | string)
+
+			return null
+		}
 	}
 
 	const dispatchSuccessAction = (data: T) => {

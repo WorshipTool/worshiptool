@@ -9,6 +9,7 @@ import {
 	People,
 	QueueMusic,
 	Settings,
+	Subscriptions,
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
@@ -44,11 +45,18 @@ export default function Menu(props: MenuProps) {
 				toParams: { alias },
 			},
 			{
+				title: 'Playlisty',
+				icon: <Subscriptions />,
+				to: 'teamPlaylists',
+				toParams: { alias },
+			},
+			{
 				title: 'Statistiky',
 				icon: <Analytics />,
 				to: 'teamStatistics',
 				toParams: { alias },
 				disabled: true,
+				hidden: true,
 			},
 			{
 				title: 'Lidé',

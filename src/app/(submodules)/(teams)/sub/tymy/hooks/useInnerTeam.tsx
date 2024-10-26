@@ -1,4 +1,5 @@
 'use client'
+import { useTeamEvents } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamEvents'
 import { useTeamSelection } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamSelection'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
@@ -33,7 +34,7 @@ export const InnerTeamProvider = ({
 }
 
 const useProvideInnerTeam = (teamAlias: string) => {
-	const { teamGettingApi } = useApi()
+	const { teamGettingApi, teamMembersApi } = useApi()
 	const [apiState, reload] = useApiStateEffect(() => {
 		return handleApiCall(
 			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
@@ -48,6 +49,13 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		guid
 	)
 
+	const [membersApiState] = useApiStateEffect(async () => {
+		const data = await handleApiCall(
+			teamMembersApi.teamMemberControllerGetTeamMembers(teamAlias)
+		)
+		return data
+	}, [teamAlias])
+
 	const { user } = useAuth()
 	const isCreator = useMemo(() => {
 		if (!apiState.data?.createdByGuid) return false
@@ -55,9 +63,12 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		return apiState.data?.createdByGuid === user?.guid
 	}, [apiState, user])
 
+	const events = useTeamEvents(guid)
+
 	return {
 		guid,
 		apiState,
+		membersApiState: membersApiState,
 		alias: teamAlias,
 		name: apiState.data?.name || '',
 		joinCode: apiState.data?.joinCode || '',
@@ -65,5 +76,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		isCreator,
 		createdByGuid: (apiState.data?.createdByGuid || '') as UserGuid,
 		reload,
+		events,
 	}
 }

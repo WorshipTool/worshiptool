@@ -24,4 +24,16 @@ export type TeamPermissions = {
 	'team.edit_songs': {
 		teamGuid: string
 	}
+
+	'team.add_event': {
+		teamGuid: string
+	}
+
+	'team.delete_event': {
+		eventGuid: string
+	}
+
+	'team.edit_event': {
+		eventGuid: string
+	}
 }

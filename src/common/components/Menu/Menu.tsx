@@ -10,7 +10,7 @@ type MenuProps = {
 	transformOrigin?: ComponentProps<typeof MuiMenu>['transformOrigin']
 
 	items?: MenuItemObjectType[]
-	children?: ReactNode[]
+	children?: ReactNode
 }
 
 export default function Menu({ ...props }: MenuProps) {
@@ -36,6 +36,8 @@ export default function Menu({ ...props }: MenuProps) {
 			MenuListProps={{
 				'aria-labelledby': 'basic-button',
 			}}
+			disablePortal
+			disableScrollLock
 		>
 			{props.children}
 			{props.items?.map((item, index) => {

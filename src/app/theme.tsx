@@ -1,35 +1,39 @@
 import { theme } from '@/common/constants/theme'
 import { createTheme } from '@mui/material'
 import { ThemeProvider as TP, responsiveFontSizes } from '@mui/material/styles'
+import { csCZ } from '@mui/x-date-pickers/locales'
 import { Roboto } from 'next/font/google'
 
-let muiTheme = createTheme({
-	...theme,
-	typography: {
-		h1: {
-			fontSize: '5rem',
-			fontWeight: 400,
-			lineHeight: 1,
-		},
-		h2: {
-			fontSize: '3rem',
-			fontWeight: 300,
-		},
-		h3: {
-			fontSize: '2rem',
-			lineHeight: 1.4,
-		},
-		h4: {
-			fontSize: '1.5rem',
-		},
-		h5: {
-			fontSize: '1.25rem',
-		},
-		h6: {
-			fontSize: '1.125rem',
+let muiTheme = createTheme(
+	{
+		...theme,
+		typography: {
+			h1: {
+				fontSize: '5rem',
+				fontWeight: 400,
+				lineHeight: 1,
+			},
+			h2: {
+				fontSize: '3rem',
+				fontWeight: 300,
+			},
+			h3: {
+				fontSize: '2rem',
+				lineHeight: 1.4,
+			},
+			h4: {
+				fontSize: '1.5rem',
+			},
+			h5: {
+				fontSize: '1.25rem',
+			},
+			h6: {
+				fontSize: '1.125rem',
+			},
 		},
 	},
-})
+	csCZ
+)
 muiTheme = responsiveFontSizes(muiTheme)
 
 // theme.typography.h4 = {

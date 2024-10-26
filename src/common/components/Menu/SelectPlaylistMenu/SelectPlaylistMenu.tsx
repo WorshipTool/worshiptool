@@ -4,9 +4,8 @@ import PlaylistMenuItem from '@/common/components/Menu/SelectPlaylistMenu/Playli
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
-import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
+import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { useApiStateEffect } from '@/tech/ApiState'
 import { MoreHoriz } from '@mui/icons-material'
 import {
 	Box,
@@ -31,13 +30,7 @@ const MAX_PLAYLIST_COUNT = 4
 
 export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 	// Playlist list
-	const { getPlaylistsOfUser } = usePlaylistsGeneral()
-	const [{ data: playlists, loading }] = useApiStateEffect(() => {
-		return getPlaylistsOfUser().then((r) => {
-			return r.playlists
-		})
-	}, [])
-
+	const { playlists, loading } = useUsersPlaylists()
 	// Dialog state
 	const [popupOpen, setPopupOpen] = useState(false)
 

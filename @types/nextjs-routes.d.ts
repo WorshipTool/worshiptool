@@ -46,6 +46,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/sub/tymy/[alias]", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/pisen/[hex]/[title-alias]", { "alias": string; "hex": string; "title-alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/playlist/[guid]", { "alias": string; "guid": string }>
+    | DynamicRoute<"/sub/tymy/[alias]/playlisty", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/statistiky", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/zpevnik", { "alias": string }>
     | DynamicRoute<"/sub/tymy/pripojitse/[code]", { "code": string }>;

@@ -243,6 +243,19 @@ export interface ChangePasswordInDto {
 /**
  * 
  * @export
+ * @interface ChangeProfilePhotoInDto
+ */
+export interface ChangeProfilePhotoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeProfilePhotoInDto
+     */
+    'pictureGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface ChangeTeamInfoInDto
  */
 export interface ChangeTeamInfoInDto {
@@ -264,6 +277,55 @@ export interface ChangeTeamInfoInDto {
      * @memberof ChangeTeamInfoInDto
      */
     'joinCode'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTeamEventInDto
+ */
+export interface CreateTeamEventInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'leaderUserGuid': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateTeamEventInDto
+     */
+    'memberUserGuids': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventTitle': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventDescription': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventDate': string;
 }
 /**
  * 
@@ -404,6 +466,55 @@ export interface EditItemInDto {
      * @memberof EditItemInDto
      */
     'sheetData'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface EditTeamEventInDto
+ */
+export interface EditTeamEventInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventTitle': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventDescription': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'leaderUserGuid': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EditTeamEventInDto
+     */
+    'memberUserGuids': Array<string>;
 }
 /**
  * 
@@ -726,6 +837,19 @@ export interface GetTeamAliasFromSubdomainOutDto {
      * @memberof GetTeamAliasFromSubdomainOutDto
      */
     'alias': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamEventsOutDto
+ */
+export interface GetTeamEventsOutDto {
+    /**
+     * 
+     * @type {Array<TeamEventData>}
+     * @memberof GetTeamEventsOutDto
+     */
+    'events': Array<TeamEventData>;
 }
 /**
  * 
@@ -2965,6 +3089,172 @@ export interface Team {
 /**
  * 
  * @export
+ * @interface TeamEvent
+ */
+export interface TeamEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Team}
+     * @memberof TeamEvent
+     */
+    'team': Team;
+    /**
+     * 
+     * @type {TeamMember}
+     * @memberof TeamEvent
+     */
+    'leader': TeamMember;
+    /**
+     * 
+     * @type {Array<TeamMember>}
+     * @memberof TeamEvent
+     */
+    'members': Array<TeamMember>;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'eventDate': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof TeamEvent
+     */
+    'attachedPlaylist': Playlist;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventData
+ */
+export interface TeamEventData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'date': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {TeamEventMemberData}
+     * @memberof TeamEventData
+     */
+    'leader': TeamEventMemberData;
+    /**
+     * 
+     * @type {Array<TeamEventMemberData>}
+     * @memberof TeamEventData
+     */
+    'members': Array<TeamEventMemberData>;
+    /**
+     * 
+     * @type {TeamEventPlaylistData}
+     * @memberof TeamEventData
+     */
+    'playlist': TeamEventPlaylistData;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventMemberData
+ */
+export interface TeamEventMemberData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'lastName': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventPlaylistData
+ */
+export interface TeamEventPlaylistData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventPlaylistData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventPlaylistData
+     */
+    'title': string;
+}
+/**
+ * 
+ * @export
  * @interface TeamMember
  */
 export interface TeamMember {
@@ -3559,6 +3849,45 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeProfilePhoto: async (changeProfilePhotoInDto: ChangeProfilePhotoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeProfilePhotoInDto' is not null or undefined
+            assertParamExists('authControllerChangeProfilePhoto', 'changeProfilePhotoInDto', changeProfilePhotoInDto)
+            const localVarPath = `/auth/change-profile-photo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeProfilePhotoInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3652,6 +3981,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3687,6 +4020,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -3756,6 +4093,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3790,6 +4131,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (email !== undefined) {
                 localVarQueryParameter['email'] = email;
@@ -3828,6 +4173,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3864,6 +4213,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3898,6 +4251,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangePassword(changePasswordInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerChangePassword']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangeProfilePhoto(changeProfilePhotoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerChangeProfilePhoto']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4031,6 +4396,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerChangeProfilePhoto(changeProfilePhotoInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4131,6 +4505,17 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerChangePassword(changePasswordInDto: ChangePasswordInDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerChangePassword(changePasswordInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerChangeProfilePhoto(changeProfilePhotoInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9945,6 +10330,331 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamEventsApi - axios parameter creator
+ * @export
+ */
+export const TeamEventsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerCreateEvent: async (createTeamEventInDto: CreateTeamEventInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTeamEventInDto' is not null or undefined
+            assertParamExists('teamEventControllerCreateEvent', 'createTeamEventInDto', createTeamEventInDto)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamEventInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerDeleteEvent: async (eventGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'eventGuid' is not null or undefined
+            assertParamExists('teamEventControllerDeleteEvent', 'eventGuid', eventGuid)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (eventGuid !== undefined) {
+                localVarQueryParameter['eventGuid'] = eventGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerEditEvent: async (editTeamEventInDto: EditTeamEventInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editTeamEventInDto' is not null or undefined
+            assertParamExists('teamEventControllerEditEvent', 'editTeamEventInDto', editTeamEventInDto)
+            const localVarPath = `/teams/events/edit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editTeamEventInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEvents: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamEventControllerGetEvents', 'teamGuid', teamGuid)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamEventsApi - functional programming interface
+ * @export
+ */
+export const TeamEventsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamEventsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerCreateEvent(createTeamEventInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerCreateEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerDeleteEvent(eventGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerDeleteEvent(eventGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerDeleteEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerEditEvent(editTeamEventInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerEditEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerGetEvents(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamEventsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerGetEvents(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerGetEvents']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamEventsApi - factory interface
+ * @export
+ */
+export const TeamEventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamEventsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerCreateEvent(createTeamEventInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerDeleteEvent(eventGuid: string, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerDeleteEvent(eventGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEvents(teamGuid: string, options?: any): AxiosPromise<GetTeamEventsOutDto> {
+            return localVarFp.teamEventControllerGetEvents(teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamEventsApi - object-oriented interface
+ * @export
+ * @class TeamEventsApi
+ * @extends {BaseAPI}
+ */
+export class TeamEventsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateTeamEventInDto} createTeamEventInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerCreateEvent(createTeamEventInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} eventGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerDeleteEvent(eventGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerDeleteEvent(eventGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {EditTeamEventInDto} editTeamEventInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerGetEvents(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerGetEvents(teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

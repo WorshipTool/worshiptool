@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 
 type PopupProps = {
 	children?: React.ReactNode
+    
 }
 export default function PopupContainer({ children }: PopupProps) {
 	const ref = useRef<HTMLDivElement | null>(null)

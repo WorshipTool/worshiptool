@@ -15,6 +15,7 @@ import {
 	SongValidationApi,
 	TeamAddingApi,
 	TeamEditingApi,
+	TeamEventsApi,
 	TeamGettingApi,
 	TeamJoiningApi,
 	TeamMembersApi,
@@ -48,6 +49,7 @@ export const useApi = () => {
 			teamEditingApi: new TeamEditingApi(apiConfiguration),
 			teamJoiningApi: new TeamJoiningApi(apiConfiguration),
 			teamMembersApi: new TeamMembersApi(apiConfiguration),
+			teamEventsApi: new TeamEventsApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)
