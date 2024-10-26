@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react'
 import {
 	apiToPermissionPayload,
 	permissionPayloadToApi,
@@ -22,7 +23,37 @@ type Merge<T extends PermissionsTypes[]> = T extends [
 
 // type Merge<T extends Record<string, any>> = T
 
-export function usePermissions<
+type Rt = ReturnType<typeof useProvidePermissions>
+
+const permissionsContext = createContext<Rt>({
+	notInitialized: true,
+} as Rt)
+
+export const usePermissions = () => {
+	const d = useContext(permissionsContext)
+	if (d.notInitialized) {
+		throw new Error('usePermissions must be used inside PermissionsProvider')
+	}
+	return d
+}
+
+export const PermissionsProvider = ({ children }: { children: any }) => {
+	const p = useProvidePermissions()
+
+	if (!p) {
+		throw new Error(
+			'PermissionsProvider must be used inside PermissionsProvider'
+		)
+	}
+
+	return (
+		<permissionsContext.Provider value={p}>
+			{children}
+		</permissionsContext.Provider>
+	)
+}
+
+function useProvidePermissions<
 	A extends PermissionsTypes[] = [PermissionsTypes]
 >(userGuid?: string) {
 	const { permissionApi } = useApi()

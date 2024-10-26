@@ -4,6 +4,7 @@ import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/
 import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import TeamPlaylistMoreButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistMoreButton'
 import { Gap } from '@/common/ui/Gap'
 import { Box } from '@mui/material'
 
@@ -18,6 +19,7 @@ export default function TeamPlaylistTopPanel() {
 		>
 			<TitleBox />
 			<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+				<TeamPlaylistMoreButton />
 				<PresentationButton />
 				<PrintButton />
 				<ShareButton />

@@ -1,3 +1,4 @@
+import { RoutesKeys, SmartSearchParams } from '@/routes'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -31,3 +32,8 @@ export const useUrlState = (key: string) => {
 
 	return [value, setValue] as const
 }
+
+export const useSmartUrlState = <T extends RoutesKeys>(
+	route: T,
+	key: keyof SmartSearchParams<T>
+) => useUrlState(key as string)

@@ -17,6 +17,7 @@ import { IconButton } from '@/common/ui/IconButton'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { usePermission } from '@/hooks/permissions/usePermission'
+import { usePermissions } from '@/hooks/permissions/usePermissions'
 import { useSmartParams } from '@/routes/useSmartParams'
 import {
 	Add,
@@ -24,6 +25,7 @@ import {
 	Close,
 	EditCalendar,
 	EventNote,
+	OpenInNew,
 	QueueMusic,
 	Warning,
 } from '@mui/icons-material'
@@ -49,10 +51,14 @@ type TeamEventPopupProps = {
 	editable?: boolean
 	data?: Partial<TeamEventPopupData>
 
-	onSubmit?: () => Promise<void>
+	onSubmit?: () => any
+	onDelete?: () => any
 
 	createMode?: boolean
 	submitting?: boolean
+
+	lockPlaylist?: boolean
+	hideOpenPlaylistButton?: boolean
 }
 
 export default function TeamEventPopup({
@@ -137,12 +143,21 @@ export default function TeamEventPopup({
 	const onDateChange = (date: Date | null) => {
 		setDate(date)
 	}
+
+	useEffect(() => {
+		if (data.title && data.title !== title) setTitle(data.title)
+		if (data.description && data.description !== description)
+			setDescription(data.description)
+		if (data.date && data.date !== date) setDate(data.date)
+		if (data.leader && data.leader !== leader) setLeader(data.leader)
+		if (data.members && data.members !== members) setMembers(data.members)
+		if (data.playlist && data.playlist !== playlist) setPlaylist(data.playlist)
+	}, [data])
+
 	// Check if the date is in the past, today is ok
 	const isPastDate = date ? dayjs(date).isBefore(dayjs(), 'day') : false
 
-	const canSubmit = Boolean(
-		title && description && date && leader && members && playlist
-	)
+	const canSubmit = Boolean(title && date && leader && members && playlist)
 
 	const allData: CreateTeamEventInDto = {
 		teamGuid: guid,
@@ -155,14 +170,17 @@ export default function TeamEventPopup({
 	}
 
 	const { enqueueSnackbar } = useSnackbar()
+	const { reload: reloadPermissions } = usePermissions()
 
 	const onSubmit = async () => {
-		if (!title || !description || !date || !leader || !playlist) return
+		if (!title || !date || !leader || !playlist) return
 		if (props.createMode) {
 			if (await addEvent(allData)) {
 				onReset()
-				props.onSubmit?.()
+				props.onClose()
 				enqueueSnackbar('Událost byla vytvořena')
+				props.onSubmit?.()
+				reloadPermissions()
 			}
 		} else {
 			if (
@@ -172,12 +190,16 @@ export default function TeamEventPopup({
 				})
 			) {
 				onReset()
+				props.onClose()
 				props.onSubmit?.()
 			}
 		}
 	}
 
 	const onReset = () => {
+		if (props.createMode) {
+			props.onClose()
+		}
 		setTitle(data.title)
 		setDescription(data.description)
 		setDate(data.date || null)
@@ -203,11 +225,16 @@ export default function TeamEventPopup({
 		}
 	)
 
+	const onClose = () => {
+		if (!props.createMode) onReset()
+		props.onClose()
+	}
+
 	return (
 		<>
 			<Popup
 				open={props.open}
-				onClose={props.onClose}
+				onClose={onClose}
 				width={600}
 				onSubmit={onSubmit}
 				onReset={onReset}
@@ -218,11 +245,13 @@ export default function TeamEventPopup({
 									<Button
 										key={'deletebutton'}
 										color="error"
+										tooltip="Smazat událost a ponechat playlist"
 										variant={deleteSecond ? 'contained' : 'text'}
 										onClick={() => {
 											if (deleteSecond) {
 												deleteEvent(data.guid || '')
 												props.onClose()
+												props.onDelete?.()
 												setDeleteSecond(false)
 											} else {
 												setDeleteSecond(true)
@@ -260,25 +289,25 @@ export default function TeamEventPopup({
 									</Button>
 								</Box>,
 						  ]
-						: [
+						: playlist && !props.hideOpenPlaylistButton
+						? [
 								<Box key={'gap2'} />,
-								playlist && (
-									<Button
-										key={'playlist'}
-										variant={editable ? 'outlined' : 'contained'}
-										startIcon={<QueueMusic />}
-										tooltip="Otevřít playlist přiřazený k této události"
-										color={editable ? undefined : 'primarygradient'}
-										to="teamPlaylist"
-										toParams={{ alias: alias, guid: playlist.guid }}
-										target="_blank"
-										disabled={props.submitting}
-									>
-										Otevřít playlist
-									</Button>
-								),
+								<Button
+									key={'playlist'}
+									variant={editable ? 'outlined' : 'contained'}
+									endIcon={<OpenInNew />}
+									tooltip="Otevřít playlist přiřazený k této události"
+									color={editable ? undefined : 'primarygradient'}
+									to="teamPlaylist"
+									toParams={{ alias: alias, guid: playlist.guid }}
+									target="_blank"
+									disabled={props.submitting}
+								>
+									Otevřít playlist
+								</Button>,
 								<Box key={'gap3'} />,
-						  ]),
+						  ]
+						: []),
 				]}
 			>
 				{/* Header */}
@@ -539,19 +568,6 @@ export default function TeamEventPopup({
 							</EventPopupGridRow>
 
 							<EventPopupGridRow label="Playlist">
-								{/* <Box
-									sx={{
-										bgcolor: 'grey.200',
-										paddingY: 0.5,
-										paddingX: 1,
-										borderRadius: 2,
-										// border: '1px solid',
-										borderColor: 'grey.400',
-									}}
-								>
-									<Typography size={'small'}>Neděle 25.7.</Typography>
-								</Box> */}
-
 								{playlist && (
 									<Chip
 										label={playlist?.title}
@@ -559,20 +575,13 @@ export default function TeamEventPopup({
 										icon={<QueueMusic />}
 										// size="small"
 										deleteIcon={<ChangeCircle />}
-										onDelete={editable ? openPlaylistSelect : undefined}
+										onDelete={
+											editable && !props.lockPlaylist
+												? openPlaylistSelect
+												: undefined
+										}
 									/>
 								)}
-
-								{/* {editable && (
-									<IconButton size="small" tooltip="Zvolit playlist">
-										<Edit
-											fontSize="inherit"
-											sx={{
-												fontSize: '1rem',
-											}}
-										/>
-									</IconButton>
-								)} */}
 
 								{editable && !playlist && (
 									<Tooltip label="Vybrat playlist ze seznamu">
@@ -596,7 +605,7 @@ export default function TeamEventPopup({
 						</Grid>
 					</Box>
 				</Box>
-				<Gap />
+				{!props.hideOpenPlaylistButton && <Gap />}
 			</Popup>
 		</>
 	)

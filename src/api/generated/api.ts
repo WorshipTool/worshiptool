@@ -10461,6 +10461,46 @@ export const TeamEventsApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEventByPlaylist: async (playlistGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'playlistGuid' is not null or undefined
+            assertParamExists('teamEventControllerGetEventByPlaylist', 'playlistGuid', playlistGuid)
+            const localVarPath = `/teams/events/byplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (playlistGuid !== undefined) {
+                localVarQueryParameter['playlistGuid'] = playlistGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10547,6 +10587,18 @@ export const TeamEventsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEventData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerGetEventByPlaylist(playlistGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerGetEventByPlaylist']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10593,6 +10645,15 @@ export const TeamEventsApiFactory = function (configuration?: Configuration, bas
          */
         teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: any): AxiosPromise<TeamEvent> {
             return localVarFp.teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: any): AxiosPromise<TeamEventData> {
+            return localVarFp.teamEventControllerGetEventByPlaylist(playlistGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10644,6 +10705,17 @@ export class TeamEventsApi extends BaseAPI {
      */
     public teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: RawAxiosRequestConfig) {
         return TeamEventsApiFp(this.configuration).teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} playlistGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerGetEventByPlaylist(playlistGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -2,16 +2,28 @@
 import { TeamEventData } from '@/api/generated'
 import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopup'
 import { Typography } from '@/common/ui/Typography'
+import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
 import { Event } from '@mui/icons-material'
 import { Box } from '@mui/material'
-import { useState } from 'react'
+import { useMemo } from 'react'
 
 type PreviousItemProps = {
 	data: TeamEventData
 }
 
 export default function PreviousItem(props: PreviousItemProps) {
-	const [open, setOpen] = useState(false)
+	const [openedEventGuid, setOpenedEventGuid] = useSmartUrlState(
+		'teamPlaylists',
+		'openedEvent'
+	)
+	const open = useMemo(
+		() => openedEventGuid === props.data.guid,
+		[openedEventGuid, props.data.guid]
+	)
+
+	const setOpen = (open: boolean) => {
+		setOpenedEventGuid(open ? props.data.guid : null)
+	}
 
 	const date = new Date(props.data.date)
 

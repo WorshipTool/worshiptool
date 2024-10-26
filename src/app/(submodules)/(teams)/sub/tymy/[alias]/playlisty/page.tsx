@@ -6,7 +6,9 @@ import OtherPlaylistPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/play
 import PreviousPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Gap } from '@/common/ui/Gap'
+import { isDateTodayOrInFuture } from '@/tech/date/date.tech'
 import { Box } from '@mui/material'
+import { useMemo } from 'react'
 
 export default SmartTeamPage(Page, {})
 
@@ -16,8 +18,14 @@ function Page() {
 		events: { events, apiState, addEvent },
 	} = useInnerTeam()
 
-	const futureEvents = events.filter((e) => new Date(e.date) > new Date())
-	const pastEvents = events.filter((e) => new Date(e.date) < new Date())
+	const futureEvents = useMemo(() => {
+		const now = new Date()
+		return events.filter((e) => isDateTodayOrInFuture(new Date(e.date), now))
+	}, [events])
+	const pastEvents = useMemo(() => {
+		const now = new Date()
+		return events.filter((e) => !isDateTodayOrInFuture(new Date(e.date), now))
+	}, [events])
 
 	return (
 		<Box>

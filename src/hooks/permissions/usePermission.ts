@@ -14,5 +14,6 @@ export const usePermission = <A extends PermissionsTypes>(
 	const includes = useMemo(() => {
 		return data.state.loading ? null : data.includesPermission(type, payload)
 	}, [data, type, payload])
+
 	return includes
 }

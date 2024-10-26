@@ -26,10 +26,6 @@ export default function NextMonthPanel(props: NextMonthPanelProps) {
 
 	const { guid: teamGuid } = useInnerTeam()
 
-	const onSubmit = async () => {
-		setOpen(false)
-	}
-
 	const hasPermissionToAdd = usePermission<TeamPermissions>('team.add_event', {
 		teamGuid,
 	})
@@ -73,7 +69,6 @@ export default function NextMonthPanel(props: NextMonthPanelProps) {
 				onClose={() => setOpen(false)}
 				editable
 				createMode
-				onSubmit={onSubmit}
 				// editable={false}
 			/>
 		</Box>

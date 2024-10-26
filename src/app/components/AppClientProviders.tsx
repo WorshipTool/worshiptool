@@ -12,6 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
+import { PermissionsProvider } from '@/hooks/permissions/usePermissions'
 import 'dayjs/locale/cs'
 type AppClientProvidersProps = {
 	children?: React.ReactNode
@@ -30,19 +31,21 @@ export default function AppClientProviders({
 				>
 					{/* <BrowserRouter> */}
 					<AuthProvider>
-						<ErrorHandlerProvider>
-							<GroupProvider>
-								<ToolbarProvider>
-									<FooterProvider>
-										<AppSongSelectSpecifierProvider>
-											<CurrentPlaylistProvider>
-												<SongDragProvider>{children}</SongDragProvider>
-											</CurrentPlaylistProvider>
-										</AppSongSelectSpecifierProvider>
-									</FooterProvider>
-								</ToolbarProvider>
-							</GroupProvider>
-						</ErrorHandlerProvider>
+						<PermissionsProvider>
+							<ErrorHandlerProvider>
+								<GroupProvider>
+									<ToolbarProvider>
+										<FooterProvider>
+											<AppSongSelectSpecifierProvider>
+												<CurrentPlaylistProvider>
+													<SongDragProvider>{children}</SongDragProvider>
+												</CurrentPlaylistProvider>
+											</AppSongSelectSpecifierProvider>
+										</FooterProvider>
+									</ToolbarProvider>
+								</GroupProvider>
+							</ErrorHandlerProvider>
+						</PermissionsProvider>
 					</AuthProvider>
 					{/* </BrowserRouter> */}
 				</SnackbarProvider>

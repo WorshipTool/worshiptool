@@ -1,4 +1,5 @@
 'use client'
+import NextPlannedPlaylistPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/NextPlannedPlaylistPanel/NextPlannedPlaylistPanel'
 import TeamQuickActions from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/QuickActions/TeamQuickActions'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
@@ -39,12 +40,15 @@ function TeamPage(props: PageProps<'team'>) {
 						</Box>
 					</TeamCard>
 				</Grid>
-				<Grid item>
+				<Grid item xs={12}>
 					<Typography strong>Rychlé akce</Typography>
 					<Gap />
 					<TeamQuickActions />
 				</Grid>
-				{/* <Grid item sm={12} md={6} lg={4}></Grid> */}
+				<Grid item>
+					<Gap />
+					<NextPlannedPlaylistPanel />
+				</Grid>
 			</Grid>
 		</>
 	)

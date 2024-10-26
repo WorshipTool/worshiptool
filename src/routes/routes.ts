@@ -70,4 +70,7 @@ export const routesSearchParams = {
 	teamSong: {
 		edit: true,
 	},
+	teamPlaylists: {
+		openedEvent: 'string' as string | undefined,
+	},
 }
