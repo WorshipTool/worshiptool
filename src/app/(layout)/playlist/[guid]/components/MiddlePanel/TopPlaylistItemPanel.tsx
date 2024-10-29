@@ -79,17 +79,19 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 
 			<Box display={'flex'} flexDirection={'row'} gap={1} sx={{}}>
 				{!props.inEditMode ? (
-					<Button
-						tooltip="Vytvořit úpravu písně pro tento playlist"
-						variant="outlined"
-						size="small"
-						startIcon={<Edit />}
-						onClick={() => {
-							props.setInEditMode(true)
-						}}
-					>
-						Upravit
-					</Button>
+					!canUserEdit ? null : (
+						<Button
+							tooltip="Vytvořit úpravu písně pro tento playlist"
+							variant="outlined"
+							size="small"
+							startIcon={<Edit />}
+							onClick={() => {
+								props.setInEditMode(true)
+							}}
+						>
+							Upravit
+						</Button>
+					)
 				) : (
 					<>
 						<Button

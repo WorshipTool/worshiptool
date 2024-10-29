@@ -10,7 +10,7 @@ export const OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME =
 	'openPlaylistAddSongPopup'
 
 export default function AddSongToPlaylistButton() {
-	const { addItem, items, ...playlist } = useInnerPlaylist()
+	const { addItem, items, canUserEdit, ...playlist } = useInnerPlaylist()
 
 	const anchorRef = useRef<HTMLButtonElement>(null)
 
@@ -66,7 +66,7 @@ export default function AddSongToPlaylistButton() {
 		}
 	}, [items, thereHasBeenItems])
 
-	return (
+	return !canUserEdit ? null : (
 		<>
 			<Box sx={{}}>
 				<Tooltip label="Přidat píseň do playlistu">

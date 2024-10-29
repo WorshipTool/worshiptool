@@ -1,6 +1,7 @@
 'use client'
 import { TeamEventData } from '@/api/generated'
 import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopup'
+import { Clickable } from '@/common/ui/Clickable'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
 import { Event } from '@mui/icons-material'
@@ -29,11 +30,12 @@ export default function PreviousItem(props: PreviousItemProps) {
 
 	return (
 		// <Clickable>
-		<>
+		<Clickable>
 			<Box
 				sx={{
 					// bgcolor: 'grey.300',
 					paddingY: 1,
+					paddingX: 1,
 					borderRadius: 3,
 					cursor: 'pointer',
 
@@ -41,7 +43,7 @@ export default function PreviousItem(props: PreviousItemProps) {
 
 					'&:hover': {
 						bgcolor: 'grey.300',
-						paddingLeft: 1,
+						// paddingLeft: 1,
 					},
 				}}
 				display={'flex'}
@@ -78,7 +80,7 @@ export default function PreviousItem(props: PreviousItemProps) {
 					date: date,
 				}}
 			/>
-		</>
+		</Clickable>
 		// </Clickable>
 	)
 }

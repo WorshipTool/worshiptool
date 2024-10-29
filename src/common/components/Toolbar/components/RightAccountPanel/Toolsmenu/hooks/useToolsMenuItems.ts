@@ -5,6 +5,7 @@ import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { isDevelopment } from '@/tech/development.tech'
+import { getIconUrl } from '@/tech/paths.tech'
 import { SxProps } from '@mui/material'
 import { useMemo } from 'react'
 import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy/hooks/useUserTeams'
@@ -41,8 +42,7 @@ export default function useToolsMenuItems() {
 
 			return {
 				title: team.name,
-				image:
-					'https://cdn0.iconfinder.com/data/icons/social-media-glyph-1/64/Facebook_Social_Media_User_Interface-38-512.png',
+				image: getIconUrl('team-default.webp'),
 				asyncImage: hasLogo
 					? async () => {
 							const url =
@@ -63,12 +63,12 @@ export default function useToolsMenuItems() {
 		return [
 			{
 				title: 'Playlisty',
-				image: 'https://cdn-icons-png.flaticon.com/512/636/636224.png',
+				image: getIconUrl('playlists.png'),
 				to: 'usersPlaylists',
 			},
 			{
 				title: 'Moje písně',
-				image: 'https://cdn-icons-png.flaticon.com/512/10627/10627120.png',
+				image: getIconUrl('users_song_list.png'),
 				to: 'usersSongs',
 			},
 
@@ -78,16 +78,16 @@ export default function useToolsMenuItems() {
 			// 	to: 'group',
 			// 	toParams: { groupCode: '13ka' },
 			// },
-			{
-				title: 'Hledat tým',
-				image: 'https://static.thenounproject.com/png/79376-200.png',
-				action: () => {
-					dispatchEvent(searchGroupsEvent)
-				},
-				sx: {
-					filter: 'invert(1) brightness(0.1)',
-				},
-			},
+			// {
+			// 	title: 'Hledat tým',
+			// 	image: 'https://static.thenounproject.com/png/79376-200.png',
+			// 	action: () => {
+			// 		dispatchEvent(searchGroupsEvent)
+			// 	},
+			// 	sx: {
+			// 		filter: 'invert(1) brightness(0.1)',
+			// 	},
+			// },
 			...(isDevelopment
 				? [
 						{

@@ -13,7 +13,6 @@ import useGroup from '../../../../../hooks/group/useGroup'
 import { usePermissions } from '../../../../../hooks/permissions/usePermissions'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
 import AddUserItem from './components/AddUserItem'
-import GroupUserItem from './components/GroupUserItem'
 
 export default function UsersPanel() {
 	const { guid } = useGroup()
@@ -90,7 +89,7 @@ export default function UsersPanel() {
 								gap: 1,
 							}}
 						>
-							{addUsersState.data?.map((u) => (
+							{/* {addUsersState.data?.map((u) => (
 								<GroupUserItem
 									key={u.guid}
 									user={u}
@@ -99,7 +98,7 @@ export default function UsersPanel() {
 									permissionType="GROUP_ADD_SONG"
 									permissionPayload={guid}
 								/>
-							))}
+							))} */}
 
 							{!editable ? (
 								<></>
@@ -116,11 +115,11 @@ export default function UsersPanel() {
 								/>
 							)}
 
-							{!editable && addUsersState.data?.length == 0 && (
+							{/* {!editable && addUsersState.data?.length == 0 && (
 								<Typography variant="body2">
 									Kromě vás zatím nikdo nemůže přidávat nové písně...
 								</Typography>
-							)}
+							)} */}
 						</Box>
 						<Gap value={3} />
 						<Typography variant="subtitle2">Mohou odebírat písně</Typography>
@@ -133,7 +132,7 @@ export default function UsersPanel() {
 								flexWrap: 'wrap',
 							}}
 						>
-							{removeUsersState.data?.map((u) => (
+							{/* {removeUsersState.data?.map((u) => (
 								<GroupUserItem
 									key={u.guid}
 									user={u}
@@ -147,7 +146,7 @@ export default function UsersPanel() {
 								<Typography variant="body2">
 									Kromě vás zatím nikdo nemůže odebírat písně...
 								</Typography>
-							)}
+							)} */}
 
 							{!editable ? (
 								<></>

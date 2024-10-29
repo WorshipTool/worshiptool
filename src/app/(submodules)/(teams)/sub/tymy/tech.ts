@@ -36,4 +36,11 @@ export type TeamPermissions = {
 	'team.edit_event': {
 		eventGuid: string
 	}
+
+	'team.pin_playlist': {
+		teamGuid: string
+	}
+	'team.unpin_playlist': {
+		teamGuid: string
+	}
 }

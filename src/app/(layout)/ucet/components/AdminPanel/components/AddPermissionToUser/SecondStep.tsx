@@ -19,7 +19,7 @@ type SecondStepProps = {
 }
 
 export default function SecondStep(props: SecondStepProps) {
-	const permissions = usePermissions(props.userGuid)
+	const permissions = usePermissions()
 
 	const [addingNew, setAddingNew] = useState(false)
 	const onAddNew = () => {
@@ -42,14 +42,14 @@ export default function SecondStep(props: SecondStepProps) {
 							</Typography>
 							{permissions.permissions.length > 0 ? (
 								<>
-									{permissions.permissions.map((permission) => (
+									{/* {permissions.permissions.map((permission) => (
 										<PermissionItem
 											key={permission.guid}
 											permission={permission}
 											userGuid={props.userGuid}
 											onSubmit={() => permissions.reload()}
 										/>
-									))}
+									))} */}
 								</>
 							) : (
 								<>

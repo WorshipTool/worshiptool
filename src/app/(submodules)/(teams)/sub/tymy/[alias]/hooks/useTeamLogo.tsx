@@ -7,6 +7,7 @@ import { getUrl } from '@/api/urls'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { getIconUrl } from '@/tech/paths.tech'
 import { useMemo } from 'react'
 
 export const EVENT_NAME_CHANGE_TEAM_LOGO = 'changeTeamLogo'
@@ -39,8 +40,7 @@ export const useTeamLogo = () => {
 	}, [apiState, hasLogo])
 
 	const url = useMemo(() => {
-		if (!hasLogo || !asyncLogo.data)
-			return 'https://cdn0.iconfinder.com/data/icons/social-media-glyph-1/64/Facebook_Social_Media_User_Interface-38-512.png'
+		if (!hasLogo || !asyncLogo.data) return getIconUrl('team-default.webp')
 		return asyncLogo.data
 	}, [apiState, hasLogo, asyncLogo])
 

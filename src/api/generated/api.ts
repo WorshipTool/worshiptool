@@ -727,6 +727,19 @@ export interface GetPackAliasFromSourceUrlOutDto {
 /**
  * 
  * @export
+ * @interface GetPinnedPlaylistsToTeamOutDto
+ */
+export interface GetPinnedPlaylistsToTeamOutDto {
+    /**
+     * 
+     * @type {Array<TeamPlaylistData>}
+     * @memberof GetPinnedPlaylistsToTeamOutDto
+     */
+    'playlists': Array<TeamPlaylistData>;
+}
+/**
+ * 
+ * @export
  * @interface GetPlaylistsResult
  */
 export interface GetPlaylistsResult {
@@ -1400,6 +1413,25 @@ export interface PermissionUserGroup {
      * @memberof PermissionUserGroup
      */
     'permissions': Array<Permission>;
+}
+/**
+ * 
+ * @export
+ * @interface PinPlaylistToTeamInDto
+ */
+export interface PinPlaylistToTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PinPlaylistToTeamInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PinPlaylistToTeamInDto
+     */
+    'teamGuid': string;
 }
 /**
  * 
@@ -3085,6 +3117,12 @@ export interface Team {
      * @memberof Team
      */
     'logo': Image;
+    /**
+     * 
+     * @type {Array<Playlist>}
+     * @memberof Team
+     */
+    'pinnedPlaylists': Array<Playlist>;
 }
 /**
  * 
@@ -3360,6 +3398,25 @@ export interface TeamOfUserDto {
      * @memberof TeamOfUserDto
      */
     'logoGuid': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface TeamPlaylistData
+ */
+export interface TeamPlaylistData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamPlaylistData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamPlaylistData
+     */
+    'title': string;
 }
 /**
  * 
@@ -11471,6 +11528,259 @@ export class TeamMembersApi extends BaseAPI {
      */
     public teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: RawAxiosRequestConfig) {
         return TeamMembersApiFp(this.configuration).teamMemberControllerSetMemberRole(setMemberRoleInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamPlaylistsApi - axios parameter creator
+ * @export
+ */
+export const TeamPlaylistsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerGetPinnedPlaylistsToTeam: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamPlaylistsControllerGetPinnedPlaylistsToTeam', 'teamGuid', teamGuid)
+            const localVarPath = `/submodules/teams/playlists/getpinnedplaylists`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerPinPlaylistToTeam: async (pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pinPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamPlaylistsControllerPinPlaylistToTeam', 'pinPlaylistToTeamInDto', pinPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/playlists/pinplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pinPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerUnpinPlaylistFromTeam: async (pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pinPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamPlaylistsControllerUnpinPlaylistFromTeam', 'pinPlaylistToTeamInDto', pinPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/playlists/unpinplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pinPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamPlaylistsApi - functional programming interface
+ * @export
+ */
+export const TeamPlaylistsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamPlaylistsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPinnedPlaylistsToTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamPlaylistsApi - factory interface
+ * @export
+ */
+export const TeamPlaylistsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamPlaylistsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: any): AxiosPromise<GetPinnedPlaylistsToTeamOutDto> {
+            return localVarFp.teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamPlaylistsApi - object-oriented interface
+ * @export
+ * @class TeamPlaylistsApi
+ * @extends {BaseAPI}
+ */
+export class TeamPlaylistsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

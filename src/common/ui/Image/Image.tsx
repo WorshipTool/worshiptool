@@ -24,8 +24,8 @@ export function Image({
 			alt={alt}
 			placeholder="blur"
 			blurDataURL={defaultSrc}
-			width={5}
-			height={5}
+			width={parseInt(width.toString())}
+			height={parseInt(height.toString())}
 			style={{
 				width: width,
 				height: height,

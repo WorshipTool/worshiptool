@@ -1,4 +1,5 @@
 import { Button } from '@/common/ui/Button'
+import { Image } from '@/common/ui/Image'
 import { Box, CircularProgress } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
@@ -43,7 +44,7 @@ export default function LogoPanel(props: LogoPanelProps) {
 					{props.loading ? (
 						<CircularProgress />
 					) : (
-						<img
+						<Image
 							alt="logo"
 							src={props.imageUrl}
 							width={'100%'}

@@ -14,7 +14,7 @@ import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { CalendarMonth, EditCalendar, MoreHoriz } from '@mui/icons-material'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export default function TeamPlaylistMoreButton() {
 	const { title, guid } = useInnerPlaylist()
@@ -29,7 +29,7 @@ export default function TeamPlaylistMoreButton() {
 			)
 		}, [guid])
 
-	const hasEvent = Boolean(apiState.data)
+	const hasEvent = useMemo(() => Boolean(apiState.data), [apiState.data])
 
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [anchor, setAnchor] = useState<null | HTMLElement>(null)
@@ -64,6 +64,8 @@ export default function TeamPlaylistMoreButton() {
 		teamGuid,
 	})
 
+	const hasPermissionToDeletePlaylist = true
+
 	const onSubmit = () => {
 		reload()
 	}
@@ -90,6 +92,16 @@ export default function TeamPlaylistMoreButton() {
 						disabled: apiState.loading,
 					},
 			  ]),
+		// ...(hasPermissionToDeletePlaylist
+		// 	? [
+		// 			{
+		// 				title: <Typography color="error">Odstranit</Typography>,
+		// 				subtitle: 'Smazat playlist',
+		// 				icon: <Delete color="error" />,
+		// 				onClick: () => {},
+		// 			},
+		// 	  ]
+		// 	: []),
 	]
 	return (
 		<>

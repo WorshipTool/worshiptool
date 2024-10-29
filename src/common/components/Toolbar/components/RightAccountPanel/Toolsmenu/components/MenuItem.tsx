@@ -1,4 +1,5 @@
 'use client'
+import { Image } from '@/common/ui/Image'
 import { CommonLinkProps, Link } from '@/common/ui/Link/Link'
 import { RoutesKeys } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
@@ -71,10 +72,11 @@ export default function MenuItem<T extends RoutesKeys>(
 						filter: 'drop-shadow(1px 4px 2px #00000033)',
 					}}
 				>
-					<img
+					<Image
+						alt={props.title}
 						src={imageUrl}
-						height={'50px'}
-						width={'60px'}
+						height={50}
+						width={60}
 						style={{
 							objectFit: 'contain',
 							pointerEvents: 'none',

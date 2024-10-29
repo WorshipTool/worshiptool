@@ -247,9 +247,9 @@ export default function TeamEventPopup({
 										color="error"
 										tooltip="Smazat událost a ponechat playlist"
 										variant={deleteSecond ? 'contained' : 'text'}
-										onClick={() => {
+										onClick={async () => {
 											if (deleteSecond) {
-												deleteEvent(data.guid || '')
+												await deleteEvent(data.guid || '')
 												props.onClose()
 												props.onDelete?.()
 												setDeleteSecond(false)
@@ -355,7 +355,9 @@ export default function TeamEventPopup({
 								}}
 							/>
 						)}
-						<Typography size={'small'}>Detail události</Typography>
+						<Typography size={'small'}>
+							{props.createMode ? 'Vytvoření události' : 'Detail události'}
+						</Typography>
 
 						<Box
 							sx={{
@@ -406,8 +408,12 @@ export default function TeamEventPopup({
 						<Box display={'flex'} flexDirection={'column'}>
 							<>
 								<TeamEventPopupEditableInput
-									placeholder="Zadejte název"
-									tooltip="Přejmenovat událost"
+									placeholder="Název události"
+									tooltip={
+										props.createMode
+											? 'Pojmenovat událost'
+											: 'Přejmenovat událost'
+									}
 									value={title}
 									editable={editable}
 									autoFocus
@@ -416,28 +422,32 @@ export default function TeamEventPopup({
 							</>
 							<Gap value={0.5} />
 							<Tooltip label="Změnit popisek" disabled={!editable}>
-								<TextField
-									placeholder="Přidejte popisek"
-									// tooltip="Změnit popisek"
-									value={description}
-									sx={{
-										fontWeight: 400,
-										fontSize: '1rem',
-										color: 'grey.700',
-										borderRadius: 1,
-										'&:hover': editable
-											? {
-													bgcolor: 'grey.100',
-											  }
-											: {},
-										'&:focus-within': editable ? { bgcolor: 'grey.100' } : {},
-										paddingX: 1,
-										paddingY: 0.5,
-										userSelect: 'none',
-									}}
-									onChange={onDescriptionChange}
-									disabled={!editable}
-								/>
+								{editable || (description && description?.length > 0) ? (
+									<TextField
+										placeholder="Přidejte popisek"
+										// tooltip="Změnit popisek"
+										value={description}
+										sx={{
+											fontWeight: 400,
+											fontSize: '1rem',
+											color: 'grey.700',
+											borderRadius: 1,
+											'&:hover': editable
+												? {
+														bgcolor: 'grey.100',
+												  }
+												: {},
+											'&:focus-within': editable ? { bgcolor: 'grey.100' } : {},
+											paddingX: 1,
+											paddingY: 0.5,
+											userSelect: 'none',
+										}}
+										onChange={onDescriptionChange}
+										disabled={!editable}
+									/>
+								) : (
+									<></>
+								)}
 							</Tooltip>
 							{/* <Gap />
 							<Divider

@@ -1,26 +1,20 @@
 import { PlaylistData } from '@/api/generated'
-import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import useUsersTeamPlaylists from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useUsersTeamPlaylists'
 import Menu from '@/common/components/Menu/Menu'
-import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
-import { useMemo } from 'react'
 
 type TeamPlaylistSelectProps = {
 	open: boolean
 	onClose: () => void
 	anchor: HTMLElement | null
 	onSelect: (playlist: PlaylistData) => void
+	filterFunc?: (playlist: PlaylistData) => boolean
 }
 export default function TeamPlaylistSelect(props: TeamPlaylistSelectProps) {
-	const { playlists: allUsersPlaylists } = useUsersPlaylists()
-	const { guid } = useInnerTeam()
+	const { playlists: allPlaylists } = useUsersTeamPlaylists()
 
-	const playlists = useMemo(() => {
-		return (
-			allUsersPlaylists?.filter((p, i) => {
-				return p.teamGuid === guid
-			}) || []
-		)
-	}, [allUsersPlaylists])
+	const playlists = props.filterFunc
+		? allPlaylists.filter(props.filterFunc)
+		: allPlaylists
 
 	return (
 		<Menu

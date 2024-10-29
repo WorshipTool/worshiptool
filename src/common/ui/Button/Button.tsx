@@ -80,7 +80,6 @@ export const Button = memo(
 						id={props.id}
 						className={props.className}
 						ref={ref}
-                        
 						sx={{
 							width: '100%',
 							height: '100%',

@@ -19,6 +19,7 @@ import {
 	TeamGettingApi,
 	TeamJoiningApi,
 	TeamMembersApi,
+	TeamPlaylistsApi,
 } from '@/api/generated'
 import { useMemo } from 'react'
 import useAuth from '../auth/useAuth'
@@ -50,6 +51,7 @@ export const useApi = () => {
 			teamJoiningApi: new TeamJoiningApi(apiConfiguration),
 			teamMembersApi: new TeamMembersApi(apiConfiguration),
 			teamEventsApi: new TeamEventsApi(apiConfiguration),
+			teamPlaylistsApi: new TeamPlaylistsApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

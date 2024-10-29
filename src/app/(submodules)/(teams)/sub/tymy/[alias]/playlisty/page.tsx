@@ -4,6 +4,7 @@ import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import NextMonthPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/NextMonthPanel'
 import OtherPlaylistPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/OtherPlaylistPanel'
 import PreviousPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousPanel'
+import UsersTeamPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/UsersTeamPlaylistsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Gap } from '@/common/ui/Gap'
 import { isDateTodayOrInFuture } from '@/tech/date/date.tech'
@@ -31,18 +32,20 @@ function Page() {
 		<Box>
 			<TeamPageTitle>Playlisty</TeamPageTitle>
 
-			<NextMonthPanel
-				events={futureEvents}
-				loading={apiState.loading}
-				allEventsCount={events.length}
-			/>
-			<Gap value={3} />
 			<Box display={'flex'} flexDirection={'row'} gap={4} flexWrap={'wrap'}>
 				<Box flex={1}>
-					<PreviousPanel events={pastEvents} loading={apiState.loading} />
-				</Box>
-				<Box flex={1}>
+					<NextMonthPanel
+						events={futureEvents}
+						loading={apiState.loading}
+						allEventsCount={events.length}
+					/>
+					<Gap value={3} />
+					<UsersTeamPlaylistsPanel />
+					<Gap value={3} />
 					<OtherPlaylistPanel />
+				</Box>
+				<Box>
+					<PreviousPanel events={pastEvents} loading={apiState.loading} />
 				</Box>
 			</Box>
 		</Box>

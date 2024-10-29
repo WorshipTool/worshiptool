@@ -23,13 +23,14 @@ type Merge<T extends PermissionsTypes[]> = T extends [
 
 // type Merge<T extends Record<string, any>> = T
 
+// Return type of useProvidePermissions
 type Rt = ReturnType<typeof useProvidePermissions>
 
 const permissionsContext = createContext<Rt>({
 	notInitialized: true,
 } as Rt)
 
-export const usePermissions = () => {
+export const usePermissions = (): Rt => {
 	const d = useContext(permissionsContext)
 	if (d.notInitialized) {
 		throw new Error('usePermissions must be used inside PermissionsProvider')

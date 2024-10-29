@@ -1,4 +1,5 @@
 'use client'
+import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Box, styled } from '@mui/material'
 import React from 'react'
 
@@ -23,12 +24,16 @@ const Container = styled(Box)(({ theme }) => ({
 type ClickableProps = {
 	children?: React.ReactNode
 	disabled?: boolean
+	tooltip?: string
+	tooltipPlacement?: React.ComponentProps<typeof Tooltip>['placement']
 } & React.HTMLAttributes<HTMLDivElement>
 
 export function Clickable(props: ClickableProps) {
 	return props.disabled ? (
 		props.children
 	) : (
-		<Container {...props}>{props.children}</Container>
+		<Tooltip label={props.tooltip} placement={props.tooltipPlacement}>
+			<Container {...props}>{props.children}</Container>
+		</Tooltip>
 	)
 }

@@ -70,7 +70,7 @@ export default function GroupToolbarDesktop({
 						transition: 'height 0.2s ease',
 					}}
 				>
-					<img
+					{/* <img
 						src="/assets/13ka-title.svg"
 						height={700}
 						style={{
@@ -88,7 +88,7 @@ export default function GroupToolbarDesktop({
 											'rotate(-8deg) translate(80px, -90px) scale(130%)',
 								  }),
 						}}
-					></img>
+					></img> */}
 				</StyledContainer>
 			</Box>
 			<Box
