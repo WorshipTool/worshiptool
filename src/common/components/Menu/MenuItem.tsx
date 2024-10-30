@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 
 export type MenuItemObjectType = {
 	onClick?: (e: React.MouseEvent<HTMLElement>) => void
-	title: string
+	title: string | ReactElement
 	subtitle?: string
 	icon?: ReactElement
 	disabled?: boolean
@@ -11,7 +11,7 @@ export type MenuItemObjectType = {
 
 export default function MenuItem(item: MenuItemObjectType) {
 	return (
-		<MIt key={item.title} onClick={item.onClick} disabled={item.disabled}>
+		<MIt onClick={item.onClick} disabled={item.disabled}>
 			{item.icon && (
 				<ListItemIcon>
 					{/* <MoreHoriz fontSize="small" /> */}

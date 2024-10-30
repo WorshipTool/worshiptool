@@ -2,7 +2,6 @@ import { TeamEventData } from '@/api/generated'
 import PreviousItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousItem'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { Schedule } from '@mui/icons-material'
 import { Box } from '@mui/material'
 
 type PreviousPanelProps = {
@@ -14,7 +13,7 @@ export default function PreviousPanel(props: PreviousPanelProps) {
 	return (
 		<Box minWidth={350}>
 			<Box display={'flex'} gap={1}>
-				<Schedule />
+				{/* <Schedule /> */}
 				<Typography variant="h6">Odehrané playlisty</Typography>
 			</Box>
 			<Gap />
