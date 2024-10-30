@@ -2,7 +2,7 @@
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import NextMonthPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/NextMonthPanel'
-import OtherPlaylistPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/OtherPlaylistPanel'
+import PinnedPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PinnedPlaylistsPanel'
 import PreviousPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousPanel'
 import UsersTeamPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/UsersTeamPlaylistsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -29,8 +29,11 @@ function Page() {
 	}, [events])
 
 	return (
-		<Box>
+		<Box display={'flex'} flexDirection={'column'} gap={3}>
 			<TeamPageTitle>Playlisty</TeamPageTitle>
+
+			{/* Your recent playlists */}
+			<UsersTeamPlaylistsPanel />
 
 			<Box display={'flex'} flexDirection={'row'} gap={4} flexWrap={'wrap'}>
 				<Box flex={1}>
@@ -40,9 +43,7 @@ function Page() {
 						allEventsCount={events.length}
 					/>
 					<Gap value={3} />
-					<UsersTeamPlaylistsPanel />
-					<Gap value={3} />
-					<OtherPlaylistPanel />
+					<PinnedPlaylistsPanel />
 				</Box>
 				<Box>
 					<PreviousPanel events={pastEvents} loading={apiState.loading} />

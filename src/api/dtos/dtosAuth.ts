@@ -25,6 +25,6 @@ export function loginResultDTOToUser(res: JwtResult): UserDto {
 		...res.user,
 		guid: res.user.guid as UserGuid,
 		token: res.token,
-		// pictureUrl: pictureUrl || undefined,
+		pictureUrl: pictureUrl || undefined,
 	}
 }

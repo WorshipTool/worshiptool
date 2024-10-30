@@ -3,7 +3,7 @@ import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { Box, SxProps, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './EventPopupEditableInput.styles.css'
 
 type TeamEventPopupEditableInputProps = {
@@ -23,6 +23,10 @@ export default function TeamEventPopupEditableInput({
 	...props
 }: TeamEventPopupEditableInputProps) {
 	const [value, setValue] = useState(props.startValue || props.value)
+
+	useEffect(() => {
+		setValue(props.value)
+	}, [props.value])
 
 	const onChange = (value: string) => {
 		setValue(value)

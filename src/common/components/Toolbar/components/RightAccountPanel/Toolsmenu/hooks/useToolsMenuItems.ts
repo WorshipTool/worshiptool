@@ -92,14 +92,13 @@ export default function useToolsMenuItems() {
 				? [
 						{
 							title: 'Test',
-							image: 'https://cdn-icons-png.flaticon.com/512/5334/5334823.png',
+							image: getIconUrl('test.png'),
 							to: 'test',
 							hidden: !isAdmin(),
 						},
 						{
 							title: 'Components',
-							image:
-								'https://icons.veryicon.com/png/o/miscellaneous/tymon/basic-components.png',
+							image: getIconUrl('components.png'),
 							to: 'testComponents',
 							hidden: !isAdmin(),
 						},

@@ -4,6 +4,7 @@ import {
 	TeamEventMemberData,
 } from '@/api/generated'
 import EventPopupGridRow from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/EventPopupGridRow'
+import TeamEventMemberChip from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventMemberChip'
 import TeamEventPopupEditableInput from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopupEditableInput'
 import TeamMemberSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamMemberSelect/TeamMemberSelect'
 import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamPlaylistSelect/TeamPlaylistSelect'
@@ -34,6 +35,7 @@ import { DatePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
+import { useUserProfileImage } from '../../../../../../../../hooks/useUserProfileImage'
 type Member = TeamEventMemberData
 export type TeamEventPopupData = {
 	guid?: string
@@ -75,7 +77,7 @@ export default function TeamEventPopup({
 
 	const {
 		guid,
-		events: { deleteEvent, editEvent, addEvent },
+		events: { deleteEvent, editEvent, addEvent, events },
 	} = useInnerTeam()
 
 	const { alias } = useSmartParams('team')
@@ -132,11 +134,21 @@ export default function TeamEventPopup({
 	const onPlaylistSelect = (playlist: PlaylistData) => {
 		setPlaylist(playlist)
 		setPlaylistSelectOpen(false)
+
+		if (!title || title === '') {
+			setTitle(playlist.title)
+		}
 	}
 
 	const openPlaylistSelect = (e: React.MouseEvent<HTMLElement>) => {
 		setPlaylistSelectOpen(true)
 		setPlaylistSelectAnchor(e.currentTarget)
+	}
+
+	// Filter function for the playlist select, filter out playlists that are already planned
+	const playlistFilterFunc = (playlist: PlaylistData) => {
+		if (!playlist) return false
+		return !events?.some((event) => event.playlist?.guid === playlist.guid)
 	}
 
 	const [date, setDate] = useState<Date | null>(data.date || null)
@@ -229,6 +241,8 @@ export default function TeamEventPopup({
 		if (!props.createMode) onReset()
 		props.onClose()
 	}
+
+	const leaderImage = useUserProfileImage(leader?.userGuid)
 
 	return (
 		<>
@@ -505,7 +519,7 @@ export default function TeamEventPopup({
 								>
 									{leader && (
 										<Chip
-											avatar={<Avatar />}
+											avatar={<Avatar src={leaderImage} />}
 											label={leader.firstName + ' ' + leader.lastName}
 											// size="small"
 											// color="primary"
@@ -539,15 +553,11 @@ export default function TeamEventPopup({
 							{/* Members */}
 							<EventPopupGridRow label="Členové">
 								{members?.map((member, index) => (
-									<Chip
+									<TeamEventMemberChip
 										key={member.userGuid}
-										avatar={<Avatar />}
-										label={member.firstName + ' ' + member.lastName}
-										// size="small"
-										onDelete={
-											editable ? () => onMemberRemove(member) : undefined
-										}
-										onClick={() => {}}
+										member={member}
+										editable={editable}
+										onMemberRemove={() => onMemberRemove(member)}
 									/>
 								))}
 								{editable && (
@@ -610,6 +620,7 @@ export default function TeamEventPopup({
 									onClose={() => setPlaylistSelectOpen(false)}
 									anchor={playlistSelectAnchor}
 									onSelect={onPlaylistSelect}
+									filterFunc={playlistFilterFunc}
 								/>
 							</EventPopupGridRow>
 						</Grid>

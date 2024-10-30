@@ -1,6 +1,7 @@
 'use client'
 
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { useUserProfileImage } from '@/hooks/useUserProfileImage'
 import { AddBox, Apps, Login } from '@mui/icons-material'
 import {
 	Avatar,
@@ -33,11 +34,11 @@ const Container = styled(Box)(({ theme }) => ({
 }))
 
 function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {
-	const { info } = useAuth()
+	const pictureUrl = useUserProfileImage()
 	return (
 		<Box sx={{ ...sx }}>
 			<Avatar
-				src={info.pictureUrl || '/assets/profile-image-default.png'}
+				src={pictureUrl}
 				alt="Profilový obrázek"
 				sx={{
 					width: size,

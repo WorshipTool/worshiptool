@@ -17,10 +17,12 @@ const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
 })
 
 export default function Tooltip(props: CustomTooltipProps) {
-	return props.disabled ? (
+	const title = props.title || props.label
+
+	return props.disabled || !title || title.length === 0 ? (
 		<>{props.children}</>
 	) : (
-		<Tltp {...props} title={props.title || props.label}>
+		<Tltp {...props} title={title}>
 			<MyComponent>{props.children}</MyComponent>
 		</Tltp>
 	)

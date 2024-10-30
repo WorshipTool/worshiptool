@@ -1,10 +1,14 @@
 'use client'
 import { TeamEventData } from '@/api/generated'
 import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopup'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Clickable } from '@/common/ui/Clickable'
+import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
-import { Box, useTheme } from '@mui/material'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { KeyboardArrowRight } from '@mui/icons-material'
+import { Box, Chip, useTheme } from '@mui/material'
 import { useMemo } from 'react'
 
 type NextMonthItemProps = {
@@ -26,11 +30,29 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 		setOpenedEventGuid(open ? props.data.guid : null)
 	}
 
+	const navigate = useSmartNavigate()
+
+	const { alias: teamAlias } = useInnerTeam()
+
+	const diffTitle: boolean = props.data.title !== props.data.playlist.title
+
 	const date = new Date(props.data.date)
+
+	const dateString = date.toLocaleDateString('cs-CZ', {
+		day: 'numeric',
+		month: 'long',
+	})
 
 	return (
 		<>
-			<Clickable onClick={() => setOpen(true)}>
+			<Clickable
+				onClick={() =>
+					navigate('teamPlaylist', {
+						alias: teamAlias,
+						guid: props.data.playlist.guid,
+					})
+				}
+			>
 				<Box
 					sx={{
 						width: theme.spacing(22),
@@ -55,16 +77,32 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 							flexDirection: 'column',
 						}}
 					>
-						<Typography strong>{props.data.title}</Typography>
+						<Box
+							display={'flex'}
+							gap={1}
+							{...(!diffTitle
+								? {
+										flexDirection: 'column-reverse',
+										// alignItems: 'center',
+								  }
+								: {})}
+						>
+							<Typography strong>{props.data.title}</Typography>
+							<Box display={'flex'}>
+								<Chip label={dateString} size="small" />
+							</Box>
+						</Box>
 						{/* <CalendarMonth
 								color="inherit"
 								sx={{
 									color: 'grey.700',
 								}}
 							/> */}
-						<Typography color="grey.700">
-							{date.toLocaleDateString()}
-						</Typography>
+						{diffTitle && (
+							<Typography color="grey.700">
+								{props.data.playlist.title}
+							</Typography>
+						)}
 					</Box>
 
 					<Box
@@ -78,6 +116,31 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 							transform: 'translateY(0%) translateX(50%) rotate(-45deg)',
 						}}
 					></Box>
+
+					<Box
+						sx={{
+							position: 'absolute',
+							right: 0,
+							bottom: 0,
+							padding: 1,
+						}}
+					>
+						<IconButton
+							tooltip="Otevřít detail"
+							onClick={(e) => {
+								e.stopPropagation()
+								setOpen(true)
+							}}
+							sx={
+								{
+									// bgcolor: 'grey.100',
+									// borderRadius: '50%',
+								}
+							}
+						>
+							<KeyboardArrowRight />
+						</IconButton>
+					</Box>
 				</Box>
 			</Clickable>
 			<TeamEventPopup

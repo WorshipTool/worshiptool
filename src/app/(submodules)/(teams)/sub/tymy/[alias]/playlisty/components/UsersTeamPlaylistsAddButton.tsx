@@ -1,0 +1,73 @@
+import { PostCreatePlaylistResult } from '@/api/generated'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Clickable } from '@/common/ui/Clickable'
+import { useApi } from '@/hooks/api/useApi'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { useApiState } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { Add } from '@mui/icons-material'
+import { Box, IconButton, useTheme } from '@mui/material'
+import { useCallback } from 'react'
+
+export default function UsersTeamPlaylistsAddButton() {
+	const { playlistEditingApi, teamEditingApi } = useApi()
+	const { alias, guid } = useInnerTeam()
+
+	const { turnOn } = useCurrentPlaylist()
+
+	const navigate = useSmartNavigate()
+
+	const theme = useTheme()
+
+	const { fetchApiState, apiState } = useApiState<PostCreatePlaylistResult>()
+
+	const onCreateClick = useCallback(() => {
+		fetchApiState(
+			async () => {
+				const p = await handleApiCall(
+					playlistEditingApi.playlistEditingControllerCreatePlaylist()
+				)
+
+				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+					teamGuid: guid,
+					playlistGuid: p.guid,
+				})
+
+				return p
+			},
+			(d) => {
+				turnOn(d.guid as PlaylistGuid)
+
+				navigate('teamPlaylist', {
+					guid: d.guid,
+					alias,
+				})
+			}
+		)
+	}, [guid])
+	return (
+		<Clickable tooltip="Vytvořit playlist" onClick={() => onCreateClick()}>
+			<Box
+				sx={{
+					// padding: 2,
+					borderRadius: 3,
+					// bgcolor: 'grey.100',
+					// border: '1px solid',
+					borderColor: 'grey.400',
+					// width: theme.spacing(6),
+					height: theme.spacing(6),
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				<IconButton>
+					<Add />
+				</IconButton>
+			</Box>
+		</Clickable>
+	)
+}

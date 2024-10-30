@@ -1,15 +1,15 @@
 'use client'
 
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import useUsersTeamPlaylists from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useUsersTeamPlaylists'
+import UsersTeamPlaylistsAddButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/UsersTeamPlaylistsAddButton'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Clickable } from '@/common/ui/Clickable'
 import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { VpnLock } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import { Schedule } from '@mui/icons-material'
+import { Box, useTheme } from '@mui/material'
 
 export default function UsersTeamPlaylistsPanel() {
 	const { playlists } = useUsersTeamPlaylists()
@@ -17,17 +17,19 @@ export default function UsersTeamPlaylistsPanel() {
 
 	const navigate = useSmartNavigate()
 
+	const theme = useTheme()
+
 	return (
-		<TeamCard
+		<Box
 		// sx={{ border: '2px solid', borderColor: 'primary.main' }}
 		>
-			<Box display={'flex'} gap={1}>
-				<VpnLock />
-				<Typography variant="h6">Tvé soukromé playlisty</Typography>
+			<Box display={'flex'} gap={1} alignItems={'center'}>
+				<Schedule />
+				<Typography variant="h6">Tvé nedávné</Typography>
 			</Box>
 			<Gap />
-			<Box display={'flex'} gap={1} flexWrap={'wrap'}>
-				{playlists.map((playlist) => (
+			<Box display={'flex'} gap={1} flexWrap={'wrap'} alignItems={'center'}>
+				{playlists.slice(0, 5).map((playlist) => (
 					<Tooltip key={playlist.guid} label="Otevřít playlist">
 						<Clickable
 							key={playlist.guid}
@@ -41,19 +43,33 @@ export default function UsersTeamPlaylistsPanel() {
 							<Box
 								key={playlist.guid}
 								sx={{
-									padding: 1,
-									borderRadius: 1,
-									// bgcolor: 'secondary.main',
+									// padding: 2,
+									borderRadius: 3,
+									bgcolor: 'grey.100',
 									border: '1px solid',
 									borderColor: 'grey.400',
+									width: theme.spacing(22),
+									height: theme.spacing(10),
+									display: 'flex',
 								}}
 							>
-								<Typography>{playlist.title}</Typography>
+								<Box
+									margin={2}
+									display={'flex'}
+									flexDirection={'column'}
+									justifyContent={'space-between'}
+								>
+									<Typography strong>{playlist.title}</Typography>
+									<Typography color="grey.500" size={'small'} strong>
+										Otevřeno před chvílí
+									</Typography>
+								</Box>
 							</Box>
 						</Clickable>
 					</Tooltip>
 				))}
+				<UsersTeamPlaylistsAddButton />
 			</Box>
-		</TeamCard>
+		</Box>
 	)
 }

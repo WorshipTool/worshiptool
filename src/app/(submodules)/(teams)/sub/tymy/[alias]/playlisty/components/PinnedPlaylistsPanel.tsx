@@ -1,23 +1,21 @@
 import { PlaylistData } from '@/api/generated'
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamPlaylistSelect/TeamPlaylistSelect'
+import PinnedPlaylistPanelItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PinnedPlaylistPanelItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { Button } from '@/common/ui/Button'
 import { Clickable } from '@/common/ui/Clickable'
 import { Gap } from '@/common/ui/Gap'
-import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
-import { Close, PushPin } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import { PushPin } from '@mui/icons-material'
+import { Box, useTheme } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 
-export default function OtherPlaylistPanel() {
+export default function PinnedPlaylistsPanel() {
 	const [open, setOpen] = useState(false)
 	const [anchor, setAnchor] = useState<HTMLElement | null>(null)
 
@@ -94,20 +92,18 @@ export default function OtherPlaylistPanel() {
 		'team.pin_playlist',
 		{ teamGuid }
 	)
-	const hasPermissionToRemove = usePermission<TeamPermissions>(
-		'team.unpin_playlist',
-		{ teamGuid }
-	)
+
+	const theme = useTheme()
 
 	return !hasPermissionToAdd && pinnedPlaylists?.length === 0 ? null : (
-		<TeamCard>
-			<Box
+		<Box display={'flex'} flexDirection={'column'}>
+			{/* <Box
 				display={'flex'}
 				flexDirection={'row'}
 				justifyContent={'space-between'}
 			>
 				<Typography variant="h6">Připnuté playlisty</Typography>
-				<Box display={'flex'}>
+				{/* <Box display={'flex'}>
 					{hasPermissionToAdd && (
 						<Button
 							variant="outlined"
@@ -119,85 +115,42 @@ export default function OtherPlaylistPanel() {
 							Připnout playlist
 						</Button>
 					)}
-				</Box>
+				</Box> 
 			</Box>
-			<Gap />
-			<Box display={'flex'} flexDirection={'row'} gap={1}>
+			<Gap /> */}
+			<Box display={'flex'} flexDirection={'row'} gap={1} flexWrap={'wrap'}>
 				{pinnedPlaylists?.map((playlist) => (
-					<Clickable
-						tooltip="Otevřít playlist"
+					<PinnedPlaylistPanelItem
+						data={playlist}
+						onRemove={() => onRemove(playlist.guid)}
 						key={playlist.guid}
-						onClick={() =>
-							navigate('teamPlaylist', {
-								alias: teamAlias,
-								guid: playlist.guid,
-							})
-						}
-					>
-						<Box
-							key={playlist.guid}
-							display={'flex'}
-							justifyContent={'space-between'}
-							alignItems={'center'}
-							flexDirection={'column'}
-							sx={{
-								// width: 150,
-								// aspectRatio: '1 / 1',
-								bgcolor: 'secondary.main',
-								borderRadius: 2,
-								overflow: 'hidden',
-							}}
-						>
-							<Box
-								flex={1}
-								sx={{
-									userSelect: 'none',
-									cursor: 'pointer',
-								}}
-								margin={2}
-								display={'flex'}
-								flexDirection={'row'}
-								gap={1}
-								alignItems={'center'}
-								justifyContent={'center'}
-							>
-								<PushPin />
-								<Typography key={playlist.guid}>{playlist.title}</Typography>
-								{hasPermissionToRemove && (
-									<IconButton
-										size="small"
-										onClick={(e) => {
-											onRemove(playlist.guid)
-											e.stopPropagation()
-										}}
-										tooltip="Odebrat z připnutých playlistů"
-									>
-										<Close />
-									</IconButton>
-								)}
-							</Box>
-
-							{/* <Box display={'flex'} gap={1} alignItems={'center'}>
-								{/* <Button
-									size="small"
-									variant="outlined"
-									to="teamPlaylist"
-									toParams={{
-										alias: teamAlias,
-										guid: playlist.guid,
-									}}
-								>
-									Otevřít
-								</Button> */}
-
-							{/* </Box> */}
-						</Box>
-					</Clickable>
+					/>
 				))}
-				{pinnedPlaylists?.length === 0 && (
+				{/* {pinnedPlaylists?.length === 0 && (
 					<Typography italic color="grey.700">
 						Žádné připnuté playlisty
 					</Typography>
+				)} */}
+				{hasPermissionToAdd && !pinApiState.loading && (
+					<Clickable tooltip="Připnout nový playlist" onClick={handleOpen}>
+						<Box
+							sx={{
+								width: theme.spacing(22),
+								aspectRatio: '3/2',
+								bgcolor: 'grey.300',
+								borderRadius: 3,
+								display: 'flex',
+								flexDirection: 'row',
+								gap: 1,
+								justifyContent: 'center',
+								alignItems: 'center',
+								color: 'grey.700',
+							}}
+						>
+							<PushPin />
+							<Typography>Připnout playlist</Typography>
+						</Box>
+					</Clickable>
 				)}
 			</Box>
 			<Gap />
@@ -208,7 +161,8 @@ export default function OtherPlaylistPanel() {
 				anchor={anchor}
 				onSelect={onPlaylistSelect}
 				filterFunc={filterFunc}
+				// anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
 			/>
-		</TeamCard>
+		</Box>
 	)
 }

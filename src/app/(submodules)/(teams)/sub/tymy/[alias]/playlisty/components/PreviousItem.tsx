@@ -1,11 +1,14 @@
 'use client'
 import { TeamEventData } from '@/api/generated'
 import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopup'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Clickable } from '@/common/ui/Clickable'
+import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
-import { Event } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { Event, KeyboardArrowRight } from '@mui/icons-material'
+import { Box, Chip, useTheme } from '@mui/material'
 import { useMemo } from 'react'
 
 type PreviousItemProps = {
@@ -27,6 +30,16 @@ export default function PreviousItem(props: PreviousItemProps) {
 	}
 
 	const date = new Date(props.data.date)
+	const dateString = date.toLocaleDateString('cs-CZ', {
+		day: 'numeric',
+		month: 'long',
+	})
+
+	const diffTitle: boolean = props.data.title !== props.data.playlist.title
+
+	const theme = useTheme()
+	const navigate = useSmartNavigate()
+	const { alias: teamAlias } = useInnerTeam()
 
 	return (
 		// <Clickable>
@@ -48,11 +61,20 @@ export default function PreviousItem(props: PreviousItemProps) {
 				}}
 				display={'flex'}
 				flexDirection={'row'}
-				gap={3}
+				gap={1}
 				alignItems={'center'}
-				onClick={() => setOpen(true)}
+				onClick={() =>
+					navigate('teamPlaylist', {
+						alias: teamAlias,
+						guid: props.data.playlist.guid,
+					})
+				}
+				height={theme.spacing(5)}
 			>
-				<Typography color="grey.700">{date.toLocaleDateString()}</Typography>
+				<Box width={90}>
+					<Chip label={dateString} size="small" icon={<Event />} />
+				</Box>
+				{/* <Typography color="grey.700">{date.toLocaleDateString()}</Typography> */}
 
 				<Box
 					display={'flex'}
@@ -61,16 +83,32 @@ export default function PreviousItem(props: PreviousItemProps) {
 					alignItems={'center'}
 				>
 					{/* <Avatar /> */}
-					<Event />
+					{/* <Event /> */}
 					<Box display={'flex'} flexDirection={'column'}>
 						<Typography strong>{props.data.title}</Typography>
 
-						<Typography color="grey.700">
+						{/* <Typography color="grey.700">
 							Vedoucí:{' '}
 							{props.data.leader.firstName + ' ' + props.data.leader.lastName}
-						</Typography>
+						</Typography> */}
+
+						{diffTitle && (
+							<Typography color="grey.700">
+								{props.data.playlist.title}
+							</Typography>
+						)}
 					</Box>
 				</Box>
+				<Box flex={1} />
+				<IconButton
+					tooltip="Otevřít detail"
+					onClick={(e) => {
+						e.stopPropagation()
+						setOpen(true)
+					}}
+				>
+					<KeyboardArrowRight />
+				</IconButton>
 			</Box>
 			<TeamEventPopup
 				open={open}

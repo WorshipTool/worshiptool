@@ -1,6 +1,7 @@
 import { PlaylistData } from '@/api/generated'
 import useUsersTeamPlaylists from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useUsersTeamPlaylists'
 import Menu from '@/common/components/Menu/Menu'
+import { ComponentProps } from 'react'
 
 type TeamPlaylistSelectProps = {
 	open: boolean
@@ -8,7 +9,7 @@ type TeamPlaylistSelectProps = {
 	anchor: HTMLElement | null
 	onSelect: (playlist: PlaylistData) => void
 	filterFunc?: (playlist: PlaylistData) => boolean
-}
+} & ComponentProps<typeof Menu>
 export default function TeamPlaylistSelect(props: TeamPlaylistSelectProps) {
 	const { playlists: allPlaylists } = useUsersTeamPlaylists()
 
@@ -18,6 +19,7 @@ export default function TeamPlaylistSelect(props: TeamPlaylistSelectProps) {
 
 	return (
 		<Menu
+			{...props}
 			open={props.open}
 			onClose={props.onClose}
 			anchor={props.anchor}

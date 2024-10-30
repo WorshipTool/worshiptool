@@ -24,7 +24,12 @@ const nextConfig = withRoutes({
 	},
 
 	images: {
-		domains: ['localhost'],
+		remotePatterns: [
+			{
+				hostname: 'localhost',
+			},
+		],
+		dangerouslyAllowSVG: true,
 	},
 
 	reactStrictMode: false,

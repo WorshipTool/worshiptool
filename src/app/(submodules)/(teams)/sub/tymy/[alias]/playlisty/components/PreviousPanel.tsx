@@ -17,7 +17,7 @@ export default function PreviousPanel(props: PreviousPanelProps) {
 				<Schedule />
 				<Typography variant="h6">Odehrané playlisty</Typography>
 			</Box>
-
+			<Gap />
 			<Box display={'flex'} flexDirection={'column'} gap={4}>
 				{/* <Box display={'flex'} flexDirection={'column'} gap={1}>
 					<Typography>Listopad 2024</Typography>
