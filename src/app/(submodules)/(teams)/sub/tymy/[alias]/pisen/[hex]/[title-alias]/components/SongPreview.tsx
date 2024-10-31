@@ -2,9 +2,12 @@
 import { CreatedType, SongVariantDto } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
 import TransposePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TransposePanel'
+import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
 import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import PrintVariantButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/PrintButton'
 import EditButtonsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/EditButtonsPanel'
+import MoreTeamSongButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongButton'
+import TeamNotePanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/TeamNotePanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
@@ -115,44 +118,90 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 			<Box display={'flex'} flexDirection={'column'} flex={1} gap={2}>
 				{!inEditMode ? (
 					sheet.getKeyChord() && (
-						<Box display={'flex'} gap={1}>
-							<TransposePanel
-								disabled={hideChords}
-								transpose={function (i: number): void {
-									sheet.transpose(i)
-									rerender()
-								}}
-							/>
-							{hideChords ? (
-								<Button
-									onClick={() => setHideChords(false)}
-									variant="text"
-									size="small"
-								>
-									Zobrazit akordy
-								</Button>
-							) : (
-								<Button
-									onClick={() => setHideChords(true)}
-									variant="text"
-									color="grey.600"
-									size="small"
-								>
-									Skrýt akordy
-								</Button>
-							)}
+						<Box
+							display={'flex'}
+							gap={1}
+							justifyContent={'space-between'}
+							flexWrap={'wrap-reverse'}
+						>
+							<Box display={'flex'} gap={1}>
+								<TransposePanel
+									disabled={hideChords}
+									transpose={function (i: number): void {
+										sheet.transpose(i)
+										rerender()
+									}}
+								/>
+								{hideChords ? (
+									<Button
+										onClick={() => setHideChords(false)}
+										variant="text"
+										size="small"
+									>
+										Zobrazit akordy
+									</Button>
+								) : (
+									<Button
+										onClick={() => setHideChords(true)}
+										variant="text"
+										color="grey.600"
+										size="small"
+									>
+										Skrýt akordy
+									</Button>
+								)}
+							</Box>
+							<Box display={'flex'} gap={1} maxHeight={'2rem'}>
+								<Box>
+									<MoreTeamSongButton />
+								</Box>
+								<AddToPlaylistButton variant={variant} />
+								{!inEditMode && (
+									<>
+										<PrintVariantButton
+											params={{
+												hex,
+												alias: titleAlias,
+												hideChords: hideChords,
+												key: sheet.getKeyNote() || undefined,
+											}}
+											size="small"
+										/>
+									</>
+								)}
+							</Box>
 						</Box>
 					)
 				) : (
 					<Box height={'1rem'} />
 				)}
-				<SheetDisplay
-					sheet={sheet}
-					hideChords={hideChords}
-					editMode={inEditMode}
-					title={inEditMode ? variant.preferredTitle : undefined}
-					onChange={onSheetChange}
-				/>
+				<Box
+					display={'flex'}
+					justifyContent={'space-between'}
+					flexWrap={'wrap'}
+					gap={2}
+				>
+					<SheetDisplay
+						sheet={sheet}
+						hideChords={hideChords}
+						editMode={inEditMode}
+						title={inEditMode ? variant.preferredTitle : undefined}
+						onChange={onSheetChange}
+					/>
+					<Box
+						sx={{
+							position: 'sticky',
+							top: 16,
+							alignSelf: 'flex-start',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2,
+						}}
+					>
+						<TeamNotePanel />
+						<UserNotePanel />
+					</Box>
+				</Box>
 			</Box>
 			<Box display={'flex'} flexDirection={'row'} gap={1} maxHeight={'2rem'}>
 				{hasPermissionToEdit && (
@@ -164,20 +213,6 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 						onCancel={onCancel}
 						saving={saving}
 					/>
-				)}
-				<AddToPlaylistButton variant={variant} />
-				{!inEditMode && (
-					<>
-						<PrintVariantButton
-							params={{
-								hex,
-								alias: titleAlias,
-								hideChords: hideChords,
-								key: sheet.getKeyNote() || undefined,
-							}}
-							size="small"
-						/>
-					</>
 				)}
 			</Box>
 		</Box>

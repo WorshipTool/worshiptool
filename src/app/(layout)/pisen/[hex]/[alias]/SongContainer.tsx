@@ -1,4 +1,6 @@
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
+import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import useAuth from '@/hooks/auth/useAuth'
 import { Box } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
@@ -25,6 +27,8 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 	}, [variant.preferredTitle])
 
 	const [showChords, setShowChords] = useState(true)
+
+	const { user } = useAuth()
 
 	const rerender = useRerender()
 
@@ -65,7 +69,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 
 	return (
 		<>
-			<Box>
+			<Box display={'flex'} flexDirection={'column'}>
 				<TopPanel
 					transpose={transpose}
 					variant={variant as SongVariantDto}
@@ -88,31 +92,55 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 						</>
 					) : (
 						currentSheet && (
-							<>
-								<Gap value={0.5} />
-								{currentSheet.getKeyChord() && (
-									<HideChordsButton
-										hiddenValue={!showChords}
-										onChange={(value) => setShowChords(!value)}
-									/>
-								)}
-								<Gap value={0.5} />
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								flexWrap={'wrap'}
+								justifyContent={'space-between'}
+							>
+								<Box>
+									<Gap value={0.5} />
+									{currentSheet.getKeyChord() && (
+										<HideChordsButton
+											hiddenValue={!showChords}
+											onChange={(value) => setShowChords(!value)}
+										/>
+									)}
+									<Gap value={0.5} />
 
-								<SheetDisplay
-									sheet={currentSheet}
-									title={editedTitle}
-									hideChords={!showChords}
-									variant={'default'}
-									editMode={inEditMode}
-									onChange={(sheet, title) => {
-										setCurrentSheet(new Sheet(sheet))
-										setEditedTitle(title)
-									}}
-								/>
-							</>
+									<SheetDisplay
+										sheet={currentSheet}
+										title={editedTitle}
+										hideChords={!showChords}
+										variant={'default'}
+										editMode={inEditMode}
+										onChange={(sheet, title) => {
+											setCurrentSheet(new Sheet(sheet))
+											setEditedTitle(title)
+										}}
+									/>
+								</Box>
+								<Box>
+									{user && (
+										<>
+											<Gap />
+											<Box
+												sx={{
+													position: 'sticky',
+													top: 80,
+													// bottom: 160,
+												}}
+											>
+												<UserNotePanel />
+											</Box>
+										</>
+									)}
+								</Box>
+							</Box>
 						)
 					)}
 				</>
+
 				{!inEditMode && variant && !variant.deleted && (
 					<>
 						<Gap value={2} />

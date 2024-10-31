@@ -1,3 +1,4 @@
+import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import {
 	getVariantAliasFromParams,
 	getVariantByAlias,
@@ -26,6 +27,15 @@ export const generateMetadata = generateSmartMetadata(
 	}
 )
 
-export default function TeamPisenLayout(props: LayoutProps) {
-	return props.children
+export default function TeamPisenLayout(props: LayoutProps<'teamSong'>) {
+	return (
+		<InnerSongProvider
+			variantAlias={getVariantAliasFromParams(
+				props.params.hex,
+				props.params['title-alias']
+			)}
+		>
+			{props.children}
+		</InnerSongProvider>
+	)
 }

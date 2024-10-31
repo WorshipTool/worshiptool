@@ -11,6 +11,7 @@ import {
 	SongDeletingApi,
 	SongEditingApi,
 	SongGettingApi,
+	SongNotesApi,
 	SongPublishingApi,
 	SongValidationApi,
 	TeamAddingApi,
@@ -20,6 +21,7 @@ import {
 	TeamJoiningApi,
 	TeamMembersApi,
 	TeamPlaylistsApi,
+	TeamSongNotesApi,
 } from '@/api/generated'
 import { useMemo } from 'react'
 import useAuth from '../auth/useAuth'
@@ -37,6 +39,7 @@ export const useApi = () => {
 			songDeletingApi: new SongDeletingApi(apiConfiguration),
 			songPublishingApi: new SongPublishingApi(apiConfiguration),
 			songValidationApi: new SongValidationApi(apiConfiguration),
+			songNotesApi: new SongNotesApi(apiConfiguration),
 			groupApi: new GroupApi(apiConfiguration),
 			authApi: new AuthApi(apiConfiguration),
 			permissionApi: new PermissionsApi(apiConfiguration),
@@ -52,6 +55,7 @@ export const useApi = () => {
 			teamMembersApi: new TeamMembersApi(apiConfiguration),
 			teamEventsApi: new TeamEventsApi(apiConfiguration),
 			teamPlaylistsApi: new TeamPlaylistsApi(apiConfiguration),
+			teamSongNotesApi: new TeamSongNotesApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

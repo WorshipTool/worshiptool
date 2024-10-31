@@ -68,7 +68,6 @@ export default function AddToPlaylistButton({
 
 	return (
 		<>
-			{' '}
 			{asMenuItem ? (
 				<MenuItem onClick={handleMenuClick}>
 					<ListItemIcon>

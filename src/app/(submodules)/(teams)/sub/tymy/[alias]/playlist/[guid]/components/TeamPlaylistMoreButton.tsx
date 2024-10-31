@@ -204,6 +204,7 @@ export default function TeamPlaylistMoreButton() {
 					canBeDeleted
 						? [
 								<Button
+									key={'delete'}
 									variant="text"
 									color="error"
 									onClick={onRemove}
@@ -211,11 +212,20 @@ export default function TeamPlaylistMoreButton() {
 								>
 									Smazat
 								</Button>,
-								<Button type="reset" disabled={deletingApiState.loading}>
+								<Button
+									type="reset"
+									disabled={deletingApiState.loading}
+									key={'cancel'}
+								>
 									Zrušit
 								</Button>,
 						  ]
-						: [<Box />, <Button type="reset">Zavřít</Button>]
+						: [
+								<Box key={'gap'} />,
+								<Button type="reset" key={'close'}>
+									Zavřít
+								</Button>,
+						  ]
 				}
 			>
 				{canBeDeleted ? (

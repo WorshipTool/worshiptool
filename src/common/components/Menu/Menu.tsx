@@ -11,6 +11,9 @@ type MenuProps = {
 
 	items?: MenuItemObjectType[]
 	children?: ReactNode
+	id?: string
+
+	keepMounted?: boolean
 }
 
 export default function Menu({ ...props }: MenuProps) {
@@ -20,6 +23,7 @@ export default function Menu({ ...props }: MenuProps) {
 
 	return (
 		<MuiMenu
+			id={props.id}
 			anchorEl={props.anchor}
 			open={props.open}
 			onClose={onClose}
@@ -38,6 +42,7 @@ export default function Menu({ ...props }: MenuProps) {
 			}}
 			disablePortal
 			disableScrollLock
+			keepMounted={props.keepMounted}
 		>
 			{props.children}
 			{props.items?.map((item, index) => {
