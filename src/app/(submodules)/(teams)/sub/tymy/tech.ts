@@ -43,4 +43,7 @@ export type TeamPermissions = {
 	'team.unpin_playlist': {
 		teamGuid: string
 	}
+	'team.edit_song_note': {
+		teamGuid: string
+	}
 }

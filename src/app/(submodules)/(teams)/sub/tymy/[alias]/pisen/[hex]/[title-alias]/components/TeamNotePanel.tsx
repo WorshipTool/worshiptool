@@ -2,12 +2,14 @@ import NoteContent from '@/app/(layout)/pisen/[hex]/[alias]/components/NoteConte
 import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import { MoreTeamSongOption } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongOption'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import MenuItem from '@/common/components/Menu/MenuItem'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import TextField from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
+import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { StickyNote2 } from '@mui/icons-material'
@@ -109,9 +111,16 @@ export default function TeamNotePanel() {
 		setAdding(false)
 	}
 
+	const hasPermissionToEdit = usePermission<TeamPermissions>(
+		'team.edit_song_note',
+		{
+			teamGuid,
+		}
+	)
+
 	return (
 		<>
-			{!hasNote && !adding && !loading && (
+			{hasPermissionToEdit && !hasNote && !adding && !loading && (
 				<MoreTeamSongOption>
 					<MenuItem
 						title={'Přidat sdílenou poznámku'}
@@ -123,7 +132,7 @@ export default function TeamNotePanel() {
 				</MoreTeamSongOption>
 			)}
 
-			{hasNote && !adding && !loading && (
+			{hasPermissionToEdit && hasNote && !adding && !loading && (
 				<MoreTeamSongOption>
 					<MenuItem
 						title={'Upravit sdílenou poznámku'}
