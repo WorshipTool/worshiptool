@@ -169,11 +169,34 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 										/>
 									</>
 								)}
+								<Box>
+									{hasPermissionToEdit && (
+										<EditButtonsPanel
+											inEditMode={inEditMode}
+											setInEditMode={setInEditMode}
+											variant={variant}
+											onSave={onSave}
+											onCancel={onCancel}
+											saving={saving}
+										/>
+									)}
+								</Box>
 							</Box>
 						</Box>
 					)
 				) : (
-					<Box height={'1rem'} />
+					<Box>
+						{hasPermissionToEdit && (
+							<EditButtonsPanel
+								inEditMode={inEditMode}
+								setInEditMode={setInEditMode}
+								variant={variant}
+								onSave={onSave}
+								onCancel={onCancel}
+								saving={saving}
+							/>
+						)}
+					</Box>
 				)}
 				<Box
 					display={'flex'}
@@ -181,39 +204,31 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 					flexWrap={'wrap'}
 					gap={2}
 				>
-					<SheetDisplay
-						sheet={sheet}
-						hideChords={hideChords}
-						editMode={inEditMode}
-						title={inEditMode ? variant.preferredTitle : undefined}
-						onChange={onSheetChange}
-					/>
-					<Box
-						sx={{
-							position: 'sticky',
-							top: 16,
-							alignSelf: 'flex-start',
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 2,
-						}}
-					>
-						<TeamNotePanel />
-						<UserNotePanel />
+					<Box flex={1}>
+						<SheetDisplay
+							sheet={sheet}
+							hideChords={hideChords}
+							editMode={inEditMode}
+							title={inEditMode ? variant.preferredTitle : undefined}
+							onChange={onSheetChange}
+						/>
 					</Box>
+					{!inEditMode && (
+						<Box
+							sx={{
+								position: 'sticky',
+								top: 16,
+								alignSelf: 'flex-start',
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 2,
+							}}
+						>
+							<TeamNotePanel />
+							<UserNotePanel />
+						</Box>
+					)}
 				</Box>
-			</Box>
-			<Box display={'flex'} flexDirection={'row'} gap={1} maxHeight={'2rem'}>
-				{hasPermissionToEdit && (
-					<EditButtonsPanel
-						inEditMode={inEditMode}
-						setInEditMode={setInEditMode}
-						variant={variant}
-						onSave={onSave}
-						onCancel={onCancel}
-						saving={saving}
-					/>
-				)}
 			</Box>
 		</Box>
 	)

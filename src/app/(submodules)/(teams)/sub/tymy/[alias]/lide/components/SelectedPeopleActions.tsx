@@ -137,9 +137,9 @@ export default function SelectedPeopleActions(
 			)}
 
 			<Menu open={open} anchor={anchorEl} onClose={() => setOpen(false)}>
-				{menuItems.map((item) => (
+				{menuItems.map((item, index) => (
 					<Tooltip
-						key={item.title}
+						key={item.title + ''}
 						label={disabledAction ? 'Nelze upravit sebe ani vlastníka' : ''}
 						placement="left"
 					>
