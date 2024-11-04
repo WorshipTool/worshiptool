@@ -46,7 +46,16 @@ export default function Menu({ ...props }: MenuProps) {
 		>
 			{props.children}
 			{props.items?.map((item, index) => {
-				return <MenuItem key={index} {...item} />
+				return (
+					<MenuItem
+						key={index}
+						{...item}
+						onClick={async (e) => {
+							const r = await item.onClick?.(e)
+							if (r !== false) onClose()
+						}}
+					/>
+				)
 			})}
 		</MuiMenu>
 	)

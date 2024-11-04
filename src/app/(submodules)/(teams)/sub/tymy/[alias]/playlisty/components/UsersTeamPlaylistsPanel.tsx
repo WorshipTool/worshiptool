@@ -9,6 +9,7 @@ import { Gap } from '@/common/ui/Gap'
 import { InfoButton } from '@/common/ui/InfoButton'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { Schedule } from '@mui/icons-material'
 import { Box, useTheme } from '@mui/material'
 
@@ -24,37 +25,8 @@ export default function UsersTeamPlaylistsPanel() {
 		return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
 	})
 
-	const getRecentString = (date: Date) => {
-		// If less than 5 minutes, 'Před chvílí'
-		// If less than 1 hour, 'Před x minutami'
-		// If less than 1 day, 'Před x hodinami'
-		// If less than 2 days, 'Včera'
-		// If less than 7 days, 'Před x dny'
-		// Else 'date'
-		const now = new Date()
-		const diff = now.getTime() - date.getTime()
-
-		if (diff < 1000 * 60 * 5) {
-			return 'Upraveno před chvílí'
-		}
-		if (diff < 1000 * 60 * 60) {
-			return `Před ${Math.floor(diff / (1000 * 60))} minutami`
-		}
-
-		if (diff < 1000 * 60 * 60 * 24) {
-			return `před ${Math.floor(diff / (1000 * 60 * 60))} hodinami`
-		}
-
-		if (diff < 1000 * 60 * 60 * 24 * 2) {
-			return 'Upraveno včera'
-		}
-
-		if (diff < 1000 * 60 * 60 * 24 * 7) {
-			return `Před ${Math.floor(diff / (1000 * 60 * 60 * 24))} dny`
-		}
-
-		return `Upraveno ${date.toLocaleDateString()}`
-	}
+	const getRecentString = (date: Date) =>
+		getSmartDateAgoString(date, 'Upraveno', 20)
 
 	return (
 		<Box

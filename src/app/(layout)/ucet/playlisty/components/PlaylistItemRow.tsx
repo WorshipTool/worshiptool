@@ -1,0 +1,225 @@
+import { PlaylistData } from '@/api/generated'
+import { PlaylistOrderOptions } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
+import Menu from '@/common/components/Menu/Menu'
+import Popup from '@/common/components/Popup/Popup'
+import { Button } from '@/common/ui/Button'
+import { IconButton } from '@/common/ui/IconButton'
+import { Link } from '@/common/ui/Link/Link'
+import { Typography } from '@/common/ui/Typography'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { getSmartDateAgoString } from '@/tech/date/date.tech'
+import { Delete, MoreHoriz } from '@mui/icons-material'
+import { Box, Chip, Tooltip, useTheme } from '@mui/material'
+import { useState } from 'react'
+
+type PlaylistItemRowProps = {
+	data: PlaylistData
+	selected?: boolean
+	onSelect?: () => void
+	sortKey: PlaylistOrderOptions
+	selectable?: boolean
+}
+
+export default function PlaylistItemRow({
+	data,
+	...props
+}: PlaylistItemRowProps) {
+	const [openDialog, setOpenDialog] = useState(false)
+
+	const [openMenu, setOpenMenu] = useState(false)
+	const [anchor, setAnchor] = useState<null | HTMLElement>(null)
+
+	const { isOn, guid: currentPlaylistGuid, turnOff } = useCurrentPlaylist()
+
+	const { deletePlaylist: deleteByGuid } = usePlaylistsGeneral()
+
+	const askToDeletePlaylist = async (guid: PlaylistGuid, title: string) => {
+		setOpenDialog(true)
+	}
+	const deletePlaylist = async (guid: PlaylistGuid) => {
+		if (currentPlaylistGuid === guid) turnOff()
+		deleteByGuid(guid)
+			.then((result) => {
+				// reload()
+			})
+			.catch((e: any) => {
+				console.log('Something went wrong:', e.message)
+			})
+	}
+
+	const createdAt = new Date(data.createdAt)
+	const updatedAt = new Date(data.updatedAt)
+	const openedAt = data.openedAt ? new Date(data.openedAt) : null
+
+	const showDate =
+		props.sortKey === 'createdAt'
+			? createdAt
+			: props.sortKey === 'updatedAt'
+			? updatedAt
+			: props.sortKey === 'openedAt'
+			? openedAt
+			: null
+
+	const navigate = useSmartNavigate()
+
+	const theme = useTheme()
+	return (
+		<>
+			<Box
+				sx={{
+					paddingX: 1,
+					paddingY: 0.5,
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					position: 'relative',
+					justifyContent: 'space-between',
+					bgcolor: 'grey.100',
+					outline: '1px solid',
+					outlineColor: 'transparent',
+					borderRadius: 2,
+					gap: 2,
+
+					'&:hover': {
+						bgcolor: 'grey.200',
+					},
+					...(props.selectable &&
+						props.selected && {
+							// outlineColor: theme.palette.primary.main,
+
+							bgcolor: 'grey.300',
+							'&:hover': {
+								bgcolor: 'grey.300',
+							},
+						}),
+
+					'&:active': {
+						bgcolor: 'grey.300',
+					},
+					transition: 'all 0.2s',
+				}}
+				onClick={() => {
+					if (!props.selectable) return
+					props.onSelect?.()
+				}}
+				onDoubleClick={() => {
+					navigate('playlist', { guid: data.guid })
+				}}
+			>
+				<Box display={'flex'} gap={1}>
+					<Link
+						to="playlist"
+						params={{
+							guid: data.guid,
+						}}
+					>
+						<Typography
+							strong
+							sx={{
+								marginLeft: 1,
+								cursor: 'pointer',
+							}}
+						>
+							{data.title}
+						</Typography>
+					</Link>
+					<Box>
+						{data.teamName ? (
+							<Tooltip title={`Playlist vytvořen v rámci týmu`}>
+								<Chip label={data.teamName} color="primary" size="small" />
+							</Tooltip>
+						) : (
+							<></>
+						)}
+					</Box>
+				</Box>
+
+				<Box flex={1} />
+
+				<Box>
+					{isOn && currentPlaylistGuid == data.guid ? (
+						<Chip label={'Aktivní'} size="small" color="secondary" />
+					) : (
+						<></>
+					)}
+				</Box>
+
+				<Box display={'flex'} gap={4} alignItems={'center'}>
+					<Typography
+						color="grey.500"
+						thin
+						sx={{
+							width: '150px',
+							userSelect: 'none',
+						}}
+					>
+						{showDate ? getSmartDateAgoString(showDate) : null}
+					</Typography>
+
+					<IconButton
+						onClick={(e) => {
+							setAnchor(e.currentTarget)
+							setOpenMenu(true)
+						}}
+					>
+						<MoreHoriz fontSize="inherit" />
+					</IconButton>
+				</Box>
+			</Box>
+			<Popup
+				open={openDialog}
+				onClose={() => setOpenDialog(false)}
+				title="Opravdu chcete odstranit playlist?"
+				width={400}
+				actions={
+					<>
+						<Button variant="outlined" type="reset">
+							Zrušit
+						</Button>
+						<Button
+							onClick={() => {
+								deletePlaylist(data.guid as PlaylistGuid)
+								setOpenDialog(false)
+							}}
+							color="error"
+							variant="contained"
+						>
+							Smazat
+						</Button>
+					</>
+				}
+			>
+				<Typography>
+					Chcete opravdu smazat playlist <strong>{data.title}</strong>? Tato
+					akce je nevratná.
+				</Typography>
+			</Popup>
+
+			<Menu
+				open={openMenu}
+				onClose={() => setOpenMenu(false)}
+				anchor={anchor}
+				items={[
+					{
+						title: 'Otevřít',
+						onClick: () => {
+							navigate('playlist', { guid: data.guid })
+						},
+					},
+					{
+						title: <Typography color="error">Smazat</Typography>,
+						icon: <Delete color="error" />,
+
+						onClick: () => {
+							askToDeletePlaylist(data.guid as PlaylistGuid, data.title)
+							return false
+						},
+					},
+				]}
+			/>
+		</>
+	)
+}

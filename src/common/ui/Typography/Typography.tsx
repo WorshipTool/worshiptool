@@ -5,7 +5,6 @@ import { useMemo } from 'react'
 type CustomTypographyProps = {
 	children?: string | React.ReactNode
 	variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal' | 'subtitle1'
-	strong?: boolean | number
 	color?: ColorType
 	size?: number | string
 	align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'
@@ -13,6 +12,10 @@ type CustomTypographyProps = {
 	className?: string
 	noWrap?: boolean
 
+	onClick?: (e: React.MouseEvent<HTMLElement>) => void
+
+	strong?: boolean | number
+	thin?: boolean
 	uppercase?: boolean
 	italic?: boolean
 }
@@ -24,7 +27,13 @@ export function Typography({
 	size,
 	...props
 }: CustomTypographyProps) {
-	const fontWeight = strong ? (strong === true ? 700 : strong) : undefined
+	const fontWeight = strong
+		? strong === true
+			? 700
+			: strong
+		: props.thin
+		? 300
+		: undefined
 
 	const typoVariant = variant === 'normal' ? 'body1' : variant
 
@@ -50,6 +59,7 @@ export function Typography({
 			noWrap={props.noWrap}
 			align={props.align}
 			className={props.className}
+			onClick={props.onClick}
 		>
 			{props.italic ? <i>{children}</i> : children}
 		</Typo>

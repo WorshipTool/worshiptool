@@ -18,7 +18,10 @@ export type SmartPageOptions = Nullable<{
 	hideToolbar: boolean
 	fullWidth: boolean
 	hidePadding: boolean
+	middleWidth: boolean
 }>
+
+const MIDDLE_WIDTH = 800
 
 export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 export const SmartPageInnerProvider = ({
@@ -38,6 +41,7 @@ export const SmartPageInnerProvider = ({
 			hideToolbar: false,
 			fullWidth: false,
 			hidePadding: false,
+			middleWidth: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -72,6 +76,7 @@ export const SmartPageInnerProvider = ({
 							flex: 1,
 					  }
 					: {
+							maxWidth: options.middleWidth ? MIDDLE_WIDTH : undefined,
 							width: options.hidePadding
 								? 'min(100%, 1320px)'
 								: 'min(calc(100% - 4*8*2px), 1320px)',

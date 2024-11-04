@@ -2,11 +2,11 @@ import { RoutesKeys, SmartSearchParams } from '@/routes'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export const useUrlState = (key: string) => {
+export const useUrlState = (key: string, startValue?: string) => {
 	const [value, _setValue] = useState<string | null>(() => {
-		if (typeof window === 'undefined') return null
+		if (typeof window === 'undefined') return startValue || null
 		const params = new URLSearchParams(window.location.search)
-		return params.get(key)
+		return params.get(key) || startValue || null
 	})
 
 	const setValue = (value: string | null) => {
@@ -24,10 +24,12 @@ export const useUrlState = (key: string) => {
 		window.history.replaceState({}, '', url)
 	}
 
+	const [first, setFirst] = useState(true)
 	const params = useSearchParams()
 	useEffect(() => {
 		const _value = params.get(key)
-		if (_value !== value) _setValue(_value)
+		if (_value !== value) _setValue(_value || first ? startValue || null : null)
+		setFirst(false)
 	}, [params])
 
 	return [value, setValue] as const
