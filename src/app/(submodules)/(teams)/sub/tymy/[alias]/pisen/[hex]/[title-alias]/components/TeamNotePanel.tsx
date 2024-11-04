@@ -166,7 +166,9 @@ export default function TeamNotePanel() {
 								sx={{
 									width: 50,
 									aspectRatio: 1,
-									bgcolor: 'secondary.main',
+									bgcolor: 'primary.main',
+									// gradient
+									// background: `l
 									position: 'absolute',
 									right: 0,
 									bottom: 0,

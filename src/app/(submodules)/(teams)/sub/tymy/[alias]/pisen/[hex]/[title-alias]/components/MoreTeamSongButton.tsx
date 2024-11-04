@@ -1,9 +1,10 @@
 import Menu from '@/common/components/Menu/Menu'
-import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
+import MenuItem from '@/common/components/Menu/MenuItem'
 import { IconButton } from '@/common/ui/IconButton'
+import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import { MoreVert } from '@mui/icons-material'
 import { Box } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export const MORE_TEAM_SONG_BUTTON_ID = 'more-team-song-button'
 
@@ -19,39 +20,15 @@ export default function MoreTeamSongButton() {
 		setOpen(true)
 	}
 
-	const items: MenuItemObjectType[] = [
-		// {
-		// 	title: 'Přidat sdílenou poznámku',
-		// 	icon: <StickyNote2 />,
-		// },
-	]
-
 	const [itemsCount, setItemsCount] = useState(0)
 
-	useEffect(() => {
-		const updateMoreTeamSongButton = () => {
-			const itemsCount = items.length
+	const onCountChange = (count: number) => {
+		setItemsCount(count)
 
-			const childrenCount = document.querySelectorAll(
-				`#${MORE_TEAM_SONG_BUTTON_ID} > *`
-			).length
-
-			const sum = itemsCount + childrenCount
-			setItemsCount(sum)
+		if (count === 0) {
+			setOpen(false)
 		}
-
-		window.addEventListener(
-			CHILDREN_UPDATE_MORE_TEAM_SONG_BUTTON_EVENT_NAME,
-			updateMoreTeamSongButton
-		)
-
-		return () => {
-			window.removeEventListener(
-				CHILDREN_UPDATE_MORE_TEAM_SONG_BUTTON_EVENT_NAME,
-				updateMoreTeamSongButton
-			)
-		}
-	}, [items.length])
+	}
 
 	return (
 		<>
@@ -65,11 +42,15 @@ export default function MoreTeamSongButton() {
 				anchor={anchor}
 				open={open}
 				onClose={() => setOpen(false)}
-				items={items}
 				keepMounted
 				// id={MORE_TEAM_SONG_BUTTON_ID}
 			>
-				<Box id={MORE_TEAM_SONG_BUTTON_ID}></Box>
+				<ChildrenCounter onCountChange={onCountChange}>
+					<Box id={MORE_TEAM_SONG_BUTTON_ID}></Box>
+				</ChildrenCounter>
+				{itemsCount === 0 && (
+					<MenuItem title={'Žádná volba dostupná'} disabled />
+				)}
 			</Menu>
 		</>
 	)

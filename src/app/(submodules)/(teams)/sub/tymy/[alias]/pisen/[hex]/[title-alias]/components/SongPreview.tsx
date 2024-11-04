@@ -117,13 +117,13 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 		>
 			<Box display={'flex'} flexDirection={'column'} flex={1} gap={2}>
 				{!inEditMode ? (
-					sheet.getKeyChord() && (
-						<Box
-							display={'flex'}
-							gap={1}
-							justifyContent={'space-between'}
-							flexWrap={'wrap-reverse'}
-						>
+					<Box
+						display={'flex'}
+						gap={1}
+						justifyContent={'space-between'}
+						flexWrap={'wrap-reverse'}
+					>
+						{sheet.getKeyChord() ? (
 							<Box display={'flex'} gap={1}>
 								<TransposePanel
 									disabled={hideChords}
@@ -151,39 +151,41 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 									</Button>
 								)}
 							</Box>
-							<Box display={'flex'} gap={1} maxHeight={'2rem'}>
-								<Box>
-									<MoreTeamSongButton />
-								</Box>
-								<AddToPlaylistButton variant={variant} />
-								{!inEditMode && (
-									<>
-										<PrintVariantButton
-											params={{
-												hex,
-												alias: titleAlias,
-												hideChords: hideChords,
-												key: sheet.getKeyNote() || undefined,
-											}}
-											size="small"
-										/>
-									</>
+						) : (
+							<Box />
+						)}
+						<Box display={'flex'} gap={1} maxHeight={'2rem'}>
+							<Box>
+								<MoreTeamSongButton />
+							</Box>
+							<AddToPlaylistButton variant={variant} />
+							{!inEditMode && (
+								<>
+									<PrintVariantButton
+										params={{
+											hex,
+											alias: titleAlias,
+											hideChords: hideChords,
+											key: sheet.getKeyNote() || undefined,
+										}}
+										size="small"
+									/>
+								</>
+							)}
+							<Box>
+								{hasPermissionToEdit && (
+									<EditButtonsPanel
+										inEditMode={inEditMode}
+										setInEditMode={setInEditMode}
+										variant={variant}
+										onSave={onSave}
+										onCancel={onCancel}
+										saving={saving}
+									/>
 								)}
-								<Box>
-									{hasPermissionToEdit && (
-										<EditButtonsPanel
-											inEditMode={inEditMode}
-											setInEditMode={setInEditMode}
-											variant={variant}
-											onSave={onSave}
-											onCancel={onCancel}
-											saving={saving}
-										/>
-									)}
-								</Box>
 							</Box>
 						</Box>
-					)
+					</Box>
 				) : (
 					<Box>
 						{hasPermissionToEdit && (
