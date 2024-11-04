@@ -1632,6 +1632,24 @@ export interface PlaylistData {
      * @memberof PlaylistData
      */
     'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'openedAt': string | null;
 }
 /**
  * 

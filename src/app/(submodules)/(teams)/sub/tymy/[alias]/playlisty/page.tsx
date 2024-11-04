@@ -21,11 +21,19 @@ function Page() {
 
 	const futureEvents = useMemo(() => {
 		const now = new Date()
-		return events.filter((e) => isDateTodayOrInFuture(new Date(e.date), now))
+		return events
+			.filter((e) => isDateTodayOrInFuture(new Date(e.date), now))
+			.sort((a, b) => {
+				return new Date(a.date).getTime() - new Date(b.date).getTime()
+			})
 	}, [events])
 	const pastEvents = useMemo(() => {
 		const now = new Date()
-		return events.filter((e) => !isDateTodayOrInFuture(new Date(e.date), now))
+		return events
+			.filter((e) => !isDateTodayOrInFuture(new Date(e.date), now))
+			.sort((a, b) => {
+				return new Date(b.date).getTime() - new Date(a.date).getTime()
+			})
 	}, [events])
 
 	return (

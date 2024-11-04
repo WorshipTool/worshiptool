@@ -5,6 +5,7 @@
 
 .info-button-text {
 	line-height: 30px;
+	/* line-height: 20px; */
 }
 
 .info-button:hover .info-button-text {
