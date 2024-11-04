@@ -2,7 +2,7 @@ import { Box, Pagination } from '@mui/material'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 export type PagerProps<T> = {
-	children: (data: T[], loading: boolean) => ReactNode
+	children: (data: T[], loading: boolean, startIndex: number) => ReactNode
 	take?: number
 	allCount?: number
 	data: T[] | ((page: number) => Promise<T[]>)
@@ -21,7 +21,7 @@ export default function Pager<T>({
 			return Math.ceil((props.data as T[]).length / take)
 		}
 		return Math.ceil((props.allCount || 0) / take)
-	}, [])
+	}, [props.allCount, props.data, staticMode])
 
 	const [loading, setLoading] = useState(false)
 
@@ -46,8 +46,8 @@ export default function Pager<T>({
 	}, [page, props.data, staticMode])
 
 	const component = useMemo(
-		() => children(pageData, loading),
-		[children, pageData, loading]
+		() => children(pageData, loading, (page - 1) * take),
+		[children, pageData, loading, take, page]
 	)
 
 	return (
