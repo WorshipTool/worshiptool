@@ -29,6 +29,15 @@ export const generateMetadata = generateSmartMetadata(
 	}
 )
 
-export default function layout(props: LayoutProps) {
+export default async function Layout(props: LayoutProps<'teamPlaylist'>) {
+	const { playlistGettingApi } = await useServerApi()
+
+	// Send tick to backend
+	await handleApiCall(
+		playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
+			props.params.guid
+		)
+	)
+
 	return props.children
 }

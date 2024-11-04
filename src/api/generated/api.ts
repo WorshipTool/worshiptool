@@ -1583,6 +1583,24 @@ export interface Playlist {
      * @memberof Playlist
      */
     'belongsToTeam': Team;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'openedAt': string;
 }
 /**
  * 
@@ -7598,6 +7616,46 @@ export const PlaylistGettingApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerUpdatePlaylistOpenDate: async (playlistGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'playlistGuid' is not null or undefined
+            assertParamExists('playlistGettingControllerUpdatePlaylistOpenDate', 'playlistGuid', playlistGuid)
+            const localVarPath = `/playlist/updateopendate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (playlistGuid !== undefined) {
+                localVarQueryParameter['playlistGuid'] = playlistGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -7658,6 +7716,18 @@ export const PlaylistGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerSearchInPlaylist']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -7705,6 +7775,15 @@ export const PlaylistGettingApiFactory = function (configuration?: Configuration
          */
         playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: any): AxiosPromise<GetSearchInPlaylistResult> {
             return localVarFp.playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: any): AxiosPromise<void> {
+            return localVarFp.playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7760,6 +7839,17 @@ export class PlaylistGettingApi extends BaseAPI {
      */
     public playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: RawAxiosRequestConfig) {
         return PlaylistGettingApiFp(this.configuration).playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} playlistGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistGettingApi
+     */
+    public playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

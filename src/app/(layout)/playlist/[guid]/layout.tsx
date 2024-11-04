@@ -37,6 +37,13 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 		)
 	)
 
+	// Send tick to backend
+	await handleApiCall(
+		playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
+			props.params.guid
+		)
+	)
+
 	const pathname = useServerPathname()
 	const afterPlaylist = pathname.split('playlist')[1]
 	const isSomethingAfter = afterPlaylist.split('/').length > 2
