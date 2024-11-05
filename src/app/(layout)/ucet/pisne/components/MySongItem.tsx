@@ -1,16 +1,19 @@
+import { MySongsOrderOptions } from '@/app/(layout)/ucet/pisne/components/MySongListOrderSelect'
 import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
+import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { MoreHoriz } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { SongVariantDto } from '../../../../../api/dtos'
-import { Gap } from '../../../../../common/ui/Gap'
 import { Link } from '../../../../../common/ui/Link/Link'
 
 interface MySongItemProps {
 	variant: SongVariantDto
 	index: number
+
+	sortKey: MySongsOrderOptions
 }
 
 export default function MySongItem(props: MySongItemProps) {
@@ -22,6 +25,14 @@ export default function MySongItem(props: MySongItemProps) {
 		...parseVariantAlias(props.variant.packAlias),
 		title: props.variant.preferredTitle,
 	}
+
+	const showDate =
+		props.sortKey === 'createdAt'
+			? props.variant.packCreatedAt
+			: props.sortKey === 'updatedAt'
+			? props.variant.createdAt
+			: null
+	const showDateString = showDate ? getSmartDateAgoString(showDate) : null
 
 	return (
 		<DraggableSong
@@ -36,7 +47,7 @@ export default function MySongItem(props: MySongItemProps) {
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
-						gap: 2,
+						gap: 4,
 						alignItems: 'center',
 						padding: 2,
 						paddingLeft: 4,
@@ -53,47 +64,50 @@ export default function MySongItem(props: MySongItemProps) {
 						transition: 'all 0.2s',
 					}}
 				>
-					<Typography>{props.index + 1}</Typography>
-					<Gap value={1} />
-					<Box
-						flex={1}
-						sx={{
-							overflow: 'hidden',
-							textOverflow: 'ellipsis',
-						}}
-					>
-						<Typography
-							strong={500}
-							sx={{
-								textOverflow: 'ellipsis',
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-							}}
-						>
-							{props.variant.preferredTitle}
-						</Typography>
-						<Typography
-							size={'small'}
-							sx={{
-								display: {
-									xs: 'none',
-									sm: 'none',
-									md: 'block',
-								},
-							}}
-							thin
-							color="grey.700"
-						>
-							{getHintText().substring(0, 100)}...
-						</Typography>
+					<Box display={'flex'} gap={4} flex={1} alignItems={'center'}>
+						<Typography>{props.index + 1}</Typography>
+						<Box flex={1}>
+							<Typography
+								strong={500}
+								sx={{
+									textOverflow: 'ellipsis',
+									overflow: 'hidden',
+									whiteSpace: 'nowrap',
+								}}
+							>
+								{props.variant.preferredTitle}
+							</Typography>
+							<Typography
+								size={'small'}
+								sx={{
+									display: {
+										xs: 'none',
+										sm: 'none',
+										md: 'block',
+									},
+									textOverflow: 'ellipsis',
+									overflow: 'hidden',
+									whiteSpace: 'nowrap',
+									maxWidth: 400,
+								}}
+								thin
+								color="grey.700"
+							>
+								{getHintText().substring(0, 100)}...
+							</Typography>
+						</Box>
 					</Box>
+
+					<Typography thin color="grey.500" noWrap>
+						{showDateString}
+					</Typography>
 					<Box
 						display={{
 							xs: 'none',
 							sm: 'block',
 						}}
 					>
-						<Typography size={'small'}>
+						<Typography thin color="grey.500">
 							{props.variant.public ? 'Veřejné' : 'Soukromé'}
 						</Typography>
 					</Box>

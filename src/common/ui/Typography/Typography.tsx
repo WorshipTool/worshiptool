@@ -18,6 +18,7 @@ type CustomTypographyProps = {
 	thin?: boolean
 	uppercase?: boolean
 	italic?: boolean
+	small?: boolean
 }
 
 export function Typography({
@@ -34,6 +35,8 @@ export function Typography({
 		: props.thin
 		? 300
 		: undefined
+
+	size = size || props.small ? 'small' : undefined
 
 	const typoVariant = variant === 'normal' ? 'body1' : variant
 
@@ -54,6 +57,7 @@ export function Typography({
 			fontWeight={fontWeight}
 			sx={{
 				fontSize: size,
+
 				...props.sx,
 			}}
 			noWrap={props.noWrap}

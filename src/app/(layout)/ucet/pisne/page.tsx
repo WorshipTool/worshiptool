@@ -131,6 +131,7 @@ function MySongsList() {
 											variant={variant}
 											index={index + startIndex}
 											key={`mysong${variant.guid}`}
+											sortKey={sortOption as MySongsOrderOptions}
 										/>
 									)
 								})}
