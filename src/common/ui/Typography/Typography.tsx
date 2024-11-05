@@ -36,7 +36,7 @@ export function Typography({
 		? 300
 		: undefined
 
-	size = size || props.small ? 'small' : undefined
+	size = props.small ? 'small' : size
 
 	const typoVariant = variant === 'normal' ? 'body1' : variant
 

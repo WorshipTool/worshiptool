@@ -143,7 +143,7 @@ export default function PlaylistItemRow({
 					</Box>
 				</Box>
 
-				<Box>
+				<Box display={'flex'} alignItems={'center'}>
 					{isOn && currentPlaylistGuid == data.guid ? (
 						<Chip label={'Aktivní'} size="small" color="secondary" />
 					) : (

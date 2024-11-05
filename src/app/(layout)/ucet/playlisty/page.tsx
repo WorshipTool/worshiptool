@@ -110,31 +110,40 @@ function Playlists() {
 					</Box>
 				) : (
 					<Box display={'flex'} flexDirection={'column'} gap={1}>
-						<Pager data={playlists || []}>
-							{(playlists) => {
-								return (
-									<Box display={'flex'} flexDirection={'column'} gap={1}>
-										{playlists.map((p) => {
-											return (
-												<PlaylistItemRow
-													data={p}
-													key={p.guid}
-													onSelect={() => {
-														setSelectedPlaylist(p.guid as PlaylistGuid)
-													}}
-													sortKey={sortType as PlaylistOrderOptions}
-													selected={p.guid === selectedPlaylist}
-												/>
-											)
-										})}
-									</Box>
-								)
-							}}
-						</Pager>
-
-						{playlists?.length == 0 && (
+						{!playlists || playlists.length == 0 ? (
+							<Box
+								display={'flex'}
+								flexDirection={'column'}
+								alignItems={'center'}
+							>
+								<Typography italic>
+									Nemáš žádný vytvořený playlist... Pro vytvoření klikni na
+									modré tlačítko
+								</Typography>
+							</Box>
+						) : (
 							<>
-								<Typography>Nemáš žádný vytvořený playlist.</Typography>
+								<Pager data={playlists || []}>
+									{(playlists) => {
+										return (
+											<Box display={'flex'} flexDirection={'column'} gap={1}>
+												{playlists.map((p) => {
+													return (
+														<PlaylistItemRow
+															data={p}
+															key={p.guid}
+															onSelect={() => {
+																setSelectedPlaylist(p.guid as PlaylistGuid)
+															}}
+															sortKey={sortType as PlaylistOrderOptions}
+															selected={p.guid === selectedPlaylist}
+														/>
+													)
+												})}
+											</Box>
+										)
+									}}
+								</Pager>
 							</>
 						)}
 					</Box>

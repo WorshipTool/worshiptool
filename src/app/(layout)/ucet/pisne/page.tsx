@@ -118,60 +118,56 @@ function MySongsList() {
 					)}
 				</Box>
 
-				{loading && (
+				{loading ? (
 					<>
 						<LinearProgress />
 					</>
+				) : (
+					<>
+						{variants.length == 0 ? (
+							<>
+								<Box
+									display={'flex'}
+									justifyContent={'center'}
+									alignItems={'center'}
+									flexDirection={'column'}
+									gap={4}
+									paddingTop={2}
+								>
+									<Typography italic>
+										Nemáš žádné vytvořené písně... Pro vytvoření klikni na modré
+										tlačítko.
+									</Typography>
+									{/* <IconButton to="addMenu">
+										<Add />
+									</IconButton> */}
+								</Box>
+							</>
+						) : (
+							<>
+								<Pager data={variants || []} take={5}>
+									{(variants, loading, startIndex) => {
+										return (
+											<Box display={'flex'} flexDirection={'column'} gap={1}>
+												{variants.map((variant, index) => {
+													return (
+														<MySongItem
+															variant={variant}
+															index={index + startIndex}
+															key={`mysong${variant.guid}`}
+															sortKey={sortOption as MySongsOrderOptions}
+															onDelete={reload}
+														/>
+													)
+												})}
+											</Box>
+										)
+									}}
+								</Pager>
+							</>
+						)}
+					</>
 				)}
-				<Pager data={variants || []} take={5}>
-					{(variants, loading, startIndex) => {
-						return (
-							<Box display={'flex'} flexDirection={'column'} gap={1}>
-								{variants.map((variant, index) => {
-									return (
-										<MySongItem
-											variant={variant}
-											index={index + startIndex}
-											key={`mysong${variant.guid}`}
-											sortKey={sortOption as MySongsOrderOptions}
-											onDelete={reload}
-										/>
-									)
-								})}
-							</Box>
-						)
-					}}
-				</Pager>
-				{/* {variants.map((variant, index) => {
-					return (
-						<MySongItem
-							variant={variant}
-							index={index}
-							key={`mysong${variant.guid}`}
-						></MySongItem>
-					)
-				})}
-
-				{variants.length == 0 && (
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							gap: 2,
-						}}
-					>
-						<Typography>Nemáš žádné vytvořené písně.</Typography>
-						<Button
-							onClick={() => {
-								navigate('addMenu', {})
-							}}
-							variant="contained"
-						>
-							Vytvořit
-						</Button>
-					</Box>
-				)} */}
 			</Box>
 		)
 	} catch (e) {
