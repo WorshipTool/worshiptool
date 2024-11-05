@@ -98,7 +98,14 @@ export default function MySongItem(props: MySongItemProps) {
 						</Box>
 					</Box>
 
-					<Typography thin color="grey.500" noWrap>
+					<Typography
+						thin
+						color="grey.500"
+						noWrap
+						sx={{
+							width: 150,
+						}}
+					>
 						{showDateString}
 					</Typography>
 					<Box
