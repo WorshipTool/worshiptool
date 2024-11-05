@@ -1,6 +1,7 @@
 'use client'
 import CreateNewPlaylistButton from '@/app/(layout)/ucet/playlisty/components/CreateNewPlaylistButton'
 import PlaylistItemRow from '@/app/(layout)/ucet/playlisty/components/PlaylistItemRow'
+import PlaylistsMoreButton from '@/app/(layout)/ucet/playlisty/components/PlaylistsMoreButton'
 import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
@@ -86,8 +87,12 @@ function Playlists() {
 						startValue={sortType as PlaylistOrderOptions}
 					/>
 					<Box flex={1} />
-					<CreateNewPlaylistButton />
+					<Box display={'flex'} gap={1}>
+						<CreateNewPlaylistButton />
+						<PlaylistsMoreButton />
+					</Box>
 				</Box>
+				<Gap value={2} />
 				{loading ? (
 					<Box
 						sx={{

@@ -11,7 +11,8 @@ import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
-import { Delete, MoreHoriz } from '@mui/icons-material'
+import { czechConjugation } from '@/tech/string/string.tech'
+import { Delete, KeyboardArrowRight, MoreHoriz } from '@mui/icons-material'
 import { Box, Chip, Tooltip, useTheme } from '@mui/material'
 import { useState } from 'react'
 
@@ -42,12 +43,6 @@ export default function PlaylistItemRow({
 	const deletePlaylist = async (guid: PlaylistGuid) => {
 		if (currentPlaylistGuid === guid) turnOff()
 		deleteByGuid(guid)
-			.then((result) => {
-				// reload()
-			})
-			.catch((e: any) => {
-				console.log('Something went wrong:', e.message)
-			})
 	}
 
 	const createdAt = new Date(data.createdAt)
@@ -109,7 +104,17 @@ export default function PlaylistItemRow({
 					navigate('playlist', { guid: data.guid })
 				}}
 			>
-				<Box display={'flex'} gap={1}>
+				<Box
+					display={'flex'}
+					gap={1}
+					flex={1}
+					onClick={() => {
+						navigate('playlist', { guid: data.guid })
+					}}
+					sx={{
+						cursor: 'pointer',
+					}}
+				>
 					<Link
 						to="playlist"
 						params={{
@@ -117,10 +122,9 @@ export default function PlaylistItemRow({
 						}}
 					>
 						<Typography
-							strong
+							strong={500}
 							sx={{
 								marginLeft: 1,
-								cursor: 'pointer',
 							}}
 						>
 							{data.title}
@@ -137,8 +141,6 @@ export default function PlaylistItemRow({
 					</Box>
 				</Box>
 
-				<Box flex={1} />
-
 				<Box>
 					{isOn && currentPlaylistGuid == data.guid ? (
 						<Chip label={'Aktivní'} size="small" color="secondary" />
@@ -148,6 +150,18 @@ export default function PlaylistItemRow({
 				</Box>
 
 				<Box display={'flex'} gap={4} alignItems={'center'}>
+					<Typography
+						color="grey.500"
+						thin
+						sx={{
+							width: '100px',
+							userSelect: 'none',
+						}}
+					>
+						{data.itemsCount > 0 ? data.itemsCount : 'Žádná'}{' '}
+						{czechConjugation('píseň', 'písně', 'písní', data.itemsCount)}
+					</Typography>
+
 					<Typography
 						color="grey.500"
 						thin
@@ -208,6 +222,7 @@ export default function PlaylistItemRow({
 						onClick: () => {
 							navigate('playlist', { guid: data.guid })
 						},
+						icon: <KeyboardArrowRight />,
 					},
 					{
 						title: <Typography color="error">Smazat</Typography>,

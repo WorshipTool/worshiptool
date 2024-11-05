@@ -21,7 +21,7 @@ export type SmartPageOptions = Nullable<{
 	middleWidth: boolean
 }>
 
-const MIDDLE_WIDTH = 800
+const MIDDLE_WIDTH = 900
 
 export const RIGHT_SIDE_BAR_CLASSNAME = 'right-side-bar'
 export const SmartPageInnerProvider = ({

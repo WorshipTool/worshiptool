@@ -11,7 +11,7 @@ import { CommonLinkProps } from '../Link/Link'
 import { ColorType, isColorOfThemeType } from '../ui.types'
 
 export type ButtonProps<T extends RoutesKeys> = {
-	children?: string
+	children?: string | React.ReactNode
 	variant?: 'contained' | 'outlined' | 'text'
 	color?: ColorType | 'primarygradient'
 	size?: 'small' | 'medium' | 'large'

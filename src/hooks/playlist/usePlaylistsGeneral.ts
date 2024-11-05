@@ -18,6 +18,11 @@ import Playlist, {
 } from '../../interfaces/playlist/playlist.types'
 import { hac, handleApiCall } from '../../tech/handleApiCall'
 
+export const PLAYLIST_UPDATE_EVENT_NAME = 'playlist-update'
+
+export const getPlaylistUpdateEventName = (guid: PlaylistGuid) =>
+	`${PLAYLIST_UPDATE_EVENT_NAME}-${guid}`
+
 export default function usePlaylistsGeneral() {
 	const { playlistEditingApi, playlistGettingApi } = useApi()
 
@@ -94,9 +99,11 @@ export default function usePlaylistsGeneral() {
 	}
 
 	const deletePlaylist = async (guid: PlaylistGuid) => {
-		return await handleApiCall(
+		const r = await handleApiCall(
 			playlistEditingApi.playlistEditingControllerDeletePlaylist(guid)
 		)
+		updatePlaylistTick(guid)
+		return r
 	}
 
 	const getPlaylistByGuid = async (guid: PlaylistGuid): Promise<Playlist> => {
@@ -174,6 +181,14 @@ export default function usePlaylistsGeneral() {
 		},
 		[playlistEditingApi]
 	)
+
+	const updatePlaylistTick = async (guid: PlaylistGuid) => {
+		window.dispatchEvent(
+			new CustomEvent(PLAYLIST_UPDATE_EVENT_NAME, { detail: guid })
+		)
+
+		window.dispatchEvent(new Event(getPlaylistUpdateEventName(guid)))
+	}
 
 	return {
 		addVariantToPlaylist,

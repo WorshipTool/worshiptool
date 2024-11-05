@@ -1650,6 +1650,12 @@ export interface PlaylistData {
      * @memberof PlaylistData
      */
     'openedAt': string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PlaylistData
+     */
+    'itemsCount': number;
 }
 /**
  * 

@@ -34,6 +34,10 @@ export default function CreateNewPlaylistButton() {
 			variant="contained"
 			onClick={createPlaylist}
 			color="primarygradient"
+			tooltip="Vytvořit nový playlist"
+			sx={{
+				height: '100%',
+			}}
 		>
 			Vytvořit
 		</Button>

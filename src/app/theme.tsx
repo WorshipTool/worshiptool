@@ -35,6 +35,7 @@ let muiTheme = createTheme(
 	csCZ
 )
 muiTheme = responsiveFontSizes(muiTheme)
+export const _muiTheme = muiTheme
 
 // theme.typography.h4 = {
 // 	fontSize: '1.2rem',
