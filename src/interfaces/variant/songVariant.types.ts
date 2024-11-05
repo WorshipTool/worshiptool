@@ -43,4 +43,7 @@ export type SongVariantDto = {
 	deleted: boolean
 
 	language: string | null
+
+	createdAt: Date
+	packCreatedAt: Date
 }

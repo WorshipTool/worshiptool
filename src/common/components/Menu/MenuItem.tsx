@@ -8,10 +8,11 @@ export type MenuItemObjectType = {
 	icon?: ReactElement
 	disabled?: boolean
 	selected?: boolean
+	hidden?: boolean
 }
 
 export default function MenuItem(item: MenuItemObjectType) {
-	return (
+	return item.hidden ? null : (
 		<MIt
 			onClick={item.onClick}
 			disabled={item.disabled}

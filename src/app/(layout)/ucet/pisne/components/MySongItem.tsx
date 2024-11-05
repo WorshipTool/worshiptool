@@ -1,8 +1,10 @@
+import { IconButton } from '@/common/ui/IconButton'
+import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import { Box, Typography } from '@mui/material'
+import { MoreHoriz } from '@mui/icons-material'
+import { Box } from '@mui/material'
 import { SongVariantDto } from '../../../../../api/dtos'
-import { Button } from '../../../../../common/ui/Button'
 import { Gap } from '../../../../../common/ui/Gap'
 import { Link } from '../../../../../common/ui/Link/Link'
 
@@ -38,16 +40,20 @@ export default function MySongItem(props: MySongItemProps) {
 						alignItems: 'center',
 						padding: 2,
 						paddingLeft: 4,
-						paddingRight: 5,
-						backgroundColor: props.index % 2 == 0 ? '#e0e0e0' : '#e6e6e6',
-						borderRadius: 1,
+						// backgroundColor: props.index % 2 == 0 ? '#e0e0e0' : '#e6e6e6',
+						bgcolor: 'grey.100',
+						borderRadius: 2,
 						cursor: 'pointer',
 						'&:hover': {
-							backgroundColor: '#d0d0d0',
+							bgcolor: 'grey.200',
 						},
+						'&:active': {
+							bgcolor: 'grey.300',
+						},
+						transition: 'all 0.2s',
 					}}
 				>
-					<Typography variant="subtitle2">{props.index}</Typography>
+					<Typography>{props.index + 1}</Typography>
 					<Gap value={1} />
 					<Box
 						flex={1}
@@ -56,16 +62,27 @@ export default function MySongItem(props: MySongItemProps) {
 							textOverflow: 'ellipsis',
 						}}
 					>
-						<Typography variant="subtitle2" maxWidth={200}>
+						<Typography
+							strong={500}
+							sx={{
+								textOverflow: 'ellipsis',
+								overflow: 'hidden',
+								whiteSpace: 'nowrap',
+							}}
+						>
 							{props.variant.preferredTitle}
 						</Typography>
 						<Typography
-							variant="caption"
-							display={{
-								xs: 'none',
-								sm: 'none',
-								md: 'block',
+							size={'small'}
+							sx={{
+								display: {
+									xs: 'none',
+									sm: 'none',
+									md: 'block',
+								},
 							}}
+							thin
+							color="grey.700"
 						>
 							{getHintText().substring(0, 100)}...
 						</Typography>
@@ -76,13 +93,18 @@ export default function MySongItem(props: MySongItemProps) {
 							sm: 'block',
 						}}
 					>
-						<Typography variant="caption">
-							{props.variant.verified ? 'Veřejné' : 'Soukromé'}
+						<Typography size={'small'}>
+							{props.variant.public ? 'Veřejné' : 'Soukromé'}
 						</Typography>
 					</Box>
-					<Button to={'variant'} toParams={variantParams} variant="text">
+
+					<IconButton>
+						<MoreHoriz />
+					</IconButton>
+
+					{/* <Button to={'variant'} toParams={variantParams} variant="text">
 						Otevřít
-					</Button>
+					</Button> */}
 				</Box>
 			</Link>
 		</DraggableSong>

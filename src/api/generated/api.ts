@@ -2874,6 +2874,12 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'hasChords': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariant
+     */
+    'createdAt': string;
 }
 
 export const SongVariantTypeEnum = {
@@ -3010,6 +3016,18 @@ export interface SongVariantDataOutDto {
      * @memberof SongVariantDataOutDto
      */
     'createdForPlaylistGuid': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'packCreatedAt': string;
 }
 
 export const SongVariantDataOutDtoCreatedTypeEnum = {
@@ -3086,6 +3104,18 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'playlistItems': Array<PlaylistItem>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'updatedAt': string;
 }
 /**
  * 

@@ -39,6 +39,9 @@ export const mapSongVariantDataOutDtoToSongVariantDto = ({
 		packGuid: api.packGuid as VariantPackGuid,
 		packAlias: api.alias as VariantPackAlias,
 		createdForPlaylistGuid: api.createdForPlaylistGuid,
+
+		createdAt: new Date(api.createdAt),
+		packCreatedAt: new Date(api.packCreatedAt),
 	}
 }
 

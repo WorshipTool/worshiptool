@@ -12,7 +12,7 @@ import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { czechConjugation } from '@/tech/string/string.tech'
-import { Delete, KeyboardArrowRight, MoreHoriz } from '@mui/icons-material'
+import { Delete, KeyboardArrowLeft, MoreHoriz } from '@mui/icons-material'
 import { Box, Chip, Tooltip, useTheme } from '@mui/material'
 import { useState } from 'react'
 
@@ -65,11 +65,9 @@ export default function PlaylistItemRow({
 		<>
 			<Box
 				sx={{
-					paddingX: 1,
-					paddingY: 0.5,
 					display: 'flex',
 					flexDirection: 'row',
-					alignItems: 'center',
+					// alignItems: 'center',
 					position: 'relative',
 					justifyContent: 'space-between',
 					bgcolor: 'grey.100',
@@ -106,6 +104,8 @@ export default function PlaylistItemRow({
 			>
 				<Box
 					display={'flex'}
+					flexDirection={'row'}
+					alignItems={'center'}
 					gap={1}
 					flex={1}
 					onClick={() => {
@@ -113,6 +113,8 @@ export default function PlaylistItemRow({
 					}}
 					sx={{
 						cursor: 'pointer',
+
+						paddingLeft: 1,
 					}}
 				>
 					<Link
@@ -149,7 +151,15 @@ export default function PlaylistItemRow({
 					)}
 				</Box>
 
-				<Box display={'flex'} gap={4} alignItems={'center'}>
+				<Box
+					display={'flex'}
+					gap={4}
+					alignItems={'center'}
+					sx={{
+						paddingRight: 1,
+						paddingY: 0.5,
+					}}
+				>
 					<Typography
 						color="grey.500"
 						thin
@@ -222,7 +232,7 @@ export default function PlaylistItemRow({
 						onClick: () => {
 							navigate('playlist', { guid: data.guid })
 						},
-						icon: <KeyboardArrowRight />,
+						icon: <KeyboardArrowLeft />,
 					},
 					{
 						title: <Typography color="error">Smazat</Typography>,
@@ -232,6 +242,7 @@ export default function PlaylistItemRow({
 							askToDeletePlaylist(data.guid as PlaylistGuid, data.title)
 							return false
 						},
+						hidden: Boolean(data.teamName),
 					},
 				]}
 			/>

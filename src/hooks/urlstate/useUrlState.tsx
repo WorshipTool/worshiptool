@@ -2,21 +2,21 @@ import { RoutesKeys, SmartSearchParams } from '@/routes'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export const useUrlState = (key: string, startValue?: string) => {
-	const [value, _setValue] = useState<string | null>(() => {
+export function useUrlState<T = string>(key: string, startValue?: T) {
+	const [value, _setValue] = useState<T | null>(() => {
 		if (typeof window === 'undefined') return startValue || null
 		const params = new URLSearchParams(window.location.search)
-		return params.get(key) || startValue || null
+		return (params.get(key) || startValue || null) as T | null
 	})
 
-	const setValue = (value: string | null) => {
+	const setValue = (value: T | null) => {
 		_setValue(value)
 
 		const params = new URLSearchParams(window.location.search)
 		if (value === null) {
 			params.delete(key)
 		} else {
-			params.set(key, value)
+			params.set(key, value as string)
 		}
 
 		const url = `${window.location.pathname}?${params.toString()}`
