@@ -68,6 +68,8 @@ export default function MySongItem(props: MySongItemProps) {
 		)
 	}
 
+	const canDelete = !props.variant.public
+
 	return (
 		<>
 			<DraggableSong
@@ -195,6 +197,7 @@ export default function MySongItem(props: MySongItemProps) {
 							setOpenDialog(true)
 						},
 						icon: <Delete color="error" />,
+						hidden: !canDelete,
 					},
 				]}
 			/>
