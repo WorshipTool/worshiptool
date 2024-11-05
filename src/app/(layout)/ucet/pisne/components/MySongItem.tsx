@@ -1,11 +1,18 @@
 import { MySongsOrderOptions } from '@/app/(layout)/ucet/pisne/components/MySongListOrderSelect'
+import Menu from '@/common/components/Menu/Menu'
+import Popup from '@/common/components/Popup/Popup'
+import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
+import { useApi } from '@/hooks/api/useApi'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { useApiState } from '@/tech/ApiState'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
-import { MoreHoriz } from '@mui/icons-material'
+import { Delete, KeyboardArrowLeft, MoreHoriz } from '@mui/icons-material'
 import { Box } from '@mui/material'
+import { useState } from 'react'
 import { SongVariantDto } from '../../../../../api/dtos'
 import { Link } from '../../../../../common/ui/Link/Link'
 
@@ -14,9 +21,15 @@ interface MySongItemProps {
 	index: number
 
 	sortKey: MySongsOrderOptions
+	onDelete: () => void
 }
 
 export default function MySongItem(props: MySongItemProps) {
+	const [openMenu, setOpenMenu] = useState(false)
+	const [anchor, setAnchor] = useState<null | HTMLElement>(null)
+
+	const [openDialog, setOpenDialog] = useState(false)
+
 	const getHintText = () => {
 		return props.variant.sheet.getSections()[0].text
 	}
@@ -34,27 +47,47 @@ export default function MySongItem(props: MySongItemProps) {
 			: null
 	const showDateString = showDate ? getSmartDateAgoString(showDate) : null
 
+	const navigate = useSmartNavigate()
+	const openVariant = () => {
+		navigate('variant', variantParams)
+	}
+
+	const { songDeletingApi } = useApi()
+	const { fetchApiState, apiState } = useApiState()
+
+	const deleteSong = () => {
+		fetchApiState(
+			async () => {
+				return await songDeletingApi.songDeletingControllerDelete(
+					props.variant.packGuid
+				)
+			},
+			() => {
+				props.onDelete()
+			}
+		)
+	}
+
 	return (
-		<DraggableSong
-			data={{
-				packGuid: props.variant.packGuid,
-				alias: props.variant.packAlias,
-				title: props.variant.preferredTitle,
-			}}
-		>
-			<Link to="variant" params={variantParams}>
+		<>
+			<DraggableSong
+				data={{
+					packGuid: props.variant.packGuid,
+					alias: props.variant.packAlias,
+					title: props.variant.preferredTitle,
+				}}
+			>
 				<Box
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
 						gap: 4,
+						paddingRight: 2,
 						alignItems: 'center',
-						padding: 2,
-						paddingLeft: 4,
 						// backgroundColor: props.index % 2 == 0 ? '#e0e0e0' : '#e6e6e6',
 						bgcolor: 'grey.100',
 						borderRadius: 2,
-						cursor: 'pointer',
+						// cursor: 'pointer',
 						'&:hover': {
 							bgcolor: 'grey.200',
 						},
@@ -63,20 +96,34 @@ export default function MySongItem(props: MySongItemProps) {
 						},
 						transition: 'all 0.2s',
 					}}
+					onDoubleClick={openVariant}
 				>
-					<Box display={'flex'} gap={4} flex={1} alignItems={'center'}>
+					<Box
+						display={'flex'}
+						gap={4}
+						flex={1}
+						alignItems={'center'}
+						sx={{
+							cursor: 'pointer',
+							padding: 2,
+							paddingLeft: 4,
+						}}
+						onClick={openVariant}
+					>
 						<Typography>{props.index + 1}</Typography>
 						<Box flex={1}>
-							<Typography
-								strong={500}
-								sx={{
-									textOverflow: 'ellipsis',
-									overflow: 'hidden',
-									whiteSpace: 'nowrap',
-								}}
-							>
-								{props.variant.preferredTitle}
-							</Typography>
+							<Link to="variant" params={variantParams}>
+								<Typography
+									strong={500}
+									sx={{
+										textOverflow: 'ellipsis',
+										overflow: 'hidden',
+										whiteSpace: 'nowrap',
+									}}
+								>
+									{props.variant.preferredTitle}
+								</Typography>
+							</Link>
 							<Typography
 								size={'small'}
 								sx={{
@@ -97,7 +144,6 @@ export default function MySongItem(props: MySongItemProps) {
 							</Typography>
 						</Box>
 					</Box>
-
 					<Typography
 						thin
 						color="grey.500"
@@ -119,15 +165,70 @@ export default function MySongItem(props: MySongItemProps) {
 						</Typography>
 					</Box>
 
-					<IconButton>
+					<IconButton
+						onClick={(e) => {
+							setAnchor(e.currentTarget)
+							setOpenMenu(true)
+							e.stopPropagation()
+							e.preventDefault()
+						}}
+					>
 						<MoreHoriz />
 					</IconButton>
-
-					{/* <Button to={'variant'} toParams={variantParams} variant="text">
-						Otevřít
-					</Button> */}
 				</Box>
-			</Link>
-		</DraggableSong>
+			</DraggableSong>
+			<Menu
+				open={openMenu}
+				anchor={anchor}
+				onClose={() => setOpenMenu(false)}
+				items={[
+					{
+						title: 'Otevřít',
+						onClick: () => {
+							openVariant()
+						},
+						icon: <KeyboardArrowLeft />,
+					},
+					{
+						title: <Typography color="error">Smazat</Typography>,
+						onClick: () => {
+							setOpenDialog(true)
+						},
+						icon: <Delete color="error" />,
+					},
+				]}
+			/>
+
+			<Popup
+				open={openDialog}
+				onClose={() => setOpenDialog(false)}
+				title="Opravdu chcete odstranit píseň?"
+				width={400}
+				actions={
+					<>
+						<Button variant="outlined" type="reset" disabled={apiState.loading}>
+							Zrušit
+						</Button>
+						<Button
+							loading={apiState.loading}
+							onClick={() => {
+								deleteSong()
+								setOpenDialog(false)
+							}}
+							color="error"
+							variant="contained"
+						>
+							Smazat
+						</Button>
+					</>
+				}
+			>
+				<Typography>
+					Chcete opravdu smazat píseň{' '}
+					<strong>{props.variant.preferredTitle}</strong>? Tato akce je
+					nevratná.
+				</Typography>
+			</Popup>
+		</>
 	)
 }

@@ -28,15 +28,17 @@ function MySongsList() {
 		'updatedAt'
 	)
 
-	const [{ data: allVariants, loading }] = useApiStateEffect(async () => {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerGetSongListOfUser()
-		)
-		const variants = result.variants.map((variant) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(variant)
-		})
-		return variants
-	})
+	const [{ data: allVariants, loading }, reload] = useApiStateEffect(
+		async () => {
+			const result = await handleApiCall(
+				songGettingApi.songGettingControllerGetSongListOfUser()
+			)
+			const variants = result.variants.map((variant) => {
+				return mapSongVariantDataOutDtoToSongVariantDto(variant)
+			})
+			return variants
+		}
+	)
 
 	const [filters, setFilters] = useState<MySongFilterOption[]>([])
 
@@ -132,6 +134,7 @@ function MySongsList() {
 											index={index + startIndex}
 											key={`mysong${variant.guid}`}
 											sortKey={sortOption as MySongsOrderOptions}
+											onDelete={reload}
 										/>
 									)
 								})}

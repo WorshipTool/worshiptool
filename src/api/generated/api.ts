@@ -8400,15 +8400,15 @@ export const SongDeletingApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerDelete: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songDeletingControllerDelete', 'guid', guid)
-            const localVarPath = `/song/variant/delete/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+        songDeletingControllerDelete: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songDeletingControllerDelete', 'packGuid', packGuid)
+            const localVarPath = `/song/variant/delete/{packGuid}`
+                .replace(`{${"packGuid"}}`, encodeURIComponent(String(packGuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8437,15 +8437,15 @@ export const SongDeletingApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerRestore: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songDeletingControllerRestore', 'guid', guid)
-            const localVarPath = `/song/variant/restore/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+        songDeletingControllerRestore: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songDeletingControllerRestore', 'packGuid', packGuid)
+            const localVarPath = `/song/variant/restore/{packGuid}`
+                .replace(`{${"packGuid"}}`, encodeURIComponent(String(packGuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8484,24 +8484,24 @@ export const SongDeletingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songDeletingControllerDelete(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerDelete(guid, options);
+        async songDeletingControllerDelete(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerDelete(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongDeletingApi.songDeletingControllerDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songDeletingControllerRestore(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerRestore(guid, options);
+        async songDeletingControllerRestore(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerRestore(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongDeletingApi.songDeletingControllerRestore']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8518,21 +8518,21 @@ export const SongDeletingApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerDelete(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songDeletingControllerDelete(guid, options).then((request) => request(axios, basePath));
+        songDeletingControllerDelete(packGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songDeletingControllerDelete(packGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerRestore(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songDeletingControllerRestore(guid, options).then((request) => request(axios, basePath));
+        songDeletingControllerRestore(packGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songDeletingControllerRestore(packGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8546,24 +8546,24 @@ export const SongDeletingApiFactory = function (configuration?: Configuration, b
 export class SongDeletingApi extends BaseAPI {
     /**
      * 
-     * @param {string} guid 
+     * @param {string} packGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongDeletingApi
      */
-    public songDeletingControllerDelete(guid: string, options?: RawAxiosRequestConfig) {
-        return SongDeletingApiFp(this.configuration).songDeletingControllerDelete(guid, options).then((request) => request(this.axios, this.basePath));
+    public songDeletingControllerDelete(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongDeletingApiFp(this.configuration).songDeletingControllerDelete(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} guid 
+     * @param {string} packGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongDeletingApi
      */
-    public songDeletingControllerRestore(guid: string, options?: RawAxiosRequestConfig) {
-        return SongDeletingApiFp(this.configuration).songDeletingControllerRestore(guid, options).then((request) => request(this.axios, this.basePath));
+    public songDeletingControllerRestore(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongDeletingApiFp(this.configuration).songDeletingControllerRestore(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
