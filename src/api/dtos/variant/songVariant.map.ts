@@ -21,6 +21,8 @@ export const mapSongDataVariantApiToSongVariantDto = (
 		sheet: new Sheet(api.sheetData),
 		createdBy: api.createdByGuid as UserGuid,
 		createdForPlaylistGuid: api.createdForPlaylistGuid,
+		createdAt: new Date(api.createdAt),
+		packCreatedAt: new Date(api.packCreatedAt),
 	}
 }
 

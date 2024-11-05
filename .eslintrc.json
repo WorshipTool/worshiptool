@@ -5,7 +5,13 @@
 		"no-restricted-imports": [
 			"error",
 			{
-				"patterns": ["@/app/(submodules)/(teams)/*"]
+				"paths": [
+					{
+						"name": "@mui/material",
+						"message": "Import from @mui/material is not allowed. Import specific modules from @ui or @common instead."
+					}
+				],
+				"patterns": ["@/app/submodules/teams/*"]
 			}
 		]
 	}

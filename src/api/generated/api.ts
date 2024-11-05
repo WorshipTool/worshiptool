@@ -2707,6 +2707,18 @@ export interface SongDataVariant {
      * @memberof SongDataVariant
      */
     'createdForPlaylistGuid': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'packCreatedAt': string;
 }
 
 export const SongDataVariantCreatedTypeEnum = {

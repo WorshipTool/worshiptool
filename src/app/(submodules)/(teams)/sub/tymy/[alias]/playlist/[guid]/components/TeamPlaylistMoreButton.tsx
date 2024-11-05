@@ -65,7 +65,7 @@ export default function TeamPlaylistMoreButton() {
 				playlist: {
 					guid: playlistGuid,
 					title,
-				},
+				} as any,
 				leader: apiState.data.leader,
 				members: apiState.data.members,
 		  }
@@ -177,7 +177,7 @@ export default function TeamPlaylistMoreButton() {
 						playlist: {
 							guid: playlistGuid,
 							title,
-						},
+						} as any,
 					}}
 					lockPlaylist
 				/>

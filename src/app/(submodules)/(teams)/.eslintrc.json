@@ -1,5 +1,10 @@
 {
 	"rules": {
-		"no-restricted-imports": "off"
+		"no-restricted-imports": [
+			"error",
+			{
+				"patterns": ["@mui/material"]
+			}
+		]
 	}
 }

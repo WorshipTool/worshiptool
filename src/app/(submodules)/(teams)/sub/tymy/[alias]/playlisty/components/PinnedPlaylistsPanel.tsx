@@ -3,6 +3,7 @@ import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/comp
 import PinnedPlaylistPanelItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PinnedPlaylistPanelItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
@@ -12,7 +13,6 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { PushPin } from '@mui/icons-material'
-import { Box, useTheme } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 
 export default function PinnedPlaylistsPanel() {
@@ -121,7 +121,7 @@ export default function PinnedPlaylistsPanel() {
 			<Box display={'flex'} flexDirection={'row'} gap={1} flexWrap={'wrap'}>
 				{pinnedPlaylists?.map((playlist) => (
 					<PinnedPlaylistPanelItem
-						data={playlist}
+						data={playlist as PlaylistData}
 						onRemove={() => onRemove(playlist.guid)}
 						key={playlist.guid}
 					/>

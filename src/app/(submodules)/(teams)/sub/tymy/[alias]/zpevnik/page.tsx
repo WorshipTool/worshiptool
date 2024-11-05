@@ -3,7 +3,6 @@ import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
-import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { Add } from '@mui/icons-material'
 import { Box } from '@mui/system'
@@ -15,6 +14,7 @@ import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import SearchFieldTeamZpevnik from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import SelectedPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/zpevnik/components/SelectedPanel'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Button } from '@/common/ui/Button'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
 import { usePermission } from '@/hooks/permissions/usePermission'
@@ -155,6 +155,7 @@ function TeamSongsPage() {
 									justifyContent={'space-between'}
 									gap={1}
 									flex={1}
+									sx={{}}
 								>
 									{<SearchFieldTeamZpevnik onSearch={setSearchString} />}
 									<Box

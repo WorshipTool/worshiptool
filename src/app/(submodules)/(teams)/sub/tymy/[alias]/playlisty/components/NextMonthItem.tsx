@@ -147,7 +147,7 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 				open={open}
 				onClose={() => setOpen(false)}
 				data={{
-					...props.data,
+					...(props.data as any),
 					date: new Date(props.data.date),
 				}}
 			/>

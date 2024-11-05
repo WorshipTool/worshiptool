@@ -1,8 +1,7 @@
 'use client'
 
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Button } from '@/common/ui/Button'
-import { Box } from '@mui/material'
+import { Box, Button } from '@/common/ui'
 
 export default SmartPage(page)
 function page() {
