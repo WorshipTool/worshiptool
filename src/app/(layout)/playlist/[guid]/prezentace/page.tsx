@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
+import PeoplePanel from '@/app/(layout)/playlist/[guid]/prezentace/components/PeoplePanel'
 import SlideCard from '@/app/(layout)/playlist/[guid]/prezentace/components/SlideCard'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
@@ -115,42 +116,56 @@ function PlaylistCards() {
 		}
 	}, [items])
 
+	const onCardChange = (index: number) => {
+		setCurrentIndex(index)
+	}
+
 	return (
-		<Box>
-			<Box position={'absolute'} right={0} top={0} bgcolor={'grey'}>
-				<IconButton
-					color="inherit"
-					sx={{ color: COLOR }}
-					onClick={() => moveCurrent(-1)}
-					disabled={currentIndex == 0}
-				>
-					<ChevronLeft />
-				</IconButton>
-				<IconButton
-					color="inherit"
-					sx={{ color: COLOR }}
-					onClick={() => moveCurrent(1)}
-					disabled={currentIndex == items.length - 1}
-				>
-					<ChevronRight />
-				</IconButton>
-				{!fullscreen ? (
+		<Box overflow={'hidden'}>
+			<Box
+				position={'absolute'}
+				right={0}
+				top={0}
+				display={'flex'}
+				gap={1}
+				alignItems={'center'}
+			>
+				<PeoplePanel onCardChange={onCardChange} cardIndex={currentIndex} />
+				<Box bgcolor={'grey'} display={'flex'}>
 					<IconButton
-						onClick={() => {
-							turnOnFullscreen()
-						}}
+						color="inherit"
+						sx={{ color: COLOR }}
+						onClick={() => moveCurrent(-1)}
+						disabled={currentIndex == 0}
 					>
-						<Fullscreen color="inherit" sx={{ color: COLOR }} />
+						<ChevronLeft />
 					</IconButton>
-				) : (
 					<IconButton
-						onClick={() => {
-							turnOffFullscreen()
-						}}
+						color="inherit"
+						sx={{ color: COLOR }}
+						onClick={() => moveCurrent(1)}
+						disabled={currentIndex == items.length - 1}
 					>
-						<FullscreenExit color="inherit" sx={{ color: COLOR }} />
+						<ChevronRight />
 					</IconButton>
-				)}
+					{!fullscreen ? (
+						<IconButton
+							onClick={() => {
+								turnOnFullscreen()
+							}}
+						>
+							<Fullscreen color="inherit" sx={{ color: COLOR }} />
+						</IconButton>
+					) : (
+						<IconButton
+							onClick={() => {
+								turnOffFullscreen()
+							}}
+						>
+							<FullscreenExit color="inherit" sx={{ color: COLOR }} />
+						</IconButton>
+					)}
+				</Box>
 			</Box>
 			<Box
 				sx={{

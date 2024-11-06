@@ -39,6 +39,7 @@
 		"react-markdown": "^9.0.1",
 		"react-snowfall": "^2.1.0",
 		"sharp": "^0.33.3",
+		"socket.io-client": "^4.8.1",
 		"swipe-event-listener": "^1.2.1",
 		"swr": "^2.2.5",
 		"ts-node": "^10.9.2"
