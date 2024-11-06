@@ -5,6 +5,7 @@ import {
 	TeamMembersApiAxiosParamCreator,
 } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
+import { getImageUrl } from '@/api/urls'
 import TeamLeftPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
 import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamPageProviders'
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
@@ -74,8 +75,18 @@ export const generateMetadata = generateSmartMetadata(
 		const teamName = info?.name
 
 		const title = info ? `Tým ${teamName}` : 'Tým'
+		const imageUrl = info?.logoGuid ? getImageUrl(info.logoGuid) : null
+
 		return {
 			title,
+
+			...(imageUrl
+				? {
+						icons: {
+							icon: imageUrl,
+						},
+				  }
+				: {}),
 		}
 	}
 )

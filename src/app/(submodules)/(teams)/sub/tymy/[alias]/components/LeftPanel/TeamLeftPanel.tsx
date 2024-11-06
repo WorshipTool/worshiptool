@@ -19,8 +19,13 @@ type TeamLeftPanelProps = {}
 
 const TRANSITION = 'all 0.2s'
 export default function TeamLeftPanel(props: TeamLeftPanelProps) {
-	const { collapsed, setCollapsedManually, darkMode, setDarkMode } =
-		useTeamSideBar()
+	const {
+		collapsed,
+		setCollapsedManually,
+		darkMode,
+		setDarkMode,
+		uncollapsable,
+	} = useTeamSideBar()
 
 	const WIDTH = useMemo(() => (collapsed ? 60 : 250), [collapsed])
 	return (
@@ -72,32 +77,34 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 						</IconButton>
 					</OnlyAdmin>
 				</Box>
-				<Box paddingBottom={2}>
-					{collapsed ? (
-						<IconButton
-							onClick={() => setCollapsedManually(!collapsed)}
-							color="inherit"
-							tooltip={'Rozbalit menu'}
-							tooltipPlacement="right"
-						>
-							{collapsed ? <ChevronRight /> : <ChevronLeft />}
-						</IconButton>
-					) : (
-						<Button
-							onClick={() => setCollapsedManually(!collapsed)}
-							color="inherit"
-							tooltip={'Sbalit menu'}
-							tooltipPlacement="right"
-							startIcon={<ChevronLeft />}
-							variant="text"
-							sx={{
-								minWidth: 150,
-							}}
-						>
-							Sbalit menu
-						</Button>
-					)}
-				</Box>
+				{!uncollapsable && (
+					<Box paddingBottom={2}>
+						{collapsed ? (
+							<IconButton
+								onClick={() => setCollapsedManually(!collapsed)}
+								color="inherit"
+								tooltip={'Rozbalit menu'}
+								tooltipPlacement="right"
+							>
+								{collapsed ? <ChevronRight /> : <ChevronLeft />}
+							</IconButton>
+						) : (
+							<Button
+								onClick={() => setCollapsedManually(!collapsed)}
+								color="inherit"
+								tooltip={'Sbalit menu'}
+								tooltipPlacement="right"
+								startIcon={<ChevronLeft />}
+								variant="text"
+								sx={{
+									minWidth: 150,
+								}}
+							>
+								Sbalit menu
+							</Button>
+						)}
+					</Box>
+				)}
 			</Box>
 			<Box
 				sx={{

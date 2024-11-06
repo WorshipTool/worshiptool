@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useState } from 'react'
+import { useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react'
 
 type SideBarType = ReturnType<typeof useTeamSideBarProvide>
 
@@ -24,22 +32,30 @@ export const TeamSideBarProvider = ({
 
 const useTeamSideBarProvide = () => {
 	const [collapsed, setCollapsed] = useState(false)
-	const [manualMode, setManualMode] = useState(false)
 	const [darkMode, setDarkMode] = useState(false)
 
-	const setCollapsedManually = useCallback((value: boolean) => {
-		setCollapsed(value)
-		// setManualMode(true)
-	}, [])
+	const theme = useTheme()
+	const uncollapsable = useMediaQuery(theme.breakpoints.down('sm'))
+	useEffect(() => {
+		if (uncollapsable && !collapsed) {
+			setCollapsed(true)
+		}
+	}, [uncollapsable])
+
+	const setCollapsedManually = useCallback(
+		(value: boolean) => {
+			if (uncollapsable) return
+			setCollapsed(value)
+		},
+		[uncollapsable]
+	)
 
 	const setCollapsedAuto = useCallback(
 		(value: boolean) => {
-			// if (manualMode) {
-			// 	return
-			// }
+			if (uncollapsable) return
 			setCollapsed(value)
 		},
-		[collapsed]
+		[uncollapsable]
 	)
 	return {
 		collapsed,
@@ -47,5 +63,6 @@ const useTeamSideBarProvide = () => {
 		setCollapsedManually,
 		darkMode,
 		setDarkMode,
+		uncollapsable,
 	}
 }
