@@ -1,3 +1,4 @@
+'use client'
 import { VariantPackGuid } from '@/api/dtos'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import usePlaylist from '@/hooks/playlist/usePlaylist'
@@ -331,5 +332,6 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		removeItem,
 		addItem,
 		editItem,
+		data: playlist.playlist,
 	}
 }

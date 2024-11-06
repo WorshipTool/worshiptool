@@ -8,20 +8,17 @@ import {
 } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
 import PeoplePanel from '@/app/(layout)/playlist/[guid]/prezentace/components/PeoplePanel'
 import SlideCard from '@/app/(layout)/playlist/[guid]/prezentace/components/SlideCard'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { useParams } from 'next/navigation'
 import { SwipeEventListener } from 'swipe-event-listener'
-import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
 export default SmartPage(PlaylistCards, ['fullWidth'])
 
 function PlaylistCards() {
-	const { guid } = useParams() as { guid: PlaylistGuid }
-	const { items, playlist } = usePlaylist(guid)
+	const { items, guid, data: playlist } = useInnerPlaylist()
 
 	const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -127,10 +124,12 @@ function PlaylistCards() {
 				right={0}
 				top={0}
 				display={'flex'}
-				gap={1}
-				alignItems={'center'}
+				gap={1.5}
+				alignItems={'end'}
 			>
-				<PeoplePanel onCardChange={onCardChange} cardIndex={currentIndex} />
+				{playlist?.teamAlias && (
+					<PeoplePanel onCardChange={onCardChange} cardIndex={currentIndex} />
+				)}
 				<Box bgcolor={'grey'} display={'flex'}>
 					<IconButton
 						color="inherit"

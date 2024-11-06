@@ -1,6 +1,8 @@
 'use server'
+import { InnerPlaylistProvider } from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { smartRedirect } from '@/routes/routes.tech.server'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps, MetadataProps } from '../../../../common/types'
@@ -54,5 +56,9 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 			guid: props.params.guid,
 		})
 	}
-	return <>{props.children}</>
+	return (
+		<InnerPlaylistProvider guid={props.params.guid as PlaylistGuid}>
+			{props.children}
+		</InnerPlaylistProvider>
+	)
 }

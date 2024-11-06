@@ -73,6 +73,9 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 		leave: (data: Person) => {
 			// Remove person from the list
 			setPeople((people) => people.filter((p) => p.guid !== data.guid))
+			if (chosen === data.guid) {
+				setChosen(null)
+			}
 		},
 		cardChange: (data: CardChangeData) => {
 			if (!user) return
@@ -119,50 +122,51 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 
 	return (
 		<Box color={'white'} display={'flex'} gap={1}>
-			{people.map((person) => {
-				const selected = chosen === person.guid
-				const you = person.guid === user?.guid
+			{people.length > 1 &&
+				people.map((person) => {
+					const selected = chosen === person.guid
+					const you = person.guid === user?.guid
 
-				const onClick = () => {
-					if (!user) return
-					if (selected) {
-						setChosen(null)
-					} else {
-						setChosen(person.guid)
-						send('startFollow', {
-							userGuid: user.guid,
-							followedUserGuid: person.guid,
-						})
+					const onClick = () => {
+						if (!user) return
+						if (selected) {
+							setChosen(null)
+						} else {
+							setChosen(person.guid)
+							send('startFollow', {
+								userGuid: user.guid,
+								followedUserGuid: person.guid,
+							})
+						}
 					}
-				}
 
-				return (
-					<Clickable
-						key={person.guid}
-						onClick={onClick}
-						tooltip={selected ? 'Zrušit sledování osoby' : 'Sledovat osobu'}
-						disabled={you}
-					>
-						<Avatar
+					return (
+						<Clickable
 							key={person.guid}
-							sx={{
-								bgcolor: !you ? stringToColor(person.name) : 'grey',
-								width: 30,
-								height: 30,
-								fontSize: 16,
-								border: '1px solid',
-								borderColor: grey[700],
-								...(selected && {
-									borderColor: 'white',
-								}),
-							}}
+							onClick={onClick}
+							tooltip={selected ? 'Zrušit sledování osoby' : 'Sledovat osobu'}
+							disabled={you}
 						>
-							{person.name.split(' ')[0][0]}
-							{person.name.split(' ')[1][0]}
-						</Avatar>
-					</Clickable>
-				)
-			})}
+							<Avatar
+								key={person.guid}
+								sx={{
+									bgcolor: !you ? stringToColor(person.name) : 'grey',
+									width: 30,
+									height: 30,
+									fontSize: 16,
+									border: '1px solid',
+									borderColor: grey[700],
+									...(selected && {
+										borderColor: 'white',
+									}),
+								}}
+							>
+								{person.name.split(' ')[0][0]}
+								{person.name.split(' ')[1][0]}
+							</Avatar>
+						</Clickable>
+					)
+				})}
 		</Box>
 	)
 }
