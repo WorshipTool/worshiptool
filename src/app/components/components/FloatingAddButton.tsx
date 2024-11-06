@@ -1,5 +1,6 @@
+import { Box, Tooltip } from '@/common/ui'
+import { Fab } from '@/common/ui/mui'
 import { Add } from '@mui/icons-material'
-import { Box, Fab, Tooltip } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from '../../../common/ui/Link/Link'
 import useAuth from '../../../hooks/auth/useAuth'

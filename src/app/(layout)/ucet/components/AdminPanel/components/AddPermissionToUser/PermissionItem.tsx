@@ -1,11 +1,6 @@
+import { Box, Button, IconButton, Typography } from '@/common/ui'
+import { NativeSelect } from '@/common/ui/mui'
 import { Close } from '@mui/icons-material'
-import {
-	Box,
-	Button,
-	IconButton,
-	NativeSelect,
-	Typography,
-} from '@mui/material'
 import { useState } from 'react'
 import { permissionPayloadToApi } from '../../../../../../../api/dtos/permission'
 import { useApi } from '../../../../../../../hooks/api/useApi'

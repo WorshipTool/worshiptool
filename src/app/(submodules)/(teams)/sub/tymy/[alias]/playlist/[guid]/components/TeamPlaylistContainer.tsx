@@ -1,7 +1,7 @@
 import LeftPanel from '@/app/(layout)/playlist/[guid]/components/LeftPanel/LeftPanel'
 import SongDropPlaylistContainer from '@/app/(layout)/playlist/[guid]/components/SongDropPlaylistContainer'
 import TeamPlaylistMiddlePanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistMiddlePanel'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 
 export default function TeamPlaylistContainer() {
 	return (

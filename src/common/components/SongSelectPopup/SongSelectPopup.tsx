@@ -1,15 +1,15 @@
 'use client'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import PopupSongList from '@/common/components/SongSelectPopup/components/PopupSongList'
+import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
 import SelectFromOptions from '@/common/components/SongSelectPopup/components/SelectFromOptions'
 import { SelectSearch } from '@/common/components/SongSelectPopup/components/SelectSearch'
-import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
 import { useSongSelectSpecifier } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { Box } from '@mui/material'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
 	SongVariantDto,

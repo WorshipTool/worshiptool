@@ -1,6 +1,6 @@
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 import { cloneElement } from 'react'
 
 type AboutInfoDatabaseProps = {

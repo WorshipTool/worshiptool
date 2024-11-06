@@ -1,5 +1,6 @@
+'use client'
 import { theme } from '@/common/constants/theme'
-import { createTheme } from '@mui/material'
+import { createTheme } from '@/common/ui/mui'
 import { ThemeProvider as TP, responsiveFontSizes } from '@mui/material/styles'
 import { csCZ } from '@mui/x-date-pickers/locales'
 import { Roboto } from 'next/font/google'

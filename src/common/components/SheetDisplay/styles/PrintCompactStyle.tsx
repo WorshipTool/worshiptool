@@ -1,5 +1,5 @@
 import MoreColumnLayout from '@/common/components/SheetDisplay/components/MoreColumnLayout'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 import { signature } from '@pepavlin/sheet-api/lib/models/note'
 import {
 	Section,
@@ -33,7 +33,7 @@ const SegmentElement = ({
 						{showChords &&
 							(index == 0 ? (
 								<>
-									<Typography sx={{ height: chordHeight }} fontWeight={900}>
+									<Typography sx={{ height: chordHeight }} strong={900}>
 										{segment.chord?.toString(signature)}
 									</Typography>
 								</>
@@ -102,7 +102,7 @@ const SectionComponent = ({
 					<Typography
 						// fontStyle={'italic'}
 						noWrap
-						fontWeight={500}
+						strong={500}
 						sx={{
 							width: '2rem',
 						}}

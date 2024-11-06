@@ -1,7 +1,7 @@
+import { Box, CircularProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Image } from '@/common/ui/Image'
-import { Box, CircularProgress } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { grey } from '@/common/ui/mui/colors'
 
 type LogoPanelProps = {
 	editable: boolean

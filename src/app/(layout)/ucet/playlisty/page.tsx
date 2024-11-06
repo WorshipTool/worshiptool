@@ -4,14 +4,14 @@ import PlaylistItemRow from '@/app/(layout)/ucet/playlisty/components/PlaylistIt
 import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
-import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import Pager from '@/common/components/Pager/Pager'
+import { Box, LinearProgress } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { Box, LinearProgress } from '@mui/material'
 import { useMemo, useState } from 'react'
 
 export default SmartPage(Playlists, ['middleWidth'])

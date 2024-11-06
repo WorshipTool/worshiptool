@@ -3,7 +3,7 @@ import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/comp
 import { useTeamTopBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamTopBar'
 import TeamPageTitleContainer from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitleContainer'
 import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 
 export default function TeamTopPanel() {
 	const { fixed, sx } = useTeamTopBar()

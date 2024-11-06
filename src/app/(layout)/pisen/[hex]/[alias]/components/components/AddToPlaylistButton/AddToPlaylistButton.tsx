@@ -1,10 +1,11 @@
 import { PlaylistData } from '@/api/generated'
 import AddToPlaylistMenuItem from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistMenuItem'
 import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
+import { useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { KeyboardArrowDown, PlaylistAddCircle } from '@mui/icons-material'
-import { ListItemIcon, ListItemText, MenuItem, useTheme } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 

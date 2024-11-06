@@ -5,7 +5,7 @@ import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/
 import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme } from '@/common/ui'
 export default function TopPlaylistPanel() {
 	const { canUserEdit } = useInnerPlaylist()
 	const theme = useTheme()

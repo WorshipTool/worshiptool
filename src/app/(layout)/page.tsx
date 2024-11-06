@@ -1,7 +1,7 @@
 'use client'
 
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { useTheme } from '@mui/material'
+import { useTheme } from '@/common/ui'
 import { useEffect } from 'react'
 import useGroup from '../../hooks/group/useGroup'
 import HomeDesktop from '../components/HomeDesktop'

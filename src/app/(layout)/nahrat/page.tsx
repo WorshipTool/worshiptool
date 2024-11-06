@@ -1,6 +1,6 @@
 'use client'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 import UploadPanel from './components/UploadPanel/UploadPanel'
 

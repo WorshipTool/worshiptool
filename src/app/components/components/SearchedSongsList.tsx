@@ -1,7 +1,6 @@
 'use client'
+import { Box, Button, LinearProgress, Typography } from '@/common/ui'
 import { Sync } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, LinearProgress, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../../common/components/ContainerGrid'
@@ -87,7 +86,7 @@ export default function SearchedSongsList({
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography fontWeight={'bold'}>Výsledky vyhledávání:</Typography>
+				<Typography strong>Výsledky vyhledávání:</Typography>
 
 				{!loading && songs.length > 0 && (
 					<SongListCards
@@ -121,7 +120,7 @@ export default function SearchedSongsList({
 								alignItems: 'center',
 							}}
 						>
-							<LoadingButton
+							<Button
 								loading={nextLoading}
 								loadingPosition="start"
 								onClick={() => {
@@ -131,7 +130,7 @@ export default function SearchedSongsList({
 								startIcon={<Sync />}
 							>
 								Načíst další
-							</LoadingButton>
+							</Button>
 						</Box>
 					</>
 				)}

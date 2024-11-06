@@ -1,4 +1,6 @@
-import { Grid, GridDirection, SxProps } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import { GridDirection } from '@mui/material/Grid/Grid'
+import { SxProps } from '@mui/system'
 import { ReactNode } from 'react'
 
 interface ContainerGridProps {

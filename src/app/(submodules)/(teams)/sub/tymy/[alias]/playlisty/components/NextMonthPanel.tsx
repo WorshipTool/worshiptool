@@ -4,13 +4,13 @@ import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/componen
 import NextMonthItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/NextMonthItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { Add } from '@mui/icons-material'
-import { Box, useTheme } from '@mui/material'
 import { useState } from 'react'
 
 type NextMonthPanelProps = {

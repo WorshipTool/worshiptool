@@ -1,9 +1,9 @@
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { InfoButton } from '@/common/ui/InfoButton'
 import { Link } from '@/common/ui/Link/Link'
 import { Typography } from '@/common/ui/Typography'
 import { Abc, Link as LinkIcon } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
 type InvitationPanelProps = {
 	joinCode: string

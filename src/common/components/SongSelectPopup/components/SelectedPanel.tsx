@@ -1,7 +1,7 @@
 import { ChosenSong } from '@/common/components/SongSelectPopup/SongSelectPopup'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Box } from '@/common/ui'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 
 type SelectedPanelProps = {
 	selected: ChosenSong[]

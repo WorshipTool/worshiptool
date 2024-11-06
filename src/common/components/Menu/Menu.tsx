@@ -1,5 +1,5 @@
 import MenuItem, { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
-import { Menu as MuiMenu } from '@mui/material'
+import { Menu as MuiMenu } from '@/common/ui/mui'
 import { ComponentProps, ReactNode } from 'react'
 
 type MenuProps = {
@@ -14,7 +14,6 @@ type MenuProps = {
 	id?: string
 
 	keepMounted?: boolean
-    
 }
 
 export default function Menu({ ...props }: MenuProps) {

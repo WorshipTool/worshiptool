@@ -2,20 +2,13 @@ import { PlaylistData } from '@/api/generated'
 import Menu from '@/common/components/Menu/Menu'
 import PlaylistMenuItem from '@/common/components/Menu/SelectPlaylistMenu/PlaylistMenuItem'
 import Popup from '@/common/components/Popup/Popup'
+import { Box, CircularProgress, Divider, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { MoreHoriz } from '@mui/icons-material'
-import {
-	Box,
-	CircularProgress,
-	Divider,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	useTheme,
-} from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
 type SelectPlaylistMenuProps = {

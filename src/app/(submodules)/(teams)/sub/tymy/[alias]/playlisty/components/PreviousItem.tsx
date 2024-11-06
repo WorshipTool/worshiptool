@@ -2,13 +2,13 @@
 import { TeamEventData } from '@/api/generated'
 import TeamEventPopup from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/EventPopup/TeamEventPopup'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box, Chip, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { IconButton } from '@/common/ui/IconButton'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Event, KeyboardArrowRight } from '@mui/icons-material'
-import { Box, Chip, useTheme } from '@mui/material'
 import { useMemo } from 'react'
 
 type PreviousItemProps = {
@@ -113,10 +113,12 @@ export default function PreviousItem(props: PreviousItemProps) {
 			<TeamEventPopup
 				open={open}
 				onClose={() => setOpen(false)}
-				data={{
-					...props.data,
-					date: date,
-				}}
+				data={
+					{
+						...props.data,
+						date: date,
+					} as any
+				}
 			/>
 		</Clickable>
 		// </Clickable>

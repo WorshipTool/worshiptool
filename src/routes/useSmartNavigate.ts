@@ -2,6 +2,7 @@
 import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { NavigateOptions as NO } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
+import { RouteLiteral } from 'nextjs-routes'
 import { routesPaths } from './routes'
 import { RoutesKeys, SmartAllParams } from './routes.types'
 
@@ -27,7 +28,7 @@ export const useSmartNavigate = () => {
 				? getReplacedUrlWithParams(toUrl, params)
 				: toUrl
 
-		router.push(urlWithParams)
+		router.push(urlWithParams as RouteLiteral)
 	}
 
 	return navigate

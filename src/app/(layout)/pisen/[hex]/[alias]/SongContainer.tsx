@@ -1,7 +1,7 @@
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import { Box } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
-import { Box } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
 import { SongDto, SongVariantDto } from '../../../../../api/dtos'

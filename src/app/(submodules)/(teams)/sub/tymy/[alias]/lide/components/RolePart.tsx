@@ -1,5 +1,6 @@
 import { TeamMemberRole } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { Box, Chip, MenuItem, Select } from '@mui/material'
+import { Box } from '@/common/ui'
+import { Chip, MenuItem, Select } from '@/common/ui/mui'
 
 export const teamMemberRoles = {
 	[TeamMemberRole.MANAGER]: 'Správce',

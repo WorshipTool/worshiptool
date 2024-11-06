@@ -1,5 +1,6 @@
+import { Box, Divider, IconButton, Typography } from '@/common/ui'
+import { Avatar } from '@/common/ui/mui'
 import { Close } from '@mui/icons-material'
-import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
 import { PermissionUserBaseOutDto } from '../../../../../../api/generated'
 import { useApi } from '../../../../../../hooks/api/useApi'

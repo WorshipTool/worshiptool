@@ -1,6 +1,7 @@
 import { Toolbar } from '@/common'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { Fade, SvgIcon, Zoom } from '@/common/ui/mui'
 import styled from '@emotion/styled'
-import { Box, Fade, SvgIcon, Typography, useTheme, Zoom } from '@mui/material'
 import { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
@@ -138,7 +139,7 @@ export default function GroupToolbarDesktop({
 								</Zoom>
 								<Typography
 									variant="h5"
-									fontWeight={900}
+									strong={900}
 									sx={{
 										transition: 'all 0.2s ease',
 										...(expanded
@@ -172,7 +173,7 @@ export default function GroupToolbarDesktop({
 							paddingLeft: 9,
 						}}
 					>
-						<Typography fontWeight={600}>Rychlé akce</Typography>
+						<Typography strong={600}>Rychlé akce</Typography>
 						<Gap value={1} />
 					</Box>
 				</Box>

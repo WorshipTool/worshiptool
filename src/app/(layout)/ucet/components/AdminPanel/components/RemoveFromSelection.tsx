@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@/common/ui'
 import React from 'react'
 import { SongVariantDto } from '../../../../../../api/dtos'
 import SongSelect from '../../../../../../common/components/songLists/SongSelect/SongSelect'

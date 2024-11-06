@@ -1,11 +1,11 @@
 'use client'
 import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import ContainerGrid from '@/common/components/ContainerGrid'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import ContainerGrid from '@/common/components/ContainerGrid'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
-import { Box } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import {
 	SongDto,

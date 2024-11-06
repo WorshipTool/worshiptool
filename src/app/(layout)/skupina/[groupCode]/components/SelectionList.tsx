@@ -1,18 +1,17 @@
-import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
-import { Search } from '@mui/icons-material'
 import {
 	Box,
 	Button,
 	CircularProgress,
-	Grow,
 	Typography,
 	useTheme,
-} from '@mui/material'
+} from '@/common/ui'
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { Search } from '@mui/icons-material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import SongListCards from '../../../../../common/components/songLists/SongListCards/SongListCards'
 import OnScrollComponent from '../../../../../common/providers/OnScrollComponent/OnScrollComponent'
 import { Gap } from '../../../../../common/ui/Gap'
-import SearchBar from '../../../../../common/ui/SearchBar/SearchBar'
+import { SearchBar } from '../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../hooks/group/useGroupSelection'
 import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
@@ -121,30 +120,30 @@ export default function SelectionList(props: SelectionListProps) {
 								<PinnedPlaylistAlternativeDisplay playlist={pinnedState.data} />
 							)}
 						</Box>
-						<Grow in={!top} timeout={top ? 100 : 300}>
-							<Box
-								display={{
-									xs: 'none',
-									sm: 'none',
-									md: 'flex',
-								}}
-								flexDirection={'row'}
-								justifyContent={'end'}
-								sx={{
-									pointerEvents: 'none',
-									position: 'fixed',
-									top: 28,
-									zIndex: 1,
-									// left:0, right:0,
-									flexDirection: 'row',
-									justifyContent: 'center',
-								}}
-							>
-								<Box width={400} sx={{ pointerEvents: 'auto' }}>
-									<SearchBar onChange={(s) => setSearchString(s)} sx={{}} />
-								</Box>
+						{/* <Grow in={!top} timeout={top ? 100 : 300}> */}
+						<Box
+							display={{
+								xs: 'none',
+								sm: 'none',
+								md: 'flex',
+							}}
+							flexDirection={'row'}
+							justifyContent={'end'}
+							sx={{
+								pointerEvents: 'none',
+								position: 'fixed',
+								top: 28,
+								zIndex: 1,
+								// left:0, right:0,
+								flexDirection: 'row',
+								justifyContent: 'center',
+							}}
+						>
+							<Box width={400} sx={{ pointerEvents: 'auto' }}>
+								<SearchBar onChange={(s) => setSearchString(s)} sx={{}} />
 							</Box>
-						</Grow>
+						</Box>
+						{/* </Grow> */}
 						<Box
 							display={{
 								xs: 'flex',

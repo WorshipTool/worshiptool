@@ -1,8 +1,8 @@
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { DriveFileRenameOutline, Save } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import React from 'react'
 
 type TeamEditableCardProps = {

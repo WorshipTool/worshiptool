@@ -1,4 +1,4 @@
-import { Chip } from '@mui/material'
+import { Chip } from '@/common/ui/mui'
 import { SourceDto } from '../../../../../../../api/dtos/source/SourceDto'
 import { SourceTypes } from '../../../../../../../interfaces/song/source'
 

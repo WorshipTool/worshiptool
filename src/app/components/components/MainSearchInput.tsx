@@ -1,6 +1,8 @@
+import { Box, useTheme } from '@/common/ui'
+import { InputBase } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, InputBase, styled, useTheme } from '@mui/material'
+import { styled } from '@mui/system'
 import { useEffect, useRef, useState } from 'react'
 
 const SearchContainer = styled(Box)(({ theme }) => ({

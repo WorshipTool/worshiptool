@@ -2,8 +2,8 @@ import { getPlaylistDataByGuid } from '@/app/(layout)/playlist/[guid]/playlist.t
 import NotFound from '@/app/not-found'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box } from '@/common/ui'
 import { SmartParams } from '@/routes'
-import { Box } from '@mui/material'
 import { Sheet, note } from '@pepavlin/sheet-api'
 
 type PageProps = {

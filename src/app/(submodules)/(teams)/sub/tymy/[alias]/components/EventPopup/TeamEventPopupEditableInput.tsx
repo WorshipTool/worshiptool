@@ -1,8 +1,7 @@
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
-import TextField from '@/common/ui/TextField/TextField'
+import { Box, TextField, Tooltip, useTheme } from '@/common/ui'
+import { SxProps } from '@/common/ui/mui'
+import { grey } from '@/common/ui/mui/colors'
 import { Typography } from '@/common/ui/Typography'
-import { Box, SxProps, useTheme } from '@mui/material'
-import { grey } from '@mui/material/colors'
 import { useEffect, useState } from 'react'
 import './EventPopupEditableInput.styles.css'
 

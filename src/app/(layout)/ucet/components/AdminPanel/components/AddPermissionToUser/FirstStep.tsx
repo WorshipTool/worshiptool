@@ -1,11 +1,5 @@
-import { LoadingButton } from '@mui/lab'
-import {
-	ButtonGroup,
-	Input,
-	StepContent,
-	StepLabel,
-	Typography,
-} from '@mui/material'
+import { Button, Typography } from '@/common/ui'
+import { ButtonGroup, Input, StepContent, StepLabel } from '@/common/ui/mui'
 import { useEffect, useState } from 'react'
 import { Gap } from '../../../../../../../common/ui/Gap/Gap'
 import { useApi } from '../../../../../../../hooks/api/useApi'
@@ -69,20 +63,18 @@ export default function FirstStep(props: FirstStepProps) {
 						disabled={loading}
 						autoFocus
 					/>
-					<LoadingButton
+					<Button
 						variant="contained"
 						onClick={handleSearch}
 						loading={loading}
 						disabled={email.trim() === '' || email === lastEmail}
 					>
 						Hledat
-					</LoadingButton>
+					</Button>
 				</ButtonGroup>
 				<Gap />
 				{apiState.error && (
-					<Typography variant="subtitle2" color={'error'}>
-						Uživatel nebyl nalezen
-					</Typography>
+					<Typography color={'error'}>Uživatel nebyl nalezen</Typography>
 				)}
 			</StepContent>
 		</>

@@ -1,17 +1,11 @@
 'use client'
 
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { Box, Tooltip, useTheme } from '@/common/ui'
+import { Avatar } from '@/common/ui/mui'
 import { useUserProfileImage } from '@/hooks/useUserProfileImage'
 import { AddBox, Apps, Login } from '@mui/icons-material'
-import {
-	Avatar,
-	Box,
-	SxProps,
-	Theme,
-	Tooltip,
-	styled,
-	useTheme,
-} from '@mui/material'
+import { SxProps, Theme, styled } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
 import UploadFileInput from '../../../../../app/(layout)/nahrat/components/UploadFileInput'
 import useAuth from '../../../../../hooks/auth/useAuth'
@@ -33,7 +27,7 @@ const Container = styled(Box)(({ theme }) => ({
 	gap: 0,
 }))
 
-function ProfileImage({ size, sx }: { size: number; sx?: SxProps<Theme> }) {
+function ProfileImage({ size, sx }: { size: number; sx?: SxProps }) {
 	const pictureUrl = useUserProfileImage()
 	return (
 		<Box sx={{ ...sx }}>

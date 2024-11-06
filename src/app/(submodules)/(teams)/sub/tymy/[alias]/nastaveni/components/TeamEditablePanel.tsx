@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import React from 'react'
 
 type TeamEditablePanelProps = {

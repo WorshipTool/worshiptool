@@ -1,13 +1,13 @@
 'use client'
 import { Group } from '@/api/generated'
 import Popup from '@/common/components/Popup/Popup'
+import { Box, Button } from '@/common/ui'
+import { DialogContentText, TextField } from '@/common/ui/mui'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Search } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, DialogContentText, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { searchGroupsEvent } from '../hooks/useToolsMenuItems'
 
@@ -65,7 +65,7 @@ export default function SearchGroupDialog() {
 			width={350}
 			actions={
 				<>
-					<LoadingButton
+					<Button
 						variant="contained"
 						onClick={onSearch}
 						startIcon={<Search />}
@@ -74,7 +74,7 @@ export default function SearchGroupDialog() {
 						type="submit"
 					>
 						Hledat a otevřít
-					</LoadingButton>
+					</Button>
 				</>
 			}
 		>

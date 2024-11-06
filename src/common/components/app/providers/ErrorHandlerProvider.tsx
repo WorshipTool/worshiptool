@@ -1,7 +1,7 @@
 'use client'
+import { Button } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Lock } from '@mui/icons-material'
-import { Button } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
 import useAuth from '../../../../hooks/auth/useAuth'

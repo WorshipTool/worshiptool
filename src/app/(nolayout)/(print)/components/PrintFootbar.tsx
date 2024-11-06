@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Typography } from '@/common/ui'
 import Logo from './../../../../assets/icon.svg'
 
 export default function PrintFootbar() {
@@ -14,7 +14,7 @@ export default function PrintFootbar() {
 				opacity: 0.15,
 			}}
 		>
-			<Typography variant="button">Chvalotce.cz</Typography>
+			<Typography uppercase>Chvalotce.cz</Typography>
 			<div
 				style={{
 					width: '2rem',

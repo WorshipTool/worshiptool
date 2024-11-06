@@ -1,13 +1,15 @@
 'use client'
 
+import { Box } from '@/common/ui/Box'
+import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
-import { Box, Typography, alpha, styled, useTheme } from '@mui/material'
+import { alpha, styled, useTheme } from '@mui/material'
 import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
-import CustomChip from '../CustomChip/CustomChip'
+import { CustomChip } from '../CustomChip/CustomChip'
 import { Link } from '../Link/Link'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -168,7 +170,12 @@ export const SongCard = memo(function S({
 						}}
 					>
 						<Box display={'flex'} flexDirection={'row'} gap={1}>
-							<Typography fontWeight={'bold'} flex={1}>
+							<Typography
+								strong
+								sx={{
+									flex: 1,
+								}}
+							>
 								{title}
 							</Typography>
 							<Box>
@@ -189,7 +196,7 @@ export const SongCard = memo(function S({
 									/>
 								)}
 								{createdByLoaderEnabled && data.createdByLoader && (
-									<Typography variant="caption">Nahráno programem</Typography>
+									<Typography>Nahráno programem</Typography>
 								)}
 							</Box>
 						</Box>
@@ -202,7 +209,13 @@ export const SongCard = memo(function S({
 										flexDirection={'row'}
 										key={line + index}
 									>
-										<Typography noWrap key={'SearchItemText' + index} flex={1}>
+										<Typography
+											noWrap
+											key={'SearchItemText' + index}
+											sx={{
+												flex: 1,
+											}}
+										>
 											{line}
 										</Typography>
 									</Box>

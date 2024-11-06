@@ -1,11 +1,11 @@
 'use client'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
 import { PlaylistAdd } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback } from 'react'
 

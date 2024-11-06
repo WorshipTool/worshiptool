@@ -1,11 +1,11 @@
 'use client'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Box, Tooltip, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
+import { alpha } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { RoutesKeys, SmartAllParams } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
-import { Box, alpha, useTheme } from '@mui/material'
 import { ReactNode, useCallback } from 'react'
 
 type MenuItemProps<T extends RoutesKeys> = {

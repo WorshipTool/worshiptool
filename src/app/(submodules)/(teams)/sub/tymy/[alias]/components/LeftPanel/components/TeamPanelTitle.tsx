@@ -2,11 +2,11 @@
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import { useTeamLogo } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useTeamLogo'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Image } from '@/common/ui/Image'
 import { Link } from '@/common/ui/Link/Link'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 
 type TeamPanelTitleProps = {
 	collapsed: boolean

@@ -6,9 +6,9 @@ import PinnedPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pl
 import PreviousPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousPanel'
 import UsersTeamPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/UsersTeamPlaylistsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { isDateTodayOrInFuture } from '@/tech/date/date.tech'
-import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
 export default SmartTeamPage(Page, {})

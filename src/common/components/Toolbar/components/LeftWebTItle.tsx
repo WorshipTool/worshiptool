@@ -1,5 +1,6 @@
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { Box, styled } from '@mui/material'
+import { Box } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
 import LogoTitle from './LogoTitle'
 
 const Container = styled(Box)(({ theme }) => ({

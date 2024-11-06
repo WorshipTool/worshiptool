@@ -3,15 +3,15 @@
 import useUsersTeamPlaylists from '@/app/(submodules)/(teams)/sub/tymy/[alias]/hooks/useUsersTeamPlaylists'
 import UsersTeamPlaylistsAddButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/UsersTeamPlaylistsAddButton'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import { Gap } from '@/common/ui/Gap'
 import { InfoButton } from '@/common/ui/InfoButton'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { Schedule } from '@mui/icons-material'
-import { Box, useTheme } from '@mui/material'
 
 export default function UsersTeamPlaylistsPanel() {
 	const { playlists: usersPlaylists } = useUsersTeamPlaylists()

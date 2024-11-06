@@ -1,8 +1,8 @@
 import { TeamEventData } from '@/api/generated'
 import PreviousItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlisty/components/PreviousItem'
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 
 type PreviousPanelProps = {
 	events: TeamEventData[]

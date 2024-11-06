@@ -8,13 +8,13 @@ import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import SongPreview from '@/app/(submodules)/(teams)/sub/tymy/[alias]/pisen/[hex]/[title-alias]/components/SongPreview'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box, LinearProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { AudioFile, OpenInNew } from '@mui/icons-material'
-import { Box, LinearProgress } from '@mui/material'
 import { useMemo } from 'react'
 
 type TeamPisenPageProps = {

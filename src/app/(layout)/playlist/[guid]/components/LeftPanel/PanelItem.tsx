@@ -1,5 +1,7 @@
+import { Box, Typography } from '@/common/ui'
+import { Skeleton } from '@/common/ui/mui/lab'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import { Box, Skeleton, Typography, styled } from '@mui/material'
+import { styled } from '@mui/system'
 import { useMemo } from 'react'
 import { Link } from '../../../../../../common/ui/Link/Link'
 import { PlaylistItemGuid } from '../../../../../../interfaces/playlist/playlist.types'
@@ -68,7 +70,7 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 								padding: '9px',
 								paddingLeft: '14px',
 							}}
-							fontWeight={900}
+							strong={900}
 						>
 							{itemIndex + 1}.
 						</Typography>

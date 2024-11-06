@@ -1,4 +1,5 @@
-import { Divider, ListItemText, Menu, MenuItem } from '@mui/material'
+import { Divider } from '@/common/ui'
+import { ListItemText, Menu, MenuItem } from '@/common/ui/mui'
 import useAuth from '../../../../../hooks/auth/useAuth'
 import { Gap } from '../../../../ui/Gap'
 import { Link } from '../../../../ui/Link/Link'

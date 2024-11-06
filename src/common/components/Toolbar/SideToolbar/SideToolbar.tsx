@@ -1,6 +1,7 @@
 'use client'
+import { Box, IconButton, Tooltip } from '@/common/ui'
 import { ArrowBack, Home, Settings } from '@mui/icons-material'
-import { Box, IconButton, Tooltip, styled } from '@mui/material'
+import { styled } from '@mui/system'
 import { ReactElement } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { usePermission } from '../../../../hooks/permissions/usePermission'

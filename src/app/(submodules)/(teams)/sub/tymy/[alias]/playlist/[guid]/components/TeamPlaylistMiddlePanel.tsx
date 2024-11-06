@@ -1,9 +1,9 @@
 import { PlaylistItem } from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/PlaylistItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
 export default function TeamPlaylistMiddlePanel() {

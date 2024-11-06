@@ -1,4 +1,4 @@
-import { ListItemIcon, ListItemText, MenuItem as MIt } from '@mui/material'
+import { ListItemIcon, ListItemText, MenuItem as MIt } from '@/common/ui/mui'
 import { ReactElement } from 'react'
 
 export type MenuItemObjectType = {

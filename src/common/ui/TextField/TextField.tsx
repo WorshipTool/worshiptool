@@ -18,7 +18,7 @@ type TextFieldProps = {
 	autoFocus?: boolean
 }
 
-export default function TextField({
+export function TextField({
 	placeholder = 'Zadejte text',
 	...props
 }: TextFieldProps) {

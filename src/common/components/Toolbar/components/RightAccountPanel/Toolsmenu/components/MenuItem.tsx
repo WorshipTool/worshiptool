@@ -1,9 +1,10 @@
 'use client'
+import { Box, Typography } from '@/common/ui'
 import { Image } from '@/common/ui/Image'
 import { CommonLinkProps, Link } from '@/common/ui/Link/Link'
+import { styled } from '@/common/ui/mui'
 import { RoutesKeys } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { Box, Typography, styled } from '@mui/material'
 import { useMemo } from 'react'
 import { MenuItemProps } from '../hooks/useToolsMenuItems'
 
@@ -30,7 +31,7 @@ const Container = styled(Box)(({ theme }) => ({
 	},
 }))
 
-export default function MenuItem<T extends RoutesKeys>(
+export default function ToolsMenuItem<T extends RoutesKeys>(
 	props: MenuItemProps<T>
 ) {
 	const [apiState] = useApiStateEffect<string | null>(async () => {
@@ -85,11 +86,11 @@ export default function MenuItem<T extends RoutesKeys>(
 					/>
 				</Box>
 				<Typography
-					display={'flex'}
-					alignItems={'end'}
-					justifyContent={'center'}
-					variant="body2"
+					size={'0.9rem'}
 					sx={{
+						display: 'flex',
+						alignItems: 'end',
+						justifyContent: 'center',
 						userSelect: 'none',
 						pointerEvents: 'none',
 						textAlign: 'center',

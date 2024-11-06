@@ -1,5 +1,6 @@
+import { Box } from '@/common/ui'
+import { SxProps } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
-import { Box, SxProps } from '@mui/material'
 import React from 'react'
 
 type TeamCardProps = {

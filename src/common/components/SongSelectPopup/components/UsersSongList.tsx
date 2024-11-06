@@ -1,9 +1,9 @@
 'use client'
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
+import { Box, LinearProgress } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { ApiState } from '@/tech/ApiState'
-import { Box, LinearProgress } from '@mui/material'
 import { useMemo } from 'react'
 import './GlobalSongList.styles.css'
 

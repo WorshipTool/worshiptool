@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 
 export const POPUP_DIV_CONTAINER_ID = 'popup-div-container'
 export default function PopupProvider() {

@@ -4,9 +4,10 @@ import MainSearchInput from '@/app/components/components/MainSearchInput'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { Grid, useMediaQuery } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
@@ -174,10 +175,10 @@ export default function HomeDesktop() {
 													pointerEvents: 'none',
 												}}
 											>
-												<Typography variant="h3" fontWeight={'200'}>
+												<Typography variant="h3" strong={200}>
 													Jsi-li ovce, tak...
 												</Typography>
-												<Typography variant="h1" fontWeight={'900'} noWrap>
+												<Typography variant="h1" strong={900} noWrap>
 													Chval Otce
 												</Typography>
 											</motion.div>

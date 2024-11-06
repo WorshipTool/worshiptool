@@ -1,10 +1,10 @@
 'use client'
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
+import { Box, CircularProgress, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
+import { grey } from '@/common/ui/mui/colors'
 import { Typography } from '@/common/ui/Typography'
-import { Box, CircularProgress, useTheme } from '@mui/material'
-import { grey } from '@mui/material/colors'
 import React, { useMemo } from 'react'
 
 type TeamQuickActionButtonProps = {

@@ -1,9 +1,9 @@
 'use client'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { ArrowBack } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
 const INTERVAL_DURATION = 5000

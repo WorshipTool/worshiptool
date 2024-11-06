@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@/common/ui'
 
 export default function Loading() {
 	return (

@@ -1,5 +1,5 @@
 'use client'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { ReactElement, useEffect, useRef, useState } from 'react'
 
 type MoreColumnLayoutProps = {

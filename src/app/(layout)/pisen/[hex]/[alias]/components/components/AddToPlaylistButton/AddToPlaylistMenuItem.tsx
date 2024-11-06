@@ -1,7 +1,7 @@
 import PlaylistMenuItem from '@/common/components/Menu/SelectPlaylistMenu/PlaylistMenuItem'
+import { Box, CircularProgress } from '@/common/ui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
-import { Box, CircularProgress } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
 import { SongVariantDto } from '../../../../../../../../api/dtos'
 import usePlaylistsGeneral from '../../../../../../../../hooks/playlist/usePlaylistsGeneral'

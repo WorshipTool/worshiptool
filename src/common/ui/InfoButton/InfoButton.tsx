@@ -1,7 +1,7 @@
 import { Typography } from '@/common/ui/Typography'
 import { Info } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
+import { Box } from '@/common/ui/Box'
 import { ReactNode, useMemo } from 'react'
 import './InfoButton.styles.css'
 

@@ -9,6 +9,7 @@ import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import Menu from '@/common/components/Menu/Menu'
 import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
+import { Box, Typography } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
 import { useApi } from '@/hooks/api/useApi'
@@ -22,7 +23,6 @@ import {
 	Info,
 	MoreHoriz,
 } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'

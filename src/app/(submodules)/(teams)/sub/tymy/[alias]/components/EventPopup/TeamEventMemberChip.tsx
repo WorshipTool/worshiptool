@@ -1,6 +1,6 @@
 import { TeamEventMemberData } from '@/api/generated'
+import { Avatar, Chip } from '@/common/ui/mui'
 import { useUserProfileImage } from '@/hooks/useUserProfileImage'
-import { Avatar, Chip } from '@mui/material'
 
 type TeamEventMemberChipProps = {
 	member: TeamEventMemberData

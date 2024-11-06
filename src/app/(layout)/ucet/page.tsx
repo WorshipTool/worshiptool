@@ -1,7 +1,7 @@
 'use client'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box, useTheme } from '@/common/ui'
 import { routesPaths } from '@/routes'
-import { Box, useTheme } from '@mui/material'
 import { useEffect } from 'react'
 import useAuth from '../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'

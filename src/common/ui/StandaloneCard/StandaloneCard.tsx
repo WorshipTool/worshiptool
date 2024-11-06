@@ -1,6 +1,7 @@
+import { Box } from '@/common/ui/Box'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
+
 import { useMemo } from 'react'
 
 type StandaloneCardProps = {

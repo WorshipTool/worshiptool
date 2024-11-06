@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import React, { ReactElement, useState } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
 import useGroup from '../../../../hooks/group/useGroup'

@@ -11,11 +11,12 @@ import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/[alias]/comp
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import Popup from '@/common/components/Popup/Popup'
+import { Box, Divider, Tooltip, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
 import { Gap } from '@/common/ui/Gap'
 import { IconButton } from '@/common/ui/IconButton'
-import TextField from '@/common/ui/TextField/TextField'
+import { Avatar, Chip, Grid } from '@/common/ui/mui'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { usePermissions } from '@/hooks/permissions/usePermissions'
@@ -30,7 +31,6 @@ import {
 	QueueMusic,
 	Warning,
 } from '@mui/icons-material'
-import { Avatar, Box, Chip, Divider, Grid, useTheme } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import { useSnackbar } from 'notistack'

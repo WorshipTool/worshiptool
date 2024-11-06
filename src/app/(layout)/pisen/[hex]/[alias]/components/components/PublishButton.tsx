@@ -1,14 +1,9 @@
+import { CircularProgress, useTheme } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { Public, PublicOff } from '@mui/icons-material'
-import {
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	useTheme,
-} from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { SongVariantDto } from '../../../../../../../api/dtos'
 import { useApi } from '../../../../../../../hooks/api/useApi'

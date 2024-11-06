@@ -2,12 +2,12 @@
 
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { MAIL } from '@/common/constants/contact'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 
 export default SmartPage(ContactPage)

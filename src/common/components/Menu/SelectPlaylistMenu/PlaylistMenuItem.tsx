@@ -1,8 +1,9 @@
+import { Box } from '@/common/ui'
 import { IconButton } from '@/common/ui/IconButton'
 import { Link } from '@/common/ui/Link/Link'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { Launch } from '@mui/icons-material'
-import { Box, ListItemIcon, ListItemText, MenuItem } from '@mui/material'
 import React, { MouseEvent } from 'react'
 
 interface PlaylistMenuItemProps {

@@ -1,14 +1,14 @@
 'use client'
 
 import GoogleLoginButton from '@/app/(nolayout)/prihlaseni/components/GoogleLoginButton'
-import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../api/dtos/dtosAuth'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -288,7 +288,7 @@ function Login() {
 						}}
 					>
 						<Box display={'flex'} flexDirection={'column'}>
-							<Typography variant={'h5'} fontWeight={'bold'} flex={1}>
+							<Typography variant={'h5'} strong={'bold'} flex={1}>
 								Která jsi ovce?
 							</Typography>
 						</Box>

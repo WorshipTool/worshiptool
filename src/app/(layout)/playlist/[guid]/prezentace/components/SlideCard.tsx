@@ -1,5 +1,5 @@
 'use client'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Sheet } from '@pepavlin/sheet-api'
 import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
 import {
@@ -22,8 +22,8 @@ const sectionPart = (section: Section, fontSize: number) => {
 			{section.name && (
 				<>
 					<Typography
-						fontWeight={'bold'}
-						fontSize={fontSize + 2}
+						strong
+						size={fontSize + 2}
 						color={'inherit'}
 						sx={{
 							color: 'red',
@@ -224,7 +224,13 @@ export default function SlideCard({ item, order }: SlideCardProps) {
 					paddingBottom: padding + 'px',
 				}}
 			>
-				<Typography fontWeight={'bold'} fontSize={size + 5} marginRight={2}>
+				<Typography
+					strong
+					size={size + 5}
+					sx={{
+						marginRight: 2,
+					}}
+				>
 					{order ? order + 1 + '. ' : ''}
 					{item?.variant?.preferredTitle.toUpperCase()}
 				</Typography>

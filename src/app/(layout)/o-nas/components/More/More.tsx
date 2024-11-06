@@ -1,7 +1,7 @@
 'use client'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { ExpandMore } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
 type MoreProps = {}
 

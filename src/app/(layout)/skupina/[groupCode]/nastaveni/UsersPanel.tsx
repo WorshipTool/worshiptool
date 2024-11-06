@@ -1,11 +1,11 @@
-import { Add } from '@mui/icons-material'
 import {
 	Box,
 	Button,
 	IconButton,
 	LinearProgress,
 	Typography,
-} from '@mui/material'
+} from '@/common/ui'
+import { Add } from '@mui/icons-material'
 import { useMemo, useState } from 'react'
 import { SkeletonLoader } from '../../../../../common/providers/SkeletonLoader'
 import { Gap } from '../../../../../common/ui/Gap'
@@ -79,7 +79,7 @@ export default function UsersPanel() {
 				render={() => (
 					<>
 						<Gap value={1} />
-						<Typography variant="subtitle2">Mohou přidávat písně</Typography>
+						<Typography>Mohou přidávat písně</Typography>
 						<Gap />
 						<Box
 							sx={{
@@ -122,7 +122,7 @@ export default function UsersPanel() {
 							)} */}
 						</Box>
 						<Gap value={3} />
-						<Typography variant="subtitle2">Mohou odebírat písně</Typography>
+						<Typography>Mohou odebírat písně</Typography>
 						<Gap />
 						<Box
 							sx={{

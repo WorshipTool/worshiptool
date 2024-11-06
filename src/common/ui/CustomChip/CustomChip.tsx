@@ -9,7 +9,7 @@ type ChipProps = {
 	children?: React.ReactNode
 }
 
-export default function CustomChip({
+export function CustomChip({
 	icon,
 	label,
 	color,

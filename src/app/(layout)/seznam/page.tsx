@@ -2,19 +2,11 @@
 import { VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box, CircularProgress, Divider, Typography } from '@/common/ui'
+import { Container, Grid, Paper, styled } from '@/common/ui/mui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useApiStateEffect } from '@/tech/ApiState'
-import {
-	Box,
-	CircularProgress,
-	Container,
-	Divider,
-	Grid,
-	Paper,
-	Typography,
-	styled,
-} from '@mui/material'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import { useApi } from '../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../routes/useSmartNavigate'
@@ -99,7 +91,7 @@ function List() {
 			>
 				<Gap value={3} />
 				<Box display={'flex'}>
-					<Typography variant="h4" fontWeight={'bold'}>
+					<Typography variant="h4" strong>
 						Seznam všech písní
 					</Typography>
 					{/* {nextExists && (
@@ -165,11 +157,11 @@ function List() {
 														}}
 													>
 														<Box display={'flex'} gap={1}>
-															<Typography fontWeight={'bold'}>
+															<Typography strong>
 																{startIndex + index + 1}
 															</Typography>
 															<Divider orientation="vertical" flexItem />
-															<Typography fontWeight={300} noWrap>
+															<Typography strong={300} noWrap>
 																{s.title}{' '}
 															</Typography>
 														</Box>

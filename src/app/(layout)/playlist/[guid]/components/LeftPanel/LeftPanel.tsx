@@ -2,8 +2,9 @@ import AddSongToPlaylistButton from '@/app/(layout)/playlist/[guid]/components/L
 import PlaylistMenuList from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PlaylistMenuList'
 import Panel from '@/app/(layout)/playlist/[guid]/components/Panel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Box, useTheme } from '@/common/ui'
+import { SxProps } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
-import { Box, SxProps, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './LeftPanel.styles.css'
 

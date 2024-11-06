@@ -1,9 +1,9 @@
 import { VariantPackGuid } from '@/api/dtos'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Box, Tooltip } from '@/common/ui'
+import { Fab } from '@/common/ui/mui'
 import { Add } from '@mui/icons-material'
-import { Box, Fab } from '@mui/material'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME =

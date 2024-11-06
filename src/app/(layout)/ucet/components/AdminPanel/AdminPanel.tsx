@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/material'
+import { Box, Divider } from '@/common/ui'
 import AddPermissionToUser from './components/AddPermissionToUser/AddPermissionToUser'
 import CreateGroupPanel from './components/CreateGroupPanel/CreateGroupPanel'
 import CurrentSongCount from './components/CurrentSongCount'

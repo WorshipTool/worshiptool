@@ -1,8 +1,8 @@
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
+import { Box } from '@/common/ui'
 import { Button, ButtonProps } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { Favorite } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import { Gap } from '@/common/ui/Gap'
@@ -94,7 +94,7 @@ export default function Footer() {
 						return (
 							<Button
 								size={'small'}
-								key={link.children}
+								key={link.children as string}
 								color="grey.500"
 								variant="text"
 								sx={{

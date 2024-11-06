@@ -1,6 +1,6 @@
-import TextField from '@/common/ui/TextField/TextField'
+import { Box } from '@/common/ui/Box'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 import './textinput.styles.css'
 
 type TextInputProps = {

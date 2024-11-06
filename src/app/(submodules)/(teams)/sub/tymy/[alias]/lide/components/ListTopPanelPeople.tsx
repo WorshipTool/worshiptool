@@ -1,9 +1,9 @@
 import SelectedPeopleActions from '@/app/(submodules)/(teams)/sub/tymy/[alias]/lide/components/SelectedPeopleActions'
 import { TeamMemberRole } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
 import { UserGuid } from '@/interfaces/user'
-import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
 type ListTopPanelPeopleProps = {

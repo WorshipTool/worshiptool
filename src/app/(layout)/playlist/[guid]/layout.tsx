@@ -44,7 +44,7 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 		)
 	)
 
-	const pathname = useServerPathname()
+	const pathname = await useServerPathname()
 	const afterPlaylist = pathname.split('playlist')[1]
 	const isSomethingAfter = afterPlaylist.split('/').length > 2
 

@@ -1,5 +1,5 @@
 'use client'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import { IconButton } from '@/common/ui/IconButton'
 import useAuth from '@/hooks/auth/useAuth'
 import { AdminPanelSettings } from '@mui/icons-material'

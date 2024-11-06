@@ -1,11 +1,11 @@
 'use client'
+import { Box, IconButton } from '@/common/ui'
 import {
 	ChevronLeft,
 	ChevronRight,
 	Fullscreen,
 	FullscreenExit,
 } from '@mui/icons-material'
-import { Box, IconButton } from '@mui/material'
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'

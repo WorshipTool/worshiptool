@@ -7,13 +7,13 @@ import {
 import Menu from '@/common/components/Menu/Menu'
 import MenuItem, { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import useAuth from '@/hooks/auth/useAuth'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { UserGuid } from '@/interfaces/user'
 import { ExpandMore } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 
 type SelectedPeopleActionsProps = {

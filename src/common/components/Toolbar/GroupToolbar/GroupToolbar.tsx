@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme } from '@/common/ui'
 import React, { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'

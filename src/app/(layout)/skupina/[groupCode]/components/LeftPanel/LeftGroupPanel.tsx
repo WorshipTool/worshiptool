@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@/common/ui'
 import { Gap } from '../../../../../../common/ui/Gap/Gap'
 import useGroup from '../../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../../hooks/group/useGroupSelection'
@@ -30,13 +30,11 @@ export default function LeftGroupPanel() {
 				flexDirection={'column'}
 			>
 				<Box padding={3} color={'white'}>
-					<Typography variant="h5" fontWeight={900}>
+					<Typography variant="h5" strong={900}>
 						Církev bratrská na Praze 13
 					</Typography>
 					<Gap value={2} />
-					<Typography variant="subtitle2">
-						Má v okruhu celkem {items.length} písní
-					</Typography>
+					<Typography>Má v okruhu celkem {items.length} písní</Typography>
 				</Box>
 				<Box
 					padding={1}

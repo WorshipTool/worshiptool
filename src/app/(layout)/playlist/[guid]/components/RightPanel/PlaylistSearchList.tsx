@@ -1,5 +1,5 @@
-import { Masonry } from '@mui/lab'
-import { useTheme } from '@mui/material'
+import { useTheme } from '@/common/ui'
+import { Masonry } from '@/common/ui/mui/lab'
 import { SongVariantDto } from '../../../../../../api/dtos'
 import SearchItem from './SearchItem'
 

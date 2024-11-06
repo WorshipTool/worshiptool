@@ -4,16 +4,16 @@ import { MoreTeamSongOption } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import MenuItem from '@/common/components/Menu/MenuItem'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
-import TextField from '@/common/ui/TextField/TextField'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { StickyNote2 } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 export default function TeamNotePanel() {

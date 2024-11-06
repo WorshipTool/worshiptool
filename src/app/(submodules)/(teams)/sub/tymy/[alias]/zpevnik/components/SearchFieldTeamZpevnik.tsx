@@ -1,7 +1,7 @@
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
-import SearchBar from '@/common/ui/SearchBar/SearchBar'
+import { Box } from '@/common/ui'
+import { SearchBar } from '@/common/ui/SearchBar/SearchBar'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 
 type SearchFieldTeamZpevnikProps = {

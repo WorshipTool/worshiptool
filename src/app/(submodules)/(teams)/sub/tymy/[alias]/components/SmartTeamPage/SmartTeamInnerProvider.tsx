@@ -1,7 +1,8 @@
 'use client'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import { useTeamTopBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamTopBar'
-import { Box, SxProps } from '@mui/material'
+import { Box } from '@/common/ui'
+import { SxProps } from '@/common/ui/mui'
 import React, { useEffect, useMemo } from 'react'
 
 // type of dict or null for every option

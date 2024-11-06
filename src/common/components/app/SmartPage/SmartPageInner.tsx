@@ -1,7 +1,7 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme } from '@/common/ui'
 import React, { useEffect, useMemo } from 'react'
 
 // type of dict or null for every option

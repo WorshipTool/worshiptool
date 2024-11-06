@@ -1,5 +1,5 @@
 'use client'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
+import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
 import { Box, styled } from '@mui/material'
 import React from 'react'
 

@@ -1,7 +1,7 @@
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { RoutesKeys, SmartAllParams } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
-import { Box } from '@mui/material'
 import { useMemo } from 'react'
 
 export type NavigationItemProps<T extends RoutesKeys> = {

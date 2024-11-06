@@ -1,10 +1,10 @@
 import { TeamMemberDto } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box } from '@/common/ui'
 import { IconButton } from '@/common/ui/IconButton'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { Done, Edit, PersonRemove } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
 type RightSideItemProps = {
 	data: TeamMemberDto

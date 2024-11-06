@@ -1,4 +1,4 @@
-import { SxProps } from '@mui/material'
+import { SxProps } from '@/common/ui/mui'
 import { createContext, useContext, useState } from 'react'
 
 type TopBarType = ReturnType<typeof useTeamTopBarProvide>

@@ -10,13 +10,13 @@ import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
 import { InnerTeamProvider } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { LayoutProps } from '@/common/types'
+import { Box } from '@/common/ui'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
 import { UserDto } from '@/interfaces/user'
 import { smartRedirect } from '@/routes/routes.tech.server'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
-import { Box } from '@mui/material'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
@@ -81,7 +81,7 @@ export const generateMetadata = generateSmartMetadata(
 )
 
 export default async function TeamLayout(layout: LayoutProps<'team'>) {
-	const pathname = useServerPathname()
+	const pathname = await useServerPathname()
 	const info = await getTeamInfo(layout.params.alias)
 	if (!info) notFound()
 

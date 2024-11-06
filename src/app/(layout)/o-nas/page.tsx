@@ -1,8 +1,8 @@
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { Box, Divider } from '@mui/material'
 
 import Image from 'next/image'
 
@@ -19,6 +19,7 @@ import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
 
 //TODO: fix overflow in better way.
+import { Divider } from '@/common/ui'
 import './styles.css'
 
 export default SmartPage(Page, {

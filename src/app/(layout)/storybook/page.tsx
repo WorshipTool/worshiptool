@@ -1,11 +1,11 @@
 'use client'
 
-import { Masonry } from '@mui/lab'
-import { Box, Button, Divider, Typography } from '@mui/material'
+import { Box, Button, Divider, Typography } from '@/common/ui'
 import { useMemo } from 'react'
 import StoryItem from './StoryItem'
 import { storyBookComponents } from './createStory'
 
+import { Masonry } from '@/common/ui/mui/lab'
 import {} from '@/ui/index.story'
 import { Gap } from '../../../common/ui/Gap'
 
@@ -24,7 +24,7 @@ export default function TestComponents() {
 				alignItems={'center'}
 				gap={1}
 			>
-				<Typography fontWeight={900}>Components: @/ui/*</Typography>
+				<Typography strong={900}>Components: @/ui/*</Typography>
 				<Button
 					onClick={() => window?.location.reload()}
 					size="small"

@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@/common/ui'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import {

@@ -1,9 +1,9 @@
 import Menu from '@/common/components/Menu/Menu'
 import MenuItem from '@/common/components/Menu/MenuItem'
+import { Box } from '@/common/ui'
 import { IconButton } from '@/common/ui/IconButton'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import { MoreVert } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 
 export const MORE_TEAM_SONG_BUTTON_ID = 'more-team-song-button'

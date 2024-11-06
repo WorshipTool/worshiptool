@@ -1,12 +1,12 @@
 import { BACKEND_URL } from '@/api/constants'
 import { ImagesApiAxiosParamCreator } from '@/api/generated'
 import { LinkProps } from '@/common/ui/Link/Link'
+import { SxProps } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { isDevelopment } from '@/tech/development.tech'
 import { getIconUrl } from '@/tech/paths.tech'
-import { SxProps } from '@mui/material'
 import { useMemo } from 'react'
 import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy/hooks/useUserTeams'
 

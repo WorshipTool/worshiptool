@@ -1,6 +1,6 @@
 'use client'
 import PrintClosePanel from '@/app/(nolayout)/(print)/components/PrintClosePanel'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { useEffect } from 'react'
 import { LayoutProps } from '../../../common/types'
 import PrintFootbar from './components/PrintFootbar'

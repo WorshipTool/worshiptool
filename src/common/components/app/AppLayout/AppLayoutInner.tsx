@@ -1,6 +1,6 @@
 'use client'
 import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import React, { useEffect } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'

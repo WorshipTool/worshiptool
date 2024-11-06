@@ -1,3 +1,5 @@
+import { Divider, useTheme } from '@/common/ui'
+import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
 import {
 	AdminPanelSettings,
 	CopyAll,
@@ -5,14 +7,6 @@ import {
 	VerifiedUser,
 	VideoFile,
 } from '@mui/icons-material'
-import {
-	Divider,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	useTheme,
-} from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'

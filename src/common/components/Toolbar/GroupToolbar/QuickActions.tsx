@@ -1,6 +1,6 @@
 'use client'
+import { Box } from '@/common/ui'
 import { Add, Edit, PushPin, Search } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'

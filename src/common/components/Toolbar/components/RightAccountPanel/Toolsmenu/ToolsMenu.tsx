@@ -1,6 +1,8 @@
 import PopupContainer from '@/common/components/Popup/PopupContainer'
-import { Box, Fade, styled } from '@mui/material'
-import MenuItem from './components/MenuItem'
+import { Box } from '@/common/ui'
+import { Fade } from '@/common/ui/mui'
+import { styled } from '@mui/system'
+import ToolsMenuItem from './components/MenuItem'
 import useOutsideClick from './hooks/useOutsideClick'
 import useToolsMenuItems from './hooks/useToolsMenuItems'
 
@@ -49,7 +51,7 @@ export default function ToolsMenu({ open, onClose }: ToolsMenuProps) {
 									.filter((a) => !a.hidden)
 									.slice(i * maxRowCount, i * maxRowCount + maxRowCount)
 									.map((item, j) => (
-										<MenuItem
+										<ToolsMenuItem
 											{...item}
 											key={`menuitem${item.title}`}
 											action={() => {

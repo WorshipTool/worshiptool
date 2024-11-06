@@ -1,5 +1,5 @@
 import DragTemplate from '@/common/components/DragTemplate/DragTemplate'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 import { forwardRef } from 'react'
 
 type SongCardDragTemplateProps = {

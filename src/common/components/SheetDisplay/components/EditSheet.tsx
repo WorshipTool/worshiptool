@@ -1,5 +1,6 @@
 'use client'
-import { Box, InputBase, styled } from '@mui/material'
+import { Box } from '@/common/ui'
+import { InputBase, styled } from '@/common/ui/mui'
 import { Sheet } from '@pepavlin/sheet-api'
 import React from 'react'
 

@@ -1,4 +1,4 @@
-import { Box, Chip } from '@mui/material'
+import { Box, Chip } from '@/common/ui'
 import { ReactElement } from 'react'
 import useGroup from '../../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'

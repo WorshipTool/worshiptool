@@ -1,5 +1,5 @@
+import { Box, Typography, useTheme } from '@/common/ui'
 import { Close } from '@mui/icons-material'
-import { Box, Typography, useTheme } from '@mui/material'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { Button } from '../../../ui/Button'
@@ -69,7 +69,7 @@ export default function GroupToolbarMobile(props: GroupToolbarMobileProps) {
 						<Clickable onClick={goHome}>
 							<Typography
 								variant="h5"
-								fontWeight={900}
+								strong={900}
 								sx={{
 									transition: 'all 0.2s ease',
 									fontSize: 24,

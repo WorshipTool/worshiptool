@@ -1,7 +1,7 @@
+import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
 import { BugReport, Build, PrecisionManufacturing } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { Gap } from '../../common/ui/Gap/Gap'
 
 export default function UnavailableMessage() {

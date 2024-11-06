@@ -1,5 +1,5 @@
+import { Box } from '@/common/ui'
 import { DragIndicator } from '@mui/icons-material'
-import { Box } from '@mui/material'
 
 type DragCornerProps = {
 	index: number

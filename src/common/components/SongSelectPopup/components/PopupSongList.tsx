@@ -1,9 +1,10 @@
 'use client'
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
+import { Box } from '@/common/ui'
+import { Skeleton } from '@/common/ui/mui/lab'
 import { Typography } from '@/common/ui/Typography'
 import { ApiState } from '@/tech/ApiState'
-import { Box, Skeleton } from '@mui/material'
 import './GlobalSongList.styles.css'
 
 type GlobalSongListProps = {

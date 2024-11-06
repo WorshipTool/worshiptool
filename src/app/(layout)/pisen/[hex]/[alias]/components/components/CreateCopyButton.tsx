@@ -1,15 +1,8 @@
 import { VariantPackAlias } from '@/api/dtos'
+import { Button, CircularProgress, Tooltip, useTheme } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { EggAlt } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import {
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	Tooltip,
-	useTheme,
-} from '@mui/material'
 import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
 import { useApi } from '../../../../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
@@ -61,7 +54,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 		</MenuItem>
 	) : (
 		<Tooltip title={'Vytvořit soukromou kopii písně'}>
-			<LoadingButton
+			<Button
 				color="success"
 				variant="contained"
 				startIcon={
@@ -77,7 +70,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 				onClick={onClick}
 			>
 				Vytvořit úpravu
-			</LoadingButton>
+			</Button>
 		</Tooltip>
 	)
 }

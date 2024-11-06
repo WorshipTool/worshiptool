@@ -6,12 +6,12 @@ import {
 import { BASE_PATH } from '@/api/generated/base'
 import { decodeTeamCode } from '@/app/(submodules)/(teams)/sub/tymy/pripojitse/[code]/tech'
 import { LayoutProps } from '@/common/types'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
 import { UserDto } from '@/interfaces/user'
 import { smartRedirect } from '@/routes/routes.tech.server'
-import { Box } from '@mui/material'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
@@ -41,7 +41,7 @@ const joinTeam = async (code: string) => {
 }
 
 export default async function PripojitSePage(props: LayoutProps<'teamJoin'>) {
-	const pathname = useServerPathname()
+	const pathname = await useServerPathname()
 	const coded_code = props.params.code
 	const code = decodeTeamCode(coded_code)
 

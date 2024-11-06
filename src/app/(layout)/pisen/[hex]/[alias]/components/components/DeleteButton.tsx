@@ -1,14 +1,8 @@
 import Popup from '@/common/components/Popup/Popup'
+import { Button, CircularProgress } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { Delete } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import {
-	Button,
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-} from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useSnackbar } from 'notistack'
 import React from 'react'
@@ -114,19 +108,19 @@ export default function DeleteButton({
 					</MenuItem>
 				)
 			) : (
-				<LoadingButton
+				<Button
 					variant="contained"
 					color={'error'}
 					// startIcon={<Remove/>}
 					loading={loading}
-					loadingIndicator="Mazání..."
+					// loadingIndicator="Mazání..."
 					onClick={async () => {
 						onClick()
 					}}
 					disabled={variant.deleted}
 				>
 					{variant.deleted ? 'Smazáno' : 'Smazat'}
-				</LoadingButton>
+				</Button>
 			)}
 
 			<Popup
@@ -138,14 +132,14 @@ export default function DeleteButton({
 						<Button variant="outlined" onClick={noClick} disabled={fetching}>
 							Ne
 						</Button>
-						<LoadingButton
+						<Button
 							loading={fetching}
 							variant="contained"
 							color="error"
 							onClick={yesClick}
 						>
 							Ano
-						</LoadingButton>
+						</Button>
 					</>
 				}
 			>

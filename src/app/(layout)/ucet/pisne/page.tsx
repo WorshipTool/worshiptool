@@ -7,12 +7,12 @@ import MySongListOrderSelect, {
 import MySongsFilterPanel, {
 	MySongFilterOption,
 } from '@/app/(layout)/ucet/pisne/components/MySongsFilterPanel'
-import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import Pager from '@/common/components/Pager/Pager'
+import { Box, LinearProgress } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { Box, LinearProgress } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '../../../../api/dtos'
 import { useApi } from '../../../../hooks/api/useApi'

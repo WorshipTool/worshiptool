@@ -16,7 +16,7 @@ const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
 	)
 })
 
-export default function Tooltip(props: CustomTooltipProps) {
+export function Tooltip(props: CustomTooltipProps) {
 	const title = props.title || props.label
 
 	return props.disabled || !title || title.length === 0 ? (

@@ -1,6 +1,6 @@
 import { createStory } from '@/app/(layout)/storybook/createStory'
+import { Box } from '@/common/ui'
 import { InfoButton } from '@/common/ui/InfoButton/InfoButton'
-import { Box } from '@mui/material'
 
 export default function InfoButtonStory() {
 	return (

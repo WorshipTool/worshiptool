@@ -1,8 +1,8 @@
 import { RESET_HOME_SCREEN_EVENT_NAME } from '@/app/components/HomeDesktop'
 import SvgIcon from '@/assets/icon.svg'
+import { Box, Typography } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
-import { Box, Typography } from '@mui/material'
 type LogoTitleProps = {
 	hideTitle?: boolean
 	nonInteractive?: boolean
@@ -34,10 +34,10 @@ export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 				>
 					<SvgIcon fill="white" height={size} />
 					<Typography
-						fontWeight={800}
-						fontSize={18}
-						marginLeft={0}
+						strong={800}
+						size={18}
 						sx={{
+							marginLeft: 0,
 							opacity: hideTitle ? 0 : 1,
 							transition: 'opacity 0.2s ease',
 						}}

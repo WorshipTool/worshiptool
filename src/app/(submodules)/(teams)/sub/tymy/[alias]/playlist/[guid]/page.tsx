@@ -5,9 +5,9 @@ import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import TeamPlaylistContainer from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistContainer'
 import TeamPlaylistTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistTopPanel'
+import { grey } from '@/common/ui/mui/colors'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartParams } from '@/routes/useSmartParams'
-import { grey } from '@mui/material/colors'
 
 export default SmartTeamPage(TeamPlaylistPage, {
 	hidePadding: true,

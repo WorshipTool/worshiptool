@@ -1,7 +1,7 @@
 import Menu from '@/common/components/Menu/Menu'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { ArrowDropDown } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 
 export type PlaylistOrderOptions =

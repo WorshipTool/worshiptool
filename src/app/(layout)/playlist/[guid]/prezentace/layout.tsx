@@ -1,5 +1,5 @@
+import { Box } from '@/common/ui'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
-import { Box } from '@mui/material'
 import { LayoutProps, MetadataProps } from '../../../../../common/types'
 
 export const generateMetadata = generateSmartMetadata(

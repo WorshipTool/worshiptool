@@ -1,5 +1,6 @@
 'use client'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
@@ -7,7 +8,6 @@ import useSongDrag from '@/hooks/dragsong/useSongDrag'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Check, OpenInNew, PlaylistAdd } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function FloatingPlaylist() {

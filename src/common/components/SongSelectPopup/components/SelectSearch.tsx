@@ -1,6 +1,6 @@
-import TextField from '@/common/ui/TextField/TextField'
+import { Box } from '@/common/ui'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Search } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import './SelectSearch.styles.css'
 
 type SelectSearchProps = {

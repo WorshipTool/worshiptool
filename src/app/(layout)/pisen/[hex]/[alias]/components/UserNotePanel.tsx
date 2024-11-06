@@ -1,15 +1,15 @@
 import NoteContent from '@/app/(layout)/pisen/[hex]/[alias]/components/NoteContent'
 import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { IconButton } from '@/common/ui/IconButton'
-import TextField from '@/common/ui/TextField/TextField'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { AddComment, Edit } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 export default function UserNotePanel() {

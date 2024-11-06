@@ -2,6 +2,7 @@
 import MenuItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box } from '@/common/ui'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import {
 	Analytics,
@@ -11,7 +12,6 @@ import {
 	Settings,
 	Subscriptions,
 } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { ComponentProps, useMemo } from 'react'
 
 type MenuItem = ComponentProps<typeof MenuItem>

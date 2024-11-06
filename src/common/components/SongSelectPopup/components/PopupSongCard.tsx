@@ -1,11 +1,12 @@
 import { SongVariantDto } from '@/api/dtos'
 import { theme } from '@/common/constants/theme'
+import { Box } from '@/common/ui'
 import { IconButton } from '@/common/ui/IconButton'
+import { alpha } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { OpenInNew } from '@mui/icons-material'
-import { alpha, Box } from '@mui/material'
 import { memo, useCallback } from 'react'
 
 type PopupSongCardProps = {

@@ -1,13 +1,14 @@
 import { PlaylistData } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import { Box, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { IconButton } from '@/common/ui/IconButton'
+import { Chip } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Close, PushPin } from '@mui/icons-material'
-import { Box, Chip, useTheme } from '@mui/material'
 import { useState } from 'react'
 
 type PinnedPlaylistPanelItemProps = {

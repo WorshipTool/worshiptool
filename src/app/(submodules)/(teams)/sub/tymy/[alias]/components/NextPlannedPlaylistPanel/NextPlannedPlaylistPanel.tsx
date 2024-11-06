@@ -2,10 +2,12 @@
 
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { Box } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Gap } from '@/common/ui/Gap'
 import { IconButton } from '@/common/ui/IconButton'
 import { Link } from '@/common/ui/Link/Link'
+import { Chip } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import {
 	isDateToday,
@@ -13,7 +15,6 @@ import {
 	isDateTomorrow,
 } from '@/tech/date/date.tech'
 import { CalendarMonth, KeyboardArrowRight } from '@mui/icons-material'
-import { Box, Chip } from '@mui/material'
 import { useMemo } from 'react'
 
 export default function NextPlannedPlaylistPanel() {

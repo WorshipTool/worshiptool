@@ -1,7 +1,8 @@
 import Menu from '@/common/components/Menu/Menu'
 import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
+import { Box } from '@/common/ui'
+import { Chip } from '@/common/ui/mui'
 import { Add } from '@mui/icons-material'
-import { Box, Chip } from '@mui/material'
 import { useState } from 'react'
 export type MySongFilterOption = 'private' | 'public'
 

@@ -1,4 +1,5 @@
-import { Box, Pagination } from '@mui/material'
+import { Box } from '@/common/ui'
+import { Pagination } from '@/common/ui/mui'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 export type PagerProps<T> = {

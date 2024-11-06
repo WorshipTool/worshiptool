@@ -5,8 +5,8 @@ import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/comp
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import TeamPlaylistMoreButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistMoreButton'
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
-import { Box } from '@mui/material'
 
 export default function TeamPlaylistTopPanel() {
 	const { canUserEdit } = useInnerPlaylist()

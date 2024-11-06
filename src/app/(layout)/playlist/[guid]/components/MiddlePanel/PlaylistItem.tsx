@@ -1,10 +1,11 @@
-import { Box, Paper } from '@mui/material'
+import { Box } from '@/common/ui'
 import React, { ReactNode, memo, useEffect, useMemo, useState } from 'react'
 
 import TopPlaylistItemPanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/TopPlaylistItemPanel'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import DefaultStyle from '@/common/components/SheetDisplay/styles/DefaultStyle'
+import { Paper } from '@/common/ui/mui'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { Sheet } from '@pepavlin/sheet-api'
 

@@ -1,5 +1,5 @@
+import { Box } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 import { useState } from 'react'
 
 type Item = {

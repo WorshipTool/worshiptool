@@ -2,16 +2,9 @@
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box, Button, Tooltip, Typography } from '@/common/ui'
+import { InputBase, Switch, styled } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import {
-	Box,
-	Button,
-	InputBase,
-	Switch,
-	Tooltip,
-	Typography,
-	styled,
-} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -170,9 +163,10 @@ function Create() {
 							</Box>
 							<Box display={'flex'} justifyContent={'end'} padding={1}>
 								<Typography
-									display={'flex'}
-									alignItems={'center'}
-									variant="caption"
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
 								>
 									Náhled
 								</Typography>
@@ -215,7 +209,7 @@ function Create() {
 						) : (
 							<StyledContainer flexDirection={'column'}>
 								{title == '' && sheet.getSections().length == 0 && (
-									<Typography variant="caption" sx={{ color: 'grey' }}>
+									<Typography sx={{ color: 'grey' }}>
 										Tady uvidite ukazku...
 									</Typography>
 								)}

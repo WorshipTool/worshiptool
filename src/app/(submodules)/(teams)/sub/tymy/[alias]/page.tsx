@@ -6,10 +6,11 @@ import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Tea
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { PageProps } from '@/common/types'
+import { Box, useTheme } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
+import { Grid } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { WavingHand } from '@mui/icons-material'
-import { Box, Grid, useTheme } from '@mui/material'
 
 export default SmartTeamPage(TeamPage, {
 	collapseSideBar: false,

@@ -1,7 +1,7 @@
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
-import { Box } from '@mui/material'
 
 type TeamEditableFieldProps = {
 	label: string

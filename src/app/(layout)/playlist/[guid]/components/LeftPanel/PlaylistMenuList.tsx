@@ -2,12 +2,12 @@
 import { OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME } from '@/app/(layout)/playlist/[guid]/components/LeftPanel/AddSongToPlaylistButton'
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { Add } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { Reorder } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 

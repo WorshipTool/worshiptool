@@ -1,6 +1,6 @@
 'use client'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, Divider, LinearProgress, Typography } from '@mui/material'
+import { Box, Divider, LinearProgress, Typography } from '@/common/ui'
 import { Card } from '../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../common/ui/Gap'
 import useGroup from '../../../../../hooks/group/useGroup'

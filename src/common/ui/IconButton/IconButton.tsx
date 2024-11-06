@@ -1,15 +1,10 @@
+import { Box } from '@/common/ui/Box'
 import { getColorHex } from '@/tech/theme/theme.tech'
-import {
-	Box,
-	IconButton as IconBtn,
-	SxProps,
-	darken,
-	useTheme,
-} from '@mui/material'
+import { IconButton as IconBtn, SxProps, darken, useTheme } from '@mui/material'
 import React, { ComponentProps, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
 import { Clickable } from '../Clickable'
-import Tooltip from '../CustomTooltip/Tooltip'
+import { Tooltip } from '../CustomTooltip/Tooltip'
 import { CommonLinkProps, Link } from '../Link/Link'
 import { ColorType } from '../ui.types'
 
