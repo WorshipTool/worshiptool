@@ -1,6 +1,7 @@
 'use client'
 
 import { Box } from '@/common/ui/Box'
+import SongCardAdditional from '@/common/ui/SongCard/components/SongCardAdditional'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
@@ -27,11 +28,6 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 	outlineWidth: 1.4,
 	outlineStyle: 'solid',
 	position: 'relative',
-}))
-
-const StyledBox = styled(Box)(({ theme }) => ({
-	maxWidth: 'calc(100vw - 3rem)',
-	overflow: 'hidden',
 }))
 
 const SONG_CARD_PROPERTIES = [
@@ -64,6 +60,8 @@ export const SongCard = memo(function S({
 }: SongCardProps) {
 	const { user } = useAuth()
 	const theme = useTheme()
+
+	const [isOver, setIsOver] = useState(false)
 
 	const [selected, setSelected] = useState<boolean>(props.selected || false)
 	useEffect(() => {
@@ -152,6 +150,8 @@ export const SongCard = memo(function S({
 						userSelect: 'none',
 					}}
 					onClick={onClick}
+					onMouseEnter={() => setIsOver(true)}
+					onMouseLeave={() => setIsOver(false)}
 				>
 					<Box
 						sx={{
@@ -166,7 +166,9 @@ export const SongCard = memo(function S({
 									bgcolor: alpha(theme.palette.primary.main, 0.2),
 								},
 							}),
-							height: '100%',
+							height: 'calc(100% - 2rem)',
+							display: 'flex',
+							flexDirection: 'column',
 						}}
 					>
 						<Box display={'flex'} flexDirection={'row'} gap={1}>
@@ -196,32 +198,47 @@ export const SongCard = memo(function S({
 									/>
 								)}
 								{createdByLoaderEnabled && data.createdByLoader && (
-									<Typography>Nahráno programem</Typography>
+									<Typography size={'small'}>Nahráno programem</Typography>
 								)}
 							</Box>
 						</Box>
 
-						<StyledBox>
-							{dataLines.map((line, index) => {
-								return (
-									<Box
-										display={'flex'}
-										flexDirection={'row'}
-										key={line + index}
-									>
-										<Typography
-											noWrap
-											key={'SearchItemText' + index}
-											sx={{
-												flex: 1,
-											}}
+						<Box
+							sx={{
+								maxWidth: 'calc(100vw - 3rem)',
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								flex: 1,
+							}}
+						>
+							<Box
+								sx={{
+									overflow: 'hidden',
+								}}
+							>
+								{dataLines.map((line, index) => {
+									return (
+										<Box
+											display={'flex'}
+											flexDirection={'row'}
+											key={line + index}
 										>
-											{line}
-										</Typography>
-									</Box>
-								)
-							})}
-						</StyledBox>
+											<Typography
+												noWrap
+												key={'SearchItemText' + index}
+												sx={{
+													flex: 1,
+												}}
+											>
+												{line}
+											</Typography>
+										</Box>
+									)
+								})}
+							</Box>
+							<SongCardAdditional isOver={isOver} data={data} />
+						</Box>
 					</Box>
 				</StyledContainer>
 			</Link>

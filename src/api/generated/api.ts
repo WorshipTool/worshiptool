@@ -26,6 +26,19 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AddFavouriteInDto
+ */
+export interface AddFavouriteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddFavouriteInDto
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddNoteToVariantInDto
  */
 export interface AddNoteToVariantInDto {
@@ -623,6 +636,44 @@ export interface GetAnalyticsOutDto {
      * @memberof GetAnalyticsOutDto
      */
     'days': number;
+}
+/**
+ * 
+ * @export
+ * @interface GetFavouritesItemData
+ */
+export interface GetFavouritesItemData {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'variantGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetFavouritesOutDto
+ */
+export interface GetFavouritesOutDto {
+    /**
+     * 
+     * @type {Array<GetFavouritesItemData>}
+     * @memberof GetFavouritesOutDto
+     */
+    'items': Array<GetFavouritesItemData>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesOutDto
+     */
+    'selectionGuid': string;
 }
 /**
  * 
@@ -2271,6 +2322,19 @@ export interface RegisterWebhookExtensionBody {
 /**
  * 
  * @export
+ * @interface RemoveFavouriteInDto
+ */
+export interface RemoveFavouriteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RemoveFavouriteInDto
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface RemoveTeamLogoInDto
  */
 export interface RemoveTeamLogoInDto {
@@ -3790,6 +3854,12 @@ export interface User {
      * @memberof User
      */
     'picture': Image;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof User
+     */
+    'favourites': Playlist;
 }
 
 export const UserRoleEnum = {
@@ -8757,6 +8827,249 @@ export class SongEditingApi extends BaseAPI {
      */
     public songEditingControllerEditVariant(postEditVariantInDto: PostEditVariantInDto, options?: RawAxiosRequestConfig) {
         return SongEditingApiFp(this.configuration).songEditingControllerEditVariant(postEditVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongFavouritesApi - axios parameter creator
+ * @export
+ */
+export const SongFavouritesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerAddFavourite: async (addFavouriteInDto: AddFavouriteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addFavouriteInDto' is not null or undefined
+            assertParamExists('songFavouritesControllerAddFavourite', 'addFavouriteInDto', addFavouriteInDto)
+            const localVarPath = `/song/favourites/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addFavouriteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerGetFavourites: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/favourites`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerRemoveFavourite: async (removeFavouriteInDto: RemoveFavouriteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'removeFavouriteInDto' is not null or undefined
+            assertParamExists('songFavouritesControllerRemoveFavourite', 'removeFavouriteInDto', removeFavouriteInDto)
+            const localVarPath = `/song/favourites/remove`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(removeFavouriteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongFavouritesApi - functional programming interface
+ * @export
+ */
+export const SongFavouritesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongFavouritesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerAddFavourite(addFavouriteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerAddFavourite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerGetFavourites(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetFavouritesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerGetFavourites(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerGetFavourites']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerRemoveFavourite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongFavouritesApi - factory interface
+ * @export
+ */
+export const SongFavouritesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongFavouritesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: any): AxiosPromise<PlaylistItem> {
+            return localVarFp.songFavouritesControllerAddFavourite(addFavouriteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerGetFavourites(options?: any): AxiosPromise<GetFavouritesOutDto> {
+            return localVarFp.songFavouritesControllerGetFavourites(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongFavouritesApi - object-oriented interface
+ * @export
+ * @class SongFavouritesApi
+ * @extends {BaseAPI}
+ */
+export class SongFavouritesApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddFavouriteInDto} addFavouriteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerAddFavourite(addFavouriteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerGetFavourites(options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerGetFavourites(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
