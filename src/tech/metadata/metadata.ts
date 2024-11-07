@@ -13,7 +13,9 @@ export const generateSmartMetadata = <T extends RoutesKeys>(
 		const parentTitle = parentData.title?.absolute
 
 		const combinedTitle = parentTitle
-			? data.title + WINDOW_TITLE_DIVIDER + parentTitle
+			? data.title
+				? data.title + WINDOW_TITLE_DIVIDER + parentTitle
+				: parentTitle
 			: data.title
 		return {
 			...data,

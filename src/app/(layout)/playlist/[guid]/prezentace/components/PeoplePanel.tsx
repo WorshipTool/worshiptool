@@ -5,15 +5,21 @@ import { grey } from '@/common/ui/mui/colors'
 import useAuth from '@/hooks/auth/useAuth'
 import { useLiveMessage } from '@/hooks/sockets/useLiveMessage'
 import { UserGuid } from '@/interfaces/user'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Person = {
 	name: string
 	guid: UserGuid
+	uniqueId: string
+}
+
+type ConnectedPerson = Person & {
+	joinedAt: Date
 }
 
 type CardChangeData = {
 	userGuid: UserGuid
+	uniqueId: string
 	index: number
 }
 
@@ -27,24 +33,40 @@ type PeoplePanelProps = {
 	cardIndex: number
 }
 
+const SEND_INTERVAL = 5000
+const AUTO_LEAVE_INTERVAL = 10000
+
 export default function PeoplePanel(props: PeoplePanelProps) {
 	const { guid } = useInnerPlaylist()
 	const { user } = useAuth()
 
-	const [_people, setPeople] = useState<Person[]>([])
+	const [_people, setPeople] = useState<ConnectedPerson[]>([])
 
-	const [chosen, setChosen] = useState<UserGuid | null>(null)
+	const [chosen, setChosen] = useState<Person | null>(null)
+
+	const uniqueId = useMemo(() => {
+		return Math.random().toString(36).substr(2, 9)
+	}, [])
+
+	const me: Person = useMemo(
+		() => ({
+			name: user?.firstName + ' ' + user?.lastName,
+			guid: user?.guid || ('' as UserGuid),
+			uniqueId,
+		}),
+		[user, uniqueId]
+	)
 
 	// unique
 	const people = _people
 		.filter(
 			(person, index, self) =>
-				self.findIndex((p) => p.guid === person.guid) === index
+				self.findIndex((p) => p.uniqueId === person.uniqueId) === index
 		)
 		// you at end
 		.sort((a, b) => {
-			if (a.guid === user?.guid) return 1
-			if (b.guid === user?.guid) return -1
+			if (a.uniqueId === uniqueId) return 1
+			if (b.uniqueId === uniqueId) return -1
 			return 0
 		})
 
@@ -54,26 +76,47 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 			if (!user) return
 
 			// Add person to the list
-			setPeople((people) => [...people, data])
+			setPeople((people) => [
+				...people,
+				{
+					...data,
+					joinedAt: new Date(),
+				},
+			])
 
-			if (data.guid !== user?.guid) {
+			if (data.uniqueId !== uniqueId) {
 				// Send back that I'm here
-				send('imhere', {
-					name: user.firstName + ' ' + user.lastName,
-					guid: user.guid,
-				})
+				send('imhere', me)
 			}
 		},
 		imhere: (data: Person) => {
 			// Add person to the list
-			if (!people.find((p) => p.guid === data.guid)) {
-				setPeople((people) => [...people, data])
+			if (!people.find((p) => p.uniqueId === data.uniqueId)) {
+				setPeople((people) => [
+					...people,
+					{
+						...data,
+						joinedAt: new Date(),
+					},
+				])
+			} else {
+				setPeople((people) =>
+					people.map((p) => {
+						if (p.uniqueId === data.uniqueId) {
+							return {
+								...p,
+								joinedAt: new Date(),
+							}
+						}
+						return p
+					})
+				)
 			}
 		},
 		leave: (data: Person) => {
 			// Remove person from the list
-			setPeople((people) => people.filter((p) => p.guid !== data.guid))
-			if (chosen === data.guid) {
+			setPeople((people) => people.filter((p) => p.uniqueId !== data.uniqueId))
+			if (chosen && chosen.uniqueId === data.uniqueId) {
 				setChosen(null)
 			}
 		},
@@ -81,7 +124,7 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 			if (!user) return
 			if (!chosen) return
 
-			if (chosen === data.userGuid) {
+			if (chosen && chosen.uniqueId === data.uniqueId) {
 				props.onCardChange(data.index)
 			}
 		},
@@ -91,6 +134,7 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 				send('cardChange', {
 					userGuid: user.guid,
 					index: props.cardIndex,
+					uniqueId: me.uniqueId,
 				})
 			}
 		},
@@ -102,37 +146,53 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 		send('cardChange', {
 			userGuid: user.guid,
 			index: props.cardIndex,
+			uniqueId: me.uniqueId,
 		})
 	}, [props.cardIndex, user])
 
 	useEffect(() => {
-		if (!user) return
-		send('join', {
-			name: user.firstName + ' ' + user.lastName,
-			guid: user.guid,
-		})
+		if (user) send('join', me)
 
 		return () => {
-			send('leave', {
-				name: user.firstName + ' ' + user.lastName,
-				guid: user.guid,
-			})
+			send('leave', me)
 		}
+	}, [me])
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (user) send('imhere', me)
+		}, SEND_INTERVAL)
+
+		return () => clearInterval(interval)
 	}, [])
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			// filter people
+			setPeople((people) =>
+				people.filter((p) => {
+					const diff = new Date().getTime() - p.joinedAt.getTime()
+					return diff < AUTO_LEAVE_INTERVAL
+				})
+			)
+		}, AUTO_LEAVE_INTERVAL)
+
+		return () => clearInterval(interval)
+	}, [chosen])
 
 	return (
 		<Box color={'white'} display={'flex'} gap={1}>
 			{people.length > 1 &&
 				people.map((person) => {
-					const selected = chosen === person.guid
-					const you = person.guid === user?.guid
+					const selected = chosen && chosen.uniqueId === person.uniqueId
+					const you = person.uniqueId === uniqueId
 
 					const onClick = () => {
 						if (!user) return
 						if (selected) {
 							setChosen(null)
 						} else {
-							setChosen(person.guid)
+							setChosen(person)
 							send('startFollow', {
 								userGuid: user.guid,
 								followedUserGuid: person.guid,
@@ -150,7 +210,9 @@ export default function PeoplePanel(props: PeoplePanelProps) {
 							<Avatar
 								key={person.guid}
 								sx={{
-									bgcolor: !you ? stringToColor(person.name) : 'grey',
+									bgcolor: !you
+										? stringToColor(person.name + person.uniqueId)
+										: 'grey',
 									width: 30,
 									height: 30,
 									fontSize: 16,

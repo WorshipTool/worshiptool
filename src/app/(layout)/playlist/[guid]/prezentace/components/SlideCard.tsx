@@ -263,7 +263,6 @@ export default function SlideCard({ item, order }: SlideCardProps) {
 				bottom={0}
 				sx={{
 					color: '#fff',
-					zIndex: (theme) => theme.zIndex.drawer + 1,
 				}}
 				display={showLoading ? 'flex' : 'none'}
 				justifyContent={'center'}

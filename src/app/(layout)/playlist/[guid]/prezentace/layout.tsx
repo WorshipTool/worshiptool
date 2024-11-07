@@ -6,7 +6,10 @@ export const generateMetadata = generateSmartMetadata(
 	'playlistCards',
 	({ params }: MetadataProps<'playlistCards'>) => {
 		return {
-			title: '💻',
+			// title: '💻',
+			icons: {
+				icon: '/assets/icons/presentation-favicon.png',
+			},
 		}
 	}
 )

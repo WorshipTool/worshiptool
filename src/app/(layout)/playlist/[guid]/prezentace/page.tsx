@@ -119,6 +119,7 @@ function PlaylistCards() {
 
 	return (
 		<Box overflow={'hidden'}>
+			<SlideCard item={items[currentIndex]} order={currentIndex} />
 			<Box
 				position={'absolute'}
 				right={0}
@@ -175,7 +176,6 @@ function PlaylistCards() {
 			>
 				<GoBackButton teamAlias={playlist?.teamAlias} />
 			</Box>
-			<SlideCard item={items[currentIndex]} order={currentIndex} />
 		</Box>
 	)
 }
