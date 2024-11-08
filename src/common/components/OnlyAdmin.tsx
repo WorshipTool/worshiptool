@@ -30,6 +30,8 @@ export default function OnlyAdmin(props: OnlyAdminProps) {
 							borderRadius: '5px',
 							padding: collapsed ? 0 : '4px',
 							borderColor: collapsed ? 'grey' : 'black',
+							display: 'flex',
+							alignItems: 'center',
 						}}
 						onClick={() => setCollapsed(false)}
 					>

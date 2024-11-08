@@ -4,6 +4,7 @@ import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
+import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
@@ -145,6 +146,13 @@ export default function MySongItem(props: MySongItemProps) {
 								{getHintText().substring(0, 100)}...
 							</Typography>
 						</Box>
+					</Box>
+					<Box>
+						<HeartLikeButton
+							packGuid={props.variant.packGuid}
+							unmountIfNotVisible
+							hideIfNot
+						/>
 					</Box>
 					<Typography
 						thin

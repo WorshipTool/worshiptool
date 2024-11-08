@@ -8,9 +8,23 @@ type SongCardAdditionalProps = {
 }
 
 export default function SongCardAdditional(props: SongCardAdditionalProps) {
+	const moveOffset = '0.5rem'
 	return (
 		<Box display={'flex'} flexDirection={'column'} justifyContent={'end'}>
-			<HeartLikeButton isOver={props.isOver} packGuid={props.data.packGuid} />
+			<Box
+				sx={
+					{
+						// transform: `translateY(${moveOffset}) translateX(${moveOffset})`,
+					}
+				}
+			>
+				<HeartLikeButton
+					// hideIfNot={!props.isOver}
+					hideIfNot
+					// interactable
+					packGuid={props.data.packGuid}
+				/>
+			</Box>
 		</Box>
 	)
 }

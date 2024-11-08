@@ -13,6 +13,7 @@ import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
+import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartParams } from '@/routes/useSmartParams'
@@ -155,7 +156,12 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 							<Box />
 						)}
 						<Box display={'flex'} gap={1} maxHeight={'2rem'}>
-							<Box>
+							<Box display={'flex'}>
+								<HeartLikeButton
+									packGuid={variant.packGuid}
+									interactable
+									small
+								/>
 								<MoreTeamSongButton />
 							</Box>
 							<AddToPlaylistButton variant={variant} />

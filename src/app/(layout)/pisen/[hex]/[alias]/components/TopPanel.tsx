@@ -3,6 +3,7 @@ import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
+import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
@@ -196,18 +197,23 @@ export default function TopPanel(props: TopPanelProps) {
 						<Box flex={1} />
 
 						{isOwner && <VisibilityLabel public={props.variant.public} right />}
-						<SongsOptionsButton
-							reloadSong={props.reloadSong}
-							variant={props.variant}
-							sheet={props.sheet}
-							song={props.song}
-							onEditClick={onEditClick}
-							isInEditMode={props.isInEditMode}
-							saving={saving}
-							editedTitle={props.editedTitle}
-							isOwner={isOwner}
-							anyChange={anyChange}
-						/>
+
+						<Box display={'flex'}>
+							<HeartLikeButton packGuid={props.variant.packGuid} interactable />
+
+							<SongsOptionsButton
+								reloadSong={props.reloadSong}
+								variant={props.variant}
+								sheet={props.sheet}
+								song={props.song}
+								onEditClick={onEditClick}
+								isInEditMode={props.isInEditMode}
+								saving={saving}
+								editedTitle={props.editedTitle}
+								isOwner={isOwner}
+								anyChange={anyChange}
+							/>
+						</Box>
 						{isLoggedIn() && !(isOwner && !props.variant.public) && (
 							<Box
 								sx={{

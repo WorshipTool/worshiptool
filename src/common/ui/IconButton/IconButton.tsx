@@ -120,7 +120,11 @@ const ClickableComponent = <T extends RoutesKeys>({
 	return (
 		<Clickable>
 			{props.tooltip ? (
-				<Tooltip title={props.tooltip} placement={props.tooltipPlacement}>
+				<Tooltip
+					title={props.tooltip}
+					placement={props.tooltipPlacement}
+					disabled={props.disabled}
+				>
 					<LinkComponent {...props} />
 				</Tooltip>
 			) : (

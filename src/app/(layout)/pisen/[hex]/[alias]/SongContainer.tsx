@@ -129,6 +129,9 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 													position: 'sticky',
 													top: 80,
 													// bottom: 160,
+													display: 'flex',
+													flexDirection: 'column',
+													alignItems: 'flex-end',
 												}}
 											>
 												<UserNotePanel />

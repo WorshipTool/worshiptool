@@ -7,13 +7,16 @@ import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import { useEffect, useMemo, useState } from 'react'
 
 type HeartLikeButtonProps = {
-	isOver?: boolean
+	hideIfNot?: boolean
 	packGuid: VariantPackGuid
+	interactable?: boolean
+	unmountIfNotVisible?: boolean
+	small?: boolean
 }
 
-export default function HeartLikeButton(props: HeartLikeButtonProps) {
-	const [liked, setLiked] = useState(false)
+export const heartColor = 'rgb(238, 72, 85)'
 
+export default function HeartLikeButton(props: HeartLikeButtonProps) {
 	const { items, loading, add, remove } = useFavourites()
 
 	const isFavourite = useMemo(() => {
@@ -21,6 +24,8 @@ export default function HeartLikeButton(props: HeartLikeButtonProps) {
 			items && items.some((item) => item.packGuid === props.packGuid)
 		)
 	}, [items, props.packGuid])
+
+	const [liked, setLiked] = useState(isFavourite)
 
 	useEffect(() => {
 		if (items) setLiked(isFavourite)
@@ -35,37 +40,47 @@ export default function HeartLikeButton(props: HeartLikeButtonProps) {
 			add(props.packGuid)
 		}
 	}
-	const color = 'rgb(238, 72, 85)'
 	// const color = 'grey.700'
-	const moveOffset = '0.5rem'
-
-	return (
+	const hidden = props.hideIfNot && !liked
+	const color = liked ? heartColor : 'grey.400'
+	return props.unmountIfNotVisible && hidden ? null : (
 		<Box
 			sx={{
-				transform: `translateY(${moveOffset}) translateX(${moveOffset})`,
-				opacity: props.isOver || liked ? 1 : 0,
+				opacity: hidden ? 0 : 1,
 				transition: 'all 0.2s',
 			}}
+			onClick={(e) => {
+				e.stopPropagation()
+				e.preventDefault()
+			}}
 		>
-			<IconButton
-				onClick={(e) => {
-					e.stopPropagation()
-					e.preventDefault()
-					onClick()
-				}}
-				color={liked ? color : 'grey.400'}
-				sx={{
-					stroke: grey[200],
-					strokeWidth: liked ? 0 : 1,
-					'&:hover': {
-						strokeWidth: 0,
-					},
-				}}
-				disabled={loading && !liked}
-			>
-				{liked ? <Favorite /> : <FavoriteBorder />}
-				{/* {liked ? <Bookmark /> : <BookmarkBorder />} */}
-			</IconButton>
+			{props.interactable ? (
+				<IconButton
+					onClick={(e) => {
+						e.stopPropagation()
+						e.preventDefault()
+						onClick()
+					}}
+					color={color}
+					sx={{
+						stroke: grey[200],
+						strokeWidth: liked ? 0 : 1,
+						'&:hover': props.interactable
+							? {
+									strokeWidth: 0,
+							  }
+							: {},
+					}}
+					disabled={(loading && !liked) || !props.interactable}
+					tooltip={liked ? 'Odebrat z oblíbených' : 'Přidat do oblíbených'}
+					size={props.small ? 'small' : undefined}
+				>
+					{liked ? <Favorite /> : <FavoriteBorder />}
+					{/* {liked ? <Bookmark /> : <BookmarkBorder />} */}
+				</IconButton>
+			) : (
+				<Box color={color}>{liked ? <Favorite /> : <FavoriteBorder />}</Box>
+			)}
 		</Box>
 	)
 }
