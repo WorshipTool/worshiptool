@@ -39,10 +39,17 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 
 	const date = new Date(props.data.date)
 
-	const dateString = date.toLocaleDateString('cs-CZ', {
-		day: 'numeric',
-		month: 'long',
-	})
+	const dateString = useMemo(() => {
+		const long = date.toLocaleDateString('cs-CZ', {
+			day: 'numeric',
+			month: 'long',
+		})
+		if (long.length <= 11) return long
+		return date.toLocaleDateString('cs-CZ', {
+			day: 'numeric',
+			month: 'short',
+		})
+	}, [date])
 
 	return (
 		<>
@@ -73,13 +80,15 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 							top: theme.spacing(3),
 							right: theme.spacing(3),
 							bottom: theme.spacing(3),
-							gap: 1,
+							gap: 0,
 							display: 'flex',
 							flexDirection: 'column',
+							justifyContent: 'space-between',
 						}}
 					>
 						<Box
 							display={'flex'}
+							flexWrap={'wrap-reverse'}
 							gap={1}
 							{...(!diffTitle
 								? {
@@ -100,7 +109,12 @@ export default function NextMonthItem(props: NextMonthItemProps) {
 								}}
 							/> */}
 						{diffTitle && (
-							<Typography color="grey.700">
+							<Typography
+								color="grey.700"
+								sx={{
+									marginBottom: theme.spacing(1.5),
+								}}
+							>
 								{props.data.playlist.title}
 							</Typography>
 						)}
