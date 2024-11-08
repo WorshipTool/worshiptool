@@ -46,6 +46,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/sub/tymy/pripojitse/[code]", { "code": string }>
     | StaticRoute<"/test">
     | StaticRoute<"/ucet">
+    | StaticRoute<"/ucet/oblibene">
     | StaticRoute<"/ucet/pisne">
     | StaticRoute<"/ucet/playlisty">
     | StaticRoute<"/vytvorit">

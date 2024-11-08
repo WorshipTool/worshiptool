@@ -19,6 +19,7 @@ export type SmartPageOptions = Nullable<{
 	fullWidth: boolean
 	hidePadding: boolean
 	middleWidth: boolean
+	topPadding: boolean
 }>
 
 const MIDDLE_WIDTH = 900
@@ -42,6 +43,7 @@ export const SmartPageInnerProvider = ({
 			fullWidth: false,
 			hidePadding: false,
 			middleWidth: false,
+			topPadding: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -85,6 +87,12 @@ export const SmartPageInnerProvider = ({
 								width: 'calc(100% - 1*8*2px)',
 							},
 					  }),
+
+				...(options.topPadding
+					? {
+							paddingTop: 7,
+					  }
+					: {}),
 			}}
 		>
 			{children}

@@ -71,6 +71,11 @@ export default function useToolsMenuItems() {
 				image: getIconUrl('users_song_list.png'),
 				to: 'usersSongs',
 			},
+			{
+				title: 'Oblíbené',
+				image: getIconUrl('favourites-songs.png'),
+				to: 'usersFavourites',
+			},
 
 			// {
 			// 	title: '13ka',

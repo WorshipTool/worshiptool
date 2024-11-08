@@ -33,12 +33,12 @@ const useProvideFavourites = () => {
 
 	const [{ data: favourites, loading: favouritesLoading }, reload] =
 		useApiStateEffect(async () => {
-			if (!user) return []
+			if (!user) return null
 
 			const result = await handleApiCall(
 				songFavouritesApi.songFavouritesControllerGetFavourites()
 			)
-			return result.items
+			return result
 		}, [user])
 
 	const add = async (packGuid: VariantPackGuid) => {
@@ -57,9 +57,10 @@ const useProvideFavourites = () => {
 	}
 
 	return {
-		items: favourites,
+		items: favourites?.items || null,
 		loading: favouritesLoading,
 		add,
 		remove,
+		selectionGuid: favourites?.selectionGuid || null,
 	}
 }

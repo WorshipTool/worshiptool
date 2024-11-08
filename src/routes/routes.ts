@@ -25,6 +25,7 @@ export const routesPaths = {
 	resetPasswordToken: '/reset-hesla/[token]',
 	usersPlaylists: '/ucet/playlisty',
 	usersSongs: '/ucet/pisne',
+	usersFavourites: '/ucet/oblibene',
 	songsList: '/seznam',
 	test: '/test',
 	testComponents: '/storybook',
