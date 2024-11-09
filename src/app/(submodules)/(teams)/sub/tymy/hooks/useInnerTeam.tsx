@@ -1,5 +1,6 @@
 'use client'
 import { useTeamEvents } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamEvents'
+import { useTeamMembers } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamMembers'
 import { useTeamSelection } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamSelection'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
@@ -49,13 +50,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		guid
 	)
 
-	const [membersApiState] = useApiStateEffect(async () => {
-		const data = await handleApiCall(
-			teamMembersApi.teamMemberControllerGetTeamMembers(teamAlias)
-		)
-		return data
-	}, [teamAlias])
-
 	const { user } = useAuth()
 	const isCreator = useMemo(() => {
 		if (!apiState.data?.createdByGuid) return false
@@ -64,11 +58,13 @@ const useProvideInnerTeam = (teamAlias: string) => {
 	}, [apiState, user])
 
 	const events = useTeamEvents(guid)
+	const members = useTeamMembers(teamAlias, guid)
 
 	return {
 		guid,
 		apiState,
-		membersApiState: membersApiState,
+		membersApiState: members.apiState,
+		members: members,
 		alias: teamAlias,
 		name: apiState.data?.name || '',
 		joinCode: apiState.data?.joinCode || '',

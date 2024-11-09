@@ -7,12 +7,15 @@ import React, { useState } from 'react'
 
 type OnlyAdminProps = {
 	children?: React.ReactNode
+	notCollapse?: boolean
 }
 
 export default function OnlyAdmin(props: OnlyAdminProps) {
 	const { isAdmin } = useAuth()
 
-	const [collapsed, setCollapsed] = useState(true)
+	const [collapsed, setCollapsed] = useState<boolean>(
+		!Boolean(props.notCollapse)
+	)
 	return (
 		<>
 			{isAdmin() ? (

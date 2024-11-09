@@ -23,6 +23,7 @@ import {
 	TeamMembersApi,
 	TeamPlaylistsApi,
 	TeamSongNotesApi,
+	TeamStatisticsApi,
 } from '@/api/generated'
 import { useMemo } from 'react'
 import useAuth from '../auth/useAuth'
@@ -41,7 +42,7 @@ export const useApi = () => {
 			songPublishingApi: new SongPublishingApi(apiConfiguration),
 			songValidationApi: new SongValidationApi(apiConfiguration),
 			songNotesApi: new SongNotesApi(apiConfiguration),
-            songFavouritesApi: new SongFavouritesApi(apiConfiguration),
+			songFavouritesApi: new SongFavouritesApi(apiConfiguration),
 			groupApi: new GroupApi(apiConfiguration),
 			authApi: new AuthApi(apiConfiguration),
 			permissionApi: new PermissionsApi(apiConfiguration),
@@ -58,6 +59,7 @@ export const useApi = () => {
 			teamEventsApi: new TeamEventsApi(apiConfiguration),
 			teamPlaylistsApi: new TeamPlaylistsApi(apiConfiguration),
 			teamSongNotesApi: new TeamSongNotesApi(apiConfiguration),
+			teamStatisticsApi: new TeamStatisticsApi(apiConfiguration),
 		}),
 		[apiConfiguration]
 	)

@@ -1,5 +1,5 @@
 import { Typography } from '@/common/ui/Typography'
-import { Grid } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
 import React from 'react'
 
 type EventPopupGridRowProps = {

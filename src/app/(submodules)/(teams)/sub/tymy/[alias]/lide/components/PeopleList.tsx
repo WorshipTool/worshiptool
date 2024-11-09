@@ -6,11 +6,8 @@ import { Box, LinearProgress, Tooltip } from '@/common/ui'
 import { Checkbox } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
-import useAuth from '@/hooks/auth/useAuth'
 import { UserGuid } from '@/interfaces/user'
 import { useSmartParams } from '@/routes/useSmartParams'
-import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useSnackbar } from 'notistack'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -20,27 +17,12 @@ export default function PeopleList(props: PeopleListDto) {
 	// ApiStates and items
 	const { teamMembersApi } = useApi()
 	const { alias: teamAlias } = useSmartParams('teamPeople')
-	const { user } = useAuth()
 
-	const { guid: teamGuid } = useInnerTeam()
+	const {
+		guid: teamGuid,
+		members: { apiState, reload: fetchData, me, members },
+	} = useInnerTeam()
 	const { enqueueSnackbar } = useSnackbar()
-
-	const [apiState, fetchData] = useApiStateEffect(async () => {
-		const data = await handleApiCall(
-			teamMembersApi.teamMemberControllerGetTeamMembers(teamAlias)
-		)
-		return data
-	}, [teamAlias])
-
-	const members = useMemo(() => {
-		const arr =
-			apiState.data?.members.filter((m) => m.userGuid !== user?.guid) ?? []
-		return arr
-	}, [apiState])
-
-	const me = useMemo(() => {
-		return apiState.data?.members.find((m) => m.userGuid === user?.guid)
-	}, [apiState, user])
 
 	// Selecting
 	const [selectable, setSelectable] = useState(false)

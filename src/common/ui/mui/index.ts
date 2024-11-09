@@ -9,7 +9,6 @@ export {
 	Fab,
 	Fade,
 	FormControl,
-	Grid,
 	Input,
 	InputBase,
 	ListItemIcon,

@@ -1,5 +1,5 @@
 'use client'
-import Menu from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/components/Menu'
+import TeamLeftMenu from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/components/TeamLeftMenu'
 import TeamPanelTitle from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/components/TeamPanelTitle'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import OnlyAdmin from '@/common/components/OnlyAdmin'
@@ -49,7 +49,7 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 				}}
 			>
 				<TeamPanelTitle collapsed={collapsed} />
-				<Menu collapsed={collapsed} transition={TRANSITION} />
+				<TeamLeftMenu collapsed={collapsed} transition={TRANSITION} />
 				<Box flex={1} />
 				<Box padding={2}>
 					<OnlyAdmin>

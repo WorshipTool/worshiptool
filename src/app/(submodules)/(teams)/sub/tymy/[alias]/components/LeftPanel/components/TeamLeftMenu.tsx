@@ -1,7 +1,11 @@
 'use client'
 import MenuItem from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/components/MenuItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
-import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import {
+	TeamMemberRole,
+	TeamPermissions,
+} from '@/app/(submodules)/(teams)/sub/tymy/tech'
+import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Box } from '@/common/ui'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import {
@@ -21,14 +25,22 @@ type MenuProps = {
 	transition: string
 }
 
-export default function Menu(props: MenuProps) {
-	const { alias, guid } = useInnerTeam()
+export default function TeamLeftMenu(props: MenuProps) {
+	const {
+		alias,
+		guid,
+		events: { events },
+		members: { me },
+	} = useInnerTeam()
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.change_base_info',
 		{
 			teamGuid: guid,
 		}
 	)
+
+	const showStatistics =
+		events.length >= 10 && me?.role === TeamMemberRole.MANAGER
 
 	const items: MenuItem[] = useMemo(
 		() => [
@@ -55,8 +67,8 @@ export default function Menu(props: MenuProps) {
 				icon: <Analytics />,
 				to: 'teamStatistics',
 				toParams: { alias },
-				disabled: true,
-				hidden: true,
+				// disabled: true,
+				hidden: !showStatistics,
 			},
 			{
 				title: 'Lidé',
@@ -72,7 +84,7 @@ export default function Menu(props: MenuProps) {
 				hidden: !hasPermissionToEdit,
 			},
 		],
-		[hasPermissionToEdit, alias]
+		[hasPermissionToEdit, alias, showStatistics]
 	)
 	return (
 		<Box
@@ -89,6 +101,17 @@ export default function Menu(props: MenuProps) {
 			{items.map((item, index) => (
 				<MenuItem key={index} {...item} collapsed={props.collapsed} />
 			))}
+
+			{!showStatistics && (
+				<OnlyAdmin notCollapse>
+					<MenuItem
+						title="Statistiky"
+						icon={<Analytics />}
+						to="teamStatistics"
+						toParams={{ alias }}
+					/>
+				</OnlyAdmin>
+			)}
 		</Box>
 	)
 }

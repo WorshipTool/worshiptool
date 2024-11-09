@@ -41,7 +41,7 @@ export default function AccountMenu({
 			}}
 		>
 			<Link to="account" params={{}}>
-				<MenuItem>
+				<MenuItem onClick={onClose}>
 					<ListItemText
 						primary={user?.firstName + ' ' + user?.lastName}
 						secondary={'Spravovat účet'}

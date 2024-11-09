@@ -8,7 +8,7 @@ import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam
 import { PageProps } from '@/common/types'
 import { Box, useTheme } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
-import { Grid } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
 import { Typography } from '@/common/ui/Typography'
 import { WavingHand } from '@mui/icons-material'
 

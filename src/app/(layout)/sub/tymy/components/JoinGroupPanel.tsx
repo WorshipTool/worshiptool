@@ -1,11 +1,16 @@
 'use client'
 import { JoinTeamOutDto } from '@/api/generated'
+import {
+	NEW_TEAM_MEMBER_MESSAGE_GROUP,
+	NEW_TEAM_MEMBER_MESSAGE_NAME,
+} from '@/app/(submodules)/(teams)/sub/tymy/hooks/useTeamMembers'
 import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
+import { useLiveMessage } from '@/hooks/sockets/useLiveMessage'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
@@ -27,6 +32,8 @@ export default function JoinGroupPanel() {
 
 	const navigate = useSmartNavigate()
 
+	const { send } = useLiveMessage(NEW_TEAM_MEMBER_MESSAGE_GROUP)
+
 	const onJoinClick = () => {
 		fetchApiState(
 			async () => {
@@ -43,6 +50,7 @@ export default function JoinGroupPanel() {
 
 				if (data.newMember) {
 					enqueueSnackbar('Vítej v týmu!')
+					send(NEW_TEAM_MEMBER_MESSAGE_NAME, {})
 				}
 			}
 		)

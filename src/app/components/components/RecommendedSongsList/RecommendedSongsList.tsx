@@ -1,6 +1,7 @@
 'use client'
 import { Box, Typography, useTheme } from '@/common/ui'
-import { Grid, styled } from '@/common/ui/mui'
+import { styled } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
 import { useEffect, useState } from 'react'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import SongListCards, {

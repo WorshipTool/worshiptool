@@ -1063,6 +1063,37 @@ export interface GetTeamMembersOutDto {
 /**
  * 
  * @export
+ * @interface GetTeamStatisticsOutDto
+ */
+export interface GetTeamStatisticsOutDto {
+    /**
+     * 
+     * @type {Array<LeastPlayedSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'leastPlayedSongs': Array<LeastPlayedSong>;
+    /**
+     * 
+     * @type {Array<LeastPlayedSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'topPlayedSongs': Array<LeastPlayedSong>;
+    /**
+     * 
+     * @type {Array<TrendingSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'mostTrendingSongs': Array<TrendingSong>;
+    /**
+     * 
+     * @type {Array<PlayedCountSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'playedCountSongs': Array<PlayedCountSong>;
+}
+/**
+ * 
+ * @export
  * @interface GetTeamsOfUserOutDto
  */
 export interface GetTeamsOfUserOutDto {
@@ -1267,6 +1298,25 @@ export interface JwtResult {
      * @memberof JwtResult
      */
     'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface LeastPlayedSong
+ */
+export interface LeastPlayedSong {
+    /**
+     * 
+     * @type {number}
+     * @memberof LeastPlayedSong
+     */
+    'playedCount': number;
+    /**
+     * 
+     * @type {Array<StatisticsSongData>}
+     * @memberof LeastPlayedSong
+     */
+    'songs': Array<StatisticsSongData>;
 }
 /**
  * 
@@ -1585,6 +1635,25 @@ export interface PinPlaylistToTeamInDto {
      * @memberof PinPlaylistToTeamInDto
      */
     'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface PlayedCountSong
+ */
+export interface PlayedCountSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof PlayedCountSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof PlayedCountSong
+     */
+    'playedCount': number;
 }
 /**
  * 
@@ -3279,6 +3348,25 @@ export interface Statistics {
 /**
  * 
  * @export
+ * @interface StatisticsSongData
+ */
+export interface StatisticsSongData {
+    /**
+     * 
+     * @type {string}
+     * @memberof StatisticsSongData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StatisticsSongData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface Tag
  */
 export interface Tag {
@@ -3686,6 +3774,25 @@ export interface TransposePlaylistItemInDto {
      * @memberof TransposePlaylistItemInDto
      */
     'key': string;
+}
+/**
+ * 
+ * @export
+ * @interface TrendingSong
+ */
+export interface TrendingSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof TrendingSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof TrendingSong
+     */
+    'trending': number;
 }
 /**
  * 
@@ -13118,6 +13225,117 @@ export class TeamSongNotesApi extends BaseAPI {
      */
     public teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: RawAxiosRequestConfig) {
         return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamStatisticsApi - axios parameter creator
+ * @export
+ */
+export const TeamStatisticsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamStatisticsControllerGetTeamStatistics: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamStatisticsControllerGetTeamStatistics', 'teamGuid', teamGuid)
+            const localVarPath = `/teams/statistics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamStatisticsApi - functional programming interface
+ * @export
+ */
+export const TeamStatisticsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamStatisticsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamStatisticsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamStatisticsControllerGetTeamStatistics(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamStatisticsApi.teamStatisticsControllerGetTeamStatistics']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamStatisticsApi - factory interface
+ * @export
+ */
+export const TeamStatisticsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamStatisticsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: any): AxiosPromise<GetTeamStatisticsOutDto> {
+            return localVarFp.teamStatisticsControllerGetTeamStatistics(teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamStatisticsApi - object-oriented interface
+ * @export
+ * @class TeamStatisticsApi
+ * @extends {BaseAPI}
+ */
+export class TeamStatisticsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamStatisticsApi
+     */
+    public teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamStatisticsApiFp(this.configuration).teamStatisticsControllerGetTeamStatistics(teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

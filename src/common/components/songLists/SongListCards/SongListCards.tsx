@@ -1,6 +1,6 @@
 'use client'
 import { useTheme } from '@/common/ui'
-import { Grid } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
 import { Masonry } from '@/common/ui/mui/lab'
 import { ResponsiveStyleValue } from '@mui/system'
 import { ComponentProps, memo, useMemo } from 'react'
