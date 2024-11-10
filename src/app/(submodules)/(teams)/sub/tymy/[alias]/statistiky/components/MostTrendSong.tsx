@@ -1,5 +1,7 @@
 import { GetTeamStatisticsOutDto } from '@/api/generated'
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
+import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/TeamStatisticsCard'
+import { getStatisticsColorFromString } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/tech/statistics.tech'
+import OnlyAdmin from '@/common/components/OnlyAdmin'
 import { Box, Typography, useTheme } from '@/common/ui'
 import { BarChart } from '@mui/x-charts'
 import { useMemo } from 'react'
@@ -14,64 +16,85 @@ type MostTrendSongProps = {
 }
 
 export default function MostTrendSong(props: MostTrendSongProps) {
+	const theme = useTheme()
 	const dataset: DataItem[] = useMemo(() => {
-		return props.data
-			.map((item) => {
-				// Make title from multiple songs title, max three, separated by comma, then add and x more if there are more songs
-				const title = item.song.title
-				return {
-					songTitle: title,
-					trend: title == 'Ovečka kudrnatá' ? -30 : item.trending,
-				}
-			})
-			.sort((a, b) => b.trend - a.trend)
+		const data = [
+			...props.data
+				.map((item) => {
+					// Make title from multiple songs title, max three, separated by comma, then add and x more if there are more songs
+					const title = item.song.title
+					return {
+						songTitle: title,
+						trend: item.trending,
+					}
+				})
+				.sort((a, b) => b.trend - a.trend),
+		]
+
+		return data
 	}, [props.data])
 
-	const theme = useTheme()
 	return (
-		<TeamCard>
-			<Box display={'flex'} justifyContent={'space-between'} flexWrap={'wrap'}>
-				<Typography variant="h6" strong>
-					5 Trendy písní
-				</Typography>
-				<Typography>V rámci 20 dnů</Typography>
-			</Box>
-			<BarChart
-				dataset={dataset}
-				yAxis={[
-					{
-						dataKey: 'trend',
-						colorMap: {
-							type: 'piecewise',
-							thresholds: [-100, -50, 0, 50, 100],
-							colors: [
-								theme.palette.error.main,
-								theme.palette.error.light,
-								theme.palette.error.light,
-								theme.palette.primary.light,
-								theme.palette.primary.main,
-							],
-						},
-					},
-				]}
-				xAxis={[
-					{
-						// data: ['a', 'b', 'c', 'd', 'e'],
-						dataKey: 'songTitle',
-						scaleType: 'band',
-					},
-				]}
-				series={[
-					{
-						dataKey: 'trend',
-						// label: 'Počet přehrání',
-						valueFormatter: (v) => v + '%',
-					},
-				]}
-				layout="vertical"
-				// {...chartSetting}
-				height={400}
-			/>
-		</TeamCard>
+		<TeamStatisticsCard
+			label="Trendy písně"
+			rightLabel="V rámci posledních 40 dnů"
+		>
+			{dataset.length > 0 ? (
+				<>
+					<Box display={'flex'} flexWrap={'wrap'} gap={0.5}>
+						<Typography>Nejvíce trend chvála je</Typography>
+						<Typography
+							strong
+							color={getStatisticsColorFromString(dataset[0].songTitle)}
+						>
+							{dataset[0].songTitle}
+						</Typography>
+					</Box>
+					<BarChart
+						dataset={dataset}
+						yAxis={[
+							{
+								dataKey: 'trend',
+							},
+						]}
+						xAxis={[
+							{
+								// data: ['a', 'b', 'c', 'd', 'e'],
+								dataKey: 'songTitle',
+								scaleType: 'band',
+
+								colorMap: {
+									type: 'ordinal',
+									colors: dataset.map((item) => {
+										return getStatisticsColorFromString(item.songTitle)
+									}),
+								},
+							},
+						]}
+						series={[
+							{
+								dataKey: 'trend',
+								// label: 'Počet přehrání',
+								valueFormatter: (v) => v + '%',
+							},
+						]}
+						layout="vertical"
+						// {...chartSetting}
+						height={376}
+					/>
+				</>
+			) : (
+				<>
+					<Typography italic>Data nejsou k dispozici</Typography>
+					<Box display={'flex'}>
+						<OnlyAdmin>
+							<Typography italic>
+								Pro zobrazení trendů je potřeba mít alespoň 1 píseň odehranou
+							</Typography>
+						</OnlyAdmin>
+					</Box>
+				</>
+			)}
+		</TeamStatisticsCard>
 	)
 }

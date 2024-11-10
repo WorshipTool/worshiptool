@@ -1,7 +1,7 @@
 'use client'
 import { GetTeamStatisticsOutDto } from '@/api/generated'
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
-import { Box, Typography } from '@/common/ui'
+import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/TeamStatisticsCard'
+import { getStatisticsColorFromString } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/tech/statistics.tech'
 import { BarChart } from '@mui/x-charts'
 import { useMemo } from 'react'
 
@@ -18,37 +18,41 @@ export default function LeastPlayedSongsEverCard(
 	props: LeastPlayedSongsEverCardProps
 ) {
 	const dataset: DataItem[] = useMemo(() => {
-		return props.data.map((item) => {
-			// Make title from multiple songs title, max three, separated by comma, then add and x more if there are more songs
-			const title = item.songs
-				.slice(0, 2)
-				.map((song) => song.title)
-				.join(', ')
-			const more = item.songs.length - 3
-			const moreText = more > 0 ? ` a ${more} další` : ''
-			const songTitle = `${title}${moreText}`
-			return {
-				song: songTitle,
-				playedCount: item.playedCount,
-			}
-		})
+		return props.data
+			.map((item) => {
+				return item.songs.map((song) => ({
+					song: song.title,
+					playedCount: item.playedCount,
+				}))
+			})
+			.flat()
+			.sort((a, b) => a.playedCount - b.playedCount)
+			.slice(0, 10)
 	}, [props.data])
 
 	return (
-		<TeamCard>
-			<Box display={'flex'} justifyContent={'space-between'} flexWrap={'wrap'}>
-				<Typography variant="h6" strong>
-					10 Nejméně hraných písní
-				</Typography>
-				<Typography>Za celou dobu</Typography>
-			</Box>
+		<TeamStatisticsCard
+			label="10 nejméně hraných písní"
+			rightLabel="Za celou dobu"
+		>
 			<BarChart
 				dataset={dataset}
-				yAxis={[{ scaleType: 'band', dataKey: 'song' }]}
+				yAxis={[
+					{
+						scaleType: 'band',
+						dataKey: 'song',
+						colorMap: {
+							type: 'ordinal',
+							colors: dataset.map((item) => {
+								return getStatisticsColorFromString(item.song)
+							}),
+						},
+					},
+				]}
 				series={[
 					{
 						dataKey: 'playedCount',
-						label: 'Počet přehrání',
+						// label: 'Počet přehrání',
 						valueFormatter: (v) => v + '',
 					},
 				]}
@@ -58,6 +62,6 @@ export default function LeastPlayedSongsEverCard(
 					left: 150,
 				}}
 			/>
-		</TeamCard>
+		</TeamStatisticsCard>
 	)
 }

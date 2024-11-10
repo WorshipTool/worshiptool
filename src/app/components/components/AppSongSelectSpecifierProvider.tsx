@@ -2,6 +2,7 @@
 import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
 import { SongSelectSpecifierProvider } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
 import { useApi } from '@/hooks/api/useApi'
+import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import React from 'react'
@@ -14,6 +15,7 @@ export default function AppSongSelectSpecifierProvider(
 ) {
 	const [searchString, setSearchString] = React.useState('')
 	const { songGettingApi } = useApi()
+	const { user } = useAuth()
 
 	const [globalApiState] = useApiStateEffect(async () => {
 		const result = await handleApiCall(
@@ -26,6 +28,10 @@ export default function AppSongSelectSpecifierProvider(
 	}, [searchString])
 
 	const [usersApiState] = useApiStateEffect(async () => {
+		if (!user) {
+			return []
+		}
+
 		const result = await handleApiCall(
 			songGettingApi.songGettingControllerSearchMySongsInPopup(searchString)
 		)
@@ -33,7 +39,7 @@ export default function AppSongSelectSpecifierProvider(
 		return result.variants.map((v) => {
 			return mapSongVariantDataOutDtoToSongVariantDto(v)
 		})
-	}, [searchString])
+	}, [searchString, user])
 
 	return (
 		<SongSelectSpecifierProvider

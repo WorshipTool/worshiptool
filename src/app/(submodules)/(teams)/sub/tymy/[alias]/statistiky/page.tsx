@@ -3,6 +3,7 @@ import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/compo
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import EverySongPlayedCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/EverySongPlayedCard'
 import LeastPlayedSongsEverCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/LeastPlayedSongsEverCard'
+import MostFavouritesSongsCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/MostFavouritesSongsCard'
 import MostPlayedSongsEverCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/MostPlayedSongsEverCard'
 import MostTrendSong from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/MostTrendSong'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
@@ -39,15 +40,20 @@ function TeamStatistikyPage() {
 			{statisticsData && (
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={8}>
-						<MostTrendSong data={statisticsData.mostTrendingSongs} />
-					</Grid>
-					<Grid item xs={12} md={4}>
 						<MostPlayedSongsEverCard data={statisticsData.topPlayedSongs} />
 					</Grid>
 					<Grid item xs={12} md={4}>
-						<EverySongPlayedCard data={statisticsData.playedCountSongs} />
+						<Box display={'flex'} flexDirection={'column'} gap={2}>
+							<MostFavouritesSongsCard
+								data={statisticsData.mostFavouriteSongs}
+							/>
+							<EverySongPlayedCard data={statisticsData.playedCountSongs} />
+						</Box>
 					</Grid>
-					<Grid item xs={12} md={8}>
+					<Grid item xs={12} md={6}>
+						<MostTrendSong data={statisticsData.mostTrendingSongs} />
+					</Grid>
+					<Grid item xs={12} md={6}>
 						<LeastPlayedSongsEverCard data={statisticsData.leastPlayedSongs} />
 					</Grid>
 				</Grid>

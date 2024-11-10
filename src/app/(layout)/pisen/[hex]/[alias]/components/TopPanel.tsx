@@ -199,7 +199,12 @@ export default function TopPanel(props: TopPanelProps) {
 						{isOwner && <VisibilityLabel public={props.variant.public} right />}
 
 						<Box display={'flex'}>
-							<HeartLikeButton packGuid={props.variant.packGuid} interactable />
+							{user && (
+								<HeartLikeButton
+									packGuid={props.variant.packGuid}
+									interactable
+								/>
+							)}
 
 							<SongsOptionsButton
 								reloadSong={props.reloadSong}

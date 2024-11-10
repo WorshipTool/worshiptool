@@ -1090,6 +1090,12 @@ export interface GetTeamStatisticsOutDto {
      * @memberof GetTeamStatisticsOutDto
      */
     'playedCountSongs': Array<PlayedCountSong>;
+    /**
+     * 
+     * @type {Array<MostFavouriteSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'mostFavouriteSongs': Array<MostFavouriteSong>;
 }
 /**
  * 
@@ -1450,6 +1456,25 @@ export interface MessengerResponseInDto {
      * @memberof MessengerResponseInDto
      */
     'entry': Array<object>;
+}
+/**
+ * 
+ * @export
+ * @interface MostFavouriteSong
+ */
+export interface MostFavouriteSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof MostFavouriteSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof MostFavouriteSong
+     */
+    'favouriteCount': number;
 }
 /**
  * 

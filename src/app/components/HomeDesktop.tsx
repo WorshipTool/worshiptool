@@ -9,8 +9,9 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import normalizeSearchText from '@/tech/normalizeSearchText'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
@@ -30,15 +31,18 @@ export default function HomeDesktop() {
 	const [searchString, setSearchString] = useUrlState('hledat')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
-	const onSearchValueChange = useCallback((e: string) => {
-		setSearchInputValue(e)
-		if (searchString === null) setSearchString('')
-	}, [])
+	const onSearchValueChange = useCallback(
+		(e: string) => {
+			setSearchInputValue(e)
+			if (searchString === null) setSearchString('')
+		},
+		[searchString]
+	)
 
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') setSearchString(value.replaceAll(',', ' '))
+			if (value !== '') setSearchString(normalizeSearchText(value))
 		},
 		[]
 	)
@@ -98,10 +102,13 @@ export default function HomeDesktop() {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
+	const SearchList = useMemo(() => {
+		console.log('useMemo SearchList')
+		return searchString && <SearchedSongsList searchString={searchString} />
+	}, [searchString])
+
 	return (
 		<>
-			{/* <Toolbar transparent={isTop} /> */}
-
 			<Box
 				sx={{
 					flex: 1,
@@ -220,7 +227,7 @@ export default function HomeDesktop() {
 						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
-					{searchString && <SearchedSongsList searchString={searchString} />}
+					{SearchList}
 					<RecommendedSongsList />
 				</div>
 			</Box>

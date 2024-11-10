@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export const countPerPage = 10
 
@@ -13,6 +13,7 @@ export default function usePagination<T>(
 
 	const loadPage = useCallback(
 		async (page: number, replace?: boolean) => {
+			console.log('loadPage', page)
 			const result: T[] = await new Promise((res, reject) => {
 				func(
 					page,
@@ -39,7 +40,16 @@ export default function usePagination<T>(
 		[array, func]
 	)
 
+	useEffect(() => {
+		console.log('usePagination useEffect func change', func)
+	}, [func])
+
+	useEffect(() => {
+		console.log('usePagination useEffect array change', array)
+	}, [array])
+
 	const nextPage = () => {
+		console.log('nextPage')
 		return loadPage(lastPage + 1, false)
 	}
 

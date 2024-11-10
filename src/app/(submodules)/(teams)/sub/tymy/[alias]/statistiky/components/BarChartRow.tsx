@@ -1,3 +1,4 @@
+import { getStatisticsColorFromString } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/tech/statistics.tech'
 import { Box, Tooltip, Typography } from '@/common/ui'
 
 type BarChartRowProps = {
@@ -9,6 +10,8 @@ type BarChartRowProps = {
 
 export default function BarChartRow(props: BarChartRowProps) {
 	const labelsWidth = 100
+
+	const color = getStatisticsColorFromString(props.label)
 
 	return (
 		<Tooltip label={props.tooltip} placement="right">
@@ -49,7 +52,8 @@ export default function BarChartRow(props: BarChartRowProps) {
 						<Box
 							sx={{
 								width: `${(props.value / props.maxValue) * 100}%`,
-								backgroundColor: 'primary.main',
+								// backgroundColor: 'primary.light',
+								backgroundColor: color,
 								borderRadius: 1,
 								// marginY: 1,
 								height: 10,

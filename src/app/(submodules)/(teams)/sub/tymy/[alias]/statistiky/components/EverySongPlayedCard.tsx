@@ -1,8 +1,8 @@
 'use client'
 import { GetTeamStatisticsOutDto } from '@/api/generated'
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
 import BarChartRow from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/BarChartRow'
-import { Box, Gap, Typography } from '@/common/ui'
+import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/TeamStatisticsCard'
+import { Box, Gap } from '@/common/ui'
 import { useMemo } from 'react'
 
 type DataItem = {
@@ -27,13 +27,7 @@ export default function EverySongPlayedCard(props: EverySongPlayedCardProps) {
 	const maxValue = Math.max(...dataset.map((item) => item.playedCount))
 
 	return (
-		<TeamCard>
-			<Box display={'flex'} justifyContent={'space-between'} flexWrap={'wrap'}>
-				<Typography variant="h6" strong>
-					Kolikrát se co hrálo
-				</Typography>
-				<Typography>Za celou dobu</Typography>
-			</Box>
+		<TeamStatisticsCard label="Kolikrát se co hrálo" rightLabel="Za celou dobu">
 			{/* <BarChart
 				dataset={dataset}
 				yAxis={[
@@ -64,8 +58,8 @@ export default function EverySongPlayedCard(props: EverySongPlayedCardProps) {
 					flexDirection: 'column',
 					gap: 0.5,
 					overflowY: 'auto',
-					maxHeight: 400,
 					paddingRight: 1,
+					maxHeight: 173,
 				}}
 			>
 				{dataset.map((item, index) => (
@@ -78,6 +72,6 @@ export default function EverySongPlayedCard(props: EverySongPlayedCardProps) {
 					/>
 				))}
 			</Box>
-		</TeamCard>
+		</TeamStatisticsCard>
 	)
 }

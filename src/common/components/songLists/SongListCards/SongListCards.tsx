@@ -3,7 +3,7 @@ import { useTheme } from '@/common/ui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { Masonry } from '@/common/ui/mui/lab'
 import { ResponsiveStyleValue } from '@mui/system'
-import { ComponentProps, memo, useMemo } from 'react'
+import { ComponentProps, memo, useCallback, useMemo } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
 import { SongCard } from '../../../ui/SongCard'
 
@@ -57,33 +57,36 @@ export const SongListCard = memo(function SongListCards(
 		}
 	}, [props])
 
-	const CommonCard = ({
-		v,
-		flexibleHeight = true,
-	}: {
-		v: SongVariantDto
-		flexibleHeight?: boolean
-	}) => {
-		return (
-			<SongCard
-				data={v}
-				key={v.guid}
-				flexibleHeight={flexibleHeight}
-				toLinkProps={props.cardToLinkProps}
-				properties={props.properties}
-				onClick={() => {
-					props.onCardClick && props.onCardClick(v)
-				}}
-				selectable={props.selectable}
-				onSelect={() => {
-					props.onCardSelect && props.onCardSelect(v)
-				}}
-				onDeselect={() => {
-					props.onCardDeselect && props.onCardDeselect(v)
-				}}
-			/>
-		)
-	}
+	const CommonCard = useCallback(
+		({
+			v,
+			flexibleHeight = true,
+		}: {
+			v: SongVariantDto
+			flexibleHeight?: boolean
+		}) => {
+			return (
+				<SongCard
+					data={v}
+					key={v.guid}
+					flexibleHeight={flexibleHeight}
+					toLinkProps={props.cardToLinkProps}
+					properties={props.properties}
+					onClick={() => {
+						props.onCardClick && props.onCardClick(v)
+					}}
+					selectable={props.selectable}
+					onSelect={() => {
+						props.onCardSelect && props.onCardSelect(v)
+					}}
+					onDeselect={() => {
+						props.onCardDeselect && props.onCardDeselect(v)
+					}}
+				/>
+			)
+		},
+		[props]
+	)
 
 	return props.data.length === 0 ? (
 		<></>

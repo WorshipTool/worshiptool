@@ -2,7 +2,7 @@
 import { Box, Button, LinearProgress, Typography } from '@/common/ui'
 import { Sync } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../../common/components/ContainerGrid'
 import SongListCards from '../../../common/components/songLists/SongListCards/SongListCards'
 import { Gap } from '../../../common/ui/Gap/Gap'
@@ -19,9 +19,7 @@ interface SearchedSongsListProps {
 }
 const controller = new AbortController()
 
-export default function SearchedSongsList({
-	searchString,
-}: SearchedSongsListProps) {
+const SearchedSongsList = memo(({ searchString }: SearchedSongsListProps) => {
 	const loadNextLevelRef = useRef(null)
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -127,6 +125,7 @@ export default function SearchedSongsList({
 									setNextLoading(true)
 									loadNext()
 								}}
+								variant="text"
 								startIcon={<Sync />}
 							>
 								Načíst další
@@ -145,4 +144,6 @@ export default function SearchedSongsList({
 			<Gap />
 		</ContainerGrid>
 	)
-}
+})
+
+export default SearchedSongsList

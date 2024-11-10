@@ -1,7 +1,8 @@
 'use client'
 import { GetTeamStatisticsOutDto } from '@/api/generated'
-import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TeamCard/TeamCard'
-import { Box, Typography } from '@/common/ui'
+import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/components/TeamStatisticsCard'
+import { getStatisticsColorFromString } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/statistiky/tech/statistics.tech'
+import { useTheme } from '@/common/ui'
 import { BarChart } from '@mui/x-charts'
 import { useMemo } from 'react'
 
@@ -30,17 +31,30 @@ export default function MostPlayedSongsEverCard(
 			.slice(0, 10)
 	}, [props.data])
 
+	const theme = useTheme()
+
 	return (
-		<TeamCard>
-			<Box display={'flex'} justifyContent={'space-between'} flexWrap={'wrap'}>
-				<Typography variant="h6" strong>
-					10 Nejhranějších písní
-				</Typography>
-				<Typography>Za celou dobu</Typography>
-			</Box>
+		<TeamStatisticsCard
+			label="10 nejhranějších chval"
+			rightLabel="Za posledních 90 dní"
+		>
 			<BarChart
 				dataset={dataset}
-				yAxis={[{ scaleType: 'band', dataKey: 'songTitle' }]}
+				yAxis={[
+					{
+						scaleType: 'band',
+						dataKey: 'songTitle',
+						colorMap: {
+							// type: 'piecewise',
+							// thresholds: [0],
+							// colors: [theme.palette.primary.light],
+							type: 'ordinal',
+							colors: dataset.map((item) => {
+								return getStatisticsColorFromString(item.songTitle)
+							}),
+						},
+					},
+				]}
 				series={[
 					{
 						dataKey: 'playedCount',
@@ -55,6 +69,6 @@ export default function MostPlayedSongsEverCard(
 					left: 150,
 				}}
 			/>
-		</TeamCard>
+		</TeamStatisticsCard>
 	)
 }
