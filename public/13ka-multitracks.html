@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Výběr a úprava písní</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h4 {
+            margin-bottom: 0px;
+        }
+        .gdrive-load {
+            display: inline-block;
+            font-size: 16px;
+            margin-right: 50px;
+        }
+        #songInput {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #songList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .song-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .song-button:hover {
+            background-color: #0056b3;
+        }
+        #trackControls {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .track-container {
+            display: flex;
+            align-items: center;
+            /* margin-bottom: 20px; */
+            padding: 5px 15px;
+            border-bottom: 1px solid #ccc;
+        }
+        .track-label {
+            flex: 2;
+            font-weight: bold;
+            color: #333;
+        }
+        .play-button, .stop-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .play-button:hover, .stop-button:hover {
+            background-color: #218838;
+        }
+        .volume-control {
+            margin-left: 15px;
+            flex: 1;
+        }
+        .progress-bar {
+            flex: 2;
+            margin: 0 15px;
+        }
+        .track-checkbox {
+            margin-right: 15px;
+        }
+        .main-progress-bar {
+            width: 500px;
+            margin-left: 20px;
+        }
+        .play-all-button, .stop-all-button {
+            width: 150px;
+        }
+        .play-all-button, .stop-all-button, .play-selected-button, .stop-selected-button {
+            display: inline-block;
+            margin: 20px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .play-all-button:hover, .play-selected-button:hover, .stop-selected-button:hover {
+            background-color: #e64a19;
+        }
+        .play-all-button[disabled], .play-selected-button[disabled], .stop-selected-button[disabled] {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .play-all-button {
+            background-color: #28a745;
+        }
+        .play-all-button:hover {
+            background-color: #218838;
+        }
+        .mute-button, .solo-button {
+            margin-right: 10px;
+            height: 40px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .mute-button {
+            background-color: #501c1a;
+            color: white;
+        }
+        .mute-button.muted {
+            background-color: #e93323;   
+        }
+        .solo-button {
+            background-color: #41310e;
+            color: white;
+        }
+        .solo-button.soloed {
+            background-color: #e4d747;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Výběr písně a úprava stop</h1>
+    <div style="display: none">
+        <h4 for="songInput">Nahrajte složku s písněmi:</h4>
+        <button class="gdrive-load" onclick="listFiles()">Načíst z Google Drive</button>
+        <input type="file" id="songInput" webkitdirectory multiple>
+    </div>
+    <div id="songList"></div>
+    <div id="trackControls"></div>
+    <script>
+        const FOLDER_ID = '1qy8Is05siyYqgQeIAYDnz7f8hPmJALra';
+        const API_KEY = 'AIzaSyDOkvRFBMrzzuaCwvcHW1FdkDiPD-SKUks';
+        const songInput = document.getElementById('songInput');
+        const songList = document.getElementById('songList');
+        const trackControls = document.getElementById('trackControls');
+        const playAllButton = document.createElement('button');
+        const stopAllButton = document.createElement('button');
+        // const playSelectedButton = document.createElement('button');
+        // const stopSelectedButton = document.createElement('button');
+        const globalProgressBar = document.createElement('input');
+        globalProgressBar.type = 'range';
+        globalProgressBar.min = 0;
+        globalProgressBar.max = 100;
+        globalProgressBar.value = 0;
+        globalProgressBar.step = 'any';
+        globalProgressBar.className = 'main-progress-bar';
+
+        globalProgressBar.addEventListener('click', event => {  
+            let time = null;
+            audioElements.forEach(({ audio, checkbox, name }) => {
+                if (audio.error?.code == 4) {
+                    return;
+                }
+                // if (checkbox.checked) {
+                    if (time == null) {
+                       time = audio.duration * event.target.value / 100
+                    }
+                    audio.currentTime = time;
+                // }
+            });
+        });
+        let globalProgressBarFocused = false;
+        globalProgressBar.addEventListener('mousedown', event => {  
+            globalProgressBarFocused = true;
+        });
+        globalProgressBar.addEventListener('mouseup', event => {  
+            globalProgressBarFocused = false;
+        });
+        let audioElements = [];
+
+        function listFiles() {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}`; // Public access query, no need for key
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const files = data.files;
+                    if (files && files.length > 0) {
+                        displaySongList(files);
+                    } else {
+                        console.log('No files found.');
+                    }
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+
+        function displaySongList(folders) {
+            songList.innerHTML = ''; // Clear previous songs
+            trackControls.innerHTML = ''; // Clear previous controls
+
+            folders.forEach(folder => {
+                const songButton = document.createElement('button');
+                songButton.textContent = folder.name;
+                songButton.className = 'song-button';
+                songButton.addEventListener('click', () => {
+                    if (folder.tracks) {
+                        loadTracks(folder.tracks);
+                    } else {
+                        loadTracksFromDrive(folder);
+                    }
+                });
+                songList.appendChild(songButton);
+            });
+        }
+
+        async function loadTracks(tracks, fromGoogle = false) {
+                audioElements.forEach(({ audio, checkbox }) => {
+                    // if (checkbox.checked) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    // }
+                    playAllButton.textContent = 'Přehrát';
+                });
+                trackControls.innerHTML = ''; // Vymazání předchozích ovládacích prvků
+                audioElements = []; // Vymazání předchozích zvukových prvků
+
+                trackControls.appendChild(playAllButton);
+                trackControls.appendChild(stopAllButton);
+                // trackControls.appendChild(playSelectedButton);
+                // trackControls.appendChild(stopSelectedButton);
+                trackControls.appendChild(globalProgressBar);
+
+                tracks.forEach((trackFile, index) => {
+                    let url = fromGoogle ? `https://www.googleapis.com/drive/v3/files/${trackFile.id}?alt=media&key=${API_KEY}` : URL.createObjectURL(trackFile);
+                    if (fromGoogle) {
+                        url = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                    }
+                    const audioElement = new Audio(url);
+                    // const audioElement = new Audio(fromGoogle ? trackFile.contentLink : URL.createObjectURL(trackFile));
+                    const volumeControl = document.createElement('input');
+                    // const checkbox = document.createElement('input');
+                    const muteButton = document.createElement('button');
+                    const soloButton = document.createElement('button');
+                    // const playButton = document.createElement('button');
+                    // const stopButton = document.createElement('button');
+                    const trackContainer = document.createElement('div');
+                    const trackLabel = document.createElement('span');
+                    const progressBar = document.createElement('input');
+
+                    trackContainer.className = 'track-container';
+                    trackLabel.className = 'track-label';
+                    trackLabel.textContent = trackFile.name;
+
+                    volumeControl.type = 'range';
+                    volumeControl.min = 0;
+                    volumeControl.max = 1;
+                    volumeControl.step = 0.01;
+                    volumeControl.value = 1;
+                    volumeControl.className = 'volume-control';
+
+                    volumeControl.addEventListener('input', () => {
+                        audioElement.volume = volumeControl.value;
+                    });
+
+                    muteButton.textContent = 'Mute';
+                    muteButton.className = 'mute-button';
+                    muteButton.addEventListener('click', () => {
+                        if (audioElement.muted) {
+                            audioElement.muted = false;
+                            muteButton.className = 'mute-button';
+                        } else {
+                            audioElement.muted = true;
+                            muteButton.className = 'mute-button muted';
+                        }
+                    });
+
+                    soloButton.textContent = 'Solo';
+                    soloButton.className = 'solo-button';
+                    soloButton.addEventListener('click', () => {
+                        soloButton.className = soloButton.className.includes('soloed') ? 'solo-button' : 'solo-button soloed';
+                        let soloEnabled = audioElements.some(element => element.soloBtn.className.includes('soloed'));
+                        if (soloEnabled) {
+                            audioElements.forEach(({ audio, checkbox, name, soloBtn, muteBtn }) => {
+                                if (soloBtn.className.includes('soloed') && !muteBtn.className.includes('muted')) {
+                                    audio.muted = false;
+                                } else {
+                                    audio.muted = true;
+                                }
+                            });
+                        } else {
+                            audioElements.forEach(({ audio, checkbox, name, soloBtn, muteBtn }) => {
+                                if(name !== trackFile.name) {
+                                    if (!muteBtn.className.includes('muted')) {
+                                        audio.muted = false;
+                                    }
+                                }
+                            });
+                        }
+                        
+                    });
+
+                    // playButton.textContent = 'Přehrát';
+                    // playButton.className = 'play-button';
+                    // playButton.addEventListener('click', () => {
+                    //     if (audioElement.paused) {
+                    //         audioElement.play();
+                    //         playButton.textContent = 'Pauza';
+                    //     } else {
+                    //         audioElement.pause();
+                    //         playButton.textContent = 'Přehrát';
+                    //     }
+                    // });
+
+                    // stopButton.textContent = 'Zastavit';
+                    // stopButton.className = 'stop-button';
+                    // stopButton.addEventListener('click', () => {
+                    //     audioElement.pause();
+                    //     audioElement.currentTime = 0;
+                    //     playButton.textContent = 'Přehrát';
+                    // });
+
+                    // checkbox.type = 'checkbox';
+                    // checkbox.className = 'track-checkbox';
+
+                    progressBar.type = 'range';
+                    progressBar.min = 0;
+                    progressBar.max = 100;
+                    progressBar.value = 0;
+                    progressBar.step = 'any';
+                    progressBar.className = 'progress-bar';
+                    progressBar.disabled = true;
+
+                    audioElement.addEventListener('timeupdate', () => {
+                        progressBar.value = (audioElement.currentTime / audioElement.duration) * 100;
+                        if (!globalProgressBarFocused) {
+                            globalProgressBar.value = (audioElement.currentTime / audioElement.duration) * 100;
+                        }
+                    });
+
+                    // trackContainer.appendChild(checkbox);
+                    trackContainer.appendChild(muteButton);
+                    trackContainer.appendChild(soloButton);
+                    trackContainer.appendChild(trackLabel);
+                    // trackContainer.appendChild(playButton);
+                    // trackContainer.appendChild(stopButton);
+                    trackContainer.appendChild(document.createTextNode(' Progress: '));
+                    trackContainer.appendChild(progressBar);
+                    trackContainer.appendChild(document.createTextNode(' Hlasitost: '));
+                    trackContainer.appendChild(volumeControl);
+                    trackControls.appendChild(trackContainer);
+
+                    audioElements.push({ audio: audioElement, /*checkbox: checkbox, */volumeControl: volumeControl, name: trackFile.name, soloBtn: soloButton, muteBtn: muteButton });
+                });
+
+                if (fromGoogle) {
+                    playAllButton.disabled = true;
+                    // playSelectedButton.disabled = true;
+                    const checkLoaded = () => {
+                        setTimeout(() => {
+                            if (audioElements.every((element) => {
+                                //error code 4 znamena, ze nejde prehrat - treba .zip
+                                return element.audio.readyState == 4 || element.audio.error?.code == 4;
+                            })) {
+                                playAllButton.disabled = false;
+                                // playSelectedButton.disabled = false;
+                            } else {
+                                checkLoaded(false);
+                            };
+                        }, 550);
+                    }
+                    checkLoaded();
+                }
+            }
+
+        function loadTracksFromDrive(folder) {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folder.id}'+in+parents&key=${API_KEY}`; // Public access query, no need for key
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const files = data.files;
+                    if (files && files.length > 0) {
+                        Promise.all(files.map(file => {
+                            return new Promise((resolve, reject) => {
+                                const url2 = "https://www.googleapis.com/drive/v3/files/" + file.id + `?fields=webViewLink&key=${API_KEY}`; 
+                                fetch(url2)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        resolve({ ...file, contentLink: data.webViewLink });
+                                    });
+                            })
+                        })).then(values => {
+                            loadTracks(values, true);
+                        });
+                    } else {
+                        console.log('No files found.');
+                    }
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+
+        function loadTrack(folder) {
+            const trackControls = document.getElementById('trackControls');
+            const audioElement = new Audio(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media&key=${API_KEY}`);
+            // const playButton = document.createElement('button');
+            // const stopButton = document.createElement('button');
+
+            // playButton.textContent = 'Přehrát';
+            // playButton.className = 'play-button';
+            // playButton.addEventListener('click', () => {
+            //     if (audioElement.paused) {
+            //         audioElement.play();
+            //         playButton.textContent = 'Pauza';
+            //     } else {
+            //         audioElement.pause();
+            //         playButton.textContent = 'Přehrát';
+            //     }
+            // });
+
+            // stopButton.textContent = 'Zastavit';
+            // stopButton.className = 'stop-button';
+            // stopButton.addEventListener('click', () => {
+            //     audioElement.pause();
+            //     audioElement.currentTime = 0;
+            //     playButton.textContent = 'Přehrát';
+            // });
+
+            trackControls.innerHTML = ''; // Clear previous controls
+            // trackControls.appendChild(playButton);
+            // trackControls.appendChild(stopButton);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            playAllButton.textContent = 'Přehrát';
+            playAllButton.className = 'play-all-button';
+            stopAllButton.textContent = 'Zastavit';
+            stopAllButton.classList = 'stop-all-button';
+            // playSelectedButton.textContent = 'Přehrát vybrané';
+            // playSelectedButton.className = 'play-selected-button';
+            // stopSelectedButton.textContent = 'Zastavit vybrané';
+            // stopSelectedButton.className = 'stop-selected-button';
+
+            songInput.addEventListener('change', (event) => {
+                const files = Array.from(event.target.files);
+                const songFolders = [];
+
+                // Roztřídit soubory podle složek (písní)
+                files.forEach(file => {
+                    const folderName = file.webkitRelativePath.split('/')[1];
+                    let folderIndex = songFolders.findIndex(folder => folder.name == folderName);
+                    if (folderIndex == -1) {
+                        songFolders.push({name: folderName, tracks: []});
+                        folderIndex = songFolders.length - 1;
+                    };
+                    songFolders[folderIndex].tracks.push(file);
+                });
+
+                displaySongList(songFolders);
+            });
+
+            playAllButton.addEventListener('click', () => {
+                if (playAllButton.textContent == 'Přehrát') {
+                    audioElements.forEach(({ audio, checkbox }) => {
+                        // if (checkbox.checked) {
+                        audio.play();
+                        // } else {
+                        //     checkbox.checked = true;
+                        //     audio.play();
+                        // }
+                    });
+                    playAllButton.textContent = 'Pauza';
+                    // playSelectedButton.textContent = 'Pauznout vybrané'
+                } else {
+                    audioElements.forEach(({ audio, checkbox }) => {
+                        audio.pause();
+                    });
+                    playAllButton.textContent = 'Přehrát';
+                }
+            });
+
+            stopAllButton.addEventListener('click', () => {
+                audioElements.forEach(({ audio, checkbox }) => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                });
+                playAllButton.textContent = 'Přehrát';
+            });
+
+            // playSelectedButton.addEventListener('click', () => {
+            //     if (playSelectedButton.textContent == 'Pauznout vybrané') {
+            //         audioElements.forEach(({ audio, checkbox }) => {
+            //             if (checkbox.checked) {
+            //                 audio.pause();
+            //             }
+            //         });
+            //         playSelectedButton.textContent = 'Přehrát vybrané';
+            //     } else {
+            //         audioElements.forEach(({ audio, checkbox }) => {
+            //             if (checkbox.checked) {
+            //                 audio.play();
+            //             }
+            //         });
+            //         playSelectedButton.textContent = 'Pauznout vybrané';
+            //     }
+            // });
+
+            // stopSelectedButton.addEventListener('click', () => {
+            //     audioElements.forEach(({ audio, checkbox }) => {
+            //         if (checkbox.checked) {
+            //             audio.pause();
+            //             audio.currentTime = 0;
+            //         }
+            //     });
+            // });
+
+            listFiles();
+        });
+    </script>
+</body>
+</html>
