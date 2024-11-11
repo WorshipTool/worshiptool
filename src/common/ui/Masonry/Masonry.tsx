@@ -38,7 +38,7 @@ export const Masonry = ({
 				}}
 			>
 				{props.children?.map((c, index) => (
-					<Box key={index} width={`${columnWidth}%`}>
+					<Box key={c.key} width={`${columnWidth}%`}>
 						<Box padding={itemPadding}>{c}</Box>
 					</Box>
 				))}
