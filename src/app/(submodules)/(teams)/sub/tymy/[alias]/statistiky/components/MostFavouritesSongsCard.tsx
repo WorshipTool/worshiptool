@@ -21,8 +21,8 @@ export default function MostFavouritesSongsCard(
 				<>
 					<Typography italic>Data nejsou k dizpozici</Typography>
 					<Box display={'flex'}>
-						<OnlyAdmin>
-							<Typography italic>
+						<OnlyAdmin notCollapse>
+							<Typography italic small>
 								Pro zobrazení trendů je potřeba mít alespoň 3 písně v tymu v
 								oblíbených
 							</Typography>

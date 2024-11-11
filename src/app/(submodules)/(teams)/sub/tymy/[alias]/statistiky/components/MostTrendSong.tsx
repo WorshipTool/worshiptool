@@ -87,8 +87,8 @@ export default function MostTrendSong(props: MostTrendSongProps) {
 				<>
 					<Typography italic>Data nejsou k dispozici</Typography>
 					<Box display={'flex'}>
-						<OnlyAdmin>
-							<Typography italic>
+						<OnlyAdmin notCollapse>
+							<Typography italic small>
 								Pro zobrazení trendů je potřeba mít alespoň 1 píseň odehranou
 							</Typography>
 						</OnlyAdmin>
