@@ -4,12 +4,12 @@ import { Sync } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../../common/components/ContainerGrid'
-import SongListCards from '../../../common/components/songLists/SongListCards/SongListCards'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
 import normalizeSearchText from '../../../tech/normalizeSearchText'
 
+import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { SongVariantDto } from '../../../api/dtos'
@@ -19,7 +19,9 @@ interface SearchedSongsListProps {
 }
 const controller = new AbortController()
 
-const SearchedSongsList = memo(({ searchString }: SearchedSongsListProps) => {
+const SearchedSongsList = memo(function S({
+	searchString,
+}: SearchedSongsListProps) {
 	const loadNextLevelRef = useRef(null)
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -97,6 +99,14 @@ const SearchedSongsList = memo(({ searchString }: SearchedSongsListProps) => {
 						]}
 					></SongListCards>
 				)}
+
+				{/* {!loading &&
+					songs.length > 0 &&
+					songs.map((song) => {
+						return (
+							<Typography key={song.packGuid}>{song.preferredTitle}</Typography>
+						)
+					})} */}
 			</>
 
 			<div ref={loadNextLevelRef}></div>

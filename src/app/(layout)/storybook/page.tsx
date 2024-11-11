@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import StoryItem from './StoryItem'
 import { storyBookComponents } from './createStory'
 
-import { Masonry } from '@/common/ui/mui/lab'
+import { Masonry } from '@/common/ui/Masonry'
 import {} from '@/ui/index.story'
 import { Gap } from '../../../common/ui/Gap'
 

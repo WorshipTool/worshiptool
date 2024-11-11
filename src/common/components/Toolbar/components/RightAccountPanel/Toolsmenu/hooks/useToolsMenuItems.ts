@@ -1,5 +1,6 @@
 import { BACKEND_URL } from '@/api/constants'
 import { ImagesApiAxiosParamCreator } from '@/api/generated'
+import { useTeamChecker } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { LinkProps } from '@/common/ui/Link/Link'
 import { SxProps } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
@@ -30,6 +31,7 @@ export default function useToolsMenuItems() {
 	const { isAdmin, isLoggedIn } = useAuth()
 
 	const { teams } = useUserTeams()
+	const isTeamOn = useTeamChecker()
 
 	const imagesApi = ImagesApiAxiosParamCreator({
 		isJsonMime: () => true,
@@ -77,22 +79,13 @@ export default function useToolsMenuItems() {
 				to: 'usersFavourites',
 			},
 
-			// {
-			// 	title: '13ka',
-			// 	image: '/assets/13ka-icon.png',
-			// 	to: 'group',
-			// 	toParams: { groupCode: '13ka' },
-			// },
-			// {
-			// 	title: 'Hledat tým',
-			// 	image: 'https://static.thenounproject.com/png/79376-200.png',
-			// 	action: () => {
-			// 		dispatchEvent(searchGroupsEvent)
-			// 	},
-			// 	sx: {
-			// 		filter: 'invert(1) brightness(0.1)',
-			// 	},
-			// },
+			{
+				title: 'Mimo tým',
+				image: getIconUrl('home.png'),
+				to: 'home',
+				hidden: !isTeamOn,
+			},
+
 			...(isDevelopment
 				? [
 						{

@@ -1,7 +1,6 @@
 'use client'
-import { useTheme } from '@/common/ui'
+import { Masonry } from '@/common/ui/Masonry'
 import { Grid } from '@/common/ui/mui/Grid'
-import { Masonry } from '@/common/ui/mui/lab'
 import { ResponsiveStyleValue } from '@mui/system'
 import { ComponentProps, memo, useCallback, useMemo } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
@@ -38,14 +37,12 @@ export type SongListCardsProps = ListProps | MasonryGridProps | RowProps
 export const SongListCard = memo(function SongListCards(
 	props: SongListCardsProps
 ) {
-	const theme = useTheme()
 	const spacing = 1
 
-	let columns: ResponsiveStyleValue<string | number> = useMemo(() => {
+	let columns: ResponsiveStyleValue<number> = useMemo(() => {
 		switch (props.variant) {
 			case 'list':
 				return 1
-				break
 			case undefined:
 			case 'masonrygrid':
 			case 'row':
@@ -104,8 +101,7 @@ export const SongListCard = memo(function SongListCards(
 		<Masonry
 			columns={columns}
 			sx={{
-				marginLeft: -(spacing / 2),
-				width: `calc(100% + ${theme.spacing(spacing)})`,
+				width: `100%`,
 			}}
 			spacing={spacing}
 		>

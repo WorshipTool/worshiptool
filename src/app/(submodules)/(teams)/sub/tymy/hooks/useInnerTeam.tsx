@@ -13,10 +13,17 @@ import { createContext, useContext, useMemo } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerTeam>
 
-export const innerTeamContext = createContext<Rt>({} as Rt)
+export const innerTeamContext = createContext<Rt>({
+	uninitialized: true,
+} as any as Rt)
 
 export default function useInnerTeam() {
 	return useContext(innerTeamContext)
+}
+
+export function useTeamChecker() {
+	const d: any = useContext(innerTeamContext)
+	return !Boolean(d.uninitialized)
 }
 
 export const InnerTeamProvider = ({
