@@ -1,14 +1,14 @@
 'use client'
 
+import LeftWebTitle from '@/common/components/Toolbar/components/LeftWebTItle'
 import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
 import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
+import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
 import { styled, useMediaQuery } from '@mui/system'
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
-import LeftWebTitle from './components/LeftWebTItle'
-import RightAccountPanel from './components/RightAccountPanel/RightAccountPanel'
 
 const TopBar = styled(Box)(({ theme }) => ({
 	right: 0,

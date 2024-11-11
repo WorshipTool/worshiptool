@@ -1,5 +1,4 @@
-import SearchGroupDialog from '@/common/components/Toolbar/components/RightAccountPanel/Toolsmenu/components/SearchGroupDialog'
-import AppLayout from '../../common/components/app/AppLayout/AppLayout'
+import AppLayout from '@/common/components/app/AppLayout/AppLayout'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {
@@ -10,7 +9,7 @@ export function AppContainer(props: AppContainerProps) {
 	return (
 		<>
 			{/* <Snow /> */}
-			<SearchGroupDialog />
+			{/* <SearchGroupDialog /> */}
 			<LoadingRoutesProvider>
 				<AppLayout>{props.children}</AppLayout>
 			</LoadingRoutesProvider>

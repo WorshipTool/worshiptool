@@ -1,6 +1,6 @@
-import { SongVariantDto } from '@/api/dtos'
+import { FavouriteItem } from '@/app/(layout)/ucet/oblibene/page'
 import Menu from '@/common/components/Menu/Menu'
-import { Box, IconButton, Typography } from '@/common/ui'
+import { Box, Chip, IconButton, Tooltip, Typography } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { useFavourites } from '@/hooks/favourites/useFavourites'
 import { parseVariantAlias } from '@/routes/routes.tech'
@@ -13,20 +13,32 @@ import {
 import { useMemo, useState } from 'react'
 
 type FavouritesRowItemProps = {
-	data: SongVariantDto
+	data: FavouriteItem
 	index: number
 }
 
 export default function FavouritesRowItem(props: FavouritesRowItemProps) {
+	const variant = props.data.data.variant
+
 	const hintText = useMemo(() => {
-		return props.data.sheet.getSections()[0].text
-	}, [props.data])
+		return variant.sheet.getSections()[0].text
+	}, [variant])
 
 	const navigate = useSmartNavigate()
 	const onOpenClick = () => {
-		navigate('variant', {
-			...parseVariantAlias(props.data.packAlias),
-		})
+		if (props.data.teamAlias) {
+			const variantAlias = parseVariantAlias(variant.packAlias)
+			navigate('teamSong', {
+				hex: variantAlias.hex,
+				'title-alias': variantAlias.alias,
+				alias: props.data.teamAlias,
+				edit: false,
+			})
+		} else {
+			navigate('variant', {
+				...parseVariantAlias(variant.packAlias),
+			})
+		}
 	}
 	const [open, setOpen] = useState(false)
 	const [anchor, setAnchor] = useState<null | HTMLElement>(null)
@@ -34,15 +46,15 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 	const { remove, loading } = useFavourites()
 
 	const onRemove = () => {
-		remove(props.data.packGuid)
+		remove(variant.packGuid)
 	}
 	return (
 		<>
 			<DraggableSong
 				data={{
-					packGuid: props.data.packGuid,
-					alias: props.data.packAlias,
-					title: props.data.preferredTitle,
+					packGuid: variant.packGuid,
+					alias: variant.packAlias,
+					title: variant.preferredTitle,
 				}}
 			>
 				<Box
@@ -86,7 +98,18 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 							{props.index + 1}
 						</Typography>
 						<Box display={'flex'} flexDirection={'column'}>
-							<Typography strong>{props.data.preferredTitle}</Typography>
+							<Box display={'flex'} gap={1}>
+								<Typography strong>{variant.preferredTitle}</Typography>
+								{props.data.teamName && (
+									<Tooltip label="Píseň vytvořena v rámci týmu">
+										<Chip
+											label={props.data.teamName}
+											size="small"
+											color="primary"
+										/>
+									</Tooltip>
+								)}
+							</Box>
 							<Typography
 								color={'grey.600'}
 								small

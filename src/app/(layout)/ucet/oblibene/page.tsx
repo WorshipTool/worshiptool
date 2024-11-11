@@ -9,13 +9,22 @@ import { Box, Typography } from '@/common/ui'
 import { useFavourites } from '@/hooks/favourites/useFavourites'
 import { useSelection } from '@/hooks/playlist/useSelection'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import {
+	PlaylistGuid,
+	PlaylistItemDto,
+} from '@/interfaces/playlist/playlist.types'
 import { useMemo } from 'react'
 
 export default SmartPage(page, ['middleWidth', 'topPadding'])
 
+export type FavouriteItem = {
+	data: PlaylistItemDto
+	teamAlias?: string
+	teamName?: string
+}
+
 function page() {
-	const { selectionGuid } = useFavourites()
+	const { selectionGuid, items: bsItems } = useFavourites()
 
 	const { items: allItems } = useSelection(selectionGuid as PlaylistGuid)
 
@@ -25,18 +34,31 @@ function page() {
 	)
 
 	// sort items
-	const items = useMemo(() => {
-		const arr = allItems.sort((a, b) => {
-			if (sortOption === 'addedAt') {
-				return a.order > b.order ? -1 : 1
-			}
-			if (sortOption === 'title') {
-				return a.variant.preferredTitle.localeCompare(b.variant.preferredTitle)
-			}
-			return 0
-		})
+	const items: FavouriteItem[] = useMemo(() => {
+		const arr = allItems
+			.sort((a, b) => {
+				if (sortOption === 'addedAt') {
+					return a.order > b.order ? -1 : 1
+				}
+				if (sortOption === 'title') {
+					return a.variant.preferredTitle.localeCompare(
+						b.variant.preferredTitle
+					)
+				}
+				return 0
+			})
+			.map((variant, index) => {
+				const team = bsItems?.find(
+					(item) => item.packGuid === variant.variant.packGuid
+				)
+				return {
+					data: variant,
+					teamAlias: team?.teamAlias,
+					teamName: team?.teamName,
+				}
+			})
 		return [...arr]
-	}, [allItems, sortOption])
+	}, [allItems, sortOption, bsItems])
 
 	return (
 		<Box display={'flex'} flexDirection={'column'} gap={2}>
@@ -86,8 +108,8 @@ function page() {
 							{part.map((item, index) => {
 								return (
 									<FavouritesRowItem
-										key={item.guid}
-										data={item.variant}
+										key={item.data.guid}
+										data={item}
 										index={startIndex + index}
 									/>
 								)

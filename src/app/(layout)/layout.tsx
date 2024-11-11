@@ -1,4 +1,4 @@
-import { AppContainer } from '../components/AppContainer'
+import { AppContainer } from '@/app/components/AppContainer'
 
 export default function RootLayout({
 	children,

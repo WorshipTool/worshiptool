@@ -1,5 +1,5 @@
 import { Box, Typography } from '@/common/ui'
-import { Skeleton } from '@/common/ui/mui/lab'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { styled } from '@mui/system'
 import { useMemo } from 'react'

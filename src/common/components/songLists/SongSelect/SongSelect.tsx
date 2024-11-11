@@ -3,7 +3,7 @@ import { TextField } from '@/common/ui/mui'
 import React from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
 import useSongSearch from '../../../../hooks/song/useSongSearch'
-import normalizeSearchText from '../../../../tech/normalizeSearchText'
+import normalizeSearchText from '../../../../tech/string/normalizeSearchText'
 import OnChangeDelayer from '../../../providers/ChangeDelayer/ChangeDelayer'
 import SongListCards from '../SongListCards/SongListCards'
 

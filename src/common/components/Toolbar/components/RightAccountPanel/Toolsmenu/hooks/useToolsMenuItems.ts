@@ -47,6 +47,7 @@ export default function useToolsMenuItems() {
 				image: getIconUrl('team-default.webp'),
 				asyncImage: hasLogo
 					? async () => {
+							// console.log('getting logo in tool item')
 							const url =
 								BACKEND_URL +
 								(await imagesApi.imagesControllerGetImage(team.logoGuid!)).url

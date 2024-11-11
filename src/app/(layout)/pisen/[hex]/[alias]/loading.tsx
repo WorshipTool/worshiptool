@@ -1,5 +1,5 @@
 import { Box } from '@/common/ui'
-import Skeleton from '@mui/lab/Skeleton'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 
 export default function Loading() {
 	const height = '2rem'

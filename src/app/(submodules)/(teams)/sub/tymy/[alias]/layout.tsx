@@ -9,6 +9,7 @@ import { getImageUrl } from '@/api/urls'
 import TeamLeftPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/LeftPanel/TeamLeftPanel'
 import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamPageProviders'
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/TeamTopPanel'
+import TeamClientProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/TeamClientProviders'
 import { InnerTeamProvider } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { LayoutProps } from '@/common/types'
 import { Box } from '@/common/ui'
@@ -116,20 +117,22 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 			position={'relative'}
 		>
 			<InnerTeamProvider teamAlias={layout.params.alias}>
-				<TeamPageProviders>
-					<TeamLeftPanel />
-					<Box
-						display={'flex'}
-						flexDirection={'column'}
-						flex={1}
-						height={'100%'}
-					>
-						<TeamTopPanel />
-						<Box flex={1} paddingBottom={4}>
-							{layout.children}
+				<TeamClientProviders>
+					<TeamPageProviders>
+						<TeamLeftPanel />
+						<Box
+							display={'flex'}
+							flexDirection={'column'}
+							flex={1}
+							height={'100%'}
+						>
+							<TeamTopPanel />
+							<Box flex={1} paddingBottom={4}>
+								{layout.children}
+							</Box>
 						</Box>
-					</Box>
-				</TeamPageProviders>
+					</TeamPageProviders>
+				</TeamClientProviders>
 			</InnerTeamProvider>
 		</Box>
 	)

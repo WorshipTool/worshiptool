@@ -1,6 +1,6 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Box, Divider, Typography } from '@/common/ui'
-import { Skeleton } from '@/common/ui/mui/lab'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { styled } from '@mui/system'
 import { Sheet } from '@pepavlin/sheet-api'

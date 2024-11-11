@@ -7,7 +7,7 @@ import ContainerGrid from '../../../common/components/ContainerGrid'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
-import normalizeSearchText from '../../../tech/normalizeSearchText'
+import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 
 import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'

@@ -1,7 +1,15 @@
 'use client'
+import { Box } from '@/common/ui/Box'
+import BlockLinkPopup from '@/common/ui/Link/BlockLinkPopup'
+import {
+	LinkBlockerPopupData,
+	useOutsideBlockerLinkCheck,
+} from '@/common/ui/Link/useOutsideBlocker'
 import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { styled, SxProps } from '@mui/material'
 import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import { RouteLiteral } from 'nextjs-routes'
 import React, { ComponentProps, useEffect, useMemo } from 'react'
 import { routesPaths } from '../../../routes'
 import { RoutesKeys, SmartAllParams } from '../../../routes/routes.types'
@@ -64,21 +72,51 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 		}
 	}, [])
 
+	const result = useOutsideBlockerLinkCheck({
+		to: props.to,
+		params: props.params,
+		url,
+	})
+	const shouldBeBlocked = result !== false
+	const message = result as LinkBlockerPopupData
+
+	const [popupOpen, setPopupOpen] = React.useState(false)
+	const [redirecting, setRedirecting] = React.useState(false)
+
+	const router = useRouter()
+	const goWithNavigate = () => {
+		setRedirecting(true)
+		router.push(url as RouteLiteral)
+	}
+
 	return (props.onlyWithShift && !shiftOn) || props.disabled ? (
 		<>{props.children}</>
 	) : (
-		<StyledLink
-			// @ts-ignore
-			href={url}
-			passHref
-			style={{
-				color: 'inherit',
-				textDecoration: 'none',
-				...props.style,
-			}}
-			target={props.newTab ? '_blank' : props.target}
-		>
-			{props.children}
-		</StyledLink>
+		<>
+			{!shouldBeBlocked ? (
+				<StyledLink
+					// @ts-ignore
+					href={url}
+					passHref
+					style={{
+						color: 'inherit',
+						textDecoration: 'none',
+						...props.style,
+					}}
+					target={props.newTab ? '_blank' : props.target}
+				>
+					{props.children}
+				</StyledLink>
+			) : (
+				<Box onClick={() => setPopupOpen(true)}>{props.children}</Box>
+			)}
+			<BlockLinkPopup
+				open={popupOpen}
+				onClose={() => setPopupOpen(false)}
+				data={message}
+				redirecting={redirecting}
+				onSubmit={goWithNavigate}
+			/>
+		</>
 	)
 }

@@ -2,7 +2,7 @@
 import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
 import { Box } from '@/common/ui'
-import { Skeleton } from '@/common/ui/mui/lab'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { Typography } from '@/common/ui/Typography'
 import { ApiState } from '@/tech/ApiState'
 import './GlobalSongList.styles.css'

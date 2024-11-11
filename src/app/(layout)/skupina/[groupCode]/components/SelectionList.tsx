@@ -16,7 +16,7 @@ import useGroup from '../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../hooks/group/useGroupSelection'
 import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
-import normalizeSearchText from '../../../../../tech/normalizeSearchText'
+import normalizeSearchText from '../../../../../tech/string/normalizeSearchText'
 import Loading from '../loading'
 import PinnedPlaylistAlternativeDisplay from './PinnedPlaylistAlternativeDisplay'
 

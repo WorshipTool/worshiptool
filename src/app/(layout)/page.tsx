@@ -1,10 +1,9 @@
 'use client'
 
+import HomeDesktop from '@/app/components/HomeDesktop'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { useTheme } from '@/common/ui'
 import { useEffect } from 'react'
 import useGroup from '../../hooks/group/useGroup'
-import HomeDesktop from '../components/HomeDesktop'
 
 export default SmartPage(Home, {
 	hideTitle: true,
@@ -13,7 +12,6 @@ export default SmartPage(Home, {
 })
 
 function Home() {
-	const theme = useTheme()
 	const { turnOff } = useGroup()
 
 	useEffect(() => {

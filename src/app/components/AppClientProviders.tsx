@@ -12,6 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
+import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
 import { FavouritesProvider } from '@/hooks/favourites/useFavourites'
 import { PermissionsProvider } from '@/hooks/permissions/usePermissions'
 import 'dayjs/locale/cs'
@@ -38,11 +39,13 @@ export default function AppClientProviders({
 									<GroupProvider>
 										<ToolbarProvider>
 											<FooterProvider>
-												<AppSongSelectSpecifierProvider>
-													<CurrentPlaylistProvider>
-														<SongDragProvider>{children}</SongDragProvider>
-													</CurrentPlaylistProvider>
-												</AppSongSelectSpecifierProvider>
+												<OutsideLinkBlockerProvider>
+													<AppSongSelectSpecifierProvider>
+														<CurrentPlaylistProvider>
+															<SongDragProvider>{children}</SongDragProvider>
+														</CurrentPlaylistProvider>
+													</AppSongSelectSpecifierProvider>
+												</OutsideLinkBlockerProvider>
 											</FooterProvider>
 										</ToolbarProvider>
 									</GroupProvider>

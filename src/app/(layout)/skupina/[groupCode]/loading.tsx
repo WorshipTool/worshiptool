@@ -1,5 +1,3 @@
-// import { Skeleton } from '@/common/ui/mui/lab'
-
 import { Box } from '@/common/ui'
 
 export default function Loading() {

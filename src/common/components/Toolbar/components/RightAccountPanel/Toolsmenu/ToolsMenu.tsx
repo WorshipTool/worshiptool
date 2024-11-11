@@ -1,8 +1,8 @@
 import PopupContainer from '@/common/components/Popup/PopupContainer'
+import ToolsMenuItem from '@/common/components/Toolbar/components/RightAccountPanel/Toolsmenu/components/MenuItem'
 import { Box } from '@/common/ui'
 import { Fade } from '@/common/ui/mui'
 import { styled } from '@mui/system'
-import ToolsMenuItem from './components/MenuItem'
 import useOutsideClick from './hooks/useOutsideClick'
 import useToolsMenuItems from './hooks/useToolsMenuItems'
 

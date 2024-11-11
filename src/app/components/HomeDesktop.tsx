@@ -9,7 +9,7 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import normalizeSearchText from '@/tech/normalizeSearchText'
+import normalizeSearchText from '@/tech/string/normalizeSearchText'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
@@ -103,7 +103,6 @@ export default function HomeDesktop() {
 	}, [])
 
 	const SearchList = useMemo(() => {
-		console.log('useMemo SearchList')
 		return searchString && <SearchedSongsList searchString={searchString} />
 	}, [searchString])
 

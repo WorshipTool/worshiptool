@@ -11,11 +11,17 @@ import {
 export const shouldUseSubdomains = () =>
 	process.env.NEXT_PUBLIC_DONT_USE_SUBDOMAINS !== 'true'
 
-export const urlMatchPatterns = (pathname: string, pattern: string) => {
+export const urlMatchPatterns = (
+	pathname: string,
+	pattern: string,
+	parental: boolean = false
+) => {
 	const urlParts = pathname.split('/')
 	const patternParts = pattern.split('/')
 
-	if (urlParts.length !== patternParts.length) return false
+	if (urlParts.length < patternParts.length) return false
+
+	if (!parental && urlParts.length !== patternParts.length) return false
 
 	for (let i = 0; i < patternParts.length; i++) {
 		const part = patternParts[i]

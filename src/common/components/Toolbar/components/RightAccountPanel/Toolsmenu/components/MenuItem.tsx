@@ -35,9 +35,10 @@ export default function ToolsMenuItem<T extends RoutesKeys>(
 	props: MenuItemProps<T>
 ) {
 	const [apiState] = useApiStateEffect<string | null>(async () => {
+		// return null
 		if (!props.asyncImage) return null
 		return await props.asyncImage()
-	})
+	}, [])
 
 	const imageUrl = useMemo(() => {
 		return apiState.data || props.image

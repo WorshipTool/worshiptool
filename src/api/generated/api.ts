@@ -655,6 +655,18 @@ export interface GetFavouritesItemData {
      * @memberof GetFavouritesItemData
      */
     'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'teamAlias'?: string;
 }
 /**
  * 

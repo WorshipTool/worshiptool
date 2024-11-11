@@ -4,7 +4,7 @@ import { SongVariantDto } from '../../../../api/dtos'
 import useGroup from '../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../hooks/group/useGroupSelection'
 import useSongSearch from '../../../../hooks/song/useSongSearch'
-import normalizeSearchText from '../../../../tech/normalizeSearchText'
+import normalizeSearchText from '../../../../tech/string/normalizeSearchText'
 import OnChangeDelayer from '../../../providers/ChangeDelayer/ChangeDelayer'
 
 type SongSearchMethod = 'all' | 'group'

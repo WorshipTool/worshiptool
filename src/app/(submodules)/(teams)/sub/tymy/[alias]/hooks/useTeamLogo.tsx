@@ -7,7 +7,9 @@ import { getUrl } from '@/api/urls'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { PICTURE_SIZE_LIMIT } from '@/tech/files/picture.tech'
 import { getIconUrl } from '@/tech/paths.tech'
+import { enqueueSnackbar } from 'notistack'
 import { useMemo } from 'react'
 
 export const EVENT_NAME_CHANGE_TEAM_LOGO = 'changeTeamLogo'
@@ -47,6 +49,12 @@ export const useTeamLogo = () => {
 	// const { imagesApi } = useApi()
 	const changeLogo = async (file: File) => {
 		if (!apiState.data) return
+
+		// 0. Check logo size
+		if (file.size > PICTURE_SIZE_LIMIT) {
+			enqueueSnackbar('Obrázek je příliš velký (64KB max)')
+			return
+		}
 
 		// 1. Prepare form data
 		const form = new FormData()

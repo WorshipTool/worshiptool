@@ -1,22 +1,21 @@
 'use client'
 
+import AccountMenu from '@/common/components/Toolbar/components/RightAccountPanel/AccountMenu'
+import GroupChip from '@/common/components/Toolbar/components/RightAccountPanel/GroupChip'
+import ToolsMenu from '@/common/components/Toolbar/components/RightAccountPanel/Toolsmenu/ToolsMenu'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
-import { Box, Tooltip, useTheme } from '@/common/ui'
+import { Box, IconButton, Tooltip, useTheme } from '@/common/ui'
 import { Avatar } from '@/common/ui/mui'
 import { useUserProfileImage } from '@/hooks/useUserProfileImage'
 import { AddBox, Apps, Login } from '@mui/icons-material'
 import { SxProps, Theme, styled } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
+import { isMobile, isTablet } from 'react-device-detect'
 import UploadFileInput from '../../../../../app/(layout)/nahrat/components/UploadFileInput'
 import useAuth from '../../../../../hooks/auth/useAuth'
 import useGroup from '../../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
-import { isMobile, isTablet } from '../../../../../tech/device.tech'
 import { Button } from '../../../../ui/Button'
-import { IconButton } from '../../../../ui/IconButton'
-import AccountMenu from './AccountMenu'
-import GroupChip from './GroupChip'
-import ToolsMenu from './Toolsmenu/ToolsMenu'
 
 const Container = styled(Box)(({ theme }) => ({
 	// flex: 1,
@@ -101,6 +100,8 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 	useEffect(() => {
 		setLoginNextUrl(window.location.href)
 	}, [])
+
+	// return <div>rightaccountpanel</div>
 
 	return (
 		<>

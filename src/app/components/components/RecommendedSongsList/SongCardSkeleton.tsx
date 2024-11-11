@@ -1,5 +1,5 @@
 import { Box } from '@/common/ui'
-import { Skeleton } from '@/common/ui/mui/lab'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 
 export default function SongCardSkeleton() {
 	return (
