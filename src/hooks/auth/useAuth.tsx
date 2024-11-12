@@ -65,7 +65,9 @@ export function useProvideAuth() {
 		return undefined
 	}
 	const _emptyCookie = () => {
-		cookies.remove(AUTH_COOKIE_NAME)
+		cookies.remove(AUTH_COOKIE_NAME, {
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+		})
 	}
 
 	// User state
@@ -140,8 +142,8 @@ export function useProvideAuth() {
 		if (checkIfCookieExists()) await authApi.authControllerLogout()
 		if (user) {
 			setUser(undefined)
-			_emptyCookie()
 			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+			_emptyCookie()
 		}
 		setLoading(false)
 	}
