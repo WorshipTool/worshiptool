@@ -197,6 +197,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 				{sections.map((section, index) => {
 					return (
 						<div
+							key={section.name + index}
 							style={{
 								breakInside: 'avoid',
 							}}
