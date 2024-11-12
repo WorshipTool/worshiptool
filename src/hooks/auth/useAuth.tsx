@@ -53,7 +53,9 @@ export function useProvideAuth() {
 	// Cookies
 	const cookies = useCookies()
 	const _setCookie = (user: UserDto) => {
-		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user))
+		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user), {
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+		})
 	}
 	const _getCookie = (): UserDto | undefined => {
 		const value = cookies.get(AUTH_COOKIE_NAME)

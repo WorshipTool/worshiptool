@@ -16,6 +16,7 @@ import {
 	getReplacedUrlWithParams,
 	shouldUseSubdomains,
 } from '@/routes/routes.tech'
+import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -66,6 +67,9 @@ const setResponse = async (
 		response.cookies.set(
 			COOKIES_SUBDOMAINS_PATHNAME_NAME,
 			subdomainsPrefixPathname
+			// {
+			// 	domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			// }
 		)
 	}
 
@@ -154,23 +158,6 @@ const checkAuthentication = async (
 		return { user, response }
 	}
 	return { user }
-}
-
-const getSubdomains = (host?: string | null) => {
-	let subdomains: string[] = []
-	if (!host && typeof window !== 'undefined') {
-		// On client side, get the host from window
-		host = window.location.host
-	}
-	if (host && host.includes('.')) {
-		const parts = host.split('.')
-		if (parts.length > 1) {
-			// Valid candidate
-			const local = parts.at(-1)?.includes('localhost')
-			subdomains = parts.slice(0, local ? -1 : -2)
-		}
-	}
-	return subdomains
 }
 
 const replaceTeamInSubPathname = async (pathname: string) => {

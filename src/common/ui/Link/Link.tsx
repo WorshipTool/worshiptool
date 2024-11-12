@@ -6,6 +6,7 @@ import {
 	useOutsideBlockerLinkCheck,
 } from '@/common/ui/Link/useOutsideBlocker'
 import { getReplacedUrlWithParams } from '@/routes/routes.tech'
+import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { styled, SxProps } from '@mui/material'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -30,13 +31,45 @@ export type LinkProps<T extends RoutesKeys> = CommonLinkProps<T> & {
 const StyledLink = styled(NextLink)({})
 
 export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
-	const url = useMemo(() => {
-		const a = getReplacedUrlWithParams(
+	const { aliases } = useSubdomainPathnameAlias()
+
+	const { url, relativeUrl } = useMemo(() => {
+		const absoluteUrl = getReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {}
 		)
-		return a
-	}, [props.to, props.params])
+		const relativeUrl = getReplacedUrlWithParams(
+			routesPaths[props.to] || '/',
+			(props.params as Record<string, string>) || {},
+			{
+				subdomains: false,
+			}
+		)
+
+		// Check aliases and change absoluteUrl to subdomain if needed
+		// Relative url let as is
+		for (const alias of aliases) {
+			if (relativeUrl.startsWith(alias.pathname)) {
+				const leftPart = relativeUrl.slice(alias.pathname.length)
+				const subdomainUrl = getReplacedUrlWithParams(routesPaths.subdomain, {
+					subdomain: alias.subdomain,
+				})
+
+				const allNewUrl = subdomainUrl.endsWith('/')
+					? subdomainUrl.slice(0, -1) + leftPart
+					: subdomainUrl + leftPart
+				return {
+					url: allNewUrl,
+					relativeUrl,
+				}
+			}
+		}
+
+		return {
+			url: absoluteUrl,
+			relativeUrl,
+		}
+	}, [props.to, props.params, aliases])
 
 	const [shiftOn, setShiftOn] = React.useState(false)
 
@@ -75,7 +108,7 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 	const result = useOutsideBlockerLinkCheck({
 		to: props.to,
 		params: props.params,
-		url,
+		url: relativeUrl,
 	})
 	const shouldBeBlocked = result !== false
 	const message = result as LinkBlockerPopupData

@@ -6,7 +6,14 @@ body {
 }
 
 body {
-	overflow-y: auto;
+	overflow-y: scroll;
+}
+
+/*If its phone, set overflow to auto*/
+@media (max-width: 768px) {
+	body {
+		overflow-y: auto;
+	}
 }
 
 ::-webkit-scrollbar {

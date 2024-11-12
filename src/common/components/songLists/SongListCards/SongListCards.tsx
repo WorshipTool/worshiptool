@@ -34,9 +34,15 @@ type RowProps = CommmonProps & {
 
 export type SongListCardsProps = ListProps | MasonryGridProps | RowProps
 
-export const SongListCard = memo(function SongListCards(
-	props: SongListCardsProps
-) {
+export const SongListCard = memo(function SongListCards({
+	data: _data,
+	...props
+}: SongListCardsProps) {
+	// unique
+	const data = _data
+		.filter((v) => v !== undefined)
+		.filter((v, i, a) => a.findIndex((t) => t.guid === v.guid) === i)
+
 	const spacing = 1
 
 	let columns: ResponsiveStyleValue<number> = useMemo(() => {
@@ -85,11 +91,11 @@ export const SongListCard = memo(function SongListCards(
 		[props]
 	)
 
-	return props.data.length === 0 ? (
+	return data.length === 0 ? (
 		<></>
 	) : props.variant === 'row' ? (
 		<Grid container columns={{ xs: 1, md: 2, lg: 4 }} spacing={spacing}>
-			{props.data.map((v) => {
+			{data.map((v) => {
 				return (
 					<Grid item key={v.guid} xs={1}>
 						<CommonCard v={v} flexibleHeight={false} />
@@ -105,7 +111,7 @@ export const SongListCard = memo(function SongListCards(
 			}}
 			spacing={spacing}
 		>
-			{props.data.map((v) => {
+			{data.map((v) => {
 				return <CommonCard v={v} key={v.guid} />
 			})}
 		</Masonry>

@@ -129,10 +129,15 @@ export const changeUrlFromSubdomains = (url: string): string => {
 	return newUrl.toString()
 }
 
+type GetReplacedUrlWithParamsOptions = {
+	subdomains?: boolean
+	absolute?: boolean
+}
+
 export const getReplacedUrlWithParams = (
 	url: string,
 	params: { [key: string]: ParamValueType | undefined },
-	options: { subdomains?: boolean } = {
+	options: GetReplacedUrlWithParamsOptions = {
 		subdomains: true,
 	}
 ) => {
@@ -172,10 +177,11 @@ export const getReplacedUrlWithParams = (
 
 export const getRouteUrlWithParams = <T extends RoutesKeys>(
 	page: T,
-	params: SmartParams<T>
+	params: SmartParams<T>,
+	options?: GetReplacedUrlWithParamsOptions
 ) => {
 	const url = routesPaths[page]
-	let result = getReplacedUrlWithParams(FRONTEND_URL + url, params)
+	let result = getReplacedUrlWithParams(FRONTEND_URL + url, params, options)
 
 	return result
 }
@@ -189,4 +195,14 @@ export const parseVariantAlias = (variantAlias: VariantPackAlias) => {
 	const code = alias.split('-').slice(1).join('-')
 
 	return { hex, alias: code }
+}
+
+export const getPathnameFromUrl = (url: string): string => {
+	// get with regex
+	const regex = /https?:\/\/[^/]+(\/.*)/
+
+	const match = url.match(regex)
+	if (!match) return ''
+
+	return match[1]
 }

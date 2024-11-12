@@ -31,7 +31,20 @@ const nextConfig = withRoutes({
 		],
 		dangerouslyAllowSVG: true,
 	},
-
+	async headers() {
+		return [
+			{
+				// Nastavení hlavičky pro všechny cesty
+				source: '/(.*)',
+				headers: [
+					{
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin',
+					},
+				],
+			},
+		]
+	},
 	reactStrictMode: false,
 	output: 'standalone',
 })
