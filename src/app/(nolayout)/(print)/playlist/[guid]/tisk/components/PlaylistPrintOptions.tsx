@@ -34,9 +34,12 @@ export default function PlaylistPrintOptions(props: PlaylistPrintOptionsProps) {
 				label="Použít zobrazení na šířku"
 			/>
 
-			<Gap value={2} />
+			<Gap value={1} />
 			<Box display={'flex'} justifyContent={'center'}>
 				<Button
+					sx={{
+						flex: 1,
+					}}
 					endIcon={<Print />}
 					variant={'outlined'}
 					onClick={props.onPrint}
