@@ -133,11 +133,7 @@ const SectionComponent = ({
 					</Typography>
 				)}
 			</Box>
-			<Box
-				sx={{
-					breakInside: 'avoid',
-				}}
-			>
+			<Box sx={{}}>
 				{section.lines ? (
 					<>
 						{section.lines.map((line, index) => {
@@ -198,28 +194,37 @@ const DefaultStyle: SheetStyleComponentType = ({
 					// justifyContent: 'center',
 				}}
 			>
-				{title && (
-					<Box
-						sx={{
-							marginBottom: 2,
-							// display: 'flex',
-							// justifyContent: 'center',
-						}}
-					>
-						<Typography variant="h5" noWrap>
-							<b>{title}</b>
-						</Typography>
-					</Box>
-				)}
 				{sections.map((section, index) => {
 					return (
-						<SectionComponent
-							key={section.name + index}
-							section={section}
-							signature={signature}
-							isLast={index === sections.length - 1}
-							hideChords={hideChords}
-						/>
+						<div
+							style={{
+								breakInside: 'avoid',
+							}}
+						>
+							{index == 0 && title && (
+								<>
+									<Box
+										sx={{
+											marginBottom: 2,
+											// display: 'flex',
+											// justifyContent: 'center',
+										}}
+									>
+										<Typography variant="h5" noWrap>
+											<b>{title}</b>
+										</Typography>
+									</Box>
+								</>
+							)}
+
+							<SectionComponent
+								key={section.name + index}
+								section={section}
+								signature={signature}
+								isLast={index === sections.length - 1}
+								hideChords={hideChords}
+							/>
+						</div>
 					)
 				})}
 			</Box>

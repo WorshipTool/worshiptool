@@ -29,7 +29,7 @@ const SegmentElement = ({
 		<>
 			{words.map((word, index) => {
 				return (
-					<Box key={word}>
+					<Box key={index}>
 						{showChords &&
 							(index == 0 ? (
 								<>

@@ -17,7 +17,7 @@ import { SwipeEventListener } from 'swipe-event-listener'
 
 export default SmartPage(PlaylistCards, ['fullWidth'])
 
-function PlaylistCards() {
+export function PlaylistCards() {
 	const { items, guid, data: playlist } = useInnerPlaylist()
 
 	const [currentIndex, setCurrentIndex] = useState(0)

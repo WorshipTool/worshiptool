@@ -27,6 +27,7 @@ export function useUrlState<T = string>(key: string, startValue?: T) {
 	const [first, setFirst] = useState(true)
 	const params = useSearchParams()
 	useEffect(() => {
+		if (first) return
 		const _value = params.get(key)
 		if (_value !== value) _setValue(_value || first ? startValue || null : null)
 		setFirst(false)
@@ -36,6 +37,6 @@ export function useUrlState<T = string>(key: string, startValue?: T) {
 }
 
 export const useSmartUrlState = <T extends RoutesKeys>(
-	route: T,
-	key: keyof SmartSearchParams<T>
-) => useUrlState(key as string)
+	page: T,
+	paramKey: keyof SmartSearchParams<T>
+) => useUrlState<SmartSearchParams<T>[typeof paramKey]>(paramKey as string)

@@ -1,13 +1,9 @@
 'use client'
-import { InnerPlaylistProvider } from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import TeamSelectSpecifierProvider from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/TeamSelectSpecifierProvider'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/TopPanel/components/TeamPageTitle'
 import TeamPlaylistContainer from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistContainer'
 import TeamPlaylistTopPanel from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistTopPanel'
 import { grey } from '@/common/ui/mui/colors'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { useSmartParams } from '@/routes/useSmartParams'
 
 export default SmartTeamPage(TeamPlaylistPage, {
 	hidePadding: true,
@@ -20,19 +16,13 @@ export default SmartTeamPage(TeamPlaylistPage, {
 })
 
 function TeamPlaylistPage() {
-	const { guid } = useSmartParams('teamPlaylist')
-
 	return (
-		<TeamSelectSpecifierProvider>
-			{!guid ? null : (
-				<InnerPlaylistProvider guid={guid as PlaylistGuid}>
-					<TeamPageTitle>
-						<TeamPlaylistTopPanel />
-					</TeamPageTitle>
-					{/* <Box bgcolor={'blue'}>ahoj</Box> */}
-					<TeamPlaylistContainer />
-				</InnerPlaylistProvider>
-			)}
-		</TeamSelectSpecifierProvider>
+		<>
+			<TeamPageTitle>
+				<TeamPlaylistTopPanel />
+			</TeamPageTitle>
+			{/* <Box bgcolor={'blue'}>ahoj</Box> */}
+			<TeamPlaylistContainer />
+		</>
 	)
 }

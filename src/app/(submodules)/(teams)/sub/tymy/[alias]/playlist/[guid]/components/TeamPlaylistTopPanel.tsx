@@ -5,11 +5,13 @@ import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/comp
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import TeamPlaylistMoreButton from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/components/TeamPlaylistMoreButton'
+import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
 import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 
 export default function TeamPlaylistTopPanel() {
-	const { canUserEdit } = useInnerPlaylist()
+	const { canUserEdit, guid } = useInnerPlaylist()
+	const { alias } = useInnerTeam()
 	return (
 		<Box
 			flex={1}
@@ -20,7 +22,13 @@ export default function TeamPlaylistTopPanel() {
 			<TitleBox />
 			<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
 				<TeamPlaylistMoreButton />
-				<PresentationButton />
+				<PresentationButton
+					to="teamPlaylistCards"
+					toParams={{
+						alias,
+						guid,
+					}}
+				/>
 				<PrintButton />
 				<ShareButton />
 				{canUserEdit && (

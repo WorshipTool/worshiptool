@@ -1,3 +1,4 @@
+import TeamPlaylistClientProviders from '@/app/(submodules)/(teams)/sub/tymy/[alias]/playlist/[guid]/PlaylistClientProviders'
 import { LayoutProps } from '@/common/types'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { handleApiCall } from '@/tech/handleApiCall'
@@ -39,5 +40,7 @@ export default async function Layout(props: LayoutProps<'teamPlaylist'>) {
 		)
 	)
 
-	return props.children
+	return (
+		<TeamPlaylistClientProviders>{props.children}</TeamPlaylistClientProviders>
+	)
 }

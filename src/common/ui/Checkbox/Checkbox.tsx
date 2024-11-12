@@ -4,6 +4,7 @@ import { ColorType, isColorOfThemeType } from '../ui.types'
 
 type CheckboxProps = {
 	checked?: boolean
+
 	onChange?: (event: ChangeEvent<HTMLInputElement>, value: boolean) => void
 	color?: ColorType
 	label?: string

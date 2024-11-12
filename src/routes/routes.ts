@@ -42,6 +42,7 @@ export const routesPaths = {
 	teamJoin: '/sub/tymy/pripojitse/[code]',
 	teamSong: '/sub/tymy/[alias]/pisen/[hex]/[title-alias]',
 	teamPlaylist: '/sub/tymy/[alias]/playlist/[guid]',
+	teamPlaylistCards: '/sub/tymy/[alias]/playlist/[guid]/prezentace',
 	teamPlaylists: '/sub/tymy/[alias]/playlisty',
 } as const
 
@@ -73,5 +74,8 @@ export const routesSearchParams = {
 	},
 	teamPlaylists: {
 		openedEvent: 'string' as string | undefined,
+	},
+	playlistPrint: {
+		landscapeMode: false as boolean | undefined,
 	},
 }

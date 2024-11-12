@@ -7,7 +7,7 @@ import { routesPaths } from './routes'
 import { RoutesKeys, SmartAllParams } from './routes.types'
 
 type NavigateOptions = NO & {
-	replace: boolean
+	replace?: boolean
 }
 //TODO: use replace
 
@@ -20,7 +20,7 @@ export const useSmartNavigate = () => {
 					url: string
 			  },
 		params: SmartAllParams<T>,
-		options?: NavigateOptions
+		options: NavigateOptions = {}
 	) => {
 		const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
 		const urlWithParams =
@@ -28,7 +28,11 @@ export const useSmartNavigate = () => {
 				? getReplacedUrlWithParams(toUrl, params)
 				: toUrl
 
-		router.push(urlWithParams as RouteLiteral)
+		if (options.replace) {
+			router.replace(urlWithParams as RouteLiteral)
+		} else {
+			router.push(urlWithParams as RouteLiteral)
+		}
 	}
 
 	return navigate
