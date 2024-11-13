@@ -14,6 +14,7 @@ export default function PrintButton() {
 		const urlPattern = routesPaths.playlistPrint
 		const printParams: SmartAllParams<'playlistPrint'> = {
 			guid,
+			landscapeMode: false,
 		}
 		const url = getReplacedUrlWithParams(urlPattern, printParams)
 
