@@ -1,7 +1,7 @@
 'use client'
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
-import useAuth from '../../../../hooks/auth/useAuth'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
+import useAuth from '../../../../../hooks/auth/useAuth'
+import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
 
 type GoogleLoginButtonProps = {
 	afterLogin?: () => void

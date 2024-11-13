@@ -1,5 +1,5 @@
 'use client'
-import GoogleLoginButton from '@/app/(nolayout)/prihlaseni/components/GoogleLoginButton'
+import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
 import { Box } from '@/common/ui'
@@ -10,8 +10,8 @@ import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useState } from 'react'
-import useAuth from '../../../hooks/auth/useAuth'
-import { useSmartNavigate } from '../../../routes/useSmartNavigate'
+import useAuth from '../../../../hooks/auth/useAuth'
+import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 
 export default SmartPage(SignUp, {
 	hideFooter: true,

@@ -16,7 +16,13 @@ export default function AboutInfoDatabase(props: AboutInfoDatabaseProps) {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'start',
+
+				bgcolor: 'grey.100',
+				padding: 3,
+				borderRadius: 4,
 			}}
+			maxWidth={300}
+			gap={1}
 		>
 			{props.icon && (
 				<>
@@ -24,7 +30,7 @@ export default function AboutInfoDatabase(props: AboutInfoDatabaseProps) {
 					<Gap />
 				</>
 			)}
-			<Box padding={1}>
+			<Box padding={0}>
 				<Typography
 					variant="h4"
 					strong
@@ -32,7 +38,8 @@ export default function AboutInfoDatabase(props: AboutInfoDatabaseProps) {
 						textWrap: 'nowrap',
 					}}
 				>
-					{props.order + 1}. {props.title}
+					{/* {props.order + 1}.  */}
+					{props.title}
 				</Typography>
 			</Box>
 			<Typography variant="h5" color="grey.600">

@@ -30,6 +30,18 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 					transition: 'all 0.1s',
 				}}
 			>
+				{hasLogo && (
+					<Link
+						to="team"
+						params={{
+							alias,
+						}}
+					>
+						<Clickable>
+							<Image src={logoUrl} alt={'Logo týmu'} width={64} height={64} />
+						</Clickable>
+					</Link>
+				)}
 				<Typography color={darkMode ? 'grey.300' : 'grey.800'} noWrap>
 					Chválící tým
 				</Typography>
@@ -48,20 +60,6 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 							gap={1}
 							minWidth={'13rem'}
 						>
-							{/* <Box
-                                width={'3rem'}
-                                sx={{
-                                    aspectRatio: '2/1',
-                                }}
-                                position={'relative'}
-                            >
-                                <Image
-                                    src={'/assets/13ka-icon.png'}
-                                    alt={'Logo skupiny'}
-                                    fill
-                                    objectFit={'contain'}
-                                />
-                            </Box> */}
 							<Typography variant="h4">{name}</Typography>
 						</Box>
 					</Clickable>
@@ -73,9 +71,10 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 						position: 'absolute',
 						top: 32,
 						left: '50%',
-						transform: 'translateX(-50%)',
+						transform: `translateX(-50%)`,
 						opacity: props.collapsed ? 1 : 0,
 						transition: 'all 0.1s',
+						pointerEvents: props.collapsed ? 'auto' : 'none',
 					}}
 				>
 					<Link
@@ -84,7 +83,7 @@ export default function TeamPanelTitle(props: TeamPanelTitleProps) {
 							alias,
 						}}
 					>
-						<Clickable>
+						<Clickable disabled={!props.collapsed}>
 							<Image src={logoUrl} alt={'Logo týmu'} width={32} height={32} />
 						</Clickable>
 					</Link>

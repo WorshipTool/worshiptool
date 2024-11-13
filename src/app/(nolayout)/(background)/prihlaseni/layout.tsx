@@ -1,5 +1,5 @@
-import { LayoutProps } from '../../../common/types'
-import { generateSmartMetadata } from '../../../tech/metadata/metadata'
+import { LayoutProps } from '../../../../common/types'
+import { generateSmartMetadata } from '../../../../tech/metadata/metadata'
 
 export const generateMetadata = generateSmartMetadata('login', async () => {
 	return {

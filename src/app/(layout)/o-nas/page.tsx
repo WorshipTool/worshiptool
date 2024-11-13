@@ -1,6 +1,7 @@
+'use client'
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box } from '@/common/ui'
+import { Box, useTheme } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 
@@ -14,11 +15,11 @@ import ToolbarChanger from '@/app/(layout)/o-nas/components/ToolbarChanger'
 import { Video } from '@/common/components/Video/Video'
 import { Button } from '@/common/ui/Button'
 import { Groups2, LibraryMusic, SmartButton } from '@mui/icons-material'
-import { grey } from '@mui/material/colors'
 import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
 
 //TODO: fix overflow in better way.
+import SheepBigGraphics from '@/app/(layout)/o-nas/components/SheepBigGraphics'
 import { Divider } from '@/common/ui'
 import './styles.css'
 
@@ -27,6 +28,7 @@ export default SmartPage(Page, {
 })
 
 function Page() {
+	const theme = useTheme()
 	return (
 		<Box>
 			<ToolbarChanger />
@@ -144,31 +146,31 @@ function Page() {
 				paddingY={8}
 				position={'relative'}
 				display={'flex'}
-				flexDirection={'column'}
-				gap={1}
+				flexDirection={'row'}
+				gap={3}
+				flexWrap={'wrap'}
 			>
-				<Box display={'flex'} flexDirection={'column'} gap={1}>
-					<Typography variant="h2">Velká a aktuální databáze</Typography>
-
-					<Typography
-						variant="h4"
-						sx={{
-							maxWidth: 450,
-						}}
-						color="grey.600"
-					>
-						Základem celé aplikace je seznam chval. Tento seznam se snažíme
-						držet co největší a dobře strukturovaný.
-					</Typography>
-				</Box>
-
 				<Box
 					display={'flex'}
-					flexDirection={'row'}
-					justifyContent={'space-between'}
-					flexWrap={'wrap'}
-					gap={1}
+					flexDirection={'column'}
+					gap={4}
+					flex={1}
+					minWidth={300}
 				>
+					<Box display={'flex'} flexDirection={'column'} gap={1}>
+						<Typography variant="h2">Velká a aktuální databáze</Typography>
+
+						<Typography
+							variant="h4"
+							sx={{
+								maxWidth: 450,
+							}}
+							color="grey.500"
+						>
+							Základem celé aplikace je seznam chval. Tento seznam se snažíme
+							držet co největší a dobře strukturovaný.
+						</Typography>
+					</Box>
 					<Box
 						flex={1}
 						display={{
@@ -177,97 +179,70 @@ function Page() {
 							sm: 'flex',
 						}}
 						justifyContent={'center'}
-						alignItems={'center'}
-						padding={2}
-						position={'relative'}
-						minWidth={300}
-						minHeight={300}
-						sx={{}}
+						sx={{
+							[theme.breakpoints.up('lg')]: {
+								transform: 'translateX(-64px) ',
+							},
+						}}
 					>
-						<Box
-							style={{
-								zIndex: 1,
-								// transform: 'scaleX(-1)',
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translateX(-50%) translateY(-50%) scaleX(-1)',
-							}}
-							sx={{
-								width: 300,
-								aspectRatio: '3/2',
-								position: 'relative',
-							}}
-						>
-							<Box
-								sx={{
-									width: 200,
-									aspectRatio: '2/1',
-									position: 'relative',
-									zIndex: 1,
-								}}
-							>
-								<Image src={'/assets/bubble.svg'} alt="Bublina" fill />
-								<Typography
-									sx={{
-										position: 'absolute',
-										top: '50%',
-										left: '50%',
-										transform: 'translate(-50%, -50%) scaleX(-1) ',
-									}}
-									align="center"
-									variant="h6"
-								>
-									Velikáá
-								</Typography>
-							</Box>
-							<Box
-								position={'relative'}
-								sx={{
-									width: 300,
-									aspectRatio: '3/2',
-									transform: 'translateY(-25%)',
-								}}
-							>
-								<Image src={'/assets/sheeps/ovce2.svg'} alt="Ovečka" fill />
-							</Box>
-						</Box>
-						<Box
-							sx={{
-								width: 400,
-								height: 70,
-								background: `radial-gradient(${grey[400]} 0%,${grey[400]} 10%, rgba(255,255,255,0) 40%)`,
-								position: 'absolute',
-								left: '50%',
-								bottom: '0',
-								transform: 'translateX(-50%) translateY(-45%)',
-							}}
+						<SheepBigGraphics />
+					</Box>
+				</Box>
+				<Box
+					flex={1}
+					display={'flex'}
+					flexDirection={'column'}
+					gap={4}
+					minWidth={350}
+					sx={{
+						alignItems: 'center',
+						[theme.breakpoints.up('lg')]: {
+							alignItems: 'end',
+						},
+					}}
+					// bgcolor={'grey.500'}
+				>
+					<Box
+						sx={{
+							[theme.breakpoints.up('lg')]: {
+								transform: 'translateX(-128px) translateY(32px)',
+							},
+						}}
+					>
+						<AboutInfoDatabase
+							order={0}
+							title="Vše na jednom místě"
+							text="Seskupujeme písně z jiných zpěvníků, abyste mohli hledat na jednom místě"
 						/>
 					</Box>
-					<Box flex={1} maxWidth={500}>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							gap={2}
-							maxWidth={400}
-							minWidth={300}
-						>
-							<AboutInfoDatabase
-								order={0}
-								title="Rozsáhlost"
-								text="Seskupujeme písně z jiných zpěvníků, abyste mohli hledat na jednom místě"
-							/>
-							<AboutInfoDatabase
-								order={1}
-								title="Aktuálnost"
-								text="Abychom mohli nabídnout i nové písně, vyvinuli jsme chytrý algoritmus"
-							/>
-							<AboutInfoDatabase
-								order={2}
-								title="Váše písně"
-								text="Databáze je otevřená - sami můžete přidávat chvály, veřejně i soukromě"
-							/>
-						</Box>
+					<Box
+						sx={{
+							[theme.breakpoints.up('lg')]: {
+								transform: 'translateX(0%) translateY(32px)',
+							},
+						}}
+					>
+						<AboutInfoDatabase
+							order={1}
+							title="Neustálá aktualizace"
+							text="Náš algoritmus automaticky 
+                                        přidává nové písně, takže databáze 
+                                        je vždy aktuální"
+						/>
+					</Box>
+					<Box
+						sx={{
+							[theme.breakpoints.up('lg')]: {
+								transform: `translateX(-100%) translateX(-32px) translateY(-32px)`,
+							},
+						}}
+					>
+						<AboutInfoDatabase
+							order={2}
+							title="Váše písně"
+							text="Databáze je otevřená 
+                                        - sami můžete přidávat chvály, veřejně či soukromě"
+						/>
 					</Box>
 				</Box>
 			</Box>

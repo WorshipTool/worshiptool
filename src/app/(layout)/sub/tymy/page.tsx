@@ -5,6 +5,7 @@ import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
+import { getAssetUrl } from '@/tech/paths.tech'
 import Image from 'next/image'
 import JoinGroupPanel from './components/JoinGroupPanel'
 import './teams.styles.css'
@@ -47,8 +48,7 @@ function Page() {
 						color="grey.500"
 					>
 						<strong>Zdarma</strong> nabízíme <strong>nástroje</strong>, které
-						vám
-						<strong>usnadní přípravu</strong> na společné hraní
+						vám <strong>usnadní přípravu</strong> na společné hraní
 					</Typography>
 				</Box>
 				<Box
@@ -105,7 +105,7 @@ function Page() {
 							position={'relative'}
 						>
 							<Image
-								src={'/assets/group-preview.png'}
+								src={getAssetUrl('team-preview.png')}
 								alt="Ukázka obrazovky týmu"
 								fill
 							/>
