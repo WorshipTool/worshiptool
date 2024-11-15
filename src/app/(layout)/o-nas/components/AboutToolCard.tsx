@@ -41,7 +41,14 @@ export default function AboutToolCard(props: AboutToolCardProps) {
 				{props.title}
 			</Typography>
 
-			<Typography align="center" variant="h5" color="grey.600">
+			<Typography
+				align="center"
+				variant="h5"
+				color="grey.600"
+				sx={{
+					textWrap: 'pretty',
+				}}
+			>
 				{props.text}
 			</Typography>
 

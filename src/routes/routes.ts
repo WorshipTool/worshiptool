@@ -78,4 +78,7 @@ export const routesSearchParams = {
 	playlistPrint: {
 		landscapeMode: false as boolean | undefined,
 	},
+	contact: {
+		wantToJoin: false as boolean | undefined,
+	},
 }

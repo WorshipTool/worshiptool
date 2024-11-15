@@ -8,17 +8,38 @@ import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
-import { useState } from 'react'
+import { useSmartParams } from '@/routes/useSmartParams'
+import { useEffect, useState } from 'react'
 
 export default SmartPage(ContactPage)
+
+const FEEDBACK_DIV_ID = 'feedback'
 
 function ContactPage() {
 	const [sent, setSent] = useState(false)
 	const [loading, setLoading] = useState(false)
 
+	const { wantToJoin } = useSmartParams('contact')
+
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [message, setMessage] = useState('')
+
+	const [first, setFirst] = useState(true)
+	useEffect(() => {
+		if (!first) return
+		if (wantToJoin) {
+			document
+				.getElementById(FEEDBACK_DIV_ID)
+				?.scrollIntoView({ behavior: 'smooth' })
+
+			setMessage(
+				'Dobrý den,\nrád bych se podílel na vytváření této aplikace. Jaké mám možnosti?'
+			)
+		}
+
+		setFirst(false)
+	}, [wantToJoin, first])
 
 	const { mailApi } = useApi()
 
@@ -66,9 +87,13 @@ function ContactPage() {
 			</StandaloneCard>
 
 			<StandaloneCard
-				title="Zpětná vazba"
+				title={wantToJoin ? 'Chcete nám pomoci?' : 'Zpětná vazba'}
 				variant="secondary"
-				subtitle="Líbí se vám naše aplikace, nebo máte nějaké přípomínky? Napište nám pomocí formuláře."
+				subtitle={
+					wantToJoin
+						? 'Rádi byste se připojili k vytváření této aplikace? Napište nám pomocí formuláře.'
+						: 'Líbí se vám naše aplikace, nebo máte nějaké přípomínky? Napište nám pomocí formuláře.'
+				}
 			>
 				{!sent ? (
 					<form
@@ -76,6 +101,7 @@ function ContactPage() {
 							width: '100%',
 						}}
 						onSubmit={onSubmitHandle}
+						id={FEEDBACK_DIV_ID}
 					>
 						<Box
 							sx={{

@@ -2,11 +2,10 @@ import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import CreateTeamButton from '@/app/(layout)/sub/tymy/components/CreateTeamButton'
 import TeamsToolbarChanger from '@/app/(layout)/sub/tymy/components/ToolbarChanger'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box } from '@/common/ui'
+import { Box, Image } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { getAssetUrl } from '@/tech/paths.tech'
-import Image from 'next/image'
 import JoinGroupPanel from './components/JoinGroupPanel'
 import './teams.styles.css'
 
@@ -101,6 +100,13 @@ function Page() {
 							width={'70%'}
 							sx={{
 								aspectRatio: '8 / 5',
+								zIndex: 1,
+
+								'&: hover': {
+									transform: 'scale(1.7)',
+									bgcolor: 'rgba(0,0,0,0)',
+								},
+								transition: 'all 1s',
 							}}
 							position={'relative'}
 						>

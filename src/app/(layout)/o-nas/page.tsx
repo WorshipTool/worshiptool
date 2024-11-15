@@ -21,6 +21,7 @@ import Shape2 from './shape2.svg'
 //TODO: fix overflow in better way.
 import SheepBigGraphics from '@/app/(layout)/o-nas/components/SheepBigGraphics'
 import { Divider } from '@/common/ui'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import './styles.css'
 
 export default SmartPage(Page, {
@@ -29,6 +30,15 @@ export default SmartPage(Page, {
 
 function Page() {
 	const theme = useTheme()
+
+	const navigate = useSmartNavigate()
+
+	const onJoinClick = () => {
+		navigate('contact', {
+			wantToJoin: true,
+		})
+	}
+
 	return (
 		<Box>
 			<ToolbarChanger />
@@ -267,7 +277,7 @@ function Page() {
 				<Box display={'flex'} flexDirection={'row'} gap={2} flexWrap={'wrap'}>
 					<AboutToolCard
 						title="Chytré vyhledávání"
-						text="Najděte své písně podle jejich textu, tématu či dokonce nálady"
+						text="Najděte své písně podle jejich názvu nebo i textu"
 						icon={<SmartButton />}
 						button={
 							<Button size="small" variant="outlined" to="home">
@@ -354,47 +364,55 @@ function Page() {
 						</Typography>
 					</Box>
 					<Box display={'flex'}>
-						<Button color={'primarygradient'}>Chci se připojit</Button>
+						<Button color={'primarygradient'} onClick={onJoinClick}>
+							Chci se připojit
+						</Button>
 					</Box>
 				</Box>
-				<Box
-					display={'flex'}
-					flexDirection={'column'}
-					alignItems={'center'}
-					gap={2}
-					flexWrap={'wrap'}
-					bgcolor={'grey.300'}
-					boxShadow={'0px 2px 4px  rgba(0,0,0,0.2)'}
-					padding={4}
-					borderRadius={4}
-					flex={1}
-				>
-					<Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+				{false && (
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						alignItems={'center'}
+						gap={2}
+						flexWrap={'wrap'}
+						bgcolor={'grey.300'}
+						boxShadow={'0px 2px 4px  rgba(0,0,0,0.2)'}
+						padding={4}
+						borderRadius={4}
+						flex={1}
+					>
 						<Box
 							display={'flex'}
-							flexDirection={'row'}
+							flexDirection={'column'}
 							alignItems={'center'}
-							gap={1}
 						>
-							<Image
-								src={'/assets/icons/send-money.svg'}
-								alt="Poslat peníze"
-								width={40}
-								height={40}
-							/>
-							<Typography variant="h2" noWrap>
-								Podpořte nás
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								alignItems={'center'}
+								gap={1}
+							>
+								<Image
+									src={'/assets/icons/send-money.svg'}
+									alt="Poslat peníze"
+									width={40}
+									height={40}
+								/>
+								<Typography variant="h2" noWrap>
+									Podpořte nás
+								</Typography>
+							</Box>
+							<Typography variant="h4" color="grey.600" align="center">
+								Celou aplikaci jsme vytvářeli ve svém volném času, zadarmo. Za
+								jakoukoliv finanční podporu budeme rádi.
 							</Typography>
 						</Box>
-						<Typography variant="h4" color="grey.600" align="center">
-							Celou aplikaci jsme vytvářeli ve svém volném času, zadarmo. Za
-							jakoukoliv finanční podporu budeme rádi.
-						</Typography>
+						<Box display={'flex'}>
+							<Button color={'secondary'}>Finančně podpořit</Button>
+						</Box>
 					</Box>
-					<Box display={'flex'}>
-						<Button color={'secondary'}>Finančně podpořit</Button>
-					</Box>
-				</Box>
+				)}
 			</Box>
 		</Box>
 	)
