@@ -225,25 +225,30 @@ function Create() {
 						<Gap />
 						<Box display={'flex'} justifyContent={'start'}>
 							<Box flex={1}>
-								<Tooltip title={'Přidat'}>
-									<Button
-										variant={'contained'}
-										color={'primary'}
-										disabled={
-											posting || title == '' || sheetData == '' || !isSheetValid
-										}
-										onClick={onPostClick}
-									>
-										Vytvořit {'(neveřejně)'}
-										{posting && (
-											<CircularProgress
-												color={'inherit'}
-												size={16}
-												sx={{ marginLeft: 1 }}
-											/>
-										)}
-									</Button>
-								</Tooltip>
+								<Box display={'flex'}>
+									<Tooltip title={'Přidat'}>
+										<Button
+											variant={'contained'}
+											color={'primary'}
+											disabled={
+												posting ||
+												title == '' ||
+												sheetData == '' ||
+												!isSheetValid
+											}
+											onClick={onPostClick}
+										>
+											Vytvořit {'(neveřejně)'}
+											{posting && (
+												<CircularProgress
+													color={'inherit'}
+													size={16}
+													sx={{ marginLeft: 1 }}
+												/>
+											)}
+										</Button>
+									</Tooltip>
+								</Box>
 								{sheetData !== '' && !isSheetValid && <NotValidWarning />}
 							</Box>
 						</Box>

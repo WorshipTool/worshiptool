@@ -98,7 +98,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 								flexWrap={'wrap'}
 								justifyContent={'space-between'}
 							>
-								<Box>
+								<Box flex={1}>
 									<Gap value={0.5} />
 									{currentSheet.getKeyChord() && (
 										<HideChordsButton
@@ -120,25 +120,27 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 										}}
 									/>
 								</Box>
-								<Box>
-									{user && (
-										<>
-											<Gap />
-											<Box
-												sx={{
-													position: 'sticky',
-													top: 80,
-													// bottom: 160,
-													display: 'flex',
-													flexDirection: 'column',
-													alignItems: 'flex-end',
-												}}
-											>
-												<UserNotePanel />
-											</Box>
-										</>
-									)}
-								</Box>
+								{!inEditMode && (
+									<Box>
+										{user && (
+											<>
+												<Gap />
+												<Box
+													sx={{
+														position: 'sticky',
+														top: 80,
+														// bottom: 160,
+														display: 'flex',
+														flexDirection: 'column',
+														alignItems: 'flex-end',
+													}}
+												>
+													<UserNotePanel />
+												</Box>
+											</>
+										)}
+									</Box>
+								)}
 							</Box>
 						)
 					)}
