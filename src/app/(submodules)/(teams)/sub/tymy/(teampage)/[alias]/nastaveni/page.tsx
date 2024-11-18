@@ -24,7 +24,13 @@ import { useEffect, useMemo, useState } from 'react'
 export default SmartTeamPage(TeamSettingsPage)
 
 function TeamSettingsPage() {
-	const { name: _name, joinCode: _joinCode, guid, reload } = useInnerTeam()
+	const {
+		name: _name,
+		joinCode: _joinCode,
+		guid,
+		reload,
+		isCreator,
+	} = useInnerTeam()
 
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.change_base_info',
@@ -144,74 +150,74 @@ function TeamSettingsPage() {
 					</Box>
 				)}
 			</TeamEditableCard>
-
-			<AdvancedSettings />
-
-			<TeamCard
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					flexWrap: 'wrap',
-					gap: 1,
-				}}
-			>
-				<Box display={'flex'} flexDirection={'column'}>
-					<Typography variant="h6" strong>
-						Smazání týmu
-					</Typography>
-					<Typography>
-						Po smazání týmu nebude možné tým obnovit. Záznamy o týmu budou
-						smazány.
-					</Typography>
-				</Box>
-
-				<Box
-					display={'flex'}
-					flexDirection={'column'}
-					justifyContent={'center'}
+			{isCreator && <AdvancedSettings />}
+			{isCreator && (
+				<TeamCard
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						flexWrap: 'wrap',
+						gap: 1,
+					}}
 				>
-					<Button
-						color="error"
-						size="small"
-						startIcon={<Delete />}
-						variant="outlined"
-						onClick={() => setDeletePopupOpen(true)}
+					<Box display={'flex'} flexDirection={'column'}>
+						<Typography variant="h6" strong>
+							Smazání týmu
+						</Typography>
+						<Typography>
+							Po smazání týmu nebude možné tým obnovit. Záznamy o týmu budou
+							smazány.
+						</Typography>
+					</Box>
+
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						justifyContent={'center'}
 					>
-						Odstranit tým
-					</Button>
-				</Box>
-
-				<Popup
-					open={deletePopupOpen}
-					onClose={() => setDeletePopupOpen(false)}
-					title="Jste si jistí?"
-					icon={<Delete />}
-					actions={[
 						<Button
-							key={'delete'}
-							variant="text"
 							color="error"
-							onClick={onTeamPermanentRemove}
+							size="small"
+							startIcon={<Delete />}
+							variant="outlined"
+							onClick={() => setDeletePopupOpen(true)}
 						>
-							Ano, nevratně odstranit
-						</Button>,
-						<Button
-							key={'cancel'}
-							type="reset"
-							tooltip="Zavřít vyskakovací okno bez jakékoliv akce"
-						>
-							Zrušit
-						</Button>,
-					]}
-					width={400}
-				>
-					<Typography>
-						Snažíte se smazat tým <b>{_name}</b>. Tato akce je nevratná. Jste si
-						jistí, že chcete pokračovat?
-					</Typography>
-				</Popup>
-			</TeamCard>
+							Odstranit tým
+						</Button>
+					</Box>
+
+					<Popup
+						open={deletePopupOpen}
+						onClose={() => setDeletePopupOpen(false)}
+						title="Jste si jistí?"
+						icon={<Delete />}
+						actions={[
+							<Button
+								key={'delete'}
+								variant="text"
+								color="error"
+								onClick={onTeamPermanentRemove}
+							>
+								Ano, nevratně odstranit
+							</Button>,
+							<Button
+								key={'cancel'}
+								type="reset"
+								tooltip="Zavřít vyskakovací okno bez jakékoliv akce"
+							>
+								Zrušit
+							</Button>,
+						]}
+						width={400}
+					>
+						<Typography>
+							Snažíte se smazat tým <b>{_name}</b>. Tato akce je nevratná. Jste
+							si jistí, že chcete pokračovat?
+						</Typography>
+					</Popup>
+				</TeamCard>
+			)}
 		</Box>
 	)
 }

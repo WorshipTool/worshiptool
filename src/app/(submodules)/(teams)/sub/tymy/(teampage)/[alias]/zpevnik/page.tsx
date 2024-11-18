@@ -13,7 +13,7 @@ import './styles.css'
 
 export default SmartTeamPage(TeamSongsPage)
 
-export function TeamSongsPage() {
+function TeamSongsPage() {
 	const { alias } = useSmartParams('teamSongbook')
 
 	const cardToProps = useCallback((variant: SongVariantDto) => {
