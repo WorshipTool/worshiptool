@@ -26,14 +26,13 @@ export const mapSongDataVariantApiToSongVariantDto = (
 	}
 }
 
-export const mapSongVariantDataOutDtoToSongVariantDto = ({
-	prefferedTitle,
-	...api
-}: SongVariantDataOutDto): SongVariantDto => {
+export const mapSongVariantDataOutDtoToSongVariantDto = (
+	api: SongVariantDataOutDto
+): SongVariantDto => {
 	return {
 		...api,
 
-		preferredTitle: prefferedTitle,
+		preferredTitle: api?.prefferedTitle,
 		sheet: new Sheet(api.sheetData),
 
 		guid: api.guid as SongVariantGuid,

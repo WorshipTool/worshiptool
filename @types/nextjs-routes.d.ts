@@ -45,6 +45,8 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/sub/tymy/[alias]/statistiky", { "alias": string }>
     | DynamicRoute<"/sub/tymy/[alias]/zpevnik", { "alias": string }>
     | DynamicRoute<"/sub/tymy/pripojitse/[code]", { "code": string }>
+    | DynamicRoute<"/sub/tymy/v/[alias]", { "alias": string }>
+    | DynamicRoute<"/sub/tymy/v/[alias]/pisen/[hex]/[title-alias]", { "alias": string; "hex": string; "title-alias": string }>
     | StaticRoute<"/test">
     | StaticRoute<"/ucet">
     | StaticRoute<"/ucet/oblibene">

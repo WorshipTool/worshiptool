@@ -44,6 +44,8 @@ export const routesPaths = {
 	teamPlaylist: '/sub/tymy/[alias]/playlist/[guid]',
 	teamPlaylistCards: '/sub/tymy/[alias]/playlist/[guid]/prezentace',
 	teamPlaylists: '/sub/tymy/[alias]/playlisty',
+	teamPublic: '/sub/tymy/v/[alias]',
+	teamPublicSong: '/sub/tymy/v/[alias]/pisen/[hex]/[title-alias]',
 } as const
 
 // DONT REMOVE

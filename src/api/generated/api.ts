@@ -572,6 +572,25 @@ export interface EditItemInDto {
 /**
  * 
  * @export
+ * @interface EditPayloadInDto
+ */
+export interface EditPayloadInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditPayloadInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditPayloadInDto
+     */
+    'payload': string;
+}
+/**
+ * 
+ * @export
  * @interface EditTeamEventInDto
  */
 export interface EditTeamEventInDto {
@@ -3530,6 +3549,12 @@ export interface Team {
      * @memberof Team
      */
     'pinnedPlaylists': Array<Playlist>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'payload': string;
 }
 /**
  * 
@@ -11163,6 +11188,45 @@ export const TeamEditingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerEditPayload: async (editPayloadInDto: EditPayloadInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editPayloadInDto' is not null or undefined
+            assertParamExists('teamEditingControllerEditPayload', 'editPayloadInDto', editPayloadInDto)
+            const localVarPath = `/submodules/teams/editpayload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editPayloadInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11364,6 +11428,18 @@ export const TeamEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerEditPayload(editPayloadInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerEditPayload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11448,6 +11524,15 @@ export const TeamEditingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamEditingControllerEditPayload(editPayloadInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11522,6 +11607,17 @@ export class TeamEditingApi extends BaseAPI {
      */
     public teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig) {
         return TeamEditingApiFp(this.configuration).teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {EditPayloadInDto} editPayloadInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerEditPayload(editPayloadInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12075,6 +12171,42 @@ export const TeamGettingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamPayload: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamGettingControllerGetTeamPayload', 'teamGuid', teamGuid)
+            const localVarPath = `/submodules/teams/teampayload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -12120,6 +12252,18 @@ export const TeamGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetTeamBasicInfo']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetTeamPayload(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetTeamPayload(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetTeamPayload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -12155,6 +12299,15 @@ export const TeamGettingApiFactory = function (configuration?: Configuration, ba
          */
         teamGettingControllerGetTeamBasicInfo(alias: string, options?: any): AxiosPromise<GetTeamInfoOutDto> {
             return localVarFp.teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamPayload(teamGuid: string, options?: any): AxiosPromise<string> {
+            return localVarFp.teamGettingControllerGetTeamPayload(teamGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12196,6 +12349,17 @@ export class TeamGettingApi extends BaseAPI {
      */
     public teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig) {
         return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetTeamPayload(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamPayload(teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

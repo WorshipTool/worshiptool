@@ -56,6 +56,7 @@ export const SongListCard = memo(function SongListCards({
 					xs: 1,
 					md: 2,
 					lg: 4,
+					xl: 5,
 				}
 		}
 	}, [props])
@@ -94,7 +95,7 @@ export const SongListCard = memo(function SongListCards({
 	return data.length === 0 ? (
 		<></>
 	) : props.variant === 'row' ? (
-		<Grid container columns={{ xs: 1, md: 2, lg: 4 }} spacing={spacing}>
+		<Grid container columns={{ xs: 1, md: 2, lg: 4, xl: 5 }} spacing={spacing}>
 			{data.map((v) => {
 				return (
 					<Grid item key={v.guid} xs={1}>

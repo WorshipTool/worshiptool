@@ -12,7 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
-import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/[alias]/components/Providers/StableTeamSubdomainProvider'
+import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/Providers/StableTeamSubdomainProvider'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
 import { FavouritesProvider } from '@/hooks/favourites/useFavourites'
 import { PermissionsProvider } from '@/hooks/permissions/usePermissions'

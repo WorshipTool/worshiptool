@@ -1,6 +1,6 @@
 import { BACKEND_URL } from '@/api/constants'
 import { ImagesApiAxiosParamCreator } from '@/api/generated'
-import { useTeamChecker } from '@/app/(submodules)/(teams)/sub/tymy/hooks/useInnerTeam'
+import { useTeamChecker } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { LinkProps } from '@/common/ui/Link/Link'
 import { SxProps } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
@@ -9,7 +9,7 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { isDevelopment } from '@/tech/development.tech'
 import { getIconUrl } from '@/tech/paths.tech'
 import { useMemo } from 'react'
-import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy/hooks/useUserTeams'
+import useUserTeams from '../../../../../../../app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
 
 export type MenuItemProps<T extends RoutesKeys> = {
 	title: string

@@ -8,6 +8,8 @@ type CheckboxProps = {
 	onChange?: (event: ChangeEvent<HTMLInputElement>, value: boolean) => void
 	color?: ColorType
 	label?: string
+
+	disabled?: boolean
 }
 
 export function Checkbox({ color, ...props }: CheckboxProps) {
