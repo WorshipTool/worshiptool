@@ -16,6 +16,7 @@ type CommmonProps = {
 	onCardSelect?: (data: SongVariantDto) => void
 	onCardDeselect?: (data: SongVariantDto) => void
 	selectable?: boolean
+	cardIcons?: ComponentProps<typeof SongCard>['icons']
 }
 
 type ListProps = CommmonProps & {
@@ -86,6 +87,7 @@ export const SongListCard = memo(function SongListCards({
 					onDeselect={() => {
 						props.onCardDeselect && props.onCardDeselect(v)
 					}}
+					icons={props.cardIcons}
 				/>
 			)
 		},

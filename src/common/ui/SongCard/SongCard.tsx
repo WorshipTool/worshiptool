@@ -42,6 +42,10 @@ type ToLinkProps = (data: SongVariantDto) => {
 	params: ComponentProps<typeof Link>['params']
 } | null
 
+type SongCardIconData = (data: SongVariantDto) => {
+	icon: JSX.Element
+}[]
+
 type SongCardProps = {
 	data: SongVariantDto
 	flexibleHeight?: boolean
@@ -52,6 +56,7 @@ type SongCardProps = {
 	onClick?: () => void
 	onSelect?: (selected: boolean) => void
 	onDeselect?: (selected: boolean) => void
+	icons?: SongCardIconData
 }
 export const SongCard = memo(function S({
 	data,
@@ -237,7 +242,11 @@ export const SongCard = memo(function S({
 									)
 								})}
 							</Box>
-							<SongCardAdditional isOver={isOver} data={data} />
+							<SongCardAdditional
+								isOver={isOver}
+								data={data}
+								icons={props.icons}
+							/>
 						</Box>
 					</Box>
 				</StyledContainer>

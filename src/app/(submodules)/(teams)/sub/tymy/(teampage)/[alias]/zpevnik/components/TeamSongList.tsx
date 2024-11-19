@@ -9,7 +9,7 @@ import { Box, Button, LinearProgress, Typography } from '@/common/ui'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
 import { usePermission } from '@/hooks/permissions/usePermission'
-import { Add } from '@mui/icons-material'
+import { Add, StickyNote2 } from '@mui/icons-material'
 import {
 	ComponentProps,
 	useCallback,
@@ -24,7 +24,7 @@ type Props = {
 }
 
 export const TeamSongList = (props: Props) => {
-	const { selection, guid: teamGuid, alias } = useInnerTeam()
+	const { selection, guid: teamGuid, alias, notes } = useInnerTeam()
 	const [searchString, setSearchString] = useState('')
 	const items = useMemo(() => {
 		const items =
@@ -103,6 +103,22 @@ export const TeamSongList = (props: Props) => {
 			selection.addPacks([data.packGuid])
 		},
 		[selection]
+	)
+
+	const getCardIcons = useCallback(
+		(variant: SongVariantDto) => {
+			const hasNote = notes.notes.some((n) => n.packGuid === variant.packGuid)
+			return [
+				...(hasNote
+					? [
+							{
+								icon: <StickyNote2 />,
+							},
+					  ]
+					: []),
+			]
+		},
+		[notes.notes]
 	)
 
 	return (
@@ -193,6 +209,7 @@ export const TeamSongList = (props: Props) => {
 					selectable={selectable}
 					onCardSelect={onCardSelect}
 					onCardDeselect={onCardDeselect}
+					cardIcons={getCardIcons}
 				/>
 				{!selection.loading && selection.items.length === 0 && (
 					<Box gap={1} display={'flex'} flexDirection={'column'}>

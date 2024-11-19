@@ -159,6 +159,31 @@ export interface AddVariantToPlaylistInDto {
 /**
  * 
  * @export
+ * @interface AllTeamNoteData
+ */
+export interface AllTeamNoteData {
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AllTeamSubdomainAlias
  */
 export interface AllTeamSubdomainAlias {
@@ -655,6 +680,19 @@ export interface EditVariantOutDto {
      * @memberof EditVariantOutDto
      */
     'alias': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetAllTeamNotesOutDto
+ */
+export interface GetAllTeamNotesOutDto {
+    /**
+     * 
+     * @type {Array<AllTeamNoteData>}
+     * @memberof GetAllTeamNotesOutDto
+     */
+    'notes': Array<AllTeamNoteData>;
 }
 /**
  * 
@@ -13312,6 +13350,46 @@ export const TeamSongNotesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetAllNotesOfTeam: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamSongNoteControllerGetAllNotesOfTeam', 'teamGuid', teamGuid)
+            const localVarPath = `/team/song/notes/all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} variantGuid 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
@@ -13405,6 +13483,18 @@ export const TeamSongNotesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllTeamNotesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerGetAllNotesOfTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} variantGuid 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
@@ -13452,6 +13542,15 @@ export const TeamSongNotesApiFactory = function (configuration?: Configuration, 
          */
         teamSongNoteControllerEditNote(updateTeamNoteInDto: UpdateTeamNoteInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.teamSongNoteControllerEditNote(updateTeamNoteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: any): AxiosPromise<GetAllTeamNotesOutDto> {
+            return localVarFp.teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13504,6 +13603,17 @@ export class TeamSongNotesApi extends BaseAPI {
      */
     public teamSongNoteControllerEditNote(updateTeamNoteInDto: UpdateTeamNoteInDto, options?: RawAxiosRequestConfig) {
         return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerEditNote(updateTeamNoteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

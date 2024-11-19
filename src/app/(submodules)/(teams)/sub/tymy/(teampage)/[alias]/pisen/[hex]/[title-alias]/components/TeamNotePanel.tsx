@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react'
 export default function TeamNotePanel() {
 	const { teamSongNotesApi } = useApi()
 	const { guid: variantGuid } = useInnerVariant()
-	const { guid: teamGuid } = useInnerTeam()
+	const { guid: teamGuid, notes: allTeamNotes } = useInnerTeam()
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
@@ -78,6 +78,7 @@ export default function TeamNotePanel() {
 			},
 			() => {
 				reload()
+				allTeamNotes.reload()
 				setAdding(false)
 			}
 		)

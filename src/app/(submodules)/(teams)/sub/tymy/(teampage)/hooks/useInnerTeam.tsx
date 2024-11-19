@@ -1,6 +1,7 @@
 'use client'
 import { useTeamEvents } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamEvents'
 import { useTeamMembers } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamMembers'
+import { useTeamNotes } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamNotes'
 import { useTeamSelection } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamSelection'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
@@ -68,6 +69,7 @@ const useProvideInnerTeam = (teamAlias: string) => {
 
 	const events = useTeamEvents(guid)
 	const members = useTeamMembers(teamAlias, guid)
+	const notes = useTeamNotes(guid)
 
 	return {
 		guid,
@@ -82,5 +84,6 @@ const useProvideInnerTeam = (teamAlias: string) => {
 		createdByGuid: (apiState.data?.createdByGuid || '') as UserGuid,
 		reload,
 		events,
+		notes,
 	}
 }
