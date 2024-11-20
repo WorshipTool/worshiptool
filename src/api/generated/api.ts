@@ -115,6 +115,25 @@ export interface AddPermissionToUserInDto {
 /**
  * 
  * @export
+ * @interface AddTeamMebmerByEmailInDto
+ */
+export interface AddTeamMebmerByEmailInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamMebmerByEmailInDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamMebmerByEmailInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddTeamNoteToVariantInDto
  */
 export interface AddTeamNoteToVariantInDto {
@@ -12411,6 +12430,45 @@ export const TeamJoiningApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerAddByEmail: async (addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addTeamMebmerByEmailInDto' is not null or undefined
+            assertParamExists('teamJoiningControllerAddByEmail', 'addTeamMebmerByEmailInDto', addTeamMebmerByEmailInDto)
+            const localVarPath = `/submodules/teams/addbyemail`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addTeamMebmerByEmailInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12500,6 +12558,18 @@ export const TeamJoiningApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamJoiningApi.teamJoiningControllerAddByEmail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12534,6 +12604,15 @@ export const TeamJoiningApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} teamAlias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12560,6 +12639,17 @@ export const TeamJoiningApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class TeamJoiningApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamJoiningApi
+     */
+    public teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: RawAxiosRequestConfig) {
+        return TeamJoiningApiFp(this.configuration).teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} teamAlias 

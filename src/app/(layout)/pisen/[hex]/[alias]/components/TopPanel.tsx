@@ -1,5 +1,5 @@
 import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'

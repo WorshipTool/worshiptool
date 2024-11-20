@@ -5,7 +5,7 @@ import {
 	TeamMemberRole,
 	TeamPermissions,
 } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { Box } from '@/common/ui'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import {

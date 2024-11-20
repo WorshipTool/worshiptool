@@ -1,7 +1,7 @@
 import { GetTeamStatisticsOutDto } from '@/api/generated'
 import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/statistiky/components/TeamStatisticsCard'
 import { getStatisticsColorFromString } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/statistiky/tech/statistics.tech'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { Box, Typography, useTheme } from '@/common/ui'
 import { BarChart } from '@mui/x-charts'
 import { useMemo } from 'react'

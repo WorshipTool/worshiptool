@@ -1,6 +1,6 @@
 import { GetTeamStatisticsOutDto } from '@/api/generated'
 import TeamStatisticsCard from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/statistiky/components/TeamStatisticsCard'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { Box, Gap, Typography } from '@/common/ui'
 
 type MostFavouritesSongsCardProps = {

@@ -1,4 +1,9 @@
-import { ListItemIcon, ListItemText, MenuItem as MIt } from '@/common/ui/mui'
+import {
+	ListItemIcon,
+	ListItemText,
+	MenuItem as MIt,
+	SxProps,
+} from '@/common/ui/mui'
 import { ReactElement } from 'react'
 
 export type MenuItemObjectType = {
@@ -9,6 +14,7 @@ export type MenuItemObjectType = {
 	disabled?: boolean
 	selected?: boolean
 	hidden?: boolean
+	sx?: SxProps
 }
 
 export default function MenuItem(item: MenuItemObjectType) {
@@ -17,6 +23,7 @@ export default function MenuItem(item: MenuItemObjectType) {
 			onClick={item.onClick}
 			disabled={item.disabled}
 			selected={item.selected}
+			sx={item.sx}
 		>
 			{item.icon && (
 				<ListItemIcon>

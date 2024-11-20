@@ -2,7 +2,7 @@
 import TeamLeftMenu from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamLeftMenu'
 import TeamPanelTitle from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamPanelTitle'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'

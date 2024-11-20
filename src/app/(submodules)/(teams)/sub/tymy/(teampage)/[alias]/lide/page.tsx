@@ -2,6 +2,7 @@
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import InvitationPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/InvitationPanel'
 import PeopleList from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/PeopleList'
+import TeamPeopleAdminOption from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/TeamPeopleAdminOption'
 import { encodeTeamCode } from '@/app/(submodules)/(teams)/sub/tymy/pripojitse/[code]/tech'
 import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui'
@@ -65,6 +66,7 @@ function TeamPeoplePage() {
 					Pozvat
 				</Button>
 			</TeamPageTitle>
+			<TeamPeopleAdminOption />
 			<PeopleList />
 
 			<Popup

@@ -1,5 +1,6 @@
 export {
 	Avatar,
+	Badge,
 	Box,
 	ButtonGroup,
 	Checkbox,
