@@ -173,7 +173,10 @@ export const TeamSongList = (props: Props) => {
 									}
 									{addSongPermission && (
 										<Box
-											display={'flex'}
+											display={{
+												xs: 'none',
+												sm: 'flex',
+											}}
 											ref={(r) => {
 												anchorRef.current = r as any
 												setAnchorName('addSongRight')

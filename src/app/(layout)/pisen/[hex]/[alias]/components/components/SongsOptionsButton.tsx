@@ -57,6 +57,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}
+				keepMounted
 			>
 				{isLoggedIn() && [
 					props.isOwner && !props.variant.public && (
@@ -126,21 +127,6 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					key={'add-to-group-button'}
 				/>
 
-				{isAdmin() && [
-					<Divider key={'divider-2'} />,
-					<SheetAdminButtons
-						key={'sheet-admin-buttons'}
-						sheet={props.sheet}
-						song={props.song}
-						reload={props.reloadSong}
-						variant={props.variant}
-						onEditClick={props.onEditClick}
-						isInEditMode={props.isInEditMode}
-						editLoading={props.saving}
-						editedTitle={props.editedTitle}
-						anyChange={props.anyChange}
-					/>,
-				]}
 				{props.isOwner && [
 					<Divider key={'div-aunalk'} />,
 					<DeleteButton
@@ -151,6 +137,19 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					/>,
 				]}
 			</Menu>
+
+			<SheetAdminButtons
+				key={'sheet-admin-buttons'}
+				sheet={props.sheet}
+				song={props.song}
+				reload={props.reloadSong}
+				variant={props.variant}
+				onEditClick={props.onEditClick}
+				isInEditMode={props.isInEditMode}
+				editLoading={props.saving}
+				editedTitle={props.editedTitle}
+				anyChange={props.anyChange}
+			/>
 		</>
 	)
 }

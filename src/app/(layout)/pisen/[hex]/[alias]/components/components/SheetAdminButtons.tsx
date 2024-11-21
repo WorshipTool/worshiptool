@@ -1,9 +1,14 @@
-import { Divider, useTheme } from '@/common/ui'
+import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
+import AdminOption from '@/common/components/admin/AdminOption'
+import CustomMenuItem from '@/common/components/Menu/MenuItem'
+import Popup from '@/common/components/Popup/Popup'
+import { Button, Divider, Typography, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
 import {
-	AdminPanelSettings,
 	CopyAll,
+	NewReleases,
 	Tag,
+	Verified,
 	VerifiedUser,
 	VideoFile,
 } from '@mui/icons-material'
@@ -83,14 +88,15 @@ export default function SheetAdminButtons({
 
 	const theme = useTheme()
 
+	const [verifyPopupOpen, setVerifyPopupOpen] = useState(false)
 	return (
 		<>
-			<MenuItem onClick={handleClick}>
-				<ListItemIcon>
-					<AdminPanelSettings />
-				</ListItemIcon>
-				<ListItemText primary={'Admin'} secondary={'Pokročilé možnosti'} />
-			</MenuItem>
+			<AdminOption
+				title="Pokročilé možnosti"
+				subtitle="Možnosti k písni"
+				onClick={handleClick}
+			/>
+
 			<Menu
 				id="basic-menu"
 				anchorEl={anchorEl}
@@ -98,10 +104,21 @@ export default function SheetAdminButtons({
 					vertical: 'top',
 					horizontal: 'right',
 				}}
+				transformOrigin={{
+					vertical: 'top',
+					horizontal: 'right',
+				}}
 				open={open}
 				onClose={handleClose}
 			>
 				<PublishButton variant={variant} />
+				{variant.public && (
+					<CustomMenuItem
+						title="Spravovat manuální ověření"
+						icon={variant.verified ? <Verified /> : <NewReleases />}
+						onClick={() => setVerifyPopupOpen(true)}
+					/>
+				)}
 				<Divider />
 
 				{isAdmin() &&
@@ -154,6 +171,34 @@ export default function SheetAdminButtons({
 					<ListItemText>Přidat tag</ListItemText>
 				</MenuItem>
 			</Menu>
+
+			<Popup
+				open={verifyPopupOpen}
+				onClose={() => setVerifyPopupOpen(false)}
+				title="Manuální ověření"
+				subtitle={variant.preferredTitle}
+				actions={[
+					<Button key={'cancel'} type="reset" size="small" variant="text">
+						Zrušit
+					</Button>,
+					<VerifyButton variant={variant} key={'action'} />,
+				]}
+				width={300}
+			>
+				{variant.verified !== null ? (
+					<>
+						{variant.verified ? (
+							<Typography>Píseň je manualně ověřena.</Typography>
+						) : (
+							<Typography>Píseň je manualně zamítnuta.</Typography>
+						)}
+					</>
+				) : (
+					<>
+						<Typography>Píseň není manualně ověřena</Typography>
+					</>
+				)}
+			</Popup>
 		</>
 	)
 }

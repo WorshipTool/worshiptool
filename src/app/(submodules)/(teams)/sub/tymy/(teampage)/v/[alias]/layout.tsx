@@ -79,8 +79,8 @@ export default async function TeamPublicLayout(
 								flexDirection={'column'}
 								gap={2}
 								sx={{
-									paddingX: 4,
-									paddingBottom: 4,
+									paddingX: { xs: 2, sm: 3, md: 4 },
+									paddingBottom: { xs: 2, sm: 3, md: 4 },
 								}}
 							>
 								<JoinTeamPublicPanel />

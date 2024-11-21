@@ -1,12 +1,16 @@
-import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
-import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
+import AdminOption from '@/common/components/admin/AdminOption'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import { Gap } from '@/common/ui/Gap'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
-import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
+import {
+	DomainVerification,
+	Language,
+	Polyline,
+	Public,
+	PublicOff,
+} from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
@@ -272,87 +276,43 @@ export default function TopPanel(props: TopPanelProps) {
 					</>
 				)}
 			</Box>
-			{isAdmin() && <Gap />}
-			<OnlyAdmin>
-				<Box
-					display={'flex'}
-					flexDirection={'row'}
-					gap={1}
-					alignItems={'center'}
-				>
-					<Typography strong>
-						{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
-					</Typography>
 
-					{props.variant.public ? (
-						<>
-							<div>
-								<Typography>Píseň je public</Typography>
-								{props.variant.verified !== null ? (
-									<>
-										{props.variant.verified ? (
-											<Typography>A je manualně ověřena.</Typography>
-										) : (
-											<Typography>A je manualně zamítnuta.</Typography>
-										)}
-									</>
-								) : (
-									<>
-										<Typography>Ale není manualně ověřena</Typography>
-									</>
-								)}
-							</div>
-							<VerifyButton variant={props.variant} />
-						</>
-					) : (
-						<Typography>Píseň NENI public</Typography>
-					)}
-				</Box>
-			</OnlyAdmin>
+			<AdminOption
+				label={props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
+				icon={<DomainVerification />}
+				onlyNotification
+			/>
+
+			<AdminOption
+				label={props.variant.public ? 'Píseň je veřejná' : 'Soukromá píseň'}
+				icon={props.variant.public ? <Public /> : <PublicOff />}
+				onlyNotification
+			/>
+
 			{props.variant.public && (
 				<>
 					{!props.variant.language && (
 						<>
-							<Gap />
-							<Box display={'flex'}>
-								<OnlyAdmin>
-									<Box display={'flex'} alignItems={'center'} gap={1}>
-										<Typography>
-											Píseň je sice public, ale nemá nastavený jazyk.
-										</Typography>
-										<Button
-											size="small"
-											color="secondary"
-											onClick={generateLanguage}
-											loading={languageGenerating}
-										>
-											Dogenerovat
-										</Button>
-									</Box>
-								</OnlyAdmin>
-							</Box>
+							<AdminOption
+								title="Dogenerovat jazyk"
+								subtitle="Public píseň ale bez jazyka."
+								onClick={generateLanguage}
+								loading={languageGenerating}
+								icon={<Language />}
+								notify
+							/>
 						</>
 					)}
 					{(!props.variant.tags || props.variant.tags.length === 0) && (
 						<>
-							{isAdmin() && <Gap />}
-							<Box display={'flex'}>
-								<OnlyAdmin>
-									<Box display={'flex'} alignItems={'center'} gap={1}>
-										<Typography>
-											Píseň je sice public, ale nemá žádná klíčová slova.
-										</Typography>
-										<Button
-											size="small"
-											color="secondary"
-											onClick={generateKeyword}
-											loading={keywordsGenerating}
-										>
-											Dogenerovat
-										</Button>
-									</Box>
-								</OnlyAdmin>
-							</Box>
+							<AdminOption
+								title="Dogenerovat keywords"
+								subtitle="Public píseň ale bez klíčových slov."
+								onClick={generateKeyword}
+								loading={keywordsGenerating}
+								icon={<Polyline />}
+								notify
+							/>
 						</>
 					)}
 				</>

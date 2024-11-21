@@ -32,8 +32,7 @@ export default function TeamPeopleAdminOption() {
 	return (
 		<>
 			<AdminOption
-				notify
-				label="Přidat uživatele do týmu"
+				label="Přidat nového člena"
 				onClick={() => setPopupOpen(true)}
 			/>
 

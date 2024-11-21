@@ -51,11 +51,7 @@ export const SmartTeamPageInnerProvider = ({
 	return (
 		<Box
 			sx={{
-				padding: options.hidePadding ? 0 : 4,
-				// if small remove hidePadding
-				// [theme.breakpoints.down('sm')]: {
-				// 	width: 'calc(100% - 1*8*2px)',
-				// },
+				padding: options.hidePadding ? 0 : { xs: 2, sm: 3, md: 4 },
 			}}
 		>
 			{children}

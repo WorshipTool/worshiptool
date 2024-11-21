@@ -2,7 +2,7 @@
 import TeamLeftMenu from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamLeftMenu'
 import TeamPanelTitle from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamPanelTitle'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
-import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
+import AdminOption from '@/common/components/admin/AdminOption'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
@@ -10,7 +10,6 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	DarkMode,
-	Home,
 	LightMode,
 } from '@mui/icons-material'
 import { useMemo } from 'react'
@@ -51,32 +50,16 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 				<TeamPanelTitle collapsed={collapsed} />
 				<TeamLeftMenu collapsed={collapsed} transition={TRANSITION} />
 				<Box flex={1} />
-				<Box padding={2}>
-					<OnlyAdmin>
-						<IconButton
-							size={'small'}
-							color="inherit"
-							tooltip={
-								darkMode
-									? 'Přepnout na světlý režim'
-									: 'Přepnout na tmavý režim'
-							}
-							tooltipPlacement="right"
-							onClick={() => setDarkMode(!darkMode)}
-						>
-							{darkMode ? <LightMode /> : <DarkMode />}
-						</IconButton>
-						<IconButton
-							size={'small'}
-							color="inherit"
-							to="home"
-							tooltip="Jít na hlavní stránku, mimo tým"
-							tooltipPlacement="right"
-						>
-							<Home />
-						</IconButton>
-					</OnlyAdmin>
-				</Box>
+
+				<AdminOption
+					title="Přepnout režim menu"
+					subtitle={
+						darkMode ? 'Přepnout na světlý režim' : 'Přepnout na tmavý režim'
+					}
+					icon={darkMode ? <LightMode /> : <DarkMode />}
+					onClick={() => setDarkMode(!darkMode)}
+				/>
+
 				{!uncollapsable && (
 					<Box paddingBottom={2}>
 						{collapsed ? (

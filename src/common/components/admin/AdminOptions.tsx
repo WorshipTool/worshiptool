@@ -68,7 +68,12 @@ export default function AdminOptionsProvider() {
 							},
 						}}
 					>
-						<IconButton size="small" color="black" onClick={onClick}>
+						<IconButton
+							size="small"
+							color="black"
+							onClick={onClick}
+							variant="contained"
+						>
 							<AdminPanelSettings />
 						</IconButton>
 					</Badge>

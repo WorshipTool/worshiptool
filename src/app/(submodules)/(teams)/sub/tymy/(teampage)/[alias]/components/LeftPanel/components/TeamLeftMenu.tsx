@@ -5,9 +5,10 @@ import {
 	TeamMemberRole,
 	TeamPermissions,
 } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
+import AdminOption from '@/common/components/admin/AdminOption'
 import { Box } from '@/common/ui'
 import { usePermission } from '@/hooks/permissions/usePermission'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import {
 	Analytics,
 	Dashboard,
@@ -38,6 +39,8 @@ export default function TeamLeftMenu(props: MenuProps) {
 			teamGuid: guid,
 		}
 	)
+
+	const navigate = useSmartNavigate()
 
 	const showStatistics =
 		events.length >= 10 && me?.role === TeamMemberRole.MANAGER
@@ -102,16 +105,14 @@ export default function TeamLeftMenu(props: MenuProps) {
 				<MenuItem key={index} {...item} collapsed={props.collapsed} />
 			))}
 
-			{!showStatistics && (
-				<OnlyAdmin notCollapse>
-					<MenuItem
-						title="Statistiky"
-						icon={<Analytics />}
-						to="teamStatistics"
-						toParams={{ alias }}
-					/>
-				</OnlyAdmin>
-			)}
+			<AdminOption
+				label={'Statistiky'}
+				subtitle="Zobrazit stránku Statistiky"
+				icon={<Analytics />}
+				onClick={() => {
+					navigate('teamStatistics', { alias })
+				}}
+			/>
 		</Box>
 	)
 }

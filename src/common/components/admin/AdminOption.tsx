@@ -10,9 +10,15 @@ import { ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 
 type AdminOptionProps = {
 	notify?: boolean
-	label: string
+	onlyNotification?: boolean
+	label?: string
+	title?: string
+	subtitle?: string
 	icon?: ReactElement
 	onClick?: (e: React.MouseEvent<HTMLElement>) => any
+
+	disabled?: boolean
+	loading?: boolean
 }
 
 export default function AdminOption(props: AdminOptionProps) {
@@ -38,11 +44,22 @@ export default function AdminOption(props: AdminOptionProps) {
 	const onClick = (e: React.MouseEvent<HTMLElement>) => {
 		props.onClick?.(e)
 
-		window.dispatchEvent(new CustomEvent(CLOSE_ADMIN_OPTIONS_EVENT_NAME))
+		if (!props.onlyNotification)
+			window.dispatchEvent(new CustomEvent(CLOSE_ADMIN_OPTIONS_EVENT_NAME))
 	}
 
 	const menuItem = useMemo(() => {
-		return <MenuItem title={props.label} icon={props.icon} onClick={onClick} />
+		return (
+			<MenuItem
+				title={props.label || props.title || ''}
+				subtitle={
+					props.subtitle || (props.onlyNotification ? 'Jen upozornění' : '')
+				}
+				icon={props.icon}
+				onClick={onClick}
+				disabled={props.disabled || props.loading}
+			/>
+		)
 	}, [props, onClick])
 
 	return ref.current && mounted ? createSmartPortal(menuItem, providerId) : null

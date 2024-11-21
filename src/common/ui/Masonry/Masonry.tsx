@@ -28,21 +28,29 @@ export const Masonry = ({
 
 	return (
 		<Box sx={props.sx}>
-			<M
-				enterOneAfterAnother
-				transition={'fade'}
-				style={{
-					width: `calc(100% + ${theme.spacing(spacing)})`,
-					marginLeft: fixMargin,
-					marginTop: fixMargin,
-				}}
-			>
-				{props.children?.map((c, index) => (
-					<Box key={c.key} width={`${columnWidth}%`}>
-						<Box padding={itemPadding}>{c}</Box>
+			{columnsCount <= 1 ? (
+				<>
+					<Box display={'flex'} flexDirection={'column'} gap={spacing}>
+						{props.children}
 					</Box>
-				))}
-			</M>
+				</>
+			) : (
+				<M
+					enterOneAfterAnother
+					transition={'fade'}
+					style={{
+						width: `calc(100% + ${theme.spacing(spacing)})`,
+						marginLeft: fixMargin,
+						marginTop: fixMargin,
+					}}
+				>
+					{props.children?.map((c, index) => (
+						<Box key={c.key} width={`${columnWidth}%`}>
+							<Box padding={itemPadding}>{c}</Box>
+						</Box>
+					))}
+				</M>
+			)}
 		</Box>
 	)
 }
