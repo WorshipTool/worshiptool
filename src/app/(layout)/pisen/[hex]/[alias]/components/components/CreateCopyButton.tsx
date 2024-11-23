@@ -1,5 +1,5 @@
 import { VariantPackAlias } from '@/api/dtos'
-import { Button, CircularProgress, Tooltip, useTheme } from '@/common/ui'
+import { Button, CircularProgress, Gap, Tooltip, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { EggAlt } from '@mui/icons-material'
@@ -42,16 +42,19 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const theme = useTheme()
 
 	return props.asMenuItem ? (
-		<MenuItem onClick={onClick} disabled={apiState.loading}>
-			<ListItemIcon>
-				{apiState.loading ? (
-					<CircularProgress size={`1rem`} color="inherit" />
-				) : (
-					<EggAlt color="inherit" />
-				)}
-			</ListItemIcon>
-			<ListItemText primary="Vytvořit kopii" />
-		</MenuItem>
+		<>
+			<MenuItem onClick={onClick} disabled={apiState.loading}>
+				<ListItemIcon>
+					{apiState.loading ? (
+						<CircularProgress size={`1rem`} color="inherit" />
+					) : (
+						<EggAlt color="inherit" />
+					)}
+				</ListItemIcon>
+				<ListItemText primary="Vytvořit kopii" />
+			</MenuItem>
+			<Gap value={0.5} />
+		</>
 	) : (
 		<Tooltip title={'Vytvořit soukromou kopii písně'}>
 			<Button

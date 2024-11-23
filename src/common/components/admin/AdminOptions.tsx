@@ -3,6 +3,7 @@ import Menu from '@/common/components/Menu/Menu'
 import { Box, IconButton } from '@/common/ui'
 import { Badge } from '@/common/ui/mui'
 import { grey } from '@/common/ui/mui/colors'
+import useAuth from '@/hooks/auth/useAuth'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import { AdminPanelSettings } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
@@ -40,9 +41,10 @@ export default function AdminOptionsProvider() {
 			)
 		}
 	}, [])
+	const { isAdmin } = useAuth()
 
 	const offset = 32
-	return (
+	return !isAdmin() ? null : (
 		<>
 			{itemsCount > 0 && (
 				<Box

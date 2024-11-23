@@ -230,7 +230,6 @@ export const SongCard = memo(function S({
 											key={line + index}
 										>
 											<Typography
-												noWrap
 												key={'SearchItemText' + index}
 												sx={{
 													flex: 1,
@@ -242,7 +241,7 @@ export const SongCard = memo(function S({
 									)
 								})}
 							</Box>
-							<SongCardAdditional
+							<SongCardAdditional 
 								isOver={isOver}
 								data={data}
 								icons={props.icons}

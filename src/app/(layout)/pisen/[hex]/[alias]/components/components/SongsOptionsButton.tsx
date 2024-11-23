@@ -1,6 +1,6 @@
+import Menu from '@/common/components/Menu/Menu'
 import { Box, Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
-import { Dashboard, Settings } from '@mui/icons-material'
+import { Settings } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import React from 'react'
 import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
@@ -54,7 +54,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 			)}
 			<Menu
 				id="basic-menu"
-				anchorEl={anchorEl}
+				anchor={anchorEl}
 				open={open}
 				onClose={handleClose}
 				keepMounted
@@ -108,13 +108,6 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					>
 						<AddToPlaylistButton variant={props.variant} asMenuItem />
 					</Box>,
-
-					<MenuItem disabled key={'cards-button'}>
-						<ListItemIcon>
-							<Dashboard />
-						</ListItemIcon>
-						<ListItemText primary={'Karty'} secondary={'Zobrazit jako karty'} />
-					</MenuItem>,
 
 					isTrustee() && [
 						<Divider key={'divider1'} />,
