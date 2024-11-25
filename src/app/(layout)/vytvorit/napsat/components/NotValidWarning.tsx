@@ -1,4 +1,4 @@
-import { ListItemText } from '@mui/material'
+import { ListItemText } from '@/common/ui/mui'
 
 export default function NotValidWarning() {
 	return (

@@ -1,4 +1,4 @@
-import { Card, Typography } from '@mui/material'
+import { Card, Typography } from '@/common/ui'
 import { Gap } from '../../../../../../common/ui/Gap/Gap'
 import useGroup from '../../../../../../hooks/group/useGroup'
 import AddToSelection from './AddToSelection'

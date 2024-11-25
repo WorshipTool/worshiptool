@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@/common/ui'
 
 export default function Loading() {
 	return (
@@ -13,7 +13,7 @@ export default function Loading() {
 			>
 				<LinearProgress
 					sx={{
-						height: 60,
+						height: 4,
 					}}
 				/>
 			</Box>

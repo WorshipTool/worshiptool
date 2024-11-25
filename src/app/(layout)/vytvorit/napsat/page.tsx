@@ -1,15 +1,10 @@
 'use client'
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
-import {
-	Box,
-	Button,
-	InputBase,
-	Switch,
-	Tooltip,
-	Typography,
-	styled,
-} from '@mui/material'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box, Button, Tooltip, Typography } from '@/common/ui'
+import { InputBase, Switch, styled } from '@/common/ui/mui'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -17,7 +12,6 @@ import ContainerGrid from '../../../../common/components/ContainerGrid'
 import DefaultStyle from '../../../../common/components/SheetDisplay/styles/DefaultStyle'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
-import { parseVariantAlias } from '../../../../routes'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../tech/ApiState'
 import { handleApiCall } from '../../../../tech/handleApiCall'
@@ -41,7 +35,8 @@ const SheetInput = styled(InputBase)(({}) => ({
 	alignItems: 'start',
 }))
 
-export default function Create() {
+export default SmartPage(Create)
+function Create() {
 	const { songAddingApi } = useApi()
 	const {
 		fetchApiState,
@@ -168,9 +163,10 @@ export default function Create() {
 							</Box>
 							<Box display={'flex'} justifyContent={'end'} padding={1}>
 								<Typography
-									display={'flex'}
-									alignItems={'center'}
-									variant="caption"
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
 								>
 									Náhled
 								</Typography>
@@ -213,7 +209,7 @@ export default function Create() {
 						) : (
 							<StyledContainer flexDirection={'column'}>
 								{title == '' && sheet.getSections().length == 0 && (
-									<Typography variant="caption" sx={{ color: 'grey' }}>
+									<Typography sx={{ color: 'grey' }}>
 										Tady uvidite ukazku...
 									</Typography>
 								)}
@@ -229,25 +225,30 @@ export default function Create() {
 						<Gap />
 						<Box display={'flex'} justifyContent={'start'}>
 							<Box flex={1}>
-								<Tooltip title={'Přidat'}>
-									<Button
-										variant={'contained'}
-										color={'primary'}
-										disabled={
-											posting || title == '' || sheetData == '' || !isSheetValid
-										}
-										onClick={onPostClick}
-									>
-										Vytvořit {'(neveřejně)'}
-										{posting && (
-											<CircularProgress
-												color={'inherit'}
-												size={16}
-												sx={{ marginLeft: 1 }}
-											/>
-										)}
-									</Button>
-								</Tooltip>
+								<Box display={'flex'}>
+									<Tooltip title={'Přidat'}>
+										<Button
+											variant={'contained'}
+											color={'primary'}
+											disabled={
+												posting ||
+												title == '' ||
+												sheetData == '' ||
+												!isSheetValid
+											}
+											onClick={onPostClick}
+										>
+											Vytvořit {'(neveřejně)'}
+											{posting && (
+												<CircularProgress
+													color={'inherit'}
+													size={16}
+													sx={{ marginLeft: 1 }}
+												/>
+											)}
+										</Button>
+									</Tooltip>
+								</Box>
 								{sheetData !== '' && !isSheetValid && <NotValidWarning />}
 							</Box>
 						</Box>

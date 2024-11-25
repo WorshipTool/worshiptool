@@ -2,23 +2,24 @@
 
 import { ValidationResult } from '@/api/generated'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Button } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
-import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
-import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { useSmartParams } from '@/routes/useSmartParams'
 import {
-	Button,
 	FormControl,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
-} from '@mui/material'
+} from '@/common/ui/mui'
+import { Typography } from '@/common/ui/Typography'
+import { useApi } from '@/hooks/api/useApi'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { useSmartParams } from '@/routes/useSmartParams'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
-
-export default function Page() {
+export default SmartPage(Page)
+function Page() {
 	const { hex, alias } = useSmartParams('variantPublish')
 
 	const {

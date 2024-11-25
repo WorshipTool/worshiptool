@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme } from '@/common/ui'
 import React, { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
@@ -24,7 +24,10 @@ export default function GroupToolbar({ expanded, header }: GroupToolbarProps) {
 	const { isOn, code } = useGroup()
 	const goHome = () => {
 		if (isOn) navigate('group', { groupCode: code })
-		else navigate('home', {})
+		else
+			navigate('home', {
+				hledat: undefined,
+			})
 		window?.scroll({
 			top: 0,
 			behavior: 'auto',

@@ -1,5 +1,6 @@
+import { Button, Typography } from '@/common/ui'
+import { InputBase } from '@/common/ui/mui'
 import { Token } from '@mui/icons-material'
-import { Button, InputBase, Typography } from '@mui/material'
 import { useState } from 'react'
 import { LoginRequestDTO } from '../../../../../../api/dtos/dtosAuth'
 import { Card } from '../../../../../../common/ui/Card/Card'

@@ -1,5 +1,6 @@
+import { Box, Button, Typography } from '@/common/ui'
+import { Paper } from '@/common/ui/mui'
 import { CloudUpload } from '@mui/icons-material'
-import { Box, Button, Paper, Typography } from '@mui/material'
 import React, { useRef } from 'react'
 import { Gap } from '../../../../../common/ui/Gap'
 import UploadFileInput from '../UploadFileInput'
@@ -131,9 +132,7 @@ export default function UploadPanel(props: UploadPanelProps) {
 					}}
 					width={200}
 				>
-					<Typography variant="body2" color={'grey'}>
-						Formáty: png, jpg, jpeg, pdf
-					</Typography>
+					<Typography color={'grey'}>Formáty: png, jpg, jpeg, pdf</Typography>
 				</Box>
 			</Paper>
 			<UploadFileInput

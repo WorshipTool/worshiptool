@@ -1,10 +1,22 @@
 import { FRONTEND_URL } from '@/api/constants'
-import { AuthApiAxiosParamCreator } from '@/api/generated'
+import {
+	AuthApiAxiosParamCreator,
+	GetTeamAliasFromSubdomainOutDto,
+	TeamGettingApiAxiosParamCreator,
+} from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
+import {
+	COOKIES_SUBDOMAINS_PATHNAME_NAME,
+	HEADERS_PATHNAME_NAME,
+} from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
-import { getReplacedUrlWithParams, routesPaths } from '@/routes'
-import { shouldUseSubdomains } from '@/routes/routes.tech'
+import { routesPaths } from '@/routes'
+import {
+	getReplacedUrlWithParams,
+	shouldUseSubdomains,
+} from '@/routes/routes.tech'
+import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -23,20 +35,47 @@ export async function middleware(request: NextRequest) {
 
 	// Check if the path is in the excluded paths
 	if (excludedPaths.some((path) => pathname.startsWith(path))) {
-		return NextResponse.next()
+		return setResponse(NextResponse.next(), pathname)
 	}
 
 	// Check authentication
-	const checkAuth = await checkAuthentication(request)
-	if (checkAuth !== true) return checkAuth
+	const auth = await checkAuthentication(request)
+	if (auth.response) return auth.response
 
 	// Subdomains
 	if (shouldUseSubdomains()) {
-		const checkSub = await checkSubdomain(request)
+		const checkSub = await checkSubdomain(request, auth.user)
 		if (checkSub !== true) return checkSub
 	}
 
-	return NextResponse.next()
+	const url = request.nextUrl.clone()
+	const newPathname = await replaceTeamInSubPathname(url.pathname)
+	if (newPathname !== url.pathname) {
+		url.pathname = newPathname
+		return setResponse(NextResponse.rewrite(url), newPathname)
+	}
+
+	return setResponse(NextResponse.next(), pathname)
+}
+
+const setResponse = async (
+	response: NextResponse,
+	pathname: string,
+	subdomainsPrefixPathname?: string
+): Promise<NextResponse> => {
+	if (subdomainsPrefixPathname) {
+		response.cookies.set(
+			COOKIES_SUBDOMAINS_PATHNAME_NAME,
+			subdomainsPrefixPathname
+			// {
+			// 	domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			// }
+		)
+	}
+
+	response.headers.set(HEADERS_PATHNAME_NAME, pathname)
+
+	return response
 }
 
 export const config = {
@@ -44,8 +83,9 @@ export const config = {
 	matcher: ['/((?!.*\\..*).*)'],
 }
 
-export const checkSubdomain = async (
-	request: NextRequest
+const checkSubdomain = async (
+	request: NextRequest,
+	user?: UserDto
 ): Promise<NextResponse | true> => {
 	const url = request.nextUrl.clone()
 	const host = request.headers.get('host')
@@ -68,15 +108,19 @@ export const checkSubdomain = async (
 		}
 
 		url.pathname = pathname + url.pathname
+		url.pathname = await replaceTeamInSubPathname(url.pathname)
 
-		return NextResponse.rewrite(url)
+		return setResponse(NextResponse.rewrite(url), pathname)
 	}
 	return true
 }
 
-export const checkAuthentication = async (
+const checkAuthentication = async (
 	request: NextRequest
-): Promise<NextResponse | true> => {
+): Promise<{
+	user?: UserDto | undefined
+	response?: NextResponse
+}> => {
 	const { cookies } = request
 	const tokenCookie = cookies.get(AUTH_COOKIE_NAME)
 	const user: UserDto | undefined = tokenCookie
@@ -84,7 +128,7 @@ export const checkAuthentication = async (
 		: undefined
 	const token = user?.token
 
-	if (!token) return true
+	if (!token) return {}
 
 	const creator = AuthApiAxiosParamCreator({
 		isJsonMime: () => true,
@@ -97,8 +141,9 @@ export const checkAuthentication = async (
 		const result = await fetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
-		let response: NextResponse = NextResponse.redirect(
-			new URL('/prihlaseni', request.url)
+		let response: NextResponse = await setResponse(
+			NextResponse.redirect(new URL('/prihlaseni', request.url)),
+			'/prihlaseni'
 		)
 
 		response.cookies.set(AUTH_COOKIE_NAME, '', {
@@ -107,27 +152,55 @@ export const checkAuthentication = async (
 
 		// Not redicert if the user is already on the login page
 		if (request.nextUrl.pathname.startsWith('/prihlaseni')) {
-			return true
+			return { user }
 		}
 
-		return response
+		return { user, response }
 	}
-	return true
+	return { user }
 }
 
-export const getSubdomains = (host?: string | null) => {
-	let subdomains: string[] = []
-	if (!host && typeof window !== 'undefined') {
-		// On client side, get the host from window
-		host = window.location.host
-	}
-	if (host && host.includes('.')) {
-		const parts = host.split('.')
-		if (parts.length > 1) {
-			// Valid candidate
-			const local = parts.at(-1)?.includes('localhost')
-			subdomains = parts.slice(0, local ? -1 : -2)
+const replaceTeamInSubPathname = async (pathname: string) => {
+	const key = routesPaths.subdomain.split('/')[1]
+
+	const getAlias = async (subdomain: string): Promise<string | null> => {
+		const creator = TeamGettingApiAxiosParamCreator({
+			isJsonMime: () => true,
+		})
+		const fetchData = await creator.teamGettingControllerGetAliasBySubdomain(
+			subdomain
+		)
+
+		try {
+			const url = BASE_PATH + fetchData.url
+			const response = await fetch(url, { ...(fetchData.options as any) })
+			if (response.status === 404) return null
+			const result: GetTeamAliasFromSubdomainOutDto = await response.json()
+			return result.alias
+		} catch (e) {
+			return null
 		}
 	}
-	return subdomains
+
+	const parts = pathname.split('/').filter((part) => part !== '')
+	if (parts.length < 2) return pathname
+
+	if (parts[0] !== key) return pathname // Not a subdomain
+
+	const alias = await getAlias(parts[1])
+	if (!alias) return pathname
+
+	const teamPathname = getReplacedUrlWithParams(
+		routesPaths.team,
+		{ alias },
+		{
+			subdomains: false,
+		}
+	)
+
+	//replace the first two parts of the path with the team url
+
+	const newPath = teamPathname + '/' + parts.slice(2).join('/')
+
+	return newPath
 }

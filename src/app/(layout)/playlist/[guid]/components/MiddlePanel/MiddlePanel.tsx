@@ -1,6 +1,6 @@
 import { PlaylistItem } from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/PlaylistItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { useMemo } from 'react'
 
 export default function MiddlePanel() {

@@ -30,7 +30,7 @@ interface SearchBarProps {
 	sx?: SxProps
 }
 
-export default function SearchBar({ value, onChange, sx }: SearchBarProps) {
+export function SearchBar({ value, onChange, sx }: SearchBarProps) {
 	const inputRef = useRef()
 
 	const onChangeHandler = (e: any) => {

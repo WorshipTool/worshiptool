@@ -1,5 +1,5 @@
+import { Box, Divider, useTheme } from '@/common/ui'
 import { PushPin } from '@mui/icons-material'
-import { Box, Divider, useTheme } from '@mui/material'
 import { Clickable } from '../../../../../common/ui/Clickable'
 import { Gap } from '../../../../../common/ui/Gap'
 import { Typography } from '../../../../../common/ui/Typography'

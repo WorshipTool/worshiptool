@@ -29,6 +29,8 @@ export type SongVariantDto = {
 	createdBy: UserGuid
 	createdByLoader: boolean
 
+	createdForPlaylistGuid: string | null
+
 	sources: SourceDto[]
 	creators: CreatorDto[]
 	tags: string[]
@@ -41,4 +43,7 @@ export type SongVariantDto = {
 	deleted: boolean
 
 	language: string | null
+
+	createdAt: Date
+	packCreatedAt: Date
 }

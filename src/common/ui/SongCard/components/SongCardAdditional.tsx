@@ -1,0 +1,46 @@
+import { SongVariantDto } from '@/api/dtos'
+import { Box } from '@/common/ui/Box'
+import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
+import { SongCard } from '@/common/ui/SongCard/SongCard'
+import { ComponentProps, useMemo } from 'react'
+
+type SongCardAdditionalProps = {
+	isOver?: boolean
+	data: SongVariantDto
+	icons: ComponentProps<typeof SongCard>['icons']
+}
+
+export default function SongCardAdditional(props: SongCardAdditionalProps) {
+	const icons = useMemo(() => {
+		if (!props.icons) return []
+		return props.icons(props.data)
+	}, [props.data, props.icons])
+
+	const moveOffset = '0.5rem'
+	return (
+		<Box
+			display={'flex'}
+			flexDirection={'column'}
+			justifyContent={'end'}
+			gap={0.5}
+		>
+			{icons.map((icon, i) => (
+				<Box
+					key={i}
+					sx={{
+						color: 'grey.500',
+					}}
+				>
+					{icon.icon}
+				</Box>
+			))}
+			<HeartLikeButton
+				// hideIfNot={!props.isOver}
+				hideIfNot
+				// interactable
+				packGuid={props.data.packGuid}
+				unmountIfNotVisible
+			/>
+		</Box>
+	)
+}

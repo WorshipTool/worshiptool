@@ -1,23 +1,20 @@
-import {
-    PermissionPayloadType,
-    PermissionType
-} from "../../interfaces/permission.types";
+import { PermissionPayloadType } from '../../hooks/permissions/permission.types'
 
 export const apiToPermissionPayload = (
-    api?: string
-): PermissionPayloadType<PermissionType> | undefined => {
-    if (!api) return undefined;
+	api?: string
+): PermissionPayloadType<any> | undefined => {
+	if (!api) return undefined
 
-    try {
-        return JSON.parse(api) as PermissionPayloadType<PermissionType>;
-    } catch (e) {
-        return api as PermissionPayloadType<PermissionType>;
-    }
-};
+	try {
+		return JSON.parse(api) as PermissionPayloadType<any>
+	} catch (e) {
+		return api as PermissionPayloadType<any>
+	}
+}
 
 export const permissionPayloadToApi = (
-    payload?: PermissionPayloadType<PermissionType>
+	payload?: PermissionPayloadType<any>
 ): string | undefined => {
-    if (!payload) return undefined;
-    return JSON.stringify(payload);
-};
+	if (!payload) return undefined
+	return JSON.stringify(payload)
+}

@@ -1,6 +1,5 @@
+import { Box, Button, Typography } from '@/common/ui'
 import { Restore } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { SongVariantDto } from '../../../../../../../api/dtos'
 import { SongDeletingApi } from '../../../../../../../api/generated'
@@ -53,16 +52,16 @@ export default function DeletedInfoPanel({
 			<Gap value={2} horizontal />
 			{isAdmin() && (
 				<>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="secondary"
 						startIcon={<Restore />}
-						loadingIndicator="Obnovování..."
+						// loadingIndicator="Obnovování..."
 						loading={loading}
 						onClick={restore}
 					>
 						Obnovit
-					</LoadingButton>
+					</Button>
 				</>
 			)}
 		</Box>

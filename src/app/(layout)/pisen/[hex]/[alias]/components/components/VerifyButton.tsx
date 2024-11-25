@@ -1,9 +1,9 @@
 'use client'
 import { SongVariantDto } from '@/api/dtos'
+import { Button } from '@/common/ui'
 import { ButtonGroup } from '@/common/ui/ButtonGroup'
 import { useApi } from '@/hooks/api/useApi'
 import { handleApiCall } from '@/tech/handleApiCall'
-import { Button } from '@mui/material'
 
 type VerifyButtonProps = {
 	variant: SongVariantDto

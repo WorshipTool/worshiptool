@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@/common/ui'
 
 interface UploadedSongLinkProps {
 	title: string
@@ -30,10 +30,14 @@ export default function UploadedSongLink(props: UploadedSongLinkProps) {
 				}}
 			>
 				<Button onClick={open}>Otevřít</Button>
-				<Typography variant="subtitle2" flex={1}>
+				<Typography
+					sx={{
+						flex: 1,
+					}}
+				>
 					{props.title}
 				</Typography>
-				<Typography variant="caption">{props.index}</Typography>
+				<Typography>{props.index}</Typography>
 			</Box>
 		</div>
 	)

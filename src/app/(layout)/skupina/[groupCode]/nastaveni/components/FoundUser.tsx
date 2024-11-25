@@ -1,5 +1,5 @@
-import { LoadingButton } from '@mui/lab'
-import { Box, TextField } from '@mui/material'
+import { Box, Button } from '@/common/ui'
+import { TextField } from '@/common/ui/mui'
 import { useState } from 'react'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import { useApiState } from '../../../../../../tech/ApiState'
@@ -52,9 +52,9 @@ export default function FoundUser(props: FoundUserProps) {
 				helperText={apiState.error ? 'Uživatel nebyl nalezen' : ''}
 				error={Boolean(apiState.error)}
 			/>
-			<LoadingButton onClick={handleSearch} loading={loading}>
+			<Button onClick={handleSearch} loading={loading}>
 				Přidat
-			</LoadingButton>
+			</Button>
 		</Box>
 	)
 }

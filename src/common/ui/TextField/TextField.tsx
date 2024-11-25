@@ -11,9 +11,14 @@ type TextFieldProps = {
 	sx?: SxProps<{}>
 	className?: string
 	type?: TextFieldType
+	required?: boolean
+	multiline?: boolean
+	disabled?: boolean
+
+	autoFocus?: boolean
 }
 
-export default function TextField({
+export function TextField({
 	placeholder = 'Zadejte text',
 	...props
 }: TextFieldProps) {
@@ -30,6 +35,10 @@ export default function TextField({
 			sx={props.sx}
 			type={props.type}
 			fullWidth
+			required={props.required}
+			multiline={props.multiline}
+			disabled={props.disabled}
+			autoFocus={props.autoFocus}
 		/>
 	)
 }

@@ -1,11 +1,14 @@
 import { LayoutProps } from '../../../../common/types'
-import { generateMetadataTitle } from '../../../../hooks/window-title/tech'
+import { generateSmartMetadata } from '../../../../tech/metadata/metadata'
 
-export const generateMetadata = async () => {
-	return {
-		title: await generateMetadataTitle('Playlisty', 'usersPlaylists', {}),
+export const generateMetadata = generateSmartMetadata(
+	'usersPlaylists',
+	async () => {
+		return {
+			title: 'Playlisty',
+		}
 	}
-}
+)
 
 export default function layout(props: LayoutProps) {
 	return props.children

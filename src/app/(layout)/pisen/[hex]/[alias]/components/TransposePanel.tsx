@@ -1,5 +1,6 @@
+import { Box, Typography } from '@/common/ui'
+import { alpha, styled } from '@/common/ui/mui'
 import { Add, Remove } from '@mui/icons-material'
-import { Box, Typography, alpha, styled } from '@mui/material'
 import { Gap } from '../../../../../../common/ui/Gap'
 import { IconButton } from '../../../../../../common/ui/IconButton'
 
@@ -34,13 +35,14 @@ export default function TransposePanel({
             ) : ( */}
 			<>
 				<Typography
-					variant="subtitle2"
-					fontWeight={'400'}
+					strong={400}
 					sx={{
 						color: disabled ? 'lightgrey' : 'black',
 					}}
+					size={'small'}
+					uppercase
 				>
-					TRANSPOZICE
+					Transpozice
 				</Typography>
 				<Gap horizontal value={0.5} />
 				<StyledButton

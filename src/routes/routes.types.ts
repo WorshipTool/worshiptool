@@ -32,3 +32,5 @@ export type PageParams<T extends RoutesKeys> = {
 	params: SmartParams<T>
 	searchParams: SmartSearchParams<T>
 }
+
+export type ParamValueType = string | boolean

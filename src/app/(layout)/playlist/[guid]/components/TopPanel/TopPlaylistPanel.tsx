@@ -5,9 +5,9 @@ import SaveEditButtons from '@/app/(layout)/playlist/[guid]/components/TopPanel/
 import ShareButton from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/ShareButton/ShareButton'
 import TitleBox from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/TitleBox/TitleBox'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme } from '@/common/ui'
 export default function TopPlaylistPanel() {
-	const { canUserEdit } = useInnerPlaylist()
+	const { canUserEdit, guid } = useInnerPlaylist()
 	const theme = useTheme()
 	return (
 		<Panel
@@ -29,7 +29,12 @@ export default function TopPlaylistPanel() {
 		>
 			<TitleBox />
 			<Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
-				<PresentationButton />
+				<PresentationButton
+					to="playlistCards"
+					toParams={{
+						guid,
+					}}
+				/>
 				<PrintButton />
 				<ShareButton />
 				{canUserEdit && (

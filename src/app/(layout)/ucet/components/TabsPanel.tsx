@@ -1,5 +1,6 @@
 import AdminPanel from '@/app/(layout)/ucet/components/AdminPanel/AdminPanel'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
+import { Tab, Tabs } from '@/common/ui/mui'
 import React, { useState } from 'react'
 import useAuth from '../../../../hooks/auth/useAuth'
 import BasicInfo from './BasicInfo'

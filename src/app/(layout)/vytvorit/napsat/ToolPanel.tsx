@@ -1,11 +1,5 @@
-import {
-	Box,
-	Button,
-	ButtonGroup,
-	Tooltip,
-	Typography,
-	styled,
-} from '@mui/material'
+import { Box, Button, Tooltip, Typography } from '@/common/ui'
+import { ButtonGroup, styled } from '@/common/ui/mui'
 import { Gap } from '../../../../common/ui/Gap'
 
 const Container = styled(Box)(({ theme }) => ({
@@ -24,9 +18,9 @@ interface ToolPaneProps {
 export default function ToolPanel({ onNewSection, onNewChord }: ToolPaneProps) {
 	return (
 		<Container>
-			<Typography variant="subtitle2">Označ sekci:</Typography>
+			<Typography>Označ sekci:</Typography>
 
-			<ButtonGroup variant="outlined" orientation="horizontal">
+			<ButtonGroup orientation="horizontal">
 				<Tooltip title={'Sloka'}>
 					<Button
 						onClick={() => {
@@ -56,7 +50,12 @@ export default function ToolPanel({ onNewSection, onNewChord }: ToolPaneProps) {
 				</Tooltip>
 			</ButtonGroup>
 			<Gap value={0.5} />
-			<Typography variant="caption" justifyContent={'center'} display={'flex'}>
+			<Typography
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+			>
 				{'Alt + V/R/B'}
 			</Typography>
 
@@ -71,7 +70,7 @@ export default function ToolPanel({ onNewSection, onNewChord }: ToolPaneProps) {
 					sx={{ display: 'flex', flexDirection: 'column' }}
 				>
 					Vlož akord
-					<Typography variant="caption">{'Alt + C'}</Typography>
+					<Typography>{'Alt + C'}</Typography>
 				</Button>
 			</Tooltip>
 		</Container>

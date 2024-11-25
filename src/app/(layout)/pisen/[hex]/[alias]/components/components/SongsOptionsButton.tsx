@@ -1,15 +1,6 @@
-import { Dashboard, Settings } from '@mui/icons-material'
-import {
-	Box,
-	Divider,
-	IconButton,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Tooltip,
-	useTheme,
-} from '@mui/material'
+import Menu from '@/common/components/Menu/Menu'
+import { Box, Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
+import { Settings } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import React from 'react'
 import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
@@ -39,7 +30,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 	const [open, setOpen] = React.useState(false)
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setOpen(true)
 		setAnchorEl(event.currentTarget)
 	}
@@ -63,9 +54,10 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 			)}
 			<Menu
 				id="basic-menu"
-				anchorEl={anchorEl}
+				anchor={anchorEl}
 				open={open}
 				onClose={handleClose}
+				keepMounted
 			>
 				{isLoggedIn() && [
 					props.isOwner && !props.variant.public && (
@@ -117,13 +109,6 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 						<AddToPlaylistButton variant={props.variant} asMenuItem />
 					</Box>,
 
-					<MenuItem disabled key={'cards-button'}>
-						<ListItemIcon>
-							<Dashboard />
-						</ListItemIcon>
-						<ListItemText primary={'Karty'} secondary={'Zobrazit jako karty'} />
-					</MenuItem>,
-
 					isTrustee() && [
 						<Divider key={'divider1'} />,
 						<PublishButton variant={props.variant} key={'publish-button-as'} />,
@@ -135,21 +120,6 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					key={'add-to-group-button'}
 				/>
 
-				{isAdmin() && [
-					<Divider key={'divider-2'} />,
-					<SheetAdminButtons
-						key={'sheet-admin-buttons'}
-						sheet={props.sheet}
-						song={props.song}
-						reload={props.reloadSong}
-						variant={props.variant}
-						onEditClick={props.onEditClick}
-						isInEditMode={props.isInEditMode}
-						editLoading={props.saving}
-						editedTitle={props.editedTitle}
-						anyChange={props.anyChange}
-					/>,
-				]}
 				{props.isOwner && [
 					<Divider key={'div-aunalk'} />,
 					<DeleteButton
@@ -160,6 +130,19 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 					/>,
 				]}
 			</Menu>
+
+			<SheetAdminButtons
+				key={'sheet-admin-buttons'}
+				sheet={props.sheet}
+				song={props.song}
+				reload={props.reloadSong}
+				variant={props.variant}
+				onEditClick={props.onEditClick}
+				isInEditMode={props.isInEditMode}
+				editLoading={props.saving}
+				editedTitle={props.editedTitle}
+				anyChange={props.anyChange}
+			/>
 		</>
 	)
 }

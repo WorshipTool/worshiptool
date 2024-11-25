@@ -1,42 +1,65 @@
 'use client'
 
-import { Box, styled, useTheme } from '@mui/material'
+import LeftWebTitle from '@/common/components/Toolbar/components/LeftWebTItle'
+import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
+import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
+import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { Box, useTheme } from '@/common/ui'
+import { styled, useMediaQuery } from '@mui/system'
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
-import { Gap } from '../../ui/Gap/Gap'
-import LeftWebTitle from './components/LeftWebTItle'
-import RightAccountPanel from './components/RightAccountPanel'
+import { useEffect, useMemo, useState } from 'react'
 
-const TopBar = styled(Box)(() => ({
+const TopBar = styled(Box)(({ theme }) => ({
 	right: 0,
 	left: 0,
 	top: 0,
 	height: 56,
-	minHeight: 50,
-	alignItems: 'center',
 	display: 'flex',
+	flexDirection: 'column',
 	displayPrint: 'none',
 	zIndex: 10,
 	pointerEvents: 'none',
+	transition: 'all 0.3s ease',
 }))
 
 interface ToolbarProps {
-	transparent?: boolean
-	white?: boolean
-	header?: React.ReactNode
+	// transparent?: boolean
+	// white?: boolean
 }
-export function Toolbar({ transparent, white, header }: ToolbarProps) {
+export function Toolbar({}: ToolbarProps) {
 	const theme = useTheme()
+
+	const { transparent, whiteVersion, hidden } = useToolbar()
+
+	const white = useMemo(() => {
+		return whiteVersion || !transparent
+	}, [whiteVersion, transparent])
 
 	const [init, setInit] = useState(false)
 	useEffect(() => {
 		setInit(true)
 	}, [])
 
+	const navigationInMiddle = useMediaQuery(theme.breakpoints.up('md'))
+
 	return (
 		<>
-			<TopBar displayPrint={'none'} position={'sticky'} zIndex={0}></TopBar>
-			<TopBar displayPrint={'none'} position={'fixed'}>
+			<TopBar
+				displayPrint={'none'}
+				position={'sticky'}
+				zIndex={0}
+				sx={{
+					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+				}}
+			></TopBar>
+			<TopBar
+				displayPrint={'none'}
+				position={'fixed'}
+				sx={{
+					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+				}}
+			>
 				<motion.div
 					style={{
 						background: `linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
@@ -54,33 +77,31 @@ export function Toolbar({ transparent, white, header }: ToolbarProps) {
 				<Box
 					zIndex={0}
 					flexDirection={'row'}
+					justifyContent={'space-between'}
+					alignItems={'center'}
 					display={'flex'}
 					flex={1}
 					height={'100%'}
+					color={!white ? 'black' : 'white'}
 				>
-					<LeftWebTitle transparent={transparent} />
-					<Gap horizontal value={3} />
+					<LeftWebTitle />
+					{navigationInMiddle && <MiddleNavigationPanel />}
+
 					<Box
-						sx={{
-							pointerEvents: 'auto',
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
-					>
-						{header}
-					</Box>
-					<Box
-						flex={1}
 						sx={{
 							opacity: init ? 1 : 0,
 							transition: 'opacity 0.3s',
+							display: 'flex',
+							flexDirection: 'row',
+							paddingRight: 2,
 						}}
 					>
-						<RightAccountPanel transparent={transparent && !white} />
+						<RightAccountPanel />
+						{!navigationInMiddle && <MiddleNavigationPanel />}
 					</Box>
 				</Box>
 			</TopBar>
+			<NavigationMobilePanel />
 		</>
 	)
 }

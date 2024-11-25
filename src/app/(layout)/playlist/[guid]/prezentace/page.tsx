@@ -1,23 +1,24 @@
 'use client'
+import { Box, IconButton } from '@/common/ui'
 import {
 	ChevronLeft,
 	ChevronRight,
 	Fullscreen,
 	FullscreenExit,
 } from '@mui/icons-material'
-import { Box, IconButton } from '@mui/material'
 import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
+import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import GoBackButton from '@/app/(layout)/playlist/[guid]/prezentace/components/GoBackButton'
+import PeoplePanel from '@/app/(layout)/playlist/[guid]/prezentace/components/PeoplePanel'
 import SlideCard from '@/app/(layout)/playlist/[guid]/prezentace/components/SlideCard'
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { useParams } from 'next/navigation'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { SwipeEventListener } from 'swipe-event-listener'
-import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
-export default function PlaylistCards() {
-	const { guid } = useParams() as { guid: PlaylistGuid }
-	const { items, playlist } = usePlaylist(guid)
+export default SmartPage(PlaylistCards, ['fullWidth'])
+
+export function PlaylistCards() {
+	const { items, guid, data: playlist } = useInnerPlaylist()
 
 	const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -112,42 +113,59 @@ export default function PlaylistCards() {
 		}
 	}, [items])
 
+	const onCardChange = (index: number) => {
+		setCurrentIndex(index)
+	}
+
 	return (
-		<Box>
-			<Box position={'absolute'} right={0} top={0} bgcolor={'grey'}>
-				<IconButton
-					color="inherit"
-					sx={{ color: COLOR }}
-					onClick={() => moveCurrent(-1)}
-					disabled={currentIndex == 0}
-				>
-					<ChevronLeft />
-				</IconButton>
-				<IconButton
-					color="inherit"
-					sx={{ color: COLOR }}
-					onClick={() => moveCurrent(1)}
-					disabled={currentIndex == items.length - 1}
-				>
-					<ChevronRight />
-				</IconButton>
-				{!fullscreen ? (
-					<IconButton
-						onClick={() => {
-							turnOnFullscreen()
-						}}
-					>
-						<Fullscreen color="inherit" sx={{ color: COLOR }} />
-					</IconButton>
-				) : (
-					<IconButton
-						onClick={() => {
-							turnOffFullscreen()
-						}}
-					>
-						<FullscreenExit color="inherit" sx={{ color: COLOR }} />
-					</IconButton>
+		<Box overflow={'hidden'}>
+			<SlideCard item={items[currentIndex]} order={currentIndex} />
+			<Box
+				position={'absolute'}
+				right={0}
+				top={0}
+				display={'flex'}
+				gap={1.5}
+				alignItems={'end'}
+			>
+				{playlist?.teamAlias && (
+					<PeoplePanel onCardChange={onCardChange} cardIndex={currentIndex} />
 				)}
+				<Box bgcolor={'grey'} display={'flex'}>
+					<IconButton
+						color="inherit"
+						sx={{ color: COLOR }}
+						onClick={() => moveCurrent(-1)}
+						disabled={currentIndex == 0}
+					>
+						<ChevronLeft />
+					</IconButton>
+					<IconButton
+						color="inherit"
+						sx={{ color: COLOR }}
+						onClick={() => moveCurrent(1)}
+						disabled={currentIndex == items.length - 1}
+					>
+						<ChevronRight />
+					</IconButton>
+					{!fullscreen ? (
+						<IconButton
+							onClick={() => {
+								turnOnFullscreen()
+							}}
+						>
+							<Fullscreen color="inherit" sx={{ color: COLOR }} />
+						</IconButton>
+					) : (
+						<IconButton
+							onClick={() => {
+								turnOffFullscreen()
+							}}
+						>
+							<FullscreenExit color="inherit" sx={{ color: COLOR }} />
+						</IconButton>
+					)}
+				</Box>
 			</Box>
 			<Box
 				sx={{
@@ -156,9 +174,8 @@ export default function PlaylistCards() {
 					left: 0,
 				}}
 			>
-				<GoBackButton />
+				<GoBackButton teamAlias={playlist?.teamAlias} />
 			</Box>
-			<SlideCard item={items[currentIndex]} order={currentIndex} />
 		</Box>
 	)
 }

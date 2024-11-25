@@ -1,106 +1,113 @@
 'use client'
 
-import SearchIcon from '@mui/icons-material/Search'
-import {
-	Box,
-	Grid,
-	InputBase,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material'
-import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import MainSearchInput from '@/app/components/components/MainSearchInput'
+import { useFooter } from '@/common/components/Footer/hooks/useFooter'
+import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
+import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import normalizeSearchText from '@/tech/string/normalizeSearchText'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
 import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
-const SearchContainer = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.grey[100],
-	padding: '0.5rem',
-	paddingLeft: '0.8rem',
-	paddingRight: '0.8rem',
-	borderRadius: '0.5rem',
-	display: 'flex',
+export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
 
-	justifyContent: 'center',
-	alignItems: 'center',
-}))
-const SearchInput = styled(InputBase)(({ theme }) => ({
-	flex: 1,
-	marginLeft: '0.5em',
-	zIndex: 100,
-}))
+const ANIMATION_DURATION = 0.2
 
 export default function HomeDesktop() {
 	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down('sm'))
 
-	const [isTop, setTop] = useState(true)
 	const scrollPointRef = useRef(null)
 
-	const [searchValue, setSearchValue] = useState('')
-	const [showSearchedList, setShowSearchedList] = useState(false)
+	// Manage search input, and url state with delay
+	const [searchString, setSearchString] = useUrlState('hledat')
+	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
-	const animationDuration = 0.2
+	const onSearchValueChange = useCallback(
+		(e: string) => {
+			setSearchInputValue(e)
+			if (searchString === null) setSearchString('')
+		},
+		[searchString]
+	)
 
-	/**
-	 * Calculation value to correct window height
-	 * ...handles resizing
-	 */
-	const [correctingOffsetForWindowHeight, setcorrectingOffsetForWindowHeight] =
-		useState(1000)
+	useChangeDelayer(
+		searchInputValue,
+		(value) => {
+			if (value !== '') setSearchString(normalizeSearchText(value))
+		},
+		[]
+	)
+
 	useEffect(() => {
-		const onResize = () => {
-			const min = window.innerHeight
-			setcorrectingOffsetForWindowHeight(min)
+		const handler = () => {
+			setSearchInputValue('')
 		}
-		onResize()
-		window.addEventListener('resize', onResize)
+
+		window.addEventListener(RESET_HOME_SCREEN_EVENT_NAME, handler)
 		return () => {
-			window.removeEventListener('resize', onResize)
+			window.removeEventListener(RESET_HOME_SCREEN_EVENT_NAME, handler)
 		}
 	}, [])
 
-	const onSearchValueChange = (event: any) => {
-		setShowSearchedList(true)
-		setSearchValue(event.target.value)
-	}
-
-	const scrollLevel = 50
-
-	useEffect(() => {
-		if (searchValue == '') {
-		} else {
-			window.scroll({
-				top: scrollLevel * 2,
-				left: 0,
-				behavior: 'smooth',
-			})
-		}
-	}, [searchValue])
-
-	useEffect(() => {
-		const handleScroll = (event: any) => {
-			const sy = window.scrollY
-			if (sy > scrollLevel) {
-				setTop(false)
-			} else {
-				setTop(true)
-			}
-		}
-
-		window.addEventListener('scroll', handleScroll)
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll)
-		}
+	// Manage scrolling to search results
+	const scrollLevel = 20
+	const scrollToTop = useCallback(() => {
+		window.scroll({
+			top: 90,
+			behavior: 'smooth',
+		})
 	}, [])
+
+	useEffect(() => {
+		if (searchString === null) return
+		scrollToTop()
+	}, [searchString])
+
+	// Manage toolbar and footer
+	const { isTop } = useScrollHandler({
+		topThreshold: scrollLevel,
+	})
+
+	const toolbar = useToolbar()
+	const footer = useFooter()
+
+	useEffect(() => {
+		toolbar.setTransparent(isTop && !phoneVersion)
+		toolbar.setHideMiddleNavigation(!isTop && !phoneVersion)
+		toolbar.setShowTitle(!isTop || phoneVersion)
+	}, [isTop, toolbar, phoneVersion])
+
+	useEffect(() => {
+		footer.setShow(false)
+	}, [footer])
+
+	// Calculate inner height of the window
+	const [innerHeight, setInnerHeight] = useState(
+		typeof window !== 'undefined' ? window.innerHeight : 500
+	)
+	useEffect(() => {
+		const handleResize = () => {
+			setInnerHeight(window.innerHeight)
+		}
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
+	const SearchList = useMemo(() => {
+		return searchString && <SearchedSongsList searchString={searchString} />
+	}, [searchString])
 
 	return (
 		<>
-			{/* <Toolbar transparent={isTop} /> */}
-
 			<Box
 				sx={{
 					flex: 1,
@@ -108,127 +115,123 @@ export default function HomeDesktop() {
 					alignItems: 'start',
 					display: 'flex',
 					flexDirection: 'column',
+					position: 'relative',
 				}}
 			>
 				<motion.div
 					style={{
 						position: 'fixed',
-						left: 0,
-						right: 0,
 						display: 'flex',
 						flexDirection: 'column',
-						zIndex: 10,
+						zIndex: phoneVersion ? 1 : 10,
 						alignItems: 'center',
 						pointerEvents: 'none',
 					}}
 					initial={{
-						top: '35%',
+						top: !phoneVersion
+							? isTop
+								? `35%`
+								: 'calc(-7rem + 22px)'
+							: 'calc( 64px)',
+
+						left: !phoneVersion ? 0 : theme.spacing(1),
+						right: !phoneVersion ? 0 : theme.spacing(1),
 					}}
 					animate={{
-						top: isTop ? '35%' : 28,
+						top: !phoneVersion
+							? isTop
+								? `35%`
+								: 'calc(-7rem + 22px)'
+							: 'calc( 64px)',
+
+						left: !phoneVersion ? 0 : theme.spacing(1),
+						right: !phoneVersion ? 0 : theme.spacing(1),
 					}}
 					transition={{
 						type: 'keyframes',
-						duration: animationDuration,
+						duration: ANIMATION_DURATION,
 					}}
 				>
 					<ContainerGrid>
 						<Grid item xs={12}>
 							<Grid container justifyContent="center">
-								<Grid item xs={6} sx={{ pointerEvents: 'auto' }}>
-									<motion.div
-										initial={{
-											height: '7rem',
-											opacity: 1,
-										}}
-										animate={{
-											height: isTop ? '7rem' : '0',
-											opacity: isTop ? 1 : 0,
-										}}
-										transition={{
-											type: 'keyframes',
-											duration: animationDuration / 2,
-										}}
-										style={{
-											display: 'flex',
-											justifyContent: 'center',
-											marginBottom: 2,
-											flexDirection: 'column',
-											userSelect: 'none',
-										}}
-									>
-										<Typography variant="h4" fontWeight={'200'}>
-											Jsi-li ovce, tak...
-										</Typography>
-										<Typography variant="h2" fontWeight={'bold'}>
-											Chval Otce
-										</Typography>
-									</motion.div>
+								<Grid item sm={6} xs={12} sx={{ pointerEvents: 'auto' }}>
+									<AnimatePresence>
+										{!phoneVersion && (
+											<motion.div
+												initial={{
+													height: '7rem',
+													opacity: isTop ? 1 : 0,
+												}}
+												animate={{
+													opacity: isTop ? 1 : 0,
+												}}
+												exit={{
+													opacity: 0,
+												}}
+												transition={{
+													type: 'keyframes',
+													duration: ANIMATION_DURATION / 2,
+												}}
+												style={{
+													display: 'flex',
+													justifyContent: 'center',
+													marginBottom: theme.spacing(1),
+													flexDirection: 'column',
+													userSelect: 'none',
+													pointerEvents: 'none',
+												}}
+											>
+												<Typography variant="h3" strong={200}>
+													Jsi-li ovce, tak...
+												</Typography>
+												<Typography variant="h1" strong={900} noWrap>
+													Chval Otce
+												</Typography>
+											</motion.div>
+										)}
+									</AnimatePresence>
 
-									<motion.div
-										style={{
-											background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-											boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
-											width: '100%',
-											borderRadius: '0.6rem',
-										}}
-										initial={{
-											padding: 2,
-										}}
-										animate={{
-											padding: isTop ? 2 : 0,
-										}}
-									>
-										<SearchContainer>
-											<SearchIcon />
-											<SearchInput
-												placeholder="Hledej..."
-												onChange={onSearchValueChange}
-												autoFocus
-												value={searchValue}
-											></SearchInput>
-										</SearchContainer>
-									</motion.div>
+									<MainSearchInput
+										gradientBorder={isTop && !phoneVersion}
+										value={searchInputValue}
+										onChange={onSearchValueChange}
+									/>
 								</Grid>
 							</Grid>
 						</Grid>
 					</ContainerGrid>
 				</motion.div>
-				<Box sx={{ height: 65 }}></Box>
+				<Box sx={{ height: phoneVersion ? 0 : 65 }}></Box>
 
 				<div ref={scrollPointRef}></div>
 
-				<Box sx={{ height: correctingOffsetForWindowHeight }}></Box>
+				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
 
-				<motion.div
+				<div
 					style={{
 						left: 0,
 						right: 0,
-						position: 'fixed',
+						position: 'absolute',
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						padding: theme.spacing(2),
-					}}
-					initial={{
-						top: '80%',
-						position: 'fixed',
-					}}
-					animate={{
-						top: isTop ? '80%' : 170,
-						position: isTop ? 'fixed' : 'absolute',
-					}}
-					transition={{
-						type: 'keyframes',
-						duration: animationDuration,
+						padding: 0,
+						top: !phoneVersion ? 'calc(100% - 275px)' : '66px',
+						// TODO: fix height jumping on one column preview
+						transform:
+							isTop || phoneVersion
+								? 'translateY(0)'
+								: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
+						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
-					{showSearchedList && <SearchedSongsList searchString={searchValue} />}
+					{SearchList}
 					<RecommendedSongsList />
-				</motion.div>
+				</div>
 			</Box>
 
-			<FloatingAddButton extended={!isTop} />
+			{!phoneVersion && <FloatingAddButton extended={!isTop} />}
 		</>
 	)
 }

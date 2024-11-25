@@ -1,5 +1,6 @@
+import { Box, Typography } from '@/common/ui'
 import { Card } from '@/common/ui/Card'
-import { Box, TextField, Typography } from '@mui/material'
+import { TextField } from '@/common/ui/mui'
 import Image from 'next/image'
 import { Gap } from '../../../../common/ui/Gap/Gap'
 import useAuth from '../../../../hooks/auth/useAuth'
@@ -12,11 +13,11 @@ export default function BasicInfo() {
 			<Card>
 				<Box display={'flex'} flexDirection={'row'}>
 					<Image
-						src={'/assets/account.webp'}
+						src={info.pictureUrl || '/assets/account.webp'}
 						alt="account"
 						width={70}
 						height={70}
-						style={{ opacity: 0.3 }}
+						style={{ opacity: info.pictureUrl ? 1 : 0.3 }}
 					/>
 					<Box
 						marginLeft={3}
@@ -43,18 +44,18 @@ export default function BasicInfo() {
 
 				<Box display={'flex'} flexDirection={'row'} gap={3}>
 					<Box>
-						<Typography variant="subtitle2">Křestní jméno</Typography>
+						<Typography>Křestní jméno</Typography>
 						<TextField size="small" fullWidth value={info.firstName} disabled />
 					</Box>
 					<Box>
-						<Typography variant="subtitle2">Příjmení</Typography>
+						<Typography>Příjmení</Typography>
 						<TextField size="small" fullWidth value={info.lastName} disabled />
 					</Box>
 				</Box>
 
 				<Gap />
 
-				<Typography variant="subtitle2">Email</Typography>
+				<Typography>Email</Typography>
 				<TextField size="small" fullWidth value={info.email} disabled />
 			</Card>
 		</>

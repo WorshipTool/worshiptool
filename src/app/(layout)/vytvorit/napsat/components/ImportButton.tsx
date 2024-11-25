@@ -1,5 +1,5 @@
+import { Button } from '@/common/ui'
 import { FileUpload } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
 import { useRef, useState } from 'react'
 import useImport from '../../../nahrat/hooks/useImport'
 
@@ -42,7 +42,7 @@ export default function ImportButton({ onLoad }: ImportButtonProps) {
 				type="file"
 				onChange={handleFileChange}
 			/>
-			<LoadingButton
+			<Button
 				variant="contained"
 				onClick={onClick}
 				loading={inProgress}
@@ -50,7 +50,7 @@ export default function ImportButton({ onLoad }: ImportButtonProps) {
 				startIcon={<FileUpload />}
 			>
 				Importovat
-			</LoadingButton>
+			</Button>
 		</>
 	)
 }

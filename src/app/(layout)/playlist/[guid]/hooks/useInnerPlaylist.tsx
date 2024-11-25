@@ -1,11 +1,15 @@
+'use client'
 import { VariantPackGuid } from '@/api/dtos'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import usePlaylist from '@/hooks/playlist/usePlaylist'
+import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
 import {
 	PlaylistGuid,
 	PlaylistItemDto,
 	PlaylistItemGuid,
 } from '@/interfaces/playlist/playlist.types'
-import { Chord } from '@pepavlin/sheet-api'
+import { Chord, Sheet } from '@pepavlin/sheet-api'
 import {
 	createContext,
 	useCallback,
@@ -14,7 +18,6 @@ import {
 	useMemo,
 	useState,
 } from 'react'
-import usePlaylist from '../../../../../hooks/playlist/usePlaylist'
 
 type Rt = ReturnType<typeof useProvideInnerPlaylist>
 export const innerPlaylistContext = createContext<Rt>({} as Rt)
@@ -55,19 +58,32 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		redo: _redo,
 		hasRedo,
 		hasUndo,
-	} = useStateWithHistory<PlaylistHistoryStateType>(
-		{} as PlaylistHistoryStateType
-	)
-
-	const playlist = usePlaylist(guid, (data) => {
-		setState({
-			title: data.title,
-			items: data.items.sort((a, b) => {
-				return a.order - b.order
-			}),
-		})
-		reset()
+	} = useStateWithHistory<PlaylistHistoryStateType>({
+		title: '',
+		items: [],
 	})
+
+	const current = useCurrentPlaylist()
+	const isCurrent = useMemo(
+		() => current.guid === guid && Boolean(guid),
+		[current.guid, guid]
+	)
+	const _playlist = usePlaylist(guid, undefined, isCurrent)
+	const playlist = isCurrent ? current : _playlist
+
+	const [hasInitialized, setHasInitialized] = useState(false)
+
+	useEffect(() => {
+		if (playlist.playlist && !playlist.loading && !hasInitialized) {
+			setState({
+				title: playlist.title || '',
+				items: playlist.items.sort((a, b) => a.order - b.order),
+			})
+			reset()
+			setHasInitialized(true)
+		}
+	}, [playlist, hasInitialized])
+
 	const canUserEdit = useMemo(() => playlist.isOwner, [playlist.isOwner])
 
 	const title = useMemo(() => state.title, [state.title])
@@ -104,7 +120,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		if (!canUserEdit) return
 
 		// Save name
-		if (playlist.title !== state.title) {
+		if (playlist.title !== state.title && state.title) {
 			await playlist.rename(state.title)
 		}
 
@@ -141,9 +157,64 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			await playlist.setItemsKeyChord(item, new Chord(item.toneKey))
 		}
 
+		// Check if title or sheetData has been changed
+		const changedItems = state.items.filter((i) => {
+			const oldItem = playlist.items.find((j) => j.guid === i.guid)
+			return (
+				oldItem?.variant.preferredTitle !== i.variant.preferredTitle ||
+				oldItem?.variant.sheetData !== i.variant.sheetData
+			)
+		})
+		for (const item of changedItems) {
+			// 1. Require item edit
+			await playlist.requireItemEdit(item.guid)
+
+			// 2. Then edit the item
+			await playlist.editItem(item.guid, {
+				title: item.variant.preferredTitle,
+				sheetData: item.variant.sheetData,
+			})
+		}
+
 		// reset()
 		setIsSaved(true)
 	}
+
+	// Shortcuts
+	useEffect(() => {
+		// Add CTRL+Z and CTRL+Y support for undo and redo
+		const handleKeyDown = (event: KeyboardEvent) => {
+			switch (event.key) {
+				case 'z':
+					if (event.ctrlKey || event.metaKey) {
+						event.preventDefault()
+						undo()
+					}
+					break
+				case 'y':
+					if (event.ctrlKey || event.metaKey) {
+						if (event.shiftKey) {
+							event.preventDefault()
+							undo()
+						} else {
+							event.preventDefault()
+							redo()
+						}
+					}
+					break
+
+				// Save with shortcut
+				case 's':
+					if (event.ctrlKey || event.metaKey) {
+						event.preventDefault()
+						save()
+					}
+					break
+			}
+		}
+		window.addEventListener('keydown', handleKeyDown)
+		return () => window.removeEventListener('keydown', handleKeyDown)
+	}, [redo, undo])
 
 	// Handle unsaved changes
 	useEffect(() => {
@@ -217,6 +288,29 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems(newItems)
 	}
 
+	const editItem = async (
+		itemGuid: PlaylistItemGuid,
+		data: EditPlaylistItemData
+	) => {
+		const item = state.items.find((i) => i.guid === itemGuid)
+		if (!item) return
+
+		const newItems = state.items.map((i) => {
+			if (i.guid !== itemGuid) return i
+
+			const newItem = { ...i }
+			newItem.variant = { ...i.variant }
+			if (data.title) newItem.variant.preferredTitle = data.title
+			if (data.sheetData) {
+				newItem.variant.sheetData = data.sheetData
+				newItem.variant.sheet = new Sheet(data.sheetData)
+			}
+
+			return newItem
+		})
+		setItems(newItems)
+	}
+
 	return {
 		items,
 		title,
@@ -237,5 +331,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItemKeyChord,
 		removeItem,
 		addItem,
+		editItem,
+		data: playlist.playlist,
 	}
 }

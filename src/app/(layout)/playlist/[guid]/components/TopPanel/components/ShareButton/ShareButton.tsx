@@ -1,6 +1,6 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { Button } from '@/common/ui/Button'
-import { getRouteUrlWithParams } from '@/routes'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import { Share } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'
@@ -21,11 +21,10 @@ export default function ShareButton() {
 				})
 				.then(() => {})
 				.catch(console.error)
-		} else {
-			navigator.clipboard.writeText(url)
-
-			enqueueSnackbar('Odkaz zkopírován do schránky', {})
 		}
+		navigator.clipboard.writeText(url)
+
+		enqueueSnackbar('Odkaz zkopírován do schránky', {})
 	}
 
 	return (

@@ -1,4 +1,5 @@
-import { Box, styled } from '@mui/material'
+import { Box } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
 import React from 'react'
 
 type PanelProps = {
@@ -8,6 +9,7 @@ type PanelProps = {
 const Container = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[200],
 	padding: theme.spacing(2),
+	borderColor: theme.palette.grey[400],
 	borderRight: `1px inset ${theme.palette.grey[400]}`,
 	borderBottom: `1px inset ${theme.palette.grey[400]}`,
 }))

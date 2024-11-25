@@ -1,5 +1,7 @@
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
-import { Box } from '@mui/material'
+import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import { Box } from '@/common/ui'
+import useAuth from '@/hooks/auth/useAuth'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
 import { SongDto, SongVariantDto } from '../../../../../api/dtos'
@@ -7,8 +9,8 @@ import SheetDisplay from '../../../../../common/components/SheetDisplay/SheetDis
 import { Gap } from '../../../../../common/ui/Gap'
 import { useRerender } from '../../../../../hooks/useRerender'
 import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel'
-import DeletedInfoPanel from './components/components/DeletedInfoPanel'
 import TopPanel from './components/TopPanel'
+import DeletedInfoPanel from './components/components/DeletedInfoPanel'
 
 export type SongPageProps = {
 	variant: SongVariantDto
@@ -25,6 +27,8 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 	}, [variant.preferredTitle])
 
 	const [showChords, setShowChords] = useState(true)
+
+	const { user } = useAuth()
 
 	const rerender = useRerender()
 
@@ -65,7 +69,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 
 	return (
 		<>
-			<Box>
+			<Box display={'flex'} flexDirection={'column'}>
 				<TopPanel
 					transpose={transpose}
 					variant={variant as SongVariantDto}
@@ -88,31 +92,60 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 						</>
 					) : (
 						currentSheet && (
-							<>
-								<Gap value={0.5} />
-								{currentSheet.getKeyChord() && (
-									<HideChordsButton
-										hiddenValue={!showChords}
-										onChange={(value) => setShowChords(!value)}
-									/>
-								)}
-								<Gap value={0.5} />
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								flexWrap={'wrap'}
+								justifyContent={'space-between'}
+							>
+								<Box flex={1}>
+									<Gap value={0.5} />
+									{currentSheet.getKeyChord() && (
+										<HideChordsButton
+											hiddenValue={!showChords}
+											onChange={(value) => setShowChords(!value)}
+										/>
+									)}
+									<Gap value={0.5} />
 
-								<SheetDisplay
-									sheet={currentSheet}
-									title={editedTitle}
-									hideChords={!showChords}
-									variant={'default'}
-									editMode={inEditMode}
-									onChange={(sheet, title) => {
-										setCurrentSheet(new Sheet(sheet))
-										setEditedTitle(title)
-									}}
-								/>
-							</>
+									<SheetDisplay
+										sheet={currentSheet}
+										title={editedTitle}
+										hideChords={!showChords}
+										variant={'default'}
+										editMode={inEditMode}
+										onChange={(sheet, title) => {
+											setCurrentSheet(new Sheet(sheet))
+											setEditedTitle(title)
+										}}
+									/>
+								</Box>
+								{!inEditMode && (
+									<Box>
+										{user && (
+											<>
+												<Gap />
+												<Box
+													sx={{
+														position: 'sticky',
+														top: 80,
+														// bottom: 160,
+														display: 'flex',
+														flexDirection: 'column',
+														alignItems: 'flex-end',
+													}}
+												>
+													<UserNotePanel />
+												</Box>
+											</>
+										)}
+									</Box>
+								)}
+							</Box>
 						)
 					)}
 				</>
+
 				{!inEditMode && variant && !variant.deleted && (
 					<>
 						<Gap value={2} />

@@ -1,5 +1,6 @@
 import { SongVariantDto } from '@/api/dtos'
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { MenuItem, Select, SelectChangeEvent } from '@/common/ui/mui'
+
 import React from 'react'
 
 interface ChangeVariantProps {

@@ -1,18 +1,21 @@
 'use client'
 
+import { Box } from '@/common/ui/Box'
+import SongCardAdditional from '@/common/ui/SongCard/components/SongCardAdditional'
+import { Typography } from '@/common/ui/Typography'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
-import { Box, Typography, styled, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { alpha, styled, useTheme } from '@mui/material'
+import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
 import { SongVariantDto } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
-import { parseVariantAlias } from '../../../routes'
-import CustomChip from '../CustomChip/CustomChip'
-import { Link } from '../Link/CustomLink'
+import { CustomChip } from '../CustomChip/CustomChip'
+import { Link } from '../Link/Link'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[100],
 
-	padding: '1rem',
 	borderRadius: '0.5rem',
 	'&:hover': {
 		backgroundColor: theme.palette.grey[200],
@@ -22,130 +25,231 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 		},
 	},
 	cursor: 'pointer',
-	borderWidth: 1.4,
-	borderStyle: 'solid',
+	outlineWidth: 1.4,
+	outlineStyle: 'solid',
 	position: 'relative',
 }))
 
-const StyledBox = styled(Box)(({ theme }) => ({
-	maxWidth: 'calc(100vw - 3rem)',
-	overflow: 'hidden',
-}))
+const SONG_CARD_PROPERTIES = [
+	'SHOW_PRIVATE_LABEL',
+	'SHOW_YOUR_PUBLIC_LABEL',
+	'SHOW_ADDED_BY_LOADER',
+] as const
+type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
-type PublicityMode = 'none' | 'private' | 'byyou' | 'privateandloader' | 'all'
+type ToLinkProps = (data: SongVariantDto) => {
+	to: ComponentProps<typeof Link>['to']
+	params: ComponentProps<typeof Link>['params']
+} | null
+
+type SongCardIconData = (data: SongVariantDto) => {
+	icon: JSX.Element
+}[]
 
 type SongCardProps = {
 	data: SongVariantDto
-	publicityMode?: PublicityMode
-	flexibleHeght?: boolean
+	flexibleHeight?: boolean
+	properties?: SongCardProperty[]
+	toLinkProps?: ToLinkProps
+	selected?: boolean
+	selectable?: boolean
+	onClick?: () => void
+	onSelect?: (selected: boolean) => void
+	onDeselect?: (selected: boolean) => void
+	icons?: SongCardIconData
 }
 export const SongCard = memo(function S({
 	data,
-	publicityMode,
-	flexibleHeght = true,
+	flexibleHeight: flexibleHeght = true,
+	...props
 }: SongCardProps) {
 	const { user } = useAuth()
 	const theme = useTheme()
 
+	const [isOver, setIsOver] = useState(false)
+
+	const [selected, setSelected] = useState<boolean>(props.selected || false)
+	useEffect(() => {
+		setSelected(props.selected || false)
+	}, [props.selected])
+
 	const createdByYou = user && data.createdBy === user.guid
 
+	// Generate object from array properties
+	const properties: Record<SongCardProperty, boolean> = useMemo(() => {
+		const result: Record<SongCardProperty, boolean> = {} as any
+		SONG_CARD_PROPERTIES.forEach((property) => {
+			result[property] = props.properties?.includes(property) ?? false
+		})
+		return result
+	}, [])
+
+	const createdByLoaderEnabled = properties.SHOW_ADDED_BY_LOADER
+	const privateLabelEnabled = properties.SHOW_PRIVATE_LABEL
+	const yourPublicLabelEnabled = properties.SHOW_YOUR_PUBLIC_LABEL
+
 	// What display
-	let showCreatedByLoader = data.createdByLoader
-	let showPrivate = !data.public && createdByYou
-	let showPublic = data.public && !createdByYou
-
-	switch (publicityMode) {
-		case 'private':
-			showPublic = false
-			showCreatedByLoader = false
-			break
-		case 'byyou':
-			showCreatedByLoader = false
-			break
-		case 'privateandloader':
-			showPublic = false
-			break
-		case 'all':
-			break
-		case 'none':
-			showPublic = false
-			showPrivate = false
-			showCreatedByLoader = false
-			break
-	}
-
-	const showBorder = showPrivate
+	const showPrivate = !data.public && createdByYou && privateLabelEnabled
+	const showYourPublic = data.public && createdByYou && yourPublicLabelEnabled
 
 	// Title and sheet data to display
 	const title = data.preferredTitle
 	const dataLines = data.sheet.getSections()[0]?.text?.split('\n').slice(0, 4)
 
+	const linkProps = useMemo(() => {
+		if (props.toLinkProps) {
+			return props.toLinkProps(data)
+		}
+		return null
+	}, [data])
+
+	const onClick = () => {
+		props.onClick?.()
+
+		if (props.selectable) {
+			const newValue = !selected
+			setSelected(newValue)
+
+			if (newValue) {
+				props.onSelect?.(newValue)
+			} else {
+				props.onDeselect?.(newValue)
+			}
+		}
+	}
+
+	const draggable = useMemo(() => {
+		return !props.selectable
+	}, [props.selectable])
+
 	return (
-		<Link
-			to={'variant'}
-			params={{
-				...parseVariantAlias(data.packAlias),
+		<DraggableSong
+			data={{
+				packGuid: data.packGuid,
+				alias: data.packAlias,
+				title: title,
 			}}
+			draggable={draggable}
 		>
-			<StyledContainer
-				sx={{
-					borderColor: showBorder ? theme.palette.grey[300] : 'transparent',
-					height: flexibleHeght ? 'auto' : '11rem',
-					overflowY: 'hidden',
-				}}
+			<Link
+				to={linkProps?.to || 'variant'}
+				params={
+					linkProps?.params || {
+						...parseVariantAlias(data.packAlias),
+					}
+				}
+				disabled={(props.toLinkProps && !linkProps) || props.selectable}
 			>
-				<Box display={'flex'} flexDirection={'row'} gap={1}>
-					<Typography fontWeight={'bold'} flex={1}>
-						{title}
-					</Typography>
-					<Box>
-						{(showPrivate || showPublic) && (
-							<CustomChip
-								icon={showPrivate ? <Lock /> : <Public />}
-								label={showPrivate ? 'Soukromé' : 'Vytvořeno vámi'}
-								color={
-									showPrivate
-										? theme.palette.grey[600]
-										: theme.palette.primary.main
-								}
-								borderColor={
-									showPrivate
-										? theme.palette.grey[400]
-										: theme.palette.primary.main
-								}
-							/>
-						)}
-						{showCreatedByLoader && (
-							<Typography variant="caption">Nahráno programem</Typography>
-						)}
-					</Box>
-				</Box>
-
-				<StyledBox>
-					{dataLines.map((line, index) => {
-						return (
-							<Box display={'flex'} flexDirection={'row'} key={line + index}>
-								<Typography noWrap key={'SearchItemText' + index} flex={1}>
-									{line}
-								</Typography>
-							</Box>
-						)
-					})}
-				</StyledBox>
-
-				<Box
-					className="songcardgradient"
+				<StyledContainer
 					sx={{
-						background: `linear-gradient(0deg, ${theme.palette.grey[100]} 50%, transparent)`,
+						outlineColor: showPrivate ? theme.palette.grey[300] : 'transparent',
 
-						position: 'absolute',
-						bottom: 0,
-						left: 0,
-						right: 0,
-						height: '1rem',
+						height: flexibleHeght ? 'auto' : '11rem',
+						overflowY: 'hidden',
+
+						...(selected && {
+							outlineColor: 'primary.main',
+							outlineWidth: 2,
+							outlineStyle: 'solid',
+						}),
+						userSelect: 'none',
 					}}
-				/>
-			</StyledContainer>
-		</Link>
+					onClick={onClick}
+					onMouseEnter={() => setIsOver(true)}
+					onMouseLeave={() => setIsOver(false)}
+				>
+					<Box
+						sx={{
+							position: 'relative',
+							padding: '1rem',
+							...(selected && {
+								borderColor: 'primary.main',
+								borderWidth: 2,
+								bgcolor: alpha(theme.palette.primary.main, 0.1),
+
+								'&:hover': {
+									bgcolor: alpha(theme.palette.primary.main, 0.2),
+								},
+							}),
+							height: 'calc(100% - 2rem)',
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<Box display={'flex'} flexDirection={'row'} gap={1}>
+							<Typography
+								strong
+								sx={{
+									flex: 1,
+								}}
+							>
+								{title}
+							</Typography>
+							<Box>
+								{(showPrivate || showYourPublic) && (
+									<CustomChip
+										icon={showPrivate ? <Lock /> : <Public />}
+										label={showPrivate ? 'Soukromé' : 'Vytvořeno vámi'}
+										color={
+											showPrivate
+												? theme.palette.grey[600]
+												: theme.palette.primary.main
+										}
+										borderColor={
+											showPrivate
+												? theme.palette.grey[400]
+												: theme.palette.primary.main
+										}
+									/>
+								)}
+								{createdByLoaderEnabled && data.createdByLoader && (
+									<Typography size={'small'}>Nahráno programem</Typography>
+								)}
+							</Box>
+						</Box>
+
+						<Box
+							sx={{
+								maxWidth: 'calc(100vw - 3rem)',
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								flex: 1,
+							}}
+						>
+							<Box
+								sx={{
+									overflow: 'hidden',
+								}}
+							>
+								{dataLines.map((line, index) => {
+									return (
+										<Box
+											display={'flex'}
+											flexDirection={'row'}
+											key={line + index}
+										>
+											<Typography
+												key={'SearchItemText' + index}
+												sx={{
+													flex: 1,
+												}}
+											>
+												{line}
+											</Typography>
+										</Box>
+									)
+								})}
+							</Box>
+							<SongCardAdditional 
+								isOver={isOver}
+								data={data}
+								icons={props.icons}
+							/>
+						</Box>
+					</Box>
+				</StyledContainer>
+			</Link>
+		</DraggableSong>
 	)
 })

@@ -1,6 +1,6 @@
+import { Box, Button, Typography } from '@/common/ui'
+import { TextField } from '@/common/ui/mui'
 import { Groups } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, Button, TextField, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { Card } from '../../../../../../../common/ui/Card/Card'
@@ -81,15 +81,11 @@ export default function CreateGroupPanel() {
 
 	return (
 		<Card title="Vytvoř novou skupinu" icon={<Groups />}>
-			<Typography variant="body2">
-				Vyplň základní informace a vytvoř novou skupinu.
-			</Typography>
+			<Typography>Vyplň základní informace a vytvoř novou skupinu.</Typography>
 			<Gap />
 			{error && (
 				<>
-					<Typography variant="body2" color="error">
-						{error}
-					</Typography>
+					<Typography color="error">{error}</Typography>
 					<Gap />
 				</>
 			)}
@@ -117,9 +113,9 @@ export default function CreateGroupPanel() {
 					onChange={(e) => setCode(e.target.value)}
 					disabled={loading}
 				/>
-				<LoadingButton variant="contained" onClick={onClick} loading={loading}>
+				<Button variant="contained" onClick={onClick} loading={loading}>
 					Vytvořit skupinu
-				</LoadingButton>
+				</Button>
 			</Box>
 		</Card>
 	)

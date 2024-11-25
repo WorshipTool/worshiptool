@@ -1,68 +1,175 @@
 'use client'
-import { Box, Button, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import CreateNewMySongButton from '@/app/(layout)/ucet/pisne/components/CreateNewMySongButton'
+import MySongItem from '@/app/(layout)/ucet/pisne/components/MySongItem'
+import MySongListOrderSelect, {
+	MySongsOrderOptions,
+} from '@/app/(layout)/ucet/pisne/components/MySongListOrderSelect'
+import MySongsFilterPanel, {
+	MySongFilterOption,
+} from '@/app/(layout)/ucet/pisne/components/MySongsFilterPanel'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import Pager from '@/common/components/Pager/Pager'
+import { Box, LinearProgress } from '@/common/ui'
+import { Typography } from '@/common/ui/Typography'
+import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import { useApiStateEffect } from '@/tech/ApiState'
+import { useMemo, useState } from 'react'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '../../../../api/dtos'
 import { useApi } from '../../../../hooks/api/useApi'
-import useAuth from '../../../../hooks/auth/useAuth'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { handleApiCall } from '../../../../tech/handleApiCall'
-import MySongItem from './components/MySongItem'
-import Loading from './loading'
 
-export default async function MySongsList() {
-	const { isLoggedIn } = useAuth()
+export default SmartPage(MySongsList, ['middleWidth'])
+
+function MySongsList() {
 	const { songGettingApi } = useApi()
-	const navigate = useSmartNavigate()
 
-	const [init, setInit] = useState(false)
-	useEffect(() => {
-		setInit(true)
-	}, [])
+	const [sortOption, setSortOption] = useUrlState<MySongsOrderOptions>(
+		'sortKey',
+		'updatedAt'
+	)
 
-	if (!init) return <Loading />
+	const [{ data: allVariants, loading }, reload] = useApiStateEffect(
+		async () => {
+			const result = await handleApiCall(
+				songGettingApi.songGettingControllerGetSongListOfUser()
+			)
+			const variants = result.variants.map((variant) => {
+				return mapSongVariantDataOutDtoToSongVariantDto(variant)
+			})
+			return variants
+		}
+	)
 
-	if (!isLoggedIn())
-		return <Typography> Pro zobrazení písní je třeba být přihlášen</Typography>
+	const [filters, setFilters] = useState<MySongFilterOption[]>([])
+
+	const filteredVariants = useMemo(() => {
+		return allVariants?.filter((variant) => {
+			return filters.length > 0
+				? filters.some((filter) => {
+						if (filter === 'public') {
+							return variant.public
+						}
+						if (filter === 'private') {
+							return !variant.public
+						}
+						return false
+				  })
+				: true
+		})
+	}, [allVariants, filters])
+
+	const variants = useMemo(() => {
+		const arr =
+			(sortOption === 'updatedAt'
+				? filteredVariants?.sort((a, b) => {
+						return (
+							new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+						)
+				  })
+				: sortOption === 'createdAt'
+				? filteredVariants?.sort((a, b) => {
+						return (
+							new Date(b.packCreatedAt).getTime() -
+							new Date(a.packCreatedAt).getTime()
+						)
+				  })
+				: sortOption === 'title'
+				? filteredVariants?.sort((a, b) => {
+						return a.preferredTitle.localeCompare(b.preferredTitle)
+				  })
+				: filteredVariants) || []
+
+		return [...arr]
+	}, [filteredVariants, sortOption])
 
 	try {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerGetSongListOfUser()
-		)
-		const variants = result.variants.map((variant) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(variant)
-		})
-
 		return (
-			<Box>
-				{variants.map((variant, index) => {
-					return (
-						<MySongItem
-							variant={variant}
-							index={index}
-							key={`mysong${variant.guid}`}
-						></MySongItem>
-					)
-				})}
+			<Box paddingTop={7} display={'flex'} flexDirection={'column'} gap={3}>
+				<Box display={'flex'} flexDirection={'column'} gap={2}>
+					<Box display={'flex'} gap={2} alignItems={'end'} flexWrap={'wrap'}>
+						<Typography variant="h4" strong={600}>
+							Moje písně
+						</Typography>
 
-				{variants.length == 0 && (
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							gap: 2,
-						}}
-					>
-						<Typography>Nemáš žádné vytvořené písně.</Typography>
-						<Button
-							onClick={() => {
-								navigate('addMenu', {})
-							}}
-							variant="contained"
-						>
-							Vytvořit
-						</Button>
+						{!loading && (
+							<Typography thin color="grey.500">
+								Celkem {variants?.length} písní
+							</Typography>
+						)}
+
+						<MySongListOrderSelect
+							onChange={setSortOption}
+							startValue={sortOption || undefined}
+						/>
+
+						{filters.length === 0 && (
+							<MySongsFilterPanel
+								addedFilters={filters}
+								onChange={setFilters}
+							/>
+						)}
+
+						<Box flex={1} />
+
+						<CreateNewMySongButton />
 					</Box>
+					{filters.length > 0 && (
+						<MySongsFilterPanel addedFilters={filters} onChange={setFilters} />
+					)}
+				</Box>
+
+				{loading ? (
+					<>
+						<LinearProgress />
+					</>
+				) : (
+					<>
+						{variants.length == 0 ? (
+							<>
+								<Box
+									display={'flex'}
+									justifyContent={'center'}
+									alignItems={'center'}
+									flexDirection={'column'}
+									gap={4}
+									paddingTop={2}
+								>
+									<Typography italic>
+										Nemáš žádné vytvořené písně{' '}
+										{filters.length > 0 ? '(s těmito filtery)' : ''}...{' '}
+										{filters.length === 0
+											? 'Pro vytvoření klikni na modré tlačítko.'
+											: ''}
+									</Typography>
+									{/* <IconButton to="addMenu">
+										<Add />
+									</IconButton> */}
+								</Box>
+							</>
+						) : (
+							<>
+								<Pager data={variants || []} take={5}>
+									{(variants, loading, startIndex) => {
+										return (
+											<Box display={'flex'} flexDirection={'column'} gap={1}>
+												{variants.map((variant, index) => {
+													return (
+														<MySongItem
+															variant={variant}
+															index={index + startIndex}
+															key={`mysong${variant.guid}`}
+															sortKey={sortOption as MySongsOrderOptions}
+															onDelete={reload}
+														/>
+													)
+												})}
+											</Box>
+										)
+									}}
+								</Pager>
+							</>
+						)}
+					</>
 				)}
 			</Box>
 		)

@@ -1,9 +1,15 @@
-import { AppContainer } from '../components/AppContainer'
+import { AppContainer } from '@/app/components/AppContainer'
+import { Background } from '@/common'
 
 export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode
 }>) {
-	return <AppContainer>{children}</AppContainer>
+	return (
+		<>
+			<Background />
+			<AppContainer>{children}</AppContainer>
+		</>
+	)
 }

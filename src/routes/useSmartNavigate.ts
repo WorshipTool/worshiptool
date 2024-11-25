@@ -1,11 +1,13 @@
 // import { useNavigate } from "react-router-dom";
+import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { NavigateOptions as NO } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { getReplacedUrlWithParams, routesPaths } from './routes'
+import { RouteLiteral } from 'nextjs-routes'
+import { routesPaths } from './routes'
 import { RoutesKeys, SmartAllParams } from './routes.types'
 
 type NavigateOptions = NO & {
-	replace: boolean
+	replace?: boolean
 }
 //TODO: use replace
 
@@ -18,14 +20,19 @@ export const useSmartNavigate = () => {
 					url: string
 			  },
 		params: SmartAllParams<T>,
-		options?: NavigateOptions
+		options: NavigateOptions = {}
 	) => {
 		const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
-		const urlWithParams = params
-			? getReplacedUrlWithParams(toUrl, params)
-			: toUrl
+		const urlWithParams =
+			Object.keys(params).length > 0
+				? getReplacedUrlWithParams(toUrl, params)
+				: toUrl
 
-		router.push(urlWithParams)
+		if (options.replace) {
+			router.replace(urlWithParams as RouteLiteral)
+		} else {
+			router.push(urlWithParams as RouteLiteral)
+		}
 	}
 
 	return navigate

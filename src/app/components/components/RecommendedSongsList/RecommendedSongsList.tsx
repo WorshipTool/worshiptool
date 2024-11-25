@@ -1,13 +1,15 @@
 'use client'
-import { Box, Grid, Typography, styled, useTheme } from '@mui/material'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
+import { Grid } from '@/common/ui/mui/Grid'
 import { useEffect, useState } from 'react'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import SongListCards, {
 	SongListCardsProps,
 } from '../../../../common/components/songLists/SongListCards/SongListCards'
 import { Button } from '../../../../common/ui/Button'
-import useRecommendedSongs from './hooks/useRecommendedSongs'
 import SongCardSkeleton from './SongCardSkeleton'
+import useRecommendedSongs from './hooks/useRecommendedSongs'
 
 const GridContainer = styled(Grid)(({ theme }) => ({
 	padding: 10,
@@ -36,7 +38,7 @@ export default function RecommendedSongsList({
 				width: '100%',
 			}}
 		>
-			{<Typography fontWeight={'bold'}>Nějaký nápad:</Typography>}
+			{<Typography strong>Nějaký nápad:</Typography>}
 
 			{isError && (
 				<>
@@ -65,16 +67,20 @@ export default function RecommendedSongsList({
 						))}
 					</Grid>
 				) : null}
-				<SongListCards data={data.slice(0, 4)} variant={listType} />
+				<SongListCards
+					data={data.slice(0, 4)}
+					variant={listType}
+					properties={['SHOW_ADDED_BY_LOADER']}
+				/>
 			</GridContainer>
 
 			{init && (
 				<Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
-					<Typography variant="subtitle2">Nebo si vyberte ze </Typography>
+					<Typography>Nebo si vyberte ze </Typography>
 					<Button size="small" variant="text" to="songsList">
 						Seznamu
 					</Button>
-					<Typography variant="subtitle2">všech písní ve zpěvníku</Typography>
+					<Typography>všech písní ve zpěvníku</Typography>
 				</Box>
 			)}
 		</ContainerGrid>

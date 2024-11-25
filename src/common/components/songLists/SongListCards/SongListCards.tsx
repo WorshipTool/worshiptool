@@ -1,13 +1,22 @@
 'use client'
-import { Masonry } from '@mui/lab'
-import { useTheme } from '@mui/material'
+import { Masonry } from '@/common/ui/Masonry'
+import { Grid } from '@/common/ui/mui/Grid'
 import { ResponsiveStyleValue } from '@mui/system'
-import { useMemo } from 'react'
+import { ComponentProps, memo, useCallback, useMemo } from 'react'
 import { SongVariantDto } from '../../../../api/dtos'
 import { SongCard } from '../../../ui/SongCard'
 
 type CommmonProps = {
 	data: SongVariantDto[]
+	properties?: ComponentProps<typeof SongCard>['properties']
+	cardToLinkProps?: ComponentProps<typeof SongCard>['toLinkProps']
+	onCardClick?: (data: SongVariantDto) => void
+
+	// Selecting
+	onCardSelect?: (data: SongVariantDto) => void
+	onCardDeselect?: (data: SongVariantDto) => void
+	selectable?: boolean
+	cardIcons?: ComponentProps<typeof SongCard>['icons']
 }
 
 type ListProps = CommmonProps & {
@@ -26,15 +35,23 @@ type RowProps = CommmonProps & {
 
 export type SongListCardsProps = ListProps | MasonryGridProps | RowProps
 
-export default function SongListCards(props: SongListCardsProps) {
-	const theme = useTheme()
+export const SongListCard = memo(function SongListCards({
+	data: _data,
+	...props
+}: SongListCardsProps) {
+	// unique
+	const data = _data
+		.filter((v) => v !== undefined)
+		.filter((v, i, a) => a.findIndex((t) => t.guid === v.guid) === i)
+
 	const spacing = 1
 
-	let columns: ResponsiveStyleValue<string | number> = useMemo(() => {
-		switch (props.variant) {
+	const variant = props.variant
+
+	let columns: ResponsiveStyleValue<number> = useMemo(() => {
+		switch (variant) {
 			case 'list':
 				return 1
-				break
 			case undefined:
 			case 'masonrygrid':
 			case 'row':
@@ -42,31 +59,67 @@ export default function SongListCards(props: SongListCardsProps) {
 					xs: 1,
 					md: 2,
 					lg: 4,
+					xl: 5,
 				}
 		}
 	}, [props])
 
-	return props.data.length === 0 ? (
+	const CommonCard = useCallback(
+		({
+			v,
+			flexibleHeight = true,
+		}: {
+			v: SongVariantDto
+			flexibleHeight?: boolean
+		}) => {
+			return (
+				<SongCard
+					data={v}
+					key={v.guid}
+					flexibleHeight={flexibleHeight}
+					toLinkProps={props.cardToLinkProps}
+					properties={props.properties}
+					onClick={() => {
+						props.onCardClick && props.onCardClick(v)
+					}}
+					selectable={props.selectable}
+					onSelect={() => {
+						props.onCardSelect && props.onCardSelect(v)
+					}}
+					onDeselect={() => {
+						props.onCardDeselect && props.onCardDeselect(v)
+					}}
+					icons={props.cardIcons}
+				/>
+			)
+		},
+		[props]
+	)
+
+	return data.length === 0 ? (
 		<></>
+	) : variant === 'row' ? (
+		<Grid container columns={{ xs: 1, md: 2, lg: 4, xl: 5 }} spacing={spacing}>
+			{data.map((v) => {
+				return (
+					<Grid item key={v.guid} xs={1}>
+						<CommonCard v={v} flexibleHeight={false} />
+					</Grid>
+				)
+			})}
+		</Grid>
 	) : (
 		<Masonry
 			columns={columns}
 			sx={{
-				marginLeft: -(spacing / 2),
-				width: `calc(100% + ${theme.spacing(spacing)})`,
+				width: `100%`,
 			}}
 			spacing={spacing}
 		>
-			{props.data.map((v) => {
-				return (
-					<SongCard
-						data={v}
-						key={v.guid}
-						publicityMode="privateandloader"
-						flexibleHeght={props.variant !== 'row'}
-					/>
-				)
+			{data.map((v) => {
+				return <CommonCard v={v} key={v.guid} />
 			})}
 		</Masonry>
 	)
-}
+})
+export default SongListCard

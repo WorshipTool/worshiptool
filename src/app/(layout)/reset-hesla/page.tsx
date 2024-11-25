@@ -1,17 +1,20 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Card } from '@/common/ui/Card/Card'
 import { Gap } from '@/common/ui/Gap'
-import TextField from '@/common/ui/TextField/TextField'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import useAuth from '@/hooks/auth/useAuth'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import './styles.css'
 
-export default function Page() {
+export default SmartPage(Page)
+
+function Page() {
 	const [email, setEmail] = useState('')
 
 	const [error, setError] = useState('')

@@ -1,231 +1,154 @@
 'use client'
+import CreateNewPlaylistButton from '@/app/(layout)/ucet/playlisty/components/CreateNewPlaylistButton'
+import PlaylistItemRow from '@/app/(layout)/ucet/playlisty/components/PlaylistItemRow'
+import PlaylistsOrderSelect, {
+	PlaylistOrderOptions,
+} from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import Pager from '@/common/components/Pager/Pager'
+import { Box, LinearProgress } from '@/common/ui'
+import { Gap } from '@/common/ui/Gap'
+import { Typography } from '@/common/ui/Typography'
+import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
+import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { Add, Remove } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import {
-	Box,
-	Button,
-	Chip,
-	CircularProgress,
-	IconButton,
-	Paper,
-	Typography,
-	styled,
-} from '@mui/material'
-import { useEffect, useState } from 'react'
-import Dialog from '../../../../common/ui/Dialog/Dialog'
-import { Gap } from '../../../../common/ui/Gap'
-import useCurrentPlaylist from '../../../../hooks/playlist/useCurrentPlaylist'
-import usePlaylistsGeneral from '../../../../hooks/playlist/usePlaylistsGeneral'
-import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
-import { useApiStateEffect } from '../../../../tech/ApiState'
+import { useMemo, useState } from 'react'
 
-const StyledContainer = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.grey[100],
+export default SmartPage(Playlists, ['middleWidth'])
 
-	padding: '0.5rem',
-	'&:hover': {
-		backgroundColor: theme.palette.grey[200],
-	},
-	cursor: 'pointer',
-}))
+function Playlists() {
+	const { playlists: allPlaylists, loading } = useUsersPlaylists()
+	const [sortType, setSortType] = useUrlState('sortKey', 'updatedAt')
 
-export default function Playlists() {
-	const {
-		getPlaylistsOfUser,
-		createPlaylist: createWithoutName,
-		deletePlaylist: deleteByGuid,
-	} = usePlaylistsGeneral()
-	const [loaded, setLoaded] = useState(false)
-	const navigate = useSmartNavigate()
+	const playlists = useMemo(() => {
+		const arr =
+			(sortType === 'updatedAt'
+				? allPlaylists?.sort((a, b) => {
+						return (
+							new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+						)
+				  })
+				: sortType === 'createdAt'
+				? allPlaylists?.sort((a, b) => {
+						return (
+							new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+						)
+				  })
+				: sortType === 'openedAt'
+				? allPlaylists?.sort((a, b) => {
+						if (a.openedAt === null && b.openedAt === null) {
+							return a.title.localeCompare(b.title)
+						}
+						if (a.openedAt === null) {
+							return 1
+						}
+						if (b.openedAt === null) {
+							return -1
+						}
+						return (
+							new Date(b.openedAt).getTime() - new Date(a.openedAt).getTime()
+						)
+				  })
+				: sortType === 'title'
+				? allPlaylists?.sort((a, b) => {
+						return a.title.localeCompare(b.title)
+				  })
+				: allPlaylists) || []
 
-	const [createLoading, setCreateLoading] = useState(false)
+		return [...arr]
+	}, [allPlaylists, sortType])
 
-	const [{ data: playlists, loading, error }, reload] =
-		useApiStateEffect(() => {
-			return getPlaylistsOfUser().then((r) => {
-				return r.playlists
-			})
-		}, [])
-
-	const [openDialog, setOpenDialog] = useState(false)
-	const [deletingTitle, setDeletingTitle] = useState('')
-	const [deletingGuid, setDeletingGuid] = useState<PlaylistGuid | null>()
-
-	useEffect(() => {
-		if (loaded) return
-		if (!loading) setLoaded(true)
-	}, [loading])
-
-	const { guid: playlistGuid, turnOn, turnOff } = useCurrentPlaylist()
-
-	const onCreateClick = () => {
-		setCreateLoading(true)
-		createPlaylist()
-	}
-
-	const createPlaylist = async () => {
-		try {
-			const result = await createWithoutName()
-			navigate('playlist', {
-				guid: result,
-			})
-			turnOn(result)
-		} catch (e: any) {
-			console.log('Something went wrong:', e.message)
-			setCreateLoading(false)
-		}
-	}
-
-	const askToDeletePlaylist = async (guid: PlaylistGuid, title: string) => {
-		setDeletingTitle(title)
-		setDeletingGuid(guid)
-		setOpenDialog(true)
-	}
-	const deletePlaylist = async (guid: PlaylistGuid) => {
-		if (playlistGuid === guid) turnOff()
-		deleteByGuid(guid)
-			.then((result) => {
-				reload()
-			})
-			.catch((e: any) => {
-				console.log('Something went wrong:', e.message)
-			})
-	}
-
-	const openPlaylist = (guid: PlaylistGuid) => {
-		navigate('playlist', {
-			guid,
-		})
-	}
-	const { isOn, guid: currentPlaylistGuid } = useCurrentPlaylist()
-
-	const ListPlaylistItem = ({
-		name,
-		guid,
-	}: {
-		name: string
-		guid: PlaylistGuid
-	}) => {
-		return (
-			<StyledContainer
-				sx={{
-					padding: 0,
-					marginBottom: 1,
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-				}}
-			>
-				<Button onClick={() => openPlaylist(guid)} fullWidth color="warning">
-					{name}
-				</Button>
-				<IconButton>
-					<Remove onClick={() => askToDeletePlaylist(guid, name)} />
-				</IconButton>
-				<Box position={'absolute'} marginLeft={1}>
-					{isOn && currentPlaylistGuid == guid ? (
-						<Chip label={'Aktivní'} size="small" color="secondary" />
-					) : (
-						<></>
-					)}
-				</Box>
-			</StyledContainer>
-		)
-	}
+	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistGuid | null>(
+		null
+	)
 
 	return (
-		<Box display={'flex'} justifyContent={'center'} padding={1}>
-			<Box sx={{ maxWidth: 500, marginTop: 7 }} flex={1}>
-				{error ? (
-					<>
-						<Typography>Při načítání nastala chyba.</Typography>
-						<Typography>{error.message}</Typography>
-					</>
-				) : (
-					<></>
-				)}
-				<Box display={'flex'} marginBottom={3}>
-					<Typography variant="h5" fontWeight={600} flex={1}>
-						Moje playlisty:
+		<Box>
+			<Box sx={{ marginTop: 7 }} flex={1}>
+				<Box
+					display={'flex'}
+					alignItems={'end'}
+					justifyContent={'space-between'}
+					gap={2}
+				>
+					<Typography variant="h4" strong>
+						Moje playlisty
 					</Typography>
 
-					<LoadingButton
-						loading={createLoading}
-						loadingPosition="start"
-						startIcon={<Add />}
-						variant="contained"
-						onClick={onCreateClick}
-					>
-						Vytvořit
-					</LoadingButton>
+					{!loading && (
+						<Typography color={'grey.500'} thin>
+							{playlists?.length} celkem
+						</Typography>
+					)}
+					<PlaylistsOrderSelect
+						onChange={setSortType}
+						startValue={sortType as PlaylistOrderOptions}
+					/>
+					<Box flex={1} />
+					<Box display={'flex'} gap={1}>
+						<CreateNewPlaylistButton />
+						{/* <PlaylistsMoreButton /> */}
+					</Box>
 				</Box>
-				{!loaded ? (
+				<Gap value={3} />
+				{loading ? (
 					<Box
 						sx={{
 							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
+							flexDirection: 'column',
+							// justifyContent: 'center',
+							// alignItems: 'center',
 							flex: 1,
 							color: 'black',
 						}}
 					>
-						<Typography>Načítání playlistů...</Typography>
-						<Gap horizontal />
-						<CircularProgress size={'2rem'} color="inherit" />
+						<Box display={'flex'} justifyContent={'center'}>
+							<Typography>Načítání playlistů...</Typography>
+						</Box>
+						<Gap />
+						<LinearProgress />
 					</Box>
 				) : (
-					<>
-						{playlists?.map((p) => {
-							return (
-								<ListPlaylistItem
-									name={p.title}
-									guid={p.guid as PlaylistGuid}
-									key={p.guid}
-								/>
-							)
-						})}
-
-						{playlists?.length == 0 && (
+					<Box display={'flex'} flexDirection={'column'} gap={1}>
+						{!playlists || playlists.length == 0 ? (
+							<Box
+								display={'flex'}
+								flexDirection={'column'}
+								alignItems={'center'}
+							>
+								<Typography italic>
+									Nemáš žádný vytvořený playlist... Pro vytvoření klikni na
+									modré tlačítko
+								</Typography>
+							</Box>
+						) : (
 							<>
-								<Typography>Nemáš žádný vytvořený playlist.</Typography>
+								<Pager data={playlists || []}>
+									{(playlists) => {
+										return (
+											<Box display={'flex'} flexDirection={'column'} gap={1}>
+												{playlists.map((p) => {
+													return (
+														<PlaylistItemRow
+															data={p}
+															key={p.guid}
+															onSelect={() => {
+																setSelectedPlaylist(p.guid as PlaylistGuid)
+															}}
+															sortKey={sortType as PlaylistOrderOptions}
+															selected={p.guid === selectedPlaylist}
+														/>
+													)
+												})}
+											</Box>
+										)
+									}}
+								</Pager>
 							</>
 						)}
-					</>
+					</Box>
 				)}
 			</Box>
-			<Dialog
-				open={openDialog}
-				title="Opravdu chcete odstranit playlist?"
-				buttons={
-					<>
-						<Button
-							onClick={() => setOpenDialog(false)}
-							variant="outlined"
-							// size="small"
-						>
-							Zrušit
-						</Button>
-						<Button
-							onClick={() => {
-								if (deletingGuid) deletePlaylist(deletingGuid)
-								setOpenDialog(false)
-							}}
-							color="error"
-							variant="contained"
-							// size="small"
-						>
-							Smazat
-						</Button>
-					</>
-				}
-			>
-				<Typography>
-					Chcete opravdu smazat playlist <strong>{deletingTitle}</strong>? Tato
-					akce je nevratná.
-				</Typography>
-			</Dialog>
 		</Box>
 	)
 }

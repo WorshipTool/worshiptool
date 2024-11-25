@@ -1,5 +1,5 @@
+import { Box, IconButton, Tooltip, Typography, useTheme } from '@/common/ui'
 import { Public, PublicOff } from '@mui/icons-material'
-import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material'
 
 export type VisibilityLabelProps = {
 	public: boolean

@@ -1,8 +1,13 @@
 import AppProviders from '@/app/components/AppProviders'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
+import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
+import PopupProvider from '@/common/components/Popup/PopupProvider'
+import AdminOptionsProvider from '@/common/components/admin/AdminOptions'
 import type { Metadata } from 'next'
+import './globals.classes.css'
 import './globals.css'
+import './typography.globals.css'
 
 export const metadata: Metadata = {
 	title: 'Chvalotce.cz',
@@ -32,7 +37,12 @@ export default function RootLayout({
 		<html lang="en">
 			<GoogleAnalytics />
 			<body>
-				<AppProviders>{children}</AppProviders>
+				<AppProviders>
+					{children}
+					<PopupProvider />
+					<DragTemplatesContainer />
+					<AdminOptionsProvider />
+				</AppProviders>
 				<UnavailableMessage />
 			</body>
 		</html>

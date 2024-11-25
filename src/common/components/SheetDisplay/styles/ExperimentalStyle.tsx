@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Typography } from '@/common/ui'
 import { SheetStyleComponentType } from './config'
 
 const ExperimentalStyle: SheetStyleComponentType = (props) => {

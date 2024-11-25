@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { Metadata } from 'next'
 import {
 	getVariantAliasFromParams,
@@ -7,8 +7,8 @@ import {
 import { mapSongDataVariantApiToSongVariantDto } from '../../../../../../../api/dtos'
 import SheetDisplay from '../../../../../../../common/components/SheetDisplay/SheetDisplay'
 import { MetadataProps } from '../../../../../../../common/types'
-import { generateMetadataTitle } from '../../../../../../../hooks/window-title/tech'
 import { SmartParams, SmartSearchParams } from '../../../../../../../routes'
+import { generateSmartMetadata } from '../../../../../../../tech/metadata/metadata'
 import NotFound from '../../../../../../not-found'
 
 type PageProps = {
@@ -16,15 +16,14 @@ type PageProps = {
 	searchParams: SmartSearchParams<'variantPrint'>
 }
 
-export const generateMetadata = async ({
-	params,
-}: MetadataProps<'variantPrint'>): Promise<Metadata> => {
-	const title = await generateMetadataTitle('Tisk', 'variantPrint', params)
-
-	return {
-		title,
+export const generateMetadata = generateSmartMetadata(
+	'variantPrint',
+	async ({ params }: MetadataProps<'variantPrint'>): Promise<Metadata> => {
+		return {
+			title: 'Tisk',
+		}
 	}
-}
+)
 
 export default async function page({ params, searchParams }: PageProps) {
 	try {
@@ -55,7 +54,7 @@ export default async function page({ params, searchParams }: PageProps) {
 					sheet={sheet}
 					variant="printCompact"
 					columns={2}
-					hideChords={searchParams.hideChords === 'true'}
+					hideChords={searchParams.hideChords === true}
 				/>
 			</Box>
 		)

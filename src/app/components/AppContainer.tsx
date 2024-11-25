@@ -1,7 +1,4 @@
-import { Background } from '@/common/components'
-import AppLayout from '../../common/components/app/AppLayout/AppLayout'
-import Snow from '../../common/components/Snow'
-import SearchGroupDialog from '../../common/components/Toolbar/components/Toolsmenu/components/SearchGroupDialog'
+import AppLayout from '@/common/components/app/AppLayout/AppLayout'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {
@@ -11,10 +8,8 @@ type AppContainerProps = {
 export function AppContainer(props: AppContainerProps) {
 	return (
 		<>
-			<Background />
-
-			<Snow />
-			<SearchGroupDialog />
+			{/* <Snow /> */}
+			{/* <SearchGroupDialog /> */}
 			<LoadingRoutesProvider>
 				<AppLayout>{props.children}</AppLayout>
 			</LoadingRoutesProvider>

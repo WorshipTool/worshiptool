@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 import { Gap } from '../../../../../common/ui/Gap'
 import UploadedSongLink from './components/UploadedSongLink'
 

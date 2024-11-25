@@ -1,15 +1,16 @@
 'use client'
 import { CreatedType } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
-import { CloudUpload } from '@mui/icons-material'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import {
 	Box,
 	Button,
 	CircularProgress,
-	Paper,
 	Typography,
 	useTheme,
-} from '@mui/material'
+} from '@/common/ui'
+import { Paper } from '@/common/ui/mui'
+import { CloudUpload } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
@@ -36,7 +37,8 @@ const uploadingMessages = [
 	'Ukládám píseň do databáze...',
 ]
 
-export default function Parse() {
+export default SmartPage(Parse)
+function Parse() {
 	const { files } = useSmartParams('uploadParse')
 
 	const [parsed, setParsed] = React.useState(false)
@@ -196,7 +198,7 @@ export default function Parse() {
 													}}
 												>
 													<Box flex={1}>
-														<Typography variant="subtitle2">
+														<Typography>
 															Zkontrolujte, zda bylo vše správně načteno...
 														</Typography>
 													</Box>
@@ -214,9 +216,7 @@ export default function Parse() {
 															endIcon={<CloudUpload />}
 															onClick={uploadSheets}
 														>
-															<Typography variant="button">
-																Ano, vše je v pořádku
-															</Typography>
+															<Typography>Ano, vše je v pořádku</Typography>
 														</Button>
 													</Box>
 													<Box
@@ -236,9 +236,7 @@ export default function Parse() {
 															size="large"
 															onClick={uploadSheets}
 														>
-															<Typography variant="button">
-																Vše v pořádku
-															</Typography>
+															<Typography>Vše v pořádku</Typography>
 														</Button>
 													</Box>
 												</Box>
@@ -263,9 +261,7 @@ export default function Parse() {
 														alignItems: 'center',
 													}}
 												>
-													<Typography variant="subtitle2">
-														Nenašli jsme žádné písně.
-													</Typography>
+													<Typography>Nenašli jsme žádné písně.</Typography>
 													<Gap value={2} />
 													<Button
 														variant="contained"
@@ -275,9 +271,7 @@ export default function Parse() {
 															navigate('upload', {})
 														}}
 													>
-														<Typography variant="button">
-															Zkusit jinou fotku
-														</Typography>
+														<Typography>Zkusit jinou fotku</Typography>
 													</Button>
 												</Box>
 											</>
@@ -295,9 +289,7 @@ export default function Parse() {
 										>
 											<CircularProgress />
 											<Gap />
-											<Typography variant="subtitle2">
-												{uploadingMessage}
-											</Typography>
+											<Typography>{uploadingMessage}</Typography>
 										</Box>
 									</>
 								)}

@@ -16,10 +16,13 @@ export const mapSongDataVariantApiToSongVariantDto = (
 		guid: api.guid as SongVariantGuid,
 		packGuid: api.packGuid as VariantPackGuid,
 
-		preferredTitle: api.prefferedTitle,
+		preferredTitle: api?.prefferedTitle,
 		packAlias: api.alias as VariantPackAlias,
 		sheet: new Sheet(api.sheetData),
 		createdBy: api.createdByGuid as UserGuid,
+		createdForPlaylistGuid: api.createdForPlaylistGuid,
+		createdAt: new Date(api.createdAt),
+		packCreatedAt: new Date(api.packCreatedAt),
 	}
 }
 
@@ -29,13 +32,17 @@ export const mapSongVariantDataOutDtoToSongVariantDto = (
 	return {
 		...api,
 
-		preferredTitle: api.prefferedTitle,
+		preferredTitle: api?.prefferedTitle,
 		sheet: new Sheet(api.sheetData),
 
 		guid: api.guid as SongVariantGuid,
 		createdBy: api.createdBy as UserGuid,
 		packGuid: api.packGuid as VariantPackGuid,
 		packAlias: api.alias as VariantPackAlias,
+		createdForPlaylistGuid: api.createdForPlaylistGuid,
+
+		createdAt: new Date(api.createdAt),
+		packCreatedAt: new Date(api.packCreatedAt),
 	}
 }
 
