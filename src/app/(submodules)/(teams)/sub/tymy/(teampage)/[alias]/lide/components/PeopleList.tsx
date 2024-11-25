@@ -2,8 +2,8 @@ import ListTopPanelPeople from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[
 import PeopleListItem from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/PeopleListItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { TeamMemberRole } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { Box, LinearProgress, Tooltip } from '@/common/ui'
-import { Checkbox } from '@/common/ui/mui'
+import { Box, LinearProgress, Tooltip, useTheme } from '@/common/ui'
+import { Checkbox, useMediaQuery } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { UserGuid } from '@/interfaces/user'
@@ -91,18 +91,25 @@ export default function PeopleList(props: PeopleListDto) {
 	// Styles
 	const firstPartsWidth = 'minmax(0,200px)'
 
+	const theme = useTheme()
+	const hideActions = useMediaQuery(theme.breakpoints.down('sm'))
+	const hideEmail = useMediaQuery('(max-width: 450px)')
+
 	const gridStyle = useMemo(
 		() => ({
 			display: 'grid',
 			gridTemplateColumns: `${
 				selectable ? '40px' : ''
-			} minmax(20px,60px) repeat(3, ${firstPartsWidth}) 1fr 100px`,
+			} minmax(20px,60px) repeat(${
+				hideActions ? 1 : 3
+			}, ${firstPartsWidth}) 1fr 100px`,
 			alignItems: 'center',
 			gap: '1rem 1rem',
 			paddingX: 2,
 		}),
-		[selectable]
+		[selectable, hideActions]
 	)
+
 	return (
 		<Box>
 			<ListTopPanelPeople
@@ -159,10 +166,14 @@ export default function PeopleList(props: PeopleListDto) {
 						)}
 						<Box />
 						<Typography color="grey.500">Jméno</Typography>
-						<Typography color="grey.500">Email</Typography>
+						{!hideEmail && <Typography color="grey.500">Email</Typography>}
 						<Typography color="grey.500">Role</Typography>
-						<Box />
-						<Typography color="grey.500">Akce</Typography>
+						{!hideActions && (
+							<>
+								<Box />
+								<Typography color="grey.500">Akce</Typography>
+							</>
+						)}
 					</>
 				</Box>
 				<Box
@@ -193,6 +204,8 @@ export default function PeopleList(props: PeopleListDto) {
 								}
 								onMemberRemove={onMemberRemove}
 								onChangeRole={onSetRole}
+								hideActions={hideActions}
+								hideEmail={hideEmail}
 							/>
 						)}
 					</Box>
@@ -225,6 +238,8 @@ export default function PeopleList(props: PeopleListDto) {
 							}
 							onMemberRemove={onMemberRemove}
 							onChangeRole={onSetRole}
+							hideActions={hideActions}
+							hideEmail={hideEmail}
 						/>
 					))}
 

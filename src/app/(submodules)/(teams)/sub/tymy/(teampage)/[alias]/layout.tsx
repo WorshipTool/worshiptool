@@ -67,6 +67,7 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 			flexDirection={'row'}
 			height={'100vh'}
 			position={'relative'}
+			maxWidth={'100vw'}
 		>
 			<InnerTeamProvider teamAlias={layout.params.alias}>
 				<TeamClientProviders>

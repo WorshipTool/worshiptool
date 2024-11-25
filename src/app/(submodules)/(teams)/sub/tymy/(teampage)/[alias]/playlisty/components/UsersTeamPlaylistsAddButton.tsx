@@ -64,7 +64,7 @@ export default function UsersTeamPlaylistsAddButton() {
 					alignItems: 'center',
 				}}
 			>
-				<IconButton>
+				<IconButton variant="contained" color="grey.300">
 					<Add />
 				</IconButton>
 			</Box>
