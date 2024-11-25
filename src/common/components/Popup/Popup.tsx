@@ -105,7 +105,7 @@ export default function Popup({
 									padding: 3,
 									borderRadius: 3,
 									bgcolor: 'white',
-									boxShadow: '0px 0px 4px  rgba(0,0,0,0.1)',
+									boxShadow: '0px 0px 2px  rgba(0,0,0,0.1)',
 									position: 'relative',
 								}}
 								onClick={(e) => e.stopPropagation()}
@@ -113,6 +113,7 @@ export default function Popup({
 								flexDirection={'column'}
 								gap={1}
 								width={props.width}
+								maxWidth={`calc(100vw - 4rem)`}
 							>
 								{(props.title || props.subtitle) && (
 									<Box display={'flex'} flexDirection={'column'}>
