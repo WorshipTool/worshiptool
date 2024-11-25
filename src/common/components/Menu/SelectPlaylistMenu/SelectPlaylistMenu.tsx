@@ -23,7 +23,10 @@ const MAX_PLAYLIST_COUNT = 4
 
 export default function SelectPlaylistMenu(props: SelectPlaylistMenuProps) {
 	// Playlist list
-	const { playlists, loading } = useUsersPlaylists()
+	const { playlists: _playlists, loading } = useUsersPlaylists()
+	const playlists = _playlists?.sort((a, b) =>
+		a.updatedAt > b.updatedAt ? -1 : 1
+	)
 	// Dialog state
 	const [popupOpen, setPopupOpen] = useState(false)
 
