@@ -23,7 +23,7 @@ const nextConfig = withRoutes({
 	async rewrites() {
 		return [
 			{
-				source: '/sub/tymy/yy9rexn/nahravky',
+				source: '/sub/tymy/5eatrh6/nahravky',
 				destination: '/sites/13ka-records.html',
 			},
 		]
