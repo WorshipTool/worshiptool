@@ -1,12 +1,37 @@
+'use client'
 import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
 import { BugReport, Build, PrecisionManufacturing } from '@mui/icons-material'
+import { useEffect, useState } from 'react'
 import { Gap } from '../../common/ui/Gap/Gap'
 
 export default function UnavailableMessage() {
-	const isUnvailable =
+	const [isUnvailable, setIsUnvailable] = useState(
 		process.env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE === 'true'
+	)
+
+	// if user write on keyboard "please", then set isUnvailable to false
+	useEffect(() => {
+		const keysDown: string[] = []
+		const mustContain = ['p', 'l', 'e', 'a', 's', 'e']
+		const onKeyDown = (e: KeyboardEvent) => {
+			keysDown.push(e.key)
+
+			if (mustContain.every((key) => keysDown.includes(key))) {
+				setIsUnvailable(false)
+			}
+		}
+		const onKeyUp = (e: KeyboardEvent) => {
+			keysDown.splice(keysDown.indexOf(e.key), 1)
+		}
+		window.addEventListener('keydown', onKeyDown)
+		window.addEventListener('keyup', onKeyUp)
+		return () => {
+			window.removeEventListener('keydown', onKeyDown)
+			window.removeEventListener('keyup', onKeyUp)
+		}
+	}, [])
 
 	const padding = '0rem'
 	return (
