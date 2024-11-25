@@ -23,6 +23,8 @@ type PeopleListItemProps = {
 	onSelectChange: (selected: boolean) => void
 	onMemberRemove: (guid: UserGuid) => void
 	onChangeRole: (guid: UserGuid, role: TeamMemberRole) => void
+	hideActions?: boolean
+	hideEmail?: boolean
 }
 
 export default function PeopleListItem(props: PeopleListItemProps) {
@@ -69,6 +71,8 @@ export default function PeopleListItem(props: PeopleListItemProps) {
 		return createdByGuid === props.data.userGuid
 	}, [createdByGuid])
 
+	const hideActions = props.hideActions
+
 	return (
 		<>
 			{props.selectable && (
@@ -88,9 +92,11 @@ export default function PeopleListItem(props: PeopleListItemProps) {
 			<Box>
 				<Typography>{fullName}</Typography>
 			</Box>
-			<Box>
-				<Typography>{props.data.email}</Typography>
-			</Box>
+			{!props.hideEmail && (
+				<Box>
+					<Typography>{props.data.email}</Typography>
+				</Box>
+			)}
 			<RolePart
 				editable={editable}
 				role={role}
@@ -98,36 +104,37 @@ export default function PeopleListItem(props: PeopleListItemProps) {
 				isOwner={isCreator}
 			/>
 			<Box></Box>
-			{!props.me ? (
-				<ActionsPartPeople
-					data={props.data}
-					editable={editable}
-					onEditableChange={onEditableChange}
-					selectable={Boolean(props.selectable)}
-					onRemove={() => setPopupOpen(true)}
-					isCreator={isCreator}
-				/>
-			) : (
-				<Box display={'flex'} flexDirection={'row'} justifyContent={'end'}>
-					<Tooltip
-						label={
-							isCreator ? 'Nelze opustit skupinu, které jsi vlastníkem' : ''
-						}
-					>
-						<Button
-							tooltip="Opustit tým"
-							color="error"
-							size="small"
-							variant="outlined"
-							endIcon={<ExitToApp />}
-							disabled={props.selectable || isCreator}
-							onClick={() => setPopupOpen(true)}
+			{!hideActions &&
+				(!props.me ? (
+					<ActionsPartPeople
+						data={props.data}
+						editable={editable}
+						onEditableChange={onEditableChange}
+						selectable={Boolean(props.selectable)}
+						onRemove={() => setPopupOpen(true)}
+						isCreator={isCreator}
+					/>
+				) : (
+					<Box display={'flex'} flexDirection={'row'} justifyContent={'end'}>
+						<Tooltip
+							label={
+								isCreator ? 'Nelze opustit skupinu, které jsi vlastníkem' : ''
+							}
 						>
-							Odejít
-						</Button>
-					</Tooltip>
-				</Box>
-			)}
+							<Button
+								tooltip="Opustit tým"
+								color="error"
+								size="small"
+								variant="outlined"
+								endIcon={<ExitToApp />}
+								disabled={props.selectable || isCreator}
+								onClick={() => setPopupOpen(true)}
+							>
+								Odejít
+							</Button>
+						</Tooltip>
+					</Box>
+				))}
 			<Popup
 				open={popupOpen}
 				onClose={() => setPopupOpen(false)}
