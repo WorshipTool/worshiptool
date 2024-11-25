@@ -6,8 +6,7 @@ import PinnedPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)
 import PreviousPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/playlisty/components/PreviousPanel'
 import UsersTeamPlaylistsPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/playlisty/components/UsersTeamPlaylistsPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { Box } from '@/common/ui'
-import { Gap } from '@/common/ui/Gap'
+import { Box, Gap } from '@/common/ui'
 import { isDateTodayOrInFuture } from '@/tech/date/date.tech'
 import { useMemo } from 'react'
 
@@ -37,13 +36,18 @@ function Page() {
 	}, [events])
 
 	return (
-		<Box display={'flex'} flexDirection={'column'} gap={3}>
+		<>
 			<TeamPageTitle>Playlisty</TeamPageTitle>
 
 			{/* Your recent playlists */}
 			<UsersTeamPlaylistsPanel />
 
-			<Box display={'flex'} flexDirection={'row'} gap={4} flexWrap={'wrap'}>
+			<Box
+				display={'flex'}
+				flexDirection={'row'}
+				// gap={4}
+				flexWrap={'wrap'}
+			>
 				<Box flex={1}>
 					<NextMonthPanel
 						events={futureEvents}
@@ -57,6 +61,6 @@ function Page() {
 					<PreviousPanel events={pastEvents} loading={apiState.loading} />
 				</Box>
 			</Box>
-		</Box>
+		</>
 	)
 }

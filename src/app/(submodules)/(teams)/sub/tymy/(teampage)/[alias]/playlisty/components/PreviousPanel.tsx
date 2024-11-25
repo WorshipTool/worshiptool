@@ -11,7 +11,7 @@ type PreviousPanelProps = {
 
 export default function PreviousPanel(props: PreviousPanelProps) {
 	return (
-		<Box minWidth={350}>
+		<Box>
 			<Box display={'flex'} gap={1}>
 				{/* <Schedule /> */}
 				<Typography variant="h6">Odehrané playlisty</Typography>
