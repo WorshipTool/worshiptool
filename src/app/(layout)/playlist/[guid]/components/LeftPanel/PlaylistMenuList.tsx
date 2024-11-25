@@ -1,12 +1,15 @@
 'use client'
+import { OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME } from '@/app/(layout)/playlist/[guid]/components/LeftPanel/AddSongToPlaylistButton'
 import PanelItem from '@/app/(layout)/playlist/[guid]/components/LeftPanel/PanelItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Box } from '@/common/ui'
+import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
-import { Box } from '@mui/material'
+import { Add } from '@mui/icons-material'
 import { Reorder } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 type PlaylistMenuListProps = {}
 
@@ -55,6 +58,11 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 		startReordering.current = true
 	}
 
+	const openSelectSongPopup = useCallback(() => {
+		const event = new CustomEvent(OPEN_PLAYLIST_ADD_SONG_POPUP_EVENT_NAME)
+		document.dispatchEvent(event)
+	}, [])
+
 	return (
 		<>
 			{loading || !items ? (
@@ -66,40 +74,85 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 					{items.length === 0 && (
 						<>
 							<Gap />
-							<Typography>V playlistu nejsou žádné písně...</Typography>
+							<Typography color="grey.500" align="center">
+								V playlistu nejsou žádné písně...
+							</Typography>
+							<Gap value={1} />
+							{/* {<Box
+								display={'flex'}
+								flexDirection={'row'}
+								justifyContent={'center'}
+							>
+								<Button
+									startIcon={<Add />}
+									size="small"
+									variant="outlined"
+									color="grey.800"
+									onClick={openSelectSongPopup}
+								>
+									Přidat píseň
+								</Button>
+							</Box> } */}
 						</>
 					)}
 					{canUserEdit ? (
 						<>
-							<Reorder.Group
-								values={innerGuids}
-								onReorder={(values) => onReorder(values)}
-								axis="y"
-								style={{
-									padding: 0,
-									position: 'relative',
-									width: '100%',
-									gap: '8px',
-									display: 'flex',
-									flexDirection: 'column',
-								}}
-							>
-								{innerGuids?.map((item, index) => {
-									return (
-										<Reorder.Item
-											key={item}
-											value={item}
-											as="div"
-											style={{
-												paddingLeft: 5,
-												paddingRight: 5,
-											}}
-										>
-											<PanelItem itemGuid={item} key={item} itemIndex={index} />
-										</Reorder.Item>
-									)
-								})}
-							</Reorder.Group>
+							{items.length > 0 && (
+								<Reorder.Group
+									values={innerGuids}
+									onReorder={(values) => onReorder(values)}
+									axis="y"
+									style={{
+										padding: 0,
+										position: 'relative',
+										width: '100%',
+										gap: '8px',
+										display: 'flex',
+										flexDirection: 'column',
+									}}
+								>
+									{innerGuids?.map((item, index) => {
+										return (
+											<Reorder.Item
+												key={item}
+												value={item}
+												as="div"
+												style={{
+													paddingLeft: 5,
+													paddingRight: 5,
+												}}
+											>
+												<PanelItem
+													itemGuid={item}
+													key={item}
+													itemIndex={index}
+												/>
+											</Reorder.Item>
+										)
+									})}
+								</Reorder.Group>
+							)}
+
+							{
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									justifyContent={'center'}
+								>
+									<Button
+										startIcon={<Add />}
+										size="small"
+										variant="text"
+										color={items.length === 0 ? 'grey.800' : 'grey.500'}
+										onClick={openSelectSongPopup}
+										sx={{
+											paddingX: 1,
+										}}
+									>
+										Přidat píseň
+									</Button>
+								</Box>
+							}
 						</>
 					) : (
 						<Box
@@ -127,6 +180,23 @@ export default function PlaylistMenuList(props: PlaylistMenuListProps) {
 							})}
 						</Box>
 					)}
+					{/* <Box
+						display={'flex'}
+						justifyContent={'center'}
+						alignItems={'center'}
+						gap={0.5}
+						color={'grey.600'}
+					>
+						<Add
+							fontSize="inherit"
+							sx={{
+								fontSize: '1rem',
+							}}
+						/>
+						<Typography size={'small'} strong>
+							Přidat píseň
+						</Typography>
+					</Box> */}
 				</>
 			)}
 		</>

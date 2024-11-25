@@ -1,13 +1,14 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import { LoadingButton } from '@mui/lab'
-import { Box, Divider, Skeleton, Typography, styled } from '@mui/material'
+import { Box, Divider, Typography } from '@/common/ui'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
+import { parseVariantAlias } from '@/routes/routes.tech'
+import { styled } from '@mui/system'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useState } from 'react'
 import { SongVariantDto } from '../../../../../../api/dtos'
 import { Button } from '../../../../../../common/ui/Button'
-import { Link } from '../../../../../../common/ui/Link/CustomLink'
+import { Link } from '../../../../../../common/ui/Link/Link'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { parseVariantAlias } from '../../../../../../routes'
 import { useApiState } from '../../../../../../tech/ApiState'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -99,22 +100,25 @@ export default function SearchItem({
 					>
 						<Box padding={'1rem'}>
 							{variant.createdBy == user?.guid && (
-								<Typography variant="subtitle2">Vytvořeno vámi.</Typography>
+								<Typography>Vytvořeno vámi.</Typography>
 							)}
 
 							<Box display={'flex'}>
-								<Typography fontWeight={'bold'} flex={1}>
+								<Typography
+									strong
+									sx={{
+										flex: 1,
+									}}
+								>
 									{variant.preferredTitle}
 								</Typography>
 								{!variant.verified ? (
 									<>
 										{variant.createdByLoader ? (
-											<Typography variant="caption">
-												Nahráno programem
-											</Typography>
+											<Typography>Nahráno programem</Typography>
 										) : (
 											<>
-												<Typography variant="caption">Neověřeno</Typography>
+												<Typography>Neověřeno</Typography>
 											</>
 										)}
 									</>
@@ -151,13 +155,13 @@ export default function SearchItem({
 								>
 									Otevřít
 								</Button>
-								<LoadingButton
+								<Button
 									variant="contained"
 									onClick={addToPlaylist}
 									loading={loading}
 								>
 									Přidat do playlistu
-								</LoadingButton>
+								</Button>
 							</Box>
 						)}
 					</StyledContainer>

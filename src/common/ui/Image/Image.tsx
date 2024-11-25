@@ -8,6 +8,7 @@ type ImageProps = {
 	width?: number | string
 	height?: number | string
 	style?: CSSProperties
+	fill?: boolean
 }
 
 export function Image({
@@ -17,6 +18,7 @@ export function Image({
 	width = 100,
 	height = 100,
 	style,
+	...props
 }: ImageProps) {
 	return (
 		<Img
@@ -24,13 +26,24 @@ export function Image({
 			alt={alt}
 			placeholder="blur"
 			blurDataURL={defaultSrc}
-			width={5}
-			height={5}
+			{...(props.fill
+				? {
+						fill: true,
+				  }
+				: {
+						width: parseInt(width.toString()),
+						height: parseInt(height.toString()),
+				  })}
 			style={{
-				width: width,
-				height: height,
+				...(!props.fill
+					? {
+							width: width,
+							height: height,
+					  }
+					: {}),
 				...style,
 			}}
+			{...props}
 		>
 			{/* {defaultSrc && <img src={defaultSrc} alt={alt} />} */}
 		</Img>

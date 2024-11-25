@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@mui/material'
+import { Button } from '@/common/ui'
 import { useSnackbar } from 'notistack'
 import { ReactNode, useEffect } from 'react'
 import { ApiState } from '../../../tech/ApiState'

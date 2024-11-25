@@ -1,9 +1,9 @@
+import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps } from '../../../common/types'
-import { generateMetadataTitle } from '../../../hooks/window-title/tech'
 
-export const generateMetadata = async () => ({
-	title: await generateMetadataTitle('Vytvořit', 'addMenu', {}),
-})
+export const generateMetadata = generateSmartMetadata('addMenu', async () => ({
+	title: 'Vytvořit',
+}))
 
 export default function layout({ children }: LayoutProps) {
 	return children

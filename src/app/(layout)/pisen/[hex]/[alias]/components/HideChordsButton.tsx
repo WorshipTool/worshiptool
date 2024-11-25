@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button } from '@/common/ui'
 
 type HideChordsButtonProps = {
 	hiddenValue: boolean
@@ -7,13 +7,14 @@ type HideChordsButtonProps = {
 
 export default function HideChordsButton(props: HideChordsButtonProps) {
 	return (
-		<Box sx={{ color: 'grey.500' }}>
+		<Box sx={{ color: 'grey.500' }} display={'flex'}>
 			<Button
 				size="small"
 				color="inherit"
 				onClick={() => {
 					props.onChange(!props.hiddenValue)
 				}}
+				variant="text"
 			>
 				{props.hiddenValue ? 'Zobrazit akordy' : 'Skrýt akordy'}
 			</Button>

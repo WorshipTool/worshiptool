@@ -1,55 +1,31 @@
 'use client'
-import { Box } from '@mui/material'
-import React, { useEffect } from 'react'
-import useGroup from '../../../../hooks/group/useGroup'
+import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
+import { Toolbar } from '@/common/components/Toolbar'
+import { Box } from '@/common/ui'
+import React from 'react'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
-import { Toolbar } from '../../Toolbar'
-import GroupContainer from './components/GroupContainer'
+import Footer from '../../Footer/Footer'
+import './applayout.styles.css'
 
 interface AppContainerProps {
 	children?: React.ReactNode
 }
 
 export default function Inner({ children }: AppContainerProps) {
-	const { isOn } = useGroup()
-	const expandable = useSmartMatch('group')
-	const transparent = useSmartMatch('home')
 	const hidden = useSmartMatch('playlistCards')
-
-	const [isTop, setTop] = React.useState(true)
-
-	const scrollLevel = 50
-	useEffect(() => {
-		const handleScroll = (event: any) => {
-			const sy = window.scrollY
-			if (sy > scrollLevel) {
-				setTop(false)
-			} else {
-				setTop(true)
-			}
-		}
-
-		window.addEventListener('scroll', handleScroll)
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll)
-		}
-	}, [])
 
 	return hidden ? (
 		children
 	) : (
-		<Box>
-			{!isOn ? (
-				<>
-					<Toolbar transparent={transparent && isTop} />
-					{children}
-				</>
-			) : (
-				<>
-					<GroupContainer expandable={expandable}>{children}</GroupContainer>
-				</>
-			)}
+		<Box display={'flex'} flexDirection={'column'} minHeight={'100vh'}>
+			<Toolbar />
+			<Box className={'app-body-container'}>
+				{children}
+				<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
+			</Box>
+
+			<Box flex={1} />
+			<Footer />
 		</Box>
 	)
 }

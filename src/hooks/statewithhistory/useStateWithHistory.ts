@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 type InitialValueType<T> = T | ((prev?: T) => T)
 
@@ -98,33 +98,6 @@ export const useStateWithHistory: <T>(
 		setHistory((prev) => [prev.at(-1)!])
 		setPointer(0)
 	}, [setHistory, setPointer])
-
-	useEffect(() => {
-		// Add CTRL+Z and CTRL+Y support for undo and redo
-		const handleKeyDown = (event: KeyboardEvent) => {
-			switch (event.key) {
-				case 'z':
-					if (event.ctrlKey || event.metaKey) {
-						event.preventDefault()
-						undo()
-					}
-					break
-				case 'y':
-					if (event.ctrlKey || event.metaKey) {
-						if (event.shiftKey) {
-							event.preventDefault()
-							undo()
-						} else {
-							event.preventDefault()
-							redo()
-						}
-					}
-					break
-			}
-		}
-		window.addEventListener('keydown', handleKeyDown)
-		return () => window.removeEventListener('keydown', handleKeyDown)
-	}, [redo, undo])
 
 	return {
 		state,

@@ -1,0 +1,15 @@
+.editable-text-input {
+	padding-left: 0.5rem;
+	border-radius: 0.2rem;
+}
+
+.editable-text-input:focus-within,
+.editable-text-input:hover {
+	outline-style: solid;
+	outline-width: 1px;
+}
+
+.editable-text-input:focus-within {
+	outline-color: var(--color-primary);
+	/* background-color: var(--color-grey-100); */
+}

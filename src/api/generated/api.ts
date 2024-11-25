@@ -26,6 +26,76 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AddFavouriteInDto
+ */
+export interface AddFavouriteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddFavouriteInDto
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AddNoteToVariantInDto
+ */
+export interface AddNoteToVariantInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddNoteToVariantInDto
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddNoteToVariantInDto
+     */
+    'variantGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AddPackToTeamSelectionInDto
+ */
+export interface AddPackToTeamSelectionInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPackToTeamSelectionInDto
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPackToTeamSelectionInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AddPermissionToGroupInDto
+ */
+export interface AddPermissionToGroupInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPermissionToGroupInDto
+     */
+    'groupGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddPermissionToGroupInDto
+     */
+    'permissionGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddPermissionToUserInDto
  */
 export interface AddPermissionToUserInDto {
@@ -45,6 +115,50 @@ export interface AddPermissionToUserInDto {
 /**
  * 
  * @export
+ * @interface AddTeamMebmerByEmailInDto
+ */
+export interface AddTeamMebmerByEmailInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamMebmerByEmailInDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamMebmerByEmailInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AddTeamNoteToVariantInDto
+ */
+export interface AddTeamNoteToVariantInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamNoteToVariantInDto
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamNoteToVariantInDto
+     */
+    'variantGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddTeamNoteToVariantInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddVariantToPlaylistInDto
  */
 export interface AddVariantToPlaylistInDto {
@@ -60,6 +174,69 @@ export interface AddVariantToPlaylistInDto {
      * @memberof AddVariantToPlaylistInDto
      */
     'playlist': string;
+}
+/**
+ * 
+ * @export
+ * @interface AllTeamNoteData
+ */
+export interface AllTeamNoteData {
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamNoteData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface AllTeamSubdomainAlias
+ */
+export interface AllTeamSubdomainAlias {
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamSubdomainAlias
+     */
+    'teamAlias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllTeamSubdomainAlias
+     */
+    'subdomain': string;
+}
+/**
+ * 
+ * @export
+ * @interface AttachPlaylistToTeamInDto
+ */
+export interface AttachPlaylistToTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AttachPlaylistToTeamInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttachPlaylistToTeamInDto
+     */
+    'teamGuid': string;
 }
 /**
  * 
@@ -97,6 +274,12 @@ export interface BaseUserInfoOutDto {
      * @memberof BaseUserInfoOutDto
      */
     'role': BaseUserInfoOutDtoRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseUserInfoOutDto
+     */
+    'pictureGuid': string;
     /**
      * 
      * @type {Array<number>}
@@ -180,6 +363,125 @@ export interface ChangePasswordInDto {
 /**
  * 
  * @export
+ * @interface ChangeProfilePhotoInDto
+ */
+export interface ChangeProfilePhotoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeProfilePhotoInDto
+     */
+    'pictureGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface ChangeTeamInfoInDto
+ */
+export interface ChangeTeamInfoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeTeamInfoInDto
+     */
+    'joinCode'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTeamEventInDto
+ */
+export interface CreateTeamEventInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'leaderUserGuid': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateTeamEventInDto
+     */
+    'memberUserGuids': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventTitle': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventDescription': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamEventInDto
+     */
+    'eventDate': string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTeamInDto
+ */
+export interface CreateTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamInDto
+     */
+    'teamName': string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTeamOutDto
+ */
+export interface CreateTeamOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
  * @interface Creator
  */
 export interface Creator {
@@ -231,6 +533,45 @@ export type CreatorDTOTypeEnum = typeof CreatorDTOTypeEnum[keyof typeof CreatorD
 /**
  * 
  * @export
+ * @interface DeleteNoteInDto
+ */
+export interface DeleteNoteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeleteNoteInDto
+     */
+    'noteGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface DeleteTeamInDto
+ */
+export interface DeleteTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeleteTeamInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface DeleteTeamNoteInDto
+ */
+export interface DeleteTeamNoteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeleteTeamNoteInDto
+     */
+    'noteGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface Domain
  */
 export interface Domain {
@@ -246,6 +587,99 @@ export interface Domain {
      * @memberof Domain
      */
     'data': Array<RecordItem>;
+}
+/**
+ * 
+ * @export
+ * @interface EditItemInDto
+ */
+export interface EditItemInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'itemGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditItemInDto
+     */
+    'sheetData'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface EditPayloadInDto
+ */
+export interface EditPayloadInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditPayloadInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditPayloadInDto
+     */
+    'payload': string;
+}
+/**
+ * 
+ * @export
+ * @interface EditTeamEventInDto
+ */
+export interface EditTeamEventInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventTitle': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventDescription': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'eventDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EditTeamEventInDto
+     */
+    'leaderUserGuid': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EditTeamEventInDto
+     */
+    'memberUserGuids': Array<string>;
 }
 /**
  * 
@@ -269,6 +703,32 @@ export interface EditVariantOutDto {
 /**
  * 
  * @export
+ * @interface GetAllTeamNotesOutDto
+ */
+export interface GetAllTeamNotesOutDto {
+    /**
+     * 
+     * @type {Array<AllTeamNoteData>}
+     * @memberof GetAllTeamNotesOutDto
+     */
+    'notes': Array<AllTeamNoteData>;
+}
+/**
+ * 
+ * @export
+ * @interface GetAllTeamSubdomainAliasesOutDto
+ */
+export interface GetAllTeamSubdomainAliasesOutDto {
+    /**
+     * 
+     * @type {Array<AllTeamSubdomainAlias>}
+     * @memberof GetAllTeamSubdomainAliasesOutDto
+     */
+    'aliases': Array<AllTeamSubdomainAlias>;
+}
+/**
+ * 
+ * @export
  * @interface GetAnalyticsOutDto
  */
 export interface GetAnalyticsOutDto {
@@ -284,6 +744,69 @@ export interface GetAnalyticsOutDto {
      * @memberof GetAnalyticsOutDto
      */
     'days': number;
+}
+/**
+ * 
+ * @export
+ * @interface GetFavouritesItemData
+ */
+export interface GetFavouritesItemData {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'variantGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesItemData
+     */
+    'teamAlias'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetFavouritesOutDto
+ */
+export interface GetFavouritesOutDto {
+    /**
+     * 
+     * @type {Array<GetFavouritesItemData>}
+     * @memberof GetFavouritesOutDto
+     */
+    'items': Array<GetFavouritesItemData>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetFavouritesOutDto
+     */
+    'selectionGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetGlobalSongsOutDto
+ */
+export interface GetGlobalSongsOutDto {
+    /**
+     * 
+     * @type {Array<SongVariantDataOutDto>}
+     * @memberof GetGlobalSongsOutDto
+     */
+    'variants': Array<SongVariantDataOutDto>;
 }
 /**
  * 
@@ -357,6 +880,19 @@ export interface GetGroupsCountResult {
 /**
  * 
  * @export
+ * @interface GetJoinCodeOutDto
+ */
+export interface GetJoinCodeOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetJoinCodeOutDto
+     */
+    'joinCode': string;
+}
+/**
+ * 
+ * @export
  * @interface GetListSongData
  */
 export interface GetListSongData {
@@ -378,6 +914,25 @@ export interface GetListSongData {
      * @memberof GetListSongData
      */
     'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetListSongData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetNotesOfVariantOutDto
+ */
+export interface GetNotesOfVariantOutDto {
+    /**
+     * 
+     * @type {Array<NoteData>}
+     * @memberof GetNotesOfVariantOutDto
+     */
+    'notes': Array<NoteData>;
 }
 /**
  * 
@@ -397,6 +952,44 @@ export interface GetOrCreatePermissionInDto {
      * @memberof GetOrCreatePermissionInDto
      */
     'payload'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetPackAliasFromSourceUrlOutDto
+ */
+export interface GetPackAliasFromSourceUrlOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetPackAliasFromSourceUrlOutDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetPackAliasFromSourceUrlOutDto
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetPackAliasFromSourceUrlOutDto
+     */
+    'title': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetPinnedPlaylistsToTeamOutDto
+ */
+export interface GetPinnedPlaylistsToTeamOutDto {
+    /**
+     * 
+     * @type {Array<TeamPlaylistData>}
+     * @memberof GetPinnedPlaylistsToTeamOutDto
+     */
+    'playlists': Array<TeamPlaylistData>;
 }
 /**
  * 
@@ -502,6 +1095,144 @@ export interface GetSongDataOutDto {
 /**
  * 
  * @export
+ * @interface GetTeamAliasFromSubdomainOutDto
+ */
+export interface GetTeamAliasFromSubdomainOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamAliasFromSubdomainOutDto
+     */
+    'alias': string;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamEventsOutDto
+ */
+export interface GetTeamEventsOutDto {
+    /**
+     * 
+     * @type {Array<TeamEventData>}
+     * @memberof GetTeamEventsOutDto
+     */
+    'events': Array<TeamEventData>;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamInfoOutDto
+ */
+export interface GetTeamInfoOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'selectionGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'createdByGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'joinCode': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeamInfoOutDto
+     */
+    'logoGuid': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamMembersOutDto
+ */
+export interface GetTeamMembersOutDto {
+    /**
+     * 
+     * @type {Array<TeamMemberDto>}
+     * @memberof GetTeamMembersOutDto
+     */
+    'members': Array<TeamMemberDto>;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamStatisticsOutDto
+ */
+export interface GetTeamStatisticsOutDto {
+    /**
+     * 
+     * @type {Array<LeastPlayedSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'leastPlayedSongs': Array<LeastPlayedSong>;
+    /**
+     * 
+     * @type {Array<LeastPlayedSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'topPlayedSongs': Array<LeastPlayedSong>;
+    /**
+     * 
+     * @type {Array<TrendingSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'mostTrendingSongs': Array<TrendingSong>;
+    /**
+     * 
+     * @type {Array<PlayedCountSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'playedCountSongs': Array<PlayedCountSong>;
+    /**
+     * 
+     * @type {Array<MostFavouriteSong>}
+     * @memberof GetTeamStatisticsOutDto
+     */
+    'mostFavouriteSongs': Array<MostFavouriteSong>;
+}
+/**
+ * 
+ * @export
+ * @interface GetTeamsOfUserOutDto
+ */
+export interface GetTeamsOfUserOutDto {
+    /**
+     * 
+     * @type {Array<TeamOfUserDto>}
+     * @memberof GetTeamsOfUserOutDto
+     */
+    'teams': Array<TeamOfUserDto>;
+}
+/**
+ * 
+ * @export
  * @interface GetUserPermissionOutDto
  */
 export interface GetUserPermissionOutDto {
@@ -602,6 +1333,82 @@ export interface Group {
 /**
  * 
  * @export
+ * @interface Image
+ */
+export interface Image {
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof Image
+     */
+    'data': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'fileName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'mimeType': string;
+}
+/**
+ * 
+ * @export
+ * @interface IsUserMemberOfTeamOutDto
+ */
+export interface IsUserMemberOfTeamOutDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IsUserMemberOfTeamOutDto
+     */
+    'isMember': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface JoinTeamInDto
+ */
+export interface JoinTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof JoinTeamInDto
+     */
+    'joinCode': string;
+}
+/**
+ * 
+ * @export
+ * @interface JoinTeamOutDto
+ */
+export interface JoinTeamOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof JoinTeamOutDto
+     */
+    'teamAlias': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof JoinTeamOutDto
+     */
+    'newMember': boolean;
+}
+/**
+ * 
+ * @export
  * @interface JwtResult
  */
 export interface JwtResult {
@@ -617,6 +1424,44 @@ export interface JwtResult {
      * @memberof JwtResult
      */
     'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface LeastPlayedSong
+ */
+export interface LeastPlayedSong {
+    /**
+     * 
+     * @type {number}
+     * @memberof LeastPlayedSong
+     */
+    'playedCount': number;
+    /**
+     * 
+     * @type {Array<StatisticsSongData>}
+     * @memberof LeastPlayedSong
+     */
+    'songs': Array<StatisticsSongData>;
+}
+/**
+ * 
+ * @export
+ * @interface LeaveTeamInDto
+ */
+export interface LeaveTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof LeaveTeamInDto
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LeaveTeamInDto
+     */
+    'teamAlias': string;
 }
 /**
  * 
@@ -678,57 +1523,6 @@ export interface LoginInputData {
 /**
  * 
  * @export
- * @interface LoginMethod
- */
-export interface LoginMethod {
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LoginMethod
-     */
-    'type': LoginMethodTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'email': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'password': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginMethod
-     */
-    'googleId': string;
-    /**
-     * 
-     * @type {User}
-     * @memberof LoginMethod
-     */
-    'user': User;
-}
-
-export const LoginMethodTypeEnum = {
-    NUMBER_0: 0,
-    NUMBER_1: 1
-} as const;
-
-export type LoginMethodTypeEnum = typeof LoginMethodTypeEnum[keyof typeof LoginMethodTypeEnum];
-
-/**
- * 
- * @export
  * @interface Media
  */
 export interface Media {
@@ -782,6 +1576,44 @@ export interface MessengerResponseInDto {
      * @memberof MessengerResponseInDto
      */
     'entry': Array<object>;
+}
+/**
+ * 
+ * @export
+ * @interface MostFavouriteSong
+ */
+export interface MostFavouriteSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof MostFavouriteSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof MostFavouriteSong
+     */
+    'favouriteCount': number;
+}
+/**
+ * 
+ * @export
+ * @interface NoteData
+ */
+export interface NoteData {
+    /**
+     * 
+     * @type {string}
+     * @memberof NoteData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NoteData
+     */
+    'content': string;
 }
 /**
  * 
@@ -845,6 +1677,12 @@ export interface Permission {
      * @memberof Permission
      */
     'users': Array<User>;
+    /**
+     * 
+     * @type {Array<PermissionUserGroup>}
+     * @memberof Permission
+     */
+    'groups': Array<PermissionUserGroup>;
 }
 /**
  * 
@@ -882,6 +1720,12 @@ export interface PermissionUserBaseOutDto {
      * @memberof PermissionUserBaseOutDto
      */
     'role': PermissionUserBaseOutDtoRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionUserBaseOutDto
+     */
+    'pictureGuid': string;
 }
 
 export const PermissionUserBaseOutDtoRoleEnum = {
@@ -893,6 +1737,69 @@ export const PermissionUserBaseOutDtoRoleEnum = {
 
 export type PermissionUserBaseOutDtoRoleEnum = typeof PermissionUserBaseOutDtoRoleEnum[keyof typeof PermissionUserBaseOutDtoRoleEnum];
 
+/**
+ * 
+ * @export
+ * @interface PermissionUserGroup
+ */
+export interface PermissionUserGroup {
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionUserGroup
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Array<User>}
+     * @memberof PermissionUserGroup
+     */
+    'users': Array<User>;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof PermissionUserGroup
+     */
+    'permissions': Array<Permission>;
+}
+/**
+ * 
+ * @export
+ * @interface PinPlaylistToTeamInDto
+ */
+export interface PinPlaylistToTeamInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PinPlaylistToTeamInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PinPlaylistToTeamInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface PlayedCountSong
+ */
+export interface PlayedCountSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof PlayedCountSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof PlayedCountSong
+     */
+    'playedCount': number;
+}
 /**
  * 
  * @export
@@ -929,6 +1836,36 @@ export interface Playlist {
      * @memberof Playlist
      */
     'isSelection': boolean;
+    /**
+     * 
+     * @type {PermissionUserGroup}
+     * @memberof Playlist
+     */
+    'editorsPermissionGroup': PermissionUserGroup;
+    /**
+     * 
+     * @type {Team}
+     * @memberof Playlist
+     */
+    'belongsToTeam': Team;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Playlist
+     */
+    'openedAt': string;
 }
 /**
  * 
@@ -948,6 +1885,42 @@ export interface PlaylistData {
      * @memberof PlaylistData
      */
     'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'teamGuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'teamName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistData
+     */
+    'openedAt': string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PlaylistData
+     */
+    'itemsCount': number;
 }
 /**
  * 
@@ -979,6 +1952,18 @@ export interface PlaylistDataOutDto {
      * @memberof PlaylistDataOutDto
      */
     'ownerGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'teamGuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistDataOutDto
+     */
+    'teamAlias'?: string;
 }
 /**
  * 
@@ -1336,6 +2321,12 @@ export interface PostGoogleLoginBody {
      * @memberof PostGoogleLoginBody
      */
     'lastName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostGoogleLoginBody
+     */
+    'picture': string;
 }
 /**
  * 
@@ -1381,6 +2372,31 @@ export interface PostSendFeedbackBody {
      * @memberof PostSendFeedbackBody
      */
     'userName'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface PostSendMailFeedbackInDto
+ */
+export interface PostSendMailFeedbackInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostSendMailFeedbackInDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostSendMailFeedbackInDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostSendMailFeedbackInDto
+     */
+    'message': string;
 }
 /**
  * 
@@ -1520,6 +2536,32 @@ export interface RegisterWebhookExtensionBody {
 /**
  * 
  * @export
+ * @interface RemoveFavouriteInDto
+ */
+export interface RemoveFavouriteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RemoveFavouriteInDto
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface RemoveTeamLogoInDto
+ */
+export interface RemoveTeamLogoInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RemoveTeamLogoInDto
+     */
+    'teamGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface RenamePlaylistInDto
  */
 export interface RenamePlaylistInDto {
@@ -1577,6 +2619,38 @@ export interface ReorderPlaylistItem {
 /**
  * 
  * @export
+ * @interface RequireItemEditInDto
+ */
+export interface RequireItemEditInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RequireItemEditInDto
+     */
+    'itemGuid': string;
+}
+/**
+ * 
+ * @export
+ * @interface RequireItemEditOutDto
+ */
+export interface RequireItemEditOutDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RequireItemEditOutDto
+     */
+    'createdCopy': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof RequireItemEditOutDto
+     */
+    'packAlias': string;
+}
+/**
+ * 
+ * @export
  * @interface ResetPasswordInDto
  */
 export interface ResetPasswordInDto {
@@ -1612,6 +2686,39 @@ export interface SetGroupPayloadInDto {
      */
     'payload': string;
 }
+/**
+ * 
+ * @export
+ * @interface SetMemberRoleInDto
+ */
+export interface SetMemberRoleInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SetMemberRoleInDto
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SetMemberRoleInDto
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof SetMemberRoleInDto
+     */
+    'role': SetMemberRoleInDtoRoleEnum;
+}
+
+export const SetMemberRoleInDtoRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type SetMemberRoleInDtoRoleEnum = typeof SetMemberRoleInDtoRoleEnum[keyof typeof SetMemberRoleInDtoRoleEnum];
+
 /**
  * 
  * @export
@@ -1872,6 +2979,24 @@ export interface SongDataVariant {
      * @memberof SongDataVariant
      */
     'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'createdForPlaylistGuid': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDataVariant
+     */
+    'packCreatedAt': string;
 }
 
 export const SongDataVariantCreatedTypeEnum = {
@@ -2039,6 +3164,12 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'hasChords': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariant
+     */
+    'createdAt': string;
 }
 
 export const SongVariantTypeEnum = {
@@ -2169,6 +3300,24 @@ export interface SongVariantDataOutDto {
      * @memberof SongVariantDataOutDto
      */
     'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'createdForPlaylistGuid': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantDataOutDto
+     */
+    'packCreatedAt': string;
 }
 
 export const SongVariantDataOutDtoCreatedTypeEnum = {
@@ -2223,12 +3372,6 @@ export interface SongVariantHistoryPack {
     'alias': UrlAlias;
     /**
      * 
-     * @type {Array<PlaylistItem>}
-     * @memberof SongVariantHistoryPack
-     */
-    'playlistItems': Array<PlaylistItem>;
-    /**
-     * 
      * @type {boolean}
      * @memberof SongVariantHistoryPack
      */
@@ -2239,6 +3382,30 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'public': boolean;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof SongVariantHistoryPack
+     */
+    'createdForPlaylist': Playlist;
+    /**
+     * 
+     * @type {Array<PlaylistItem>}
+     * @memberof SongVariantHistoryPack
+     */
+    'playlistItems': Array<PlaylistItem>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'updatedAt': string;
 }
 /**
  * 
@@ -2326,6 +3493,25 @@ export interface Statistics {
 /**
  * 
  * @export
+ * @interface StatisticsSongData
+ */
+export interface StatisticsSongData {
+    /**
+     * 
+     * @type {string}
+     * @memberof StatisticsSongData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StatisticsSongData
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface Tag
  */
 export interface Tag {
@@ -2351,6 +3537,379 @@ export interface Tag {
 /**
  * 
  * @export
+ * @interface Team
+ */
+export interface Team {
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'joinCode': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof Team
+     */
+    'selection': Playlist;
+    /**
+     * 
+     * @type {Array<TeamMember>}
+     * @memberof Team
+     */
+    'members': Array<TeamMember>;
+    /**
+     * 
+     * @type {User}
+     * @memberof Team
+     */
+    'createdBy': User;
+    /**
+     * 
+     * @type {PermissionUserGroup}
+     * @memberof Team
+     */
+    'managersPermissionGroup': PermissionUserGroup;
+    /**
+     * 
+     * @type {Array<Playlist>}
+     * @memberof Team
+     */
+    'playlists': Array<Playlist>;
+    /**
+     * 
+     * @type {Image}
+     * @memberof Team
+     */
+    'logo': Image;
+    /**
+     * 
+     * @type {Array<Playlist>}
+     * @memberof Team
+     */
+    'pinnedPlaylists': Array<Playlist>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    'payload': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEvent
+ */
+export interface TeamEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Team}
+     * @memberof TeamEvent
+     */
+    'team': Team;
+    /**
+     * 
+     * @type {TeamMember}
+     * @memberof TeamEvent
+     */
+    'leader': TeamMember;
+    /**
+     * 
+     * @type {Array<TeamMember>}
+     * @memberof TeamEvent
+     */
+    'members': Array<TeamMember>;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'eventDate': string;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof TeamEvent
+     */
+    'attachedPlaylist': Playlist;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEvent
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventData
+ */
+export interface TeamEventData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'date': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventData
+     */
+    'teamGuid': string;
+    /**
+     * 
+     * @type {TeamEventMemberData}
+     * @memberof TeamEventData
+     */
+    'leader': TeamEventMemberData;
+    /**
+     * 
+     * @type {Array<TeamEventMemberData>}
+     * @memberof TeamEventData
+     */
+    'members': Array<TeamEventMemberData>;
+    /**
+     * 
+     * @type {TeamEventPlaylistData}
+     * @memberof TeamEventData
+     */
+    'playlist': TeamEventPlaylistData;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventMemberData
+ */
+export interface TeamEventMemberData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventMemberData
+     */
+    'lastName': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamEventPlaylistData
+ */
+export interface TeamEventPlaylistData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventPlaylistData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamEventPlaylistData
+     */
+    'title': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamMember
+ */
+export interface TeamMember {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMember
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {Team}
+     * @memberof TeamMember
+     */
+    'team': Team;
+    /**
+     * 
+     * @type {User}
+     * @memberof TeamMember
+     */
+    'user': User;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMember
+     */
+    'role': TeamMemberRoleEnum;
+}
+
+export const TeamMemberRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type TeamMemberRoleEnum = typeof TeamMemberRoleEnum[keyof typeof TeamMemberRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface TeamMemberDto
+ */
+export interface TeamMemberDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMemberDto
+     */
+    'userGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMemberDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMemberDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMemberDto
+     */
+    'lastName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMemberDto
+     */
+    'role': TeamMemberDtoRoleEnum;
+}
+
+export const TeamMemberDtoRoleEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1
+} as const;
+
+export type TeamMemberDtoRoleEnum = typeof TeamMemberDtoRoleEnum[keyof typeof TeamMemberDtoRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface TeamOfUserDto
+ */
+export interface TeamOfUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'logoGuid': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface TeamPlaylistData
+ */
+export interface TeamPlaylistData {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamPlaylistData
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamPlaylistData
+     */
+    'title': string;
+}
+/**
+ * 
+ * @export
  * @interface TransposePlaylistItemInDto
  */
 export interface TransposePlaylistItemInDto {
@@ -2366,6 +3925,82 @@ export interface TransposePlaylistItemInDto {
      * @memberof TransposePlaylistItemInDto
      */
     'key': string;
+}
+/**
+ * 
+ * @export
+ * @interface TrendingSong
+ */
+export interface TrendingSong {
+    /**
+     * 
+     * @type {StatisticsSongData}
+     * @memberof TrendingSong
+     */
+    'song': StatisticsSongData;
+    /**
+     * 
+     * @type {number}
+     * @memberof TrendingSong
+     */
+    'trending': number;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateNoteInDto
+ */
+export interface UpdateNoteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateNoteInDto
+     */
+    'noteGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateNoteInDto
+     */
+    'content': string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateTeamNoteInDto
+ */
+export interface UpdateTeamNoteInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamNoteInDto
+     */
+    'noteGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamNoteInDto
+     */
+    'content': string;
+}
+/**
+ * 
+ * @export
+ * @interface UploadImageOutDto
+ */
+export interface UploadImageOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadImageOutDto
+     */
+    'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadImageOutDto
+     */
+    'fileName': string;
 }
 /**
  * 
@@ -2473,10 +4108,16 @@ export interface User {
     'resetTokens': Array<UserToken>;
     /**
      * 
-     * @type {LoginMethod}
+     * @type {Image}
      * @memberof User
      */
-    'loginMethods': LoginMethod;
+    'picture': Image;
+    /**
+     * 
+     * @type {Playlist}
+     * @memberof User
+     */
+    'favourites': Playlist;
 }
 
 export const UserRoleEnum = {
@@ -2817,6 +4458,45 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeProfilePhoto: async (changeProfilePhotoInDto: ChangeProfilePhotoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeProfilePhotoInDto' is not null or undefined
+            assertParamExists('authControllerChangeProfilePhoto', 'changeProfilePhotoInDto', changeProfilePhotoInDto)
+            const localVarPath = `/auth/change-profile-photo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeProfilePhotoInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2910,6 +4590,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -2945,6 +4629,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -3014,6 +4702,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3048,6 +4740,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (email !== undefined) {
                 localVarQueryParameter['email'] = email;
@@ -3086,6 +4782,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3122,6 +4822,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3156,6 +4860,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangePassword(changePasswordInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerChangePassword']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangeProfilePhoto(changeProfilePhotoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerChangeProfilePhoto']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3289,6 +5005,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerChangeProfilePhoto(changeProfilePhotoInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3389,6 +5114,17 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerChangePassword(changePasswordInDto: ChangePasswordInDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerChangePassword(changePasswordInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ChangeProfilePhotoInDto} changeProfilePhotoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerChangeProfilePhoto(changeProfilePhotoInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3506,35 +5242,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mailControllerSendTestMail: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/mail/test`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         statusMonitorControllerRoot: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/monitor/status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3574,17 +5281,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mailControllerSendTestMail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mailControllerSendTestMail(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.mailControllerSendTestMail']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         async statusMonitorControllerRoot(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.statusMonitorControllerRoot(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -3606,14 +5302,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mailControllerSendTestMail(options?: any): AxiosPromise<void> {
-            return localVarFp.mailControllerSendTestMail(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         statusMonitorControllerRoot(options?: any): AxiosPromise<void> {
             return localVarFp.statusMonitorControllerRoot(options).then((request) => request(axios, basePath));
         },
@@ -3627,16 +5315,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public mailControllerSendTestMail(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).mailControllerSendTestMail(options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -4272,6 +5950,340 @@ export class GroupApi extends BaseAPI {
 
 
 /**
+ * ImagesApi - axios parameter creator
+ * @export
+ */
+export const ImagesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerGetImage: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'guid' is not null or undefined
+            assertParamExists('imagesControllerGetImage', 'guid', guid)
+            const localVarPath = `/images/{guid}`
+                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerUploadFile: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/images/upload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ImagesApi - functional programming interface
+ * @export
+ */
+export const ImagesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ImagesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async imagesControllerGetImage(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.imagesControllerGetImage(guid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ImagesApi.imagesControllerGetImage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async imagesControllerUploadFile(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadImageOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.imagesControllerUploadFile(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ImagesApi.imagesControllerUploadFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ImagesApi - factory interface
+ * @export
+ */
+export const ImagesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ImagesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerGetImage(guid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.imagesControllerGetImage(guid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        imagesControllerUploadFile(options?: any): AxiosPromise<UploadImageOutDto> {
+            return localVarFp.imagesControllerUploadFile(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ImagesApi - object-oriented interface
+ * @export
+ * @class ImagesApi
+ * @extends {BaseAPI}
+ */
+export class ImagesApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} guid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImagesApi
+     */
+    public imagesControllerGetImage(guid: string, options?: RawAxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).imagesControllerGetImage(guid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImagesApi
+     */
+    public imagesControllerUploadFile(options?: RawAxiosRequestConfig) {
+        return ImagesApiFp(this.configuration).imagesControllerUploadFile(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MailApi - axios parameter creator
+ * @export
+ */
+export const MailApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {PostSendMailFeedbackInDto} postSendMailFeedbackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mailControllerSendFeedbackMail: async (postSendMailFeedbackInDto: PostSendMailFeedbackInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postSendMailFeedbackInDto' is not null or undefined
+            assertParamExists('mailControllerSendFeedbackMail', 'postSendMailFeedbackInDto', postSendMailFeedbackInDto)
+            const localVarPath = `/mail/feedback`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postSendMailFeedbackInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mailControllerSendTestMail: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/mail/test`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MailApi - functional programming interface
+ * @export
+ */
+export const MailApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MailApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {PostSendMailFeedbackInDto} postSendMailFeedbackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mailControllerSendFeedbackMail(postSendMailFeedbackInDto: PostSendMailFeedbackInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mailControllerSendFeedbackMail(postSendMailFeedbackInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MailApi.mailControllerSendFeedbackMail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mailControllerSendTestMail(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mailControllerSendTestMail(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MailApi.mailControllerSendTestMail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MailApi - factory interface
+ * @export
+ */
+export const MailApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MailApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {PostSendMailFeedbackInDto} postSendMailFeedbackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mailControllerSendFeedbackMail(postSendMailFeedbackInDto: PostSendMailFeedbackInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.mailControllerSendFeedbackMail(postSendMailFeedbackInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mailControllerSendTestMail(options?: any): AxiosPromise<void> {
+            return localVarFp.mailControllerSendTestMail(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MailApi - object-oriented interface
+ * @export
+ * @class MailApi
+ * @extends {BaseAPI}
+ */
+export class MailApi extends BaseAPI {
+    /**
+     * 
+     * @param {PostSendMailFeedbackInDto} postSendMailFeedbackInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MailApi
+     */
+    public mailControllerSendFeedbackMail(postSendMailFeedbackInDto: PostSendMailFeedbackInDto, options?: RawAxiosRequestConfig) {
+        return MailApiFp(this.configuration).mailControllerSendFeedbackMail(postSendMailFeedbackInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MailApi
+     */
+    public mailControllerSendTestMail(options?: RawAxiosRequestConfig) {
+        return MailApiFp(this.configuration).mailControllerSendTestMail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * MessengerApi - axios parameter creator
  * @export
  */
@@ -4531,6 +6543,45 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerAddPermissionToGroup: async (addPermissionToGroupInDto: AddPermissionToGroupInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPermissionToGroupInDto' is not null or undefined
+            assertParamExists('permissionControllerAddPermissionToGroup', 'addPermissionToGroupInDto', addPermissionToGroupInDto)
+            const localVarPath = `/permissions/group/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPermissionToGroupInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4692,6 +6743,45 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerRemovePermissionFromGroup: async (addPermissionToGroupInDto: AddPermissionToGroupInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPermissionToGroupInDto' is not null or undefined
+            assertParamExists('permissionControllerRemovePermissionFromGroup', 'addPermissionToGroupInDto', addPermissionToGroupInDto)
+            const localVarPath = `/permissions/group/remove`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPermissionToGroupInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4739,6 +6829,18 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
 export const PermissionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PermissionsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionUserGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PermissionsApi.permissionControllerAddPermissionToGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -4790,6 +6892,18 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionUserGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PermissionsApi.permissionControllerRemovePermissionFromGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4810,6 +6924,15 @@ export const PermissionsApiFp = function(configuration?: Configuration) {
 export const PermissionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PermissionsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: any): AxiosPromise<PermissionUserGroup> {
+            return localVarFp.permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -4849,6 +6972,15 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: any): AxiosPromise<PermissionUserGroup> {
+            return localVarFp.permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4866,6 +6998,17 @@ export const PermissionsApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class PermissionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PermissionsApi
+     */
+    public permissionControllerAddPermissionToGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig) {
+        return PermissionsApiFp(this.configuration).permissionControllerAddPermissionToGroup(addPermissionToGroupInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {AddPermissionToUserInDto} addPermissionToUserInDto 
@@ -4909,6 +7052,17 @@ export class PermissionsApi extends BaseAPI {
      */
     public permissionControllerGetUserPermissions(userGuid?: string, options?: RawAxiosRequestConfig) {
         return PermissionsApiFp(this.configuration).permissionControllerGetUserPermissions(userGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPermissionToGroupInDto} addPermissionToGroupInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PermissionsApi
+     */
+    public permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto: AddPermissionToGroupInDto, options?: RawAxiosRequestConfig) {
+        return PermissionsApiFp(this.configuration).permissionControllerRemovePermissionFromGroup(addPermissionToGroupInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5030,6 +7184,85 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
 
             if (guid !== undefined) {
                 localVarQueryParameter['guid'] = guid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerEditItem: async (editItemInDto: EditItemInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editItemInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerEditItem', 'editItemInDto', editItemInDto)
+            const localVarPath = `/playlist/edititem`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editItemInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerIsItemEditable: async (itemGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'itemGuid' is not null or undefined
+            assertParamExists('playlistEditingControllerIsItemEditable', 'itemGuid', itemGuid)
+            const localVarPath = `/playlist/isitemeditable`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (itemGuid !== undefined) {
+                localVarQueryParameter['itemGuid'] = itemGuid;
             }
 
 
@@ -5170,6 +7403,45 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerRequireItemEdit: async (requireItemEditInDto: RequireItemEditInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requireItemEditInDto' is not null or undefined
+            assertParamExists('playlistEditingControllerRequireItemEdit', 'requireItemEditInDto', requireItemEditInDto)
+            const localVarPath = `/playlist/requireItemEdit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requireItemEditInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {TransposePlaylistItemInDto} transposePlaylistItemInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5254,6 +7526,30 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerEditItem(editItemInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerEditItem']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerIsItemEditable(itemGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerIsItemEditable(itemGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerIsItemEditable']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
@@ -5287,6 +7583,18 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerReorderPlaylist']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequireItemEditOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.playlistEditingControllerRequireItemEdit']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5339,6 +7647,24 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {EditItemInDto} editItemInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.playlistEditingControllerEditItem(editItemInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} itemGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerIsItemEditable(itemGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.playlistEditingControllerIsItemEditable(itemGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} packGuid 
          * @param {string} playlist 
          * @param {*} [options] Override http request option.
@@ -5364,6 +7690,15 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
          */
         playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RequireItemEditInDto} requireItemEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: any): AxiosPromise<RequireItemEditOutDto> {
+            return localVarFp.playlistEditingControllerRequireItemEdit(requireItemEditInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5418,6 +7753,28 @@ export class PlaylistEditingApi extends BaseAPI {
 
     /**
      * 
+     * @param {EditItemInDto} editItemInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerEditItem(editItemInDto: EditItemInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerEditItem(editItemInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} itemGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerIsItemEditable(itemGuid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerIsItemEditable(itemGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} packGuid 
      * @param {string} playlist 
      * @param {*} [options] Override http request option.
@@ -5448,6 +7805,17 @@ export class PlaylistEditingApi extends BaseAPI {
      */
     public playlistEditingControllerReorderPlaylist(reorderPlaylistInDto: ReorderPlaylistInDto, options?: RawAxiosRequestConfig) {
         return PlaylistEditingApiFp(this.configuration).playlistEditingControllerReorderPlaylist(reorderPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RequireItemEditInDto} requireItemEditInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public playlistEditingControllerRequireItemEdit(requireItemEditInDto: RequireItemEditInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).playlistEditingControllerRequireItemEdit(requireItemEditInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5642,6 +8010,46 @@ export const PlaylistGettingApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerUpdatePlaylistOpenDate: async (playlistGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'playlistGuid' is not null or undefined
+            assertParamExists('playlistGettingControllerUpdatePlaylistOpenDate', 'playlistGuid', playlistGuid)
+            const localVarPath = `/playlist/updateopendate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (playlistGuid !== undefined) {
+                localVarQueryParameter['playlistGuid'] = playlistGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -5702,6 +8110,18 @@ export const PlaylistGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerSearchInPlaylist']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -5749,6 +8169,15 @@ export const PlaylistGettingApiFactory = function (configuration?: Configuration
          */
         playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: any): AxiosPromise<GetSearchInPlaylistResult> {
             return localVarFp.playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: any): AxiosPromise<void> {
+            return localVarFp.playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5804,6 +8233,17 @@ export class PlaylistGettingApi extends BaseAPI {
      */
     public playlistGettingControllerSearchInPlaylist(searchKey: string, playlist: string, page?: number, options?: RawAxiosRequestConfig) {
         return PlaylistGettingApiFp(this.configuration).playlistGettingControllerSearchInPlaylist(searchKey, playlist, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} playlistGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistGettingApi
+     */
+    public playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid: string, options?: RawAxiosRequestConfig) {
+        return PlaylistGettingApiFp(this.configuration).playlistGettingControllerUpdatePlaylistOpenDate(playlistGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6300,15 +8740,15 @@ export const SongDeletingApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerDelete: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songDeletingControllerDelete', 'guid', guid)
-            const localVarPath = `/song/variant/delete/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+        songDeletingControllerDelete: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songDeletingControllerDelete', 'packGuid', packGuid)
+            const localVarPath = `/song/variant/delete/{packGuid}`
+                .replace(`{${"packGuid"}}`, encodeURIComponent(String(packGuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6337,15 +8777,15 @@ export const SongDeletingApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerRestore: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('songDeletingControllerRestore', 'guid', guid)
-            const localVarPath = `/song/variant/restore/{guid}`
-                .replace(`{${"guid"}}`, encodeURIComponent(String(guid)));
+        songDeletingControllerRestore: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songDeletingControllerRestore', 'packGuid', packGuid)
+            const localVarPath = `/song/variant/restore/{packGuid}`
+                .replace(`{${"packGuid"}}`, encodeURIComponent(String(packGuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6384,24 +8824,24 @@ export const SongDeletingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songDeletingControllerDelete(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerDelete(guid, options);
+        async songDeletingControllerDelete(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerDelete(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongDeletingApi.songDeletingControllerDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songDeletingControllerRestore(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerRestore(guid, options);
+        async songDeletingControllerRestore(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songDeletingControllerRestore(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongDeletingApi.songDeletingControllerRestore']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6418,21 +8858,21 @@ export const SongDeletingApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerDelete(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songDeletingControllerDelete(guid, options).then((request) => request(axios, basePath));
+        songDeletingControllerDelete(packGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songDeletingControllerDelete(packGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} guid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songDeletingControllerRestore(guid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songDeletingControllerRestore(guid, options).then((request) => request(axios, basePath));
+        songDeletingControllerRestore(packGuid: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songDeletingControllerRestore(packGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6446,24 +8886,24 @@ export const SongDeletingApiFactory = function (configuration?: Configuration, b
 export class SongDeletingApi extends BaseAPI {
     /**
      * 
-     * @param {string} guid 
+     * @param {string} packGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongDeletingApi
      */
-    public songDeletingControllerDelete(guid: string, options?: RawAxiosRequestConfig) {
-        return SongDeletingApiFp(this.configuration).songDeletingControllerDelete(guid, options).then((request) => request(this.axios, this.basePath));
+    public songDeletingControllerDelete(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongDeletingApiFp(this.configuration).songDeletingControllerDelete(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} guid 
+     * @param {string} packGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongDeletingApi
      */
-    public songDeletingControllerRestore(guid: string, options?: RawAxiosRequestConfig) {
-        return SongDeletingApiFp(this.configuration).songDeletingControllerRestore(guid, options).then((request) => request(this.axios, this.basePath));
+    public songDeletingControllerRestore(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongDeletingApiFp(this.configuration).songDeletingControllerRestore(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6651,6 +9091,249 @@ export class SongEditingApi extends BaseAPI {
 
 
 /**
+ * SongFavouritesApi - axios parameter creator
+ * @export
+ */
+export const SongFavouritesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerAddFavourite: async (addFavouriteInDto: AddFavouriteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addFavouriteInDto' is not null or undefined
+            assertParamExists('songFavouritesControllerAddFavourite', 'addFavouriteInDto', addFavouriteInDto)
+            const localVarPath = `/song/favourites/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addFavouriteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerGetFavourites: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/favourites`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerRemoveFavourite: async (removeFavouriteInDto: RemoveFavouriteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'removeFavouriteInDto' is not null or undefined
+            assertParamExists('songFavouritesControllerRemoveFavourite', 'removeFavouriteInDto', removeFavouriteInDto)
+            const localVarPath = `/song/favourites/remove`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(removeFavouriteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongFavouritesApi - functional programming interface
+ * @export
+ */
+export const SongFavouritesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongFavouritesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerAddFavourite(addFavouriteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerAddFavourite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerGetFavourites(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetFavouritesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerGetFavourites(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerGetFavourites']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongFavouritesApi.songFavouritesControllerRemoveFavourite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongFavouritesApi - factory interface
+ * @export
+ */
+export const SongFavouritesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongFavouritesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddFavouriteInDto} addFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: any): AxiosPromise<PlaylistItem> {
+            return localVarFp.songFavouritesControllerAddFavourite(addFavouriteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerGetFavourites(options?: any): AxiosPromise<GetFavouritesOutDto> {
+            return localVarFp.songFavouritesControllerGetFavourites(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongFavouritesApi - object-oriented interface
+ * @export
+ * @class SongFavouritesApi
+ * @extends {BaseAPI}
+ */
+export class SongFavouritesApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddFavouriteInDto} addFavouriteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerAddFavourite(addFavouriteInDto: AddFavouriteInDto, options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerAddFavourite(addFavouriteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerGetFavourites(options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerGetFavourites(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RemoveFavouriteInDto} removeFavouriteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongFavouritesApi
+     */
+    public songFavouritesControllerRemoveFavourite(removeFavouriteInDto: RemoveFavouriteInDto, options?: RawAxiosRequestConfig) {
+        return SongFavouritesApiFp(this.configuration).songFavouritesControllerRemoveFavourite(removeFavouriteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * SongGettingApi - axios parameter creator
  * @export
  */
@@ -6706,10 +9389,11 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {number} [page] 
+         * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetList: async (page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        songGettingControllerGetList: async (page?: number, perPage?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/song/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6722,9 +9406,87 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
             }
+
+            if (perPage !== undefined) {
+                localVarQueryParameter['perPage'] = perPage;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetListSongCount: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/listsongcount`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} url 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetPublicSongBySource: async (url: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'url' is not null or undefined
+            assertParamExists('songGettingControllerGetPublicSongBySource', 'url', url)
+            const localVarPath = `/song/publicsongbysource/{url}`
+                .replace(`{${"url"}}`, encodeURIComponent(String(url)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6754,6 +9516,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6890,6 +9656,10 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6938,6 +9708,84 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchGlobalSongsInPopup: async (searchString?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/teampopupglobalsongssearch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchMySongsInPopup: async (searchString?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/teampopupmysongssearch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (searchString !== undefined) {
+                localVarQueryParameter['searchString'] = searchString;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -6964,13 +9812,37 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} [page] 
+         * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetListSongData>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetList(page, options);
+        async songGettingControllerGetList(page?: number, perPage?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetListSongData>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetList(page, perPage, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetListSongCount(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetListSongCount(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetListSongCount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} url 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetPublicSongBySource(url: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPackAliasFromSourceUrlOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetPublicSongBySource(url, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetPublicSongBySource']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -7041,6 +9913,32 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetVariantFromAlias']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGlobalSongsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerSearchGlobalSongsInPopup(searchString, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerSearchGlobalSongsInPopup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGlobalSongsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerSearchMySongsInPopup(searchString, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerSearchMySongsInPopup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -7064,11 +9962,29 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
         /**
          * 
          * @param {number} [page] 
+         * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetList(page?: number, options?: any): AxiosPromise<Array<GetListSongData>> {
-            return localVarFp.songGettingControllerGetList(page, options).then((request) => request(axios, basePath));
+        songGettingControllerGetList(page?: number, perPage?: number, options?: any): AxiosPromise<Array<GetListSongData>> {
+            return localVarFp.songGettingControllerGetList(page, perPage, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetListSongCount(options?: any): AxiosPromise<number> {
+            return localVarFp.songGettingControllerGetListSongCount(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} url 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetPublicSongBySource(url: string, options?: any): AxiosPromise<GetPackAliasFromSourceUrlOutDto> {
+            return localVarFp.songGettingControllerGetPublicSongBySource(url, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -7120,6 +10036,26 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
         songGettingControllerGetVariantFromAlias(alias: string, options?: any): AxiosPromise<string> {
             return localVarFp.songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
+            return localVarFp.songGettingControllerSearchGlobalSongsInPopup(searchString, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+         * @summary 
+         * @param {string} [searchString] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerSearchMySongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
+            return localVarFp.songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -7145,12 +10081,34 @@ export class SongGettingApi extends BaseAPI {
     /**
      * 
      * @param {number} [page] 
+     * @param {number} [perPage] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongGettingApi
      */
-    public songGettingControllerGetList(page?: number, options?: RawAxiosRequestConfig) {
-        return SongGettingApiFp(this.configuration).songGettingControllerGetList(page, options).then((request) => request(this.axios, this.basePath));
+    public songGettingControllerGetList(page?: number, perPage?: number, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetList(page, perPage, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetListSongCount(options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetListSongCount(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} url 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetPublicSongBySource(url: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetPublicSongBySource(url, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7213,6 +10171,354 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerGetVariantFromAlias(alias: string, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetVariantFromAlias(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+     * @summary 
+     * @param {string} [searchString] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerSearchGlobalSongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerSearchGlobalSongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for popup song search gloal songs I not support paging, but it return constant count of songs
+     * @summary 
+     * @param {string} [searchString] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongNotesApi - axios parameter creator
+ * @export
+ */
+export const SongNotesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddNoteToVariantInDto} addNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerAddNoteToVariant: async (addNoteToVariantInDto: AddNoteToVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addNoteToVariantInDto' is not null or undefined
+            assertParamExists('songNotesControllerAddNoteToVariant', 'addNoteToVariantInDto', addNoteToVariantInDto)
+            const localVarPath = `/song/variant/notes/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addNoteToVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {DeleteNoteInDto} deleteNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerDeleteNote: async (deleteNoteInDto: DeleteNoteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deleteNoteInDto' is not null or undefined
+            assertParamExists('songNotesControllerDeleteNote', 'deleteNoteInDto', deleteNoteInDto)
+            const localVarPath = `/song/variant/notes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteNoteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UpdateNoteInDto} updateNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerEditNote: async (updateNoteInDto: UpdateNoteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateNoteInDto' is not null or undefined
+            assertParamExists('songNotesControllerEditNote', 'updateNoteInDto', updateNoteInDto)
+            const localVarPath = `/song/variant/notes/edit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateNoteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerGetNotesOfVariantAndUser: async (variantGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'variantGuid' is not null or undefined
+            assertParamExists('songNotesControllerGetNotesOfVariantAndUser', 'variantGuid', variantGuid)
+            const localVarPath = `/song/variant/notes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (variantGuid !== undefined) {
+                localVarQueryParameter['variantGuid'] = variantGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongNotesApi - functional programming interface
+ * @export
+ */
+export const SongNotesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongNotesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddNoteToVariantInDto} addNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songNotesControllerAddNoteToVariant(addNoteToVariantInDto: AddNoteToVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerAddNoteToVariant(addNoteToVariantInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongNotesApi.songNotesControllerAddNoteToVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {DeleteNoteInDto} deleteNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songNotesControllerDeleteNote(deleteNoteInDto: DeleteNoteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerDeleteNote(deleteNoteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongNotesApi.songNotesControllerDeleteNote']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {UpdateNoteInDto} updateNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songNotesControllerEditNote(updateNoteInDto: UpdateNoteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerEditNote(updateNoteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongNotesApi.songNotesControllerEditNote']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerGetNotesOfVariantAndUser(variantGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongNotesApi.songNotesControllerGetNotesOfVariantAndUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongNotesApi - factory interface
+ * @export
+ */
+export const SongNotesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongNotesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddNoteToVariantInDto} addNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerAddNoteToVariant(addNoteToVariantInDto: AddNoteToVariantInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songNotesControllerAddNoteToVariant(addNoteToVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {DeleteNoteInDto} deleteNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerDeleteNote(deleteNoteInDto: DeleteNoteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songNotesControllerDeleteNote(deleteNoteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateNoteInDto} updateNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerEditNote(updateNoteInDto: UpdateNoteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songNotesControllerEditNote(updateNoteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
+            return localVarFp.songNotesControllerGetNotesOfVariantAndUser(variantGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongNotesApi - object-oriented interface
+ * @export
+ * @class SongNotesApi
+ * @extends {BaseAPI}
+ */
+export class SongNotesApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddNoteToVariantInDto} addNoteToVariantInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongNotesApi
+     */
+    public songNotesControllerAddNoteToVariant(addNoteToVariantInDto: AddNoteToVariantInDto, options?: RawAxiosRequestConfig) {
+        return SongNotesApiFp(this.configuration).songNotesControllerAddNoteToVariant(addNoteToVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {DeleteNoteInDto} deleteNoteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongNotesApi
+     */
+    public songNotesControllerDeleteNote(deleteNoteInDto: DeleteNoteInDto, options?: RawAxiosRequestConfig) {
+        return SongNotesApiFp(this.configuration).songNotesControllerDeleteNote(deleteNoteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateNoteInDto} updateNoteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongNotesApi
+     */
+    public songNotesControllerEditNote(updateNoteInDto: UpdateNoteInDto, options?: RawAxiosRequestConfig) {
+        return SongNotesApiFp(this.configuration).songNotesControllerEditNote(updateNoteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} variantGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongNotesApi
+     */
+    public songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: RawAxiosRequestConfig) {
+        return SongNotesApiFp(this.configuration).songNotesControllerGetNotesOfVariantAndUser(variantGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -7705,6 +11011,2822 @@ export class SongValidationApi extends BaseAPI {
      */
     public songValidationControllerValidateSheetDataAndTitle(postValidateSheetDataAndTitleInDto: PostValidateSheetDataAndTitleInDto, options?: RawAxiosRequestConfig) {
         return SongValidationApiFp(this.configuration).songValidationControllerValidateSheetDataAndTitle(postValidateSheetDataAndTitleInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamAddingApi - axios parameter creator
+ * @export
+ */
+export const TeamAddingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamInDto} createTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamAddingControllerCreateNewTeam: async (createTeamInDto: CreateTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTeamInDto' is not null or undefined
+            assertParamExists('teamAddingControllerCreateNewTeam', 'createTeamInDto', createTeamInDto)
+            const localVarPath = `/submodules/teams/create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamAddingApi - functional programming interface
+ * @export
+ */
+export const TeamAddingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamAddingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamInDto} createTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamAddingControllerCreateNewTeam(createTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamAddingApi.teamAddingControllerCreateNewTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamAddingApi - factory interface
+ * @export
+ */
+export const TeamAddingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamAddingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamInDto} createTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: any): AxiosPromise<CreateTeamOutDto> {
+            return localVarFp.teamAddingControllerCreateNewTeam(createTeamInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamAddingApi - object-oriented interface
+ * @export
+ * @class TeamAddingApi
+ * @extends {BaseAPI}
+ */
+export class TeamAddingApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateTeamInDto} createTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamAddingApi
+     */
+    public teamAddingControllerCreateNewTeam(createTeamInDto: CreateTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamAddingApiFp(this.configuration).teamAddingControllerCreateNewTeam(createTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamEditingApi - axios parameter creator
+ * @export
+ */
+export const TeamEditingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamInfo: async (changeTeamInfoInDto: ChangeTeamInfoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeTeamInfoInDto' is not null or undefined
+            assertParamExists('teamEditingControllerChangeTeamInfo', 'changeTeamInfoInDto', changeTeamInfoInDto)
+            const localVarPath = `/submodules/teams/changeteaminfo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeTeamInfoInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamLogo: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/changelogo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerDeleteTeam: async (deleteTeamInDto: DeleteTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deleteTeamInDto' is not null or undefined
+            assertParamExists('teamEditingControllerDeleteTeam', 'deleteTeamInDto', deleteTeamInDto)
+            const localVarPath = `/submodules/teams/deleteteam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerEditPayload: async (editPayloadInDto: EditPayloadInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editPayloadInDto' is not null or undefined
+            assertParamExists('teamEditingControllerEditPayload', 'editPayloadInDto', editPayloadInDto)
+            const localVarPath = `/submodules/teams/editpayload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editPayloadInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerRemoveTeamLogo: async (removeTeamLogoInDto: RemoveTeamLogoInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'removeTeamLogoInDto' is not null or undefined
+            assertParamExists('teamEditingControllerRemoveTeamLogo', 'removeTeamLogoInDto', removeTeamLogoInDto)
+            const localVarPath = `/submodules/teams/removeLogo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(removeTeamLogoInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAddPackToTeam: async (addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPackToTeamSelectionInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerAddPackToTeam', 'addPackToTeamSelectionInDto', addPackToTeamSelectionInDto)
+            const localVarPath = `/submodules/teams/selection/add/pack`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPackToTeamSelectionInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAttachPlaylistToTeam: async (attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'attachPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerAttachPlaylistToTeam', 'attachPlaylistToTeamInDto', attachPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/selection/attachPlaylistToTeam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attachPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerRemovePackFromTeam: async (addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPackToTeamSelectionInDto' is not null or undefined
+            assertParamExists('teamSelectionControllerRemovePackFromTeam', 'addPackToTeamSelectionInDto', addPackToTeamSelectionInDto)
+            const localVarPath = `/submodules/teams/selection/remove/pack`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addPackToTeamSelectionInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamEditingApi - functional programming interface
+ * @export
+ */
+export const TeamEditingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamEditingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerChangeTeamInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerChangeTeamLogo(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerChangeTeamLogo(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerChangeTeamLogo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerDeleteTeam(deleteTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerDeleteTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerEditPayload(editPayloadInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerEditPayload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamEditingControllerRemoveTeamLogo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistItemOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerAddPackToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerAttachPlaylistToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEditingApi.teamSelectionControllerRemovePackFromTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamEditingApi - factory interface
+ * @export
+ */
+export const TeamEditingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamEditingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerChangeTeamLogo(options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerChangeTeamLogo(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {DeleteTeamInDto} deleteTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {EditPayloadInDto} editPayloadInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamEditingControllerEditPayload(editPayloadInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: any): AxiosPromise<PlaylistItemOutDto> {
+            return localVarFp.teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamEditingApi - object-oriented interface
+ * @export
+ * @class TeamEditingApi
+ * @extends {BaseAPI}
+ */
+export class TeamEditingApi extends BaseAPI {
+    /**
+     * 
+     * @param {ChangeTeamInfoInDto} changeTeamInfoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerChangeTeamInfo(changeTeamInfoInDto: ChangeTeamInfoInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamInfo(changeTeamInfoInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerChangeTeamLogo(options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerChangeTeamLogo(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {DeleteTeamInDto} deleteTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerDeleteTeam(deleteTeamInDto: DeleteTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerDeleteTeam(deleteTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {EditPayloadInDto} editPayloadInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerEditPayload(editPayloadInDto: EditPayloadInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerEditPayload(editPayloadInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RemoveTeamLogoInDto} removeTeamLogoInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto: RemoveTeamLogoInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamEditingControllerRemoveTeamLogo(removeTeamLogoInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerAddPackToTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AttachPlaylistToTeamInDto} attachPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto: AttachPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerAttachPlaylistToTeam(attachPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddPackToTeamSelectionInDto} addPackToTeamSelectionInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEditingApi
+     */
+    public teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto: AddPackToTeamSelectionInDto, options?: RawAxiosRequestConfig) {
+        return TeamEditingApiFp(this.configuration).teamSelectionControllerRemovePackFromTeam(addPackToTeamSelectionInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamEventsApi - axios parameter creator
+ * @export
+ */
+export const TeamEventsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerCreateEvent: async (createTeamEventInDto: CreateTeamEventInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTeamEventInDto' is not null or undefined
+            assertParamExists('teamEventControllerCreateEvent', 'createTeamEventInDto', createTeamEventInDto)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamEventInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerDeleteEvent: async (eventGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'eventGuid' is not null or undefined
+            assertParamExists('teamEventControllerDeleteEvent', 'eventGuid', eventGuid)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (eventGuid !== undefined) {
+                localVarQueryParameter['eventGuid'] = eventGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerEditEvent: async (editTeamEventInDto: EditTeamEventInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'editTeamEventInDto' is not null or undefined
+            assertParamExists('teamEventControllerEditEvent', 'editTeamEventInDto', editTeamEventInDto)
+            const localVarPath = `/teams/events/edit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(editTeamEventInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEventByPlaylist: async (playlistGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'playlistGuid' is not null or undefined
+            assertParamExists('teamEventControllerGetEventByPlaylist', 'playlistGuid', playlistGuid)
+            const localVarPath = `/teams/events/byplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (playlistGuid !== undefined) {
+                localVarQueryParameter['playlistGuid'] = playlistGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEvents: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamEventControllerGetEvents', 'teamGuid', teamGuid)
+            const localVarPath = `/teams/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamEventsApi - functional programming interface
+ * @export
+ */
+export const TeamEventsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamEventsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerCreateEvent(createTeamEventInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerCreateEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerDeleteEvent(eventGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerDeleteEvent(eventGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerDeleteEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEvent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerEditEvent(editTeamEventInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerEditEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamEventData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerGetEventByPlaylist(playlistGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerGetEventByPlaylist']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamEventControllerGetEvents(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamEventsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamEventControllerGetEvents(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamEventsApi.teamEventControllerGetEvents']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamEventsApi - factory interface
+ * @export
+ */
+export const TeamEventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamEventsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTeamEventInDto} createTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerCreateEvent(createTeamEventInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} eventGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerDeleteEvent(eventGuid: string, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerDeleteEvent(eventGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {EditTeamEventInDto} editTeamEventInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: any): AxiosPromise<TeamEvent> {
+            return localVarFp.teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} playlistGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: any): AxiosPromise<TeamEventData> {
+            return localVarFp.teamEventControllerGetEventByPlaylist(playlistGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamEventControllerGetEvents(teamGuid: string, options?: any): AxiosPromise<GetTeamEventsOutDto> {
+            return localVarFp.teamEventControllerGetEvents(teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamEventsApi - object-oriented interface
+ * @export
+ * @class TeamEventsApi
+ * @extends {BaseAPI}
+ */
+export class TeamEventsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateTeamEventInDto} createTeamEventInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerCreateEvent(createTeamEventInDto: CreateTeamEventInDto, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerCreateEvent(createTeamEventInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} eventGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerDeleteEvent(eventGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerDeleteEvent(eventGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {EditTeamEventInDto} editTeamEventInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerEditEvent(editTeamEventInDto: EditTeamEventInDto, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerEditEvent(editTeamEventInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} playlistGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerGetEventByPlaylist(playlistGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerGetEventByPlaylist(playlistGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamEventsApi
+     */
+    public teamEventControllerGetEvents(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamEventsApiFp(this.configuration).teamEventControllerGetEvents(teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamGettingApi - axios parameter creator
+ * @export
+ */
+export const TeamGettingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAliasBySubdomain: async (subdomain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'subdomain' is not null or undefined
+            assertParamExists('teamGettingControllerGetAliasBySubdomain', 'subdomain', subdomain)
+            const localVarPath = `/submodules/teams/aliasbysubdomain`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (subdomain !== undefined) {
+                localVarQueryParameter['subdomain'] = subdomain;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAllSubdomains: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/allsubdomains`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamBasicInfo: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('teamGettingControllerGetTeamBasicInfo', 'alias', alias)
+            const localVarPath = `/submodules/teams/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (alias !== undefined) {
+                localVarQueryParameter['alias'] = alias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamPayload: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamGettingControllerGetTeamPayload', 'teamGuid', teamGuid)
+            const localVarPath = `/submodules/teams/teampayload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamGettingApi - functional programming interface
+ * @export
+ */
+export const TeamGettingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamGettingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamAliasFromSubdomainOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetAliasBySubdomain(subdomain, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetAliasBySubdomain']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetAllSubdomains(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllTeamSubdomainAliasesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetAllSubdomains(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetAllSubdomains']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamInfoOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetTeamBasicInfo(alias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetTeamBasicInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamGettingControllerGetTeamPayload(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamGettingControllerGetTeamPayload(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamGettingApi.teamGettingControllerGetTeamPayload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamGettingApi - factory interface
+ * @export
+ */
+export const TeamGettingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamGettingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} subdomain 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: any): AxiosPromise<GetTeamAliasFromSubdomainOutDto> {
+            return localVarFp.teamGettingControllerGetAliasBySubdomain(subdomain, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetAllSubdomains(options?: any): AxiosPromise<GetAllTeamSubdomainAliasesOutDto> {
+            return localVarFp.teamGettingControllerGetAllSubdomains(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamBasicInfo(alias: string, options?: any): AxiosPromise<GetTeamInfoOutDto> {
+            return localVarFp.teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamGettingControllerGetTeamPayload(teamGuid: string, options?: any): AxiosPromise<string> {
+            return localVarFp.teamGettingControllerGetTeamPayload(teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamGettingApi - object-oriented interface
+ * @export
+ * @class TeamGettingApi
+ * @extends {BaseAPI}
+ */
+export class TeamGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} subdomain 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetAliasBySubdomain(subdomain: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetAliasBySubdomain(subdomain, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetAllSubdomains(options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetAllSubdomains(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} alias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetTeamBasicInfo(alias: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamBasicInfo(alias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamGettingApi
+     */
+    public teamGettingControllerGetTeamPayload(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamGettingApiFp(this.configuration).teamGettingControllerGetTeamPayload(teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamJoiningApi - axios parameter creator
+ * @export
+ */
+export const TeamJoiningApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerAddByEmail: async (addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addTeamMebmerByEmailInDto' is not null or undefined
+            assertParamExists('teamJoiningControllerAddByEmail', 'addTeamMebmerByEmailInDto', addTeamMebmerByEmailInDto)
+            const localVarPath = `/submodules/teams/addbyemail`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addTeamMebmerByEmailInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerGetJoinCode: async (teamAlias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamAlias' is not null or undefined
+            assertParamExists('teamJoiningControllerGetJoinCode', 'teamAlias', teamAlias)
+            const localVarPath = `/submodules/teams/joincode`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamAlias !== undefined) {
+                localVarQueryParameter['teamAlias'] = teamAlias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerJoinTeam: async (joinTeamInDto: JoinTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'joinTeamInDto' is not null or undefined
+            assertParamExists('teamJoiningControllerJoinTeam', 'joinTeamInDto', joinTeamInDto)
+            const localVarPath = `/submodules/teams/join`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(joinTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamJoiningApi - functional programming interface
+ * @export
+ */
+export const TeamJoiningApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamJoiningApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamJoiningApi.teamJoiningControllerAddByEmail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamJoiningControllerGetJoinCode(teamAlias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetJoinCodeOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamJoiningControllerGetJoinCode(teamAlias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamJoiningApi.teamJoiningControllerGetJoinCode']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JoinTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamJoiningControllerJoinTeam(joinTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamJoiningApi.teamJoiningControllerJoinTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamJoiningApi - factory interface
+ * @export
+ */
+export const TeamJoiningApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamJoiningApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerGetJoinCode(teamAlias: string, options?: any): AxiosPromise<GetJoinCodeOutDto> {
+            return localVarFp.teamJoiningControllerGetJoinCode(teamAlias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {JoinTeamInDto} joinTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: any): AxiosPromise<JoinTeamOutDto> {
+            return localVarFp.teamJoiningControllerJoinTeam(joinTeamInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamJoiningApi - object-oriented interface
+ * @export
+ * @class TeamJoiningApi
+ * @extends {BaseAPI}
+ */
+export class TeamJoiningApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddTeamMebmerByEmailInDto} addTeamMebmerByEmailInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamJoiningApi
+     */
+    public teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto: AddTeamMebmerByEmailInDto, options?: RawAxiosRequestConfig) {
+        return TeamJoiningApiFp(this.configuration).teamJoiningControllerAddByEmail(addTeamMebmerByEmailInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamAlias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamJoiningApi
+     */
+    public teamJoiningControllerGetJoinCode(teamAlias: string, options?: RawAxiosRequestConfig) {
+        return TeamJoiningApiFp(this.configuration).teamJoiningControllerGetJoinCode(teamAlias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {JoinTeamInDto} joinTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamJoiningApi
+     */
+    public teamJoiningControllerJoinTeam(joinTeamInDto: JoinTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamJoiningApiFp(this.configuration).teamJoiningControllerJoinTeam(joinTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamMembersApi - axios parameter creator
+ * @export
+ */
+export const TeamMembersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamMembers: async (teamAlias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamAlias' is not null or undefined
+            assertParamExists('teamMemberControllerGetTeamMembers', 'teamAlias', teamAlias)
+            const localVarPath = `/submodules/teams/ofteam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamAlias !== undefined) {
+                localVarQueryParameter['teamAlias'] = teamAlias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamsOfUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/submodules/teams/ofuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerIsUserMemberOfTeam: async (teamAlias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamAlias' is not null or undefined
+            assertParamExists('teamMemberControllerIsUserMemberOfTeam', 'teamAlias', teamAlias)
+            const localVarPath = `/submodules/teams/isUserMemberOfTeam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamAlias !== undefined) {
+                localVarQueryParameter['teamAlias'] = teamAlias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {LeaveTeamInDto} leaveTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerLeaveTeam: async (leaveTeamInDto: LeaveTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'leaveTeamInDto' is not null or undefined
+            assertParamExists('teamMemberControllerLeaveTeam', 'leaveTeamInDto', leaveTeamInDto)
+            const localVarPath = `/submodules/teams/leaveteam`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(leaveTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerSetMemberRole: async (setMemberRoleInDto: SetMemberRoleInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'setMemberRoleInDto' is not null or undefined
+            assertParamExists('teamMemberControllerSetMemberRole', 'setMemberRoleInDto', setMemberRoleInDto)
+            const localVarPath = `/submodules/teams/setrole`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(setMemberRoleInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamMembersApi - functional programming interface
+ * @export
+ */
+export const TeamMembersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamMembersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerGetTeamMembers(teamAlias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamMembersOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerGetTeamMembers(teamAlias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerGetTeamMembers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerGetTeamsOfUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamsOfUserOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerGetTeamsOfUser(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerGetTeamsOfUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IsUserMemberOfTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerIsUserMemberOfTeam(teamAlias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerIsUserMemberOfTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {LeaveTeamInDto} leaveTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerLeaveTeam(leaveTeamInDto: LeaveTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerLeaveTeam(leaveTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerLeaveTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamMemberControllerSetMemberRole(setMemberRoleInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamMembersApi.teamMemberControllerSetMemberRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamMembersApi - factory interface
+ * @export
+ */
+export const TeamMembersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamMembersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamMembers(teamAlias: string, options?: any): AxiosPromise<GetTeamMembersOutDto> {
+            return localVarFp.teamMemberControllerGetTeamMembers(teamAlias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerGetTeamsOfUser(options?: any): AxiosPromise<GetTeamsOfUserOutDto> {
+            return localVarFp.teamMemberControllerGetTeamsOfUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamAlias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: any): AxiosPromise<IsUserMemberOfTeamOutDto> {
+            return localVarFp.teamMemberControllerIsUserMemberOfTeam(teamAlias, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {LeaveTeamInDto} leaveTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerLeaveTeam(leaveTeamInDto: LeaveTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamMemberControllerLeaveTeam(leaveTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SetMemberRoleInDto} setMemberRoleInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamMemberControllerSetMemberRole(setMemberRoleInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamMembersApi - object-oriented interface
+ * @export
+ * @class TeamMembersApi
+ * @extends {BaseAPI}
+ */
+export class TeamMembersApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamAlias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerGetTeamMembers(teamAlias: string, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerGetTeamMembers(teamAlias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerGetTeamsOfUser(options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerGetTeamsOfUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamAlias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerIsUserMemberOfTeam(teamAlias: string, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerIsUserMemberOfTeam(teamAlias, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {LeaveTeamInDto} leaveTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerLeaveTeam(leaveTeamInDto: LeaveTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerLeaveTeam(leaveTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SetMemberRoleInDto} setMemberRoleInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamMembersApi
+     */
+    public teamMemberControllerSetMemberRole(setMemberRoleInDto: SetMemberRoleInDto, options?: RawAxiosRequestConfig) {
+        return TeamMembersApiFp(this.configuration).teamMemberControllerSetMemberRole(setMemberRoleInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamPlaylistsApi - axios parameter creator
+ * @export
+ */
+export const TeamPlaylistsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerGetPinnedPlaylistsToTeam: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamPlaylistsControllerGetPinnedPlaylistsToTeam', 'teamGuid', teamGuid)
+            const localVarPath = `/submodules/teams/playlists/getpinnedplaylists`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerPinPlaylistToTeam: async (pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pinPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamPlaylistsControllerPinPlaylistToTeam', 'pinPlaylistToTeamInDto', pinPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/playlists/pinplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pinPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerUnpinPlaylistFromTeam: async (pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pinPlaylistToTeamInDto' is not null or undefined
+            assertParamExists('teamPlaylistsControllerUnpinPlaylistFromTeam', 'pinPlaylistToTeamInDto', pinPlaylistToTeamInDto)
+            const localVarPath = `/submodules/teams/playlists/unpinplaylist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pinPlaylistToTeamInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamPlaylistsApi - functional programming interface
+ * @export
+ */
+export const TeamPlaylistsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamPlaylistsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPinnedPlaylistsToTeamOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamPlaylistsApi - factory interface
+ * @export
+ */
+export const TeamPlaylistsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamPlaylistsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: any): AxiosPromise<GetPinnedPlaylistsToTeamOutDto> {
+            return localVarFp.teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamPlaylistsApi - object-oriented interface
+ * @export
+ * @class TeamPlaylistsApi
+ * @extends {BaseAPI}
+ */
+export class TeamPlaylistsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerGetPinnedPlaylistsToTeam(teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerPinPlaylistToTeam(pinPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PinPlaylistToTeamInDto} pinPlaylistToTeamInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamPlaylistsApi
+     */
+    public teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto: PinPlaylistToTeamInDto, options?: RawAxiosRequestConfig) {
+        return TeamPlaylistsApiFp(this.configuration).teamPlaylistsControllerUnpinPlaylistFromTeam(pinPlaylistToTeamInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamSongNotesApi - axios parameter creator
+ * @export
+ */
+export const TeamSongNotesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddTeamNoteToVariantInDto} addTeamNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerAddNoteToVariant: async (addTeamNoteToVariantInDto: AddTeamNoteToVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addTeamNoteToVariantInDto' is not null or undefined
+            assertParamExists('teamSongNoteControllerAddNoteToVariant', 'addTeamNoteToVariantInDto', addTeamNoteToVariantInDto)
+            const localVarPath = `/team/song/notes/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addTeamNoteToVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {DeleteTeamNoteInDto} deleteTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerDeleteNote: async (deleteTeamNoteInDto: DeleteTeamNoteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deleteTeamNoteInDto' is not null or undefined
+            assertParamExists('teamSongNoteControllerDeleteNote', 'deleteTeamNoteInDto', deleteTeamNoteInDto)
+            const localVarPath = `/team/song/notes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteTeamNoteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UpdateTeamNoteInDto} updateTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerEditNote: async (updateTeamNoteInDto: UpdateTeamNoteInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateTeamNoteInDto' is not null or undefined
+            assertParamExists('teamSongNoteControllerEditNote', 'updateTeamNoteInDto', updateTeamNoteInDto)
+            const localVarPath = `/team/song/notes/edit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTeamNoteInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetAllNotesOfTeam: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamSongNoteControllerGetAllNotesOfTeam', 'teamGuid', teamGuid)
+            const localVarPath = `/team/song/notes/all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetNotesOfVariantAndTeam: async (variantGuid: string, teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'variantGuid' is not null or undefined
+            assertParamExists('teamSongNoteControllerGetNotesOfVariantAndTeam', 'variantGuid', variantGuid)
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamSongNoteControllerGetNotesOfVariantAndTeam', 'teamGuid', teamGuid)
+            const localVarPath = `/team/song/notes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (variantGuid !== undefined) {
+                localVarQueryParameter['variantGuid'] = variantGuid;
+            }
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamSongNotesApi - functional programming interface
+ * @export
+ */
+export const TeamSongNotesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamSongNotesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddTeamNoteToVariantInDto} addTeamNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto: AddTeamNoteToVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerAddNoteToVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {DeleteTeamNoteInDto} deleteTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerDeleteNote(deleteTeamNoteInDto: DeleteTeamNoteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerDeleteNote(deleteTeamNoteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerDeleteNote']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {UpdateTeamNoteInDto} updateTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerEditNote(updateTeamNoteInDto: UpdateTeamNoteInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerEditNote(updateTeamNoteInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerEditNote']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllTeamNotesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerGetAllNotesOfTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamSongNotesApi - factory interface
+ * @export
+ */
+export const TeamSongNotesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamSongNotesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddTeamNoteToVariantInDto} addTeamNoteToVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto: AddTeamNoteToVariantInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {DeleteTeamNoteInDto} deleteTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerDeleteNote(deleteTeamNoteInDto: DeleteTeamNoteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamSongNoteControllerDeleteNote(deleteTeamNoteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateTeamNoteInDto} updateTeamNoteInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerEditNote(updateTeamNoteInDto: UpdateTeamNoteInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.teamSongNoteControllerEditNote(updateTeamNoteInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: any): AxiosPromise<GetAllTeamNotesOutDto> {
+            return localVarFp.teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} variantGuid 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
+            return localVarFp.teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamSongNotesApi - object-oriented interface
+ * @export
+ * @class TeamSongNotesApi
+ * @extends {BaseAPI}
+ */
+export class TeamSongNotesApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddTeamNoteToVariantInDto} addTeamNoteToVariantInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto: AddTeamNoteToVariantInDto, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerAddNoteToVariant(addTeamNoteToVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {DeleteTeamNoteInDto} deleteTeamNoteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerDeleteNote(deleteTeamNoteInDto: DeleteTeamNoteInDto, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerDeleteNote(deleteTeamNoteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateTeamNoteInDto} updateTeamNoteInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerEditNote(updateTeamNoteInDto: UpdateTeamNoteInDto, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerEditNote(updateTeamNoteInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerGetAllNotesOfTeam(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetAllNotesOfTeam(teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} variantGuid 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamSongNotesApi
+     */
+    public teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TeamStatisticsApi - axios parameter creator
+ * @export
+ */
+export const TeamStatisticsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamStatisticsControllerGetTeamStatistics: async (teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamGuid' is not null or undefined
+            assertParamExists('teamStatisticsControllerGetTeamStatistics', 'teamGuid', teamGuid)
+            const localVarPath = `/teams/statistics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teamGuid !== undefined) {
+                localVarQueryParameter['teamGuid'] = teamGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamStatisticsApi - functional programming interface
+ * @export
+ */
+export const TeamStatisticsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamStatisticsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeamStatisticsOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamStatisticsControllerGetTeamStatistics(teamGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TeamStatisticsApi.teamStatisticsControllerGetTeamStatistics']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TeamStatisticsApi - factory interface
+ * @export
+ */
+export const TeamStatisticsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamStatisticsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} teamGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: any): AxiosPromise<GetTeamStatisticsOutDto> {
+            return localVarFp.teamStatisticsControllerGetTeamStatistics(teamGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamStatisticsApi - object-oriented interface
+ * @export
+ * @class TeamStatisticsApi
+ * @extends {BaseAPI}
+ */
+export class TeamStatisticsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} teamGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamStatisticsApi
+     */
+    public teamStatisticsControllerGetTeamStatistics(teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamStatisticsApiFp(this.configuration).teamStatisticsControllerGetTeamStatistics(teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,4 +1,5 @@
-import { Box, Chip, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
+import { Chip } from '@/common/ui/mui'
 import { SongDto, SongVariantDto } from '../../../../../../api/dtos'
 import YoutubeVideo from '../../../../../../common/components/YoutubeVideo'
 import useAuth from '../../../../../../hooks/auth/useAuth'
@@ -46,7 +47,7 @@ export default function AdditionalSongInfoPanel({
 						{/* TAGS */}
 						{song.tags.length > 0 && (
 							<>
-								<Typography variant="subtitle2">Tagy</Typography>
+								<Typography>Tagy</Typography>
 								<Box
 									display={'flex'}
 									flexDirection={'row'}
@@ -63,7 +64,7 @@ export default function AdditionalSongInfoPanel({
 						{/* CREATORS */}
 						{variant.creators.length > 0 && (
 							<>
-								<Typography variant="subtitle2">Autoři</Typography>
+								<Typography>Autoři</Typography>
 								<Box display={'flex'} flexDirection={'row'} gap={0.5}>
 									{variant.creators.map((s) => {
 										return <Chip label={s.name} key={s.name} />

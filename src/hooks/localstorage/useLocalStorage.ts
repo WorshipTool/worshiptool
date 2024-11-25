@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * This hook holds current value in local storage.
@@ -16,6 +16,10 @@ export const useLocalStorage = <T = string>(key: string) => {
 
 	// Hook holds the current value
 	const [value, setValue] = useState<T | undefined>(get)
+
+	useEffect(() => {
+		setValue(get())
+	}, [key])
 
 	/**
 	 * Set the value in local storage. If value is undefined, the key will be removed.

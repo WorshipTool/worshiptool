@@ -1,17 +1,18 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@/common/ui'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../interfaces/permission.types'
+	PermissionsTypes,
+} from '../../../../../../hooks/permissions/permission.types'
 import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import FoundUser from './FoundUser'
 
 type AddUserItemProps<T extends PermissionType> = {
 	permissionType: T
-	permissionPayload: PermissionPayloadType<T>
+	permissionPayload: PermissionPayloadType<PermissionsTypes, T>
 	onAdd: () => void
 	loading?: boolean
 }

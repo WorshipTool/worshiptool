@@ -1,10 +1,16 @@
-import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
-import OnlyAdmin from '@/common/components/OnlyAdmin'
+import AdminOption from '@/common/components/admin/AdminOption'
+import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import { Gap } from '@/common/ui/Gap'
-import { Typography } from '@/common/ui/Typography'
+import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
-import { Box, useTheme } from '@mui/material'
+import { parseVariantAlias } from '@/routes/routes.tech'
+import {
+	DomainVerification,
+	Language,
+	Polyline,
+	Public,
+	PublicOff,
+} from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
@@ -20,19 +26,18 @@ import {
 	SongEditingApi,
 } from '../../../../../../api/generated'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { parseVariantAlias } from '../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../../../tech/sheet.tech'
 import NotValidWarning from '../../../../vytvorit/napsat/components/NotValidWarning'
-import TransposePanel from './TransposePanel'
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
 import CreateCopyButton from './components/CreateCopyButton'
 import EditButton from './components/EditButton'
-import PrintButton from './components/PrintButton'
+import PrintVariantButton from './components/PrintButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
 import VisibilityLabel from './components/VisibilityLabel'
+import TransposePanel from './TransposePanel'
 
 interface TopPanelProps {
 	transpose: (i: number) => void
@@ -63,9 +68,10 @@ export default function TopPanel(props: TopPanelProps) {
 
 	const songsApi = new SongEditingApi(apiConfiguration)
 	const { songEditingApi, songPublishingApi } = useApi()
-	const { fetchApiState } = useApiState<EditVariantOutDto>()
-
-	const [saving, setSaving] = React.useState(false)
+	const {
+		fetchApiState,
+		apiState: { loading: saving },
+	} = useApiState<EditVariantOutDto>()
 
 	const anyChange = useMemo(() => {
 		const t = props.variant.preferredTitle !== props.editedTitle
@@ -118,8 +124,6 @@ export default function TopPanel(props: TopPanelProps) {
 			return
 		}
 
-		setSaving(true)
-
 		const body: PostEditVariantInDto = {
 			variantAlias: props.variant.packAlias,
 			sheetData: props.sheet.getOriginalSheetData(),
@@ -140,7 +144,6 @@ export default function TopPanel(props: TopPanelProps) {
 				navigate('variant', {
 					...parseVariantAlias(result.alias as VariantPackAlias),
 				})
-				setSaving(false)
 			}
 		)
 	}
@@ -198,18 +201,28 @@ export default function TopPanel(props: TopPanelProps) {
 						<Box flex={1} />
 
 						{isOwner && <VisibilityLabel public={props.variant.public} right />}
-						<SongsOptionsButton
-							reloadSong={props.reloadSong}
-							variant={props.variant}
-							sheet={props.sheet}
-							song={props.song}
-							onEditClick={onEditClick}
-							isInEditMode={props.isInEditMode}
-							saving={saving}
-							editedTitle={props.editedTitle}
-							isOwner={isOwner}
-							anyChange={anyChange}
-						/>
+
+						<Box display={'flex'}>
+							{user && (
+								<HeartLikeButton
+									packGuid={props.variant.packGuid}
+									interactable
+								/>
+							)}
+
+							<SongsOptionsButton
+								reloadSong={props.reloadSong}
+								variant={props.variant}
+								sheet={props.sheet}
+								song={props.song}
+								onEditClick={onEditClick}
+								isInEditMode={props.isInEditMode}
+								saving={saving}
+								editedTitle={props.editedTitle}
+								isOwner={isOwner}
+								anyChange={anyChange}
+							/>
+						</Box>
 						{isLoggedIn() && !(isOwner && !props.variant.public) && (
 							<Box
 								sx={{
@@ -253,94 +266,53 @@ export default function TopPanel(props: TopPanelProps) {
 							</Box>
 						)}
 
-						<PrintButton
-							keyNote={props.sheet?.getKeyNote() || null}
-							hideChords={props.hideChords || null}
+						<PrintVariantButton
+							params={{
+								...parseVariantAlias(props.variant.packAlias),
+								hideChords: props.hideChords,
+								key: props.sheet?.getKeyNote() || undefined,
+							}}
 						/>
 					</>
 				)}
 			</Box>
-			{isAdmin() && <Gap />}
-			<OnlyAdmin>
-				<Box
-					display={'flex'}
-					flexDirection={'row'}
-					gap={1}
-					alignItems={'center'}
-				>
-					<Typography strong>
-						{props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
-					</Typography>
 
-					{props.variant.public ? (
-						<>
-							<div>
-								<Typography>Píseň je public</Typography>
-								{props.variant.verified !== null ? (
-									<>
-										{props.variant.verified ? (
-											<Typography>A je manualně ověřena.</Typography>
-										) : (
-											<Typography>A je manualně zamítnuta.</Typography>
-										)}
-									</>
-								) : (
-									<>
-										<Typography>Ale není manualně ověřena</Typography>
-									</>
-								)}
-							</div>
-							<VerifyButton variant={props.variant} />
-						</>
-					) : (
-						<Typography>Píseň NENI public</Typography>
-					)}
-				</Box>
-			</OnlyAdmin>
+			<AdminOption
+				label={props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
+				icon={<DomainVerification />}
+				onlyNotification
+			/>
+
+			<AdminOption
+				label={props.variant.public ? 'Píseň je veřejná' : 'Soukromá píseň'}
+				icon={props.variant.public ? <Public /> : <PublicOff />}
+				onlyNotification
+			/>
+
 			{props.variant.public && (
 				<>
 					{!props.variant.language && (
 						<>
-							<Gap />
-							<Box display={'flex'}>
-								<OnlyAdmin>
-									<Box display={'flex'} alignItems={'center'} gap={1}>
-										<Typography>
-											Píseň je sice public, ale nemá nastavený jazyk.
-										</Typography>
-										<Button
-											size="small"
-											color="secondary"
-											onClick={generateLanguage}
-											loading={languageGenerating}
-										>
-											Dogenerovat
-										</Button>
-									</Box>
-								</OnlyAdmin>
-							</Box>
+							<AdminOption
+								title="Dogenerovat jazyk"
+								subtitle="Public píseň ale bez jazyka."
+								onClick={generateLanguage}
+								loading={languageGenerating}
+								icon={<Language />}
+								notify
+							/>
 						</>
 					)}
 					{(!props.variant.tags || props.variant.tags.length === 0) && (
 						<>
-							{isAdmin() && <Gap />}
-							<Box display={'flex'}>
-								<OnlyAdmin>
-									<Box display={'flex'} alignItems={'center'} gap={1}>
-										<Typography>
-											Píseň je sice public, ale nemá žádná klíčová slova.
-										</Typography>
-										<Button
-											size="small"
-											color="secondary"
-											onClick={generateKeyword}
-											loading={keywordsGenerating}
-										>
-											Dogenerovat
-										</Button>
-									</Box>
-								</OnlyAdmin>
-							</Box>
+							<AdminOption
+								title="Dogenerovat keywords"
+								subtitle="Public píseň ale bez klíčových slov."
+								onClick={generateKeyword}
+								loading={keywordsGenerating}
+								icon={<Polyline />}
+								notify
+							/>
 						</>
 					)}
 				</>

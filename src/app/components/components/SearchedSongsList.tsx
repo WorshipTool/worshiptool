@@ -1,16 +1,15 @@
 'use client'
+import { Box, Button, LinearProgress, Typography } from '@/common/ui'
 import { Sync } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, LinearProgress, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../../common/components/ContainerGrid'
-import SongListCards from '../../../common/components/songLists/SongListCards/SongListCards'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
-import normalizeSearchText from '../../../tech/normalizeSearchText'
+import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 
+import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { SongVariantDto } from '../../../api/dtos'
@@ -20,7 +19,7 @@ interface SearchedSongsListProps {
 }
 const controller = new AbortController()
 
-export default function SearchedSongsList({
+const SearchedSongsList = memo(function S({
 	searchString,
 }: SearchedSongsListProps) {
 	const loadNextLevelRef = useRef(null)
@@ -72,7 +71,6 @@ export default function SearchedSongsList({
 		if (songs.length > 0 && nextExists) {
 			setNextLoading(true)
 			loadNext()
-			console.log('a')
 		}
 	})
 	useChangeDelayer(
@@ -88,11 +86,27 @@ export default function SearchedSongsList({
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography fontWeight={'bold'}>Výsledky vyhledávání:</Typography>
+				<Typography strong>Výsledky vyhledávání:</Typography>
 
 				{!loading && songs.length > 0 && (
-					<SongListCards data={songs} key={'songlistcards'}></SongListCards>
+					<SongListCards
+						data={songs}
+						key={'songlistcards'}
+						properties={[
+							'SHOW_ADDED_BY_LOADER',
+							'SHOW_PRIVATE_LABEL',
+							// 'SHOW_YOUR_PUBLIC_LABEL',
+						]}
+					></SongListCards>
 				)}
+
+				{/* {!loading &&
+					songs.length > 0 &&
+					songs.map((song) => {
+						return (
+							<Typography key={song.packGuid}>{song.preferredTitle}</Typography>
+						)
+					})} */}
 			</>
 
 			<div ref={loadNextLevelRef}></div>
@@ -114,17 +128,18 @@ export default function SearchedSongsList({
 								alignItems: 'center',
 							}}
 						>
-							<LoadingButton
+							<Button
 								loading={nextLoading}
 								loadingPosition="start"
 								onClick={() => {
 									setNextLoading(true)
 									loadNext()
 								}}
+								variant="text"
 								startIcon={<Sync />}
 							>
 								Načíst další
-							</LoadingButton>
+							</Button>
 						</Box>
 					</>
 				)}
@@ -139,4 +154,6 @@ export default function SearchedSongsList({
 			<Gap />
 		</ContainerGrid>
 	)
-}
+})
+
+export default SearchedSongsList

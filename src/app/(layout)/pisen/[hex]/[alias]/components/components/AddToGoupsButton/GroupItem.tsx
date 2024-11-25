@@ -1,12 +1,8 @@
 import { VariantPackGuid } from '@/api/dtos'
+import { CircularProgress } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { CheckCircle, PlaylistAdd } from '@mui/icons-material'
-import {
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-} from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { SkeletonLoader } from '../../../../../../../../common/providers'
 import { useGroups } from '../../../../../../../../hooks/group/useGroups'

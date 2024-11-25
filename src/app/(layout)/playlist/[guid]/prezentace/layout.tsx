@@ -1,14 +1,19 @@
+import { Box } from '@/common/ui'
+import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps, MetadataProps } from '../../../../../common/types'
-import { generateMetadataTitle } from '../../../../../hooks/window-title/tech'
 
-export const generateMetadata = async ({
-	params,
-}: MetadataProps<'playlistCards'>) => {
-	return {
-		title: await generateMetadataTitle('💻', 'playlistCards', params),
+export const generateMetadata = generateSmartMetadata(
+	'playlistCards',
+	({ params }: MetadataProps<'playlistCards'>) => {
+		return {
+			// title: '💻',
+			icons: {
+				icon: '/assets/icons/presentation-favicon.png',
+			},
+		}
 	}
-}
+)
 
 export default function layout(props: LayoutProps) {
-	return <div>{props.children}</div>
+	return <Box>{props.children}</Box>
 }

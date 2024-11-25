@@ -1,4 +1,5 @@
-import { Box, Typography, styled } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
 import useCurrentPlaylist from '../../../../../hooks/playlist/useCurrentPlaylist'
 import usePlaylistsGeneral from '../../../../../hooks/playlist/usePlaylistsGeneral'
 import { useSmartNavigate } from '../../../../../routes/useSmartNavigate'
@@ -34,7 +35,7 @@ export default function CreatePlaylistButton() {
 	}
 	return (
 		<Container onClick={onClick}>
-			<Typography variant="h6" fontWeight={900} sx={{ userSelect: 'none' }}>
+			<Typography variant="h6" strong={900} sx={{ userSelect: 'none' }}>
 				Vytvořit playlist
 			</Typography>
 		</Container>

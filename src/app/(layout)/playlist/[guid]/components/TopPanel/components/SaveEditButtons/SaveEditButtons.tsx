@@ -1,9 +1,9 @@
 import Redo from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/SaveEditButtons/Redo'
 import Undo from '@/app/(layout)/playlist/[guid]/components/TopPanel/components/SaveEditButtons/Undo'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
-import { Box } from '@mui/material'
 
 export default function SaveEditButtons() {
 	const { undo, redo, hasUndo, hasRedo, save, isSaved } = useInnerPlaylist()

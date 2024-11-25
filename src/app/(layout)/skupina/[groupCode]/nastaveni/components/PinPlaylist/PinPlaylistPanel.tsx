@@ -1,7 +1,7 @@
+import { Box, Button, Typography } from '@/common/ui'
+import { TextField } from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { PushPin } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Card } from '../../../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../../../common/ui/Gap'
@@ -100,14 +100,14 @@ export default function PinPlaylistPanel() {
 						{!choosing ? (
 							<>
 								<Typography>Zatím nemáte připnutý žádný playlist.</Typography>
-								<LoadingButton
+								<Button
 									loading={loading}
 									size="small"
 									variant="contained"
 									onClick={() => setChoosing(true)}
 								>
 									Zvolit playlist
-								</LoadingButton>
+								</Button>
 							</>
 						) : (
 							<Box
@@ -119,7 +119,7 @@ export default function PinPlaylistPanel() {
 								}}
 								flex={1}
 							>
-								<Typography variant="body1">
+								<Typography>
 									Zadejte, prosím, url playlistu, který chcete připnout.
 								</Typography>
 								<Gap />
@@ -133,9 +133,9 @@ export default function PinPlaylistPanel() {
 										helperText={error}
 										error={!!error}
 									/>
-									<LoadingButton onClick={onPinClick} loading={loading}>
+									<Button onClick={onPinClick} loading={loading}>
 										Připnout
-									</LoadingButton>
+									</Button>
 								</Box>
 							</Box>
 						)}

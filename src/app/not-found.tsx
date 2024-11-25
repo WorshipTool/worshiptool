@@ -1,5 +1,5 @@
+import { Box, Button, Typography } from '@/common/ui'
 import { Home } from '@mui/icons-material'
-import { Box, Button, Typography } from '@mui/material'
 import { Gap } from '../common/ui/Gap'
 
 export default function ErrorPage() {
@@ -18,7 +18,7 @@ export default function ErrorPage() {
 				justifyContent={'end'}
 				alignItems={'center'}
 			>
-				<Typography variant="h2" fontWeight={900}>
+				<Typography variant="h2" strong={900}>
 					Oops...
 				</Typography>
 				<Gap value={2} />
@@ -29,7 +29,7 @@ export default function ErrorPage() {
 				<Button
 					variant="contained"
 					color="primary"
-					href="/"
+					to="home"
 					size="medium"
 					endIcon={<Home />}
 				>

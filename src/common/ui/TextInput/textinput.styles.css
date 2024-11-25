@@ -1,0 +1,17 @@
+.custom-text-input {
+	padding: var(--spacing-1);
+	padding-top: 4px;
+	padding-bottom: 4px;
+	outline-style: solid;
+	outline-width: 1px;
+	outline-color: var(--color-grey-300);
+	border-radius: 4px;
+}
+
+.custom-text-input:hover {
+	outline-color: var(--color-grey-500);
+}
+
+.custom-text-input:focus-within {
+	outline-color: var(--color-primary);
+}

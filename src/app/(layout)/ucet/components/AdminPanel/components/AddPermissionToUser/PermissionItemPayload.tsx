@@ -1,18 +1,20 @@
-import { Box, NativeSelect, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
+import { NativeSelect } from '@/common/ui/mui'
 import { useEffect, useMemo } from 'react'
 import { SkeletonLoader } from '../../../../../../../common/providers/SkeletonLoader'
 import { useGroups } from '../../../../../../../hooks/group/useGroups'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../../interfaces/permission.types'
+	PermissionsTypes,
+} from '../../../../../../../hooks/permissions/permission.types'
 import { useApiStateEffect } from '../../../../../../../tech/ApiState'
 
 type PermissionItemPayloadProps<T extends PermissionType> = {
 	type: T
 	editable?: boolean
-	value?: PermissionPayloadType<T>
-	onChange?: (value: PermissionPayloadType<T>) => void
+	value?: PermissionPayloadType<PermissionsTypes, T>
+	onChange?: (value: PermissionPayloadType<PermissionsTypes, T>) => void
 }
 
 export default function PermissionItemPayload<T extends PermissionType>(

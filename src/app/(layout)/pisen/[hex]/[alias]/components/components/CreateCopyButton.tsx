@@ -1,17 +1,10 @@
 import { VariantPackAlias } from '@/api/dtos'
+import { Button, CircularProgress, Gap, Tooltip, useTheme } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
+import { parseVariantAlias } from '@/routes/routes.tech'
 import { EggAlt } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import {
-	CircularProgress,
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	Tooltip,
-	useTheme,
-} from '@mui/material'
 import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
 import { useApi } from '../../../../../../../hooks/api/useApi'
-import { parseVariantAlias } from '../../../../../../../routes'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
@@ -49,19 +42,22 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const theme = useTheme()
 
 	return props.asMenuItem ? (
-		<MenuItem onClick={onClick} disabled={apiState.loading}>
-			<ListItemIcon>
-				{apiState.loading ? (
-					<CircularProgress size={`1rem`} color="inherit" />
-				) : (
-					<EggAlt color="inherit" />
-				)}
-			</ListItemIcon>
-			<ListItemText primary="Vytvořit kopii" />
-		</MenuItem>
+		<>
+			<MenuItem onClick={onClick} disabled={apiState.loading}>
+				<ListItemIcon>
+					{apiState.loading ? (
+						<CircularProgress size={`1rem`} color="inherit" />
+					) : (
+						<EggAlt color="inherit" />
+					)}
+				</ListItemIcon>
+				<ListItemText primary="Vytvořit kopii" />
+			</MenuItem>
+			<Gap value={0.5} />
+		</>
 	) : (
 		<Tooltip title={'Vytvořit soukromou kopii písně'}>
-			<LoadingButton
+			<Button
 				color="success"
 				variant="contained"
 				startIcon={
@@ -77,7 +73,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 				onClick={onClick}
 			>
 				Vytvořit úpravu
-			</LoadingButton>
+			</Button>
 		</Tooltip>
 	)
 }

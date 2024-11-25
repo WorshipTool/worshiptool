@@ -1,7 +1,7 @@
 'use client'
+import { Box, Button, Typography, useTheme } from '@/common/ui'
+import { Paper, TextField } from '@/common/ui/mui'
 import { Try } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Box, Paper, TextField, Typography, useTheme } from '@mui/material'
 import { useState } from 'react'
 import { PostSendMessageDTO } from '../../../../api/dtos/feedbackDtos'
 import { MessengerApi } from '../../../../api/generated'
@@ -86,7 +86,7 @@ export default function FeedbackPanel() {
 						<Gap value={1} horizontal />
 						<Typography variant="h6">Zpětná vazba</Typography>
 					</Box>
-					<Typography variant="body2">
+					<Typography>
 						Napište nám, co bychom měli zlepšit, co se vám líbí, co vám chybí...
 					</Typography>
 					<Gap value={2} />
@@ -105,7 +105,7 @@ export default function FeedbackPanel() {
 					/>
 					<Gap />
 					<Box display={'flex'} flexDirection={'row'} justifyContent={'end'}>
-						<LoadingButton
+						<Button
 							variant="contained"
 							color="primary"
 							size="medium"
@@ -113,7 +113,7 @@ export default function FeedbackPanel() {
 							loading={sending}
 						>
 							Odeslat
-						</LoadingButton>
+						</Button>
 					</Box>
 				</Paper>
 			) : (

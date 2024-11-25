@@ -1,6 +1,6 @@
+import { Button } from '@/common/ui'
+import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { Edit, Save } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { ListItemIcon, ListItemText, MenuItem } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { isSheetDataValid } from '../../../../../../../tech/sheet.tech'
 
@@ -39,12 +39,12 @@ export default function EditButton(props: EditButtonProps) {
 			)}
 		</>
 	) : (
-		<LoadingButton
+		<Button
 			variant="contained"
 			color={props.inEditMode ? 'info' : 'secondary'}
 			startIcon={props.inEditMode ? <Save /> : <Edit />}
 			loading={props.loading}
-			loadingIndicator="Ukládání..."
+			// loadingIndicator="Ukládání..."
 			disabled={
 				(props.inEditMode && !props.anyChange) ||
 				(props.inEditMode && !isSheetDataValid(props.sheetData))
@@ -52,6 +52,6 @@ export default function EditButton(props: EditButtonProps) {
 			onClick={onClick}
 		>
 			{props.inEditMode ? 'Uložit' : 'Upravit'}
-		</LoadingButton>
+		</Button>
 	)
 }

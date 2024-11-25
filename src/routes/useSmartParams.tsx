@@ -1,15 +1,17 @@
 // import { useParams } from "react-router-dom";
 import { useParams, useSearchParams } from 'next/navigation'
-import { RoutesKeys, SmartAllParams } from './routes.types'
+import { ParamValueType, RoutesKeys, SmartAllParams } from './routes.types'
 
 export const useSmartParams = <T extends RoutesKeys>(page: T) => {
 	const params = useParams()
 	const searchParamsObject = useSearchParams()
 
-	const searchParams: Record<string, unknown> = {}
+	const searchParams: Record<string, ParamValueType> = {}
 
 	searchParamsObject?.forEach((value, key) => {
-		searchParams[key] = value.includes(',') ? value.split(',') : value
+		// searchParams[key] = value.includes(',') ? value.split(',') : value // TODO: now ignoring arrays
+		searchParams[key] =
+			value === 'true' ? true : value === 'false' ? false : value
 	})
 	const p: SmartAllParams<T> = {
 		...params,

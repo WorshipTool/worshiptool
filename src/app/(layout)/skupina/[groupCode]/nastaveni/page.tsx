@@ -1,14 +1,22 @@
 'use client'
-import { Box, Divider, LinearProgress, Typography } from '@mui/material'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box, Divider, LinearProgress, Typography } from '@/common/ui'
 import { Card } from '../../../../../common/ui/Card/Card'
 import { Gap } from '../../../../../common/ui/Gap'
-import { usePermission } from '../../../../../hooks/auth/usePermission'
 import useGroup from '../../../../../hooks/group/useGroup'
+import { usePermission } from '../../../../../hooks/permissions/usePermission'
 import GroupCustomLayout from '../GroupCustomLayout'
 import UsersPanel from './UsersPanel'
 import PinPlaylistPanel from './components/PinPlaylist/PinPlaylistPanel'
 
-export default function GroupSettings() {
+export default SmartPage(GroupSettings, {
+	transparentToolbar: true,
+	whiteToolbarVersion: true,
+	hideMiddleNavigation: true,
+	hideFooter: true,
+	hideTitle: true,
+})
+function GroupSettings() {
 	const { guid } = useGroup()
 	const isOwner = usePermission('GROUP_OWNER', guid)
 

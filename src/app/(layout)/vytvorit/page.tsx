@@ -1,12 +1,15 @@
 'use client'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box } from '@/common/ui'
 import { Edit, UploadFile } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useApi } from '../../../hooks/api/useApi'
 import { useApiStateEffect } from '../../../tech/ApiState'
 import { handleApiCall } from '../../../tech/handleApiCall'
 import AddMenuItem from './components/AddMenuItem'
 
-export default function AddMenu() {
+export default SmartPage(AddMenu)
+
+function AddMenu() {
 	const { songAddingApi } = useApi()
 
 	const [apiState] = useApiStateEffect(() => {

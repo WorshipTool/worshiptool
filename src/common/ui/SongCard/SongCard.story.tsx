@@ -18,7 +18,7 @@ const SongCardStory = () => {
 		public: false,
 	} as SongVariantDto
 
-	return <SongCard data={data} publicityMode="all" />
+	return <SongCard data={data} />
 }
 
 createStory(SongCard, SongCardStory)

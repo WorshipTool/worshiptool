@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 import { signature } from '@pepavlin/sheet-api/lib/models/note'
 import {
 	Section,
@@ -50,7 +50,7 @@ const SegmentElement = ({
 								<>
 									<Typography
 										sx={{ height: chordHeight, paddingRight: '0.5rem' }}
-										fontWeight={900}
+										strong={900}
 									>
 										{segment.chord?.toString(signature)}
 									</Typography>
@@ -124,7 +124,7 @@ const SectionComponent = ({
 					<Typography
 						// fontStyle={'italic'}
 						noWrap
-						fontWeight={section.type === SectionType.CHORUS ? 600 : 400}
+						strong={section.type === SectionType.CHORUS ? 600 : 400}
 						sx={{
 							width: '2rem',
 						}}
@@ -133,11 +133,7 @@ const SectionComponent = ({
 					</Typography>
 				)}
 			</Box>
-			<Box
-				sx={{
-					breakInside: 'avoid',
-				}}
-			>
+			<Box sx={{}}>
 				{section.lines ? (
 					<>
 						{section.lines.map((line, index) => {
@@ -198,28 +194,38 @@ const DefaultStyle: SheetStyleComponentType = ({
 					// justifyContent: 'center',
 				}}
 			>
-				{title && (
-					<Box
-						sx={{
-							marginBottom: 2,
-							// display: 'flex',
-							// justifyContent: 'center',
-						}}
-					>
-						<Typography variant="h5" noWrap>
-							<b>{title}</b>
-						</Typography>
-					</Box>
-				)}
 				{sections.map((section, index) => {
 					return (
-						<SectionComponent
+						<div
 							key={section.name + index}
-							section={section}
-							signature={signature}
-							isLast={index === sections.length - 1}
-							hideChords={hideChords}
-						/>
+							style={{
+								breakInside: 'avoid',
+							}}
+						>
+							{index == 0 && title && (
+								<>
+									<Box
+										sx={{
+											marginBottom: 2,
+											// display: 'flex',
+											// justifyContent: 'center',
+										}}
+									>
+										<Typography variant="h5" noWrap>
+											<b>{title}</b>
+										</Typography>
+									</Box>
+								</>
+							)}
+
+							<SectionComponent
+								key={section.name + index}
+								section={section}
+								signature={signature}
+								isLast={index === sections.length - 1}
+								hideChords={hideChords}
+							/>
+						</div>
 					)
 				})}
 			</Box>

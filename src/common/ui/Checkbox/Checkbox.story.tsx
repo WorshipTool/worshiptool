@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { createStory } from '../../../app/(layout)/storybook/createStory'
 import { Checkbox } from './Checkbox'
 

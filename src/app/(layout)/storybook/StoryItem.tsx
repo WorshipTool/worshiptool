@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/material'
+import { Box, Divider } from '@/common/ui'
 import { Gap } from '../../../common/ui/Gap'
 import { Typography } from '../../../common/ui/Typography/Typography'
 import { StoryBookItem } from './createStory'

@@ -1,11 +1,5 @@
-import {
-	Box,
-	Button,
-	InputBase,
-	Paper,
-	Typography,
-	styled,
-} from '@mui/material'
+import { Box, Button, Typography } from '@/common/ui'
+import { InputBase, Paper, styled } from '@/common/ui/mui'
 import { Sheet } from '@pepavlin/sheet-api'
 import React, { useMemo } from 'react'
 import DefaultStyle from '../../../../common/components/SheetDisplay/styles/DefaultStyle'
@@ -58,7 +52,7 @@ export default function UploadSheetEditable(props: UploadSheetEditableProps) {
 					>
 						Zahodit
 					</Button>
-					<Typography variant="subtitle2" fontWeight={200}>
+					<Typography strong={200}>
 						Nalezeno v <strong>{props.originalFile.name}</strong>
 					</Typography>
 

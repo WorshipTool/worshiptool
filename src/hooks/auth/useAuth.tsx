@@ -53,7 +53,9 @@ export function useProvideAuth() {
 	// Cookies
 	const cookies = useCookies()
 	const _setCookie = (user: UserDto) => {
-		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user))
+		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user), {
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+		})
 	}
 	const _getCookie = (): UserDto | undefined => {
 		const value = cookies.get(AUTH_COOKIE_NAME)
@@ -63,7 +65,9 @@ export function useProvideAuth() {
 		return undefined
 	}
 	const _emptyCookie = () => {
-		cookies.remove(AUTH_COOKIE_NAME)
+		cookies.remove(AUTH_COOKIE_NAME, {
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+		})
 	}
 
 	// User state
@@ -138,8 +142,8 @@ export function useProvideAuth() {
 		if (checkIfCookieExists()) await authApi.authControllerLogout()
 		if (user) {
 			setUser(undefined)
+			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 			_emptyCookie()
-			enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 		}
 		setLoading(false)
 	}
@@ -174,6 +178,7 @@ export function useProvideAuth() {
 			email: decoded.email,
 			firstName: decoded.given_name,
 			lastName: decoded.family_name,
+			picture: decoded.picture,
 		}
 
 		authApi

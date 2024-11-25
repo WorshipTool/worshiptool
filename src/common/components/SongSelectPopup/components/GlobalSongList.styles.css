@@ -1,0 +1,15 @@
+.global-song-list-container {
+	overflow-x: auto;
+	padding-bottom: 8px;
+}
+.global-song-list-item {
+}
+
+.global-song-list-link-icon {
+	opacity: 0;
+	transition: all 0.2s;
+}
+
+.global-song-list-item:hover .global-song-list-link-icon {
+	opacity: 1;
+}

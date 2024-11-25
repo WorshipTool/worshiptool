@@ -1,11 +1,8 @@
 import { VariantPackAlias } from '@/api/dtos'
+import { getRouteUrlWithParams, parseVariantAlias } from '@/routes/routes.tech'
 import type { MetadataRoute } from 'next'
 import { GetListSongData, SongGettingApi } from '../api/generated'
-import {
-	getRouteUrlWithParams,
-	parseVariantAlias,
-	routesPaths,
-} from '../routes/routes'
+import { routesPaths } from '../routes/routes'
 import { handleApiCall } from '../tech/handleApiCall'
 
 export const revalidate = 60 * 60 // 1 hour

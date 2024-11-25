@@ -1,9 +1,10 @@
 'use client'
+import { Box, IconButton, Tooltip } from '@/common/ui'
 import { ArrowBack, Home, Settings } from '@mui/icons-material'
-import { Box, IconButton, styled, Tooltip } from '@mui/material'
+import { styled } from '@mui/system'
 import { ReactElement } from 'react'
-import { usePermission } from '../../../../hooks/auth/usePermission'
 import useGroup from '../../../../hooks/group/useGroup'
+import { usePermission } from '../../../../hooks/permissions/usePermission'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 // import { useMatch } from "react-router-dom";
@@ -57,7 +58,9 @@ export function SideToolbar({ component, children }: SideToolbarProps) {
 	const isOwner = usePermission('GROUP_OWNER', guid)
 
 	const leave = () => {
-		navigate('home', {})
+		navigate('home', {
+			hledat: undefined,
+		})
 	}
 
 	return (

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 import { signature } from '@pepavlin/sheet-api/lib/models/note'
 import { Section } from '@pepavlin/sheet-api/lib/models/song/section'
 import { Segment } from '@pepavlin/sheet-api/lib/models/song/segment'
@@ -30,7 +30,7 @@ const SegmentElement = ({
 						{showChords &&
 							(index == 0 ? (
 								<>
-									<Typography sx={{ height: chordHeight }} fontWeight={900}>
+									<Typography sx={{ height: chordHeight }} strong={900}>
 										{segment.chord?.toString(signature)}
 									</Typography>
 								</>
@@ -75,9 +75,9 @@ const SectionComponent = ({
 			>
 				{sectionName && (
 					<Typography
-						fontStyle={'italic'}
+						italic
 						noWrap
-						fontWeight={500}
+						strong={500}
 						sx={{
 							paddingRight: '2em',
 						}}

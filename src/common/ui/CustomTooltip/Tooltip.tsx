@@ -5,6 +5,7 @@ type CustomTooltipProps = {
 	children?: ReactElement
 	label?: string
 	title?: string
+	disabled?: boolean
 } & Omit<TooltipProps, 'title'>
 
 const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
@@ -15,9 +16,13 @@ const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
 	)
 })
 
-export default function Tooltip(props: CustomTooltipProps) {
-	return (
-		<Tltp {...props} title={props.title || props.label}>
+export function Tooltip(props: CustomTooltipProps) {
+	const title = props.title || props.label
+
+	return props.disabled || !title || title.length === 0 ? (
+		<>{props.children}</>
+	) : (
+		<Tltp {...props} title={title}>
 			<MyComponent>{props.children}</MyComponent>
 		</Tltp>
 	)

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { Typography } from '../../../../../common/ui/Typography/Typography'
 
 export default function NotFound() {

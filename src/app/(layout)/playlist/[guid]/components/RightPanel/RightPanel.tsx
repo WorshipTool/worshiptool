@@ -1,9 +1,10 @@
 import PlaylistSearchList from '@/app/(layout)/playlist/[guid]/components/RightPanel/PlaylistSearchList'
-import { Box, Typography, styled, useTheme } from '@mui/material'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
 import { useMemo, useState } from 'react'
 import SongSearch from '../../../../../../common/components/songLists/SongSearch/SongSearch'
 import { Gap } from '../../../../../../common/ui/Gap/Gap'
-import SearchBar from '../../../../../../common/ui/SearchBar/SearchBar'
+import { SearchBar } from '../../../../../../common/ui/SearchBar/SearchBar'
 import useGroup from '../../../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../../../hooks/group/useGroupSelection'
 import { isMobile } from '../../../../../../tech/device.tech'
@@ -89,7 +90,7 @@ export default function RightPanel({}: RightPanelProps) {
 										) : (
 											<></>
 										)}
-										<Typography fontWeight={900}>Nějaké návrhy:</Typography>
+										<Typography strong={900}>Nějaké návrhy:</Typography>
 										<Gap value={0.5} />
 										<PlaylistSearchList variants={ideaArr} />
 									</>
@@ -100,7 +101,7 @@ export default function RightPanel({}: RightPanelProps) {
 
 					{idea != '' ? (
 						<>
-							<Typography fontWeight={500}>Nemáte nápad? </Typography>
+							<Typography strong={500}>Nemáte nápad? </Typography>
 							<Typography>
 								Zkuste třeba: <i>{idea}</i>
 							</Typography>

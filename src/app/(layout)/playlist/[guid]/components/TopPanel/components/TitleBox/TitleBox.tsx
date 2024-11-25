@@ -1,8 +1,7 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import Tooltip from '@/common/ui/CustomTooltip/Tooltip'
-import TextField from '@/common/ui/TextField/TextField'
+import { Box, Tooltip, useTheme } from '@/common/ui'
+import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
-import { Box, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import './TitleBox.styles.css'
 

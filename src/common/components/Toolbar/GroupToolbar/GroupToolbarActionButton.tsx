@@ -1,13 +1,8 @@
-import {
-	Box,
-	CircularProgress,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material'
+import { Box, CircularProgress, Typography, useTheme } from '@/common/ui'
+import { styled } from '@/common/ui/mui'
 import React from 'react'
 import { RoutesKeys } from '../../../../routes'
-import { CommonLinkProps, Link, LinkProps } from '../../../ui/Link/CustomLink'
+import { CommonLinkProps, Link, LinkProps } from '../../../ui/Link/Link'
 
 const Container = styled(Box)(({ theme }) => ({
 	width: 180,
@@ -98,21 +93,19 @@ export default function GroupToolbarActionButton<T extends RoutesKeys>({
 			>
 				<Typography
 					variant="h6"
-					fontWeight={500}
-					sx={{ userSelect: 'none' }}
-					lineHeight={'inherit'}
+					strong={500}
+					sx={{ userSelect: 'none', lineHeight: 'inherit' }}
 				>
 					{label}
 				</Typography>
 				{secondaryLabel && (
 					<Typography
-						variant="subtitle2"
-						lineHeight={'inherit'}
 						sx={{
 							textOverflow: 'clip',
 							overflow: 'hidden',
 							width: '80px',
 							opacity: 0.6,
+							lineHeight: 'inherit',
 						}}
 						noWrap
 					>

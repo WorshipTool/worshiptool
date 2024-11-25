@@ -1,33 +1,42 @@
-import { createTheme } from '@mui/material'
-import { ThemeProvider as TP } from '@mui/material/styles'
+'use client'
+import { theme } from '@/common/constants/theme'
+import { createTheme } from '@/common/ui/mui'
+import { ThemeProvider as TP, responsiveFontSizes } from '@mui/material/styles'
+import { csCZ } from '@mui/x-date-pickers/locales'
 import { Roboto } from 'next/font/google'
 
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#0085FF',
-			dark: '#532EE7',
-		},
-		secondary: {
-			main: '#EBBC1E',
-		},
-		success: {
-			main: '#43a047',
+let muiTheme = createTheme(
+	{
+		...theme,
+		typography: {
+			h1: {
+				fontSize: '5rem',
+				fontWeight: 400,
+				lineHeight: 1,
+			},
+			h2: {
+				fontSize: '3rem',
+				fontWeight: 300,
+			},
+			h3: {
+				fontSize: '2rem',
+				lineHeight: 1.4,
+			},
+			h4: {
+				fontSize: '1.5rem',
+			},
+			h5: {
+				fontSize: '1.25rem',
+			},
+			h6: {
+				fontSize: '1.125rem',
+			},
 		},
 	},
-})
-
-// theme.typography.h1 = {
-// 	fontSize: '1.5rem',
-// }
-
-// theme.typography.h2 = {
-// 	fontSize: '1.4rem',
-// }
-
-// theme.typography.h3 = {
-// 	fontSize: '1.3rem',
-// }
+	csCZ
+)
+muiTheme = responsiveFontSizes(muiTheme)
+export const _muiTheme = muiTheme
 
 // theme.typography.h4 = {
 // 	fontSize: '1.2rem',
@@ -52,7 +61,7 @@ type ThemeProviderProps = {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 	return (
-		<TP theme={theme}>
+		<TP theme={muiTheme}>
 			<div className={roboto.className}>{children}</div>
 		</TP>
 	)

@@ -1,5 +1,5 @@
 'use client'
-import { Box } from '@mui/material'
+import { Box } from '@/common/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import Snowfall from 'react-snowfall'

@@ -1,22 +1,33 @@
 'use client'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { ArrowBack } from '@mui/icons-material'
-import { Box } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
 const INTERVAL_DURATION = 5000
 
-export default function GoBackButton() {
+type GoBackButtonProps = {
+	teamAlias?: string
+}
+
+export default function GoBackButton(props: GoBackButtonProps) {
 	const [active, setActive] = useState(false)
 
 	const navigate = useSmartNavigate()
 	const params = useSmartParams('playlistCards')
 
 	const onClick = useCallback(() => {
-		navigate('playlist', params)
-	}, [navigate, params])
+		if (props.teamAlias) {
+			navigate('teamPlaylist', {
+				alias: props.teamAlias,
+				...params,
+			})
+		} else {
+			navigate('playlist', params)
+		}
+	}, [navigate, params, props.teamAlias])
 
 	useEffect(() => {
 		let interval: NodeJS.Timeout | null = null

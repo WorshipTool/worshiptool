@@ -1,5 +1,5 @@
 import SvgIcon from '@/assets/icon.svg'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/common/ui'
 // import { AnimatePresence } from 'framer-motion'
 import { Gap } from '../../../ui/Gap/Gap'
 import { Background } from '../Background'

@@ -1,6 +1,6 @@
-import { Button } from '@mui/material'
+import { Button } from '@/common/ui'
 import { createStory } from '../../../app/(layout)/storybook/createStory'
-import Tooltip from './Tooltip'
+import { Tooltip } from './Tooltip'
 
 const CustomToolkipStory = () => (
 	<Tooltip title="This is a custom tooltip" placement="top-start">

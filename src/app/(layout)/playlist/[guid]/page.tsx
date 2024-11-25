@@ -1,16 +1,10 @@
 'use client'
 // import { useParams } from "react-router-dom";
-import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
-import { useParams } from 'next/navigation'
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import PlaylistPreview from './components/PlaylistPreview'
-import { InnerPlaylistProvider } from './hooks/useInnerPlaylist'
 
-export default function PlaylistScreen() {
-	const { guid } = useParams() as { guid: PlaylistGuid }
+export default SmartPage(PlaylistScreen, ['fullWidth', 'hideFooter'])
 
-	return !guid ? null : (
-		<InnerPlaylistProvider guid={guid}>
-			<PlaylistPreview />
-		</InnerPlaylistProvider>
-	)
+function PlaylistScreen() {
+	return <PlaylistPreview />
 }

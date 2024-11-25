@@ -1,11 +1,12 @@
+import { Toolbar } from '@/common'
+import { Box, Typography, useTheme } from '@/common/ui'
+import { Fade, SvgIcon, Zoom } from '@/common/ui/mui'
 import styled from '@emotion/styled'
-import { Box, Fade, SvgIcon, Typography, useTheme, Zoom } from '@mui/material'
 import { useMemo } from 'react'
 import useGroup from '../../../../hooks/group/useGroup'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { Clickable } from '../../../ui/Clickable'
 import { Gap } from '../../../ui/Gap'
-import { Toolbar } from '../Toolbar'
 import QuickActions from './QuickActions'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -33,7 +34,10 @@ export default function GroupToolbarDesktop({
 	const { isOn, code } = useGroup()
 	const goHome = () => {
 		if (isOn) navigate('group', { groupCode: code })
-		else navigate('home', {})
+		else
+			navigate('home', {
+				hledat: undefined,
+			})
 		window?.scroll({
 			top: 0,
 			behavior: 'auto',
@@ -49,7 +53,7 @@ export default function GroupToolbarDesktop({
 			position={'relative'}
 			zIndex={1}
 		>
-			<Toolbar transparent white />
+			<Toolbar />
 
 			<Box
 				overflow={'hidden'}
@@ -67,7 +71,7 @@ export default function GroupToolbarDesktop({
 						transition: 'height 0.2s ease',
 					}}
 				>
-					<img
+					{/* <img
 						src="/assets/13ka-title.svg"
 						height={700}
 						style={{
@@ -85,7 +89,7 @@ export default function GroupToolbarDesktop({
 											'rotate(-8deg) translate(80px, -90px) scale(130%)',
 								  }),
 						}}
-					></img>
+					></img> */}
 				</StyledContainer>
 			</Box>
 			<Box
@@ -135,7 +139,7 @@ export default function GroupToolbarDesktop({
 								</Zoom>
 								<Typography
 									variant="h5"
-									fontWeight={900}
+									strong={900}
 									sx={{
 										transition: 'all 0.2s ease',
 										...(expanded
@@ -169,7 +173,7 @@ export default function GroupToolbarDesktop({
 							paddingLeft: 9,
 						}}
 					>
-						<Typography fontWeight={600}>Rychlé akce</Typography>
+						<Typography strong={600}>Rychlé akce</Typography>
 						<Gap value={1} />
 					</Box>
 				</Box>

@@ -1,13 +1,15 @@
+import { Box, Divider, IconButton, Typography } from '@/common/ui'
+import { Avatar } from '@/common/ui/mui'
 import { Close } from '@mui/icons-material'
-import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { permissionPayloadToApi } from '../../../../../../api/dtos/permission'
 import { PermissionUserBaseOutDto } from '../../../../../../api/generated'
 import { useApi } from '../../../../../../hooks/api/useApi'
-import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import {
 	PermissionPayloadType,
 	PermissionType,
-} from '../../../../../../interfaces/permission.types'
+	PermissionsTypes,
+} from '../../../../../../hooks/permissions/permission.types'
+import { useUserProfileImage } from '../../../../../../hooks/useUserProfileImage'
 import { useApiState } from '../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
@@ -16,7 +18,7 @@ type GroupUserItemProps<T extends PermissionType> = {
 	editable?: boolean
 	onRemove: () => void
 	permissionType: T
-	permissionPayload: PermissionPayloadType<T>
+	permissionPayload: PermissionPayloadType<PermissionsTypes, T>
 }
 
 export default function GroupUserItem<T extends PermissionType>(

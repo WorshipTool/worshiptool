@@ -19,7 +19,32 @@ const nextConfig = withRoutes({
 			},
 		]
 	},
+	async rewrites() {
+		return []
+	},
 
+	images: {
+		remotePatterns: [
+			{
+				hostname: 'localhost',
+			},
+		],
+		dangerouslyAllowSVG: true,
+	},
+	async headers() {
+		return [
+			{
+				// Nastavení hlavičky pro všechny cesty
+				source: '/(.*)',
+				headers: [
+					{
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin',
+					},
+				],
+			},
+		]
+	},
 	reactStrictMode: false,
 	output: 'standalone',
 })

@@ -1,28 +1,64 @@
-import { PlaylistGettingApi } from '../../../../api/generated'
+'use server'
+import { InnerPlaylistProvider } from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerPathname } from '@/hooks/pathname/useServerPathname'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { smartRedirect } from '@/routes/routes.tech.server'
+import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps, MetadataProps } from '../../../../common/types'
-import { generateMetadataTitle } from '../../../../hooks/window-title/tech'
 import { handleApiCall } from '../../../../tech/handleApiCall'
 
-export const generateMetadata = async ({
-	params,
-}: MetadataProps<'playlist'>) => {
-	const api = new PlaylistGettingApi()
-	try {
-		const playlist = await handleApiCall(
-			api.playlistGettingControllerGetPlaylistDataByGuid(params.guid)
-		)
+export const generateMetadata = generateSmartMetadata(
+	'playlist',
+	async ({ params }: MetadataProps<'playlist'>) => {
+		const { playlistGettingApi } = await useServerApi()
+		try {
+			const playlist = await handleApiCall(
+				playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
+					params.guid
+				)
+			)
 
-		const title = playlist ? playlist.title + ' (Playlist)' : 'Playlist'
-		return {
-			title: await generateMetadataTitle(title, 'playlist', params),
-		}
-	} catch (e) {
-		return {
-			title: await generateMetadataTitle('Playlist', 'playlist', params),
+			const title = playlist ? playlist.title + ' (Playlist)' : 'Playlist'
+			return {
+				title: title,
+			}
+		} catch (e) {
+			return {
+				title: 'Playlist',
+			}
 		}
 	}
-}
+)
 
-export default function layout(props: LayoutProps) {
-	return <>{props.children}</>
+export default async function Layout(props: LayoutProps<'playlist'>) {
+	const { playlistGettingApi } = await useServerApi()
+	const playlist = await handleApiCall(
+		playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
+			props.params.guid
+		)
+	)
+
+	// Send tick to backend
+	await handleApiCall(
+		playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
+			props.params.guid
+		)
+	)
+
+	const pathname = await useServerPathname()
+	const afterPlaylist = pathname.split('playlist')[1]
+	const isSomethingAfter = afterPlaylist.split('/').length > 2
+
+	if (playlist.teamAlias && !isSomethingAfter) {
+		smartRedirect('teamPlaylist', {
+			alias: playlist.teamAlias,
+			guid: props.params.guid,
+		})
+	}
+	return (
+		<InnerPlaylistProvider guid={props.params.guid as PlaylistGuid}>
+			{props.children}
+		</InnerPlaylistProvider>
+	)
 }
