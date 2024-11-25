@@ -73,13 +73,21 @@ function TeamSettingsPage() {
 	}
 
 	const onSave = async () => {
-		await handleApiCall(
-			teamEditingApi.teamEditingControllerChangeTeamInfo({
-				teamGuid: guid,
-				teamName: name,
-				joinCode,
-			})
-		)
+		try {
+			await handleApiCall(
+				teamEditingApi.teamEditingControllerChangeTeamInfo({
+					teamGuid: guid,
+					teamName: name,
+					joinCode,
+				})
+			)
+		} catch (e) {
+			enqueueSnackbar(
+				'Nepodařilo se uložit změny. Nejspíše je tento kód již použitý.'
+			)
+			reload()
+			return
+		}
 
 		if (chosenFile) logo.changeLogo(chosenFile)
 
