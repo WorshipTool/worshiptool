@@ -174,6 +174,7 @@ export const SongCard = memo(function S({
 							height: 'calc(100% - 2rem)',
 							display: 'flex',
 							flexDirection: 'column',
+							overflow: 'hidden',
 						}}
 					>
 						<Box display={'flex'} flexDirection={'row'} gap={1}>
@@ -241,7 +242,7 @@ export const SongCard = memo(function S({
 									)
 								})}
 							</Box>
-							<SongCardAdditional 
+							<SongCardAdditional
 								isOver={isOver}
 								data={data}
 								icons={props.icons}

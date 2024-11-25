@@ -109,13 +109,7 @@ export const SongListCard = memo(function SongListCards({
 			})}
 		</Grid>
 	) : (
-		<Masonry
-			columns={columns}
-			sx={{
-				width: `100%`,
-			}}
-			spacing={spacing}
-		>
+		<Masonry columns={columns} sx={{}} spacing={spacing}>
 			{data.map((v) => {
 				return <CommonCard v={v} key={v.guid} />
 			})}
