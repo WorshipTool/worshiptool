@@ -317,7 +317,7 @@ function Page() {
 			<Divider />
 			{/* FOURTH PAGE - Video */}
 
-			<Box paddingY={8} position={'relative'}>
+			<Box paddingY={8} position={'relative'} display={'none'}>
 				<Box display={'flex'} flexDirection={'row'} gap={2} flexWrap={'wrap'}>
 					<Box display={'flex'} flexDirection={'column'} flex={2} gap={1}>
 						<Typography variant="h2" noWrap>
