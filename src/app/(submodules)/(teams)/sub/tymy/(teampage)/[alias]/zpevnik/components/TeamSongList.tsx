@@ -29,7 +29,11 @@ export const TeamSongList = (props: Props) => {
 	const items = useMemo(() => {
 		const items =
 			searchString.length > 0 ? selection.searchedItems : selection.items
-		return items.map((item) => item.variant)
+		return items
+			.map((item) => item.variant)
+			.sort((a, b) => {
+				return a.preferredTitle.localeCompare(b.preferredTitle)
+			})
 	}, [selection, searchString])
 
 	const addSongPermission = usePermission<TeamPermissions>('team.add_song', {

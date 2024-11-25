@@ -135,8 +135,11 @@ function MySongsList() {
 									paddingTop={2}
 								>
 									<Typography italic>
-										Nemáš žádné vytvořené písně... Pro vytvoření klikni na modré
-										tlačítko.
+										Nemáš žádné vytvořené písně{' '}
+										{filters.length > 0 ? '(s těmito filtery)' : ''}...{' '}
+										{filters.length === 0
+											? 'Pro vytvoření klikni na modré tlačítko.'
+											: ''}
 									</Typography>
 									{/* <IconButton to="addMenu">
 										<Add />

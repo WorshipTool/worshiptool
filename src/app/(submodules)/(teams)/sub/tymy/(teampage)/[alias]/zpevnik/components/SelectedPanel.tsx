@@ -58,6 +58,7 @@ export default function SelectedPanel({
 		(e: React.MouseEvent<HTMLElement>) => {
 			setPlaylistMenuOpen(true)
 			setPlaylistMenuAnchor(e.currentTarget)
+			return false
 		},
 		[]
 	)
