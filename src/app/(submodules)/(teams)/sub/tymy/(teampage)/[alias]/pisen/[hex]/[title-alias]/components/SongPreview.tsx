@@ -219,7 +219,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 					flexWrap={'wrap'}
 					gap={2}
 				>
-					<Box flex={1}>
+					<Box>
 						<SheetDisplay
 							sheet={sheet}
 							hideChords={hideChords}

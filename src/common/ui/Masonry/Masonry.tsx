@@ -27,11 +27,40 @@ export const Masonry = ({
 	const fixMargin = `-${theme.spacing(spacing / 2)}`
 
 	return (
-		<Box sx={props.sx}>
+		<Box
+			sx={{
+				...props.sx,
+				position: 'relative',
+			}}
+		>
 			{columnsCount <= 1 ? (
 				<>
-					<Box display={'flex'} flexDirection={'column'} gap={spacing}>
-						{props.children}
+					<Box
+						sx={{
+							...props.sx,
+							width: '100%',
+							display: 'grid',
+							gridTemplateColumns: '1fr', // Jeden sloupec, který zabírá celou šířku
+							gap: spacing,
+							position: 'relative',
+							margin: '0 auto',
+							overflow: 'hidden',
+						}}
+					>
+						{props.children?.map((child, index) => (
+							<Box
+								key={index}
+								sx={{
+									width: '100%',
+									maxWidth: '100%', // Omezíme šířku dětí na 100% rodiče
+									overflow: 'hidden',
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+								}}
+							>
+								{child}
+							</Box>
+						))}
 					</Box>
 				</>
 			) : (
