@@ -34,6 +34,9 @@ const nextConfig = withRoutes({
 			{
 				hostname: 'localhost',
 			},
+			{
+				hostname: 'chvalotce.cz',
+			},
 		],
 		dangerouslyAllowSVG: true,
 	},
