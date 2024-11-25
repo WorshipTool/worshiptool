@@ -10,8 +10,10 @@ env:
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
+  release:
+    types: [published]
+#   push:
+#     branches: [master]
 
 jobs:
   release:
