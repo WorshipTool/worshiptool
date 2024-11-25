@@ -47,9 +47,7 @@ export default function Page(props: PageProps<'teamPublic'>) {
 
 	return (
 		<Box>
-			<TeamPageTitle>Zpěvník</TeamPageTitle>
-
-			{/* <JoinGroupPanel /> */}
+			<TeamPageTitle>Seznam písní</TeamPageTitle>
 
 			<TeamSongList cardToProps={cardToProps} />
 		</Box>

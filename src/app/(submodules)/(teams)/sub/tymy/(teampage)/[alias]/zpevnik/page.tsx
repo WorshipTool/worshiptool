@@ -32,7 +32,7 @@ function TeamSongsPage() {
 	}, [])
 	return (
 		<>
-			<TeamPageTitle>Zpěvník</TeamPageTitle>
+			<TeamPageTitle>Seznam písní</TeamPageTitle>
 			<TeamSongList cardToProps={cardToProps} />
 
 			<FloatingPlaylist />
