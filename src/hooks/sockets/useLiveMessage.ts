@@ -2,7 +2,8 @@ import { BACKEND_URL } from '@/api/constants'
 import { useCallback, useEffect } from 'react'
 import io from 'socket.io-client'
 
-const DISABLE_WEBSOCKET = process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
+//TODO
+const DISABLE_WEBSOCKET = true //process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
 
 const _socket = io(BACKEND_URL, {
 	transports: ['websocket'],
