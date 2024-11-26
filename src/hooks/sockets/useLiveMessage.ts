@@ -2,9 +2,13 @@ import { BACKEND_URL } from '@/api/constants'
 import { useCallback, useEffect } from 'react'
 import io from 'socket.io-client'
 
-const socket = io(BACKEND_URL, {
+const DISABLE_WEBSOCKET = process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
+
+const _socket = io(BACKEND_URL, {
 	transports: ['websocket'],
 })
+
+const socket: typeof _socket = DISABLE_WEBSOCKET ? (null as any) : _socket
 
 type Socket<T extends string> = {
 	eventName: T
@@ -25,10 +29,12 @@ export const useLiveMessage = <T extends string, Events extends Listeners<T>>(
 	const localEventName = groupName
 
 	const sendInitalMessage = useCallback(() => {
+		if (DISABLE_WEBSOCKET) return
 		socket.emit(START_LISTEN_GROUP_EVENT_NAME, localEventName)
 	}, [localEventName])
 
 	const stopListening = useCallback(() => {
+		if (DISABLE_WEBSOCKET) return
 		socket.emit(STOP_LISTEN_GROUP_EVENT_NAME, localEventName)
 	}, [localEventName])
 
@@ -50,6 +56,7 @@ export const useLiveMessage = <T extends string, Events extends Listeners<T>>(
 	)
 
 	useEffect(() => {
+		if (DISABLE_WEBSOCKET) return
 		socket.on(localEventName, handle)
 		return () => {
 			socket.off(localEventName)
@@ -57,6 +64,8 @@ export const useLiveMessage = <T extends string, Events extends Listeners<T>>(
 	}, [localEventName, handle])
 
 	const send = <K extends T>(eventName: K, data: Parameters<Events[K]>[0]) => {
+		if (DISABLE_WEBSOCKET) return
+
 		const socketData: Socket<T> = {
 			eventName,
 			data,
