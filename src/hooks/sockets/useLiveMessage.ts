@@ -2,14 +2,15 @@ import { BACKEND_URL } from '@/api/constants'
 import { useCallback, useEffect } from 'react'
 import io from 'socket.io-client'
 
-//TODO
-const DISABLE_WEBSOCKET = true //process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
+const DISABLE_WEBSOCKET = process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
 
-const _socket = io(BACKEND_URL, {
-	transports: ['websocket'],
-})
+// get return type of io
 
-const socket: typeof _socket = DISABLE_WEBSOCKET ? (null as any) : _socket
+const socket: ReturnType<typeof io> = DISABLE_WEBSOCKET
+	? (null as any)
+	: io(BACKEND_URL, {
+			transports: ['websocket'],
+	  })
 
 type Socket<T extends string> = {
 	eventName: T
