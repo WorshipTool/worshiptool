@@ -5,6 +5,7 @@ import { TeamSongList } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[al
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { PageProps } from '@/common/types'
 import { Box, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys, SmartParams } from '@/routes'
 import { parseVariantAlias } from '@/routes/routes.tech'
@@ -15,7 +16,7 @@ export default function Page(props: PageProps<'teamPublic'>) {
 	const { user } = useAuth()
 
 	const navigate = useSmartNavigate()
-	const { members } = useInnerTeam()
+	const { members, name } = useInnerTeam()
 	useEffect(() => {
 		if (!user) return
 
@@ -45,9 +46,13 @@ export default function Page(props: PageProps<'teamPublic'>) {
 		}
 	}, [])
 
+	const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+
 	return (
 		<Box>
-			<TeamPageTitle>Seznam písní</TeamPageTitle>
+			<TeamPageTitle>
+				{!isSmall && 'Tým'} {name}
+			</TeamPageTitle>
 
 			<TeamSongList cardToProps={cardToProps} />
 		</Box>
