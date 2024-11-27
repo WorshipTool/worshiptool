@@ -18,10 +18,11 @@ interface ErrorHandlerProviderProps {
 
 export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
 	const { enqueueSnackbar } = useSnackbar()
-	const { logout } = useAuth()
+	const { logout, isAdmin } = useAuth()
 	const navigate = useSmartNavigate()
 
 	const ne = useCallback(() => {
+		if (!isAdmin()) return
 		enqueueSnackbar('Nelze se spojit se serverem.', {
 			variant: 'error',
 			persist: true,
