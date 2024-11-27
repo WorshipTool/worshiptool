@@ -45,6 +45,8 @@ export default function TeamLeftMenu(props: MenuProps) {
 	const showStatistics =
 		events.length >= 10 && me?.role === TeamMemberRole.MANAGER
 
+	const showPeople = me?.role === TeamMemberRole.MANAGER
+
 	const items: MenuItem[] = useMemo(
 		() => [
 			{
@@ -78,6 +80,7 @@ export default function TeamLeftMenu(props: MenuProps) {
 				icon: <People />,
 				to: 'teamPeople',
 				toParams: { alias },
+				hidden: !showPeople,
 			},
 			{
 				title: 'Nastavení',
