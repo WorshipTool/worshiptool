@@ -8,13 +8,13 @@ import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[a
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
 import SongPreview from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/SongPreview'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { Box, LinearProgress } from '@/common/ui'
+import { Box, IconButton, LinearProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { AudioFile, OpenInNew } from '@mui/icons-material'
+import { AudioFile, KeyboardArrowLeft, OpenInNew } from '@mui/icons-material'
 import { useMemo } from 'react'
 
 type TeamPisenPageProps = {
@@ -54,11 +54,25 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 					alignItems={'center'}
 					gap={2}
 				>
+					<IconButton
+						sx={{
+							transform: 'translateX(-10px)',
+						}}
+						color="grey.900"
+						onClick={() => {
+							window.history.back()
+						}}
+					>
+						<KeyboardArrowLeft />
+					</IconButton>
 					<Box
 						display={'flex'}
 						justifyContent={'end'}
 						alignItems={'center'}
-						width={6 * 8}
+						width={1 * 8}
+						sx={{
+							transform: 'translateX(-8px)',
+						}}
 					>
 						<AudioFile
 							fontSize="inherit"
