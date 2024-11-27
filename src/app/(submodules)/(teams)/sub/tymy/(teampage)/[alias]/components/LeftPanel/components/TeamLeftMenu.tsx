@@ -32,6 +32,8 @@ export default function TeamLeftMenu(props: MenuProps) {
 		guid,
 		events: { events },
 		members: { me },
+		isCreator,
+		createdByGuid,
 	} = useInnerTeam()
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.change_base_info',
@@ -42,10 +44,11 @@ export default function TeamLeftMenu(props: MenuProps) {
 
 	const navigate = useSmartNavigate()
 
-	const showStatistics =
-		events.length >= 10 && me?.role === TeamMemberRole.MANAGER
+	const isManager = me?.role === TeamMemberRole.MANAGER || isCreator
 
-	const showPeople = me?.role === TeamMemberRole.MANAGER
+	const showStatistics = events.length >= 10 && isManager
+
+	const showPeople = isManager
 
 	const items: MenuItem[] = useMemo(
 		() => [
