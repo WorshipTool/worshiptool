@@ -22,13 +22,17 @@ export const createSmartPortal = (
 	containerId: string,
 	key?: string
 ) => {
+	const element = document.getElementById(containerId) as HTMLElement
+
 	const onMount = () => {
 		window.dispatchEvent(new Event(getPortalUpdateEventName(containerId)))
 	}
 
-	return createPortal(
-		<PortalItem onMount={onMount}>{children}</PortalItem>,
-		document.getElementById(containerId) as HTMLElement,
-		key
-	)
+	return element
+		? createPortal(
+				<PortalItem onMount={onMount}>{children}</PortalItem>,
+				element,
+				key
+		  )
+		: null
 }
