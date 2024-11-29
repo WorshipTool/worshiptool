@@ -1,23 +1,10 @@
 'use client'
 import MenuItem from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/MenuItem'
+import { useTeamLeftMenuItems } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/hooks/useTeamLeftMenuItems'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import {
-	TeamMemberRole,
-	TeamPermissions,
-} from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import AdminOption from '@/common/components/admin/AdminOption'
 import { Box } from '@/common/ui'
-import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import {
-	Analytics,
-	Dashboard,
-	People,
-	QueueMusic,
-	Settings,
-	Subscriptions,
-} from '@mui/icons-material'
-import { ComponentProps, useMemo } from 'react'
+import { ComponentProps } from 'react'
 
 type MenuItem = ComponentProps<typeof MenuItem>
 
@@ -29,72 +16,12 @@ type MenuProps = {
 export default function TeamLeftMenu(props: MenuProps) {
 	const {
 		alias,
-		guid,
-		events: { events },
 		members: { me },
 		isCreator,
-		createdByGuid,
 	} = useInnerTeam()
-	const hasPermissionToEdit = usePermission<TeamPermissions>(
-		'team.change_base_info',
-		{
-			teamGuid: guid,
-		}
-	)
-
 	const navigate = useSmartNavigate()
 
-	const isManager = me?.role === TeamMemberRole.MANAGER || isCreator
-
-	const showStatistics = events.length >= 10 && isManager
-
-	const showPeople = isManager
-
-	const items: MenuItem[] = useMemo(
-		() => [
-			{
-				title: 'Přehled',
-				icon: <Dashboard />,
-				to: 'team',
-				toParams: { alias },
-			},
-			{
-				title: 'Seznam písní',
-				icon: <QueueMusic />,
-				to: 'teamSongbook',
-				toParams: { alias },
-			},
-			{
-				title: 'Playlisty',
-				icon: <Subscriptions />,
-				to: 'teamPlaylists',
-				toParams: { alias },
-			},
-			{
-				title: 'Statistiky',
-				icon: <Analytics />,
-				to: 'teamStatistics',
-				toParams: { alias },
-				// disabled: true,
-				hidden: !showStatistics,
-			},
-			{
-				title: 'Lidé',
-				icon: <People />,
-				to: 'teamPeople',
-				toParams: { alias },
-				hidden: !showPeople,
-			},
-			{
-				title: 'Nastavení',
-				icon: <Settings />,
-				to: 'teamSettings',
-				toParams: { alias },
-				hidden: !hasPermissionToEdit,
-			},
-		],
-		[hasPermissionToEdit, alias, showStatistics]
-	)
+	const items = useTeamLeftMenuItems()
 	return (
 		<Box
 			paddingX={props.collapsed ? 0 : 3}
@@ -110,15 +37,6 @@ export default function TeamLeftMenu(props: MenuProps) {
 			{items.map((item, index) => (
 				<MenuItem key={index} {...item} collapsed={props.collapsed} />
 			))}
-
-			<AdminOption
-				label={'Statistiky'}
-				subtitle="Zobrazit stránku Statistiky"
-				icon={<Analytics />}
-				onClick={() => {
-					navigate('teamStatistics', { alias })
-				}}
-			/>
 		</Box>
 	)
 }

@@ -2,29 +2,18 @@
 import TeamLeftMenu from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamLeftMenu'
 import TeamPanelTitle from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamPanelTitle'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
-import AdminOption from '@/common/components/admin/AdminOption'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
-import {
-	ChevronLeft,
-	ChevronRight,
-	DarkMode,
-	LightMode,
-} from '@mui/icons-material'
+import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useMemo } from 'react'
 
 type TeamLeftPanelProps = {}
 
 const TRANSITION = 'all 0.2s'
 export default function TeamLeftPanel(props: TeamLeftPanelProps) {
-	const {
-		collapsed,
-		setCollapsedManually,
-		darkMode,
-		setDarkMode,
-		uncollapsable,
-	} = useTeamSideBar()
+	const { collapsed, setCollapsedManually, darkMode, uncollapsable } =
+		useTeamSideBar()
 
 	const WIDTH = useMemo(() => (collapsed ? 60 : 250), [collapsed])
 	return (
@@ -50,15 +39,6 @@ export default function TeamLeftPanel(props: TeamLeftPanelProps) {
 				<TeamPanelTitle collapsed={collapsed} />
 				<TeamLeftMenu collapsed={collapsed} transition={TRANSITION} />
 				<Box flex={1} />
-
-				<AdminOption
-					title="Přepnout režim menu"
-					subtitle={
-						darkMode ? 'Přepnout na světlý režim' : 'Přepnout na tmavý režim'
-					}
-					icon={darkMode ? <LightMode /> : <DarkMode />}
-					onClick={() => setDarkMode(!darkMode)}
-				/>
 
 				{!uncollapsable && (
 					<Box paddingBottom={2}>
