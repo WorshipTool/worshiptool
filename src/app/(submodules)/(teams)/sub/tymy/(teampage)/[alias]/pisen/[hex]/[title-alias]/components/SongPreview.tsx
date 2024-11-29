@@ -18,6 +18,7 @@ import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
@@ -41,6 +42,8 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 			teamGuid,
 		}
 	)
+
+	const navigate = useSmartNavigate()
 
 	const { user } = useAuth()
 
@@ -96,8 +99,20 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 				)
 			},
 			() => {
-				setInEditMode(false)
-				if (newData.title) window.location.reload()
+				if (newData.title) {
+					navigate(
+						'teamSong',
+						{
+							alias: titleAlias,
+							hex,
+							'title-alias': newData.title,
+							edit: false,
+						},
+						{
+							replace: true,
+						}
+					)
+				}
 			}
 		)
 	}, [editedSheetData, editedTitle, variant])

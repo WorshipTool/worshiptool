@@ -9,7 +9,6 @@ import { RoutesKeys, SmartAllParams } from './routes.types'
 type NavigateOptions = NO & {
 	replace?: boolean
 }
-//TODO: use replace
 
 export const useSmartNavigate = () => {
 	const router = useRouter()
