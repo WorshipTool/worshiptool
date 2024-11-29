@@ -1,6 +1,6 @@
 'use client'
 import { useApi } from '@/hooks/api/useApi'
-import { getPathnameFromUrl, getRouteUrlWithParams } from '@/routes/routes.tech'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
@@ -32,14 +32,13 @@ export default function StableTeamSubdomainProvider(
 				{ alias: alias.teamAlias },
 				{
 					subdomains: false,
+					relative: true,
 				}
 			)
 
-			const pathname = getPathnameFromUrl(url)
-
 			return {
 				subdomain: alias.subdomain,
-				pathname,
+				pathname: url,
 			}
 		})
 

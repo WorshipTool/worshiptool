@@ -67,9 +67,6 @@ const setResponse = async (
 		response.cookies.set(
 			COOKIES_SUBDOMAINS_PATHNAME_NAME,
 			subdomainsPrefixPathname
-			// {
-			// 	domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
-			// }
 		)
 	}
 
@@ -95,16 +92,13 @@ const checkSubdomain = async (
 
 		for (const subdomain of subdomains) {
 			const url = routesPaths['subdomain']
-			const aWhole = getReplacedUrlWithParams(
+			const aPathname = getReplacedUrlWithParams(
 				FRONTEND_URL + url,
 				{ subdomain },
-				{ subdomains: false }
+				{ subdomains: false, relative: true }
 			)
 
-			const aUrl = new URL(aWhole)
-			const a = aUrl.pathname
-
-			pathname = a + pathname
+			pathname = aPathname + pathname
 		}
 
 		url.pathname = pathname + url.pathname
