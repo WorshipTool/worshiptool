@@ -17,7 +17,7 @@ type Props = {
 
 export default function TeamClientLayout(props: Props) {
 	const theme = useTheme()
-	const isSmall = useMediaQuery(theme.breakpoints.down('md'))
+	const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
 
 	const { darkMode, setDarkMode } = useTeamSideBar()
 
