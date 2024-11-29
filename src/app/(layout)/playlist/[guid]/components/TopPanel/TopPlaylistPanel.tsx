@@ -52,7 +52,9 @@ export default function TopPlaylistPanel() {
 						<Box
 							display={{
 								xs: 'none',
-								sm: 'flex',
+								sm: 'none',
+								md: 'flex',
+								lg: 'flex',
 							}}
 						>
 							<Box />

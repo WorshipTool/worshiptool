@@ -3,24 +3,13 @@ import MiddlePanel from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/M
 import SongDropPlaylistContainer from '@/app/(layout)/playlist/[guid]/components/SongDropPlaylistContainer'
 import TopPlaylistPanel from '@/app/(layout)/playlist/[guid]/components/TopPanel/TopPlaylistPanel'
 import { Box } from '@/common/ui'
-import { Card } from '@/common/ui/Card/Card'
-import { Info } from '@mui/icons-material'
 
 export default function PlaylistPreview() {
 	return (
 		<SongDropPlaylistContainer>
 			<Box position={'relative'}>
 				<TopPlaylistPanel />
-				<Card
-					icon={<Info />}
-					subtitle="Playlist nelze na telefonu editovat. Pro editaci použij prosím
-                        počítač."
-					sx={{
-						marginX: 2,
-						marginTop: 2,
-						display: { xs: 'block', sm: 'none' },
-					}}
-				></Card>
+
 				<Box
 					display={'flex'}
 					flexDirection={'row'}
