@@ -1,6 +1,10 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
+import { useMediaQuery } from '@/common/ui/mui'
 import { RoutesKeys, SmartAllParams } from '@/routes'
+import { ViewCarousel } from '@mui/icons-material'
 
 type PresentationButtonProps<T extends RoutesKeys> = {
 	to: T
@@ -11,7 +15,24 @@ export default function PresentationButton<T extends RoutesKeys>(
 	props: PresentationButtonProps<T>
 ) {
 	const { guid, save, items } = useInnerPlaylist()
-	return (
+
+	const theme = useTheme()
+	const isSmall = useMediaQuery(theme.breakpoints.down('lg'))
+
+	const disabled = items.length === 0
+
+	return isSmall ? (
+		<>
+			<SmartPortalMenuItem
+				title={'Prezentace'}
+				onClick={save}
+				disabled={disabled}
+				to={props.to}
+				toParams={props.toParams}
+				icon={<ViewCarousel />}
+			/>
+		</>
+	) : (
 		<>
 			<Button
 				size="small"
@@ -19,7 +40,7 @@ export default function PresentationButton<T extends RoutesKeys>(
 				to={props.to}
 				toParams={props.toParams}
 				onClick={save}
-				disabled={items.length === 0}
+				disabled={disabled}
 			>
 				Prezentace
 			</Button>

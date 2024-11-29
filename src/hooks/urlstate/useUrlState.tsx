@@ -2,7 +2,13 @@ import { RoutesKeys, SmartSearchParams } from '@/routes'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export function useUrlState<T = string>(key: string, startValue?: T) {
+type UseURLStateOptions = {}
+
+export function useUrlState<T = string>(
+	key: string,
+	startValue?: T,
+	options?: UseURLStateOptions
+) {
 	const [value, _setValue] = useState<T | null>(() => {
 		if (typeof window === 'undefined') return startValue || null
 		const params = new URLSearchParams(window.location.search)
@@ -38,5 +44,11 @@ export function useUrlState<T = string>(key: string, startValue?: T) {
 
 export const useSmartUrlState = <T extends RoutesKeys>(
 	page: T,
-	paramKey: keyof SmartSearchParams<T>
-) => useUrlState<SmartSearchParams<T>[typeof paramKey]>(paramKey as string)
+	paramKey: keyof SmartSearchParams<T>,
+	options?: UseURLStateOptions
+) =>
+	useUrlState<SmartSearchParams<T>[typeof paramKey]>(
+		paramKey as string,
+		undefined,
+		options
+	)

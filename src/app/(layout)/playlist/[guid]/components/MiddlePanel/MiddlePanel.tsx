@@ -1,5 +1,6 @@
 import { PlaylistItem } from '@/app/(layout)/playlist/[guid]/components/MiddlePanel/PlaylistItem'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import CannotEditOnPhone from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/playlist/[guid]/components/CannotEditOnPhone'
 import { Box } from '@/common/ui'
 import { useMemo } from 'react'
 
@@ -21,6 +22,7 @@ export default function MiddlePanel() {
 
 	return (
 		<Box flex={1} padding={2} position={'relative'}>
+			<CannotEditOnPhone />
 			{loading || !items ? <>Načítání...</> : <>{itemsArr}</>}
 		</Box>
 	)

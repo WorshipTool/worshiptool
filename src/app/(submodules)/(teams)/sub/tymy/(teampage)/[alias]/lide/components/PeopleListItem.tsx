@@ -103,7 +103,7 @@ export default function PeopleListItem(props: PeopleListItemProps) {
 				onRoleChange={setRole}
 				isOwner={isCreator}
 			/>
-			<Box></Box>
+			{!hideActions && <Box></Box>}
 			{!hideActions &&
 				(!props.me ? (
 					<ActionsPartPeople

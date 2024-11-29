@@ -17,6 +17,8 @@ import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { usePermission } from '@/hooks/permissions/usePermission'
+import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
@@ -31,8 +33,8 @@ type SongPreviewProps = {
 export default function SongPreview({ variant }: SongPreviewProps) {
 	const { guid: teamGuid } = useInnerTeam()
 
-	const { edit, 'title-alias': titleAlias, hex } = useSmartParams('teamSong')
-	const [inEditMode, setInEditMode] = useState(edit || false)
+	const { 'title-alias': titleAlias, hex } = useSmartParams('teamSong')
+	const [inEditMode, setInEditMode] = useSmartUrlState('teamSong', 'edit')
 
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.edit_songs',
@@ -40,6 +42,8 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 			teamGuid,
 		}
 	)
+
+	const navigate = useSmartNavigate()
 
 	const { user } = useAuth()
 
@@ -95,7 +99,20 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 				)
 			},
 			() => {
-				if (newData.title) window.location.reload()
+				if (newData.title) {
+					navigate(
+						'teamSong',
+						{
+							alias: titleAlias,
+							hex,
+							'title-alias': newData.title,
+							edit: false,
+						},
+						{
+							replace: true,
+						}
+					)
+				}
 			}
 		)
 	}, [editedSheetData, editedTitle, variant])
@@ -188,7 +205,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 							<Box>
 								{hasPermissionToEdit && (
 									<EditButtonsPanel
-										inEditMode={inEditMode}
+										inEditMode={Boolean(inEditMode)}
 										setInEditMode={setInEditMode}
 										variant={variant}
 										onSave={onSave}
@@ -219,11 +236,15 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 					flexWrap={'wrap'}
 					gap={2}
 				>
-					<Box>
+					<Box
+						sx={{
+							flex: inEditMode ? 1 : undefined,
+						}}
+					>
 						<SheetDisplay
 							sheet={sheet}
 							hideChords={hideChords}
-							editMode={inEditMode}
+							editMode={Boolean(inEditMode)}
 							title={inEditMode ? variant.preferredTitle : undefined}
 							onChange={onSheetChange}
 						/>

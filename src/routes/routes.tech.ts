@@ -16,6 +16,11 @@ export const urlMatchPatterns = (
 	pattern: string,
 	parental: boolean = false
 ) => {
+	// make sure that pathname is relative
+	if (pathname.startsWith(FRONTEND_URL)) {
+		pathname = pathname.slice(FRONTEND_URL.length)
+	}
+
 	const urlParts = pathname.split('/')
 	const patternParts = pattern.split('/')
 
@@ -132,6 +137,7 @@ export const changeUrlFromSubdomains = (url: string): string => {
 type GetReplacedUrlWithParamsOptions = {
 	subdomains?: boolean
 	absolute?: boolean
+	relative?: boolean
 }
 
 export const getReplacedUrlWithParams = (
@@ -139,10 +145,17 @@ export const getReplacedUrlWithParams = (
 	params: { [key: string]: ParamValueType | undefined },
 	options: GetReplacedUrlWithParamsOptions = {
 		subdomains: true,
+		absolute: true,
 	}
 ) => {
+	// Check options
+	if (!options.absolute && options.subdomains)
+		throw new Error('Cannot use subdomains without absolute url')
+	if (options.relative !== undefined) options.absolute = !options.relative
+
 	const queryParams: Record<string, ParamValueType> = {}
 
+	// Process params
 	let result = url
 	for (const key in params) {
 		// Ignore undefined values
@@ -169,10 +182,17 @@ export const getReplacedUrlWithParams = (
 		result = url.toString()
 	}
 
+	// Handling subdomains
 	if (options?.subdomains && shouldUseSubdomains()) {
 		result = changeUrlToSubdomains(result)
 	}
-	return result
+
+	// Make sure its absolute or relative
+	const _url = new URL(result, FRONTEND_URL)
+	if (options?.absolute) {
+		return _url.toString()
+	}
+	return _url.pathname
 }
 
 export const getRouteUrlWithParams = <T extends RoutesKeys>(

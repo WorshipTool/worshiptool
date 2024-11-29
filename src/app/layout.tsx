@@ -1,6 +1,7 @@
 import AppProviders from '@/app/components/AppProviders'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { GoogleAnalytics } from '@/app/components/components/GoogleAnalytics'
+import HotjarAnalytics from '@/app/components/components/HotjarAnalytics'
 import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
 import AdminOptionsProvider from '@/common/components/admin/AdminOptions'
@@ -36,6 +37,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<GoogleAnalytics />
+			<HotjarAnalytics />
 			<body>
 				<AppProviders>
 					{children}

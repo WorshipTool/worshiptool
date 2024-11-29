@@ -7,7 +7,13 @@ import { Typography } from '@/common/ui/Typography'
 import { RoutesKeys, SmartAllParams } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import { ReactNode, useCallback } from 'react'
-
+export type TeamBarMenuTypes =
+	| 'overview'
+	| 'songlist'
+	| 'playlists'
+	| 'statistics'
+	| 'people'
+	| 'settings'
 type MenuItemProps<T extends RoutesKeys> = {
 	title: string
 	icon: React.ReactNode
@@ -17,6 +23,7 @@ type MenuItemProps<T extends RoutesKeys> = {
 	hidden?: boolean
 
 	collapsed?: boolean
+	id: TeamBarMenuTypes
 }
 
 export default function MenuItem<T extends RoutesKeys>(

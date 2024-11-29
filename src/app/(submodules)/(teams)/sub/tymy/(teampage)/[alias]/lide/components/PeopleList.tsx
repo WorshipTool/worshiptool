@@ -93,7 +93,7 @@ export default function PeopleList(props: PeopleListDto) {
 
 	const theme = useTheme()
 	const hideActions = useMediaQuery(theme.breakpoints.down('sm'))
-	const hideEmail = useMediaQuery('(max-width: 450px)')
+	const hideEmail = useMediaQuery('(max-width: 450px)') || hideActions
 
 	const gridStyle = useMemo(
 		() => ({
@@ -101,8 +101,8 @@ export default function PeopleList(props: PeopleListDto) {
 			gridTemplateColumns: `${
 				selectable ? '40px' : ''
 			} minmax(20px,60px) repeat(${
-				hideActions ? 1 : 3
-			}, ${firstPartsWidth}) 1fr 100px`,
+				hideActions ? (hideEmail ? 1 : 2) : 3
+			}, ${firstPartsWidth}) ${hideActions ? '' : '1fr'} 100px`,
 			alignItems: 'center',
 			gap: '1rem 1rem',
 			paddingX: 2,

@@ -16,6 +16,10 @@ export default function TeamClientProviders(props: Props) {
 				condition={({ url, params: p }) => {
 					const isTeam = urlMatchPatterns(url, routesPaths.team, true)
 
+					const isLoginPage = urlMatchPatterns(url, routesPaths.login, true)
+
+					if (isLoginPage) return false
+
 					// Block everything outside the team
 					if (!isTeam) return true
 

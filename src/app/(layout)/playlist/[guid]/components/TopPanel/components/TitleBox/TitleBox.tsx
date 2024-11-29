@@ -20,7 +20,7 @@ export default function TitleBox() {
 								outlineColor: `${grey[400]}`,
 								fontSize: '1.5rem',
 								fontWeight: 600,
-								[theme.breakpoints.down('sm')]: {
+								[theme.breakpoints.down('md')]: {
 									display: 'none',
 								},
 							}}
@@ -36,7 +36,8 @@ export default function TitleBox() {
 						paddingLeft={1}
 						display={{
 							sx: 'block',
-							sm: 'none',
+							sm: 'block',
+							md: 'none',
 						}}
 					>
 						<Typography strong={600} size={'1.5rem'}>

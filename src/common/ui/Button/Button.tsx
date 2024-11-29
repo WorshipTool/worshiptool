@@ -37,6 +37,8 @@ export type ButtonProps<T extends RoutesKeys> = {
 	type?: ComponentProps<typeof LoadingButton>['type']
 
 	className?: string
+
+	disableUppercase?: boolean
 }
 
 export const Button = memo(
@@ -92,6 +94,7 @@ export const Button = memo(
 								  }
 								: {}),
 
+							textTransform: props.disableUppercase ? 'none' : undefined,
 							...props.sx,
 						}}
 					>

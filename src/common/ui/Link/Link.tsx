@@ -36,13 +36,17 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 	const { url, relativeUrl } = useMemo(() => {
 		const absoluteUrl = getReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
-			(props.params as Record<string, string>) || {}
+			(props.params as Record<string, string>) || {},
+			{
+				absolute: true,
+			}
 		)
 		const relativeUrl = getReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
 			{
 				subdomains: false,
+				relative: true,
 			}
 		)
 

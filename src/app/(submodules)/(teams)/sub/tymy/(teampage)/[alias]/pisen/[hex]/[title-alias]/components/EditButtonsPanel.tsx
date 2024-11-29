@@ -5,7 +5,6 @@ import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
@@ -38,7 +37,6 @@ export default function EditButtonsPanel({
 	const needToBeCopied = useMemo(() => {
 		return selection.songNeedToBeCopiedToEdit(variant)
 	}, [])
-	const { teamEditingApi } = useApi()
 	const { fetchApiState, apiState } = useApiState<RequireItemEditOutDto>()
 
 	const [copyPopupOpen, setCopyPopupOpen] = useState(false)
@@ -61,12 +59,18 @@ export default function EditButtonsPanel({
 					const aliasData = parseVariantAlias(
 						result.packAlias as VariantPackAlias
 					)
-					navigate('teamSong', {
-						alias: teamAlias,
-						hex: aliasData.hex,
-						'title-alias': aliasData.alias,
-						edit: true,
-					})
+					navigate(
+						'teamSong',
+						{
+							alias: teamAlias,
+							hex: aliasData.hex,
+							'title-alias': aliasData.alias,
+							edit: true,
+						},
+						{
+							replace: true,
+						}
+					)
 				}
 
 				return result
