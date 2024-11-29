@@ -1,4 +1,6 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button } from '@/common/ui/Button'
 import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import { Share } from '@mui/icons-material'
@@ -10,6 +12,8 @@ export default function ShareButton() {
 	const url = useMemo(() => getRouteUrlWithParams('playlist', { guid }), [guid])
 
 	const { enqueueSnackbar } = useSnackbar()
+
+	const isSmall = useDownSize('md')
 
 	const onShare = async () => {
 		await save()
@@ -27,7 +31,15 @@ export default function ShareButton() {
 		enqueueSnackbar('Odkaz zkopírován do schránky', {})
 	}
 
-	return (
+	return isSmall ? (
+		<>
+			<SmartPortalMenuItem
+				title={'Sdílet'}
+				icon={<Share />}
+				onClick={onShare}
+			/>
+		</>
+	) : (
 		<Button
 			endIcon={<Share />}
 			color="secondary"

@@ -1,11 +1,16 @@
 import TeamBottomMenu from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/LeftPanel/components/TeamBottomMenu'
 import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/hooks/useTeamSideBar'
 import { Box } from '@/common/ui'
+import { useEffect } from 'react'
 
 const TRANSITION = 'all 0.2s'
 
 export default function TeamBottomPanel() {
-	const { darkMode } = useTeamSideBar()
+	const { darkMode, setHidden } = useTeamSideBar()
+
+	useEffect(() => {
+		setHidden(true)
+	}, [])
 
 	const HEIGHT = 60
 

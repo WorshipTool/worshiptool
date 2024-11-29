@@ -1,5 +1,7 @@
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
+import { useDownSize } from '@/common/hooks/useDownSize'
+import { IconButton } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { SmartAllParams, routesPaths } from '@/routes'
 import { getReplacedUrlWithParams } from '@/routes/routes.tech'
@@ -20,12 +22,25 @@ export default function PrintButton() {
 
 		openNewPrintWindow(url)
 	}
-	return (
+
+	const isSmall = useDownSize('sm')
+	const disabled = items.length === 0
+
+	return isSmall ? (
+		<IconButton
+			onClick={onPrint}
+			disabled={disabled}
+			variant="contained"
+			color="primary"
+		>
+			<Print />
+		</IconButton>
+	) : (
 		<Button
 			startIcon={<Print />}
 			size="small"
 			onClick={onPrint}
-			disabled={items.length === 0}
+			disabled={disabled}
 		>
 			Tiskout
 		</Button>

@@ -33,9 +33,10 @@ export const TeamSideBarProvider = ({
 const useTeamSideBarProvide = () => {
 	const [collapsed, setCollapsed] = useState(false)
 	const [darkMode, setDarkMode] = useState(false)
+	const [hidden, setHidden] = useState(false)
 
 	const theme = useTheme()
-	const uncollapsable = useMediaQuery(theme.breakpoints.down('sm'))
+	const uncollapsable = useMediaQuery('(max-width: 750px)')
 	useEffect(() => {
 		if (uncollapsable && !collapsed) {
 			setCollapsed(true)
@@ -59,6 +60,8 @@ const useTeamSideBarProvide = () => {
 	)
 	return {
 		collapsed,
+		hidden,
+		setHidden,
 		setCollapsedAuto,
 		setCollapsedManually,
 		darkMode,

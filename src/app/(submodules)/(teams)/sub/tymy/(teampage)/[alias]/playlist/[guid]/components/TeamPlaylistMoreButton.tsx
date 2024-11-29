@@ -16,6 +16,7 @@ import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
+import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import {
 	CalendarMonth,
 	Delete,
@@ -26,6 +27,8 @@ import {
 import { useRouter } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'
+
+export const TEAM_PLAYLIST_MORE_BUTTON_ID = 'team-playlist-more-button'
 
 export default function TeamPlaylistMoreButton() {
 	const { title, guid: playlistGuid } = useInnerPlaylist()
@@ -143,9 +146,14 @@ export default function TeamPlaylistMoreButton() {
 			  ]
 			: []),
 	]
+
+	const [childrenCount, setChildrenCount] = useState(items.length)
+	const onCountChange = (count: number) => {
+		setChildrenCount(count + items.length)
+	}
 	return (
 		<>
-			{items.length > 0 && (
+			{childrenCount > 0 && (
 				<IconButton onClick={onClick}>
 					<MoreHoriz />
 				</IconButton>
@@ -162,7 +170,12 @@ export default function TeamPlaylistMoreButton() {
 				anchor={anchor}
 				onClose={() => setMenuOpen(false)}
 				items={items}
-			/>
+				keepMounted
+			>
+				<ChildrenCounter onCountChange={onCountChange}>
+					<div id={TEAM_PLAYLIST_MORE_BUTTON_ID}></div>
+				</ChildrenCounter>
+			</Menu>
 
 			{!hasEvent ? (
 				<TeamEventPopup

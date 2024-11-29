@@ -19,7 +19,7 @@ export default function LeftPanel(props: LeftPanelProps) {
 	return (
 		<Box
 			sx={{
-				[theme.breakpoints.down('sm')]: {
+				[theme.breakpoints.down('md')]: {
 					display: 'none',
 				},
 			}}

@@ -7,7 +7,7 @@ import { Box } from '@/common/ui'
 
 export default function TeamTopPanel() {
 	const { fixed, sx } = useTeamTopBar()
-	const { collapsed } = useTeamSideBar()
+	const { collapsed, hidden } = useTeamSideBar()
 	// const theme = useTheme()
 	return (
 		<>
@@ -19,7 +19,7 @@ export default function TeamTopPanel() {
 					paddingY: 3,
 					position: fixed ? 'fixed' : undefined,
 					top: 0,
-					left: collapsed ? 60 : 250,
+					left: hidden ? 0 : collapsed ? 60 : 250,
 					transition: 'all 0.2s',
 					right: 0,
 					zIndex: 1,

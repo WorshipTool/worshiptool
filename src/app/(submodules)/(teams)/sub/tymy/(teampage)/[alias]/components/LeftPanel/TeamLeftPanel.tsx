@@ -6,14 +6,23 @@ import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 type TeamLeftPanelProps = {}
 
 const TRANSITION = 'all 0.2s'
 export default function TeamLeftPanel(props: TeamLeftPanelProps) {
-	const { collapsed, setCollapsedManually, darkMode, uncollapsable } =
-		useTeamSideBar()
+	const {
+		collapsed,
+		setCollapsedManually,
+		darkMode,
+		uncollapsable,
+		setHidden,
+	} = useTeamSideBar()
+
+	useEffect(() => {
+		setHidden(false)
+	}, [])
 
 	const WIDTH = useMemo(() => (collapsed ? 60 : 250), [collapsed])
 	return (
