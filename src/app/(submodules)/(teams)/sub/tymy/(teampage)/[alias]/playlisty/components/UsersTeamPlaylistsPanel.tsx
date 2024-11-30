@@ -29,9 +29,7 @@ export default function UsersTeamPlaylistsPanel() {
 		getSmartDateAgoString(date, 'Upraveno', 20)
 
 	return (
-		<Box
-		// sx={{ border: '2px solid', borderColor: 'primary.main' }}
-		>
+		<Box display={'flex'} flexDirection={'column'}>
 			<Box display={'flex'} gap={1} alignItems={'center'}>
 				<Schedule />
 				<Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
