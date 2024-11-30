@@ -52,6 +52,7 @@ export const SmartTeamPageInnerProvider = ({
 		<Box
 			sx={{
 				padding: options.hidePadding ? 0 : { xs: 2, sm: 3, md: 4 },
+				paddingTop: options.hidePadding ? 0 : { xs: 1, sm: 2, md: 4 },
 			}}
 		>
 			{children}

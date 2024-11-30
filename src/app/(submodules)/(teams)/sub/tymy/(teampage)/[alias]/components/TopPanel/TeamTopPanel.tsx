@@ -15,7 +15,7 @@ export default function TeamTopPanel() {
 				sx={{
 					// height: 60,
 					// bgcolor: 'grey.400',
-					paddingX: 4,
+					paddingX: { xs: 3, sm: 3, md: 4 },
 					paddingY: 3,
 					position: fixed ? 'fixed' : undefined,
 					top: 0,
