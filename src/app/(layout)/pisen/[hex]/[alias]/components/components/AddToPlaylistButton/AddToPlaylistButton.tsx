@@ -5,7 +5,12 @@ import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPo
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
+import {
+	ListItemIcon,
+	ListItemText,
+	MenuItem,
+	useMediaQuery,
+} from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { KeyboardArrowDown, PlaylistAddCircle } from '@mui/icons-material'
 import React, { useCallback, useMemo } from 'react'
@@ -52,6 +57,9 @@ export default function AddToPlaylistButton({
 	}, [])
 
 	const isSmall = useDownSize('sm')
+
+	const shortenTitle = useMediaQuery('(max-width: 700px)')
+
 	const buttonComponent = useMemo(
 		() => (
 			<>
@@ -61,7 +69,7 @@ export default function AddToPlaylistButton({
 						variant="contained"
 						endIcon={<KeyboardArrowDown />}
 					>
-						Přidat do playlistu
+						{shortenTitle ? 'Přidat do' : 'Přidat do playlistu'}
 					</Button>
 				) : (
 					<SmartPortalMenuItem
@@ -72,7 +80,7 @@ export default function AddToPlaylistButton({
 				)}
 			</>
 		),
-		[handleClick, theme, isSmall]
+		[handleClick, theme, isSmall, shortenTitle]
 	)
 
 	return (
@@ -87,6 +95,7 @@ export default function AddToPlaylistButton({
 			) : (
 				buttonComponent
 			)}
+
 			<SelectPlaylistMenu
 				open={open}
 				onClose={handleClose}

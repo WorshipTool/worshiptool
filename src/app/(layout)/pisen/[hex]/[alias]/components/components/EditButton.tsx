@@ -1,3 +1,5 @@
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { Edit, Save } from '@mui/icons-material'
@@ -27,6 +29,8 @@ export default function EditButton(props: EditButtonProps) {
 		props.onClick?.(!props.inEditMode)
 	}
 
+	const isSmall = useDownSize('md')
+
 	return props.asMenuItem ? (
 		<>
 			{!props.inEditMode && (
@@ -38,7 +42,7 @@ export default function EditButton(props: EditButtonProps) {
 				</MenuItem>
 			)}
 		</>
-	) : (
+	) : !isSmall || props.inEditMode ? (
 		<Button
 			variant="contained"
 			color={props.inEditMode ? 'info' : 'secondary'}
@@ -53,5 +57,7 @@ export default function EditButton(props: EditButtonProps) {
 		>
 			{props.inEditMode ? 'Uložit' : 'Upravit'}
 		</Button>
+	) : (
+		<SmartPortalMenuItem title={'Upravit'} onClick={onClick} icon={<Edit />} />
 	)
 }

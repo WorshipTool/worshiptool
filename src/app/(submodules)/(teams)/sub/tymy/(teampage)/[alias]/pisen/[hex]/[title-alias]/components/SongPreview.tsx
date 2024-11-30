@@ -11,6 +11,7 @@ import TeamNotePanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
@@ -124,6 +125,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 	}, [])
 
 	const isSmall = useDownSize('md')
+	const isLarger = useDownSize('lg')
 
 	return (
 		<Box
@@ -156,23 +158,35 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 										rerender()
 									}}
 								/>
-								{hideChords ? (
-									<Button
+								{!isLarger ? (
+									hideChords ? (
+										<Button
+											onClick={() => setHideChords(false)}
+											variant="text"
+											size="small"
+										>
+											Zobrazit akordy
+										</Button>
+									) : (
+										<Button
+											onClick={() => setHideChords(true)}
+											variant="text"
+											color="grey.600"
+											size="small"
+										>
+											Skrýt akordy
+										</Button>
+									)
+								) : hideChords ? (
+									<SmartPortalMenuItem
+										title={'Zobrazit akordy'}
 										onClick={() => setHideChords(false)}
-										variant="text"
-										size="small"
-									>
-										Zobrazit akordy
-									</Button>
+									/>
 								) : (
-									<Button
+									<SmartPortalMenuItem
+										title={'Skrýt akordy'}
 										onClick={() => setHideChords(true)}
-										variant="text"
-										color="grey.600"
-										size="small"
-									>
-										Skrýt akordy
-									</Button>
+									/>
 								)}
 							</Box>
 						) : (

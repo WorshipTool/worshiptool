@@ -1,4 +1,5 @@
 import AdminOption from '@/common/components/admin/AdminOption'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
@@ -36,7 +37,6 @@ import CreateCopyButton from './components/CreateCopyButton'
 import EditButton from './components/EditButton'
 import PrintVariantButton from './components/PrintButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
-import VisibilityLabel from './components/VisibilityLabel'
 import TransposePanel from './TransposePanel'
 
 interface TopPanelProps {
@@ -156,6 +156,8 @@ export default function TopPanel(props: TopPanelProps) {
 		return isSheetDataValid(data)
 	}, [props.sheet, props.sheet?.toString()])
 
+	const isSmall = useDownSize('md')
+
 	return (
 		<>
 			<Box
@@ -196,17 +198,27 @@ export default function TopPanel(props: TopPanelProps) {
 							disabled={!Boolean(props.sheet?.getKeyChord())}
 						/>
 
-						{isOwner && <VisibilityLabel public={props.variant.public} />}
+						{/* {isOwner && <VisibilityLabel public={props.variant.public} />} */}
 
 						<Box flex={1} />
 
-						{isOwner && <VisibilityLabel public={props.variant.public} right />}
+						{/* {isOwner && <VisibilityLabel public={props.variant.public} right />} */}
 
-						<Box display={'flex'}>
+						<Box display={'flex'} alignItems={'center'}>
 							{user && (
 								<HeartLikeButton
 									packGuid={props.variant.packGuid}
 									interactable
+								/>
+							)}
+
+							{isSmall && (
+								<PrintVariantButton
+									params={{
+										...parseVariantAlias(props.variant.packAlias),
+										hideChords: props.hideChords,
+										key: props.sheet?.getKeyNote() || undefined,
+									}}
 								/>
 							)}
 
@@ -223,56 +235,32 @@ export default function TopPanel(props: TopPanelProps) {
 								anyChange={anyChange}
 							/>
 						</Box>
-						{isLoggedIn() && !(isOwner && !props.variant.public) && (
-							<Box
-								sx={{
-									[theme.breakpoints.down('md')]: {
-										display: 'none',
-									},
-								}}
-							>
-								<CreateCopyButton variantGuid={props.variant.guid} />
-							</Box>
+						{isLoggedIn() && (
+							<CreateCopyButton variantGuid={props.variant.guid} />
 						)}
 
 						{isOwner && !props.variant.public && (
-							<Box
-								sx={{
-									[theme.breakpoints.down('md')]: {
-										display: 'none',
-									},
-								}}
-							>
-								<EditButton
-									onClick={onEditClick}
-									inEditMode={props.isInEditMode}
-									loading={saving}
-									sheetData={props.sheet?.getOriginalSheetData() || ''}
-									anyChange={anyChange}
-									title={props.editedTitle}
-								/>
-							</Box>
+							<EditButton
+								onClick={onEditClick}
+								inEditMode={props.isInEditMode}
+								loading={saving}
+								sheetData={props.sheet?.getOriginalSheetData() || ''}
+								anyChange={anyChange}
+								title={props.editedTitle}
+							/>
 						)}
 
-						{isLoggedIn() && (
-							<Box
-								sx={{
-									[theme.breakpoints.down('sm')]: {
-										display: 'none',
-									},
-								}}
-							>
-								<AddToPlaylistButton variant={props.variant} />
-							</Box>
-						)}
+						{isLoggedIn() && <AddToPlaylistButton variant={props.variant} />}
 
-						<PrintVariantButton
-							params={{
-								...parseVariantAlias(props.variant.packAlias),
-								hideChords: props.hideChords,
-								key: props.sheet?.getKeyNote() || undefined,
-							}}
-						/>
+						{!isSmall && (
+							<PrintVariantButton
+								params={{
+									...parseVariantAlias(props.variant.packAlias),
+									hideChords: props.hideChords,
+									key: props.sheet?.getKeyNote() || undefined,
+								}}
+							/>
+						)}
 					</>
 				)}
 			</Box>

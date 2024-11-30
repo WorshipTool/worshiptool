@@ -1,8 +1,13 @@
 import { VariantPackAlias } from '@/api/dtos'
+import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button, CircularProgress, Gap, Tooltip, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
+import useAuth from '@/hooks/auth/useAuth'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { EggAlt } from '@mui/icons-material'
+import { useMemo } from 'react'
 import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
 import { useApi } from '../../../../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
@@ -41,6 +46,18 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 
 	const theme = useTheme()
 
+	const isSmall = useDownSize('lg')
+	const icon = <EggAlt color="inherit" />
+
+	const { user } = useAuth()
+	const { variant } = useInnerSong()
+	const isOwner = useMemo(() => {
+		if (!user) return false
+		return variant.createdBy === user?.guid
+	}, [user, variant])
+
+	const showAsButton = !(isOwner && !variant.public)
+
 	return props.asMenuItem ? (
 		<>
 			<MenuItem onClick={onClick} disabled={apiState.loading}>
@@ -48,7 +65,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 					{apiState.loading ? (
 						<CircularProgress size={`1rem`} color="inherit" />
 					) : (
-						<EggAlt color="inherit" />
+						icon
 					)}
 				</ListItemIcon>
 				<ListItemText primary="Vytvořit kopii" />
@@ -56,24 +73,28 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 			<Gap value={0.5} />
 		</>
 	) : (
-		<Tooltip title={'Vytvořit soukromou kopii písně'}>
-			<Button
-				color="success"
-				variant="contained"
-				startIcon={
-					<EggAlt
-						sx={{
-							[theme.breakpoints.down('lg')]: {
-								display: 'none',
-							},
-						}}
+		<>
+			{!isSmall && showAsButton ? (
+				<Tooltip title={'Vytvořit soukromou kopii písně'}>
+					<Button
+						color="success"
+						variant="contained"
+						startIcon={icon}
+						loading={apiState.loading}
+						onClick={onClick}
+					>
+						Vytvořit úpravu
+					</Button>
+				</Tooltip>
+			) : (
+				<>
+					<SmartPortalMenuItem
+						title={'Vytvořit úpravu'}
+						subtitle="Vytvoří soukromou kopii písně,"
+						icon={icon}
 					/>
-				}
-				loading={apiState.loading}
-				onClick={onClick}
-			>
-				Vytvořit úpravu
-			</Button>
-		</Tooltip>
+				</>
+			)}
+		</>
 	)
 }

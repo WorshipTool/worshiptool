@@ -1,16 +1,12 @@
 import Menu from '@/common/components/Menu/Menu'
-import { Box, Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
-import { Settings } from '@mui/icons-material'
+import { Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
+import ChildrenCounter from '@/tech/portal/ChildrenCounter'
+import { MoreVert } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
-import React from 'react'
+import React, { useState } from 'react'
 import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
-import AddToGroupButton from './AddToGoupsButton/AddToGroupButton'
-import AddToPlaylistButton from './AddToPlaylistButton/AddToPlaylistButton'
-import CreateCopyButton from './CreateCopyButton'
 import DeleteButton from './DeleteButton'
-import EditButton from './EditButton'
-import PublishButton from './PublishButton'
 import SheetAdminButtons from './SheetAdminButtons'
 
 type SongsOptionsButtonProps = {
@@ -25,6 +21,8 @@ type SongsOptionsButtonProps = {
 	isOwner: boolean
 	anyChange: boolean
 }
+
+export const SONG_OPTIONS_BUTTON_ID = 'song-options-button'
 
 export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 	const [open, setOpen] = React.useState(false)
@@ -43,12 +41,14 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 	const { isAdmin, isLoggedIn, isTrustee } = useAuth()
 	const theme = useTheme()
 
+	const [childrenCount, setChildrenCount] = useState(0)
+
 	return (
 		<>
-			{isLoggedIn() && (
+			{childrenCount > 0 && (
 				<Tooltip title={'Další možnosti'}>
 					<IconButton onClick={handleClick}>
-						<Settings />
+						<MoreVert />
 					</IconButton>
 				</Tooltip>
 			)}
@@ -59,7 +59,11 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 				onClose={handleClose}
 				keepMounted
 			>
-				{isLoggedIn() && [
+				<ChildrenCounter onCountChange={setChildrenCount}>
+					<div id={SONG_OPTIONS_BUTTON_ID}></div>
+				</ChildrenCounter>
+
+				{/* {isLoggedIn() && [
 					props.isOwner && !props.variant.public && (
 						<Box
 							key={'edit-button'}
@@ -98,27 +102,27 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 							<CreateCopyButton variantGuid={props.variant.guid} asMenuItem />
 						</Box>
 					),
-					<Box
-						key={'add-to-playlist-menu-item'}
-						sx={{
-							[theme.breakpoints.up('sm')]: {
-								display: 'none',
-							},
-						}}
-					>
-						<AddToPlaylistButton variant={props.variant} asMenuItem />
-					</Box>,
+					// <Box
+					// 	key={'add-to-playlist-menu-item'}
+					// 	sx={{
+					// 		[theme.breakpoints.up('sm')]: {
+					// 			display: 'none',
+					// 		},
+					// 	}}
+					// >
+					// 	<AddToPlaylistButton variant={props.variant} asMenuItem />
+					// </Box>,
 
 					isTrustee() && [
 						<Divider key={'divider1'} />,
 						<PublishButton variant={props.variant} key={'publish-button-as'} />,
 					],
-				]}
+				]} */}
 
-				<AddToGroupButton
+				{/* <AddToGroupButton
 					packGuid={props.variant.packGuid}
 					key={'add-to-group-button'}
-				/>
+				/> */}
 
 				{props.isOwner && [
 					<Divider key={'div-aunalk'} />,
