@@ -26,6 +26,7 @@ export default function StableTeamSubdomainProvider(
 	const aliases = apiState.data || []
 
 	useEffect(() => {
+		if (aliases.length === 0) return
 		const newAliases = aliases.map((alias) => {
 			const url = getRouteUrlWithParams(
 				'team',
