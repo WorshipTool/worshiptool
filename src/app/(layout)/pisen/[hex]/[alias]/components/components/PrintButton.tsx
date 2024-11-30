@@ -33,7 +33,7 @@ export default function PrintVariantButton(props: PrintVariantButtonProps) {
 				tooltip="Tisknout"
 				{...props}
 				sx={{
-					[theme.breakpoints.down('lg')]: {
+					[theme.breakpoints.down('md')]: {
 						display: 'none',
 					},
 					...props.sx,
@@ -45,10 +45,11 @@ export default function PrintVariantButton(props: PrintVariantButtonProps) {
 				onClick={onPrintClick}
 				tooltip="Tisknout"
 				sx={{
-					[theme.breakpoints.up('lg')]: {
+					[theme.breakpoints.up('md')]: {
 						display: 'none',
 					},
 				}}
+				size="small"
 			>
 				<Print />
 			</IconButton>

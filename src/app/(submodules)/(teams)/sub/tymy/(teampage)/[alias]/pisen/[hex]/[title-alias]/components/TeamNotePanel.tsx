@@ -160,7 +160,7 @@ export default function TeamNotePanel() {
 							// boxShadow: '0 0 2px 0 rgba(0,0,0,0.5)',
 						}}
 						flexDirection={'column'}
-						width={300}
+						maxWidth={300}
 					>
 						{!adding && (
 							<Box

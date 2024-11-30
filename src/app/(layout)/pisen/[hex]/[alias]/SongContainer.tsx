@@ -1,5 +1,6 @@
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -11,6 +12,7 @@ import { useRerender } from '../../../../../hooks/useRerender'
 import AdditionalSongInfoPanel from './components/AdditionalSongInfoPanel'
 import TopPanel from './components/TopPanel'
 import DeletedInfoPanel from './components/components/DeletedInfoPanel'
+import { SONG_OPTIONS_BUTTON_ID } from './components/components/SongsOptionsButton'
 
 export type SongPageProps = {
 	variant: SongVariantDto
@@ -68,7 +70,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 	}
 
 	return (
-		<>
+		<SmartPortalMenuProvider id={SONG_OPTIONS_BUTTON_ID}>
 			<Box display={'flex'} flexDirection={'column'}>
 				<TopPanel
 					transpose={transpose}
@@ -156,6 +158,6 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 					</>
 				)}
 			</Box>
-		</>
+		</SmartPortalMenuProvider>
 	)
 }

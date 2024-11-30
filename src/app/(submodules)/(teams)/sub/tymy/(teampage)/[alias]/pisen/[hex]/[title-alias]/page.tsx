@@ -6,8 +6,10 @@ import {
 } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
+import { MORE_TEAM_SONG_BUTTON_ID } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongButton'
 import SongPreview from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/SongPreview'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
+import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box, IconButton, LinearProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
@@ -90,9 +92,9 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 				</Box>
 			) : isInSelection ? (
 				apiState.data && (
-					<>
+					<SmartPortalMenuProvider id={MORE_TEAM_SONG_BUTTON_ID}>
 						<SongPreview variant={apiState.data} />
-					</>
+					</SmartPortalMenuProvider>
 				)
 			) : (
 				<Box>

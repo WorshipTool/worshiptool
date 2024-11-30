@@ -2,6 +2,8 @@ import { SongVariantDto } from '@/api/dtos'
 import { RequireItemEditOutDto } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import Popup from '@/common/components/Popup/Popup'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
@@ -93,51 +95,56 @@ export default function EditButtonsPanel({
 		props.onCancel()
 	}
 
+	const isSmall = useDownSize('md')
+	const icon = needToBeCopied ? <BorderColor /> : <Edit />
+
 	return (
-		<Box>
-			<Box
-				display={'flex'}
-				flexDirection={'row'}
-				justifyContent={'end'}
-				sx={
-					{
-						// position: 'absolute',
-						// right: 4 * 8,
-					}
-				}
-			>
-				{!inEditMode ? (
+		<>
+			{!inEditMode ? (
+				!isSmall ? (
 					<Button
 						color="secondary"
 						size="small"
 						// onClick={() => setInEditMode(true)}
-						startIcon={needToBeCopied ? <BorderColor /> : <Edit />}
+						startIcon={icon}
 						onClick={onEditButtonClick}
 						tooltip="Upravit píseň pro tento tým"
 					>
 						Upravit
 					</Button>
 				) : (
-					<Box display={'flex'} flexDirection={'row'} gap={1}>
-						<Button
-							color="grey.800"
-							size="small"
-							onClick={onCancel}
-							disabled={props.saving}
-						>
-							Zrušit
-						</Button>
-						<Button
-							color="secondary"
-							size="small"
-							onClick={onSave}
-							loading={props.saving}
-						>
-							Uložit
-						</Button>
-					</Box>
-				)}
-			</Box>
+					<SmartPortalMenuItem
+						title={'Upravit'}
+						subtitle="Upravit píseň pro tento tým"
+						onClick={onEditButtonClick}
+						icon={icon}
+					/>
+				)
+			) : (
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={1}
+					justifyContent={'end'}
+				>
+					<Button
+						color="grey.800"
+						size="small"
+						onClick={onCancel}
+						disabled={props.saving}
+					>
+						Zrušit
+					</Button>
+					<Button
+						color="secondary"
+						size="small"
+						onClick={onSave}
+						loading={props.saving}
+					>
+						Uložit
+					</Button>
+				</Box>
+			)}
 
 			<Popup
 				open={copyPopupOpen}
@@ -169,6 +176,6 @@ export default function EditButtonsPanel({
 					upravit.
 				</Typography>
 			</Popup>
-		</Box>
+		</>
 	)
 }
