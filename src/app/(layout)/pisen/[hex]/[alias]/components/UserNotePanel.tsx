@@ -126,7 +126,7 @@ export default function UserNotePanel() {
 						padding: 2,
 					}}
 					flexDirection={'column'}
-					width={300}
+					maxWidth={300}
 				>
 					<Box
 						display={'flex'}

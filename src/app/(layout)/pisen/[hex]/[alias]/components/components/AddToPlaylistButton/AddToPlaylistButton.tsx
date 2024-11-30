@@ -1,6 +1,8 @@
 import { PlaylistData } from '@/api/generated'
 import AddToPlaylistMenuItem from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistMenuItem'
 import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
+import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
@@ -49,22 +51,28 @@ export default function AddToPlaylistButton({
 		)
 	}, [])
 
+	const isSmall = useDownSize('sm')
 	const buttonComponent = useMemo(
 		() => (
-			<Button
-				onClick={handleClick}
-				variant="contained"
-				endIcon={<KeyboardArrowDown />}
-				sx={{
-					[theme.breakpoints.down('sm')]: {
-						display: 'none',
-					},
-				}}
-			>
-				Přidat do playlistu
-			</Button>
+			<>
+				{!isSmall ? (
+					<Button
+						onClick={handleClick}
+						variant="contained"
+						endIcon={<KeyboardArrowDown />}
+					>
+						Přidat do playlistu
+					</Button>
+				) : (
+					<SmartPortalMenuItem
+						title={'Přidat do playlistu'}
+						onClick={handleClick}
+						icon={<KeyboardArrowDown />}
+					/>
+				)}
+			</>
 		),
-		[handleClick, theme]
+		[handleClick, theme, isSmall]
 	)
 
 	return (
@@ -84,7 +92,6 @@ export default function AddToPlaylistButton({
 				onClose={handleClose}
 				anchor={anchorEl}
 				itemComponent={itemComponent}
-                
 			/>
 		</>
 	)
