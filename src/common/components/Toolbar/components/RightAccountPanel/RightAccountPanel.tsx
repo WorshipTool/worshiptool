@@ -4,6 +4,7 @@ import AccountMenu from '@/common/components/Toolbar/components/RightAccountPane
 import GroupChip from '@/common/components/Toolbar/components/RightAccountPanel/GroupChip'
 import ToolsMenu from '@/common/components/Toolbar/components/RightAccountPanel/Toolsmenu/ToolsMenu'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, IconButton, Tooltip, useTheme } from '@/common/ui'
 import { Avatar } from '@/common/ui/mui'
 import { useUserProfileImage } from '@/hooks/useUserProfileImage'
@@ -101,6 +102,9 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 		setLoginNextUrl(window.location.href)
 	}, [])
 
+	const isSmall = useDownSize('sm')
+	const hideAddSong = isSmall || (isMobile && !isTablet)
+
 	// return <div>rightaccountpanel</div>
 
 	return (
@@ -115,27 +119,28 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 
 				{isLoggedIn() ? (
 					<>
-						{isMobile && !isTablet ? (
-							<IconButton
-								tooltip={'Přidat novou píseň'}
-								color={'inherit'}
-								sx={iconButtonStyle}
-								onClick={() => uploadInputRef.current?.click()}
-								disabled={false}
-							>
-								<AddBox sx={iconStyle} fontSize={fontSize} />
-							</IconButton>
-						) : (
-							<IconButton
-								tooltip={'Přidat novou píseň'}
-								color={'inherit'}
-								sx={iconButtonStyle}
-								to="addMenu"
-								disabled={false}
-							>
-								<AddBox sx={iconStyle} fontSize={fontSize} />
-							</IconButton>
-						)}
+						{!hideAddSong &&
+							(isMobile && !isTablet ? (
+								<IconButton
+									tooltip={'Přidat novou píseň'}
+									color={'inherit'}
+									sx={iconButtonStyle}
+									onClick={() => uploadInputRef.current?.click()}
+									disabled={false}
+								>
+									<AddBox sx={iconStyle} fontSize={fontSize} />
+								</IconButton>
+							) : (
+								<IconButton
+									tooltip={'Přidat novou píseň'}
+									color={'inherit'}
+									sx={iconButtonStyle}
+									to="addMenu"
+									disabled={false}
+								>
+									<AddBox sx={iconStyle} fontSize={fontSize} />
+								</IconButton>
+							))}
 						<IconButton
 							tooltip="Nástroje"
 							color={'inherit'}

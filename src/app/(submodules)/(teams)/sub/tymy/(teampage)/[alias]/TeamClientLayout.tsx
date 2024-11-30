@@ -5,8 +5,8 @@ import { useTeamSideBar } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[
 import TeamTopPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/TeamTopPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import AdminOption from '@/common/components/admin/AdminOption'
-import { Box, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { useDownSize } from '@/common/hooks/useDownSize'
+import { Box } from '@/common/ui'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { Analytics, DarkMode, LightMode } from '@mui/icons-material'
 import React from 'react'
@@ -16,8 +16,7 @@ type Props = {
 }
 
 export default function TeamClientLayout(props: Props) {
-	const theme = useTheme()
-	const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+	const isSmall = useDownSize('sm')
 
 	const { darkMode, setDarkMode } = useTeamSideBar()
 

@@ -1,5 +1,7 @@
 'use client'
+import useBottomPanel from '@/app/providers/BottomPanelProvider'
 import Menu from '@/common/components/Menu/Menu'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, IconButton } from '@/common/ui'
 import { Badge } from '@/common/ui/mui'
 import { grey } from '@/common/ui/mui/colors'
@@ -43,14 +45,18 @@ export default function AdminOptionsProvider() {
 	}, [])
 	const { isAdmin } = useAuth()
 
-	const offset = 32
+	const { height } = useBottomPanel()
+
+	const isSmall = useDownSize('sm')
+
+	const offset = isSmall ? 24 : 32
 	return !isAdmin() ? null : (
 		<>
 			{itemsCount > 0 && (
 				<Box
 					sx={{
 						position: 'fixed',
-						bottom: offset,
+						bottom: offset + height,
 						right: offset,
 					}}
 				>

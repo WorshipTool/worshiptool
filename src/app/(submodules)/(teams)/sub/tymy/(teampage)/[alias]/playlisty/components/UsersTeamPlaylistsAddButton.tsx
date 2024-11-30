@@ -1,7 +1,6 @@
 import { PostCreatePlaylistResult } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { Box, IconButton, useTheme } from '@/common/ui'
-import { Clickable } from '@/common/ui/Clickable'
+import { Box, Clickable, IconButton, useTheme } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
@@ -69,5 +68,24 @@ export default function UsersTeamPlaylistsAddButton() {
 				</IconButton>
 			</Box>
 		</Clickable>
+		// <Box>
+		// 	<Button
+		// 		onClick={onCreateClick}
+		// 		tooltip="Vytvořit playlist"
+		// 		color="grey.300"
+		// 		sx={{
+		// 			height: theme.spacing(10),
+		// 			aspectRatio: 1,
+		// 			borderRadius: 3,
+		// 		}}
+		// 	>
+		// 		<Add
+		// 			color="inherit"
+		// 			sx={{
+		// 				color: 'grey.900',
+		// 			}}
+		// 		/>
+		// 	</Button>
+		// </Box>
 	)
 }

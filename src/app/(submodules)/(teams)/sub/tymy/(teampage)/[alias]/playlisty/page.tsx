@@ -40,25 +40,28 @@ function Page() {
 			<TeamPageTitle>Playlisty</TeamPageTitle>
 
 			{/* Your recent playlists */}
-			<UsersTeamPlaylistsPanel />
-
 			<Box
-				display={'flex'}
-				flexDirection={'row'}
-				// gap={4}
-				flexWrap={'wrap'}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 4,
+				}}
 			>
-				<Box flex={1}>
-					<NextMonthPanel
-						events={futureEvents}
-						loading={apiState.loading}
-						allEventsCount={events.length}
-					/>
-					<Gap value={3} />
-					<PinnedPlaylistsPanel />
-				</Box>
-				<Box>
-					<PreviousPanel events={pastEvents} loading={apiState.loading} />
+				<UsersTeamPlaylistsPanel />
+
+				<Box display={'flex'} flexDirection={'row'} gap={4} flexWrap={'wrap'}>
+					<Box flex={1}>
+						<NextMonthPanel
+							events={futureEvents}
+							loading={apiState.loading}
+							allEventsCount={events.length}
+						/>
+						<Gap value={3} />
+						<PinnedPlaylistsPanel />
+					</Box>
+					<Box>
+						<PreviousPanel events={pastEvents} loading={apiState.loading} />
+					</Box>
 				</Box>
 			</Box>
 		</>

@@ -6,6 +6,7 @@ import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, Button, LinearProgress, Typography } from '@/common/ui'
+import useAuth from '@/hooks/auth/useAuth'
 import SongDropContainer from '@/hooks/dragsong/SongDropContainer'
 import { DragSongDto } from '@/hooks/dragsong/tech'
 import { usePermission } from '@/hooks/permissions/usePermission'
@@ -125,6 +126,8 @@ export const TeamSongList = (props: Props) => {
 		[notes.notes]
 	)
 
+	const { user } = useAuth()
+
 	return (
 		<SongDropContainer
 			onDrop={onSongDrop}
@@ -154,7 +157,7 @@ export const TeamSongList = (props: Props) => {
 								display={'flex'}
 								flexDirection={'row'}
 								justifyContent={'space-between'}
-								gap={1}
+								gap={user ? 1 : 0}
 								flex={1}
 								sx={{}}
 							>
@@ -165,7 +168,7 @@ export const TeamSongList = (props: Props) => {
 									justifyContent={'end'}
 									gap={2}
 								>
-									{
+									{user && (
 										<Button
 											variant="text"
 											color="black"
@@ -174,7 +177,7 @@ export const TeamSongList = (props: Props) => {
 										>
 											Vybrat
 										</Button>
-									}
+									)}
 									{addSongPermission && (
 										<Box
 											display={{
