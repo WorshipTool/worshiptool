@@ -13,6 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
 import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/Providers/StableTeamSubdomainProvider'
+import { BottomPanelProvider } from '@/app/providers/BottomPanelProvider'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
 import { FavouritesProvider } from '@/hooks/favourites/useFavourites'
 import { PermissionsProvider } from '@/hooks/permissions/usePermissions'
@@ -37,27 +38,29 @@ export default function AppClientProviders({
 					<AuthProvider>
 						<PermissionsProvider>
 							<ErrorHandlerProvider>
-								<FavouritesProvider>
-									<GroupProvider>
-										<ToolbarProvider>
-											<FooterProvider>
-												<SubdomainPathnameAliasProvider>
-													<OutsideLinkBlockerProvider>
-														<StableTeamSubdomainProvider>
-															<AppSongSelectSpecifierProvider>
-																<CurrentPlaylistProvider>
-																	<SongDragProvider>
-																		{children}
-																	</SongDragProvider>
-																</CurrentPlaylistProvider>
-															</AppSongSelectSpecifierProvider>
-														</StableTeamSubdomainProvider>
-													</OutsideLinkBlockerProvider>
-												</SubdomainPathnameAliasProvider>
-											</FooterProvider>
-										</ToolbarProvider>
-									</GroupProvider>
-								</FavouritesProvider>
+								<BottomPanelProvider>
+									<FavouritesProvider>
+										<GroupProvider>
+											<ToolbarProvider>
+												<FooterProvider>
+													<SubdomainPathnameAliasProvider>
+														<OutsideLinkBlockerProvider>
+															<StableTeamSubdomainProvider>
+																<AppSongSelectSpecifierProvider>
+																	<CurrentPlaylistProvider>
+																		<SongDragProvider>
+																			{children}
+																		</SongDragProvider>
+																	</CurrentPlaylistProvider>
+																</AppSongSelectSpecifierProvider>
+															</StableTeamSubdomainProvider>
+														</OutsideLinkBlockerProvider>
+													</SubdomainPathnameAliasProvider>
+												</FooterProvider>
+											</ToolbarProvider>
+										</GroupProvider>
+									</FavouritesProvider>
+								</BottomPanelProvider>
 							</ErrorHandlerProvider>
 						</PermissionsProvider>
 					</AuthProvider>

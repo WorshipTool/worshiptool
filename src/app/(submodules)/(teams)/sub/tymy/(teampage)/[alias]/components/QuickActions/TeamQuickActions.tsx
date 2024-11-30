@@ -5,7 +5,13 @@ import { Box } from '@/common/ui'
 
 export default function TeamQuickActions() {
 	return (
-		<Box display={'flex'} flexDirection={'row'} gap={1} flexWrap={'wrap'}>
+		<Box
+			display={'flex'}
+			gap={1}
+			sx={{
+				flexFlow: 'row wrap',
+			}}
+		>
 			<TeamNewPlaylistButton />
 			<TeamFindSongButton />
 			<TeamCurrentPlaylistQuickButton />

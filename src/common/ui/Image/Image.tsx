@@ -24,7 +24,7 @@ export function Image({
 		<Img
 			src={src}
 			alt={alt}
-			placeholder="blur"
+			// placeholder=""
 			blurDataURL={defaultSrc}
 			{...(props.fill
 				? {
