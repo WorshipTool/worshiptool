@@ -1,3 +1,4 @@
+'use server'
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import CreateTeamButton from '@/app/(layout)/sub/tymy/components/CreateTeamButton'
 import TeamsToolbarChanger from '@/app/(layout)/sub/tymy/components/ToolbarChanger'
@@ -82,7 +83,7 @@ function Page() {
 							width={500}
 							height={500}
 							style={{
-								transform: ' rotate(180deg) translate(0, 0px) scale(1.0)',
+								transform: 'rotate(180deg) translate(0, 0px) scale(1.0)',
 							}}
 						/>
 					</Box>
@@ -91,7 +92,6 @@ function Page() {
 						flexDirection={'column'}
 						justifyContent={'center'}
 						alignItems={'center'}
-						// zIndex={1}
 						width={'100%'}
 					>
 						<Box
@@ -114,6 +114,7 @@ function Page() {
 								src={getAssetUrl('team-preview.png')}
 								alt="Ukázka obrazovky týmu"
 								fill
+								priority
 							/>
 						</Box>
 						<Box marginBottom={4}>

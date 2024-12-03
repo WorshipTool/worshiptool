@@ -61,14 +61,14 @@ export const breakpoints = {
 		if (value === undefined) {
 			throw new Error(`Invalid breakpoint key: ${key}`)
 		}
-		return `(min-width: ${value}px)`
+		return `@media (min-width: ${value}px)`
 	},
 	down(key: Breakpoints) {
 		const value = this.values[key]
 		if (value === undefined) {
 			throw new Error(`Invalid breakpoint key: ${key}`)
 		}
-		return `(max-width: ${value - 0.02}px)` // Oprava pro přesnost na 1px
+		return `@media (max-width: ${value - 0.02}px)` // Oprava pro přesnost na 1px
 	},
 	between(startKey: Breakpoints, endKey: Breakpoints) {
 		const startValue = this.values[startKey]
@@ -76,7 +76,9 @@ export const breakpoints = {
 		if (startValue === undefined || endValue === undefined) {
 			throw new Error(`Invalid breakpoint keys: ${startKey}, ${endKey}`)
 		}
-		return `(min-width: ${startValue}px) and (max-width: ${endValue - 0.02}px)`
+		return `@media (min-width: ${startValue}px) and (max-width: ${
+			endValue - 0.02
+		}px)`
 	},
 	only(key: Breakpoints) {
 		const value = this.values[key]
@@ -91,7 +93,7 @@ export const breakpoints = {
 		if (nextValue) {
 			return `(min-width: ${value}px) and (max-width: ${nextValue - 0.02}px)`
 		}
-		return `(min-width: ${value}px)`
+		return `@media (min-width: ${value}px)`
 	},
 }
 

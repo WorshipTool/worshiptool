@@ -9,6 +9,7 @@ type ImageProps = {
 	height?: number | string
 	style?: CSSProperties
 	fill?: boolean
+	priority?: boolean
 }
 
 export function Image({

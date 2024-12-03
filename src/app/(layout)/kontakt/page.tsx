@@ -78,7 +78,13 @@ function ContactPage() {
 				title="Kontakt"
 				subtitle="Chcete se na něco zeptat nebo máte nějaký nápad? Rádi od vás uslyšíme."
 			>
-				<Box display={'flex'} flexDirection={'row'} gap={1} fontSize={'1.1rem'}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={1}
+					fontSize={'1.1rem'}
+					flexWrap={'wrap'}
+				>
 					<Typography size={'inherit'}>Napište nám na</Typography>
 					<Typography strong size={'inherit'}>
 						{MAIL.MAIN}
@@ -111,7 +117,12 @@ function ContactPage() {
 								color: 'grey.800',
 							}}
 						>
-							<Box display={'flex'} flexDirection={'row'} gap={1}>
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								gap={1}
+								flexWrap={'wrap'}
+							>
 								<TextInput
 									placeholder="Zadejte vaše jméno"
 									required
@@ -121,6 +132,8 @@ function ContactPage() {
 									disabled={loading}
 									sx={{
 										backgroundColor: 'grey.100',
+										minWidth: 140,
+										maxWidth: '100%',
 									}}
 								/>
 								<TextInput
@@ -132,6 +145,8 @@ function ContactPage() {
 									value={email}
 									sx={{
 										backgroundColor: 'grey.100',
+										minWidth: 140,
+										maxWidth: '100%',
 									}}
 									disabled={loading}
 								/>
