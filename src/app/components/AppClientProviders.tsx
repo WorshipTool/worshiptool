@@ -1,6 +1,5 @@
 'use client'
 import AppSongSelectSpecifierProvider from '@/app/components/components/AppSongSelectSpecifierProvider'
-import { ThemeProvider } from '@/app/theme'
 import { FooterProvider } from '@/common/components/Footer/hooks/useFooter'
 import { ToolbarProvider } from '@/common/components/Toolbar/hooks/useToolbar'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
@@ -26,47 +25,45 @@ export default function AppClientProviders({
 	children,
 }: AppClientProvidersProps) {
 	return (
-		<ThemeProvider>
-			<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
-				<SnackbarProvider
-					maxSnack={1}
-					anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-					autoHideDuration={3000}
-					preventDuplicate
-				>
-					{/* <BrowserRouter> */}
-					<SubdomainPathnameAliasProvider>
-						<AuthProvider>
-							<PermissionsProvider>
-								<ErrorHandlerProvider>
-									<BottomPanelProvider>
-										<FavouritesProvider>
-											<GroupProvider>
-												<ToolbarProvider>
-													<FooterProvider>
-														<OutsideLinkBlockerProvider>
-															<StableTeamSubdomainProvider>
-																<AppSongSelectSpecifierProvider>
-																	<CurrentPlaylistProvider>
-																		<SongDragProvider>
-																			{children}
-																		</SongDragProvider>
-																	</CurrentPlaylistProvider>
-																</AppSongSelectSpecifierProvider>
-															</StableTeamSubdomainProvider>
-														</OutsideLinkBlockerProvider>
-													</FooterProvider>
-												</ToolbarProvider>
-											</GroupProvider>
-										</FavouritesProvider>
-									</BottomPanelProvider>
-								</ErrorHandlerProvider>
-							</PermissionsProvider>
-						</AuthProvider>
-					</SubdomainPathnameAliasProvider>
-					{/* </BrowserRouter> */}
-				</SnackbarProvider>
-			</LocalizationProvider>
-		</ThemeProvider>
+		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
+			<SnackbarProvider
+				maxSnack={1}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+				autoHideDuration={3000}
+				preventDuplicate
+			>
+				{/* <BrowserRouter> */}
+				<SubdomainPathnameAliasProvider>
+					<AuthProvider>
+						<PermissionsProvider>
+							<ErrorHandlerProvider>
+								<BottomPanelProvider>
+									<FavouritesProvider>
+										<GroupProvider>
+											<ToolbarProvider>
+												<FooterProvider>
+													<OutsideLinkBlockerProvider>
+														<StableTeamSubdomainProvider>
+															<AppSongSelectSpecifierProvider>
+																<CurrentPlaylistProvider>
+																	<SongDragProvider>
+																		{children}
+																	</SongDragProvider>
+																</CurrentPlaylistProvider>
+															</AppSongSelectSpecifierProvider>
+														</StableTeamSubdomainProvider>
+													</OutsideLinkBlockerProvider>
+												</FooterProvider>
+											</ToolbarProvider>
+										</GroupProvider>
+									</FavouritesProvider>
+								</BottomPanelProvider>
+							</ErrorHandlerProvider>
+						</PermissionsProvider>
+					</AuthProvider>
+				</SubdomainPathnameAliasProvider>
+				{/* </BrowserRouter> */}
+			</SnackbarProvider>
+		</LocalizationProvider>
 	)
 }

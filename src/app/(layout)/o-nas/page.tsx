@@ -1,7 +1,7 @@
-'use client'
+'use server'
 import SectionLabelPill from '@/app/(layout)/o-nas/components/SectionLabelPill'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, useTheme } from '@/common/ui'
+import { Box } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
 
@@ -19,9 +19,10 @@ import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
 
 //TODO: fix overflow in better way.
+import HelpUsPanel from '@/app/(layout)/o-nas/components/HelpUsPanel'
 import SheepBigGraphics from '@/app/(layout)/o-nas/components/SheepBigGraphics'
 import { Divider } from '@/common/ui'
-import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import breakpoints from '@/tech/theme/theme.tech'
 import './styles.css'
 
 export default SmartPage(Page, {
@@ -29,16 +30,6 @@ export default SmartPage(Page, {
 })
 
 function Page() {
-	const theme = useTheme()
-
-	const navigate = useSmartNavigate()
-
-	const onJoinClick = () => {
-		navigate('contact', {
-			wantToJoin: true,
-		})
-	}
-
 	return (
 		<Box>
 			<ToolbarChanger />
@@ -190,7 +181,7 @@ function Page() {
 						}}
 						justifyContent={'center'}
 						sx={{
-							[theme.breakpoints.up('lg')]: {
+							[breakpoints.up('lg')]: {
 								transform: 'translateX(-64px) ',
 							},
 						}}
@@ -206,7 +197,7 @@ function Page() {
 					minWidth={350}
 					sx={{
 						alignItems: 'center',
-						[theme.breakpoints.up('lg')]: {
+						[breakpoints.up('lg')]: {
 							alignItems: 'end',
 						},
 					}}
@@ -214,7 +205,7 @@ function Page() {
 				>
 					<Box
 						sx={{
-							[theme.breakpoints.up('lg')]: {
+							[breakpoints.up('lg')]: {
 								transform: 'translateX(-128px) translateY(32px)',
 							},
 						}}
@@ -227,7 +218,7 @@ function Page() {
 					</Box>
 					<Box
 						sx={{
-							[theme.breakpoints.up('lg')]: {
+							[breakpoints.up('lg')]: {
 								transform: 'translateX(0%) translateY(32px)',
 							},
 						}}
@@ -242,7 +233,7 @@ function Page() {
 					</Box>
 					<Box
 						sx={{
-							[theme.breakpoints.up('lg')]: {
+							[breakpoints.up('lg')]: {
 								transform: `translateX(-100%) translateX(-32px) translateY(-32px)`,
 							},
 						}}
@@ -348,27 +339,7 @@ function Page() {
 				gap={4}
 				flexWrap={'wrap'}
 			>
-				<Box
-					display={'flex'}
-					flexDirection={'column'}
-					gap={2}
-					flexWrap={'wrap'}
-					flex={1}
-				>
-					<Box display={'flex'} flexDirection={'column'}>
-						<Typography variant="h2" noWrap>
-							Chcete nám pomoct?
-						</Typography>
-						<Typography variant="h4" color="grey.600">
-							Chtěli byste se k projektu jakýmkoliv způsobem připojit?
-						</Typography>
-					</Box>
-					<Box display={'flex'}>
-						<Button color={'primarygradient'} onClick={onJoinClick}>
-							Chci se připojit
-						</Button>
-					</Box>
-				</Box>
+				<HelpUsPanel />
 				{false && (
 					<Box
 						display={'flex'}

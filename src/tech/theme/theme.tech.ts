@@ -1,4 +1,5 @@
 import { _muiTheme as theme } from '@/app/theme'
+import { Breakpoints } from '@/tech/theme/theme.types'
 
 const basicColors: Record<string, string> = {
 	white: '#FFFFFF',
@@ -46,3 +47,52 @@ export const getColorHex = (color: string) => {
 	// Pokud barva neodpovídá ničemu, vrátí se výchozí
 	return color // nebo jiná výchozí barva
 }
+
+export const breakpoints = {
+	values: {
+		xs: 0,
+		sm: 600,
+		md: 900,
+		lg: 1200,
+		xl: 1536,
+	},
+	up(key: Breakpoints) {
+		const value = this.values[key]
+		if (value === undefined) {
+			throw new Error(`Invalid breakpoint key: ${key}`)
+		}
+		return `(min-width: ${value}px)`
+	},
+	down(key: Breakpoints) {
+		const value = this.values[key]
+		if (value === undefined) {
+			throw new Error(`Invalid breakpoint key: ${key}`)
+		}
+		return `(max-width: ${value - 0.02}px)` // Oprava pro přesnost na 1px
+	},
+	between(startKey: Breakpoints, endKey: Breakpoints) {
+		const startValue = this.values[startKey]
+		const endValue = this.values[endKey]
+		if (startValue === undefined || endValue === undefined) {
+			throw new Error(`Invalid breakpoint keys: ${startKey}, ${endKey}`)
+		}
+		return `(min-width: ${startValue}px) and (max-width: ${endValue - 0.02}px)`
+	},
+	only(key: Breakpoints) {
+		const value = this.values[key]
+		const nextKeyIndex = Object.keys(this.values).indexOf(key) + 1
+		const nextKey = Object.keys(this.values)[nextKeyIndex] as Breakpoints
+		const nextValue = nextKey ? this.values[nextKey] : null
+
+		if (value === undefined) {
+			throw new Error(`Invalid breakpoint key: ${key}`)
+		}
+
+		if (nextValue) {
+			return `(min-width: ${value}px) and (max-width: ${nextValue - 0.02}px)`
+		}
+		return `(min-width: ${value}px)`
+	},
+}
+
+export default breakpoints

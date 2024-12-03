@@ -5,10 +5,12 @@ import HotjarAnalytics from '@/app/components/components/HotjarAnalytics'
 import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
 import AdminOptionsProvider from '@/common/components/admin/AdminOptions'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import type { Metadata } from 'next'
+
+import HeadersProviders from '@/app/providers/HeadersProviders'
 import './globals.classes.css'
 import './globals.css'
-import './typography.globals.css'
 
 export const metadata: Metadata = {
 	title: 'Chvalotce.cz',
@@ -35,17 +37,20 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="en">
+		<html lang="cs">
+			<HeadersProviders />
 			<GoogleAnalytics />
 			<HotjarAnalytics />
 			<body>
-				<AppProviders>
-					{children}
-					<PopupProvider />
-					<DragTemplatesContainer />
-					<AdminOptionsProvider />
-				</AppProviders>
-				<UnavailableMessage />
+				<AppRouterCacheProvider>
+					<AppProviders>
+						{children}
+						<PopupProvider />
+						<DragTemplatesContainer />
+						<AdminOptionsProvider />
+					</AppProviders>
+					<UnavailableMessage />
+				</AppRouterCacheProvider>
 			</body>
 		</html>
 	)
