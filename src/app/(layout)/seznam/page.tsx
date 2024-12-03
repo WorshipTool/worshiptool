@@ -2,6 +2,7 @@
 import AllSongItem from '@/app/(layout)/seznam/AllSongItem'
 import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Container } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
@@ -21,10 +22,12 @@ function List() {
 		handleApiCall(songGettingApi.songGettingControllerGetListSongCount())
 	)
 
-	const COUNT_PER_PAGE = 30
+	const isSmall = useDownSize('md')
+	const isMiddle = useDownSize('lg')
+	const countPerPage = isSmall ? 10 : isMiddle ? 20 : 30
 	const getPageData = (page: number) => {
 		return handleApiCall(
-			songGettingApi.songGettingControllerGetList(page, COUNT_PER_PAGE)
+			songGettingApi.songGettingControllerGetList(page, countPerPage)
 		).then((data) => {
 			const uniq = data.filter((v, i, a) => {
 				return a.findIndex((t) => t.guid === v.guid) === i
@@ -63,7 +66,7 @@ function List() {
 						</Box>
 					)} */}
 				</Box>
-				<Pager data={getPageData} allCount={count || 0} take={30}>
+				<Pager data={getPageData} allCount={count || 0} take={countPerPage}>
 					{(data, loading, startIndex) => {
 						return (
 							<Box

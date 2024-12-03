@@ -22,7 +22,7 @@ export default function Pager<T>({
 			return Math.ceil((props.data as T[]).length / take)
 		}
 		return Math.ceil((props.allCount || 0) / take)
-	}, [props.allCount, props.data, staticMode])
+	}, [props.allCount, props.data, staticMode, take])
 
 	const [loading, setLoading] = useState(false)
 
@@ -44,7 +44,7 @@ export default function Pager<T>({
 					setLoading(false)
 				})
 		}
-	}, [page, props.data, staticMode])
+	}, [page, props.data, staticMode, take])
 
 	const component = useMemo(
 		() => children(pageData, loading, (page - 1) * take),
