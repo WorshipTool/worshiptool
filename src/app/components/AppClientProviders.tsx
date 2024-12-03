@@ -35,15 +35,15 @@ export default function AppClientProviders({
 					preventDuplicate
 				>
 					{/* <BrowserRouter> */}
-					<AuthProvider>
-						<PermissionsProvider>
-							<ErrorHandlerProvider>
-								<BottomPanelProvider>
-									<FavouritesProvider>
-										<GroupProvider>
-											<ToolbarProvider>
-												<FooterProvider>
-													<SubdomainPathnameAliasProvider>
+					<SubdomainPathnameAliasProvider>
+						<AuthProvider>
+							<PermissionsProvider>
+								<ErrorHandlerProvider>
+									<BottomPanelProvider>
+										<FavouritesProvider>
+											<GroupProvider>
+												<ToolbarProvider>
+													<FooterProvider>
 														<OutsideLinkBlockerProvider>
 															<StableTeamSubdomainProvider>
 																<AppSongSelectSpecifierProvider>
@@ -55,15 +55,15 @@ export default function AppClientProviders({
 																</AppSongSelectSpecifierProvider>
 															</StableTeamSubdomainProvider>
 														</OutsideLinkBlockerProvider>
-													</SubdomainPathnameAliasProvider>
-												</FooterProvider>
-											</ToolbarProvider>
-										</GroupProvider>
-									</FavouritesProvider>
-								</BottomPanelProvider>
-							</ErrorHandlerProvider>
-						</PermissionsProvider>
-					</AuthProvider>
+													</FooterProvider>
+												</ToolbarProvider>
+											</GroupProvider>
+										</FavouritesProvider>
+									</BottomPanelProvider>
+								</ErrorHandlerProvider>
+							</PermissionsProvider>
+						</AuthProvider>
+					</SubdomainPathnameAliasProvider>
 					{/* </BrowserRouter> */}
 				</SnackbarProvider>
 			</LocalizationProvider>

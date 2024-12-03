@@ -117,9 +117,10 @@ const checkAuthentication = async (
 }> => {
 	const { cookies } = request
 	const tokenCookie = cookies.get(AUTH_COOKIE_NAME)
-	const user: UserDto | undefined = tokenCookie
-		? JSON.parse(tokenCookie.value)
-		: undefined
+	let user: UserDto | undefined = undefined
+	try {
+		user = tokenCookie ? JSON.parse(tokenCookie.value) : undefined
+	} catch (e) {}
 	const token = user?.token
 
 	if (!token) return {}
@@ -135,17 +136,19 @@ const checkAuthentication = async (
 		const result = await fetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
-		let response: NextResponse = await setResponse(
+		const response: NextResponse = await setResponse(
 			NextResponse.redirect(new URL('/prihlaseni', request.url)),
 			'/prihlaseni'
 		)
-
 		response.cookies.set(AUTH_COOKIE_NAME, '', {
 			expires: new Date(0),
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
 		})
 
 		// Not redicert if the user is already on the login page
-		if (request.nextUrl.pathname.startsWith('/prihlaseni')) {
+		const onLoginPage: boolean =
+			request.nextUrl.pathname.startsWith('/prihlaseni')
+		if (onLoginPage) {
 			return { user }
 		}
 

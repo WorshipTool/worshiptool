@@ -3,6 +3,10 @@
 import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google'
 // import Cookies from 'js-cookie'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
+import { routesPaths } from '@/routes'
+import { urlMatchPatterns } from '@/routes/routes.tech'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { jwtDecode } from 'jwt-decode'
 import { useCookies } from 'next-client-cookies'
 import { useSnackbar } from 'notistack'
@@ -83,12 +87,21 @@ export function useProvideAuth() {
 		[token]
 	)
 
+	const pathname = useClientPathname()
+	const navigate = useSmartNavigate()
+	const goToHomeIfNeededGoogle = () => {
+		// If its on login, or signup page, redirect to home
+		const loginPage = urlMatchPatterns(pathname, routesPaths.login)
+		const signupPage = urlMatchPatterns(pathname, routesPaths.signup)
+		if (loginPage || signupPage) navigate('home', { hledat: undefined })
+	}
+
 	// If not logged in, enable Google login
 	const [googleShouldLogin, setGoogleShouldLogin] = useState<boolean>(false)
 	useGoogleOneTapLogin({
 		disabled: !googleShouldLogin,
 		onSuccess: (credentialResponse: CredentialResponse) => {
-			loginWithGoogle(credentialResponse)
+			loginWithGoogle(credentialResponse, goToHomeIfNeededGoogle)
 		},
 	})
 	useEffect(() => {
