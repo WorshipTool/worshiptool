@@ -1,6 +1,7 @@
 import { Box } from '@/common/ui/Box'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
+import breakpoints from '@/tech/theme/theme.tech'
 
 import { useMemo } from 'react'
 
@@ -18,6 +19,7 @@ export function StandaloneCard(props: StandaloneCardProps) {
 		<Box
 			sx={{
 				width: '480px',
+				maxWidth: '100%',
 			}}
 		>
 			<Box
@@ -32,6 +34,10 @@ export function StandaloneCard(props: StandaloneCardProps) {
 					alignItems: defaultVariant ? 'center' : 'start',
 
 					boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.1)',
+
+					[breakpoints.down('sm')]: {
+						paddingX: 4,
+					},
 				}}
 			>
 				<Box

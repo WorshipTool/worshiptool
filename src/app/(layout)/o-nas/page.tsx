@@ -25,9 +25,7 @@ import { Divider } from '@/common/ui'
 import breakpoints from '@/tech/theme/theme.tech'
 import './styles.css'
 
-export default SmartPage(Page, {
-	transparentToolbar: true,
-})
+export default SmartPage(Page, ['transparentToolbar', 'containLayout'])
 
 function Page() {
 	return (
@@ -106,7 +104,6 @@ function Page() {
 						<Shape />
 					</Box>
 				</Box>
-
 				<Box
 					sx={{
 						position: 'absolute',
