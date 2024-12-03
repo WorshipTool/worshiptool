@@ -1,7 +1,7 @@
 'use client'
 import { theme } from '@/common/constants/theme'
 import { createTheme } from '@/common/ui/mui'
-import { ThemeProvider as TP, responsiveFontSizes } from '@mui/material/styles'
+import { responsiveFontSizes } from '@mui/material/styles'
 import { csCZ } from '@mui/x-date-pickers/locales'
 import { Roboto } from 'next/font/google'
 
@@ -49,20 +49,8 @@ export const _muiTheme = muiTheme
 // theme.typography.h6 = {
 // 	fontSize: '1rem',
 // }
-const roboto = Roboto({
+export const roboto = Roboto({
 	weight: '400',
 	subsets: ['latin'],
 	display: 'swap',
 })
-
-type ThemeProviderProps = {
-	children: React.ReactNode
-}
-
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-	return (
-		<TP theme={muiTheme}>
-			<div className={roboto.className}>{children}</div>
-		</TP>
-	)
-}
