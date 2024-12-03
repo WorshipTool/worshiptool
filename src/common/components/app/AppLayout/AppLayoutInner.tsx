@@ -23,7 +23,6 @@ export default function Inner({ children }: AppContainerProps) {
 				{children}
 				<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 			</Box>
-
 			<Box flex={1} />
 			<Footer />
 		</Box>
