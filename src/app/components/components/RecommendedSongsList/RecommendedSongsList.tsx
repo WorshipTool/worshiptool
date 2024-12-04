@@ -75,7 +75,12 @@ export default function RecommendedSongsList({
 			</GridContainer>
 
 			{init && (
-				<Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					alignItems={'center'}
+					flexWrap={'wrap'}
+				>
 					<Typography>Nebo si vyberte ze </Typography>
 					<Button size="small" variant="text" to="songsList">
 						Seznamu
