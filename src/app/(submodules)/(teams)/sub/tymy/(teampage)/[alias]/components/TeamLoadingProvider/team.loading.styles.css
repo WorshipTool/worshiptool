@@ -1,0 +1,27 @@
+.logo-image {
+	animation: loading 1s infinite ease-in-out;
+}
+
+@keyframes loading {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.loading-text {
+	display: inline-block;
+	clip-path: inset(0 1.5ch 0 0);
+	animation: l 1s steps(4) infinite;
+}
+
+@keyframes l {
+	to {
+		clip-path: inset(0 -0.5ch 0 0);
+	}
+}

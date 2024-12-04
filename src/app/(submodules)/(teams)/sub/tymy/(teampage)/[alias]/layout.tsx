@@ -1,6 +1,7 @@
 'use server'
 import { getImageUrl } from '@/api/urls'
 import TeamPageProviders from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/Providers/TeamPageProviders'
+import TeamLoadingProvider from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TeamLoadingProvider/TeamLoadingProvider'
 import TeamClientLayout from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/TeamClientLayout'
 import TeamClientProviders from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/TeamClientProviders'
 import { InnerTeamProvider } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
@@ -63,11 +64,13 @@ export default async function TeamLayout(layout: LayoutProps<'team'>) {
 	return (
 		<Box height={'100vh'} position={'relative'}>
 			<InnerTeamProvider teamAlias={layout.params.alias}>
-				<TeamClientProviders>
-					<TeamPageProviders>
-						<TeamClientLayout>{layout.children}</TeamClientLayout>
-					</TeamPageProviders>
-				</TeamClientProviders>
+				<TeamLoadingProvider>
+					<TeamClientProviders>
+						<TeamPageProviders>
+							<TeamClientLayout>{layout.children}</TeamClientLayout>
+						</TeamPageProviders>
+					</TeamClientProviders>
+				</TeamLoadingProvider>
 			</InnerTeamProvider>
 		</Box>
 	)
