@@ -25,14 +25,15 @@ export default function TeamLoadingProvider({
 
 		const t = setTimeout(() => {
 			setLoading(false)
-		}, 300)
+		}, 1500)
 
 		return () => {
 			clearTimeout(t)
 		}
 	}, [teamFirstLoaded])
 
-	const teamLogoUrl = hasLogo && !logoLoading ? logoUrl : undefined
+	const teamLogoUrl =
+		hasLogo && !logoUrl.includes('team-default.webp') ? logoUrl : undefined
 
 	return (
 		<div>

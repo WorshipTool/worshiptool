@@ -1,5 +1,5 @@
 import { Background } from '@/common'
-import { Box, Image, Typography } from '@/common/ui'
+import { Box, CircularProgress, Image } from '@/common/ui'
 import './team.loading.styles.css'
 
 type TeamLoadingScreenProps = {
@@ -34,8 +34,9 @@ export default function TeamLoadingScreen({
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
-					height: '100vh',
-					flexDirection: 'column',
+					height: '100%',
+					flexDirection: 'row',
+					gap: 2,
 				}}
 			>
 				{props.teamLogoUrl ? (
@@ -43,9 +44,9 @@ export default function TeamLoadingScreen({
 						<Image src={props.teamLogoUrl} alt="Logo týmu" />
 					</Box>
 				) : (
-					<>
-						<Typography className="loading-text">Načítání týmu...</Typography>
-					</>
+					<Box>
+						<CircularProgress />
+					</Box>
 				)}
 			</Box>
 		</div>
