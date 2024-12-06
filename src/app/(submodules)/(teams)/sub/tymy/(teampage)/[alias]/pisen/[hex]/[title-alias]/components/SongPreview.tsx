@@ -33,7 +33,7 @@ type SongPreviewProps = {
 }
 
 export default function SongPreview({ variant }: SongPreviewProps) {
-	const { guid: teamGuid } = useInnerTeam()
+	const { guid: teamGuid, alias: teamAlias } = useInnerTeam()
 
 	const { 'title-alias': titleAlias, hex } = useSmartParams('teamSong')
 	const [inEditMode, setInEditMode] = useSmartUrlState('teamSong', 'edit')
@@ -105,9 +105,9 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 					navigate(
 						'teamSong',
 						{
-							alias: titleAlias,
+							alias: teamAlias,
 							hex,
-							'title-alias': newData.title,
+							'title-alias': titleAlias,
 							edit: false,
 						},
 						{
