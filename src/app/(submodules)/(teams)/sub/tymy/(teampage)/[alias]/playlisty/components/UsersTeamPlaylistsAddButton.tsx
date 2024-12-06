@@ -45,7 +45,7 @@ export default function UsersTeamPlaylistsAddButton() {
 				})
 			}
 		)
-	}, [guid])
+	}, [guid, navigate])
 	return (
 		<Clickable tooltip="Vytvořit playlist" onClick={() => onCreateClick()}>
 			<Box

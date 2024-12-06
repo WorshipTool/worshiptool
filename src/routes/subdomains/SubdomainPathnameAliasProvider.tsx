@@ -29,7 +29,7 @@ export default function useSubdomainPathnameAlias() {
 	return r
 }
 
-type SubdomainData = {
+export type SubdomainData = {
 	subdomain: string
 	pathname: string
 }
