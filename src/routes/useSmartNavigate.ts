@@ -1,5 +1,8 @@
+'use client'
 // import { useNavigate } from "react-router-dom";
+import { getUrlWithSubdomainPathnameAliases } from '@/common/ui/Link/link.tech'
 import { getReplacedUrlWithParams } from '@/routes/routes.tech'
+import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { NavigateOptions as NO } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { RouteLiteral } from 'nextjs-routes'
@@ -12,6 +15,7 @@ type NavigateOptions = NO & {
 
 export const useSmartNavigate = () => {
 	const router = useRouter()
+	const { aliases } = useSubdomainPathnameAlias()
 	const navigate = <T extends RoutesKeys>(
 		to:
 			| T
@@ -24,13 +28,20 @@ export const useSmartNavigate = () => {
 		const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
 		const urlWithParams =
 			Object.keys(params).length > 0
-				? getReplacedUrlWithParams(toUrl, params)
+				? getReplacedUrlWithParams(toUrl, params, {
+						relative: true,
+				  })
 				: toUrl
 
+		const urlWithAliases = getUrlWithSubdomainPathnameAliases(
+			urlWithParams,
+			aliases
+		)
+
 		if (options.replace) {
-			router.replace(urlWithParams as RouteLiteral)
+			router.replace(urlWithAliases as RouteLiteral)
 		} else {
-			router.push(urlWithParams as RouteLiteral)
+			router.push(urlWithAliases as RouteLiteral)
 		}
 	}
 

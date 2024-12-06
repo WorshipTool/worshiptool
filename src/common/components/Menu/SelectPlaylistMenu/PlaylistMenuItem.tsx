@@ -49,26 +49,28 @@ export default function PlaylistMenuItem({
 				</Box>
 
 				{!props.hideLink && (
-					<Link
-						to="playlist"
-						params={{
-							guid: playlistGuid,
-						}}
-						newTab
-					>
-						<IconButton
-							onClick={openPlaylist}
-							tooltip="Otevřít v nové záložce"
-							size="small"
-							sx={{
-								marginY: '-5px',
-								marginX: '-4px',
-								transform: 'scale(0.8)',
+					<Box onClick={openPlaylist}>
+						<Link
+							to="playlist"
+							params={{
+								guid: playlistGuid,
 							}}
+							newTab
 						>
-							<Launch fontSize="small" />
-						</IconButton>
-					</Link>
+							<IconButton
+								// onClick={openPlaylist}
+								tooltip="Otevřít v nové záložce"
+								size="small"
+								sx={{
+									marginY: '-5px',
+									marginX: '-4px',
+									transform: 'scale(0.8)',
+								}}
+							>
+								<Launch fontSize="small" />
+							</IconButton>
+						</Link>
+					</Box>
 				)}
 			</Box>
 		</MenuItem>
