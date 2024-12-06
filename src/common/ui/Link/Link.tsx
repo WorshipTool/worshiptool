@@ -132,7 +132,6 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 						...props.style,
 					}}
 					target={props.newTab ? '_blank' : props.target}
-					prefetch
 				>
 					{props.children}
 				</StyledLink>
