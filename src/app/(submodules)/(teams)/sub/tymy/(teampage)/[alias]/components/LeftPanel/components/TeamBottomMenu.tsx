@@ -20,10 +20,10 @@ export default function TeamBottomMenu() {
 			paddingX={1}
 			gap={1}
 		>
-			<TeamBottomMenuItem item={'people'} />
 			<TeamBottomMenuItem item={'playlists'} />
-			<TeamBottomMenuItem item={'overview'} />
 			<TeamBottomMenuItem item={'songlist'} title="Písně" />
+			<TeamBottomMenuItem item={'overview'} />
+			<TeamBottomMenuItem item={'people'} />
 		</Box>
 	)
 }

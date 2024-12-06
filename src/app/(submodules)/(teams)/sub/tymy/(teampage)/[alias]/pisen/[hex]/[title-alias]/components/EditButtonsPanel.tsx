@@ -56,7 +56,6 @@ export default function EditButtonsPanel({
 		fetchApiState(
 			async () => {
 				const result = await selection.requireItemEdit(playlistItemGuid)
-
 				if (result.createdCopy) {
 					const aliasData = parseVariantAlias(
 						result.packAlias as VariantPackAlias
