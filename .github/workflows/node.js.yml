@@ -44,14 +44,4 @@ jobs:
 
       - name: Redeploy application
         run: |
-          ssh -o ServerAliveInterval=1000 "${SERVER_USERNAME}@${SERVER_URL}" "cd /home/chvalotce.cz-docker/project-deploy/worshiptool/frontend && bash ./redeploy.sh"
-
-      - name: Send message to Messenger
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: 'https://chvalotce.cz/api/sendmessage'
-          method: 'POST'
-          customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
-          data: '{"message": "Nová verze frontendu byla právě nasazena."}'
-          timeout: 30000
-          preventFailureOnNoResponse: true
+          ssh -o ServerAliveInterval=1000 "${SERVER_USERNAME}@${SERVER_URL}" "cd /home/chvalotce.cz-docker/project-deploy/worshiptool/frontend && bash ./redeploy.sh && cd /home/chvalotce.cz-docker/scripts && bash ./send-message.sh 'Nová verze frontendu byla právě nasazena.'"
