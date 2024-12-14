@@ -13,7 +13,6 @@ export const routesPaths = {
 	playlistCards: '/playlist/[guid]/prezentace',
 	group: '/skupina/[groupCode]',
 	groupSettings: '/skupina/[groupCode]/nastaveni',
-	documentation: '/dokumentace',
 	addMenu: '/vytvorit',
 	upload: '/nahrat',
 	uploadParse: '/nahrat/hledani',
