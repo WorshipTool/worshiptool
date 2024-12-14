@@ -2357,25 +2357,6 @@ export interface PostSendCustomMessageBody {
 /**
  * 
  * @export
- * @interface PostSendFeedbackBody
- */
-export interface PostSendFeedbackBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostSendFeedbackBody
-     */
-    'message': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostSendFeedbackBody
-     */
-    'userName'?: string;
-}
-/**
- * 
- * @export
  * @interface PostSendMailFeedbackInDto
  */
 export interface PostSendMailFeedbackInDto {
@@ -5232,6 +5213,103 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * BridgeApi - axios parameter creator
+ * @export
+ */
+export const BridgeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bridgeControllerGetServices: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/bridge`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BridgeApi - functional programming interface
+ * @export
+ */
+export const BridgeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BridgeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bridgeControllerGetServices(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bridgeControllerGetServices(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BridgeApi.bridgeControllerGetServices']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BridgeApi - factory interface
+ * @export
+ */
+export const BridgeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BridgeApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bridgeControllerGetServices(options?: any): AxiosPromise<object> {
+            return localVarFp.bridgeControllerGetServices(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BridgeApi - object-oriented interface
+ * @export
+ * @class BridgeApi
+ * @extends {BaseAPI}
+ */
+export class BridgeApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BridgeApi
+     */
+    public bridgeControllerGetServices(options?: RawAxiosRequestConfig) {
+        return BridgeApiFp(this.configuration).bridgeControllerGetServices(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * DefaultApi - axios parameter creator
  * @export
  */
@@ -6290,42 +6368,6 @@ export class MailApi extends BaseAPI {
 export const MessengerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Handles the HTTP POST request for sending feedback.
-         * @summary Sends a feedback to the messenger.
-         * @param {PostSendFeedbackBody} postSendFeedbackBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        messengerControllerPostFeedback: async (postSendFeedbackBody: PostSendFeedbackBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postSendFeedbackBody' is not null or undefined
-            assertParamExists('messengerControllerPostFeedback', 'postSendFeedbackBody', postSendFeedbackBody)
-            const localVarPath = `/sendfeedback`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postSendFeedbackBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * The function sends a message using the messenger service and returns a success message if the message is not empty.
          * @summary Sends a message to the messenger.
          * @param {PostSendMessageBody} postSendMessageBody 
@@ -6408,19 +6450,6 @@ export const MessengerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MessengerApiAxiosParamCreator(configuration)
     return {
         /**
-         * Handles the HTTP POST request for sending feedback.
-         * @summary Sends a feedback to the messenger.
-         * @param {PostSendFeedbackBody} postSendFeedbackBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async messengerControllerPostFeedback(postSendFeedbackBody: PostSendFeedbackBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messengerControllerPostFeedback(postSendFeedbackBody, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerPostFeedback']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * The function sends a message using the messenger service and returns a success message if the message is not empty.
          * @summary Sends a message to the messenger.
          * @param {PostSendMessageBody} postSendMessageBody 
@@ -6457,16 +6486,6 @@ export const MessengerApiFactory = function (configuration?: Configuration, base
     const localVarFp = MessengerApiFp(configuration)
     return {
         /**
-         * Handles the HTTP POST request for sending feedback.
-         * @summary Sends a feedback to the messenger.
-         * @param {PostSendFeedbackBody} postSendFeedbackBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        messengerControllerPostFeedback(postSendFeedbackBody: PostSendFeedbackBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.messengerControllerPostFeedback(postSendFeedbackBody, options).then((request) => request(axios, basePath));
-        },
-        /**
          * The function sends a message using the messenger service and returns a success message if the message is not empty.
          * @summary Sends a message to the messenger.
          * @param {PostSendMessageBody} postSendMessageBody 
@@ -6496,18 +6515,6 @@ export const MessengerApiFactory = function (configuration?: Configuration, base
  * @extends {BaseAPI}
  */
 export class MessengerApi extends BaseAPI {
-    /**
-     * Handles the HTTP POST request for sending feedback.
-     * @summary Sends a feedback to the messenger.
-     * @param {PostSendFeedbackBody} postSendFeedbackBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MessengerApi
-     */
-    public messengerControllerPostFeedback(postSendFeedbackBody: PostSendFeedbackBody, options?: RawAxiosRequestConfig) {
-        return MessengerApiFp(this.configuration).messengerControllerPostFeedback(postSendFeedbackBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * The function sends a message using the messenger service and returns a success message if the message is not empty.
      * @summary Sends a message to the messenger.
