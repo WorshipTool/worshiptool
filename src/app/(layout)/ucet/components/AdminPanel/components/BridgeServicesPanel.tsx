@@ -46,51 +46,53 @@ export default function BridgeServicesPanel() {
 				</IconButton>
 			</Box>
 
-			{apiState.data?.map((s) => {
-				const lastTickDate = new Date(s.lastTickDate)
-				const ago = Date.now() - lastTickDate.getTime()
+			{apiState.data &&
+				Array.isArray(apiState.data) &&
+				apiState.data.map((s) => {
+					const lastTickDate = new Date(s.lastTickDate)
+					const ago = Date.now() - lastTickDate.getTime()
 
-				return (
-					<Clickable key={s.id}>
-						<Box
-							key={s.id}
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: 1,
-								justifyContent: 'space-between',
-								bgcolor: 'grey.100',
-								padding: 1,
-								borderRadius: 1,
-							}}
-						>
-							<Box display={'flex'} alignItems={'center'} gap={2}>
-								<Box
-									sx={{
-										width: '1rem',
-										height: '1rem',
-										borderRadius: '50%',
-										bgcolor: s.active ? 'success.main' : 'error.main',
-									}}
-								/>
+					return (
+						<Clickable key={s.id}>
+							<Box
+								key={s.id}
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									alignItems: 'center',
+									gap: 1,
+									justifyContent: 'space-between',
+									bgcolor: 'grey.100',
+									padding: 1,
+									borderRadius: 1,
+								}}
+							>
+								<Box display={'flex'} alignItems={'center'} gap={2}>
+									<Box
+										sx={{
+											width: '1rem',
+											height: '1rem',
+											borderRadius: '50%',
+											bgcolor: s.active ? 'success.main' : 'error.main',
+										}}
+									/>
+									<Box display={'flex'} alignItems={'center'} gap={1}>
+										<Typography strong>{s.name}</Typography>
+										<Chip size="small" label={s.type} disabled />
+									</Box>
+								</Box>
 								<Box display={'flex'} alignItems={'center'} gap={1}>
-									<Typography strong>{s.name}</Typography>
-									<Chip size="small" label={s.type} disabled />
+									<Typography small>Před {Math.floor(ago / 1000)}s</Typography>
+									{s.external && (
+										<Tooltip title="Externí">
+											<LastPage fontSize="small" />
+										</Tooltip>
+									)}
 								</Box>
 							</Box>
-							<Box display={'flex'} alignItems={'center'} gap={1}>
-								<Typography small>Před {Math.floor(ago / 1000)}s</Typography>
-								{s.external && (
-									<Tooltip title="Externí">
-										<LastPage fontSize="small" />
-									</Tooltip>
-								)}
-							</Box>
-						</Box>
-					</Clickable>
-				)
-			})}
+						</Clickable>
+					)
+				})}
 		</Card>
 	)
 }
