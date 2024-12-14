@@ -1,6 +1,7 @@
 import {
 	AnalyticsApi,
 	AuthApi,
+	BridgeApi,
 	GroupApi,
 	ImagesApi,
 	MailApi,
@@ -49,6 +50,7 @@ export const useApi = () => {
 			analyticsApi: new AnalyticsApi(apiConfiguration),
 			mailApi: new MailApi(apiConfiguration),
 			imagesApi: new ImagesApi(apiConfiguration),
+			bridgeApi: new BridgeApi(apiConfiguration),
 
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),
