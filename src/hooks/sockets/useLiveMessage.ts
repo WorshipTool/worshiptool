@@ -1,8 +1,9 @@
 import { BACKEND_URL } from '@/api/constants'
+import env from '@/tech/env.tech'
 import { useCallback, useEffect } from 'react'
 import io from 'socket.io-client'
 
-const DISABLE_WEBSOCKET = process.env.NEXT_PUBLIC_DISABLE_WEBSOCKETS === 'true'
+const DISABLE_WEBSOCKET = Boolean(env.NEXT_PUBLIC_DISABLE_WEBSOCKETS)
 
 // get return type of io
 

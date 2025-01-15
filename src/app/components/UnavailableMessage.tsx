@@ -2,13 +2,14 @@
 import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
+import env from '@/tech/env.tech'
 import { BugReport, Build, PrecisionManufacturing } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { Gap } from '../../common/ui/Gap/Gap'
 
 export default function UnavailableMessage() {
 	const [isUnvailable, setIsUnvailable] = useState(
-		process.env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE === 'true'
+		Boolean(env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE)
 	)
 
 	// if user write on keyboard "please", then set isUnvailable to false

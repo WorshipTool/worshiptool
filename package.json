@@ -22,7 +22,7 @@
 		"@mui/x-charts": "^7.8.0",
 		"@mui/x-date-pickers": "^7.21.0",
 		"@next/third-parties": "^14.2.3",
-		"@pepavlin/sheet-api": "^1.3.7",
+		"@pepavlin/sheet-api": "^1.3.14",
 		"@react-oauth/google": "^0.12.1",
 		"axios": "^1.6.8",
 		"cookie-store": "^4.0.0-next.4",
@@ -48,7 +48,8 @@
 		"sharp": "^0.33.3",
 		"socket.io-client": "^4.8.1",
 		"swipe-event-listener": "^1.2.1",
-		"swr": "^2.2.5"
+		"swr": "^2.2.5",
+		"typed-env": "^1.0.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
