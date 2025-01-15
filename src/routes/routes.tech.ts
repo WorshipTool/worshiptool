@@ -7,9 +7,9 @@ import {
 	SmartAllParams,
 	SmartParams,
 } from '@/routes/routes.types'
-import env from '@/tech/env.tech'
 
-export const shouldUseSubdomains = () => !env.NEXT_PUBLIC_DONT_USE_SUBDOMAINS
+export const shouldUseSubdomains = () =>
+	process.env.NEXT_PUBLIC_DONT_USE_SUBDOMAINS !== 'true'
 
 export const urlMatchPatterns = (
 	pathname: string,

@@ -17,7 +17,6 @@ import {
 	shouldUseSubdomains,
 } from '@/routes/routes.tech'
 import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
-import env from '@/tech/env.tech'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -143,7 +142,7 @@ const checkAuthentication = async (
 		)
 		response.cookies.set(AUTH_COOKIE_NAME, '', {
 			expires: new Date(0),
-			domain: `.${env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
 		})
 
 		// Not redicert if the user is already on the login page
