@@ -7,7 +7,6 @@ import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'
 import { urlMatchPatterns } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import env from '@/tech/env.tech'
 import { jwtDecode } from 'jwt-decode'
 import { useCookies } from 'next-client-cookies'
 import { useSnackbar } from 'notistack'
@@ -59,7 +58,7 @@ export function useProvideAuth() {
 	const cookies = useCookies()
 	const _setCookie = (user: UserDto) => {
 		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user), {
-			domain: `.${env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
 		})
 	}
 	const _getCookie = (): UserDto | undefined => {
@@ -71,7 +70,7 @@ export function useProvideAuth() {
 	}
 	const _emptyCookie = () => {
 		cookies.remove(AUTH_COOKIE_NAME, {
-			domain: `.${env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
 		})
 	}
 
