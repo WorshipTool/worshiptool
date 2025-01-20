@@ -1,9 +1,9 @@
 'use client'
-import { BACKEND_URL } from '@/api/constants'
 import {
 	ParserApiAxiosParamCreator,
 	ParserSongDataResult,
 } from '@/api/generated'
+import { getUrl } from '@/api/urls'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
 import { Box, Button, LinearProgress, Typography } from '@/common/ui'
@@ -60,8 +60,7 @@ export default function ParseAdminOption() {
 	const parse = async (files: File[]) => {
 		const a = await ParserApiAxiosParamCreator(apiConfiguration)
 		const parse = await a.parserControllerParse()
-		const urlObject = new URL(parse.url, BACKEND_URL)
-		const url = urlObject.toString()
+		const url = getUrl(parse.url)
 
 		const form = new FormData()
 
