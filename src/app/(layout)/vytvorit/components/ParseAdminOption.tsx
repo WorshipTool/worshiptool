@@ -149,9 +149,10 @@ export default function ParseAdminOption() {
 							maxHeight={500}
 							overflow={'auto'}
 						>
-							{apiState.data?.sheets.map((a) => {
+							{apiState.data?.sheets.map((a, index) => {
 								return (
 									<Box
+										key={index}
 										sx={{
 											bgcolor: 'grey.100',
 											padding: 2,
@@ -166,9 +167,10 @@ export default function ParseAdminOption() {
 										<Typography strong>{a.title}</Typography>
 
 										<Box>
-											{a.data.split('\n').map((line) => {
+											{a.data.split('\n').map((line, index) => {
 												return (
 													<Typography
+														key={index}
 														sx={{
 															minHeight: '1.2rem',
 														}}
