@@ -6,7 +6,7 @@ import { Gap } from '@/common/ui/Gap'
 import { alpha } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { FormEvent, ReactNode, useEffect, useRef, useState } from 'react'
 
 type PopupProps = {
 	open: boolean
@@ -14,7 +14,7 @@ type PopupProps = {
 	children?: React.ReactNode
 
 	icon?: React.ReactNode
-	title?: string
+	title?: ReactNode
 	subtitle?: string
 	actions?: React.ReactNode
 
@@ -125,7 +125,14 @@ export default function Popup({
 												alignItems={'center'}
 											>
 												{props.icon}
-												<Typography variant="h5" strong>
+												<Typography
+													variant="h5"
+													strong
+													sx={{
+														display: 'flex',
+														flexDirection: 'row',
+													}}
+												>
 													{props.title}
 												</Typography>
 											</Box>

@@ -1,10 +1,9 @@
 'use client'
+import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box } from '@/common/ui'
 import { Edit, UploadFile } from '@mui/icons-material'
 import { useApi } from '../../../hooks/api/useApi'
-import { useApiStateEffect } from '../../../tech/ApiState'
-import { handleApiCall } from '../../../tech/handleApiCall'
 import AddMenuItem from './components/AddMenuItem'
 
 export default SmartPage(AddMenu)
@@ -12,9 +11,9 @@ export default SmartPage(AddMenu)
 function AddMenu() {
 	const { songAddingApi } = useApi()
 
-	const [apiState] = useApiStateEffect(() => {
-		return handleApiCall(songAddingApi.songAddingControllerIsParserAvailable())
-	})
+	// const [apiState] = useApiStateEffect(() => {
+	// 	return handleApiCall(songAddingApi.songAddingControllerIsParserAvailable())
+	// })
 
 	return (
 		<>
@@ -35,8 +34,8 @@ function AddMenu() {
 					}}
 				>
 					<AddMenuItem
-						disabled={!apiState.data}
-						loading={apiState.loading}
+						disabled
+						// loading={apiState.loading}
 						title="Nahrát soubor"
 						subtitle="Automaticky převeďte píseň z obrázku"
 						icon={<UploadFile fontSize="inherit" />}
@@ -51,6 +50,8 @@ function AddMenu() {
 					/>
 				</Box>
 			</Box>
+
+			<ParseAdminOption />
 		</>
 	)
 }

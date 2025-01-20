@@ -1561,25 +1561,6 @@ export type MediaTypeEnum = typeof MediaTypeEnum[keyof typeof MediaTypeEnum];
 /**
  * 
  * @export
- * @interface MessengerResponseInDto
- */
-export interface MessengerResponseInDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof MessengerResponseInDto
-     */
-    'object': string;
-    /**
-     * 
-     * @type {Array<object>}
-     * @memberof MessengerResponseInDto
-     */
-    'entry': Array<object>;
-}
-/**
- * 
- * @export
  * @interface MostFavouriteSong
  */
 export interface MostFavouriteSong {
@@ -1646,6 +1627,12 @@ export interface ParserSongDataResult {
      * @memberof ParserSongDataResult
      */
     'sheets': Array<ParserSongData>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ParserSongDataResult
+     */
+    'usedAi': boolean;
 }
 /**
  * 
@@ -2344,19 +2331,6 @@ export interface PostPublishVariantInDto {
 /**
  * 
  * @export
- * @interface PostSendCustomMessageBody
- */
-export interface PostSendCustomMessageBody {
-    /**
-     * 
-     * @type {object}
-     * @memberof PostSendCustomMessageBody
-     */
-    'data': object;
-}
-/**
- * 
- * @export
  * @interface PostSendMailFeedbackInDto
  */
 export interface PostSendMailFeedbackInDto {
@@ -2376,19 +2350,6 @@ export interface PostSendMailFeedbackInDto {
      * 
      * @type {string}
      * @memberof PostSendMailFeedbackInDto
-     */
-    'message': string;
-}
-/**
- * 
- * @export
- * @interface PostSendMessageBody
- */
-export interface PostSendMessageBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostSendMessageBody
      */
     'message': string;
 }
@@ -2494,25 +2455,6 @@ export interface RecordItem {
      * @memberof RecordItem
      */
     'value': number;
-}
-/**
- * 
- * @export
- * @interface RegisterWebhookExtensionBody
- */
-export interface RegisterWebhookExtensionBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterWebhookExtensionBody
-     */
-    'extensionName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterWebhookExtensionBody
-     */
-    'extensionPublicUrl': string;
 }
 /**
  * 
@@ -6362,22 +6304,51 @@ export class MailApi extends BaseAPI {
 
 
 /**
- * MessengerApi - axios parameter creator
+ * ParserApi - axios parameter creator
  * @export
  */
-export const MessengerApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ParserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * The function sends a message using the messenger service and returns a success message if the message is not empty.
-         * @summary Sends a message to the messenger.
-         * @param {PostSendMessageBody} postSendMessageBody 
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messengerControllerPostMessage: async (postSendMessageBody: PostSendMessageBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postSendMessageBody' is not null or undefined
-            assertParamExists('messengerControllerPostMessage', 'postSendMessageBody', postSendMessageBody)
-            const localVarPath = `/sendmessage`;
+        parserControllerIsAvailable: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/parser/is-available`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        parserControllerParse: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/parser/parse-file`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6389,50 +6360,15 @@ export const MessengerApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postSendMessageBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Sends a formatted message to the messenger.
-         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        messengerControllerSendCustomMessage: async (postSendCustomMessageBody: PostSendCustomMessageBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postSendCustomMessageBody' is not null or undefined
-            assertParamExists('messengerControllerSendCustomMessage', 'postSendCustomMessageBody', postSendCustomMessageBody)
-            const localVarPath = `/sendCustomMessage`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postSendCustomMessageBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6443,100 +6379,88 @@ export const MessengerApiAxiosParamCreator = function (configuration?: Configura
 };
 
 /**
- * MessengerApi - functional programming interface
+ * ParserApi - functional programming interface
  * @export
  */
-export const MessengerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = MessengerApiAxiosParamCreator(configuration)
+export const ParserApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ParserApiAxiosParamCreator(configuration)
     return {
         /**
-         * The function sends a message using the messenger service and returns a success message if the message is not empty.
-         * @summary Sends a message to the messenger.
-         * @param {PostSendMessageBody} postSendMessageBody 
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messengerControllerPostMessage(postSendMessageBody: PostSendMessageBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messengerControllerPostMessage(postSendMessageBody, options);
+        async parserControllerIsAvailable(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.parserControllerIsAvailable(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerPostMessage']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ParserApi.parserControllerIsAvailable']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Sends a formatted message to the messenger.
-         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messengerControllerSendCustomMessage(postSendCustomMessageBody, options);
+        async parserControllerParse(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParserSongDataResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.parserControllerParse(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerSendCustomMessage']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ParserApi.parserControllerParse']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * MessengerApi - factory interface
+ * ParserApi - factory interface
  * @export
  */
-export const MessengerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = MessengerApiFp(configuration)
+export const ParserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ParserApiFp(configuration)
     return {
         /**
-         * The function sends a message using the messenger service and returns a success message if the message is not empty.
-         * @summary Sends a message to the messenger.
-         * @param {PostSendMessageBody} postSendMessageBody 
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messengerControllerPostMessage(postSendMessageBody: PostSendMessageBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.messengerControllerPostMessage(postSendMessageBody, options).then((request) => request(axios, basePath));
+        parserControllerIsAvailable(options?: any): AxiosPromise<boolean> {
+            return localVarFp.parserControllerIsAvailable(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Sends a formatted message to the messenger.
-         * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.messengerControllerSendCustomMessage(postSendCustomMessageBody, options).then((request) => request(axios, basePath));
+        parserControllerParse(options?: any): AxiosPromise<ParserSongDataResult> {
+            return localVarFp.parserControllerParse(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * MessengerApi - object-oriented interface
+ * ParserApi - object-oriented interface
  * @export
- * @class MessengerApi
+ * @class ParserApi
  * @extends {BaseAPI}
  */
-export class MessengerApi extends BaseAPI {
+export class ParserApi extends BaseAPI {
     /**
-     * The function sends a message using the messenger service and returns a success message if the message is not empty.
-     * @summary Sends a message to the messenger.
-     * @param {PostSendMessageBody} postSendMessageBody 
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MessengerApi
+     * @memberof ParserApi
      */
-    public messengerControllerPostMessage(postSendMessageBody: PostSendMessageBody, options?: RawAxiosRequestConfig) {
-        return MessengerApiFp(this.configuration).messengerControllerPostMessage(postSendMessageBody, options).then((request) => request(this.axios, this.basePath));
+    public parserControllerIsAvailable(options?: RawAxiosRequestConfig) {
+        return ParserApiFp(this.configuration).parserControllerIsAvailable(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Sends a formatted message to the messenger.
-     * @param {PostSendCustomMessageBody} postSendCustomMessageBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MessengerApi
+     * @memberof ParserApi
      */
-    public messengerControllerSendCustomMessage(postSendCustomMessageBody: PostSendCustomMessageBody, options?: RawAxiosRequestConfig) {
-        return MessengerApiFp(this.configuration).messengerControllerSendCustomMessage(postSendCustomMessageBody, options).then((request) => request(this.axios, this.basePath));
+    public parserControllerParse(options?: RawAxiosRequestConfig) {
+        return ParserApiFp(this.configuration).parserControllerParse(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8302,6 +8226,39 @@ export const ProgramSongAddingApiAxiosParamCreator = function (configuration?: C
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        programSongAddingControllerTest: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/test`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8325,6 +8282,17 @@ export const ProgramSongAddingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ProgramSongAddingApi.programSongAddingControllerProcessDataStream']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async programSongAddingControllerTest(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.programSongAddingControllerTest(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProgramSongAddingApi.programSongAddingControllerTest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -8344,6 +8312,14 @@ export const ProgramSongAddingApiFactory = function (configuration?: Configurati
          */
         programSongAddingControllerProcessDataStream(programSongData: ProgramSongData, options?: any): AxiosPromise<boolean> {
             return localVarFp.programSongAddingControllerProcessDataStream(programSongData, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        programSongAddingControllerTest(options?: any): AxiosPromise<string> {
+            return localVarFp.programSongAddingControllerTest(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8365,6 +8341,16 @@ export class ProgramSongAddingApi extends BaseAPI {
      */
     public programSongAddingControllerProcessDataStream(programSongData: ProgramSongData, options?: RawAxiosRequestConfig) {
         return ProgramSongAddingApiFp(this.configuration).programSongAddingControllerProcessDataStream(programSongData, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProgramSongAddingApi
+     */
+    public programSongAddingControllerTest(options?: RawAxiosRequestConfig) {
+        return ProgramSongAddingApiFp(this.configuration).programSongAddingControllerTest(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8490,68 +8476,6 @@ export const SongAddingApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songAddingControllerIsParserAvailable: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/song/parser/available`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songAddingControllerParse: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/song/parse`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -8598,28 +8522,6 @@ export const SongAddingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongAddingApi.songAddingControllerCreateCopy']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songAddingControllerIsParserAvailable(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerIsParserAvailable(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongAddingApi.songAddingControllerIsParserAvailable']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songAddingControllerParse(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParserSongDataResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songAddingControllerParse(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongAddingApi.songAddingControllerParse']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -8656,22 +8558,6 @@ export const SongAddingApiFactory = function (configuration?: Configuration, bas
          */
         songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: any): AxiosPromise<PostCreateCopyOutDto> {
             return localVarFp.songAddingControllerCreateCopy(postCreateCopyInDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songAddingControllerIsParserAvailable(options?: any): AxiosPromise<boolean> {
-            return localVarFp.songAddingControllerIsParserAvailable(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songAddingControllerParse(options?: any): AxiosPromise<ParserSongDataResult> {
-            return localVarFp.songAddingControllerParse(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8714,26 +8600,6 @@ export class SongAddingApi extends BaseAPI {
      */
     public songAddingControllerCreateCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: RawAxiosRequestConfig) {
         return SongAddingApiFp(this.configuration).songAddingControllerCreateCopy(postCreateCopyInDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongAddingApi
-     */
-    public songAddingControllerIsParserAvailable(options?: RawAxiosRequestConfig) {
-        return SongAddingApiFp(this.configuration).songAddingControllerIsParserAvailable(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongAddingApi
-     */
-    public songAddingControllerParse(options?: RawAxiosRequestConfig) {
-        return SongAddingApiFp(this.configuration).songAddingControllerParse(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13847,48 +13713,10 @@ export const WebhookApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhookControllerRegisterWebhookExtension: async (registerWebhookExtensionBody: RegisterWebhookExtensionBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'registerWebhookExtensionBody' is not null or undefined
-            assertParamExists('webhookControllerRegisterWebhookExtension', 'registerWebhookExtensionBody', registerWebhookExtensionBody)
-            const localVarPath = `/webhook/registerWebhookExtension`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(registerWebhookExtensionBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {MessengerResponseInDto} messengerResponseInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        webhookControllerWebhook: async (messengerResponseInDto: MessengerResponseInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'messengerResponseInDto' is not null or undefined
-            assertParamExists('webhookControllerWebhook', 'messengerResponseInDto', messengerResponseInDto)
+        webhookControllerWebhook: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/webhook`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13903,12 +13731,9 @@ export const WebhookApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(messengerResponseInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13956,24 +13781,11 @@ export const WebhookApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WebhookApi.webhookControllerRegisterWebhookExtension']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {MessengerResponseInDto} messengerResponseInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerWebhook(messengerResponseInDto, options);
+        async webhookControllerWebhook(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookControllerWebhook(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebhookApi.webhookControllerWebhook']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -14001,21 +13813,11 @@ export const WebhookApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: any): AxiosPromise<object> {
-            return localVarFp.webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {MessengerResponseInDto} messengerResponseInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: any): AxiosPromise<boolean> {
-            return localVarFp.webhookControllerWebhook(messengerResponseInDto, options).then((request) => request(axios, basePath));
+        webhookControllerWebhook(options?: any): AxiosPromise<void> {
+            return localVarFp.webhookControllerWebhook(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14037,24 +13839,12 @@ export const WebhookApiFactory = function (configuration?: Configuration, basePa
 export class WebhookApi extends BaseAPI {
     /**
      * 
-     * @param {RegisterWebhookExtensionBody} registerWebhookExtensionBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebhookApi
      */
-    public webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody: RegisterWebhookExtensionBody, options?: RawAxiosRequestConfig) {
-        return WebhookApiFp(this.configuration).webhookControllerRegisterWebhookExtension(registerWebhookExtensionBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {MessengerResponseInDto} messengerResponseInDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WebhookApi
-     */
-    public webhookControllerWebhook(messengerResponseInDto: MessengerResponseInDto, options?: RawAxiosRequestConfig) {
-        return WebhookApiFp(this.configuration).webhookControllerWebhook(messengerResponseInDto, options).then((request) => request(this.axios, this.basePath));
+    public webhookControllerWebhook(options?: RawAxiosRequestConfig) {
+        return WebhookApiFp(this.configuration).webhookControllerWebhook(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
