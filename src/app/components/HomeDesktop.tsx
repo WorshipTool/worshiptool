@@ -1,5 +1,6 @@
 'use client'
 
+import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
@@ -231,7 +232,13 @@ export default function HomeDesktop() {
 				</div>
 			</Box>
 
-			{!phoneVersion && <FloatingAddButton extended={!isTop} />}
+			{!phoneVersion ? (
+				<FloatingAddButton extended={!isTop} />
+			) : (
+				<>
+					<ParseAdminOption />
+				</>
+			)}
 		</>
 	)
 }
