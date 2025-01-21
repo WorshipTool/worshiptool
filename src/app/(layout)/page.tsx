@@ -18,5 +18,9 @@ function Home() {
 		turnOff()
 	}, [])
 
-	return <HomeDesktop />
+	return (
+		<>
+			<HomeDesktop />
+		</>
+	)
 }
