@@ -191,7 +191,9 @@ export default function ParseAdminOption() {
 				title={
 					!result ? (
 						<Box display={'flex'} gap={1}>
-							{status === ParserStatus.Queued
+							{apiStateUploading.loading
+								? 'Nahrávání'
+								: status === ParserStatus.Queued
 								? 'Čekání ve frontě'
 								: status === ParserStatus.Started
 								? 'Zpracovávání souborů'
@@ -199,7 +201,7 @@ export default function ParseAdminOption() {
 								? 'Zpracováno'
 								: status === ParserStatus.Failed
 								? 'Nastala chyba'
-								: 'Unknown'}
+								: 'Počkejte prosím'}
 						</Box>
 					) : (
 						<Box display={'flex'} gap={1}>
@@ -220,7 +222,12 @@ export default function ParseAdminOption() {
 			>
 				{loading ? (
 					<>
-						<LinearProgress value={progress} variant="determinate" />
+						<LinearProgress
+							value={progress}
+							variant={
+								apiStateUploading.loading ? 'indeterminate' : 'determinate'
+							}
+						/>
 					</>
 				) : (
 					<Box>
