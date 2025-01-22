@@ -52,19 +52,6 @@ function List() {
 					<Typography variant="h4" strong>
 						Seznam všech písní
 					</Typography>
-					{/* {nextExists && (
-						<Box
-							flex={1}
-							display={'flex'}
-							sx={{
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<Gap horizontal value={2} />
-							<CircularProgress color="inherit" size={'2rem'} thickness={4} />
-						</Box>
-					)} */}
 				</Box>
 				<Pager data={getPageData} allCount={count || 0} take={countPerPage}>
 					{(data, loading, startIndex) => {

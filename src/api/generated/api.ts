@@ -39,6 +39,19 @@ export interface AddFavouriteInDto {
 /**
  * 
  * @export
+ * @interface AddFileToParseQueueOutDto
+ */
+export interface AddFileToParseQueueOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddFileToParseQueueOutDto
+     */
+    'id': string;
+}
+/**
+ * 
+ * @export
  * @interface AddNoteToVariantInDto
  */
 export interface AddNoteToVariantInDto {
@@ -6311,6 +6324,86 @@ export const ParserApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        parserControllerGetJobResult: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('parserControllerGetJobResult', 'id', id)
+            const localVarPath = `/parser/get-job-result`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        parserControllerGetJobStatus: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('parserControllerGetJobStatus', 'id', id)
+            const localVarPath = `/parser/get-job-status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6387,6 +6480,30 @@ export const ParserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async parserControllerGetJobResult(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParserSongDataResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.parserControllerGetJobResult(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ParserApi.parserControllerGetJobResult']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async parserControllerGetJobStatus(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.parserControllerGetJobStatus(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ParserApi.parserControllerGetJobStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6401,7 +6518,7 @@ export const ParserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async parserControllerParse(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParserSongDataResult>> {
+        async parserControllerParse(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddFileToParseQueueOutDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.parserControllerParse(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ParserApi.parserControllerParse']?.[localVarOperationServerIndex]?.url;
@@ -6419,6 +6536,24 @@ export const ParserApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        parserControllerGetJobResult(id: string, options?: any): AxiosPromise<ParserSongDataResult> {
+            return localVarFp.parserControllerGetJobResult(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        parserControllerGetJobStatus(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.parserControllerGetJobStatus(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6430,7 +6565,7 @@ export const ParserApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        parserControllerParse(options?: any): AxiosPromise<ParserSongDataResult> {
+        parserControllerParse(options?: any): AxiosPromise<AddFileToParseQueueOutDto> {
             return localVarFp.parserControllerParse(options).then((request) => request(axios, basePath));
         },
     };
@@ -6443,6 +6578,28 @@ export const ParserApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class ParserApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ParserApi
+     */
+    public parserControllerGetJobResult(id: string, options?: RawAxiosRequestConfig) {
+        return ParserApiFp(this.configuration).parserControllerGetJobResult(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ParserApi
+     */
+    public parserControllerGetJobStatus(id: string, options?: RawAxiosRequestConfig) {
+        return ParserApiFp(this.configuration).parserControllerGetJobStatus(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.

@@ -1,13 +1,14 @@
 'use client'
 import {
+	AddFileToParseQueueOutDto,
 	ParserApiAxiosParamCreator,
 	ParserSongDataResult,
 } from '@/api/generated'
 import { getUrl } from '@/api/urls'
+import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
-import { Box, Button, LinearProgress, Typography } from '@/common/ui'
-import { Chip } from '@/common/ui/mui'
+import { Box, Button, Chip, LinearProgress, Typography } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
@@ -23,6 +24,19 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 
+enum ParserStatus {
+	Queued = 0,
+	Started = 1,
+	Finished = 2,
+	Failed = 3,
+	Unknown = 4,
+}
+
+type ProgressObject = {
+	status: ParserStatus
+	progress: number
+}
+
 const INPUT_ID = 'parse-image-admin-input'
 export default function ParseAdminOption() {
 	const { isAdmin, user, apiConfiguration } = useAuth()
@@ -34,12 +48,18 @@ export default function ParseAdminOption() {
 		}
 	}
 
+	const [progress, setProgress] = useState(0)
+	const [status, setStatus] = useState(ParserStatus.Unknown)
+	const [result, setResult] = useState<ParserSongDataResult | null>(null)
+	const [loading, setLoading] = useState(false)
+
 	const [open, setOpen] = useState(false)
 	const [files, setFiles] = useState<File[] | null>(null)
 
-	const { fetchApiState, apiState } = useApiState<ParserSongDataResult>()
+	const { fetchApiState: fetchUploading, apiState: apiStateUploading } =
+		useApiState<AddFileToParseQueueOutDto>()
 	const { parserApi } = useApi()
-	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!isAdmin()) {
 			throw new Error('User is not admin')
 			return
@@ -54,7 +74,14 @@ export default function ParseAdminOption() {
 		setFiles(files)
 		setOpen(true)
 
-		fetchApiState(async () => parse(files))
+		setLoading(true)
+
+		// Upload
+		const res = await fetchUploading(async () => parse(files))
+
+		// Get stream progress
+		if (!res) return
+		await streamProgress(res.id)
 	}
 
 	const parse = async (files: File[]) => {
@@ -68,7 +95,7 @@ export default function ParseAdminOption() {
 			form.append('file', files[i], files[i].name)
 		}
 
-		const result: ParserSongDataResult = await handleApiCall(
+		const result: AddFileToParseQueueOutDto = await handleApiCall(
 			axios(url, {
 				...parse.options,
 				method: 'POST',
@@ -77,6 +104,41 @@ export default function ParseAdminOption() {
 		)
 
 		return result
+	}
+
+	const streamProgress = async (jobId: string) => {
+		// 1. Get url
+
+		const a = await ParserApiAxiosParamCreator(apiConfiguration)
+		const parse = await a.parserControllerGetJobStatus(jobId)
+		const url = getUrl(parse.url)
+
+		const eventSource = new EventSource(url)
+
+		// Listener pro průběžné hodnoty (např. procenta)
+		eventSource.addEventListener('progress', (event) => {
+			const p: ProgressObject = JSON.parse(fixParserJsonString(event.data))
+			setProgress(p.progress)
+			setStatus(p.status)
+		})
+
+		// Listener pro finální výsledek
+		eventSource.addEventListener('final', (event) => {
+			const result: ParserSongDataResult = JSON.parse(
+				fixParserJsonString(event.data)
+			)
+			setResult(result)
+			eventSource.close()
+
+			setLoading(false)
+		})
+
+		// Listener pro případ chyby
+		eventSource.addEventListener('error', (event) => {
+			console.error('Stream error:', event)
+			eventSource.close()
+			setLoading(false)
+		})
 	}
 
 	const { enqueueSnackbar } = useSnackbar()
@@ -105,6 +167,7 @@ export default function ParseAdminOption() {
 				<input
 					type="file"
 					accept="image/*"
+					aria-hidden
 					multiple
 					onChange={onChange}
 					id={INPUT_ID}
@@ -116,12 +179,22 @@ export default function ParseAdminOption() {
 				onClose={() => setOpen(false)}
 				width={400}
 				title={
-					apiState.loading ? (
-						'Zpracovávání souborů'
+					!result ? (
+						<Box display={'flex'} gap={1}>
+							{status === ParserStatus.Queued
+								? 'Čekání ve frontě'
+								: status === ParserStatus.Started
+								? 'Zpracovávání souborů'
+								: status === ParserStatus.Finished
+								? 'Zpracováno'
+								: status === ParserStatus.Failed
+								? 'Nastala chyba'
+								: 'Unknown'}
+						</Box>
 					) : (
 						<Box display={'flex'} gap={1}>
 							Zpracováno
-							{apiState.data?.usedAi && (
+							{result.usedAi && (
 								<>
 									<Chip
 										label={'S pomocí AI'}
@@ -135,9 +208,9 @@ export default function ParseAdminOption() {
 					)
 				}
 			>
-				{apiState.loading ? (
+				{loading ? (
 					<>
-						<LinearProgress />
+						<LinearProgress value={progress} variant="determinate" />
 					</>
 				) : (
 					<Box>
@@ -148,7 +221,7 @@ export default function ParseAdminOption() {
 							maxHeight={500}
 							overflow={'auto'}
 						>
-							{apiState.data?.sheets.map((a, index) => {
+							{result?.sheets.map((a, index) => {
 								return (
 									<Box
 										key={index}
@@ -198,7 +271,7 @@ export default function ParseAdminOption() {
 				)}
 			</Popup>
 
-			{apiState.data && (
+			{apiStateUploading.data && (
 				<AdminOption
 					icon={<MenuOpen />}
 					title="Otevřít zpracovaná data"
