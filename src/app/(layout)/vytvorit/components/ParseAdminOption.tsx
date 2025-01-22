@@ -70,6 +70,9 @@ export default function ParseAdminOption() {
 			console.log('No files selected')
 			return
 		}
+
+		reset()
+
 		const files = Array.from(fileList)
 		setFiles(files)
 		setOpen(true)
@@ -82,6 +85,13 @@ export default function ParseAdminOption() {
 		// Get stream progress
 		if (!res) return
 		await streamProgress(res.id)
+	}
+
+	const reset = () => {
+		setProgress(0)
+		setStatus(ParserStatus.Unknown)
+		setResult(null)
+		setLoading(false)
 	}
 
 	const parse = async (files: File[]) => {
