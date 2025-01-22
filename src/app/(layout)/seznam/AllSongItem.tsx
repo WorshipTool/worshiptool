@@ -27,6 +27,7 @@ export type AllSongItemProps = {
 export default function AllSongItem({ data: s, index }: AllSongItemProps) {
 	const navigate = useSmartNavigate()
 	const isFavorite = useFavourite(s.packGuid as VariantPackGuid)
+
 	return (
 		<DraggableSong
 			data={{
@@ -54,6 +55,7 @@ export default function AllSongItem({ data: s, index }: AllSongItemProps) {
 					>
 						{s.title}{' '}
 					</Typography>
+
 					{isFavorite && (
 						<Favorite
 							color={'inherit'}
