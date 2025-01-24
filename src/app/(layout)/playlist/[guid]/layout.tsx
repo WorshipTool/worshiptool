@@ -39,12 +39,17 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 		)
 	)
 
-	// Send tick to backend
-	await handleApiCall(
-		playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
-			props.params.guid
+	try {
+		// Send tick to backend
+		await handleApiCall(
+			playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
+				props.params.guid
+			)
 		)
-	)
+	} catch (e) {
+		console.log('Please log-in')
+		// console.error(e)
+	}
 
 	const pathname = await useServerPathname()
 	const afterPlaylist = pathname.split('playlist')[1]
