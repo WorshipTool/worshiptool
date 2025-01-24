@@ -8,7 +8,15 @@ const track = <T extends AnalyticsEventNameType>(
 	eventName: T,
 	data: AnalyticsTrackDataType<T>
 ) => {
-	mixpanel.track(eventName, data)
+	if (!(mixpanel as any).__loaded) {
+		console.error(
+			'MixPanelAnalytics not initialized. Cannot track event',
+			eventName
+		)
+		return
+	} else {
+		mixpanel.track(eventName, data)
+	}
 }
 
 export const Analytics = {

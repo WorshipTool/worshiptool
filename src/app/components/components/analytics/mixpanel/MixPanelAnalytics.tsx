@@ -3,11 +3,15 @@ import useAuth from '@/hooks/auth/useAuth'
 import { ROLES } from '@/interfaces/user'
 import mixpanel from 'mixpanel-browser'
 import { useEffect } from 'react'
+
+let initialized = false
+
 export default function MixPanelAnalytics() {
 	const { user } = useAuth()
 
 	useEffect(() => {
 		mixpanel.init('24badb161d131f1852a9a1e527030e04')
+		initialized = true
 	}, [])
 
 	useEffect(() => {
