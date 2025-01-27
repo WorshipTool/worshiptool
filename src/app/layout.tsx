@@ -46,8 +46,9 @@ export default function RootLayout({
 						<PopupProvider />
 						<DragTemplatesContainer />
 						<AdminOptionsProvider />
+
+						<UnavailableMessage />
 					</AppProviders>
-					<UnavailableMessage />
 				</AppRouterCacheProvider>
 			</body>
 		</html>

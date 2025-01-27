@@ -1,22 +1,23 @@
 'use client'
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import ToolPanel from '@/app/(layout)/vytvorit/napsat/components/ToolPanel'
+import WrittenPreview from '@/app/(layout)/vytvorit/napsat/components/WrittenPreview'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, Button, Tooltip, Typography } from '@/common/ui'
-import { InputBase, Switch, styled } from '@/common/ui/mui'
+import { useDownSize } from '@/common/hooks/useDownSize'
+import { Box, Button, Tooltip } from '@/common/ui'
+import { InputBase, styled } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
-import DefaultStyle from '../../../../common/components/SheetDisplay/styles/DefaultStyle'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../tech/ApiState'
 import { handleApiCall } from '../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../tech/sheet.tech'
-import ToolPanel from './ToolPanel'
 import NotValidWarning from './components/NotValidWarning'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -43,13 +44,13 @@ function Create() {
 		apiState: { loading: posting, error },
 	} = useApiState<PostCreateVariantOutDto>()
 
-	const [preview, setPreview] = useState(false)
-
 	const sheetInputRef: any = useRef(null)
 	const titleInputRef: any = useRef(null)
 
 	const [title, setTitle] = useState('')
 	const [sheetData, setSheetData] = useState('')
+
+	const cursorRef = useRef<{ start: number; end: number } | null>() // Ref pro uchování pozice kurzoru
 
 	const navigate = useSmartNavigate()
 
@@ -102,46 +103,44 @@ function Create() {
 		setSheetData(
 			textBeforeCursorPosition + textToInsert + textAfterCursorPosition
 		)
-		target.focus()
+
+		const pos = target.selectionEnd + textToInsert.length
+		cursorRef.current = {
+			start: pos,
+			end: pos,
+		}
 	}
 
 	const newChord = () => {
 		const target = sheetInputRef.current
-		let textToInsert = '[C]'
-		let cursorPosition = target.selectionStart
-		let textBeforeCursorPosition = target.value.substring(0, cursorPosition)
-		let textAfterCursorPosition = target.value.substring(
-			cursorPosition,
-			target.value.length
-		)
-		setSheetData(
-			textBeforeCursorPosition + textToInsert + textAfterCursorPosition
-		)
-		target.focus()
-	}
+		if (!target) return
 
-	const keysHandler = useCallback((event: any) => {
-		if (event.altKey === true) {
-			if (event.key === 'c') {
-				newChord()
-			}
+		const textToInsert = '[C]'
+		const cursorPosition = target.selectionStart
+		const textBefore = sheetData.substring(0, cursorPosition)
+		const textAfter = sheetData.substring(cursorPosition)
+		const newValue = textBefore + textToInsert + textAfter
 
-			if (event.key === 'v') {
-				newSection('V')
-			}
-			if (event.key === 'r') {
-				newSection('R')
-			}
-			if (event.key === 'b') {
-				newSection('B')
-			}
+		setSheetData(newValue)
+
+		// Nastavení pozice kurzoru na 'C'
+		cursorRef.current = {
+			start: cursorPosition + 1, // Pozice 'C'
+			end: cursorPosition + 2, // Za 'C'
 		}
-	}, [])
-
-	const onImport = (title: string, data: string) => {
-		setTitle(title)
-		setSheetData(data)
 	}
+
+	useLayoutEffect(() => {
+		if (cursorRef.current !== null) {
+			const target = sheetInputRef.current
+			if (cursorRef.current)
+				target.setSelectionRange(cursorRef.current.start, cursorRef.current.end)
+			target.focus()
+			cursorRef.current = null // Resetování ref po nastavení kurzoru
+		}
+	}, [sheetData])
+
+	const isSmall = useDownSize('sm')
 
 	return (
 		<>
@@ -155,72 +154,53 @@ function Create() {
 						alignItems: 'center',
 					}}
 				>
-					<ContainerGrid direction="column">
-						<Box display={'flex'} padding={1} paddingLeft={0}>
-							<Box flex={1} display={'flex'} alignItems={'center'}>
-								{/* <ImportButton onLoad={onImport}/> */}
-								<Gap horizontal />
-							</Box>
-							<Box display={'flex'} justifyContent={'end'} padding={1}>
-								<Typography
-									sx={{
-										display: 'flex',
-										alignItems: 'center',
-									}}
-								>
-									Náhled
-								</Typography>
-								<Switch
-									size="small"
-									checked={preview}
+					<ContainerGrid
+						direction="column"
+						sx={{
+							marginTop: 4,
+						}}
+					>
+						<StyledContainer
+							sx={{
+								display: 'flex',
+								flexDirection: isSmall ? 'column' : 'row',
+								gap: 1,
+							}}
+						>
+							<Box display={'flex'} flexDirection={'column'} flex={1}>
+								<TitleInput
+									placeholder="Zadejte název písně"
+									inputRef={titleInputRef}
+									value={title}
 									onChange={(e) => {
-										setPreview((p) => !p)
+										setTitle(e.target.value)
 									}}
 								/>
-							</Box>
-						</Box>
-
-						{!preview ? (
-							<StyledContainer>
-								<Box display={'flex'} flexDirection={'column'} flex={1}>
-									<TitleInput
-										placeholder="Zadejte název písně"
-										inputRef={titleInputRef}
-										value={title}
-										onChange={(e) => {
-											setTitle(e.target.value)
-										}}
-									/>
-
-									<SheetInput
-										placeholder="Zde je místo pro obsah písně..."
-										inputRef={sheetInputRef}
-										multiline
-										value={sheetData}
-										onChange={(e) => {
-											setSheetData(e.target.value)
-										}}
-										onKeyDown={keysHandler}
-									/>
-								</Box>
-
-								<ToolPanel onNewSection={newSection} onNewChord={newChord} />
-							</StyledContainer>
-						) : (
-							<StyledContainer flexDirection={'column'}>
-								{title == '' && sheet.getSections().length == 0 && (
-									<Typography sx={{ color: 'grey' }}>
-										Tady uvidite ukazku...
-									</Typography>
-								)}
-								<DefaultStyle
-									title={title}
-									sheet={sheet}
-									columns={1}
-									hideChords={false}
+								<SheetInput
+									placeholder="Zde je místo pro obsah písně..."
+									inputRef={sheetInputRef}
+									multiline
+									value={sheetData}
+									onChange={(e) => {
+										setSheetData(e.target.value)
+									}}
 								/>
-							</StyledContainer>
-						)}
+								<Box flex={1} />
+								<ToolPanel onNewSection={newSection} onNewChord={newChord} />
+							</Box>
+							<Box
+								flex={1}
+								sx={{
+									bgcolor: 'grey.200',
+									padding: 3,
+									borderRadius: 2,
+								}}
+							>
+								<WrittenPreview sheet={sheet} title={title} />
+							</Box>
+
+							{/* <ToolPanel onNewSection={newSection} onNewChord={newChord} /> */}
+						</StyledContainer>
 
 						<Gap />
 						<Box display={'flex'} justifyContent={'start'}>

@@ -1645,7 +1645,7 @@ export interface ParserSongDataResult {
      * @type {boolean}
      * @memberof ParserSongDataResult
      */
-    'usedAi': boolean;
+    'useAi': boolean;
 }
 /**
  * 

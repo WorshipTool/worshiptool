@@ -5,7 +5,7 @@ import { ComponentProps, ReactNode } from 'react'
 type MenuProps = {
 	open: boolean
 	onClose: () => void
-	anchor: HTMLElement | null
+	anchor: Element | null
 	anchorOrigin?: ComponentProps<typeof MuiMenu>['anchorOrigin']
 	transformOrigin?: ComponentProps<typeof MuiMenu>['transformOrigin']
 

@@ -1,7 +1,5 @@
 import BridgeServicesPanel from '@/app/(layout)/ucet/components/AdminPanel/components/BridgeServicesPanel'
 import { Box, Divider } from '@/common/ui'
-import AddPermissionToUser from './components/AddPermissionToUser/AddPermissionToUser'
-import CreateGroupPanel from './components/CreateGroupPanel/CreateGroupPanel'
 import CurrentSongCount from './components/CurrentSongCount'
 import GetToken from './components/GetToken'
 import GetterGraphs from './components/GetterGraphs'
@@ -19,10 +17,6 @@ export default function AdminPanel() {
 				<CurrentSongCount />
 				<Divider />
 				<BridgeServicesPanel />
-				<Divider />
-				<AddPermissionToUser />
-				<Divider />
-				<CreateGroupPanel />
 				<Divider />
 				<GetToken />
 			</Box>
