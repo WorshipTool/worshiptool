@@ -1,7 +1,12 @@
 import { Box } from '@/common/ui'
 import React, { useEffect } from 'react'
-import { EasySheet } from '../page'
 import UploadSheetEditable from './UploadSheetEditable'
+export interface EasySheet {
+	title: string
+	data: string
+	randomHash: string
+	originalFile: File
+}
 
 interface SheetListPreviewProps {
 	sheets: EasySheet[]

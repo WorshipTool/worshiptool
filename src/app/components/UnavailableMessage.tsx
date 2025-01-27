@@ -1,4 +1,5 @@
 'use client'
+import { useFlag } from '@/common/providers/FeatureFlags'
 import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
@@ -10,6 +11,11 @@ export default function UnavailableMessage() {
 	const [isUnvailable, setIsUnvailable] = useState(
 		process.env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE === 'true'
 	)
+
+	const { value: flagEnabled } = useFlag('app_temporarily_unavailable')
+	useEffect(() => {
+		if (flagEnabled) setIsUnvailable(flagEnabled)
+	}, [flagEnabled])
 
 	// if user write on keyboard "please", then set isUnvailable to false
 	useEffect(() => {

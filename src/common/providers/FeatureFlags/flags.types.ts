@@ -1,3 +1,6 @@
-type OtherStringFlag = string
+type ExistingFlags =
+	| 'enable_file_parser'
+	| 'enable_url_parser'
+	| 'app_temporarily_unavailable'
 
-export type FeatureFlag = 'Flag1' | 'Flag2' | 'Flag3'
+export type FeatureFlag = ExistingFlags | String

@@ -17,7 +17,7 @@ export function useFlag(key: FeatureFlag) {
 		return userDtoToConfigCatUser(user)
 	}, [user])
 
-	const data = useFeatureFlag(key, false, userObject)
+	const data = useFeatureFlag(key as string, false, userObject)
 
 	return data
 }

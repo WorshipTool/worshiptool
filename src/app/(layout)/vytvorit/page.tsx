@@ -1,20 +1,14 @@
 'use client'
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import FlagProtected from '@/common/providers/FeatureFlags/FlagProtected'
 import { Box } from '@/common/ui'
 import { Edit, UploadFile } from '@mui/icons-material'
-import { useApi } from '../../../hooks/api/useApi'
 import AddMenuItem from './components/AddMenuItem'
 
 export default SmartPage(AddMenu)
 
 function AddMenu() {
-	const { songAddingApi } = useApi()
-
-	// const [apiState] = useApiStateEffect(() => {
-	// 	return handleApiCall(songAddingApi.songAddingControllerIsParserAvailable())
-	// })
-
 	return (
 		<>
 			<Box
@@ -33,14 +27,14 @@ function AddMenu() {
 						gap: 5,
 					}}
 				>
-					<AddMenuItem
-						disabled
-						// loading={apiState.loading}
-						title="Nahrát soubor"
-						subtitle="Automaticky převeďte píseň z obrázku"
-						icon={<UploadFile fontSize="inherit" />}
-						to="upload"
-					/>
+					<FlagProtected flag={'enable_file_parser'}>
+						<AddMenuItem
+							title="Nahrát soubor"
+							subtitle="Automaticky převeďte píseň z obrázku"
+							icon={<UploadFile fontSize="inherit" />}
+							to="upload"
+						/>
+					</FlagProtected>
 					<AddMenuItem
 						title="Sepsat ručně"
 						// subtitle='Použijte editor pro psaní textu písně'
