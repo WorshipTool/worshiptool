@@ -8,5 +8,7 @@ declare namespace NodeJS {
 		NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE: 'true' | 'false' | undefined
 		NEXT_PUBLIC_DONT_USE_SUBDOMAINS: 'true' | 'false' | undefined
 		NEXT_PUBLIC_DISABLE_WEBSOCKETS: 'true' | 'false' | undefined
+
+		NEXT_PUBLIC_CONFIGCAT_API_KEY: string
 	}
 }

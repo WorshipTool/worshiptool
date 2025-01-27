@@ -13,6 +13,7 @@ import { SnackbarProvider } from 'notistack'
 
 import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/Providers/StableTeamSubdomainProvider'
 import { BottomPanelProvider } from '@/app/providers/BottomPanelProvider'
+import { FeatureFlagsProvider } from '@/common/providers/FeatureFlags'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
 import { FavouritesProvider } from '@/hooks/favourites/useFavourites'
 import { PermissionsProvider } from '@/hooks/permissions/usePermissions'
@@ -35,31 +36,33 @@ export default function AppClientProviders({
 				{/* <BrowserRouter> */}
 				<SubdomainPathnameAliasProvider>
 					<AuthProvider>
-						<PermissionsProvider>
-							<ErrorHandlerProvider>
-								<BottomPanelProvider>
-									<FavouritesProvider>
-										<GroupProvider>
-											<ToolbarProvider>
-												<FooterProvider>
-													<OutsideLinkBlockerProvider>
-														<StableTeamSubdomainProvider>
-															<AppSongSelectSpecifierProvider>
-																<CurrentPlaylistProvider>
-																	<SongDragProvider>
-																		{children}
-																	</SongDragProvider>
-																</CurrentPlaylistProvider>
-															</AppSongSelectSpecifierProvider>
-														</StableTeamSubdomainProvider>
-													</OutsideLinkBlockerProvider>
-												</FooterProvider>
-											</ToolbarProvider>
-										</GroupProvider>
-									</FavouritesProvider>
-								</BottomPanelProvider>
-							</ErrorHandlerProvider>
-						</PermissionsProvider>
+						<FeatureFlagsProvider>
+							<PermissionsProvider>
+								<ErrorHandlerProvider>
+									<BottomPanelProvider>
+										<FavouritesProvider>
+											<GroupProvider>
+												<ToolbarProvider>
+													<FooterProvider>
+														<OutsideLinkBlockerProvider>
+															<StableTeamSubdomainProvider>
+																<AppSongSelectSpecifierProvider>
+																	<CurrentPlaylistProvider>
+																		<SongDragProvider>
+																			{children}
+																		</SongDragProvider>
+																	</CurrentPlaylistProvider>
+																</AppSongSelectSpecifierProvider>
+															</StableTeamSubdomainProvider>
+														</OutsideLinkBlockerProvider>
+													</FooterProvider>
+												</ToolbarProvider>
+											</GroupProvider>
+										</FavouritesProvider>
+									</BottomPanelProvider>
+								</ErrorHandlerProvider>
+							</PermissionsProvider>
+						</FeatureFlagsProvider>
 					</AuthProvider>
 				</SubdomainPathnameAliasProvider>
 				{/* </BrowserRouter> */}
