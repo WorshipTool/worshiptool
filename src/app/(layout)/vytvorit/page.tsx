@@ -24,7 +24,12 @@ function AddMenu() {
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
-						gap: 5,
+						justifyContent: 'center',
+						flexWrap: 'wrap',
+						gap: {
+							xs: 2,
+							sm: 5,
+						},
 					}}
 				>
 					<FlagProtected flag={'enable_file_parser'}>
