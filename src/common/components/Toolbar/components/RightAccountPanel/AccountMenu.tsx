@@ -41,7 +41,7 @@ export default function AccountMenu({
 			}}
 		>
 			<Link to="account" params={{}}>
-				<MenuItem>
+				<MenuItem onClick={onClose}>
 					<ListItemText
 						primary={user?.firstName + ' ' + user?.lastName}
 						secondary={'Spravovat účet'}
@@ -51,32 +51,7 @@ export default function AccountMenu({
 			<Gap value={0.5} />
 			<Divider />
 			<Gap value={0.5} />
-			{/* <Link to="usersPlaylists" params={{}}>
-				<MenuItem>
-					<ListItemIcon>
-						<MenuSharp />
-					</ListItemIcon>
-					Playlisty
-				</MenuItem>
-			</Link>
-			<Link to="usersSongs" params={{}}>
-				<MenuItem>
-					<ListItemIcon>
-						<LibraryMusic />
-					</ListItemIcon>
-					Moje písně
-				</MenuItem>
-			</Link> */}
-
-			{/* <Gap value={0.5} />
-			<Divider />
-			<Gap value={0.5} /> */}
-			<MenuItem onClick={onLogoutClick}>
-				{/* <ListItemIcon>
-					<Logout />
-				</ListItemIcon> */}
-				Odhlásit se
-			</MenuItem>
+			<MenuItem onClick={onLogoutClick}>Odhlásit se</MenuItem>
 		</Menu>
 	)
 }
