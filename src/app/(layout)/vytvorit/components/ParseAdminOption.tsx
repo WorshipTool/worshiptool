@@ -206,7 +206,7 @@ export default function ParseAdminOption() {
 					) : (
 						<Box display={'flex'} gap={1}>
 							Zpracováno
-							{result.usedAi && (
+							{result.useAi && (
 								<>
 									<Chip
 										label={'S pomocí AI'}
