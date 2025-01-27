@@ -103,7 +103,12 @@ function Create() {
 		setSheetData(
 			textBeforeCursorPosition + textToInsert + textAfterCursorPosition
 		)
-		target.focus()
+
+		const pos = target.selectionEnd + textToInsert.length
+		cursorRef.current = {
+			start: pos,
+			end: pos,
+		}
 	}
 
 	const newChord = () => {
