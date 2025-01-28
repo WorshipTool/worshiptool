@@ -181,7 +181,11 @@ const DefaultStyle: SheetStyleComponentType = ({
 	hideChords,
 }) => {
 	const sections = useMemo(() => {
-		return sheet?.getSections() || []
+		const r = sheet?.getSections() || []
+		if (r.length == 0) {
+			r.push(new Section(''))
+		}
+		return r
 	}, [sheet])
 
 	return (
