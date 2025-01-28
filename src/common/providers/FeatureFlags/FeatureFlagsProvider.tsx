@@ -4,14 +4,13 @@ import {
 	createConsoleLogger,
 	LogLevel,
 } from 'configcat-react'
-import { isDevelopment } from '../../../tech/development.tech'
 
 type Props = {
 	children: React.ReactNode
 }
 
 export function FeatureFlagsProvider(props: Props) {
-	const logger = isDevelopment ? createConsoleLogger(LogLevel.Info) : undefined
+	const logger = createConsoleLogger(LogLevel.Error)
 	return (
 		<>
 			<ConfigCatProvider sdkKey={configcatApiKey} options={{ logger }}>
