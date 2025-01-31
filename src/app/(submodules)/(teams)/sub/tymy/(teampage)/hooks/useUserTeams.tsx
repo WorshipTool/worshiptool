@@ -13,7 +13,7 @@ export default function useUserTeams() {
 		const result = await handleApiCall(
 			teamMembersApi.teamMemberControllerGetTeamsOfUser()
 		)
-		return result.teams
+		return result.teams.sort((a, b) => a.name.localeCompare(b.name))
 	}, [teamMembersApi, user])
 
 	// Reload when team logo changes

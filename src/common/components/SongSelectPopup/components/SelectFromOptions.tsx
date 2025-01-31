@@ -46,7 +46,7 @@ export default function SelectFromOptions(props: SelectFromOptionsProps) {
 				const isSelected = i === selected
 				const focused = selectedFocused && isSelected
 				return (
-					<>
+					<Box key={option.label} display={'flex'} flexDirection={'row'}>
 						{focused && (
 							<Box
 								sx={{
@@ -66,7 +66,6 @@ export default function SelectFromOptions(props: SelectFromOptionsProps) {
 							</Box>
 						)}
 						<Box
-							key={option.label}
 							onClick={() => onChange(i)}
 							sx={{
 								cursor: 'pointer',
@@ -100,7 +99,7 @@ export default function SelectFromOptions(props: SelectFromOptionsProps) {
 								</Box>
 							)}
 						</Box>
-					</>
+					</Box>
 				)
 			})}
 		</Box>

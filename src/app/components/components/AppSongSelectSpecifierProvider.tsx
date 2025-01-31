@@ -118,6 +118,7 @@ export default function AppSongSelectSpecifierProvider(
 										{teams?.map((team) => {
 											return (
 												<Button
+													key={team.alias}
 													size="small"
 													variant={
 														selectedTeamAlias === team.alias
