@@ -31,6 +31,7 @@ export type CustomSourceList = {
 	onSearch?: (searchString: string) => void
 	apiState?: ApiState<SongVariantDto[]>
 	showCount?: boolean
+	optionsComponent?: ReactNode
 }
 
 export const SongSelectSpecifierProvider = (props: {

@@ -164,7 +164,6 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 	const onClose = () => {
 		props.onClose?.()
 		setChosen([])
-		setOptionSelected(0)
 		setSearchStringRaw('')
 	}
 
@@ -241,26 +240,9 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 										onChange={setSearchStringRaw}
 									/>
 								</Box>
+
 								<SelectFromOptions
 									options={[
-										// ...(selectSpecifier.disableGlobal
-										// 	? []
-										// 	: [
-										// 			{
-										// 				label: 'Z globálního zpěvníku',
-										// 			},
-										// 	  ]),
-										// ...(selectSpecifier.disableUsers
-										// 	? []
-										// 	: [
-										// 			{
-										// 				label: 'Z mých písní',
-										// 				count:
-										// 					searchString.length === 0
-										// 						? undefined
-										// 						: usersApiState?.data?.length || 0,
-										// 			},
-										// 	  ]),
 										...selectSpecifier.custom.map((c) => {
 											return {
 												label: c.label,
@@ -269,6 +251,7 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 													: searchString.length === 0
 													? undefined
 													: c.apiState?.data?.length || 0,
+												optionsComponent: c.optionsComponent,
 											}
 										}),
 									]}
