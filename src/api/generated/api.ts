@@ -3823,6 +3823,12 @@ export interface TeamOfUserDto {
      * @memberof TeamOfUserDto
      */
     'logoGuid': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamOfUserDto
+     */
+    'selectionGuid': string;
 }
 /**
  * 

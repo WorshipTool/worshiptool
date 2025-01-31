@@ -1,11 +1,16 @@
 'use client'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
+import { TeamOfUserDto } from '@/api/generated'
+import useUserTeams from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
 import { SongSelectSpecifierProvider } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
+import { Box, Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
+import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 type AppSongSelectSpecifierProviderProps = {
 	children: React.ReactNode
@@ -14,7 +19,7 @@ export default function AppSongSelectSpecifierProvider(
 	props: AppSongSelectSpecifierProviderProps
 ) {
 	const [searchString, setSearchString] = React.useState('')
-	const { songGettingApi } = useApi()
+	const { songGettingApi, teamGettingApi } = useApi()
 	const { user } = useAuth()
 
 	const [globalApiState] = useApiStateEffect(async () => {
@@ -41,6 +46,46 @@ export default function AppSongSelectSpecifierProvider(
 		})
 	}, [searchString, user])
 
+	const { teams } = useUserTeams()
+	const [selectedTeamAlias, setSelectedTeamAlias] = useState<string | null>(
+		null
+	)
+
+	const playlist = usePlaylistsGeneral()
+
+	const [teamApiState] = useApiStateEffect(async () => {
+		if (!selectedTeamAlias) {
+			return []
+		}
+
+		const selectionGuid = teams?.find(
+			(t) => t.alias === selectedTeamAlias
+		)?.selectionGuid
+		if (!selectionGuid) {
+			throw new Error('Selection guid not found - fix this, not necessary')
+			return []
+		}
+
+		const result = await playlist.searchInPlaylistByGuid(
+			selectionGuid as PlaylistGuid,
+			searchString
+		)
+
+		return result.items.map((v) => {
+			return mapSongVariantDataOutDtoToSongVariantDto(v.variant)
+		})
+	}, [selectedTeamAlias, searchString])
+
+	useEffect(() => {
+		if (teams) {
+			setSelectedTeamAlias(teams[0]?.alias)
+		}
+	}, [teams])
+
+	const onTeamClick = (team: TeamOfUserDto) => {
+		setSelectedTeamAlias(team.alias)
+	}
+
 	return (
 		<SongSelectSpecifierProvider
 			customSourceList={[
@@ -55,6 +100,50 @@ export default function AppSongSelectSpecifierProvider(
 					showCount: true,
 					onSearch: setSearchString,
 				},
+				...(teams && teams?.length > 0
+					? [
+							{
+								label: 'Z týmového zpěvníku',
+								onSearch: setSearchString,
+								apiState: teamApiState,
+								optionsComponent: (
+									<Box
+										display={'flex'}
+										flexDirection={'row'}
+										gap={1}
+										sx={{
+											overflowX: 'auto',
+										}}
+									>
+										{teams?.map((team) => {
+											return (
+												<Button
+													key={team.alias}
+													size="small"
+													variant={
+														selectedTeamAlias === team.alias
+															? 'contained'
+															: 'outlined'
+													}
+													color={
+														selectedTeamAlias === team.alias
+															? 'primarygradient'
+															: 'primary'
+													}
+													onClick={() => onTeamClick(team)}
+													sx={{
+														height: '24px',
+													}}
+												>
+													{team.name}
+												</Button>
+											)
+										})}
+									</Box>
+								),
+							},
+					  ]
+					: []),
 			]}
 		>
 			{props.children}
