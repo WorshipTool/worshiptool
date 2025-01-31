@@ -263,25 +263,6 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 							<Box>
 								{options[optionSelected] && (
 									<>
-										{/* {options[optionSelected].label ===
-											'Z globálního zpěvníku' && (
-											<PopupSongList
-												onSongSelect={onSongSelect}
-												onSongDeselect={onSongDeselect}
-												selectedSongs={chosen.map((v) => v.guid)}
-												apiState={globalApiState}
-												multiselect={multiselect}
-											/>
-										)}
-										{options[optionSelected].label === 'Z mých písní' && (
-											<PopupSongList
-												onSongSelect={onSongSelect}
-												onSongDeselect={onSongDeselect}
-												selectedSongs={chosen.map((v) => v.guid)}
-												apiState={usersApiState}
-												multiselect={multiselect}
-											/>
-										)} */}
 										{selectSpecifier.custom.map((c, i) => {
 											if (options[optionSelected].label === c.label) {
 												return (
