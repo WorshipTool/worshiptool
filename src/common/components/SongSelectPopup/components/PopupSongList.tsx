@@ -46,9 +46,10 @@ export default function PopupSongList(props: GlobalSongListProps) {
 			{!props.apiState.loading && props.items.length === 0 && (
 				<Box
 					bgcolor={'grey.300'}
-					padding={1}
+					padding={2}
 					sx={{
 						userSelect: 'none',
+						borderRadius: 2,
 					}}
 					flex={1}
 				>

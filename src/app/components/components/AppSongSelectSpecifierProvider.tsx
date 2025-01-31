@@ -1,6 +1,7 @@
 'use client'
 import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
 import { TeamOfUserDto } from '@/api/generated'
+import { useCurrentTeam } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import useUserTeams from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
 import { SongSelectSpecifierProvider } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
 import { Box, Button } from '@/common/ui'
@@ -10,11 +11,17 @@ import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 type AppSongSelectSpecifierProviderProps = {
 	children: React.ReactNode
+	teamsOptionLabel?: string
 }
+/**
+ * This provider is used in App Providers and also in TeamClientProviders.
+ * It provides the song selection from global, user and team songs (except the current team).
+ * useCurrentTeam returns null if its used apart from TeamClientProviders.
+ */
 export default function AppSongSelectSpecifierProvider(
 	props: AppSongSelectSpecifierProviderProps
 ) {
@@ -46,7 +53,14 @@ export default function AppSongSelectSpecifierProvider(
 		})
 	}, [searchString, user])
 
-	const { teams } = useUserTeams()
+	const team = useCurrentTeam()
+	const { teams: t } = useUserTeams()
+
+	const teams = useMemo(() => {
+		if (!team) return t
+		return t?.filter((t) => t.alias !== team.alias)
+	}, [t, team])
+
 	const [selectedTeamAlias, setSelectedTeamAlias] = useState<string | null>(
 		null
 	)
@@ -103,7 +117,7 @@ export default function AppSongSelectSpecifierProvider(
 				...(teams && teams?.length > 0
 					? [
 							{
-								label: 'Z týmového zpěvníku',
+								label: props.teamsOptionLabel || 'Z týmového zpěvníku',
 								onSearch: setSearchString,
 								apiState: teamApiState,
 								optionsComponent: (

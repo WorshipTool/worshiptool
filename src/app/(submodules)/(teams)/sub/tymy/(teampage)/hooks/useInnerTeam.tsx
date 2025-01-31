@@ -27,6 +27,13 @@ export function useTeamChecker() {
 	return !Boolean(d.uninitialized)
 }
 
+export function useCurrentTeam() {
+	const d: any = useContext(innerTeamContext)
+
+	if (Boolean(d.uninitialized)) return null
+	return d as Rt
+}
+
 export const InnerTeamProvider = ({
 	children,
 	teamAlias,
