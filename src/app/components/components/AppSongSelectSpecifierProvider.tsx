@@ -6,12 +6,11 @@ import { SongSelectSpecifierProvider } from '@/common/components/SongSelectPopup
 import { Box, Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
-import usePlaylist from '@/hooks/playlist/usePlaylist'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type AppSongSelectSpecifierProviderProps = {
 	children: React.ReactNode
@@ -52,36 +51,30 @@ export default function AppSongSelectSpecifierProvider(
 		null
 	)
 
-	const [teamInfoApiState, reload] = useApiStateEffect(async () => {
-		if (!selectedTeamAlias) {
-			return null
-		}
-		return handleApiCall(
-			teamGettingApi.teamGettingControllerGetTeamBasicInfo(selectedTeamAlias)
-		)
-	}, [selectedTeamAlias])
-
 	const playlist = usePlaylistsGeneral()
 
-	const selectionGuid = (teamInfoApiState.data?.selectionGuid ||
-		'') as PlaylistGuid
+	const [teamApiState] = useApiStateEffect(async () => {
+		if (!selectedTeamAlias) {
+			return []
+		}
 
-	const selection = usePlaylist(selectionGuid)
-	const getData = useCallback(
-		async (searchString: string) => {
-			if (searchString.length > 0)
-				return selection.searchedItems.map((i) => i.variant)
-			return selection.items.map((i) => i.variant)
-		},
-		[selection.items, selection.searchedItems, selection]
-	)
+		const selectionGuid = teams?.find(
+			(t) => t.alias === selectedTeamAlias
+		)?.selectionGuid
+		if (!selectionGuid) {
+			throw new Error('Selection guid not found - fix this, not necessary')
+			return []
+		}
 
-	const onTeamSearch = useCallback(
-		async (searchString: string) => {
-			if (searchString.length > 0) selection.search(searchString)
-		},
-		[selection]
-	)
+		const result = await playlist.searchInPlaylistByGuid(
+			selectionGuid as PlaylistGuid,
+			searchString
+		)
+
+		return result.items.map((v) => {
+			return mapSongVariantDataOutDtoToSongVariantDto(v.variant)
+		})
+	}, [selectedTeamAlias, searchString])
 
 	useEffect(() => {
 		if (teams) {
@@ -111,8 +104,8 @@ export default function AppSongSelectSpecifierProvider(
 					? [
 							{
 								label: 'Z týmového zpěvníku',
-								onSearch: onTeamSearch,
-								getData,
+								onSearch: setSearchString,
+								apiState: teamApiState,
 								optionsComponent: (
 									<Box
 										display={'flex'}
