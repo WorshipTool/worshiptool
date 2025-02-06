@@ -72,11 +72,15 @@ export default function AppSongSelectSpecifierProvider(
 			return []
 		}
 
+		if (!teams) {
+			return []
+		}
+
 		const selectionGuid = teams?.find(
 			(t) => t.alias === selectedTeamAlias
 		)?.selectionGuid
 		if (!selectionGuid) {
-			throw new Error('Selection guid not found - fix this, not necessary')
+			console.error('Selection guid not found - fix this, not necessary')
 			return []
 		}
 
