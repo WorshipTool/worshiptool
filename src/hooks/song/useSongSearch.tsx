@@ -8,10 +8,11 @@ type useSongSearchProps = {
 	searchKey: string
 	page?: number
 	signal?: AbortSignal
+	useSmartSearch?: boolean
 }
 
 export default function useSongSearch() {
-	const { songGettingApi } = useApi()
+	const { songGettingApi, packEmbeddingApi } = useApi()
 	const { user } = useAuth()
 
 	const getSongs = useCallback(
@@ -19,15 +20,25 @@ export default function useSongSearch() {
 			additionalParams: useSongSearchProps
 		): Promise<BasicVariantPack[]> => {
 			try {
-				const result = await handleApiCall(
-					songGettingApi.songGettingControllerGetBySearch(
-						additionalParams.searchKey,
-						additionalParams.page || 0,
-						{
-							signal: additionalParams.signal,
-						}
-					)
-				)
+				const result = !additionalParams.useSmartSearch
+					? await handleApiCall(
+							songGettingApi.songGettingControllerGetBySearch(
+								additionalParams.searchKey,
+								additionalParams.page || 0,
+								{
+									signal: additionalParams.signal,
+								}
+							)
+					  )
+					: await handleApiCall(
+							packEmbeddingApi.packEmbeddingSearchControllerSearch(
+								additionalParams.searchKey,
+								additionalParams.page || 0,
+								{
+									signal: additionalParams.signal,
+								}
+							)
+					  )
 				// Created by user first
 				const ordered = result.sort((a, b) => {
 					if (a.createdByGuid === user?.guid) return -1

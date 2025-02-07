@@ -5,6 +5,7 @@ import {
 	GroupApi,
 	ImagesApi,
 	MailApi,
+	PackEmbeddingApi,
 	ParserApi,
 	PermissionsApi,
 	PlaylistEditingApi,
@@ -53,6 +54,7 @@ export const useApi = () => {
 			imagesApi: new ImagesApi(apiConfiguration),
 			bridgeApi: new BridgeApi(apiConfiguration),
 			parserApi: new ParserApi(apiConfiguration),
+			packEmbeddingApi: new PackEmbeddingApi(apiConfiguration),
 
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),

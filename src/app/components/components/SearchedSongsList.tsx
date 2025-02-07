@@ -16,11 +16,13 @@ import { BasicVariantPack } from '../../../api/dtos'
 
 interface SearchedSongsListProps {
 	searchString: string
+	useSmartSearch?: boolean
 }
 const controller = new AbortController()
 
 const SearchedSongsList = memo(function S({
 	searchString,
+	useSmartSearch,
 }: SearchedSongsListProps) {
 	const loadNextLevelRef = useRef(null)
 
@@ -40,6 +42,7 @@ const SearchedSongsList = memo(function S({
 				searchKey: searchString,
 				page,
 				signal: controller.signal,
+				useSmartSearch,
 			}).then((data) => {
 				const filtered = data.filter((v) => {
 					return !arr.find((s) => s.packGuid == v.packGuid)

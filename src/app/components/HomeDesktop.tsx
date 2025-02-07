@@ -103,11 +103,18 @@ export default function HomeDesktop() {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
-	const SearchList = useMemo(() => {
-		return searchString && <SearchedSongsList searchString={searchString} />
-	}, [searchString])
-
 	const [smartSearch, setSmartSearch] = useState(false)
+
+	const SearchList = useMemo(() => {
+		return (
+			searchString && (
+				<SearchedSongsList
+					searchString={searchString}
+					useSmartSearch={smartSearch}
+				/>
+			)
+		)
+	}, [searchString, smartSearch])
 
 	return (
 		<>
