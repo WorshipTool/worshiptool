@@ -33,7 +33,6 @@ export default function AppSongSelectSpecifierProvider(
 		const result = await handleApiCall(
 			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
 		)
-
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
 		})
@@ -88,7 +87,6 @@ export default function AppSongSelectSpecifierProvider(
 			selectionGuid as PlaylistGuid,
 			searchString
 		)
-
 		return result.items.map((v) => {
 			return mapBasicVariantPackApiToDto(v.pack)
 		})
