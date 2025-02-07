@@ -1,4 +1,4 @@
-import { SongVariantDto } from '@/api/dtos'
+import { BasicVariantPack } from '@/api/dtos'
 import { Box } from '@/common/ui/Box'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { SongCard } from '@/common/ui/SongCard/SongCard'
@@ -6,7 +6,7 @@ import { ComponentProps, useMemo } from 'react'
 
 type SongCardAdditionalProps = {
 	isOver?: boolean
-	data: SongVariantDto
+	data: BasicVariantPack
 	icons: ComponentProps<typeof SongCard>['icons']
 }
 

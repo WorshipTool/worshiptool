@@ -12,7 +12,7 @@ import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
-import { SongVariantDto } from '../../../api/dtos'
+import { BasicVariantPack } from '../../../api/dtos'
 
 interface SearchedSongsListProps {
 	searchString: string
@@ -33,8 +33,8 @@ const SearchedSongsList = memo(function S({
 	const func = useCallback(
 		(
 			page: number,
-			resolve: (a: SongVariantDto[]) => void,
-			arr: SongVariantDto[]
+			resolve: (a: BasicVariantPack[]) => void,
+			arr: BasicVariantPack[]
 		) => {
 			searchSongs({
 				searchKey: searchString,
@@ -42,7 +42,7 @@ const SearchedSongsList = memo(function S({
 				signal: controller.signal,
 			}).then((data) => {
 				const filtered = data.filter((v) => {
-					return !arr.find((s) => s.guid == v.guid)
+					return !arr.find((s) => s.packGuid == v.packGuid)
 				})
 				setLoading(false)
 				setNextLoading(false)
@@ -58,7 +58,7 @@ const SearchedSongsList = memo(function S({
 		data: songs,
 		pagedData: pagedSongs,
 		nextExists,
-	} = usePagination<SongVariantDto>(func)
+	} = usePagination<BasicVariantPack>(func)
 
 	useEffect(() => {
 		setEnableLoadNext(false)

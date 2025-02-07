@@ -18,7 +18,7 @@ export default function TeamPlaylistMiddlePanel() {
 					return a.order - b.order
 				})
 				.map((item, index) => {
-					const parsedAlias = parseVariantAlias(item.variant.packAlias)
+					const parsedAlias = parseVariantAlias(item.pack.packAlias)
 					return (
 						<PlaylistItem
 							key={item.guid}

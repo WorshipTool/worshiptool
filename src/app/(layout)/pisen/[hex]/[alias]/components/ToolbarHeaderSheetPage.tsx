@@ -19,7 +19,7 @@ export default function ToolbarHeaderSheetPage(
 	const isInCurrentPlaylist = useMemo(() => {
 		if (!props.variant) return false
 		return currentPlaylist?.items.some(
-			(v) => v.variant.guid === props.variant.guid
+			(v) => v.pack.packGuid === props.variant.packGuid
 		)
 	}, [currentPlaylist, props.variant])
 

@@ -319,6 +319,73 @@ export type BaseUserInfoOutDtoLoginMethodsEnum = typeof BaseUserInfoOutDtoLoginM
 /**
  * 
  * @export
+ * @interface BasicVariantPackDto
+ */
+export interface BasicVariantPackDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicVariantPackDto
+     */
+    'packGuid': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'packAlias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'sheetData': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BasicVariantPackDto
+     */
+    'public': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BasicVariantPackDto
+     */
+    'verified': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'createdByGuid': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BasicVariantPackDto
+     */
+    'createdByLoader': boolean;
+}
+/**
+ * 
+ * @export
  * @interface CSVLink
  */
 export interface CSVLink {
@@ -816,10 +883,10 @@ export interface GetFavouritesOutDto {
 export interface GetGlobalSongsOutDto {
     /**
      * 
-     * @type {Array<SongVariantDataOutDto>}
+     * @type {Array<BasicVariantPackDto>}
      * @memberof GetGlobalSongsOutDto
      */
-    'variants': Array<SongVariantDataOutDto>;
+    'variants': Array<BasicVariantPackDto>;
 }
 /**
  * 
@@ -1025,10 +1092,10 @@ export interface GetPlaylistsResult {
 export interface GetRandomVariantOutDto {
     /**
      * 
-     * @type {SongVariantDataOutDto}
+     * @type {BasicVariantPackDto}
      * @memberof GetRandomVariantOutDto
      */
-    'variant': SongVariantDataOutDto;
+    'variant': BasicVariantPackDto;
 }
 /**
  * 
@@ -1038,10 +1105,10 @@ export interface GetRandomVariantOutDto {
 export interface GetRecommendedSongsOutDto {
     /**
      * 
-     * @type {Array<SongVariantDataOutDto>}
+     * @type {Array<BasicVariantPackDto>}
      * @memberof GetRecommendedSongsOutDto
      */
-    'variants': Array<SongVariantDataOutDto>;
+    'variants': Array<BasicVariantPackDto>;
 }
 /**
  * 
@@ -1276,10 +1343,10 @@ export interface GetUserPermissionOutDto {
 export interface GetVariantsOfUserOutDto {
     /**
      * 
-     * @type {Array<SongVariantDataOutDto>}
+     * @type {Array<BasicVariantPackDto>}
      * @memberof GetVariantsOfUserOutDto
      */
-    'variants': Array<SongVariantDataOutDto>;
+    'variants': Array<BasicVariantPackDto>;
 }
 /**
  * 
@@ -2028,10 +2095,10 @@ export interface PlaylistItemOutDto {
     'order': number;
     /**
      * 
-     * @type {SongVariantDataOutDto}
+     * @type {BasicVariantPackDto}
      * @memberof PlaylistItemOutDto
      */
-    'variant': SongVariantDataOutDto;
+    'pack': BasicVariantPackDto;
 }
 /**
  * 
@@ -3121,148 +3188,6 @@ export const SongVariantCreatedTypeEnum = {
 } as const;
 
 export type SongVariantCreatedTypeEnum = typeof SongVariantCreatedTypeEnum[keyof typeof SongVariantCreatedTypeEnum];
-
-/**
- * 
- * @export
- * @interface SongVariantDataOutDto
- */
-export interface SongVariantDataOutDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'prefferedTitle': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SongVariantDataOutDto
-     */
-    'titles': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'sheetData': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'sheetText': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'verified': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'createdBy': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'createdByLoader': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof SongVariantDataOutDto
-     */
-    'createdType': SongVariantDataOutDtoCreatedTypeEnum;
-    /**
-     * 
-     * @type {Array<SongDataSource>}
-     * @memberof SongVariantDataOutDto
-     */
-    'sources': Array<SongDataSource>;
-    /**
-     * 
-     * @type {Array<SongDataCreator>}
-     * @memberof SongVariantDataOutDto
-     */
-    'creators': Array<SongDataCreator>;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'alias': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'packGuid': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'inFormat': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'language': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'public': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SongVariantDataOutDto
-     */
-    'deleted': boolean;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SongVariantDataOutDto
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'createdForPlaylistGuid': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'createdAt': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongVariantDataOutDto
-     */
-    'packCreatedAt': string;
-}
-
-export const SongVariantDataOutDtoCreatedTypeEnum = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2
-} as const;
-
-export type SongVariantDataOutDtoCreatedTypeEnum = typeof SongVariantDataOutDtoCreatedTypeEnum[keyof typeof SongVariantDataOutDtoCreatedTypeEnum];
 
 /**
  * 
@@ -6317,6 +6242,317 @@ export class MailApi extends BaseAPI {
      */
     public mailControllerSendTestMail(options?: RawAxiosRequestConfig) {
         return MailApiFp(this.configuration).mailControllerSendTestMail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * PackEmbeddingApi - axios parameter creator
+ * @export
+ */
+export const PackEmbeddingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        embeddingQueueControllerAddAllPacksToGenerate: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/pack-embedding/addAllPacksToGenerate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        embeddingQueueControllerAddPackToGenerate: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('embeddingQueueControllerAddPackToGenerate', 'packGuid', packGuid)
+            const localVarPath = `/pack-embedding/addpacktogenerate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerSearch: async (searchKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchKey' is not null or undefined
+            assertParamExists('packEmbeddingSearchControllerSearch', 'searchKey', searchKey)
+            const localVarPath = `/pack-embedding/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (searchKey !== undefined) {
+                localVarQueryParameter['searchKey'] = searchKey;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} text1 
+         * @param {string} text2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerTestVectorize: async (text1: string, text2: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'text1' is not null or undefined
+            assertParamExists('packEmbeddingSearchControllerTestVectorize', 'text1', text1)
+            // verify required parameter 'text2' is not null or undefined
+            assertParamExists('packEmbeddingSearchControllerTestVectorize', 'text2', text2)
+            const localVarPath = `/pack-embedding/test`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (text1 !== undefined) {
+                localVarQueryParameter['text1'] = text1;
+            }
+
+            if (text2 !== undefined) {
+                localVarQueryParameter['text2'] = text2;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PackEmbeddingApi - functional programming interface
+ * @export
+ */
+export const PackEmbeddingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PackEmbeddingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async embeddingQueueControllerAddAllPacksToGenerate(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.embeddingQueueControllerAddAllPacksToGenerate(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.embeddingQueueControllerAddAllPacksToGenerate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async embeddingQueueControllerAddPackToGenerate(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.embeddingQueueControllerAddPackToGenerate(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.embeddingQueueControllerAddPackToGenerate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async packEmbeddingSearchControllerSearch(searchKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.packEmbeddingSearchControllerSearch(searchKey, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.packEmbeddingSearchControllerSearch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} text1 
+         * @param {string} text2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async packEmbeddingSearchControllerTestVectorize(text1: string, text2: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.packEmbeddingSearchControllerTestVectorize(text1, text2, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.packEmbeddingSearchControllerTestVectorize']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * PackEmbeddingApi - factory interface
+ * @export
+ */
+export const PackEmbeddingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PackEmbeddingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        embeddingQueueControllerAddAllPacksToGenerate(options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.embeddingQueueControllerAddAllPacksToGenerate(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        embeddingQueueControllerAddPackToGenerate(packGuid: string, options?: any): AxiosPromise<string> {
+            return localVarFp.embeddingQueueControllerAddPackToGenerate(packGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerSearch(searchKey: string, options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
+            return localVarFp.packEmbeddingSearchControllerSearch(searchKey, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} text1 
+         * @param {string} text2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerTestVectorize(text1: string, text2: string, options?: any): AxiosPromise<void> {
+            return localVarFp.packEmbeddingSearchControllerTestVectorize(text1, text2, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PackEmbeddingApi - object-oriented interface
+ * @export
+ * @class PackEmbeddingApi
+ * @extends {BaseAPI}
+ */
+export class PackEmbeddingApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
+    public embeddingQueueControllerAddAllPacksToGenerate(options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).embeddingQueueControllerAddAllPacksToGenerate(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
+    public embeddingQueueControllerAddPackToGenerate(packGuid: string, options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).embeddingQueueControllerAddPackToGenerate(packGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} searchKey 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
+    public packEmbeddingSearchControllerSearch(searchKey: string, options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).packEmbeddingSearchControllerSearch(searchKey, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} text1 
+     * @param {string} text2 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
+    public packEmbeddingSearchControllerTestVectorize(text1: string, text2: string, options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).packEmbeddingSearchControllerTestVectorize(text1, text2, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9839,7 +10075,7 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songGettingControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SongVariantDataOutDto>>> {
+        async songGettingControllerGetBySearch(searchKey: string, page: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetBySearch(searchKey, page, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetBySearch']?.[localVarOperationServerIndex]?.url;
@@ -9992,7 +10228,7 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songGettingControllerGetBySearch(searchKey: string, page: number, options?: any): AxiosPromise<Array<SongVariantDataOutDto>> {
+        songGettingControllerGetBySearch(searchKey: string, page: number, options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
             return localVarFp.songGettingControllerGetBySearch(searchKey, page, options).then((request) => request(axios, basePath));
         },
         /**

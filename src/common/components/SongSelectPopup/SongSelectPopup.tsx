@@ -1,4 +1,5 @@
 'use client'
+import { BasicVariantPack } from '@/api/dtos'
 import PopupContainer from '@/common/components/Popup/PopupContainer'
 import PopupSongList from '@/common/components/SongSelectPopup/components/PopupSongList'
 import SelectedPanel from '@/common/components/SongSelectPopup/components/SelectedPanel'
@@ -12,10 +13,7 @@ import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useApiStateEffect } from '@/tech/ApiState'
 import normalizeSearchText from '@/tech/string/normalizeSearchText'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-	SongVariantDto,
-	VariantPackGuid,
-} from '../../../interfaces/variant/songVariant.types'
+import { VariantPackGuid } from '../../../interfaces/variant/songVariant.types'
 import './styles.css'
 
 type PopupProps = {
@@ -73,7 +71,7 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 	}, [searchString])
 
 	const [customApiState, reinvalidate] = useApiStateEffect<
-		SongVariantDto[]
+		BasicVariantPack[]
 	>(async () => {
 		const variants = (
 			await Promise.all(

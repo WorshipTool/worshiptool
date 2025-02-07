@@ -1,22 +1,22 @@
 import { Box, Button, Typography } from '@/common/ui'
 import { TextField } from '@/common/ui/mui'
 import React from 'react'
-import { SongVariantDto } from '../../../../api/dtos'
+import { BasicVariantPack, SongVariantDto } from '../../../../api/dtos'
 import useSongSearch from '../../../../hooks/song/useSongSearch'
 import normalizeSearchText from '../../../../tech/string/normalizeSearchText'
 import OnChangeDelayer from '../../../providers/ChangeDelayer/ChangeDelayer'
 import SongListCards from '../SongListCards/SongListCards'
 
 interface SongSelectProps {
-	onChange?: (a: SongVariantDto | null) => void
-	filter?: (a: SongVariantDto) => boolean
+	onChange?: (a: BasicVariantPack | null) => void
+	filter?: (a: BasicVariantPack) => boolean
 }
 
 export default function SongSelect({ onChange, filter }: SongSelectProps) {
 	const search = useSongSearch()
 	const [value, setValue] = React.useState<string>('')
 
-	const [data, setData] = React.useState<SongVariantDto[]>([])
+	const [data, setData] = React.useState<BasicVariantPack[]>([])
 
 	const [open, setOpen] = React.useState(false)
 
@@ -30,12 +30,6 @@ export default function SongSelect({ onChange, filter }: SongSelectProps) {
 			setData(d)
 			setOpen(data.length > 0)
 		})
-	}
-
-	const onSongClick = (variant: SongVariantDto) => {
-		setChosen(variant)
-		onChange?.(variant)
-		setOpen(false)
 	}
 
 	const onEmptyClick = () => {

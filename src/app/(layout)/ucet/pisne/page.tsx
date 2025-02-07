@@ -14,7 +14,7 @@ import { Typography } from '@/common/ui/Typography'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { useMemo, useState } from 'react'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '../../../../api/dtos'
+import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
 import { useApi } from '../../../../hooks/api/useApi'
 import { handleApiCall } from '../../../../tech/handleApiCall'
 
@@ -34,7 +34,7 @@ function MySongsList() {
 				songGettingApi.songGettingControllerGetSongListOfUser()
 			)
 			const variants = result.variants.map((variant) => {
-				return mapSongVariantDataOutDtoToSongVariantDto(variant)
+				return mapBasicVariantPackApiToDto(variant)
 			})
 			return variants
 		}
@@ -63,19 +63,18 @@ function MySongsList() {
 			(sortOption === 'updatedAt'
 				? filteredVariants?.sort((a, b) => {
 						return (
-							new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+							new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
 						)
 				  })
 				: sortOption === 'createdAt'
 				? filteredVariants?.sort((a, b) => {
 						return (
-							new Date(b.packCreatedAt).getTime() -
-							new Date(a.packCreatedAt).getTime()
+							new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 						)
 				  })
 				: sortOption === 'title'
 				? filteredVariants?.sort((a, b) => {
-						return a.preferredTitle.localeCompare(b.preferredTitle)
+						return a.title.localeCompare(b.title)
 				  })
 				: filteredVariants) || []
 
@@ -157,7 +156,7 @@ function MySongsList() {
 														<MySongItem
 															variant={variant}
 															index={index + startIndex}
-															key={`mysong${variant.guid}`}
+															key={`mysong${variant.packGuid}`}
 															sortKey={sortOption as MySongsOrderOptions}
 															onDelete={reload}
 														/>

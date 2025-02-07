@@ -216,7 +216,7 @@ export default function SelectionList(props: SelectionListProps) {
 							</Box>
 						) : (
 							<>
-								<SongListCards data={itemsArr.map((v) => v.variant)} />
+								<SongListCards data={itemsArr.map((v) => v.pack)} />
 								{itemsArr.length == 0 && stillString !== '' && (
 									<Typography>
 										{`Ve skupině ${name} nebyly nalezeny žádné písně s výrazem "

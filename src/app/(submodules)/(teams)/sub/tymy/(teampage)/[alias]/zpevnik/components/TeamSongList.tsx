@@ -1,4 +1,4 @@
-import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { BasicVariantPack, VariantPackGuid } from '@/api/dtos'
 import SearchFieldTeamZpevnik from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/zpevnik/components/SearchFieldTeamZpevnik'
 import SelectedPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/zpevnik/components/SelectedPanel'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
@@ -31,9 +31,9 @@ export const TeamSongList = (props: Props) => {
 		const items =
 			searchString.length > 0 ? selection.searchedItems : selection.items
 		return items
-			.map((item) => item.variant)
+			.map((item) => item.pack)
 			.sort((a, b) => {
-				return a.preferredTitle.localeCompare(b.preferredTitle)
+				return a.title.localeCompare(b.title)
 			})
 	}, [selection, searchString])
 
@@ -66,7 +66,7 @@ export const TeamSongList = (props: Props) => {
 
 	const filterFunc = useCallback(
 		(pack: VariantPackGuid) => {
-			return !selection.items.some((i) => i.variant.packGuid === pack)
+			return !selection.items.some((i) => i.pack.packGuid === pack)
 		},
 		[selection.items]
 	)
@@ -82,7 +82,7 @@ export const TeamSongList = (props: Props) => {
 		selection.addPacks(packs)
 	}
 
-	const onCardSelect = useCallback((d: SongVariantDto) => {
+	const onCardSelect = useCallback((d: BasicVariantPack) => {
 		setSelected((s) => {
 			if (s.includes(d.packGuid)) return s
 			return [...s, d.packGuid]
@@ -90,7 +90,7 @@ export const TeamSongList = (props: Props) => {
 		setSelectable(true)
 	}, [])
 
-	const onCardDeselect = useCallback((d: SongVariantDto) => {
+	const onCardDeselect = useCallback((d: BasicVariantPack) => {
 		setSelected((s) => {
 			return s.filter((v) => v !== d.packGuid)
 		})
@@ -103,15 +103,14 @@ export const TeamSongList = (props: Props) => {
 
 	const onSongDrop = useCallback(
 		(data: DragSongDto) => {
-			if (selection.items.some((i) => i.variant.packGuid === data.packGuid))
-				return
+			if (selection.items.some((i) => i.pack.packGuid === data.packGuid)) return
 			selection.addPacks([data.packGuid])
 		},
 		[selection]
 	)
 
 	const getCardIcons = useCallback(
-		(variant: SongVariantDto) => {
+		(variant: BasicVariantPack) => {
 			const hasNote = notes.notes.some((n) => n.packGuid === variant.packGuid)
 			return [
 				...(hasNote

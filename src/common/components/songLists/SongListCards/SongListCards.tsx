@@ -3,18 +3,18 @@ import { Masonry } from '@/common/ui/Masonry'
 import { Grid } from '@/common/ui/mui/Grid'
 import { ResponsiveStyleValue } from '@mui/system'
 import { ComponentProps, memo, useCallback, useMemo } from 'react'
-import { SongVariantDto } from '../../../../api/dtos'
+import { BasicVariantPack } from '../../../../api/dtos'
 import { SongCard } from '../../../ui/SongCard'
 
 type CommmonProps = {
-	data: SongVariantDto[]
+	data: BasicVariantPack[]
 	properties?: ComponentProps<typeof SongCard>['properties']
 	cardToLinkProps?: ComponentProps<typeof SongCard>['toLinkProps']
-	onCardClick?: (data: SongVariantDto) => void
+	onCardClick?: (data: BasicVariantPack) => void
 
 	// Selecting
-	onCardSelect?: (data: SongVariantDto) => void
-	onCardDeselect?: (data: SongVariantDto) => void
+	onCardSelect?: (data: BasicVariantPack) => void
+	onCardDeselect?: (data: BasicVariantPack) => void
 	selectable?: boolean
 	cardIcons?: ComponentProps<typeof SongCard>['icons']
 }
@@ -42,7 +42,7 @@ export const SongListCard = memo(function SongListCards({
 	// unique
 	const data = _data
 		.filter((v) => v !== undefined)
-		.filter((v, i, a) => a.findIndex((t) => t.guid === v.guid) === i)
+		.filter((v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i)
 
 	const spacing = 1
 
@@ -69,13 +69,13 @@ export const SongListCard = memo(function SongListCards({
 			v,
 			flexibleHeight = true,
 		}: {
-			v: SongVariantDto
+			v: BasicVariantPack
 			flexibleHeight?: boolean
 		}) => {
 			return (
 				<SongCard
 					data={v}
-					key={v.guid}
+					key={v.packGuid}
 					flexibleHeight={flexibleHeight}
 					toLinkProps={props.cardToLinkProps}
 					properties={props.properties}
@@ -102,7 +102,7 @@ export const SongListCard = memo(function SongListCards({
 		<Grid container columns={{ xs: 1, md: 2, lg: 4, xl: 5 }} spacing={spacing}>
 			{data.map((v) => {
 				return (
-					<Grid item key={v.guid} xs={1}>
+					<Grid item key={v.packGuid} xs={1}>
 						<CommonCard v={v} flexibleHeight={false} />
 					</Grid>
 				)
@@ -111,7 +111,7 @@ export const SongListCard = memo(function SongListCards({
 	) : (
 		<Masonry columns={columns} sx={{}} spacing={spacing}>
 			{data.map((v) => {
-				return <CommonCard v={v} key={v.guid} />
+				return <CommonCard v={v} key={v.packGuid} />
 			})}
 		</Masonry>
 	)

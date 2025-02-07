@@ -42,7 +42,7 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 	const isInSelection = useMemo(() => {
 		return (
 			selection.items.find(
-				(i) => i.variant.packGuid === apiState.data?.packGuid
+				(i) => i.pack.packGuid === apiState.data?.packGuid
 			) !== undefined && apiState.data !== undefined
 		)
 	}, [apiState.data, selection])

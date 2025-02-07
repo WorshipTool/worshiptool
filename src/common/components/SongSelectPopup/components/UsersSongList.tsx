@@ -1,5 +1,5 @@
 'use client'
-import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { BasicVariantPack, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
 import { Box, LinearProgress } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
@@ -11,7 +11,7 @@ type UsersSongListProps = {
 	onSongSelect: (packGuid: VariantPackGuid, songTitle: string) => void
 	onSongDeselect: (packGuid: VariantPackGuid) => void
 	selectedSongs: VariantPackGuid[]
-	apiState: ApiState<SongVariantDto[]>
+	apiState: ApiState<BasicVariantPack[]>
 }
 
 export default function UsersSongList(props: UsersSongListProps) {
@@ -30,14 +30,14 @@ export default function UsersSongList(props: UsersSongListProps) {
 			>
 				{items.map((song) => {
 					const onSelect = () => {
-						props.onSongSelect(song.packGuid, song.preferredTitle)
+						props.onSongSelect(song.packGuid, song.title)
 					}
 					const onDeselect = () => {
 						props.onSongDeselect(song.packGuid)
 					}
 					return (
 						<PopupSongCard
-							key={song.guid}
+							key={song.packGuid}
 							song={song}
 							onSelect={onSelect}
 							onDeselect={onDeselect}

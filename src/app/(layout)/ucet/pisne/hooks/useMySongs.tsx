@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
-	SongVariantDto,
-	mapSongVariantDataOutDtoToSongVariantDto,
+	BasicVariantPack,
+	mapBasicVariantPackApiToDto,
 } from '../../../../../api/dtos'
 import { useApi } from '../../../../../hooks/api/useApi'
 import useAuth from '../../../../../hooks/auth/useAuth'
@@ -9,7 +9,7 @@ import { useApiStateEffect } from '../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 interface IUseMySongs {
-	variants: SongVariantDto[]
+	variants: BasicVariantPack[]
 	loaded: boolean
 }
 
@@ -24,7 +24,7 @@ export default function useMySongs(): IUseMySongs {
 			songGettingApi.songGettingControllerGetSongListOfUser()
 		)
 		return result.variants.map((variant) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(variant)
+			return mapBasicVariantPackApiToDto(variant)
 		})
 	}, [isLoggedIn])
 

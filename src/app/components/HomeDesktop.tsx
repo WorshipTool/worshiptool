@@ -107,6 +107,8 @@ export default function HomeDesktop() {
 		return searchString && <SearchedSongsList searchString={searchString} />
 	}, [searchString])
 
+	const [smartSearch, setSmartSearch] = useState(false)
+
 	return (
 		<>
 			<Box
@@ -197,6 +199,8 @@ export default function HomeDesktop() {
 										gradientBorder={isTop && !phoneVersion}
 										value={searchInputValue}
 										onChange={onSearchValueChange}
+										smartSearch={smartSearch}
+										onSmartSearchChange={setSmartSearch}
 									/>
 								</Grid>
 							</Grid>

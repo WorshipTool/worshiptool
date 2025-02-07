@@ -8,7 +8,7 @@ import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
 import { alpha, styled, useTheme } from '@mui/material'
 import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
-import { SongVariantDto } from '../../../api/dtos'
+import { BasicVariantPack } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { CustomChip } from '../CustomChip/CustomChip'
 import { Link } from '../Link/Link'
@@ -37,17 +37,17 @@ const SONG_CARD_PROPERTIES = [
 ] as const
 type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
-type ToLinkProps = (data: SongVariantDto) => {
+type ToLinkProps = (data: BasicVariantPack) => {
 	to: ComponentProps<typeof Link>['to']
 	params: ComponentProps<typeof Link>['params']
 } | null
 
-type SongCardIconData = (data: SongVariantDto) => {
+type SongCardIconData = (data: BasicVariantPack) => {
 	icon: JSX.Element
 }[]
 
 type SongCardProps = {
-	data: SongVariantDto
+	data: BasicVariantPack
 	flexibleHeight?: boolean
 	properties?: SongCardProperty[]
 	toLinkProps?: ToLinkProps
@@ -73,7 +73,7 @@ export const SongCard = memo(function S({
 		setSelected(props.selected || false)
 	}, [props.selected])
 
-	const createdByYou = user && data.createdBy === user.guid
+	const createdByYou = user && data.createdByGuid === user.guid
 
 	// Generate object from array properties
 	const properties: Record<SongCardProperty, boolean> = useMemo(() => {
@@ -93,7 +93,7 @@ export const SongCard = memo(function S({
 	const showYourPublic = data.public && createdByYou && yourPublicLabelEnabled
 
 	// Title and sheet data to display
-	const title = data.preferredTitle
+	const title = data.title
 	const dataLines = data.sheet.getSections()[0]?.text?.split('\n').slice(0, 4)
 
 	const linkProps = useMemo(() => {

@@ -14,11 +14,11 @@ import { useApiState } from '@/tech/ApiState'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { Delete, KeyboardArrowLeft, MoreHoriz } from '@mui/icons-material'
 import { useState } from 'react'
-import { SongVariantDto } from '../../../../../api/dtos'
+import { BasicVariantPack } from '../../../../../api/dtos'
 import { Link } from '../../../../../common/ui/Link/Link'
 
 interface MySongItemProps {
-	variant: SongVariantDto
+	variant: BasicVariantPack
 	index: number
 
 	sortKey: MySongsOrderOptions
@@ -37,14 +37,14 @@ export default function MySongItem(props: MySongItemProps) {
 
 	const variantParams = {
 		...parseVariantAlias(props.variant.packAlias),
-		title: props.variant.preferredTitle,
+		title: props.variant.title,
 	}
 
 	const showDate =
 		props.sortKey === 'createdAt'
-			? props.variant.packCreatedAt
-			: props.sortKey === 'updatedAt'
 			? props.variant.createdAt
+			: props.sortKey === 'updatedAt'
+			? props.variant.updatedAt
 			: null
 	const showDateString = showDate ? getSmartDateAgoString(showDate) : null
 
@@ -77,7 +77,7 @@ export default function MySongItem(props: MySongItemProps) {
 				data={{
 					packGuid: props.variant.packGuid,
 					alias: props.variant.packAlias,
-					title: props.variant.preferredTitle,
+					title: props.variant.title,
 				}}
 			>
 				<Box
@@ -124,7 +124,7 @@ export default function MySongItem(props: MySongItemProps) {
 										whiteSpace: 'nowrap',
 									}}
 								>
-									{props.variant.preferredTitle}
+									{props.variant.title}
 								</Typography>
 							</Link>
 							<Typography
@@ -235,9 +235,8 @@ export default function MySongItem(props: MySongItemProps) {
 				}
 			>
 				<Typography>
-					Chcete opravdu smazat píseň{' '}
-					<strong>{props.variant.preferredTitle}</strong>? Tato akce je
-					nevratná.
+					Chcete opravdu smazat píseň <strong>{props.variant.title}</strong>?
+					Tato akce je nevratná.
 				</Typography>
 			</Popup>
 		</>

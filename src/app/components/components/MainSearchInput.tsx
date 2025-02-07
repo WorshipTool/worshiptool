@@ -1,6 +1,8 @@
-import { Box, useTheme } from '@/common/ui'
+import { useFlag } from '@/common/providers/FeatureFlags'
+import { Box, IconButton, useTheme } from '@/common/ui'
 import { InputBase } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
+import { AutoAwesome } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { styled } from '@mui/system'
 import { useEffect, useRef, useState } from 'react'
@@ -26,6 +28,8 @@ type MainSearchInputProps = {
 	gradientBorder: boolean
 	value: string
 	onChange: (value: string) => void
+	smartSearch?: boolean
+	onSmartSearchChange?: (value: boolean) => void
 }
 
 export const MAIN_SEARCH_EVENT_NAME = 'search_event_5jh14'
@@ -61,6 +65,9 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 			window.removeEventListener(MAIN_SEARCH_EVENT_NAME, handler)
 		}
 	}, [])
+
+	const { value: showSmartSearch } = useFlag('enable_smart_search')
+
 	return (
 		<div
 			style={{
@@ -82,6 +89,20 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 					value={props.value}
 					inputRef={inputRef}
 				></SearchInput>
+
+				{showSmartSearch && (
+					<>
+						<IconButton
+							color={props.smartSearch ? 'primary.main' : 'grey.400'}
+							size="small"
+							onClick={() => {
+								props.onSmartSearchChange?.(!props.smartSearch)
+							}}
+						>
+							<AutoAwesome fontSize="small" />
+						</IconButton>
+					</>
+				)}
 			</SearchContainer>
 		</div>
 	)

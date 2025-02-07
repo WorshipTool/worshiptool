@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '../../api/dtos'
+import { BasicVariantPack, mapBasicVariantPackApiToDto } from '../../api/dtos'
 import { handleApiCall } from '../../tech/handleApiCall'
 import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
@@ -15,7 +15,9 @@ export default function useSongSearch() {
 	const { user } = useAuth()
 
 	const getSongs = useCallback(
-		async (additionalParams: useSongSearchProps) => {
+		async (
+			additionalParams: useSongSearchProps
+		): Promise<BasicVariantPack[]> => {
 			try {
 				const result = await handleApiCall(
 					songGettingApi.songGettingControllerGetBySearch(
@@ -28,12 +30,12 @@ export default function useSongSearch() {
 				)
 				// Created by user first
 				const ordered = result.sort((a, b) => {
-					if (a.createdBy === user?.guid) return -1
-					if (b.createdBy === user?.guid) return 1
+					if (a.createdByGuid === user?.guid) return -1
+					if (b.createdByGuid === user?.guid) return 1
 					return 0
 				})
 
-				return ordered.map((s) => mapSongVariantDataOutDtoToSongVariantDto(s))
+				return ordered.map((s) => mapBasicVariantPackApiToDto(s))
 			} catch (e) {
 				console.log(e)
 			}

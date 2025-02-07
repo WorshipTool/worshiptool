@@ -1,5 +1,5 @@
 'use client'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
+import { mapBasicVariantPackApiToDto } from '@/api/dtos'
 import { TeamOfUserDto } from '@/api/generated'
 import { useCurrentTeam } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import useUserTeams from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
@@ -35,7 +35,7 @@ export default function AppSongSelectSpecifierProvider(
 		)
 
 		return result.variants.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v)
+			return mapBasicVariantPackApiToDto(v)
 		})
 	}, [searchString])
 
@@ -49,7 +49,7 @@ export default function AppSongSelectSpecifierProvider(
 		)
 
 		return result.variants.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v)
+			return mapBasicVariantPackApiToDto(v)
 		})
 	}, [searchString, user])
 
@@ -90,7 +90,7 @@ export default function AppSongSelectSpecifierProvider(
 		)
 
 		return result.items.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v.variant)
+			return mapBasicVariantPackApiToDto(v.pack)
 		})
 	}, [selectedTeamAlias, searchString])
 

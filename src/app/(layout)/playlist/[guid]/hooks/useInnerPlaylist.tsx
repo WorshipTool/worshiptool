@@ -129,7 +129,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			(i) => !state.items.some((j) => j.guid === i.guid)
 		)
 		for (const item of removedItems) {
-			await playlist.removeVariant(item.variant.packGuid)
+			await playlist.removeVariant(item.pack.packGuid)
 		}
 
 		// Add new items
@@ -137,7 +137,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			(i) => !playlist.items.some((j) => j.guid === i.guid)
 		)
 		for (const item of newItems) {
-			await playlist.addVariant(item.variant.packGuid)
+			await playlist.addVariant(item.pack.packGuid)
 		}
 
 		// Save items order
@@ -161,8 +161,8 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		const changedItems = state.items.filter((i) => {
 			const oldItem = playlist.items.find((j) => j.guid === i.guid)
 			return (
-				oldItem?.variant.preferredTitle !== i.variant.preferredTitle ||
-				oldItem?.variant.sheetData !== i.variant.sheetData
+				oldItem?.pack.title !== i.pack.title ||
+				oldItem?.pack.sheetData !== i.pack.sheetData
 			)
 		})
 		for (const item of changedItems) {
@@ -171,8 +171,8 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 			// 2. Then edit the item
 			await playlist.editItem(item.guid, {
-				title: item.variant.preferredTitle,
-				sheetData: item.variant.sheetData,
+				title: item.pack.title,
+				sheetData: item.pack.sheetData,
 			})
 		}
 
@@ -299,11 +299,11 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			if (i.guid !== itemGuid) return i
 
 			const newItem = { ...i }
-			newItem.variant = { ...i.variant }
-			if (data.title) newItem.variant.preferredTitle = data.title
+			newItem.pack = { ...i.pack }
+			if (data.title) newItem.pack.title = data.title
 			if (data.sheetData) {
-				newItem.variant.sheetData = data.sheetData
-				newItem.variant.sheet = new Sheet(data.sheetData)
+				newItem.pack.sheetData = data.sheetData
+				newItem.pack.sheet = new Sheet(data.sheetData)
 			}
 
 			return newItem

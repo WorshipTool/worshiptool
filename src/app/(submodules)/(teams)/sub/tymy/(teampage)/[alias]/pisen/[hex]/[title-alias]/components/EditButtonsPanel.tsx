@@ -32,7 +32,7 @@ export default function EditButtonsPanel({
 	const { selection, reload, guid: teamGuid, alias: teamAlias } = useInnerTeam()
 
 	const playlistItemGuid = useMemo(() => {
-		return selection.items.find((i) => i.variant.packGuid === variant.packGuid)
+		return selection.items.find((i) => i.pack.packGuid === variant.packGuid)
 			?.guid!
 	}, [selection, variant])
 

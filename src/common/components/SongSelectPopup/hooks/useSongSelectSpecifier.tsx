@@ -1,4 +1,4 @@
-import { SongVariantDto } from '@/api/dtos'
+import { BasicVariantPack } from '@/api/dtos'
 import { ApiState } from '@/tech/ApiState'
 import {
 	ReactNode,
@@ -27,9 +27,9 @@ export const useSongSelectSpecifier = () => {
 
 export type CustomSourceList = {
 	label: string
-	getData?: (searchString: string) => Promise<SongVariantDto[]>
+	getData?: (searchString: string) => Promise<BasicVariantPack[]>
 	onSearch?: (searchString: string) => void
-	apiState?: ApiState<SongVariantDto[]>
+	apiState?: ApiState<BasicVariantPack[]>
 	showCount?: boolean
 	optionsComponent?: ReactNode
 }

@@ -1,7 +1,7 @@
 'use client'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
 
-import { SongVariantDto } from '@/api/dtos'
+import { BasicVariantPack } from '@/api/dtos'
 import FloatingPlaylist from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/FloatingPlaylist/FloatingPlaylist'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamSongList } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/zpevnik/components/TeamSongList'
@@ -16,7 +16,7 @@ export default SmartTeamPage(TeamSongsPage)
 function TeamSongsPage() {
 	const { alias } = useSmartParams('teamSongbook')
 
-	const cardToProps = useCallback((variant: SongVariantDto) => {
+	const cardToProps = useCallback((variant: BasicVariantPack) => {
 		const p = parseVariantAlias(variant.packAlias)
 
 		const to: RoutesKeys = 'teamSong'

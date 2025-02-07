@@ -1,3 +1,4 @@
+import { mapBasicVariantPackApiToDto } from '@/api/dtos/song'
 import { note } from '@pepavlin/sheet-api'
 import { TeamGuid } from '../../../app/(submodules)/(teams)/sub/tymy/tech'
 import PlaylistDto, {
@@ -6,7 +7,6 @@ import PlaylistDto, {
 	PlaylistItemGuid,
 } from '../../../interfaces/playlist/playlist.types'
 import { PlaylistDataOutDto, PlaylistItemOutDto } from '../../generated'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '../variant'
 
 export const mapPlaylistItemOutDtoApiToPlaylistItemDto = (
 	api: PlaylistItemOutDto
@@ -15,7 +15,7 @@ export const mapPlaylistItemOutDtoApiToPlaylistItemDto = (
 		guid: api.guid as PlaylistItemGuid,
 		toneKey: api.toneKey as note,
 		order: api.order,
-		variant: mapSongVariantDataOutDtoToSongVariantDto(api.variant),
+		pack: mapBasicVariantPackApiToDto(api.pack),
 	}
 }
 

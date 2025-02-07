@@ -1,6 +1,6 @@
 import { Box } from '@/common/ui'
 import React, { ReactElement, useState } from 'react'
-import { SongVariantDto } from '../../../../api/dtos'
+import { BasicVariantPack } from '../../../../api/dtos'
 import useGroup from '../../../../hooks/group/useGroup'
 import useGroupSelection from '../../../../hooks/group/useGroupSelection'
 import useSongSearch from '../../../../hooks/song/useSongSearch'
@@ -12,7 +12,10 @@ type SongSearchMethod = 'all' | 'group'
 interface SongSearchProps {
 	searchString: string
 	method?: SongSearchMethod
-	component: (variants: SongVariantDto[], searchString: string) => ReactElement
+	component: (
+		variants: BasicVariantPack[],
+		searchString: string
+	) => ReactElement
 }
 
 export default function SongSearch({
@@ -23,7 +26,7 @@ export default function SongSearch({
 	const search = useSongSearch()
 	const { isOn } = useGroup()
 	const { items: groupItems, search: searchInSelection } = useGroupSelection()
-	const [variants, setVariants] = React.useState<SongVariantDto[]>([])
+	const [variants, setVariants] = React.useState<BasicVariantPack[]>([])
 
 	const [stillString, setStillString] = useState('')
 
@@ -47,10 +50,7 @@ export default function SongSearch({
 				value={normalizeSearchText(searchString)}
 				onChange={onChangeCallback}
 			/>
-			{component(
-				!isOn ? variants : groupItems.map((v) => v.variant),
-				stillString
-			)}
+			{component(!isOn ? variants : groupItems.map((v) => v.pack), stillString)}
 		</Box>
 	)
 }

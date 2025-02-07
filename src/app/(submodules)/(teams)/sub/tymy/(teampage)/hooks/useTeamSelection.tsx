@@ -55,7 +55,7 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 
 		// Remove items from the list
 		selection._setItems((items) =>
-			items.filter((i) => !newItems.includes(i.variant.packGuid))
+			items.filter((i) => !newItems.includes(i.pack.packGuid))
 		)
 	}
 

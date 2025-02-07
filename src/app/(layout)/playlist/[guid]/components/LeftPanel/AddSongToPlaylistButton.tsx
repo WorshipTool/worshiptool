@@ -44,7 +44,7 @@ export default function AddSongToPlaylistButton() {
 	}
 
 	const filterFunc = (pack: VariantPackGuid) => {
-		return !items.some((i) => i.variant.packGuid === pack)
+		return !items.some((i) => i.pack.packGuid === pack)
 	}
 
 	// Auto open
