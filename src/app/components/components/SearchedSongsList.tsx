@@ -52,7 +52,7 @@ const SearchedSongsList = memo(function S({
 				resolve(filtered)
 			})
 		},
-		[searchString, searchSongs]
+		[searchString, searchSongs, useSmartSearch]
 	)
 
 	const {
@@ -85,6 +85,12 @@ const SearchedSongsList = memo(function S({
 		},
 		[]
 	)
+
+	useEffect(() => {
+		loadPage(0, true).then(() => {
+			setEnableLoadNext(true)
+		})
+	}, [useSmartSearch])
 
 	return (
 		<ContainerGrid direction="column">

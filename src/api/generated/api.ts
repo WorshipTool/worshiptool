@@ -6342,6 +6342,10 @@ export const PackEmbeddingApiAxiosParamCreator = function (configuration?: Confi
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (searchKey !== undefined) {
                 localVarQueryParameter['searchKey'] = searchKey;
             }
@@ -6384,6 +6388,10 @@ export const PackEmbeddingApiAxiosParamCreator = function (configuration?: Confi
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (text1 !== undefined) {
                 localVarQueryParameter['text1'] = text1;
