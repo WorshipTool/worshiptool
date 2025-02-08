@@ -92,6 +92,9 @@ const SearchedSongsList = memo(function S({
 		})
 	}, [useSmartSearch])
 
+	const showMoreButton =
+		!loading && songs.length > 0 && (nextExists || useSmartSearch)
+
 	return (
 		<ContainerGrid direction="column">
 			<>
@@ -127,7 +130,7 @@ const SearchedSongsList = memo(function S({
 			)}
 
 			<>
-				{!loading && songs.length > 0 && nextExists && (
+				{showMoreButton && (
 					<>
 						<Box
 							sx={{

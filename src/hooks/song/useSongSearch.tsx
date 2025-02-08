@@ -53,7 +53,7 @@ export default function useSongSearch() {
 
 			return []
 		},
-		[songGettingApi, user]
+		[songGettingApi, user, packEmbeddingApi]
 	)
 
 	return getSongs
