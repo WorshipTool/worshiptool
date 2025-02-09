@@ -10,7 +10,6 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import normalizeSearchText from '@/tech/string/normalizeSearchText'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
@@ -30,6 +29,7 @@ export default function HomeDesktop() {
 
 	// Manage search input, and url state with delay
 	const [searchString, setSearchString] = useUrlState('hledat')
+	// const [searchStringRaw, setSearchStringRaw] = useState(searchString || '')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
 	const onSearchValueChange = useCallback(
@@ -43,7 +43,9 @@ export default function HomeDesktop() {
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') setSearchString(normalizeSearchText(value))
+			if (value !== '') {
+				setSearchString(value)
+			}
 		},
 		[]
 	)
