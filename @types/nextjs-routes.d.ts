@@ -27,8 +27,6 @@ declare module "nextjs-routes" {
     | StaticRoute<"/reset-hesla">
     | DynamicRoute<"/reset-hesla/[token]", { "token": string }>
     | StaticRoute<"/seznam">
-    | DynamicRoute<"/skupina/[groupCode]", { "groupCode": string }>
-    | DynamicRoute<"/skupina/[groupCode]/nastaveni", { "groupCode": string }>
     | StaticRoute<"/storybook">
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>

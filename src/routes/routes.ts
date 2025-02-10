@@ -11,8 +11,6 @@ export const routesPaths = {
 	playlist: '/playlist/[guid]',
 	playlistPrint: '/playlist/[guid]/tisk',
 	playlistCards: '/playlist/[guid]/prezentace',
-	group: '/skupina/[groupCode]',
-	groupSettings: '/skupina/[groupCode]/nastaveni',
 	addMenu: '/vytvorit',
 	upload: '/nahrat',
 	uploadParse: '/nahrat/hledani',
