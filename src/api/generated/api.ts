@@ -891,75 +891,6 @@ export interface GetGlobalSongsOutDto {
 /**
  * 
  * @export
- * @interface GetGroupInfoResult
- */
-export interface GetGroupInfoResult {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupInfoResult
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupInfoResult
-     */
-    'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupInfoResult
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupInfoResult
-     */
-    'selection': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupInfoResult
-     */
-    'payload': string;
-}
-/**
- * 
- * @export
- * @interface GetGroupListItem
- */
-export interface GetGroupListItem {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupListItem
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetGroupListItem
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface GetGroupsCountResult
- */
-export interface GetGroupsCountResult {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetGroupsCountResult
-     */
-    'count': number;
-}
-/**
- * 
- * @export
  * @interface GetJoinCodeOutDto
  */
 export interface GetJoinCodeOutDto {
@@ -1376,43 +1307,6 @@ export interface Graph {
 /**
  * 
  * @export
- * @interface Group
- */
-export interface Group {
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'name': string;
-    /**
-     * 
-     * @type {Playlist}
-     * @memberof Group
-     */
-    'selection': Playlist;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'payload': string;
-}
-/**
- * 
- * @export
  * @interface Image
  */
 export interface Image {
@@ -1612,12 +1506,6 @@ export interface Media {
      * @memberof Media
      */
     'guid': string;
-    /**
-     * 
-     * @type {Song}
-     * @memberof Media
-     */
-    'song': Song;
     /**
      * 
      * @type {number}
@@ -2180,56 +2068,6 @@ export interface PostCreateCopyOutDto {
 /**
  * 
  * @export
- * @interface PostCreateGroupBody
- */
-export interface PostCreateGroupBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupBody
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupBody
-     */
-    'code': string;
-}
-/**
- * 
- * @export
- * @interface PostCreateGroupResult
- */
-export interface PostCreateGroupResult {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupResult
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupResult
-     */
-    'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupResult
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostCreateGroupResult
-     */
-    'selection': string;
-}
-/**
- * 
- * @export
  * @interface PostCreatePlaylistResult
  */
 export interface PostCreatePlaylistResult {
@@ -2673,25 +2511,6 @@ export interface ResetPasswordInDto {
 /**
  * 
  * @export
- * @interface SetGroupPayloadInDto
- */
-export interface SetGroupPayloadInDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof SetGroupPayloadInDto
-     */
-    'guid': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SetGroupPayloadInDto
-     */
-    'payload': string;
-}
-/**
- * 
- * @export
  * @interface SetMemberRoleInDto
  */
 export interface SetMemberRoleInDto {
@@ -2777,12 +2596,6 @@ export interface Song {
      * @memberof Song
      */
     'variantPacks': Array<SongVariantHistoryPack>;
-    /**
-     * 
-     * @type {Array<Media>}
-     * @memberof Song
-     */
-    'media': Array<Media>;
 }
 /**
  * 
@@ -3255,6 +3068,12 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'playlistItems': Array<PlaylistItem>;
+    /**
+     * 
+     * @type {Array<Media>}
+     * @memberof SongVariantHistoryPack
+     */
+    'media': Array<Media>;
     /**
      * 
      * @type {string}
@@ -5293,627 +5112,6 @@ export class DefaultApi extends BaseAPI {
 
 
 /**
- * GroupApi - axios parameter creator
- * @export
- */
-export const GroupApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * The function creates a new group. Only admin users can access this endpoint.
-         * @summary Creates a new group.
-         * @param {PostCreateGroupBody} postCreateGroupBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerCreateGroup: async (postCreateGroupBody: PostCreateGroupBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postCreateGroupBody' is not null or undefined
-            assertParamExists('groupControllerCreateGroup', 'postCreateGroupBody', postCreateGroupBody)
-            const localVarPath = `/group/create`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postCreateGroupBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function deletes a group. Only admin users can access this endpoint.
-         * @summary Deletes a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerDeleteGroup: async (guid?: string, code?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/group`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-            if (code !== undefined) {
-                localVarQueryParameter['code'] = code;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns number of all groups.
-         * @summary Returns number of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetCount: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/groups/count`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns information about a group.
-         * @summary Returns information about a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupInfo: async (guid?: string, code?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/group`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-            if (code !== undefined) {
-                localVarQueryParameter['code'] = code;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns the selection of a group.
-         * @summary Returns the selection of a group.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupSelection: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'guid' is not null or undefined
-            assertParamExists('groupControllerGetGroupSelection', 'guid', guid)
-            const localVarPath = `/group/selection`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (guid !== undefined) {
-                localVarQueryParameter['guid'] = guid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * The function returns a list of all groups. Only admin users can access this endpoint.
-         * @summary Returns a list of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupsList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/groups`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} searchString 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerSearchGroups: async (searchString: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'searchString' is not null or undefined
-            assertParamExists('groupControllerSearchGroups', 'searchString', searchString)
-            const localVarPath = `/search`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (searchString !== undefined) {
-                localVarQueryParameter['searchString'] = searchString;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerUpdateGroupPayload: async (setGroupPayloadInDto: SetGroupPayloadInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'setGroupPayloadInDto' is not null or undefined
-            assertParamExists('groupControllerUpdateGroupPayload', 'setGroupPayloadInDto', setGroupPayloadInDto)
-            const localVarPath = `/payload`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(setGroupPayloadInDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * GroupApi - functional programming interface
- * @export
- */
-export const GroupApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = GroupApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * The function creates a new group. Only admin users can access this endpoint.
-         * @summary Creates a new group.
-         * @param {PostCreateGroupBody} postCreateGroupBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerCreateGroup(postCreateGroupBody: PostCreateGroupBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostCreateGroupResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerCreateGroup(postCreateGroupBody, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerCreateGroup']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * The function deletes a group. Only admin users can access this endpoint.
-         * @summary Deletes a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerDeleteGroup(guid?: string, code?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerDeleteGroup(guid, code, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerDeleteGroup']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * The function returns number of all groups.
-         * @summary Returns number of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerGetCount(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGroupsCountResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetCount(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerGetCount']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * The function returns information about a group.
-         * @summary Returns information about a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerGetGroupInfo(guid?: string, code?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGroupInfoResult>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupInfo(guid, code, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerGetGroupInfo']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * The function returns the selection of a group.
-         * @summary Returns the selection of a group.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerGetGroupSelection(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlaylistDataOutDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupSelection(guid, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerGetGroupSelection']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * The function returns a list of all groups. Only admin users can access this endpoint.
-         * @summary Returns a list of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerGetGroupsList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetGroupListItem>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroupsList(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerGetGroupsList']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} searchString 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Group>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerSearchGroups(searchString, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerSearchGroups']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerUpdateGroupPayload(setGroupPayloadInDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['GroupApi.groupControllerUpdateGroupPayload']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * GroupApi - factory interface
- * @export
- */
-export const GroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = GroupApiFp(configuration)
-    return {
-        /**
-         * The function creates a new group. Only admin users can access this endpoint.
-         * @summary Creates a new group.
-         * @param {PostCreateGroupBody} postCreateGroupBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerCreateGroup(postCreateGroupBody: PostCreateGroupBody, options?: any): AxiosPromise<PostCreateGroupResult> {
-            return localVarFp.groupControllerCreateGroup(postCreateGroupBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function deletes a group. Only admin users can access this endpoint.
-         * @summary Deletes a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerDeleteGroup(guid?: string, code?: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.groupControllerDeleteGroup(guid, code, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns number of all groups.
-         * @summary Returns number of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetCount(options?: any): AxiosPromise<GetGroupsCountResult> {
-            return localVarFp.groupControllerGetCount(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns information about a group.
-         * @summary Returns information about a group.
-         * @param {string} [guid] 
-         * @param {string} [code] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupInfo(guid?: string, code?: string, options?: any): AxiosPromise<GetGroupInfoResult> {
-            return localVarFp.groupControllerGetGroupInfo(guid, code, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns the selection of a group.
-         * @summary Returns the selection of a group.
-         * @param {string} guid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupSelection(guid: string, options?: any): AxiosPromise<PlaylistDataOutDto> {
-            return localVarFp.groupControllerGetGroupSelection(guid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * The function returns a list of all groups. Only admin users can access this endpoint.
-         * @summary Returns a list of all groups.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerGetGroupsList(options?: any): AxiosPromise<Array<GetGroupListItem>> {
-            return localVarFp.groupControllerGetGroupsList(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} searchString 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerSearchGroups(searchString: string, options?: any): AxiosPromise<Array<Group>> {
-            return localVarFp.groupControllerSearchGroups(searchString, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: any): AxiosPromise<void> {
-            return localVarFp.groupControllerUpdateGroupPayload(setGroupPayloadInDto, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * GroupApi - object-oriented interface
- * @export
- * @class GroupApi
- * @extends {BaseAPI}
- */
-export class GroupApi extends BaseAPI {
-    /**
-     * The function creates a new group. Only admin users can access this endpoint.
-     * @summary Creates a new group.
-     * @param {PostCreateGroupBody} postCreateGroupBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerCreateGroup(postCreateGroupBody: PostCreateGroupBody, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerCreateGroup(postCreateGroupBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function deletes a group. Only admin users can access this endpoint.
-     * @summary Deletes a group.
-     * @param {string} [guid] 
-     * @param {string} [code] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerDeleteGroup(guid?: string, code?: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerDeleteGroup(guid, code, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function returns number of all groups.
-     * @summary Returns number of all groups.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerGetCount(options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerGetCount(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function returns information about a group.
-     * @summary Returns information about a group.
-     * @param {string} [guid] 
-     * @param {string} [code] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerGetGroupInfo(guid?: string, code?: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerGetGroupInfo(guid, code, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function returns the selection of a group.
-     * @summary Returns the selection of a group.
-     * @param {string} guid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerGetGroupSelection(guid: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerGetGroupSelection(guid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * The function returns a list of all groups. Only admin users can access this endpoint.
-     * @summary Returns a list of all groups.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerGetGroupsList(options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerGetGroupsList(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} searchString 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerSearchGroups(searchString: string, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerSearchGroups(searchString, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {SetGroupPayloadInDto} setGroupPayloadInDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupApi
-     */
-    public groupControllerUpdateGroupPayload(setGroupPayloadInDto: SetGroupPayloadInDto, options?: RawAxiosRequestConfig) {
-        return GroupApiFp(this.configuration).groupControllerUpdateGroupPayload(setGroupPayloadInDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
  * ImagesApi - axios parameter creator
  * @export
  */
@@ -6324,10 +5522,90 @@ export const PackEmbeddingApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        packEmbeddingControllerComparePack: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('packEmbeddingControllerComparePack', 'packGuid', packGuid)
+            const localVarPath = `/pack-embedding/getPackEmbedding`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         packEmbeddingSearchControllerFindFamily: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'packGuid' is not null or undefined
             assertParamExists('packEmbeddingSearchControllerFindFamily', 'packGuid', packGuid)
             const localVarPath = `/pack-embedding/findFamily`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerFindSimilarPacks: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('packEmbeddingSearchControllerFindSimilarPacks', 'packGuid', packGuid)
+            const localVarPath = `/pack-embedding/findSimilarPacks`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6536,10 +5814,34 @@ export const PackEmbeddingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async packEmbeddingControllerComparePack(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.packEmbeddingControllerComparePack(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.packEmbeddingControllerComparePack']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async packEmbeddingSearchControllerFindFamily(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.packEmbeddingSearchControllerFindFamily(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.packEmbeddingSearchControllerFindFamily']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async packEmbeddingSearchControllerFindSimilarPacks(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.packEmbeddingSearchControllerFindSimilarPacks(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PackEmbeddingApi.packEmbeddingSearchControllerFindSimilarPacks']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -6614,8 +5916,26 @@ export const PackEmbeddingApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        packEmbeddingControllerComparePack(packGuid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.packEmbeddingControllerComparePack(packGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         packEmbeddingSearchControllerFindFamily(packGuid: string, options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
             return localVarFp.packEmbeddingSearchControllerFindFamily(packGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        packEmbeddingSearchControllerFindSimilarPacks(packGuid: string, options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
+            return localVarFp.packEmbeddingSearchControllerFindSimilarPacks(packGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6685,8 +6005,30 @@ export class PackEmbeddingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PackEmbeddingApi
      */
+    public packEmbeddingControllerComparePack(packGuid: string, options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).packEmbeddingControllerComparePack(packGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
     public packEmbeddingSearchControllerFindFamily(packGuid: string, options?: RawAxiosRequestConfig) {
         return PackEmbeddingApiFp(this.configuration).packEmbeddingSearchControllerFindFamily(packGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PackEmbeddingApi
+     */
+    public packEmbeddingSearchControllerFindSimilarPacks(packGuid: string, options?: RawAxiosRequestConfig) {
+        return PackEmbeddingApiFp(this.configuration).packEmbeddingSearchControllerFindSimilarPacks(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10635,6 +9977,333 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongMergingApi - axios parameter creator
+ * @export
+ */
+export const SongMergingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingControllerAutoFindFamily: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songMergingControllerAutoFindFamily', 'packGuid', packGuid)
+            const localVarPath = `/song-merging/autoFindFamily`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} packGuid1 
+         * @param {string} packGuid2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingControllerMergePackFamilies: async (packGuid1: string, packGuid2: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid1' is not null or undefined
+            assertParamExists('songMergingControllerMergePackFamilies', 'packGuid1', packGuid1)
+            // verify required parameter 'packGuid2' is not null or undefined
+            assertParamExists('songMergingControllerMergePackFamilies', 'packGuid2', packGuid2)
+            const localVarPath = `/song-merging/mergepackfamilies`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (packGuid1 !== undefined) {
+                localVarQueryParameter['packGuid1'] = packGuid1;
+            }
+
+            if (packGuid2 !== undefined) {
+                localVarQueryParameter['packGuid2'] = packGuid2;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingQueueControllerAddAllPacksToFindFamily: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song-merging/addallpackstofindfamily`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingQueueControllerAddPackToFindFamily: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songMergingQueueControllerAddPackToFindFamily', 'packGuid', packGuid)
+            const localVarPath = `/song-merging/addpacktofindfamily`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongMergingApi - functional programming interface
+ * @export
+ */
+export const SongMergingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongMergingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songMergingControllerAutoFindFamily(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songMergingControllerAutoFindFamily(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongMergingApi.songMergingControllerAutoFindFamily']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} packGuid1 
+         * @param {string} packGuid2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songMergingControllerMergePackFamilies(packGuid1, packGuid2, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongMergingApi.songMergingControllerMergePackFamilies']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songMergingQueueControllerAddAllPacksToFindFamily(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songMergingQueueControllerAddAllPacksToFindFamily(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongMergingApi.songMergingQueueControllerAddAllPacksToFindFamily']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songMergingQueueControllerAddPackToFindFamily(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songMergingQueueControllerAddPackToFindFamily(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongMergingApi.songMergingQueueControllerAddPackToFindFamily']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongMergingApi - factory interface
+ * @export
+ */
+export const SongMergingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongMergingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingControllerAutoFindFamily(packGuid: string, options?: any): AxiosPromise<string> {
+            return localVarFp.songMergingControllerAutoFindFamily(packGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} packGuid1 
+         * @param {string} packGuid2 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: any): AxiosPromise<void> {
+            return localVarFp.songMergingControllerMergePackFamilies(packGuid1, packGuid2, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingQueueControllerAddAllPacksToFindFamily(options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.songMergingQueueControllerAddAllPacksToFindFamily(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songMergingQueueControllerAddPackToFindFamily(packGuid: string, options?: any): AxiosPromise<string> {
+            return localVarFp.songMergingQueueControllerAddPackToFindFamily(packGuid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongMergingApi - object-oriented interface
+ * @export
+ * @class SongMergingApi
+ * @extends {BaseAPI}
+ */
+export class SongMergingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongMergingApi
+     */
+    public songMergingControllerAutoFindFamily(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongMergingApiFp(this.configuration).songMergingControllerAutoFindFamily(packGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} packGuid1 
+     * @param {string} packGuid2 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongMergingApi
+     */
+    public songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: RawAxiosRequestConfig) {
+        return SongMergingApiFp(this.configuration).songMergingControllerMergePackFamilies(packGuid1, packGuid2, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongMergingApi
+     */
+    public songMergingQueueControllerAddAllPacksToFindFamily(options?: RawAxiosRequestConfig) {
+        return SongMergingApiFp(this.configuration).songMergingQueueControllerAddAllPacksToFindFamily(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongMergingApi
+     */
+    public songMergingQueueControllerAddPackToFindFamily(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongMergingApiFp(this.configuration).songMergingQueueControllerAddPackToFindFamily(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

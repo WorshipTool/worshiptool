@@ -5,7 +5,6 @@ import { ToolbarProvider } from '@/common/components/Toolbar/hooks/useToolbar'
 import ErrorHandlerProvider from '@/common/components/app/providers/ErrorHandlerProvider'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import SongDragProvider from '@/hooks/dragsong/SongDragProvider'
-import { GroupProvider } from '@/hooks/group/useGroup'
 import { CurrentPlaylistProvider } from '@/hooks/playlist/useCurrentPlaylist'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -41,23 +40,21 @@ export default function AppClientProviders({
 								<ErrorHandlerProvider>
 									<BottomPanelProvider>
 										<FavouritesProvider>
-											<GroupProvider>
-												<ToolbarProvider>
-													<FooterProvider>
-														<OutsideLinkBlockerProvider>
-															<StableTeamSubdomainProvider>
-																<AppSongSelectSpecifierProvider>
-																	<CurrentPlaylistProvider>
-																		<SongDragProvider>
-																			{children}
-																		</SongDragProvider>
-																	</CurrentPlaylistProvider>
-																</AppSongSelectSpecifierProvider>
-															</StableTeamSubdomainProvider>
-														</OutsideLinkBlockerProvider>
-													</FooterProvider>
-												</ToolbarProvider>
-											</GroupProvider>
+											<ToolbarProvider>
+												<FooterProvider>
+													<OutsideLinkBlockerProvider>
+														<StableTeamSubdomainProvider>
+															<AppSongSelectSpecifierProvider>
+																<CurrentPlaylistProvider>
+																	<SongDragProvider>
+																		{children}
+																	</SongDragProvider>
+																</CurrentPlaylistProvider>
+															</AppSongSelectSpecifierProvider>
+														</StableTeamSubdomainProvider>
+													</OutsideLinkBlockerProvider>
+												</FooterProvider>
+											</ToolbarProvider>
 										</FavouritesProvider>
 									</BottomPanelProvider>
 								</ErrorHandlerProvider>

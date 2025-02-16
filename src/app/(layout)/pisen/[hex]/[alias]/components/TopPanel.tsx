@@ -1,3 +1,4 @@
+import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
 import AdminOption from '@/common/components/admin/AdminOption'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
@@ -5,13 +6,7 @@ import { Button } from '@/common/ui/Button'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import {
-	DomainVerification,
-	Language,
-	Polyline,
-	Public,
-	PublicOff,
-} from '@mui/icons-material'
+import { Language, Polyline } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
@@ -265,17 +260,7 @@ export default function TopPanel(props: TopPanelProps) {
 				)}
 			</Box>
 
-			<AdminOption
-				label={props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
-				icon={<DomainVerification />}
-				onlyNotification
-			/>
-
-			<AdminOption
-				label={props.variant.public ? 'Píseň je veřejná' : 'Soukromá píseň'}
-				icon={props.variant.public ? <Public /> : <PublicOff />}
-				onlyNotification
-			/>
+			<AllSongAdminOptions />
 
 			{props.variant.public && (
 				<>
