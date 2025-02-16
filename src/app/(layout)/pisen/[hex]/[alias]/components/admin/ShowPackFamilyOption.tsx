@@ -22,7 +22,9 @@ export default function ShowPackFamilyOption() {
 			packEmbeddingApi.packEmbeddingSearchControllerFindFamily(packGuid)
 		)
 
-		return data.map((v) => mapBasicVariantPackApiToDto(v))
+		return data
+			.filter((v) => v.packGuid !== variant.packGuid)
+			.map((v) => mapBasicVariantPackApiToDto(v))
 	}, [variant, packEmbeddingApi])
 
 	return (
