@@ -2,18 +2,18 @@ import Popup from '@/common/components/Popup/Popup'
 import { Button, CircularProgress } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
+import { ExtendedVariantPack } from '@/types/song'
 import { Delete } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import { useSnackbar } from 'notistack'
 import React from 'react'
-import { SongVariantDto } from '../../../../../../../api/dtos'
 import { SongDeletingApi } from '../../../../../../../api/generated'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import { useApiState } from '../../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 interface DeleteButtonProps {
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	reloadSong?: () => void
 	asMenuItem?: boolean
 }
@@ -55,9 +55,7 @@ export default function DeleteButton({
 				)
 			},
 			(result) => {
-				enqueueSnackbar(
-					`Píseň ${(variant.preferredTitle && ' ') || ''}byla smazána.`
-				)
+				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla smazána.`)
 				reloadSong?.()
 
 				// back in history

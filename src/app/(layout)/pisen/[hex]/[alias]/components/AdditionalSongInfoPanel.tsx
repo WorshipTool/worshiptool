@@ -1,6 +1,7 @@
 import { Box, Typography } from '@/common/ui'
 import { Chip } from '@/common/ui/mui'
-import { SongDto, SongVariantDto } from '../../../../../../api/dtos'
+import { ExtendedVariantPack } from '@/types/song'
+import { SongDto } from '../../../../../../api/dtos'
 import YoutubeVideo from '../../../../../../common/components/YoutubeVideo'
 import useAuth from '../../../../../../hooks/auth/useAuth'
 import { MediaTypes } from '../../../../../../interfaces/song/media'
@@ -8,7 +9,7 @@ import { SourcesList } from './SourcesList/SourcesList'
 
 interface AdditionalSongInfoPanelProps {
 	song: SongDto
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 }
 
 export default function AdditionalSongInfoPanel({
@@ -36,9 +37,7 @@ export default function AdditionalSongInfoPanel({
 			) : (
 				<></>
 			)}
-			{variant.sources?.length > 0 && (
-				<SourcesList variant={variant as SongVariantDto} />
-			)}
+			{variant.sources?.length > 0 && <SourcesList variant={variant} />}
 			<Box>
 				{/* RESOURCES */}
 
@@ -61,8 +60,8 @@ export default function AdditionalSongInfoPanel({
 							</>
 						)}
 
-						{/* CREATORS */}
-						{variant.creators.length > 0 && (
+						{/* CREATORS  //TODO*/}
+						{/* {variant.creators.length > 0 && (
 							<>
 								<Typography>Autoři</Typography>
 								<Box display={'flex'} flexDirection={'row'} gap={0.5}>
@@ -71,7 +70,7 @@ export default function AdditionalSongInfoPanel({
 									})}
 								</Box>
 							</>
-						)}
+						)} */}
 					</>
 				) : (
 					<></>

@@ -348,6 +348,12 @@ export interface BasicVariantPackDto {
     'title': string;
     /**
      * 
+     * @type {object}
+     * @memberof BasicVariantPackDto
+     */
+    'songGuid': object;
+    /**
+     * 
      * @type {boolean}
      * @memberof BasicVariantPackDto
      */
@@ -780,6 +786,124 @@ export interface EditVariantOutDto {
      */
     'alias': string;
 }
+/**
+ * 
+ * @export
+ * @interface ExtendedVariantPackDto
+ */
+export interface ExtendedVariantPackDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof ExtendedVariantPackDto
+     */
+    'packGuid': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'packAlias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'sheetData': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof ExtendedVariantPackDto
+     */
+    'songGuid': object;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExtendedVariantPackDto
+     */
+    'public': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExtendedVariantPackDto
+     */
+    'verified': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'createdByGuid': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExtendedVariantPackDto
+     */
+    'createdByLoader': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExtendedVariantPackDto
+     */
+    'deleted': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExtendedVariantPackDto
+     */
+    'inFormat': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ExtendedVariantPackDto
+     */
+    'createdType': ExtendedVariantPackDtoCreatedTypeEnum;
+    /**
+     * 
+     * @type {object}
+     * @memberof ExtendedVariantPackDto
+     */
+    'language': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ExtendedVariantPackDto
+     */
+    'createdForPlaylistGuid': object | null;
+    /**
+     * 
+     * @type {Array<SourceDTO>}
+     * @memberof ExtendedVariantPackDto
+     */
+    'sources': Array<SourceDTO>;
+}
+
+export const ExtendedVariantPackDtoCreatedTypeEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type ExtendedVariantPackDtoCreatedTypeEnum = typeof ExtendedVariantPackDtoCreatedTypeEnum[keyof typeof ExtendedVariantPackDtoCreatedTypeEnum];
+
 /**
  * 
  * @export
@@ -1265,6 +1389,43 @@ export interface GetUserPermissionOutDto {
      * @memberof GetUserPermissionOutDto
      */
     'payload'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetVariantDataOutDto
+ */
+export interface GetVariantDataOutDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof GetVariantDataOutDto
+     */
+    'packGuid': object;
+    /**
+     * 
+     * @type {ExtendedVariantPackDto}
+     * @memberof GetVariantDataOutDto
+     */
+    'main': ExtendedVariantPackDto;
+    /**
+     * 
+     * @type {Array<BasicVariantPackDto>}
+     * @memberof GetVariantDataOutDto
+     */
+    'other': Array<BasicVariantPackDto>;
+    /**
+     * 
+     * @type {Array<SongDataMedia>}
+     * @memberof GetVariantDataOutDto
+     */
+    'media': Array<SongDataMedia>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetVariantDataOutDto
+     */
+    'tags': Array<string>;
 }
 /**
  * 
@@ -9568,6 +9729,46 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songOneGettingControllerGetVariantDataByAlias: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'alias' is not null or undefined
+            assertParamExists('songOneGettingControllerGetVariantDataByAlias', 'alias', alias)
+            const localVarPath = `/variantdatabyalias`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (alias !== undefined) {
+                localVarQueryParameter['alias'] = alias;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -9721,6 +9922,18 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerSearchMySongsInPopup']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songOneGettingControllerGetVariantDataByAlias(alias: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetVariantDataOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songOneGettingControllerGetVariantDataByAlias(alias, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songOneGettingControllerGetVariantDataByAlias']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -9837,6 +10050,15 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          */
         songGettingControllerSearchMySongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
             return localVarFp.songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} alias 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songOneGettingControllerGetVariantDataByAlias(alias: string, options?: any): AxiosPromise<GetVariantDataOutDto> {
+            return localVarFp.songOneGettingControllerGetVariantDataByAlias(alias, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9977,6 +10199,17 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} alias 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songOneGettingControllerGetVariantDataByAlias(alias: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songOneGettingControllerGetVariantDataByAlias(alias, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

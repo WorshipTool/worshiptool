@@ -4,6 +4,7 @@ import CustomMenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, Divider, Typography, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
+import { ExtendedVariantPack } from '@/types/song'
 import {
 	CopyAll,
 	NewReleases,
@@ -15,7 +16,7 @@ import {
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
-import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
+import { SongDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import DeleteButton from './DeleteButton'
 import EditButton from './EditButton'
@@ -25,7 +26,7 @@ interface AddToPlaylistButtonProps {
 	sheet: Sheet
 	song: SongDto
 	reload: () => void
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	onEditClick: (editable: boolean) => void
 	isInEditMode?: boolean
 	editLoading: boolean
@@ -176,7 +177,7 @@ export default function SheetAdminButtons({
 				open={verifyPopupOpen}
 				onClose={() => setVerifyPopupOpen(false)}
 				title="Manuální ověření"
-				subtitle={variant.preferredTitle}
+				subtitle={variant.title}
 				actions={[
 					<Button key={'cancel'} type="reset" size="small" variant="text">
 						Zrušit

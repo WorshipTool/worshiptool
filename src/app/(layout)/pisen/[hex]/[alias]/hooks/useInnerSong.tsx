@@ -1,12 +1,10 @@
 'use client'
 import {
-	mapGetSongDataApiToSongDto,
-	mapSongDataVariantApiToSongVariantDto,
+	mapBasicVariantPackApiToDto,
+	mapGetVariantDataApiToSongDto,
 } from '@/api/dtos'
-import { SongGettingApi } from '@/api/generated'
 import { getVariantByAlias } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerSong>
@@ -47,16 +45,10 @@ export const InnerSongProvider = (props: ProviderProps) => {
 const useProvideInnerSong = (variantAlias: string) => {
 	const [apiState] = useApiStateEffect(async () => {
 		const v = await getVariantByAlias(variantAlias)
-		const variant = v.variants[0]
+		const variant = v.main
 
-		const songGettingApi = new SongGettingApi()
-
-		const data = await handleApiCall(
-			songGettingApi.songGettingControllerGetSongDataByVariantGuid(variant.guid)
-		)
-
-		const song = mapGetSongDataApiToSongDto(data)
-		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
+		const song = mapGetVariantDataApiToSongDto(v)
+		const variantData = mapBasicVariantPackApiToDto(variant)
 
 		return { song, variant: variantData }
 	}, [variantAlias])

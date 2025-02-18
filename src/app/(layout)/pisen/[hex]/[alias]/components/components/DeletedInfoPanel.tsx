@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@/common/ui'
+import { BasicVariantPack } from '@/types/song'
 import { Restore } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { SongVariantDto } from '../../../../../../../api/dtos'
 import { SongDeletingApi } from '../../../../../../../api/generated'
 import { Gap } from '../../../../../../../common/ui/Gap'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
@@ -9,7 +9,7 @@ import { useApiState } from '../../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 interface DeletedInfoPanelProps {
-	variant: SongVariantDto
+	variant: BasicVariantPack
 	reloadSong: () => void
 }
 
@@ -33,9 +33,7 @@ export default function DeletedInfoPanel({
 				)
 			},
 			() => {
-				enqueueSnackbar(
-					`Píseň ${(variant.preferredTitle && ' ') || ''}byla obnovena.`
-				)
+				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla obnovena.`)
 				reloadSong?.()
 			}
 		)

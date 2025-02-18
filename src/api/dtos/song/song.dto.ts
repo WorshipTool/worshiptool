@@ -1,7 +1,6 @@
 import { UserGuid } from '@/interfaces/user'
-import { Sheet } from '@pepavlin/sheet-api'
+import { SongGuid } from '@/types/song'
 import {
-	SongVariantDto,
 	VariantPackAlias,
 	VariantPackGuid,
 } from '../../../interfaces/variant/songVariant.types'
@@ -10,7 +9,7 @@ import { MediaDto } from '../media/MediaDto'
 export type SongDto = {
 	guid: string
 	title: string
-	variants: SongVariantDto[]
+	variants: BasicVariantPack[]
 	media: MediaDto[]
 	tags: string[]
 }
@@ -21,7 +20,8 @@ export type BasicVariantPack = {
 	packAlias: VariantPackAlias
 	title: string
 	sheetData: string
-	sheet: Sheet
+	// sheet: Sheet
+	songGuid: SongGuid
 
 	// Additional info
 	verified: boolean

@@ -1,17 +1,18 @@
 import Menu from '@/common/components/Menu/Menu'
 import { Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
+import { ExtendedVariantPack } from '@/types/song'
 import { MoreVert } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import React, { useState } from 'react'
-import { SongDto, SongVariantDto } from '../../../../../../../api/dtos'
+import { SongDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import DeleteButton from './DeleteButton'
 import SheetAdminButtons from './SheetAdminButtons'
 
 type SongsOptionsButtonProps = {
 	reloadSong: () => void
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	sheet: Sheet
 	song: SongDto
 	isInEditMode?: boolean

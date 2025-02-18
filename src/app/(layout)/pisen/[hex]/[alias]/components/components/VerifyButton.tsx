@@ -1,24 +1,27 @@
 'use client'
-import { SongVariantDto } from '@/api/dtos'
 import { Button } from '@/common/ui'
 import { ButtonGroup } from '@/common/ui/ButtonGroup'
 import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
+import { notImplemented } from '@/tech/development.tech'
+import { BasicVariantPack } from '@/types/song'
 
 type VerifyButtonProps = {
-	variant: SongVariantDto
+	variant: BasicVariantPack
 }
 
 export default function VerifyButton(props: VerifyButtonProps) {
 	const { songPublishingApi } = useApi()
 
 	const setVerify = async (status: boolean | null) => {
-		await handleApiCall(
-			songPublishingApi.songPublishingControllerVerifyVariant({
-				variantGuid: props.variant.guid,
-				verify: status,
-			})
-		)
+		// await handleApiCall(
+		// 	songPublishingApi.songPublishingControllerVerifyVariant({
+		// 		variantGuid: props.variant.guid,
+		// 		verify: status,
+		// 	})
+		// )
+
+		notImplemented()
+
 		window.location.reload()
 	}
 	return (

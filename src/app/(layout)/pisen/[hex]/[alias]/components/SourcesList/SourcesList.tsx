@@ -1,10 +1,10 @@
 import { Box, Typography } from '@/common/ui'
-import { SongVariantDto } from '../../../../../../../api/dtos'
+import { ExtendedVariantPack } from '@/types/song'
 import { Gap } from '../../../../../../../common/ui/Gap'
 import SourceListItem from './SourceListItem'
 
 export type SongPageProps = {
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 }
 export function SourcesList({ variant }: SongPageProps) {
 	return (

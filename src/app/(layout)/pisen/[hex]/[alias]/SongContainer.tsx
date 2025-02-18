@@ -3,9 +3,10 @@ import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNot
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
+import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
-import { SongDto, SongVariantDto } from '../../../../../api/dtos'
+import { SongDto } from '../../../../../api/dtos'
 import SheetDisplay from '../../../../../common/components/SheetDisplay/SheetDisplay'
 import { Gap } from '../../../../../common/ui/Gap'
 import { useRerender } from '../../../../../hooks/useRerender'
@@ -15,7 +16,7 @@ import DeletedInfoPanel from './components/components/DeletedInfoPanel'
 import { SONG_OPTIONS_BUTTON_ID } from './components/components/SongsOptionsButton'
 
 export type SongPageProps = {
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	song: SongDto
 }
 
@@ -24,9 +25,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 		return new Sheet(variant.sheetData)
 	}, [variant.sheetData])
 
-	const title = useMemo(() => {
-		return variant.preferredTitle
-	}, [variant.preferredTitle])
+	const title = variant.title
 
 	const [showChords, setShowChords] = useState(true)
 
@@ -74,7 +73,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 			<Box display={'flex'} flexDirection={'column'}>
 				<TopPanel
 					transpose={transpose}
-					variant={variant as SongVariantDto}
+					variant={variant}
 					reloadSong={reload}
 					title={editedTitle}
 					editedTitle={editedTitle}
@@ -151,10 +150,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 				{!inEditMode && variant && !variant.deleted && (
 					<>
 						<Gap value={2} />
-						<AdditionalSongInfoPanel
-							song={song as SongDto}
-							variant={variant as SongVariantDto}
-						/>
+						<AdditionalSongInfoPanel song={song as SongDto} variant={variant} />
 					</>
 				)}
 			</Box>
