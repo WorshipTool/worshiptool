@@ -37,7 +37,7 @@ export const useSongVariant = (variantGuid: string) => {
 	const isCreatedByMe = useMemo(() => {
 		if (!user) return false
 		if (!state.data?.currentVariant) return false
-		return state.data.currentVariant.createdBy === user.guid
+		return state.data.currentVariant.createdByGuid === user.guid
 	}, [state.data?.currentVariant, user])
 
 	return {
@@ -47,7 +47,7 @@ export const useSongVariant = (variantGuid: string) => {
 		song: state.data?.song,
 		isCreatedByMe,
 		...state.data?.currentVariant,
-		title: state.data?.currentVariant.preferredTitle,
+		title: state.data?.currentVariant.title,
 		variant: state.data?.currentVariant,
 	}
 }

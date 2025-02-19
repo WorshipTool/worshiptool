@@ -10,6 +10,7 @@ import {
 	MoreHoriz,
 	PlaylistRemove,
 } from '@mui/icons-material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { useMemo, useState } from 'react'
 
 type FavouritesRowItemProps = {
@@ -21,7 +22,8 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 	const variantPack = props.data.data.pack
 
 	const hintText = useMemo(() => {
-		return variantPack.sheet.getSections()[0].text
+		const sheet = new Sheet(variantPack.sheetData)
+		return sheet.getSections()[0].text
 	}, [variantPack])
 
 	const navigate = useSmartNavigate()

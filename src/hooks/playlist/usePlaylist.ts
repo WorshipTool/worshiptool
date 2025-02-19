@@ -2,7 +2,7 @@ import { VariantPackGuid } from '@/api/dtos'
 import { ReorderPlaylistItem } from '@/api/generated'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useApiState } from '@/tech/ApiState'
-import { Chord, Sheet } from '@pepavlin/sheet-api'
+import { Chord } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
 import PlaylistDto, {
@@ -210,7 +210,7 @@ export default function usePlaylist(
 
 		if (data.sheetData) {
 			item.pack.sheetData = data.sheetData
-			item.pack.sheet = new Sheet(data.sheetData)
+			// item.pack.sheet = new Sheet(data.sheetData)
 			//TODO: do in some better way
 		}
 		if (data.title) item.pack.title = data.title

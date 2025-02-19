@@ -7,6 +7,7 @@ import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { OpenInNew } from '@mui/icons-material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { memo, useCallback } from 'react'
 
 type PopupSongCardProps = {
@@ -24,6 +25,8 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 		}
 		props.onSelect()
 	}, [props.selected, props.onSelect, props.onDeselect])
+
+	const sheet = new Sheet(props.song.sheetData)
 
 	return (
 		<Box
@@ -123,7 +126,7 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 							flex: 1,
 						}}
 					>
-						{props.song.sheet.getSections()[0].text}
+						{sheet.getSections()[0].text}
 					</Typography>
 				</Box>
 			</DraggableSong>

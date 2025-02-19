@@ -1,4 +1,4 @@
-import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { VariantPackGuid } from '@/api/dtos'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '@/api/dtos/playlist/playlist.map'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
@@ -8,6 +8,7 @@ import {
 	PlaylistItemDto,
 } from '@/interfaces/playlist/playlist.types'
 import { handleApiCall } from '@/tech/handleApiCall'
+import { ExtendedVariantPack } from '@/types/song'
 
 export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 	const selection = usePlaylist(guid)
@@ -59,7 +60,7 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 		)
 	}
 
-	const songNeedToBeCopiedToEdit = (variant: SongVariantDto): boolean => {
+	const songNeedToBeCopiedToEdit = (variant: ExtendedVariantPack): boolean => {
 		return variant.createdForPlaylistGuid !== guid
 	}
 

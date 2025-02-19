@@ -63,10 +63,10 @@ export interface AddNoteToVariantInDto {
     'content': string;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof AddNoteToVariantInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
 }
 /**
  * 
@@ -158,10 +158,10 @@ export interface AddTeamNoteToVariantInDto {
     'content': string;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof AddTeamNoteToVariantInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
     /**
      * 
      * @type {string}
@@ -2183,10 +2183,10 @@ export interface PostAiRequestOutDto {
 export interface PostChangeLanguageInDto {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PostChangeLanguageInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
     /**
      * 
      * @type {string}
@@ -2202,10 +2202,10 @@ export interface PostChangeLanguageInDto {
 export interface PostCreateCopyInDto {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PostCreateCopyInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
 }
 /**
  * 
@@ -2352,10 +2352,10 @@ export type PostEditVariantInDtoCreatedTypeEnum = typeof PostEditVariantInDtoCre
 export interface PostGetKeywordsInDto {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PostGetKeywordsInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
 }
 /**
  * 
@@ -2402,10 +2402,10 @@ export interface PostGoogleLoginBody {
 export interface PostPublishVariantInDto {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PostPublishVariantInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
 }
 /**
  * 
@@ -2459,10 +2459,10 @@ export interface PostValidateSheetDataAndTitleInDto {
 export interface PostVerifyVariantInDto {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PostVerifyVariantInDto
      */
-    'variantGuid': string;
+    'packGuid': object;
     /**
      * 
      * @type {boolean}
@@ -10667,13 +10667,13 @@ export const SongNotesApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songNotesControllerGetNotesOfVariantAndUser: async (variantGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variantGuid' is not null or undefined
-            assertParamExists('songNotesControllerGetNotesOfVariantAndUser', 'variantGuid', variantGuid)
+        songNotesControllerGetNotesOfVariantAndUser: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('songNotesControllerGetNotesOfVariantAndUser', 'packGuid', packGuid)
             const localVarPath = `/song/variant/notes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10690,8 +10690,8 @@ export const SongNotesApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (variantGuid !== undefined) {
-                localVarQueryParameter['variantGuid'] = variantGuid;
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
             }
 
 
@@ -10753,12 +10753,12 @@ export const SongNotesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerGetNotesOfVariantAndUser(variantGuid, options);
+        async songNotesControllerGetNotesOfVariantAndUser(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songNotesControllerGetNotesOfVariantAndUser(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongNotesApi.songNotesControllerGetNotesOfVariantAndUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10802,12 +10802,12 @@ export const SongNotesApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
-            return localVarFp.songNotesControllerGetNotesOfVariantAndUser(variantGuid, options).then((request) => request(axios, basePath));
+        songNotesControllerGetNotesOfVariantAndUser(packGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
+            return localVarFp.songNotesControllerGetNotesOfVariantAndUser(packGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -10854,13 +10854,13 @@ export class SongNotesApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} variantGuid 
+     * @param {string} packGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SongNotesApi
      */
-    public songNotesControllerGetNotesOfVariantAndUser(variantGuid: string, options?: RawAxiosRequestConfig) {
-        return SongNotesApiFp(this.configuration).songNotesControllerGetNotesOfVariantAndUser(variantGuid, options).then((request) => request(this.axios, this.basePath));
+    public songNotesControllerGetNotesOfVariantAndUser(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongNotesApiFp(this.configuration).songNotesControllerGetNotesOfVariantAndUser(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13822,14 +13822,14 @@ export const TeamSongNotesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamSongNoteControllerGetNotesOfVariantAndTeam: async (variantGuid: string, teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'variantGuid' is not null or undefined
-            assertParamExists('teamSongNoteControllerGetNotesOfVariantAndTeam', 'variantGuid', variantGuid)
+        teamSongNoteControllerGetNotesOfVariantAndTeam: async (packGuid: string, teamGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('teamSongNoteControllerGetNotesOfVariantAndTeam', 'packGuid', packGuid)
             // verify required parameter 'teamGuid' is not null or undefined
             assertParamExists('teamSongNoteControllerGetNotesOfVariantAndTeam', 'teamGuid', teamGuid)
             const localVarPath = `/team/song/notes`;
@@ -13848,8 +13848,8 @@ export const TeamSongNotesApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (variantGuid !== undefined) {
-                localVarQueryParameter['variantGuid'] = variantGuid;
+            if (packGuid !== undefined) {
+                localVarQueryParameter['packGuid'] = packGuid;
             }
 
             if (teamGuid !== undefined) {
@@ -13927,13 +13927,13 @@ export const TeamSongNotesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options);
+        async teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid: string, teamGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNotesOfVariantOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid, teamGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13986,13 +13986,13 @@ export const TeamSongNotesApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
-         * @param {string} variantGuid 
+         * @param {string} packGuid 
          * @param {string} teamGuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
-            return localVarFp.teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options).then((request) => request(axios, basePath));
+        teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid: string, teamGuid: string, options?: any): AxiosPromise<GetNotesOfVariantOutDto> {
+            return localVarFp.teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid, teamGuid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -14050,14 +14050,14 @@ export class TeamSongNotesApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} variantGuid 
+     * @param {string} packGuid 
      * @param {string} teamGuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamSongNotesApi
      */
-    public teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid: string, teamGuid: string, options?: RawAxiosRequestConfig) {
-        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetNotesOfVariantAndTeam(variantGuid, teamGuid, options).then((request) => request(this.axios, this.basePath));
+    public teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid: string, teamGuid: string, options?: RawAxiosRequestConfig) {
+        return TeamSongNotesApiFp(this.configuration).teamSongNoteControllerGetNotesOfVariantAndTeam(packGuid, teamGuid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

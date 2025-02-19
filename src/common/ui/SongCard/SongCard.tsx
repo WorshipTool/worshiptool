@@ -7,6 +7,7 @@ import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
 import { alpha, styled, useTheme } from '@mui/material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
 import { BasicVariantPack } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
@@ -94,7 +95,8 @@ export const SongCard = memo(function S({
 
 	// Title and sheet data to display
 	const title = data.title
-	const dataLines = data.sheet.getSections()[0]?.text?.split('\n').slice(0, 4)
+	const sheet = new Sheet(data.sheetData)
+	const dataLines = sheet.getSections()[0]?.text?.split('\n').slice(0, 4)
 
 	const linkProps = useMemo(() => {
 		if (props.toLinkProps) {

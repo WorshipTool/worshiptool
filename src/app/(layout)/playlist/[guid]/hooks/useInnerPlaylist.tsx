@@ -9,7 +9,7 @@ import {
 	PlaylistItemDto,
 	PlaylistItemGuid,
 } from '@/interfaces/playlist/playlist.types'
-import { Chord, Sheet } from '@pepavlin/sheet-api'
+import { Chord } from '@pepavlin/sheet-api'
 import {
 	createContext,
 	useCallback,
@@ -303,7 +303,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 			if (data.title) newItem.pack.title = data.title
 			if (data.sheetData) {
 				newItem.pack.sheetData = data.sheetData
-				newItem.pack.sheet = new Sheet(data.sheetData)
+				// newItem.pack.sheet = new Sheet(data.sheetData)
 			}
 
 			return newItem

@@ -13,6 +13,7 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { Delete, KeyboardArrowLeft, MoreHoriz } from '@mui/icons-material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { useState } from 'react'
 import { BasicVariantPack } from '../../../../../api/dtos'
 import { Link } from '../../../../../common/ui/Link/Link'
@@ -32,7 +33,8 @@ export default function MySongItem(props: MySongItemProps) {
 	const [openDialog, setOpenDialog] = useState(false)
 
 	const getHintText = () => {
-		return props.variant.sheet.getSections()[0].text
+		const sheet = new Sheet(props.variant.sheetData)
+		return sheet.getSections()[0].text
 	}
 
 	const variantParams = {

@@ -1,6 +1,6 @@
 'use client'
 import {
-	mapBasicVariantPackApiToDto,
+	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
 } from '@/api/dtos'
 import { getVariantByAlias } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
@@ -48,7 +48,7 @@ const useProvideInnerSong = (variantAlias: string) => {
 		const variant = v.main
 
 		const song = mapGetVariantDataApiToSongDto(v)
-		const variantData = mapBasicVariantPackApiToDto(variant)
+		const variantData = mapExtendedVariantPackApiToDto(variant)
 
 		return { song, variant: variantData }
 	}, [variantAlias])

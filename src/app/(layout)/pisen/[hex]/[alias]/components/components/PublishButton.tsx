@@ -1,7 +1,8 @@
-import { CircularProgress, useTheme } from '@/common/ui'
+import { CircularProgress } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { handleApiCall } from '@/tech/handleApiCall'
 import { BasicVariantPack } from '@/types/song'
 import { Public, PublicOff } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
@@ -31,41 +32,23 @@ export default function PublishButton(props: PublishButtonProps) {
 	}
 
 	const unverify = () => {
-		// fetchApiState(
-		// 	() => {
-		// 		return handleApiCall(
-		// 			songPublishingApi.songPublishingControllerUnpublishVariant({
-		// 				variantGuid: props.variant.guid,
-		// 			})
-		// 		)
-		// 	},
-		// 	() => {
-		// 		reload()
-		// 		enqueueSnackbar(
-		// 			`Zveřejnění písně ${props.variant.preferredTitle} bylo zrušeno`
-		// 		)
-		// 	}
-		// )
-		//TODO
+		fetchApiState(
+			() => {
+				return handleApiCall(
+					songPublishingApi.songPublishingControllerUnpublishVariant({
+						packGuid: props.variant.packGuid,
+					})
+				)
+			},
+			() => {
+				reload()
+				enqueueSnackbar(`Zveřejnění písně ${props.variant.title} bylo zrušeno`)
+			}
+		)
 	}
 	const verify = () => {
-		// fetchApiState(
-		// 	async () => {
-		// 		return handleApiCall(
-		// 			songEditingApi.songEditingControllerVerify(props.variant.guid)
-		// 		)
-		// 	},
-		// 	() => {
-		// 		reload()
-		// 		enqueueSnackbar(
-		// 			`Píseň ${(props.variant.preferredTitle && ' ') || ''}byla zveřejněna.`
-		// 		)
-		// 	}
-		// )
 		navigate('variantPublish', parseVariantAlias(props.variant.packAlias))
 	}
-
-	const theme = useTheme()
 
 	return (
 		<MenuItem

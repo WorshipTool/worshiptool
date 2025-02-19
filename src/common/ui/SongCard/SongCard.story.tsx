@@ -16,7 +16,7 @@ const SongCardStory = () => {
 		),
 		packAlias: '13adf4-asf-akaj' as VariantPackAlias,
 		public: false,
-	} as BasicVariantPack
+	} as any as BasicVariantPack
 
 	return <SongCard data={data} />
 }

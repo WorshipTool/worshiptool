@@ -18,18 +18,18 @@ import { useEffect, useState } from 'react'
 
 export default function TeamNotePanel() {
 	const { teamSongNotesApi } = useApi()
-	const { guid: variantGuid } = useInnerVariant()
+	const { packGuid } = useInnerVariant()
 	const { guid: teamGuid, notes: allTeamNotes } = useInnerTeam()
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
 			return handleApiCall(
 				teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
-					variantGuid,
+					packGuid,
 					teamGuid
 				)
 			)
-		}, [teamSongNotesApi, variantGuid])
+		}, [teamSongNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
 
@@ -71,7 +71,7 @@ export default function TeamNotePanel() {
 				return handleApiCall(
 					teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
 						content: cnt,
-						variantGuid,
+						packGuid: packGuid,
 						teamGuid: teamGuid,
 					})
 				)

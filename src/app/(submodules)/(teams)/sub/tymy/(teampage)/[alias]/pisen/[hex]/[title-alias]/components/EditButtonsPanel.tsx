@@ -1,4 +1,3 @@
-import { SongVariantDto } from '@/api/dtos'
 import { RequireItemEditOutDto } from '@/api/generated'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import Popup from '@/common/components/Popup/Popup'
@@ -10,6 +9,7 @@ import { Typography } from '@/common/ui/Typography'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
+import { ExtendedVariantPack } from '@/types/song'
 import { BorderColor, Edit, FileCopy } from '@mui/icons-material'
 import { useMemo, useState } from 'react'
 import { VariantPackAlias } from '../../../../../../../../../../../interfaces/variant/songVariant.types'
@@ -17,7 +17,7 @@ import { VariantPackAlias } from '../../../../../../../../../../../interfaces/va
 type EditButtonsPanelProps = {
 	inEditMode: boolean
 	setInEditMode: (value: boolean) => void
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	onSave: () => void
 	onCancel: () => void
 	saving: boolean

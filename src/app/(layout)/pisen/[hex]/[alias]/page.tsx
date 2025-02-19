@@ -1,24 +1,21 @@
 'use client'
 import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
-import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
-import { Box } from '@/common/ui'
-import { Typography } from '@/common/ui/Typography'
+import { Box, Typography } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
-import { ExtendedVariantPack } from '@/types/song'
+import { ExtendedVariantPack, VariantPackAlias } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
 import {
 	SongDto,
-	VariantPackAlias,
 	VariantPackGuid,
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
 } from '../../../../../api/dtos'
 import { SmartParams } from '../../../../../routes'
-import SongContainer from './SongContainer'
 import { getVariantAliasFromParams, getVariantByAlias } from './tech'
 
 type SongRoutePageProps = {
@@ -57,53 +54,51 @@ function SongRoutePage({ params }: SongRoutePageProps) {
 		doFetchStuff()
 	}, [alias])
 	return (
-		<InnerSongProvider variantAlias={alias}>
-			<Box
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				position: 'relative',
+			}}
+		>
+			<ContainerGrid
 				sx={{
+					marginTop: 2,
+					marginBottom: 2,
+					padding: 3,
+					backgroundColor: 'grey.200',
+					borderStyle: 'solid',
+					borderWidth: 1,
+					borderColor: 'grey.400',
+					borderRadius: 1,
+					flex: 1,
 					display: 'flex',
 					flexDirection: 'column',
-					alignItems: 'center',
+					displayPrint: 'none',
 					position: 'relative',
 				}}
 			>
-				<ContainerGrid
-					sx={{
-						marginTop: 2,
-						marginBottom: 2,
-						padding: 3,
-						backgroundColor: 'grey.200',
-						borderStyle: 'solid',
-						borderWidth: 1,
-						borderColor: 'grey.400',
-						borderRadius: 1,
-						flex: 1,
-						display: 'flex',
-						flexDirection: 'column',
-						displayPrint: 'none',
-						position: 'relative',
-					}}
-				>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<DraggableSong
-							key={i}
-							data={{
-								packGuid: variantData?.packGuid || ('' as VariantPackGuid),
-								title: variantData?.title || '',
-								alias: variantData?.packAlias || ('' as VariantPackAlias),
-							}}
-						>
-							<DragCorner index={i} />
-						</DraggableSong>
-					))}
-					{song && variantData ? (
-						<SongContainer variant={variantData} song={song} />
-					) : (
-						<>
-							<Typography>Načítání...</Typography>
-						</>
-					)}
-				</ContainerGrid>
-			</Box>
-		</InnerSongProvider>
+				{Array.from({ length: 4 }).map((_, i) => (
+					<DraggableSong
+						key={i}
+						data={{
+							packGuid: variantData?.packGuid || ('' as VariantPackGuid),
+							title: variantData?.title || '',
+							alias: variantData?.packAlias || ('' as VariantPackAlias),
+						}}
+					>
+						<DragCorner index={i} />
+					</DraggableSong>
+				))}
+				{song && variantData ? (
+					<SongContainer variant={variantData} song={song} />
+				) : (
+					<>
+						<Typography>Načítání...</Typography>
+					</>
+				)}
+			</ContainerGrid>
+		</Box>
 	)
 }

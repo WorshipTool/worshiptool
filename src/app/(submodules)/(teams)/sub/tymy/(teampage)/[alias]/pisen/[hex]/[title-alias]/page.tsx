@@ -1,5 +1,5 @@
 'use client'
-import { mapSongDataVariantApiToSongVariantDto } from '@/api/dtos'
+import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
 import {
 	getVariantAliasFromParams,
 	getVariantByAlias,
@@ -33,8 +33,8 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 			props.params['title-alias']
 		)
 		const v = await getVariantByAlias(alias)
-		const variant = v.variants[0]
-		const d = mapSongDataVariantApiToSongVariantDto(variant)
+		const variant = v.main
+		const d = mapExtendedVariantPackApiToDto(variant)
 
 		return d
 	}, [props.params.hex, props.params['title-alias']])
@@ -83,7 +83,7 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 							}}
 						/>
 					</Box>
-					{apiState.data?.preferredTitle}
+					{apiState.data?.title}
 				</Box>
 			</TeamPageTitle>
 			{apiState.loading || !apiState.data ? (

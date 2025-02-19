@@ -14,14 +14,14 @@ import { useEffect, useState } from 'react'
 
 export default function UserNotePanel() {
 	const { songNotesApi } = useApi()
-	const { guid: variantGuid } = useInnerVariant()
+	const { packGuid } = useInnerVariant()
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
 			return handleApiCall(
-				songNotesApi.songNotesControllerGetNotesOfVariantAndUser(variantGuid)
+				songNotesApi.songNotesControllerGetNotesOfVariantAndUser(packGuid)
 			)
-		}, [songNotesApi, variantGuid])
+		}, [songNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
 
@@ -63,7 +63,7 @@ export default function UserNotePanel() {
 				return handleApiCall(
 					songNotesApi.songNotesControllerAddNoteToVariant({
 						content: cnt,
-						variantGuid,
+						packGuid,
 					})
 				)
 			},

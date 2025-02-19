@@ -1,4 +1,6 @@
 import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
+import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
+import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminOption from '@/common/components/admin/AdminOption'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
@@ -7,7 +9,7 @@ import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { ExtendedVariantPack } from '@/types/song'
-import { Language } from '@mui/icons-material'
+import { Language, Polyline } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useMemo } from 'react'
@@ -51,11 +53,12 @@ interface TopPanelProps {
 
 export default function TopPanel(props: TopPanelProps) {
 	const { isAdmin, isTrustee, isLoggedIn, user, apiConfiguration } = useAuth()
-
 	const isOwner = useMemo(() => {
 		if (!user) return false
 		return props.variant.createdByGuid === user?.guid
 	}, [user, props.variant])
+
+	const { song } = useInnerSong()
 
 	const { enqueueSnackbar } = useSnackbar()
 	const navigate = useSmartNavigate()
@@ -78,12 +81,11 @@ export default function TopPanel(props: TopPanelProps) {
 	const generateLanguage = async () => {
 		setLanguageGenerating(true)
 		try {
-			// await handleApiCall(
-			// 	songEditingApi.songEditingControllerChangeLanguage({
-			// 		variantGuid: props.variant.guid,
-			// 	})
-			// )
-			throw new Error('Not implemented') // TODO
+			await handleApiCall(
+				songEditingApi.songEditingControllerChangeLanguage({
+					packGuid: props.variant.packGuid,
+				})
+			)
 			// Reload page
 			window.location.reload()
 			enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
@@ -96,12 +98,11 @@ export default function TopPanel(props: TopPanelProps) {
 	const generateKeyword = async () => {
 		setKeywordsGenerating(true)
 		try {
-			// await handleApiCall(
-			// 	songPublishingApi.songPublishingControllerGenerateKeywords({
-			// 		variantGuid: props.variant.guid,
-			// 	})
-			// )
-			throw new Error('Not implemented') // TODO
+			await handleApiCall(
+				songPublishingApi.songPublishingControllerGenerateKeywords({
+					packGuid: props.variant.packGuid,
+				})
+			)
 			window.location.reload()
 			enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
 		} catch (e) {
@@ -227,10 +228,9 @@ export default function TopPanel(props: TopPanelProps) {
 								anyChange={anyChange}
 							/>
 						</Box>
-						{/* {isLoggedIn() && (
-							<CreateCopyButton variantGuid={props.variant.guid} />
-						)} */}{' '}
-						{/* //TODO */}
+						{isLoggedIn() && (
+							<CreateCopyButton packGuid={props.variant.packGuid} />
+						)}
 						{isOwner && !props.variant.public && (
 							<EditButton
 								onClick={onEditClick}
@@ -271,8 +271,7 @@ export default function TopPanel(props: TopPanelProps) {
 							/>
 						</>
 					)}
-					{/* {(!props.variant.tags || props.variant.tags.length === 0) && (
-                    //TODO
+					{(!song.tags || song.tags.length === 0) && (
 						<>
 							<AdminOption
 								title="Dogenerovat keywords"
@@ -283,7 +282,7 @@ export default function TopPanel(props: TopPanelProps) {
 								notify
 							/>
 						</>
-					)} */}
+					)}
 				</>
 			)}
 		</>

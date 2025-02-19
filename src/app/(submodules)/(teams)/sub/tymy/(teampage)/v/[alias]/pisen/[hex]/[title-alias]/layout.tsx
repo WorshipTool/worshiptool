@@ -13,8 +13,8 @@ export const generateMetadata = generateSmartMetadata(
 		const alias = getVariantAliasFromParams(params.hex, params['title-alias'])
 		try {
 			const variantData = await getVariantByAlias(alias)
-			const variant = variantData.variants[0]
-			const songTitle = variant.prefferedTitle
+			const variant = variantData.main
+			const songTitle = variant.title
 
 			const title = songTitle
 			return {
