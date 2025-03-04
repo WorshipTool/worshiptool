@@ -1,52 +1,63 @@
+import {
+	mapSearchSongPacksApiToDto,
+	SearchSongDto,
+} from '@/api/dtos/song/song.search.dto'
+import { SearchKey } from '@/types/song/search.types'
 import { useCallback } from 'react'
-import { BasicVariantPack, mapBasicVariantPackApiToDto } from '../../api/dtos'
+import { mapBasicVariantPackApiToDto } from '../../api/dtos'
 import { handleApiCall } from '../../tech/handleApiCall'
 import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
 
 type useSongSearchProps = {
-	searchKey: string
 	page?: number
 	signal?: AbortSignal
 	useSmartSearch?: boolean
 }
 
+type GetSongFunction = (
+	searchKey: SearchKey,
+	additionalParams?: useSongSearchProps
+) => Promise<SearchSongDto[]>
+
 export default function useSongSearch() {
-	const { songGettingApi, packEmbeddingApi } = useApi()
+	const { songGettingApi, packEmbeddingApi, songSearchingApi } = useApi()
 	const { user } = useAuth()
 
-	const getSongs = useCallback(
+	const getSongs: GetSongFunction = useCallback(
 		async (
-			additionalParams: useSongSearchProps
-		): Promise<BasicVariantPack[]> => {
+			searchKey: SearchKey,
+			additionalParams?: useSongSearchProps
+		): Promise<SearchSongDto[]> => {
 			try {
-				const result = !additionalParams.useSmartSearch
-					? await handleApiCall(
-							songGettingApi.songGettingControllerGetBySearch(
-								additionalParams.searchKey,
-								additionalParams.page || 0,
-								{
-									signal: additionalParams.signal,
-								}
-							)
-					  )
-					: await handleApiCall(
+				// Handle smart search
+				if (additionalParams?.useSmartSearch) {
+					return (
+						await handleApiCall(
 							packEmbeddingApi.packEmbeddingSearchControllerSearch(
-								additionalParams.searchKey,
-								additionalParams.page || 0,
+								searchKey,
+								additionalParams?.page || 0,
 								{
 									signal: additionalParams.signal,
 								}
 							)
-					  )
-				// Created by user first
-				const ordered = result.sort((a, b) => {
-					if (a.createdByGuid === user?.guid) return -1
-					if (b.createdByGuid === user?.guid) return 1
-					return 0
-				})
+						)
+					).map((s) => ({
+						found: [mapBasicVariantPackApiToDto(s)],
+					}))
+				}
 
-				return ordered.map((s) => mapBasicVariantPackApiToDto(s))
+				const result = await handleApiCall(
+					songSearchingApi.songSearchingControllerSearch(
+						searchKey,
+						additionalParams?.page || 0,
+						{
+							signal: additionalParams?.signal,
+						}
+					)
+				)
+
+				return result.map((d) => mapSearchSongPacksApiToDto(d))
 			} catch (e) {
 				console.log(e)
 			}

@@ -1,6 +1,7 @@
 'use client'
 
 import { Box } from '@/common/ui/Box'
+import { SxProps } from '@/common/ui/mui'
 import SongCardAdditional from '@/common/ui/SongCard/components/SongCardAdditional'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
@@ -58,6 +59,7 @@ type SongCardProps = {
 	onSelect?: (selected: boolean) => void
 	onDeselect?: (selected: boolean) => void
 	icons?: SongCardIconData
+	sx?: SxProps
 }
 export const SongCard = memo(function S({
 	data,
@@ -155,6 +157,7 @@ export const SongCard = memo(function S({
 							outlineStyle: 'solid',
 						}),
 						userSelect: 'none',
+						...(props.sx || {}),
 					}}
 					onClick={onClick}
 					onMouseEnter={() => setIsOver(true)}

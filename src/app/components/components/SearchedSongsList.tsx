@@ -9,10 +9,11 @@ import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
 import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 
-import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
+import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
+import SmartSongListCards from '@/common/components/songLists/SongListCards/SmartSongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
-import { BasicVariantPack } from '../../../api/dtos'
+import { SearchKey } from '@/types/song/search.types'
 
 interface SearchedSongsListProps {
 	searchString: string
@@ -35,21 +36,18 @@ const SearchedSongsList = memo(function S({
 	const func = useCallback(
 		(
 			page: number,
-			resolve: (a: BasicVariantPack[]) => void,
-			arr: BasicVariantPack[]
+			resolve: (a: SearchSongDto[]) => void,
+			arr: SearchSongDto[]
 		) => {
-			searchSongs({
-				searchKey: searchString,
+			searchSongs(searchString as SearchKey, {
 				page,
 				signal: controller.signal,
 				useSmartSearch,
 			}).then((data) => {
-				const filtered = data.filter((v) => {
-					return !arr.find((s) => s.packGuid == v.packGuid)
-				})
 				setLoading(false)
 				setNextLoading(false)
-				resolve(filtered)
+				console.log(data)
+				resolve(data)
 			})
 		},
 		[searchString, searchSongs, useSmartSearch]
@@ -61,7 +59,7 @@ const SearchedSongsList = memo(function S({
 		data: songs,
 		pagedData: pagedSongs,
 		nextExists,
-	} = usePagination<BasicVariantPack>(func)
+	} = usePagination<SearchSongDto>(func)
 
 	useEffect(() => {
 		setEnableLoadNext(false)
@@ -101,7 +99,7 @@ const SearchedSongsList = memo(function S({
 				<Typography strong>Výsledky vyhledávání:</Typography>
 
 				{!loading && songs.length > 0 && (
-					<SongListCards
+					<SmartSongListCards
 						data={songs}
 						key={'songlistcards'}
 						properties={[
@@ -109,7 +107,7 @@ const SearchedSongsList = memo(function S({
 							'SHOW_PRIVATE_LABEL',
 							// 'SHOW_YOUR_PUBLIC_LABEL',
 						]}
-					></SongListCards>
+					></SmartSongListCards>
 				)}
 
 				{/* {!loading &&

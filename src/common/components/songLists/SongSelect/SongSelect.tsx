@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@/common/ui'
 import { TextField } from '@/common/ui/mui'
+import { SearchKey } from '@/types/song/search.types'
 import React from 'react'
 import { BasicVariantPack, SongVariantDto } from '../../../../api/dtos'
 import useSongSearch from '../../../../hooks/song/useSongSearch'
@@ -25,9 +26,10 @@ export default function SongSelect({ onChange, filter }: SongSelectProps) {
 	)
 
 	const searchCallback = () => {
-		search({ searchKey: value, page: 0 }).then((data) => {
-			const d = data.filter((v) => (filter ? filter(v) : true))
-			setData(d)
+		search(value as SearchKey, { page: 0 }).then((data) => {
+			//TODO: Fix this
+			const d = data.filter((v) => (filter ? filter(v.found[0]) : true))
+			setData(d.map((v) => v.found[0]))
 			setOpen(data.length > 0)
 		})
 	}
