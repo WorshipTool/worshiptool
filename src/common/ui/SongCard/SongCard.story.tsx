@@ -1,4 +1,3 @@
-import { Sheet } from '@pepavlin/sheet-api'
 import {
 	BasicVariantPack,
 	VariantPackAlias,
@@ -11,12 +10,10 @@ const SongCardStory = () => {
 	const data: BasicVariantPack = {
 		packGuid: 'guid' as VariantPackGuid,
 		title: 'Lorem ipsum',
-		sheet: new Sheet(
-			'{V1}Lorem ipsum[C] \nnechodim na uprum\nTestovaci akordy[Am]'
-		),
+		sheetData: '{V1}Lorem ipsum[C] \nnechodim na uprum\nTestovaci akordy[Am]',
 		packAlias: '13adf4-asf-akaj' as VariantPackAlias,
 		public: false,
-	} as any as BasicVariantPack
+	} as BasicVariantPack
 
 	return <SongCard data={data} />
 }

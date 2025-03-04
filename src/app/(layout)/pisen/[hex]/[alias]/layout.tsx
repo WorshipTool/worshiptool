@@ -1,4 +1,4 @@
-import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+'use server'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
 import { notFound } from 'next/navigation'
@@ -27,9 +27,6 @@ export const generateMetadata = generateSmartMetadata(
 	}
 )
 
-export default function layout(props: LayoutProps<"variant">) {
-    const alias = getVariantAliasFromParams(props.params.hex, props.params.alias)
-	return (
-		<InnerSongProvider variantAlias={alias}>{props.children}</InnerSongProvider>
-	)
+export default async function layout(props: LayoutProps<'variant'>) {
+	return props.children
 }

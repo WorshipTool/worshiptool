@@ -2,9 +2,11 @@
 import {
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
+	SongDto,
 } from '@/api/dtos'
 import { getVariantByAlias } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { ExtendedVariantPack } from '@/types/song'
 import { createContext, useContext } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerSong>
@@ -26,24 +28,31 @@ export function useInnerVariant() {
 	return s.variant
 }
 
+type InData = {
+	song: SongDto
+	variant: ExtendedVariantPack
+}
+
 type ProviderProps = {
 	children: any
 	variantAlias: string
+
+	startData?: InData
 }
 
 export const InnerSongProvider = (props: ProviderProps) => {
-	const p = useProvideInnerSong(props.variantAlias)
+	const p = useProvideInnerSong(props.variantAlias, props.startData)
 
-	return (
-		p.song &&
-		p.variant && (
-			<songContext.Provider value={p}>{props.children}</songContext.Provider>
-		)
+	return p.song && p.variant ? (
+		<songContext.Provider value={p}>{props.children}</songContext.Provider>
+	) : (
+		<p>Načítání</p>
 	)
 }
 
-const useProvideInnerSong = (variantAlias: string) => {
+const useProvideInnerSong = (variantAlias: string, startData?: InData) => {
 	const [apiState] = useApiStateEffect(async () => {
+		if (startData) return null
 		const v = await getVariantByAlias(variantAlias)
 		const variant = v.main
 
@@ -51,11 +60,11 @@ const useProvideInnerSong = (variantAlias: string) => {
 		const variantData = mapExtendedVariantPackApiToDto(variant)
 
 		return { song, variant: variantData }
-	}, [variantAlias])
+	}, [variantAlias, startData])
 
 	return {
 		loading: apiState.loading,
-		song: apiState.data?.song!,
-		variant: apiState.data?.variant!,
+		song: apiState.data?.song! || startData?.song,
+		variant: apiState.data?.variant! || startData?.variant,
 	}
 }

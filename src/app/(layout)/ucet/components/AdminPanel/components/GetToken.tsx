@@ -1,5 +1,6 @@
 import { Button, Typography } from '@/common/ui'
 import { InputBase } from '@/common/ui/mui'
+import { copyToClipboard } from '@/tech/string/copy.tech'
 import { Token } from '@mui/icons-material'
 import { useState } from 'react'
 import { LoginRequestDTO } from '../../../../../../api/dtos/dtosAuth'
@@ -34,8 +35,9 @@ export default function GetToken() {
 
 	const myToken = () => {
 		const t = user?.token || ''
+		console.log(t)
 		setToken(t)
-		navigator.clipboard.writeText(t)
+		copyToClipboard(t)
 	}
 	return (
 		<Card

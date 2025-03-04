@@ -1,16 +1,13 @@
-'use client'
+'use server'
 import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
+import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnalyze'
 import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
-import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
-import { Box, Typography } from '@/common/ui'
+import { Box } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
-import { ExtendedVariantPack, VariantPackAlias } from '@/types/song'
-import { Sheet } from '@pepavlin/sheet-api'
-import { useEffect, useMemo, useState } from 'react'
+import { VariantPackAlias } from '@/types/song'
 import {
-	SongDto,
 	VariantPackGuid,
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
@@ -24,35 +21,14 @@ type SongRoutePageProps = {
 
 export default SmartPage(SongRoutePage)
 
-function SongRoutePage({ params }: SongRoutePageProps) {
-	const alias = useMemo(() => {
-		return getVariantAliasFromParams(params.hex, params.alias)
-	}, [params.hex, params.alias])
+async function SongRoutePage({ params }: SongRoutePageProps) {
+	const alias = getVariantAliasFromParams(params.hex, params.alias)
 
-	const [song, setSong] = useState<SongDto>()
-	const [variantData, setVariantData] = useState<ExtendedVariantPack>()
-	useEffect(() => {
-		const doFetchStuff = async () => {
-			const v = await getVariantByAlias(alias)
-			const mainPack = v.main
+	const v = await getVariantByAlias(alias)
+	const mainPack = v.main
 
-			const song = mapGetVariantDataApiToSongDto(v)
-			const variantData = mapExtendedVariantPackApiToDto(mainPack)
-
-			setSong(song)
-			setVariantData(variantData)
-
-			const s = new Sheet(mainPack.sheetData)
-
-			Analytics.track('VISIT_SONG', {
-				songGuid: song.guid,
-				packGuid: mainPack.packGuid as VariantPackGuid,
-				title: song.title,
-				hasChords: s.getKeyNote() !== null,
-			})
-		}
-		doFetchStuff()
-	}, [alias])
+	const song = mapGetVariantDataApiToSongDto(v)
+	const variantData = mapExtendedVariantPackApiToDto(mainPack)
 	return (
 		<Box
 			sx={{
@@ -62,6 +38,9 @@ function SongRoutePage({ params }: SongRoutePageProps) {
 				position: 'relative',
 			}}
 		>
+			{/* Just a client analytics */}
+			<SongAnalyze data={variantData} />
+
 			<ContainerGrid
 				sx={{
 					marginTop: 2,
@@ -91,13 +70,8 @@ function SongRoutePage({ params }: SongRoutePageProps) {
 						<DragCorner index={i} />
 					</DraggableSong>
 				))}
-				{song && variantData ? (
-					<SongContainer variant={variantData} song={song} />
-				) : (
-					<>
-						<Typography>Načítání...</Typography>
-					</>
-				)}
+
+				<SongContainer variant={variantData} song={song} />
 			</ContainerGrid>
 		</Box>
 	)

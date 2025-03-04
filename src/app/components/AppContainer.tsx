@@ -1,16 +1,17 @@
 import AppLayout from '@/common/components/app/AppLayout/AppLayout'
+import { checkFlag } from '@/common/providers/FeatureFlags'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {
 	children: React.ReactNode
 }
 
-export function AppContainer(props: AppContainerProps) {
+export async function AppContainer(props: AppContainerProps) {
+	const showLoadingScreen = await checkFlag('show_loading_screen')
 	return (
 		<>
 			{/* <Snow /> */}
-			{/* <SearchGroupDialog /> */}
-			<LoadingRoutesProvider>
+			<LoadingRoutesProvider show={showLoadingScreen}>
 				<AppLayout>{props.children}</AppLayout>
 			</LoadingRoutesProvider>
 		</>

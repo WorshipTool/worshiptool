@@ -2672,6 +2672,31 @@ export interface ResetPasswordInDto {
 /**
  * 
  * @export
+ * @interface SearchSongPacksDto
+ */
+export interface SearchSongPacksDto {
+    /**
+     * 
+     * @type {BasicVariantPackDto}
+     * @memberof SearchSongPacksDto
+     */
+    'original'?: BasicVariantPackDto;
+    /**
+     * 
+     * @type {Array<BasicVariantPackDto>}
+     * @memberof SearchSongPacksDto
+     */
+    'found': Array<BasicVariantPackDto>;
+    /**
+     * 
+     * @type {Array<BasicVariantPackDto>}
+     * @memberof SearchSongPacksDto
+     */
+    'other'?: Array<BasicVariantPackDto>;
+}
+/**
+ * 
+ * @export
  * @interface SetMemberRoleInDto
  */
 export interface SetMemberRoleInDto {
@@ -2745,6 +2770,12 @@ export interface Song {
      * @memberof Song
      */
     'guid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Song
+     */
+    '_mainTitleGuid': string;
     /**
      * 
      * @type {SongTitle}
@@ -3147,6 +3178,12 @@ export interface SongVariant {
      * @memberof SongVariant
      */
     'createdAt': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariant
+     */
+    'isLast': boolean;
 }
 
 export const SongVariantTypeEnum = {
@@ -3187,6 +3224,12 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'variants': Array<SongVariant>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    '_songGuid': string;
     /**
      * 
      * @type {Song}
@@ -10263,53 +10306,6 @@ export const SongMergingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @param {string} packGuid1 
-         * @param {string} packGuid2 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songMergingControllerMergePackFamilies: async (packGuid1: string, packGuid2: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'packGuid1' is not null or undefined
-            assertParamExists('songMergingControllerMergePackFamilies', 'packGuid1', packGuid1)
-            // verify required parameter 'packGuid2' is not null or undefined
-            assertParamExists('songMergingControllerMergePackFamilies', 'packGuid2', packGuid2)
-            const localVarPath = `/song-merging/mergepackfamilies`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (packGuid1 !== undefined) {
-                localVarQueryParameter['packGuid1'] = packGuid1;
-            }
-
-            if (packGuid2 !== undefined) {
-                localVarQueryParameter['packGuid2'] = packGuid2;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10405,19 +10401,6 @@ export const SongMergingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} packGuid1 
-         * @param {string} packGuid2 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songMergingControllerMergePackFamilies(packGuid1, packGuid2, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongMergingApi.songMergingControllerMergePackFamilies']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10460,16 +10443,6 @@ export const SongMergingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
-         * @param {string} packGuid1 
-         * @param {string} packGuid2 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: any): AxiosPromise<void> {
-            return localVarFp.songMergingControllerMergePackFamilies(packGuid1, packGuid2, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10504,18 +10477,6 @@ export class SongMergingApi extends BaseAPI {
      */
     public songMergingControllerAutoFindFamily(packGuid: string, options?: RawAxiosRequestConfig) {
         return SongMergingApiFp(this.configuration).songMergingControllerAutoFindFamily(packGuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} packGuid1 
-     * @param {string} packGuid2 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongMergingApi
-     */
-    public songMergingControllerMergePackFamilies(packGuid1: string, packGuid2: string, options?: RawAxiosRequestConfig) {
-        return SongMergingApiFp(this.configuration).songMergingControllerMergePackFamilies(packGuid1, packGuid2, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11247,6 +11208,121 @@ export class SongPublishingApi extends BaseAPI {
      */
     public songPublishingControllerVerifyVariant(postVerifyVariantInDto: PostVerifyVariantInDto, options?: RawAxiosRequestConfig) {
         return SongPublishingApiFp(this.configuration).songPublishingControllerVerifyVariant(postVerifyVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongSearchingApi - axios parameter creator
+ * @export
+ */
+export const SongSearchingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songSearchingControllerSearch: async (searchKey: string, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchKey' is not null or undefined
+            assertParamExists('songSearchingControllerSearch', 'searchKey', searchKey)
+            const localVarPath = `/song/searching/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (searchKey !== undefined) {
+                localVarQueryParameter['searchKey'] = searchKey;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongSearchingApi - functional programming interface
+ * @export
+ */
+export const SongSearchingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongSearchingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songSearchingControllerSearch(searchKey: string, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SearchSongPacksDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songSearchingControllerSearch(searchKey, page, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongSearchingApi.songSearchingControllerSearch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongSearchingApi - factory interface
+ * @export
+ */
+export const SongSearchingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongSearchingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} searchKey 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songSearchingControllerSearch(searchKey: string, page?: number, options?: any): AxiosPromise<Array<SearchSongPacksDto>> {
+            return localVarFp.songSearchingControllerSearch(searchKey, page, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongSearchingApi - object-oriented interface
+ * @export
+ * @class SongSearchingApi
+ * @extends {BaseAPI}
+ */
+export class SongSearchingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} searchKey 
+     * @param {number} [page] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongSearchingApi
+     */
+    public songSearchingControllerSearch(searchKey: string, page?: number, options?: RawAxiosRequestConfig) {
+        return SongSearchingApiFp(this.configuration).songSearchingControllerSearch(searchKey, page, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -4,6 +4,7 @@ import CustomMenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, Divider, Typography, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
+import { copyToClipboard } from '@/tech/string/copy.tech'
 import { ExtendedVariantPack } from '@/types/song'
 import {
 	CopyAll,
@@ -68,7 +69,10 @@ export default function SheetAdminButtons({
 	const [addCreatorOpen, setAddCreatorOpen] = useState(false)
 
 	const onCopyClick = () => {
-		navigator.clipboard.writeText(sheet?.getOriginalSheetData() || '')
+		const data = sheet.getOriginalSheetData()
+
+		copyToClipboard(data)
+
 		enqueueSnackbar('Data písně byla zkopírována do schránky')
 	}
 
@@ -144,13 +148,11 @@ export default function SheetAdminButtons({
 						<Divider key={'divider'} />,
 					]}
 
-				<MenuItem onClick={onCopyClick}>
-					<ListItemIcon>
-						<CopyAll fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Zkopírovat</ListItemText>
-				</MenuItem>
-
+				<CustomMenuItem
+					title={'Zkopírovat'}
+					onClick={onCopyClick}
+					icon={<CopyAll fontSize="small" />}
+				/>
 				<MenuItem onClick={addCreator}>
 					<ListItemIcon>
 						<VerifiedUser fontSize="small" />
