@@ -68,7 +68,7 @@ export default function SongGroupCard({
 						const offsetX = index * 4
 						const brightness = 1 - index * 0.1
 						const rotate = hovered
-							? (index == totalCount ? 0 : index % 2 === 0 ? 1 : -1) * 1
+							? (index == totalCount ? 0 : index % 2 === 0 ? 1 : -1) * 0.5
 							: 0
 						return (
 							<Box

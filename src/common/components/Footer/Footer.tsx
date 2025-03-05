@@ -5,6 +5,7 @@ import { Typography } from '@/common/ui/Typography'
 import { Favorite } from '@mui/icons-material'
 
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
+import { useCloudNumber } from '@/common/providers/FeatureFlags/useCloudNumber'
 import { Gap } from '@/common/ui/Gap'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import { useSmartParams } from '@/routes/useSmartParams'
@@ -23,6 +24,8 @@ type Links = [
 export default function Footer() {
 	const { hledat: searchString } = useSmartParams('home')
 	const isHome = useSmartMatch('home')
+
+	const { value: year } = useCloudNumber('year', 2024)
 
 	const links: Links = useMemo(
 		() => [
@@ -116,7 +119,7 @@ export default function Footer() {
 							}}
 						/>
 					</Typography>
-					<Typography size={'small'}>2024</Typography>
+					<Typography size={'small'}>{year}</Typography>
 					<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
 				</Box>
 				<Gap />

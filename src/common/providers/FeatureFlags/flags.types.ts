@@ -6,3 +6,6 @@ type ExistingFlags =
 	| 'show_loading_screen'
 
 export type FeatureFlag = ExistingFlags | String
+
+type ExistingCloudNumbers = 'year'
+export type CloudNumber = ExistingCloudNumbers | String

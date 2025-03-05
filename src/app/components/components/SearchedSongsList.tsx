@@ -46,7 +46,6 @@ const SearchedSongsList = memo(function S({
 			}).then((data) => {
 				setLoading(false)
 				setNextLoading(false)
-				console.log(data)
 				resolve(data)
 			})
 		},
@@ -96,7 +95,9 @@ const SearchedSongsList = memo(function S({
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography strong>Výsledky vyhledávání:</Typography>
+				<Typography strong key={'results'}>
+					Výsledky vyhledávání:
+				</Typography>
 
 				{!loading && songs.length > 0 && (
 					<SmartSongListCards
