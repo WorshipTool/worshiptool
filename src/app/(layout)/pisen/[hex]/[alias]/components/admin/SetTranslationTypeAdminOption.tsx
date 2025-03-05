@@ -1,0 +1,70 @@
+import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import MenuItem from '@/common/components/Menu/MenuItem'
+import Popup from '@/common/components/Popup/Popup'
+import { Button } from '@/common/ui'
+import { useApi } from '@/hooks/api/useApi'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { PackTranslationType } from '@/types/song'
+import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+
+const OPTIONS: { label: string; value: PackTranslationType }[] = [
+	{ label: 'Originál', value: PackTranslationType.Original },
+	{ label: 'Překlad', value: PackTranslationType.Translation },
+	{
+		label: 'Oficiální překlad',
+		value: PackTranslationType.OfficialTranslation,
+	},
+	{ label: 'Neznámé', value: PackTranslationType.Unknown },
+]
+
+export default function SetTranslationTypeAdminOption() {
+	const [open, setOpen] = useState(false)
+
+	const { enqueueSnackbar } = useSnackbar()
+	const { packGuid } = useInnerVariant()
+	const { songManagementApi } = useApi()
+
+	const onOptionClick = async (value: PackTranslationType) => {
+		await handleApiCall(
+			songManagementApi.packSettingControllerSetTranslationType({
+				packGuid: packGuid,
+				translationType: value,
+			})
+		)
+		const label = OPTIONS.find((o) => o.value === value)?.label
+		enqueueSnackbar('Typ překladu nastaven na ' + label)
+		setOpen(false)
+	}
+
+	return (
+		<>
+			<MenuItem
+				title={'Nastavit typ'}
+				subtitle="Zvolit typ překladu"
+				onClick={() => setOpen(true)}
+			/>
+
+			<Popup
+				title={'Zvol typ překladu'}
+				open={open}
+				onClose={() => setOpen(false)}
+			>
+				{OPTIONS.map((p) => {
+					return (
+						<Button
+							key={p.value}
+							onClick={() => {
+								onOptionClick(p.value)
+							}}
+							size="small"
+							color="secondary"
+						>
+							{p.label}
+						</Button>
+					)
+				})}
+			</Popup>
+		</>
+	)
+}

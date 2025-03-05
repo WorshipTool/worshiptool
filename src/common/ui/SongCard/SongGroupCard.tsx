@@ -3,18 +3,19 @@ import { Box } from '@/common/ui/Box'
 import { Clickable } from '@/common/ui/Clickable'
 import { SongCard } from '@/common/ui/SongCard/SongCard'
 import { Typography } from '@/common/ui/Typography'
-import { generateNumberFromString } from '@/tech/string/string-number.tech'
 import { BasicVariantPack } from '@/types/song'
 import { useState } from 'react'
 
 type SongGroupCardProps = {
 	packs: BasicVariantPack[]
+	original?: BasicVariantPack
 	flexibleHeight?: boolean
 }
 
 export default function SongGroupCard({
 	flexibleHeight = true,
 	packs,
+	original,
 	...props
 }: SongGroupCardProps) {
 	const MAX_PACKS = 4
@@ -34,13 +35,6 @@ export default function SongGroupCard({
 
 	const BORDER_COLOR = 'grey.300'
 	const BORDER_WIDTH = '1px'
-
-	const original =
-		generateNumberFromString(first.packGuid) > 50
-			? {
-					title: 'Oceans',
-			  }
-			: null
 
 	return (
 		<>

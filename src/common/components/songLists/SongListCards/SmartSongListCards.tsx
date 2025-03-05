@@ -74,41 +74,13 @@ export const SmartSongListCard = memo(function SongListCards({
 			v: SearchSongDto
 			flexibleHeight?: boolean
 		}) => {
-			return <SongGroupCard packs={v.found} flexibleHeight={flexibleHeight} />
-			// const color = stringToColor(v.found[0].packGuid)
-			// return (
-			// 	<Box
-			// 		sx={{
-			// 			bgcolor: color,
-			// 			padding: 0.6,
-			// 			display: 'flex',
-			// 			flexDirection: 'column',
-			// 			gap: 0.6,
-			// 			borderRadius: 3,
-			// 		}}
-			// 	>
-			// 		{v.found.map((d) => (
-			// 			<SongCard
-			// 				data={d}
-			// 				key={d.packGuid}
-			// 				flexibleHeight={flexibleHeight}
-			// 				toLinkProps={props.cardToLinkProps}
-			// 				properties={props.properties}
-			// 				onClick={() => {
-			// 					props.onCardClick && props.onCardClick(d)
-			// 				}}
-			// 				selectable={props.selectable}
-			// 				onSelect={() => {
-			// 					props.onCardSelect && props.onCardSelect(d)
-			// 				}}
-			// 				onDeselect={() => {
-			// 					props.onCardDeselect && props.onCardDeselect(d)
-			// 				}}
-			// 				icons={props.cardIcons}
-			// 			/>
-			// 		))}
-			// 	</Box>
-			// )
+			return (
+				<SongGroupCard
+					packs={v.found}
+					original={v.original}
+					flexibleHeight={flexibleHeight}
+				/>
+			)
 		},
 		[props]
 	)

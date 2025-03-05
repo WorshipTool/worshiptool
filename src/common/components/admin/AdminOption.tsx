@@ -16,6 +16,7 @@ type AdminOptionProps = {
 	subtitle?: string
 	icon?: ReactElement
 	onClick?: (e: React.MouseEvent<HTMLElement>) => any
+	stayOpenedOnClick?: boolean
 
 	disabled?: boolean
 	loading?: boolean
@@ -44,7 +45,7 @@ export default function AdminOption(props: AdminOptionProps) {
 	const onClick = (e: React.MouseEvent<HTMLElement>) => {
 		props.onClick?.(e)
 
-		if (!props.onlyNotification)
+		if (!props.onlyNotification && !props.stayOpenedOnClick)
 			window.dispatchEvent(new CustomEvent(CLOSE_ADMIN_OPTIONS_EVENT_NAME))
 	}
 

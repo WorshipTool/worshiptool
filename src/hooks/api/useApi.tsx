@@ -14,6 +14,7 @@ import {
 	SongEditingApi,
 	SongFavouritesApi,
 	SongGettingApi,
+	SongManagementApi,
 	SongNotesApi,
 	SongPublishingApi,
 	SongSearchingApi,
@@ -55,6 +56,7 @@ export const useApi = () => {
 			bridgeApi: new BridgeApi(apiConfiguration),
 			parserApi: new ParserApi(apiConfiguration),
 			packEmbeddingApi: new PackEmbeddingApi(apiConfiguration),
+			songManagementApi: new SongManagementApi(apiConfiguration),
 
 			// submodules
 			teamAddingApi: new TeamAddingApi(apiConfiguration),

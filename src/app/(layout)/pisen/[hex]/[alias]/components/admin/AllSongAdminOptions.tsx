@@ -1,4 +1,4 @@
-import AdminAdvancedInfoOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AdminAdvancedInfoOption'
+import AdminAdvancedInfoOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AdminInfoOption'
 import ShowPackFamilyOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/ShowPackFamilyOption'
 import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminOption from '@/common/components/admin/AdminOption'

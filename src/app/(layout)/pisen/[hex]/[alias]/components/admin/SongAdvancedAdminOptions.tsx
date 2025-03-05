@@ -1,8 +1,9 @@
+import SetTranslationTypeAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/SetTranslationTypeAdminOption'
 import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
 import AdminOption from '@/common/components/admin/AdminOption'
 import CustomMenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
-import { Button, Divider, Typography, useTheme } from '@/common/ui'
+import { Button, Divider, Typography } from '@/common/ui'
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
 import { copyToClipboard } from '@/tech/string/copy.tech'
 import { ExtendedVariantPack } from '@/types/song'
@@ -16,12 +17,12 @@ import {
 } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { SongDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
-import DeleteButton from './DeleteButton'
-import EditButton from './EditButton'
-import PublishButton from './PublishButton'
+import DeleteButton from '../components/DeleteButton'
+import EditButton from '../components/EditButton'
+import PublishButton from '../components/PublishButton'
 
 interface AddToPlaylistButtonProps {
 	sheet: Sheet
@@ -35,7 +36,7 @@ interface AddToPlaylistButtonProps {
 	anyChange: boolean
 }
 
-export default function SheetAdminButtons({
+export default function SongAdvancedAdminOptions({
 	sheet,
 	song,
 	reload,
@@ -52,10 +53,10 @@ export default function SheetAdminButtons({
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
-	const handleClick = (event: any) => {
+	const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
 		setOpen(true)
 		setAnchorEl(event.currentTarget)
-	}
+	}, [])
 
 	const handleClose = () => {
 		setOpen(false)
@@ -91,26 +92,32 @@ export default function SheetAdminButtons({
 		handleClose()
 	}
 
-	const theme = useTheme()
-
-	const [verifyPopupOpen, setVerifyPopupOpen] = useState(false)
-	return (
-		<>
+	const Option = useMemo(
+		() => (
 			<AdminOption
 				title="Pokročilé možnosti"
 				subtitle="Možnosti k písni"
 				onClick={handleClick}
+				stayOpenedOnClick
 			/>
+		),
+		[]
+	)
+
+	const [verifyPopupOpen, setVerifyPopupOpen] = useState(false)
+	return (
+		<>
+			{Option}
 
 			<Menu
 				id="basic-menu"
 				anchorEl={anchorEl}
 				anchorOrigin={{
-					vertical: 'top',
-					horizontal: 'right',
+					vertical: 'bottom',
+					horizontal: 'left',
 				}}
 				transformOrigin={{
-					vertical: 'top',
+					vertical: 'bottom',
 					horizontal: 'right',
 				}}
 				open={open}
@@ -124,6 +131,8 @@ export default function SheetAdminButtons({
 						onClick={() => setVerifyPopupOpen(true)}
 					/>
 				)}
+				<Divider />
+				<SetTranslationTypeAdminOption />
 				<Divider />
 
 				{isAdmin() &&

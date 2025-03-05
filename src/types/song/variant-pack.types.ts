@@ -24,3 +24,10 @@ export type ExtendedVariantPack = BasicVariantPack & {
 
 	sources: SourceDto[]
 }
+
+export enum PackTranslationType {
+	Unknown = 0,
+	Original = 1,
+	Translation = 2,
+	OfficialTranslation = 3,
+}
