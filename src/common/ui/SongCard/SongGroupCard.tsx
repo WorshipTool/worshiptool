@@ -1,7 +1,7 @@
 import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui/Box'
 import { Clickable } from '@/common/ui/Clickable'
-import { SongCard } from '@/common/ui/SongCard/SongCard'
+import { SongVariantCard } from '@/common/ui/SongCard/SongVariantCard'
 import { Typography } from '@/common/ui/Typography'
 import { BasicVariantPack } from '@/types/song'
 import { useState } from 'react'
@@ -78,13 +78,13 @@ export default function SongGroupCard({
 									transition: 'bottom 0.2s, transform 0.2s',
 								}}
 							>
-								<SongCard data={d} flexibleHeight={flexibleHeight} />
+								<SongVariantCard data={d} flexibleHeight={flexibleHeight} />
 							</Box>
 						)
 					})}
 				</Box>
 
-				<SongCard
+				<SongVariantCard
 					data={first}
 					flexibleHeight={flexibleHeight}
 					sx={{
@@ -100,6 +100,7 @@ export default function SongGroupCard({
 						borderStyle: 'solid',
 						borderColor: BORDER_COLOR,
 					}}
+					properties={['SHOW_PRIVATE_LABEL']}
 				/>
 
 				{original && (
@@ -187,7 +188,11 @@ export default function SongGroupCard({
 					flexDirection={'column'}
 				>
 					{packs.map((d) => (
-						<SongCard key={d.packGuid} data={d} />
+						<SongVariantCard
+							key={d.packGuid}
+							data={d}
+							properties={['SHOW_PRIVATE_LABEL']}
+						/>
 					))}
 				</Box>
 			</Popup>

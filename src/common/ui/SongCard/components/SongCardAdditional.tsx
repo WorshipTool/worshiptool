@@ -1,13 +1,13 @@
 import { BasicVariantPack } from '@/api/dtos'
 import { Box } from '@/common/ui/Box'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
-import { SongCard } from '@/common/ui/SongCard/SongCard'
+import { SongVariantCard } from '@/common/ui/SongCard/SongVariantCard'
 import { ComponentProps, useMemo } from 'react'
 
 type SongCardAdditionalProps = {
 	isOver?: boolean
 	data: BasicVariantPack
-	icons: ComponentProps<typeof SongCard>['icons']
+	icons: ComponentProps<typeof SongVariantCard>['icons']
 }
 
 export default function SongCardAdditional(props: SongCardAdditionalProps) {

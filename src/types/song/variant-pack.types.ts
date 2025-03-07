@@ -12,7 +12,8 @@ export type VariantPackAlias = VPA
 
 export type BasicVariantPack = Basic
 
-export type SongLanguage = string & { readonly brand: unique symbol }
+type SongLanguageKeys = 'cs' | 'en' | 'sk'
+export type SongLanguage = SongLanguageKeys | String
 
 export type ExtendedVariantPack = BasicVariantPack & {
 	deleted: boolean

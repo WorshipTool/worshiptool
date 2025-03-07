@@ -6,19 +6,19 @@ import SongGroupCard from '@/common/ui/SongCard/SongGroupCard'
 import { ResponsiveStyleValue } from '@mui/system'
 import { ComponentProps, memo, useCallback, useMemo } from 'react'
 import { BasicVariantPack } from '../../../../api/dtos'
-import { SongCard } from '../../../ui/SongCard'
+import { SongVariantCard } from '../../../ui/SongCard'
 
 type CommmonProps = {
 	data: SearchSongDto[]
-	properties?: ComponentProps<typeof SongCard>['properties']
-	cardToLinkProps?: ComponentProps<typeof SongCard>['toLinkProps']
+	properties?: ComponentProps<typeof SongVariantCard>['properties']
+	cardToLinkProps?: ComponentProps<typeof SongVariantCard>['toLinkProps']
 	onCardClick?: (data: BasicVariantPack) => void
 
 	// Selecting
 	onCardSelect?: (data: BasicVariantPack) => void
 	onCardDeselect?: (data: BasicVariantPack) => void
 	selectable?: boolean
-	cardIcons?: ComponentProps<typeof SongCard>['icons']
+	cardIcons?: ComponentProps<typeof SongVariantCard>['icons']
 }
 
 type ListProps = CommmonProps & {

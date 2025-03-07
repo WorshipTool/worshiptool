@@ -17,6 +17,7 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
+import { SongLanguage } from '@/types/song'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { handleApiCall } from '../../../../../../tech/handleApiCall'
@@ -34,7 +35,7 @@ function Page() {
 
 	const [validation, setValidation] = useState<ValidationResult>()
 	const [qualities, setQualities] = useState<any>()
-	const [language, setLanguage] = useState<string>('cs')
+	const [language, setLanguage] = useState<SongLanguage>('cs')
 	const [autoFound, setAutoFound] = useState<boolean>(false)
 
 	const [message, setMessage] = useState<string>()
@@ -70,7 +71,7 @@ function Page() {
 			setValidation(validation)
 
 			try {
-				const lang =
+				const lang: SongLanguage =
 					variant.language ||
 					(
 						await handleApiCall(
@@ -102,7 +103,7 @@ function Page() {
 				await handleApiCall(
 					songEditingApi.songEditingControllerChangeLanguage({
 						packGuid: variant.packGuid,
-						languageString: language,
+						languageString: language as string,
 					})
 				)
 			}
@@ -146,7 +147,7 @@ function Page() {
 								<Select
 									labelId="demo-simple-select-label"
 									id="demo-simple-select"
-									value={language}
+									value={language as string}
 									// label="Jazyk"
 									onChange={handleChange}
 									size="small"

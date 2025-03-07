@@ -4,19 +4,19 @@ import { Grid } from '@/common/ui/mui/Grid'
 import { ResponsiveStyleValue } from '@mui/system'
 import { ComponentProps, memo, useCallback, useMemo } from 'react'
 import { BasicVariantPack } from '../../../../api/dtos'
-import { SongCard } from '../../../ui/SongCard'
+import { SongVariantCard } from '../../../ui/SongCard'
 
 type CommmonProps = {
 	data: BasicVariantPack[]
-	properties?: ComponentProps<typeof SongCard>['properties']
-	cardToLinkProps?: ComponentProps<typeof SongCard>['toLinkProps']
+	properties?: ComponentProps<typeof SongVariantCard>['properties']
+	cardToLinkProps?: ComponentProps<typeof SongVariantCard>['toLinkProps']
 	onCardClick?: (data: BasicVariantPack) => void
 
 	// Selecting
 	onCardSelect?: (data: BasicVariantPack) => void
 	onCardDeselect?: (data: BasicVariantPack) => void
 	selectable?: boolean
-	cardIcons?: ComponentProps<typeof SongCard>['icons']
+	cardIcons?: ComponentProps<typeof SongVariantCard>['icons']
 }
 
 type ListProps = CommmonProps & {
@@ -73,7 +73,7 @@ export const SongListCard = memo(function SongListCards({
 			flexibleHeight?: boolean
 		}) => {
 			return (
-				<SongCard
+				<SongVariantCard
 					data={v}
 					key={v.packGuid}
 					flexibleHeight={flexibleHeight}

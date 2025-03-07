@@ -1,5 +1,5 @@
 import { UserGuid } from '@/interfaces/user'
-import { SongGuid } from '@/types/song'
+import { PackTranslationType, SongGuid, SongLanguage } from '@/types/song'
 import {
 	VariantPackAlias,
 	VariantPackGuid,
@@ -26,6 +26,8 @@ export type BasicVariantPack = {
 	// Additional info
 	verified: boolean
 	public: boolean
+	language: SongLanguage
+	translationType: PackTranslationType
 
 	// Dates
 	createdAt: Date

@@ -4,7 +4,7 @@ import {
 	VariantPackGuid,
 } from '../../../api/dtos'
 import { createStory } from '../../../app/(layout)/storybook/createStory'
-import { SongCard } from './SongCard'
+import { SongVariantCard } from './SongVariantCard'
 
 const SongCardStory = () => {
 	const data: BasicVariantPack = {
@@ -15,7 +15,7 @@ const SongCardStory = () => {
 		public: false,
 	} as BasicVariantPack
 
-	return <SongCard data={data} />
+	return <SongVariantCard data={data} />
 }
 
-createStory(SongCard, SongCardStory)
+createStory(SongVariantCard, SongCardStory)

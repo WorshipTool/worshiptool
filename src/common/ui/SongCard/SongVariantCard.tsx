@@ -3,6 +3,7 @@
 import { Box } from '@/common/ui/Box'
 import { SxProps } from '@/common/ui/mui'
 import SongCardAdditional from '@/common/ui/SongCard/components/SongCardAdditional'
+import VariantCardColorPoint from '@/common/ui/SongCard/components/VariantCardColorPoint'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
@@ -61,7 +62,7 @@ type SongCardProps = {
 	icons?: SongCardIconData
 	sx?: SxProps
 }
-export const SongCard = memo(function S({
+export const SongVariantCard = memo(function S({
 	data,
 	flexibleHeight: flexibleHeght = true,
 	...props
@@ -189,6 +190,10 @@ export const SongCard = memo(function S({
 									flex: 1,
 								}}
 							>
+								<VariantCardColorPoint
+									language={data.language}
+									translationType={data.translationType}
+								/>
 								{title}
 							</Typography>
 							<Box>
