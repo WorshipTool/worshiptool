@@ -40,6 +40,7 @@ export default function AdminAdvancedInfoOption() {
 				>
 					<Item title="PackGuid" value={variant.packGuid} />
 					<Item title="PackAlias" value={variant.packAlias} />
+					<Item title="SongGuid" value={variant.songGuid} />
 				</Box>
 			</Popup>
 		</>
