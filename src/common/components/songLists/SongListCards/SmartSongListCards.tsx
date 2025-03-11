@@ -132,11 +132,16 @@ export const SmartSongListCard = memo(function SongListCards({
 								properties={['SHOW_PRIVATE_LABEL']}
 							/>
 						)),
-						<PackGroupCommonCard
-							packs={publicPacks}
-							original={v.original}
-							key={v.found[0].packGuid}
-						/>,
+
+						...(publicPacks.length > 0
+							? [
+									<PackGroupCommonCard
+										packs={publicPacks}
+										original={v.original}
+										key={v.found[0].packGuid}
+									/>,
+							  ]
+							: []),
 					].flat()
 				})
 				.flat()}

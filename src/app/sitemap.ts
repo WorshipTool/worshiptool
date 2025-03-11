@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const songsMap = songs.map((s) => ({
 		url: getRouteUrlWithParams(
 			'variant',
-			parseVariantAlias(s.alias as VariantPackAlias)
+			parseVariantAlias(s.main.packAlias as VariantPackAlias)
 		),
 		lastModified: date,
 		changeFrequency: 'monthly',

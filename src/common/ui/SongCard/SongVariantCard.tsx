@@ -67,7 +67,7 @@ export const SongVariantCard = memo(function S({
 	flexibleHeight: flexibleHeght = true,
 	...props
 }: SongCardProps) {
-	const { user } = useAuth()
+	const { user, isAdmin } = useAuth()
 	const theme = useTheme()
 
 	const [isOver, setIsOver] = useState(false)
@@ -188,6 +188,10 @@ export const SongVariantCard = memo(function S({
 								strong
 								sx={{
 									flex: 1,
+									...(!data.ggValidated &&
+										isAdmin() && {
+											color: 'error.main',
+										}),
 								}}
 							>
 								<VariantCardColorPoint

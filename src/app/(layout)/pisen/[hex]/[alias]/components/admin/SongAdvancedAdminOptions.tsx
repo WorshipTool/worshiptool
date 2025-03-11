@@ -1,3 +1,4 @@
+import GGFilterAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/GGFilterAdminOption'
 import SetTranslationTypeAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/SetTranslationTypeAdminOption'
 import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
 import AdminOption from '@/common/components/admin/AdminOption'
@@ -133,6 +134,7 @@ export default function SongAdvancedAdminOptions({
 				)}
 				<Divider />
 				<SetTranslationTypeAdminOption />
+				<GGFilterAdminOption />
 				<Divider />
 
 				{isAdmin() &&

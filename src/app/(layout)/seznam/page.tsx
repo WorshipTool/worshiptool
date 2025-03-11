@@ -25,10 +25,12 @@ function List() {
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
 	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
-	const getPageData = (page: number) => {
-		return handleApiCall(
-			songGettingApi.songGettingControllerGetList(page, countPerPage)
+	const getPageData = async (page: number) => {
+		const r = await handleApiCall(
+			songGettingApi.songGettingControllerGetList(page, countPerPage + 1)
 		)
+
+		return r.slice(0, countPerPage)
 	}
 
 	return (

@@ -42,6 +42,7 @@ export const mapBasicVariantPackApiToDto = (
 		songGuid: api.songGuid as SongGuid,
 
 		translationType: api.translationType as PackTranslationType,
+		ggValidated: api.ggValidated,
 
 		// Dates
 		createdAt: new Date(api.createdAt),
