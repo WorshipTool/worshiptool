@@ -1,7 +1,5 @@
-import {
-	GetVariantDataOutDto,
-	SongGettingApi,
-} from '../../../../../api/generated'
+import { useServerApi } from '@/hooks/api/useServerApi'
+import { GetVariantDataOutDto } from '../../../../../api/generated'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 export const getVariantAliasFromParams = (hex: string, code: string) => {
@@ -11,10 +9,10 @@ export const getVariantAliasFromParams = (hex: string, code: string) => {
 export const getVariantByAlias = async (
 	alias: string
 ): Promise<GetVariantDataOutDto> => {
-	const gettingApi = new SongGettingApi()
+	const { songGettingApi } = await useServerApi()
 
 	const variant = await handleApiCall(
-		gettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+		songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
 	)
 
 	return variant

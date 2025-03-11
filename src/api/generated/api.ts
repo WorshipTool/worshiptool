@@ -10469,39 +10469,6 @@ export const SongManagementApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songGGFilterControllerRegenerateAntiEmbeddings: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/songs/filter/regenerateAntiEmbeddings`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} packGuid 
          * @param {boolean} status 
          * @param {*} [options] Override http request option.
@@ -10557,46 +10524,6 @@ export const SongManagementApiAxiosParamCreator = function (configuration?: Conf
             // verify required parameter 'packGuid' is not null or undefined
             assertParamExists('songGGFilterControllerSetFilterStatusToAutoForPack', 'packGuid', packGuid)
             const localVarPath = `/songs/filter/setFilterStatusToAutoForPack`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (packGuid !== undefined) {
-                localVarQueryParameter['packGuid'] = packGuid;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} packGuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songGGFilterControllerShouldBeFiltered: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'packGuid' is not null or undefined
-            assertParamExists('songGGFilterControllerShouldBeFiltered', 'packGuid', packGuid)
-            const localVarPath = `/songs/filter/shouldBeFiltered`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10918,17 +10845,6 @@ export const SongManagementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songGGFilterControllerRegenerateAntiEmbeddings(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songGGFilterControllerRegenerateAntiEmbeddings(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongManagementApi.songGGFilterControllerRegenerateAntiEmbeddings']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {string} packGuid 
          * @param {boolean} status 
          * @param {*} [options] Override http request option.
@@ -10950,18 +10866,6 @@ export const SongManagementApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songGGFilterControllerSetFilterStatusToAutoForPack(packGuid, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongManagementApi.songGGFilterControllerSetFilterStatusToAutoForPack']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} packGuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async songGGFilterControllerShouldBeFiltered(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.songGGFilterControllerShouldBeFiltered(packGuid, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SongManagementApi.songGGFilterControllerShouldBeFiltered']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -11070,14 +10974,6 @@ export const SongManagementApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songGGFilterControllerRegenerateAntiEmbeddings(options?: any): AxiosPromise<void> {
-            return localVarFp.songGGFilterControllerRegenerateAntiEmbeddings(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {string} packGuid 
          * @param {boolean} status 
          * @param {*} [options] Override http request option.
@@ -11094,15 +10990,6 @@ export const SongManagementApiFactory = function (configuration?: Configuration,
          */
         songGGFilterControllerSetFilterStatusToAutoForPack(packGuid: string, options?: any): AxiosPromise<void> {
             return localVarFp.songGGFilterControllerSetFilterStatusToAutoForPack(packGuid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} packGuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        songGGFilterControllerShouldBeFiltered(packGuid: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.songGGFilterControllerShouldBeFiltered(packGuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Add all packs without language to generate
@@ -11191,16 +11078,6 @@ export class SongManagementApi extends BaseAPI {
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongManagementApi
-     */
-    public songGGFilterControllerRegenerateAntiEmbeddings(options?: RawAxiosRequestConfig) {
-        return SongManagementApiFp(this.configuration).songGGFilterControllerRegenerateAntiEmbeddings(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {string} packGuid 
      * @param {boolean} status 
      * @param {*} [options] Override http request option.
@@ -11220,17 +11097,6 @@ export class SongManagementApi extends BaseAPI {
      */
     public songGGFilterControllerSetFilterStatusToAutoForPack(packGuid: string, options?: RawAxiosRequestConfig) {
         return SongManagementApiFp(this.configuration).songGGFilterControllerSetFilterStatusToAutoForPack(packGuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} packGuid 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SongManagementApi
-     */
-    public songGGFilterControllerShouldBeFiltered(packGuid: string, options?: RawAxiosRequestConfig) {
-        return SongManagementApiFp(this.configuration).songGGFilterControllerShouldBeFiltered(packGuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
