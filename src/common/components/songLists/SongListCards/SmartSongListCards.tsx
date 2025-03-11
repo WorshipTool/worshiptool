@@ -68,16 +68,18 @@ export const SmartSongListCard = memo(function SongListCards({
 
 	const PackGroupCommonCard = useCallback(
 		({
-			v,
+			packs,
+			original,
 			flexibleHeight = true,
 		}: {
-			v: SearchSongDto
+			packs: BasicVariantPack[]
+			original?: BasicVariantPack
 			flexibleHeight?: boolean
 		}) => {
 			return (
 				<SongGroupCard
-					packs={v.found}
-					original={v.original}
+					packs={packs}
+					original={original}
 					flexibleHeight={flexibleHeight}
 				/>
 			)
@@ -92,16 +94,52 @@ export const SmartSongListCard = memo(function SongListCards({
 			{data.map((v) => {
 				return (
 					<Grid item key={v.found[0].packGuid} xs={1}>
-						<PackGroupCommonCard v={v} flexibleHeight={false} />
+						{data
+							.map((v) => {
+								const publicPacks = v.found.filter((v) => v.public)
+								const privatePacks = v.found.filter((v) => !v.public)
+								return [
+									privatePacks.map((v) => (
+										<SongVariantCard
+											data={v}
+											key={v.packGuid}
+											properties={['SHOW_PRIVATE_LABEL']}
+										/>
+									)),
+									<PackGroupCommonCard
+										packs={publicPacks}
+										original={v.original}
+										key={v.found[0].packGuid}
+									/>,
+								].flat()
+							})
+							.flat()}
 					</Grid>
 				)
 			})}
 		</Grid>
 	) : (
 		<Masonry columns={columns} sx={{}} spacing={spacing}>
-			{data.map((v) => {
-				return <PackGroupCommonCard v={v} key={v.found[0].packGuid} />
-			})}
+			{data
+				.map((v) => {
+					const publicPacks = v.found.filter((v) => v.public)
+					const privatePacks = v.found.filter((v) => !v.public)
+					return [
+						privatePacks.map((v) => (
+							<SongVariantCard
+								data={v}
+								key={v.packGuid}
+								properties={['SHOW_PRIVATE_LABEL']}
+							/>
+						)),
+						<PackGroupCommonCard
+							packs={publicPacks}
+							original={v.original}
+							key={v.found[0].packGuid}
+						/>,
+					].flat()
+				})
+				.flat()}
 		</Masonry>
 	)
 })
