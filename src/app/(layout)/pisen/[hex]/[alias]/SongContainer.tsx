@@ -20,9 +20,16 @@ import { SongDto } from '../../../../../api/dtos'
 export type SongPageProps = {
 	variant: ExtendedVariantPack
 	song: SongDto
+	flags: {
+		showMedia: boolean
+	}
 }
 
-export default function SongContainer({ variant, song }: SongPageProps) {
+export default function SongContainer({
+	variant,
+	song,
+	...props
+}: SongPageProps) {
 	const sheet = useMemo(() => {
 		return new Sheet(variant.sheetData)
 	}, [variant.sheetData])
@@ -164,6 +171,7 @@ export default function SongContainer({ variant, song }: SongPageProps) {
 							<AdditionalSongInfoPanel
 								song={song as SongDto}
 								variant={variant}
+								showMedia={props.flags.showMedia}
 							/>
 						</>
 					)}

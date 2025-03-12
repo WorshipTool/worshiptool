@@ -4,6 +4,7 @@ import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnaly
 import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
+import { checkFlag } from '@/common/providers/FeatureFlags'
 import { Box } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { VariantPackAlias } from '@/types/song'
@@ -29,6 +30,8 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 
 	const song = mapGetVariantDataApiToSongDto(v)
 	const variantData = mapExtendedVariantPackApiToDto(mainPack)
+
+	const showMedia = await checkFlag('show_media_on_song_page')
 	return (
 		<Box
 			sx={{
@@ -71,7 +74,13 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 					</DraggableSong>
 				))}
 
-				<SongContainer variant={variantData} song={song} />
+				<SongContainer
+					variant={variantData}
+					song={song}
+					flags={{
+						showMedia: showMedia,
+					}}
+				/>
 			</ContainerGrid>
 		</Box>
 	)

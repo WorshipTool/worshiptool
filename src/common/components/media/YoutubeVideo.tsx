@@ -8,7 +8,7 @@ type Props = {
 	width?: number | string
 }
 
-export default function YoutubeVideo({ src, ...props }: Props) {
+export default function YoutubeVideo({ src, width = '100%', ...props }: Props) {
 	const [url, setUrl] = useState<string | null>(null)
 	const { getEmbedUrl, getId } = useYoutube()
 	useEffect(() => {
@@ -28,7 +28,7 @@ export default function YoutubeVideo({ src, ...props }: Props) {
 	return url ? (
 		<iframe
 			style={{
-				width: props.width,
+				width: width,
 				aspectRatio: 16 / 9,
 			}}
 			src={url}
@@ -39,8 +39,9 @@ export default function YoutubeVideo({ src, ...props }: Props) {
 		></iframe>
 	) : (
 		<Box
-			width={props.width}
 			sx={{
+				width: width,
+				height: 300,
 				aspectRatio: 16 / 9,
 			}}
 		>

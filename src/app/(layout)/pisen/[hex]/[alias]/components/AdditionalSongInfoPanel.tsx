@@ -1,4 +1,4 @@
-import MediaPlayer from '@/common/components/media/MediaPlayer'
+import MediaSection from '@/app/(layout)/pisen/[hex]/[alias]/components/components/MediaSection'
 import { Box, Typography } from '@/common/ui'
 import { Chip } from '@/common/ui/mui'
 import { ExtendedVariantPack } from '@/types/song'
@@ -9,25 +9,21 @@ import { SourcesList } from './SourcesList/SourcesList'
 interface AdditionalSongInfoPanelProps {
 	song: SongDto
 	variant: ExtendedVariantPack
+	showMedia: boolean
 }
 
 export default function AdditionalSongInfoPanel({
 	song,
 	variant,
+	...props
 }: AdditionalSongInfoPanelProps) {
 	const { isAdmin, isLoggedIn } = useAuth()
 	return (
-		<Box sx={{}}>
+		<Box display={'flex'} flexDirection={'column'} gap={1}>
 			{/* VIDEOS */}
-			{isLoggedIn() ? (
-				<>
-					{song.media.map((m) => (
-						<MediaPlayer src={m.url} type={m.type} key={m.guid} />
-					))}
-				</>
-			) : (
-				<></>
-			)}
+
+			{props.showMedia && <MediaSection media={song.media} />}
+
 			{variant.sources?.length > 0 && <SourcesList variant={variant} />}
 			<Box>
 				{/* RESOURCES */}
@@ -50,18 +46,6 @@ export default function AdditionalSongInfoPanel({
 								</Box>
 							</>
 						)}
-
-						{/* CREATORS  //TODO*/}
-						{/* {variant.creators.length > 0 && (
-							<>
-								<Typography>Autoři</Typography>
-								<Box display={'flex'} flexDirection={'row'} gap={0.5}>
-									{variant.creators.map((s) => {
-										return <Chip label={s.name} key={s.name} />
-									})}
-								</Box>
-							</>
-						)} */}
 					</>
 				) : (
 					<></>

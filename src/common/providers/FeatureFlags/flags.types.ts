@@ -4,6 +4,7 @@ type ExistingFlags =
 	| 'app_temporarily_unavailable'
 	| 'enable_smart_search'
 	| 'show_loading_screen'
+	| 'show_media_on_song_page'
 
 export type FeatureFlag = ExistingFlags | String
 

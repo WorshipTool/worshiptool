@@ -83,7 +83,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 			<SearchContainer>
 				<SearchIcon />
 				<SearchInput
-					placeholder="Hledej..."
+					placeholder="Hledej podle názvu nebo části textu"
 					onChange={(e) => props.onChange(e.target.value)}
 					autoFocus
 					value={props.value}
