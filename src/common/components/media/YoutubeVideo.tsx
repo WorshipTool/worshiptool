@@ -1,8 +1,13 @@
 import { Box, useTheme } from '@/common/ui'
 import { useEffect, useState } from 'react'
-import useYoutube from '../../hooks/useYoutube'
+import useYoutube from '../../../hooks/useYoutube'
 
-export default function YoutubeVideo({ src }: { src: string }) {
+type Props = {
+	src: string
+	width?: number | string
+}
+
+export default function YoutubeVideo({ src, ...props }: Props) {
 	const [url, setUrl] = useState('')
 	const { getEmbedUrl, getId } = useYoutube()
 	useEffect(() => {
@@ -30,7 +35,7 @@ export default function YoutubeVideo({ src }: { src: string }) {
 			>
 				<iframe
 					style={{
-						width: '560px',
+						width: props.width ?? '560px',
 						aspectRatio: 16 / 9,
 					}}
 					src={url}
@@ -51,6 +56,7 @@ export default function YoutubeVideo({ src }: { src: string }) {
 				<iframe
 					style={{
 						aspectRatio: 16 / 9,
+						width: props.width,
 					}}
 					src={url}
 					title="YouTube video player"

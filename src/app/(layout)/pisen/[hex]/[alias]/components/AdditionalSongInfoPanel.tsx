@@ -1,10 +1,9 @@
+import MediaPlayer from '@/common/components/media/MediaPlayer'
 import { Box, Typography } from '@/common/ui'
 import { Chip } from '@/common/ui/mui'
 import { ExtendedVariantPack } from '@/types/song'
 import { SongDto } from '../../../../../../api/dtos'
-import YoutubeVideo from '../../../../../../common/components/YoutubeVideo'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { MediaTypes } from '../../../../../../interfaces/song/media'
 import { SourcesList } from './SourcesList/SourcesList'
 
 interface AdditionalSongInfoPanelProps {
@@ -22,17 +21,9 @@ export default function AdditionalSongInfoPanel({
 			{/* VIDEOS */}
 			{isLoggedIn() ? (
 				<>
-					{song.media.map((m) => {
-						if (m.type === MediaTypes.Youtube) {
-							return <YoutubeVideo src={m.url} key={m.url}></YoutubeVideo>
-						} else {
-							return (
-								<Typography key={m.url}>
-									Našli jsme přílohu, ale nevíme jak si s ní poradit.
-								</Typography>
-							)
-						}
-					})}
+					{song.media.map((m) => (
+						<MediaPlayer src={m.url} type={m.type} />
+					))}
 				</>
 			) : (
 				<></>

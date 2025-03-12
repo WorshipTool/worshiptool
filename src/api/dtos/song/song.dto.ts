@@ -1,16 +1,16 @@
 import { UserGuid } from '@/interfaces/user'
 import { PackTranslationType, SongGuid, SongLanguage } from '@/types/song'
+import { MediaData } from '@/types/song/media.types'
 import {
 	VariantPackAlias,
 	VariantPackGuid,
 } from '../../../interfaces/variant/songVariant.types'
-import { MediaDto } from '../media/MediaDto'
 
 export type SongDto = {
 	guid: string
 	title: string
 	variants: BasicVariantPack[]
-	media: MediaDto[]
+	media: MediaData[]
 	tags: string[]
 }
 

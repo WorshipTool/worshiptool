@@ -1,0 +1,168 @@
+import {
+	useInnerSong,
+	useInnerVariant,
+} from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import MenuItem from '@/common/components/Menu/MenuItem'
+import Popup from '@/common/components/Popup/Popup'
+import { Box, Button, Gap, TextField } from '@/common/ui'
+import { Switch } from '@/common/ui/mui'
+import { useApi } from '@/hooks/api/useApi'
+import { useApiState } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { MusicVideo } from '@mui/icons-material'
+import { useEffect, useState } from 'react'
+
+export default function AddMediaAdminOption() {
+	const [open, setOpen] = useState(false)
+	const [url, setUrl] = useState('')
+
+	const [adding, setAdding] = useState(true)
+
+	const { packGuid } = useInnerVariant()
+	const { song } = useInnerSong()
+	const { songManagementApi } = useApi()
+	const onSubmit = async () => {
+		doFetch(true)
+	}
+
+	const remove = async () => {
+		doFetch(false)
+	}
+
+	const { fetchApiState, apiState } = useApiState()
+
+	const doFetch = async (add: boolean) => {
+		// 0. Check if the URL is valid
+		if (!url) {
+			return
+		}
+
+		// 1. Add or remove the media
+		if (add) {
+			await fetchApiState(() =>
+				handleApiCall(
+					songManagementApi.songMediaControllerAddMediaToPack({
+						packGuid,
+						mediaUrl: url,
+					})
+				)
+			)
+		} else {
+			await fetchApiState(() =>
+				handleApiCall(
+					songManagementApi.songMediaControllerRemoveMediaFromPack({
+						packGuid,
+						mediaGuid: url,
+					})
+				)
+			)
+		}
+		setOpen(false)
+		// 2. Reload the page
+		window.location.reload()
+	}
+
+	useEffect(() => {
+		if (open) {
+			setUrl('')
+		}
+	}, [open])
+
+	return (
+		<>
+			<MenuItem
+				onClick={() => setOpen(true)}
+				icon={<MusicVideo fontSize="small" />}
+				title={'Přidat nahrávku'}
+			/>
+
+			<Popup
+				onClose={() => setOpen(false)}
+				onSubmit={onSubmit}
+				width={300}
+				open={open}
+				title={
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						gap={5}
+						alignItems={'center'}
+					>
+						Přidat nahrávku
+						<Gap horizontal />
+						{song.media.length > 0 && (
+							<Switch checked={adding} onChange={() => setAdding(!adding)} />
+						)}
+					</Box>
+				}
+				actions={[
+					<Button
+						key={'cancel'}
+						variant="outlined"
+						type="reset"
+						loading={apiState.loading}
+					>
+						Zrušit
+					</Button>,
+					!adding ? (
+						<Button
+							key={'cancel'}
+							variant="contained"
+							color="error"
+							onClick={remove}
+							size="small"
+						>
+							Odebrat
+						</Button>
+					) : (
+						<Button key={'action'} type={'submit'} loading={apiState.loading}>
+							Přidat
+						</Button>
+					),
+				]}
+			>
+				{adding ? (
+					<>
+						<TextField
+							sx={{
+								bgcolor: 'grey.200',
+								padding: 1,
+								paddingLeft: 2,
+								borderRadius: 2,
+							}}
+							placeholder={'Zadejte url nahrávky'}
+							autoFocus
+							value={url}
+							onChange={(e) => setUrl(e)}
+						/>
+					</>
+				) : (
+					<>
+						{song.media.map((media, index) => {
+							// get domain
+							let title = media.url
+							let subtitle = undefined
+							try {
+								const u = new URL(media.url)
+								title = u.hostname
+								subtitle = u.pathname
+							} catch (e) {}
+
+							const chosen = url === media.guid
+
+							if (chosen) title = 'Vybráno'
+							return (
+								<Button
+									onClick={() => setUrl(media.guid)}
+									subtitle={subtitle}
+									title={title}
+									variant={chosen ? 'contained' : 'outlined'}
+								></Button>
+							)
+						})}
+					</>
+				)}
+			</Popup>
+		</>
+	)
+}

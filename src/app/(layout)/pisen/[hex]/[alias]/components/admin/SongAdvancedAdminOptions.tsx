@@ -1,3 +1,4 @@
+import AddMediaAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AddMediaAdminOption'
 import GGFilterAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/GGFilterAdminOption'
 import SetTranslationTypeAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/SetTranslationTypeAdminOption'
 import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
@@ -5,17 +6,10 @@ import AdminOption from '@/common/components/admin/AdminOption'
 import CustomMenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, Divider, Typography } from '@/common/ui'
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@/common/ui/mui'
+import { Menu } from '@/common/ui/mui'
 import { copyToClipboard } from '@/tech/string/copy.tech'
 import { ExtendedVariantPack } from '@/types/song'
-import {
-	CopyAll,
-	NewReleases,
-	Tag,
-	Verified,
-	VerifiedUser,
-	VideoFile,
-} from '@mui/icons-material'
+import { CopyAll, NewReleases, Verified } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -66,7 +60,6 @@ export default function SongAdvancedAdminOptions({
 
 	const { enqueueSnackbar } = useSnackbar()
 
-	const [addVideoOpen, setAddVideoOpen] = useState(false)
 	const [addTagOpen, setAddTagOpen] = useState(false)
 	const [addCreatorOpen, setAddCreatorOpen] = useState(false)
 
@@ -80,11 +73,6 @@ export default function SongAdvancedAdminOptions({
 
 	const addCreator = () => {
 		setAddCreatorOpen(true)
-		handleClose()
-	}
-
-	const addVideo = () => {
-		setAddVideoOpen(true)
 		handleClose()
 	}
 
@@ -164,26 +152,8 @@ export default function SongAdvancedAdminOptions({
 					onClick={onCopyClick}
 					icon={<CopyAll fontSize="small" />}
 				/>
-				<MenuItem onClick={addCreator}>
-					<ListItemIcon>
-						<VerifiedUser fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat autora</ListItemText>
-				</MenuItem>
 
-				<MenuItem onClick={addVideo}>
-					<ListItemIcon>
-						<VideoFile fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat video</ListItemText>
-				</MenuItem>
-
-				<MenuItem onClick={addTag}>
-					<ListItemIcon>
-						<Tag fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Přidat tag</ListItemText>
-				</MenuItem>
+				<AddMediaAdminOption />
 			</Menu>
 
 			<Popup

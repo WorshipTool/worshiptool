@@ -1,6 +1,7 @@
 import { Box } from '@/common/ui'
 
 export const POPUP_DIV_CONTAINER_ID = 'popup-div-container'
+export const POPUP_CONTAINER_Z_INDEX = 1360
 export default function PopupProvider() {
 	return (
 		<Box
@@ -13,7 +14,7 @@ export default function PopupProvider() {
 				bottom: 0,
 				pointerEvents: 'none',
 				// zIndex: 10,
-				zIndex: 1360,
+				zIndex: POPUP_CONTAINER_Z_INDEX,
 			}}
 		></Box>
 	)
