@@ -1,4 +1,5 @@
 import { Box, useTheme } from '@/common/ui'
+import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { useEffect, useState } from 'react'
 import useYoutube from '../../../hooks/useYoutube'
 
@@ -8,7 +9,7 @@ type Props = {
 }
 
 export default function YoutubeVideo({ src, ...props }: Props) {
-	const [url, setUrl] = useState('')
+	const [url, setUrl] = useState<string | null>(null)
 	const { getEmbedUrl, getId } = useYoutube()
 	useEffect(() => {
 		const id = getId(src)
@@ -24,47 +25,26 @@ export default function YoutubeVideo({ src, ...props }: Props) {
 	// maximum width: 560px
 
 	const theme = useTheme()
-	return (
-		<div style={{}}>
-			<Box
-				sx={{
-					[theme.breakpoints.down('sm')]: {
-						display: 'none',
-					},
-				}}
-			>
-				<iframe
-					style={{
-						width: props.width ?? '560px',
-						aspectRatio: 16 / 9,
-					}}
-					src={url}
-					title="YouTube video player"
-					frameBorder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowFullScreen
-				></iframe>
-			</Box>
-
-			<Box
-				sx={{
-					[theme.breakpoints.up('sm')]: {
-						display: 'none',
-					},
-				}}
-			>
-				<iframe
-					style={{
-						aspectRatio: 16 / 9,
-						width: props.width,
-					}}
-					src={url}
-					title="YouTube video player"
-					frameBorder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowFullScreen
-				></iframe>
-			</Box>
-		</div>
+	return url ? (
+		<iframe
+			style={{
+				width: props.width,
+				aspectRatio: 16 / 9,
+			}}
+			src={url}
+			title="YouTube video player"
+			frameBorder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			allowFullScreen
+		></iframe>
+	) : (
+		<Box
+			width={props.width}
+			sx={{
+				aspectRatio: 16 / 9,
+			}}
+		>
+			<Skeleton width={'100%'} height={'100%'} variant="rectangular" />
+		</Box>
 	)
 }
