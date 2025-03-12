@@ -22,7 +22,7 @@ export default function AdditionalSongInfoPanel({
 			{isLoggedIn() ? (
 				<>
 					{song.media.map((m) => (
-						<MediaPlayer src={m.url} type={m.type} />
+						<MediaPlayer src={m.url} type={m.type} key={m.guid} />
 					))}
 				</>
 			) : (
