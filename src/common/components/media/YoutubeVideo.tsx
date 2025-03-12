@@ -41,7 +41,6 @@ export default function YoutubeVideo({ src, width = '100%', ...props }: Props) {
 		<Box
 			sx={{
 				width: width,
-				height: 300,
 				aspectRatio: 16 / 9,
 			}}
 		>

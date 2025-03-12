@@ -45,13 +45,13 @@ export default function SongContainer({
 	const rerender = useRerender()
 
 	// Current sheet
-	const [currentSheet, setCurrentSheet] = useState<Sheet>()
+	const [currentSheet, setCurrentSheet] = useState<Sheet>(sheet)
 	useEffect(() => {
 		if (sheet) setCurrentSheet(sheet)
 	}, [sheet])
 
 	// Current title
-	const [editedTitle, setEditedTitle] = useState('')
+	const [editedTitle, setEditedTitle] = useState(title)
 	useEffect(() => {
 		if (title) setEditedTitle(title)
 	}, [title])
@@ -126,7 +126,6 @@ export default function SongContainer({
 											/>
 										)}
 										<Gap value={0.5} />
-
 										<SheetDisplay
 											sheet={currentSheet}
 											title={editedTitle}
