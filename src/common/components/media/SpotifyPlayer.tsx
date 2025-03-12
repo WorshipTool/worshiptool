@@ -49,6 +49,7 @@ const SpotifyPlayer = ({ url }: SpotifyPlayerProps) => {
 				<Skeleton
 					width={WIDTH}
 					height={HEIGHT}
+					variant="rectangular"
 					sx={{
 						borderRadius: 2,
 					}}

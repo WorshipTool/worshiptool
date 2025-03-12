@@ -106,7 +106,7 @@ export default function AddMediaAdminOption() {
 					</Button>,
 					!adding ? (
 						<Button
-							key={'cancel'}
+							key={'remove'}
 							variant="contained"
 							color="error"
 							onClick={remove}
@@ -153,6 +153,7 @@ export default function AddMediaAdminOption() {
 							if (chosen) title = 'Vybráno'
 							return (
 								<Button
+									key={media.guid}
 									onClick={() => setUrl(media.guid)}
 									subtitle={subtitle}
 									title={title}

@@ -21,7 +21,7 @@ export default function MediaPlayer(props: Props) {
 		<Box maxWidth={'560px'} sx={{}}>
 			{type === MediaTypes.Youtube ? (
 				<YoutubeVideo
-					src={props.src}
+					url={props.src}
 					key={props.src}
 					width={'100%'}
 				></YoutubeVideo>
