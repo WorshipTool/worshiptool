@@ -75,11 +75,15 @@ const useProviderOutsideBlocker = <T extends RoutesKeys = RoutesKeys>() => {
 }
 
 export const useOutsideBlockerLinkCheck = <T extends RoutesKeys>(
-	to: ToData<T>
+	to: ToData<T>,
+	disabled?: boolean
 ) => {
 	const { checkToPath } = useOutsideBlocker()
 
-	const isBlocked = useMemo(() => checkToPath(to), [checkToPath, to])
+	const isBlocked = useMemo(
+		() => (disabled ? false : checkToPath(to)),
+		[checkToPath, to, disabled]
+	)
 
 	return isBlocked
 }

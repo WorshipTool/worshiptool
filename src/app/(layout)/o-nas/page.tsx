@@ -19,6 +19,7 @@ import Shape from './shape.svg'
 import Shape2 from './shape2.svg'
 
 //TODO: fix overflow in better way.
+import CollaborationWithWorshipkoCard from '@/app/(layout)/o-nas/components/CollaborationWithWorshipkoCard'
 import HelpUsPanel from '@/app/(layout)/o-nas/components/HelpUsPanel'
 import SheepBigGraphics from '@/app/(layout)/o-nas/components/SheepBigGraphics'
 import { Divider } from '@/common/ui'
@@ -64,7 +65,6 @@ function Page() {
 							</Typography>
 						</Box>
 					</Box>
-
 					<Typography
 						sx={{
 							maxWidth: 410,
@@ -131,14 +131,16 @@ function Page() {
 						bottom: 0,
 						left: 0,
 						right: 0,
-						height: 45,
+						height: 55,
 					}}
 				>
 					<More />
 				</Box>
 			</Box>
 
-			<Divider />
+			{/* <Divider /> */}
+			{/* <Gap /> */}
+			<CollaborationWithWorshipkoCard />
 			{/* SECOND PAGE - Database */}
 			<Box
 				paddingY={8}
@@ -245,6 +247,7 @@ function Page() {
 				</Box>
 			</Box>
 
+			{/* <Divider /> */}
 			<Divider />
 
 			{/* THIRD PAGE - Tools */}

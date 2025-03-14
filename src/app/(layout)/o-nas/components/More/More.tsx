@@ -20,9 +20,9 @@ export default function More(props: MoreProps) {
 			flexDirection={'column'}
 			alignItems={'center'}
 			sx={{
-				gap: 0.2,
+				gap: 1,
 				'&:hover': {
-					gap: 0.5,
+					gap: 1.8,
 					transform: 'translateY(2px)',
 				},
 				transition: 'all 0.3s',

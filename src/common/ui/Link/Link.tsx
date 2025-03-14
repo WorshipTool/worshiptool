@@ -19,9 +19,17 @@ import { RoutesKeys, SmartAllParams } from '../../../routes/routes.types'
 export type CommonLinkProps<T extends RoutesKeys> = {
 	to: T
 	params: SmartAllParams<T>
+	external?: false
 }
 
-export type LinkProps<T extends RoutesKeys> = CommonLinkProps<T> & {
+export type ExternalLinkProps = {
+	href: string
+	external: true
+}
+
+type CommonProps<T extends RoutesKeys> = CommonLinkProps<T> | ExternalLinkProps
+
+export type LinkProps<T extends RoutesKeys> = CommonProps<T> & {
 	children: React.ReactNode
 	onlyWithShift?: boolean
 	sx?: SxProps<{}>
@@ -35,6 +43,13 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 	const { aliases } = useSubdomainPathnameAlias()
 
 	const { url, relativeUrl } = useMemo(() => {
+		if (props.external) {
+			return {
+				url: props.href,
+				relativeUrl: props.href,
+			}
+		}
+
 		const absoluteUrl = getReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
@@ -62,7 +77,11 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 			url: urlWithAliases,
 			relativeUrl,
 		}
-	}, [props.to, props.params, aliases])
+	}, [
+		(props as CommonLinkProps<T>).to,
+		(props as CommonLinkProps<T>).params,
+		aliases,
+	])
 
 	const [shiftOn, setShiftOn] = React.useState(false)
 
@@ -98,11 +117,14 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 		}
 	}, [])
 
-	const result = useOutsideBlockerLinkCheck({
-		to: props.to,
-		params: props.params,
-		url: relativeUrl,
-	})
+	const result = useOutsideBlockerLinkCheck(
+		{
+			to: (props as CommonLinkProps<T>).to,
+			params: (props as CommonLinkProps<T>).params,
+			url: relativeUrl,
+		},
+		props.external // Disable blocker for external links
+	)
 
 	const openingOnNew = shiftOn || props.newTab
 	const shouldBeBlocked = result !== false && !openingOnNew
