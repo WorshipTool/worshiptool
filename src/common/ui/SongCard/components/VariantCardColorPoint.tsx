@@ -25,7 +25,7 @@ export default function VariantCardColorPoint({
 						}
 					case PackTranslationType.OfficialTranslation:
 						return {
-							color: 'warning.main',
+							color: 'error.light',
 							message: 'Oficiální český překlad',
 						}
 					case PackTranslationType.Translation:

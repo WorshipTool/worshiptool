@@ -9765,6 +9765,39 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetSitemapList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/sitemapList`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10107,6 +10140,17 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetSitemapList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetListSongData>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetSitemapList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetSitemapList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10254,6 +10298,14 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetSitemapList(options?: any): AxiosPromise<Array<GetListSongData>> {
+            return localVarFp.songGettingControllerGetSitemapList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} guid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10388,6 +10440,16 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerGetRecommendedSongs(options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetRecommendedSongs(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetSitemapList(options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetSitemapList(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

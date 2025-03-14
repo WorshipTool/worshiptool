@@ -13,62 +13,65 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const api = new SongGettingApi()
 	let songs: GetListSongData[] = []
 	try {
-		songs = await handleApiCall(api.songGettingControllerGetList())
+		songs = await handleApiCall(api.songGettingControllerGetSitemapList())
 	} catch (e) {
 		console.warn('Failed to fetch songs for sitemap -> ignoring songs')
 	}
 
-	const date = new Date()
+	const today = new Date()
 
-	const songsMap = songs.map((s) => ({
-		url: getRouteUrlWithParams(
-			'variant',
-			parseVariantAlias(s.main.packAlias as VariantPackAlias)
-		),
-		lastModified: date,
-		changeFrequency: 'monthly',
-		priority: 0.8,
-	}))
+	const songsMap = songs.map((s) => {
+		const date = new Date(s.main.updatedAt)
+		return {
+			url: getRouteUrlWithParams(
+				'variant',
+				parseVariantAlias(s.main.packAlias as VariantPackAlias)
+			),
+			lastModified: date,
+			changeFrequency: 'monthly',
+			priority: 0.8,
+		}
+	})
 	return [
 		{
 			url: `${BASE_URL}/`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'yearly',
 			priority: 1,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['songsList']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'weekly',
 			priority: 0.7,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['about']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'monthly',
 			priority: 0.2,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['teams']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'monthly',
 			priority: 0.2,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['login']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'yearly',
 			priority: 0.3,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['signup']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'yearly',
 			priority: 0.4,
 		},
 		{
 			url: `${BASE_URL}${routesPaths['addMenu']}`,
-			lastModified: date,
+			lastModified: today,
 			changeFrequency: 'yearly',
 			priority: 0.6,
 		},

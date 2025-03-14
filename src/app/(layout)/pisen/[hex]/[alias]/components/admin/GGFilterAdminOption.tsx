@@ -43,7 +43,7 @@ export default function GGFilterAdminOption() {
 	return (
 		<>
 			<MenuItem
-				title={'Validace obsahu'}
+				title={'(GG) Validace obsahu'}
 				subtitle="Zvolit zda se má píseň filtrovat"
 				onClick={() => setOpen(true)}
 			/>
