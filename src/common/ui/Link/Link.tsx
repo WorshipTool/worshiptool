@@ -16,7 +16,7 @@ import React, { ComponentProps, useEffect, useMemo } from 'react'
 import { routesPaths } from '../../../routes'
 import { RoutesKeys, SmartAllParams } from '../../../routes/routes.types'
 
-export type CommonLinkProps<T extends RoutesKeys> = {
+export type CommonLinkProps<T extends RoutesKeys = RoutesKeys> = {
 	to: T
 	params: SmartAllParams<T>
 	external?: false

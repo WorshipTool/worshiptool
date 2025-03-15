@@ -17,6 +17,7 @@ import {
 	shouldUseSubdomains,
 } from '@/routes/routes.tech'
 import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
+import { safeFetch } from '@/tech/fetch/fetch'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
@@ -133,7 +134,7 @@ const checkAuthentication = async (
 	try {
 		const fetchData = await creator.authControllerCheckTokenExpiration()
 		const url = BASE_PATH + fetchData.url
-		const result = await fetch(url, { ...(fetchData.options as any) })
+		const result = await safeFetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
 		const response: NextResponse = await setResponse(

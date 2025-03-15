@@ -21,12 +21,7 @@ const nextConfig = withRoutes({
 	},
 
 	async rewrites() {
-		return [
-			{
-				source: '/sub/tymy/yy9rexn/nahravky',
-				destination: '/sites/13ka-records.html',
-			},
-		]
+		return []
 	},
 
 	images: {

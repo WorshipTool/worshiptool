@@ -1,7 +1,7 @@
 import { BACKEND_URL } from '@/api/constants'
 import { ImagesApiAxiosParamCreator } from '@/api/generated'
 import { useTeamChecker } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { LinkProps } from '@/common/ui/Link/Link'
+import { CommonLinkProps } from '@/common/ui/Link/Link'
 import { SxProps } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
@@ -16,8 +16,8 @@ export type MenuItemProps<T extends RoutesKeys> = {
 	image: string
 	asyncImage?: () => Promise<string>
 	action?: () => void
-	to?: LinkProps<T>['to']
-	toParams?: LinkProps<T>['params']
+	to?: CommonLinkProps<T>['to']
+	toParams?: CommonLinkProps<T>['params']
 	disabled?: boolean
 	hidden?: boolean
 	sx?: SxProps

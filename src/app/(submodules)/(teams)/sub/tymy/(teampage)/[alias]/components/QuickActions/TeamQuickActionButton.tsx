@@ -4,10 +4,11 @@ import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, CircularProgress, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
-import { Link } from '@/common/ui/Link/Link'
+import { CommonLinkProps, Link } from '@/common/ui/Link/Link'
 import { grey } from '@/common/ui/mui/colors'
 import { Typography } from '@/common/ui/Typography'
-import React, { ComponentProps, ReactNode, useMemo } from 'react'
+import { RoutesKeys } from '@/routes'
+import React, { ReactNode, useMemo } from 'react'
 
 type TeamQuickActionButtonProps = {
 	label: string
@@ -20,8 +21,8 @@ type TeamQuickActionButtonProps = {
 	loading?: boolean
 
 	color?: 'primary' | 'secondary' | 'white'
-	to?: ComponentProps<typeof Link>['to']
-	toParams?: ComponentProps<typeof Link>['params']
+	to?: CommonLinkProps<RoutesKeys>['to']
+	toParams?: CommonLinkProps<RoutesKeys>['params']
 }
 
 export default function TeamQuickActionButton({

@@ -10,11 +10,11 @@ import { parseVariantAlias } from '@/routes/routes.tech'
 import { Lock, Public } from '@mui/icons-material'
 import { alpha, styled, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
-import { ComponentProps, memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { BasicVariantPack } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { CustomChip } from '../CustomChip/CustomChip'
-import { Link } from '../Link/Link'
+import { CommonLinkProps, Link } from '../Link/Link'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[100],
@@ -41,8 +41,8 @@ const SONG_CARD_PROPERTIES = [
 type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
 type ToLinkProps = (data: BasicVariantPack) => {
-	to: ComponentProps<typeof Link>['to']
-	params: ComponentProps<typeof Link>['params']
+	to: CommonLinkProps['to']
+	params: CommonLinkProps['params']
 } | null
 
 type SongCardIconData = (data: BasicVariantPack) => {
