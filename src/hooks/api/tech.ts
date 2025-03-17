@@ -3,6 +3,7 @@ import {
 	AuthApi,
 	Configuration,
 	MailApi,
+	MessengerApi,
 	PermissionsApi,
 	PlaylistEditingApi,
 	PlaylistGettingApi,
@@ -31,6 +32,7 @@ export const getApiClasses = (apiConfiguration: Configuration) => ({
 	permissionApi: new PermissionsApi(apiConfiguration),
 	analyticsApi: new AnalyticsApi(apiConfiguration),
 	mailApi: new MailApi(apiConfiguration),
+	messengerApi: new MessengerApi(apiConfiguration),
 
 	// submodules
 	teamAddingApi: new TeamAddingApi(apiConfiguration),

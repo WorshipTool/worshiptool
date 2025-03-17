@@ -41,6 +41,7 @@ export async function middleware(request: NextRequest) {
 
 	// Check authentication
 	const auth = await checkAuthentication(request)
+
 	if (auth.response) return auth.response
 
 	// Subdomains
@@ -137,6 +138,7 @@ const checkAuthentication = async (
 		const result = await safeFetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
 	} catch (e) {
+		console.log('going to login', e)
 		const response: NextResponse = await setResponse(
 			NextResponse.redirect(new URL('/prihlaseni', request.url)),
 			'/prihlaseni'

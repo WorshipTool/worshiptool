@@ -2805,6 +2805,25 @@ export interface SearchSongPacksDto {
 /**
  * 
  * @export
+ * @interface SendErrorInDto
+ */
+export interface SendErrorInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SendErrorInDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendErrorInDto
+     */
+    'description': string;
+}
+/**
+ * 
+ * @export
  * @interface SetMemberRoleInDto
  */
 export interface SetMemberRoleInDto {
@@ -5844,6 +5863,116 @@ export class MailApi extends BaseAPI {
      */
     public mailControllerSendTestMail(options?: RawAxiosRequestConfig) {
         return MailApiFp(this.configuration).mailControllerSendTestMail(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MessengerApi - axios parameter creator
+ * @export
+ */
+export const MessengerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {SendErrorInDto} sendErrorInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messengerControllerSendError: async (sendErrorInDto: SendErrorInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendErrorInDto' is not null or undefined
+            assertParamExists('messengerControllerSendError', 'sendErrorInDto', sendErrorInDto)
+            const localVarPath = `/sendError`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendErrorInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MessengerApi - functional programming interface
+ * @export
+ */
+export const MessengerApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MessengerApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {SendErrorInDto} sendErrorInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async messengerControllerSendError(sendErrorInDto: SendErrorInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messengerControllerSendError(sendErrorInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MessengerApi.messengerControllerSendError']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MessengerApi - factory interface
+ * @export
+ */
+export const MessengerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MessengerApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {SendErrorInDto} sendErrorInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messengerControllerSendError(sendErrorInDto: SendErrorInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.messengerControllerSendError(sendErrorInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MessengerApi - object-oriented interface
+ * @export
+ * @class MessengerApi
+ * @extends {BaseAPI}
+ */
+export class MessengerApi extends BaseAPI {
+    /**
+     * 
+     * @param {SendErrorInDto} sendErrorInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MessengerApi
+     */
+    public messengerControllerSendError(sendErrorInDto: SendErrorInDto, options?: RawAxiosRequestConfig) {
+        return MessengerApiFp(this.configuration).messengerControllerSendError(sendErrorInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
