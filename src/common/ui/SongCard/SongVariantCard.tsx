@@ -1,13 +1,17 @@
 'use client'
 
 import { Box } from '@/common/ui/Box'
+import { IconButton } from '@/common/ui/IconButton'
 import { SxProps } from '@/common/ui/mui'
 import SongCardAdditional from '@/common/ui/SongCard/components/SongCardAdditional'
 import VariantCardColorPoint from '@/common/ui/SongCard/components/VariantCardColorPoint'
+import useTranslationLike from '@/common/ui/SongCard/hooks/useTranslationLike'
+import { useTranslationLikesCount } from '@/common/ui/SongCard/hooks/useTranslationLikesCount'
 import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import { Lock, Public } from '@mui/icons-material'
+import { useApiState } from '@/tech/ApiState'
+import { Lock, Public, ThumbUpAlt, ThumbUpOffAlt } from '@mui/icons-material'
 import { alpha, styled, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { memo, useEffect, useMemo, useState } from 'react'
@@ -37,6 +41,7 @@ const SONG_CARD_PROPERTIES = [
 	'SHOW_PRIVATE_LABEL',
 	'SHOW_YOUR_PUBLIC_LABEL',
 	'SHOW_ADDED_BY_LOADER',
+	'ENABLE_TRANSLATION_LIKE',
 ] as const
 type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
@@ -45,7 +50,10 @@ type ToLinkProps = (data: BasicVariantPack) => {
 	params: CommonLinkProps['params']
 } | null
 
-type SongCardIconData = (data: BasicVariantPack) => {
+type SongCardIconData = (
+	data: BasicVariantPack,
+	isOver: boolean
+) => {
 	icon: JSX.Element
 }[]
 
@@ -126,6 +134,83 @@ export const SongVariantCard = memo(function S({
 	const draggable = useMemo(() => {
 		return !props.selectable
 	}, [props.selectable])
+
+	const translationLikeEnabled = properties.ENABLE_TRANSLATION_LIKE
+	const translationLike = useTranslationLike(data.packGuid)
+	const { fetchApiState, apiState } = useApiState()
+
+	const translationLikes = useTranslationLikesCount(
+		data.packGuid,
+		data.translationLikes
+	)
+
+	const additionalIcons = useMemo(() => {
+		if (!translationLikeEnabled) return props.icons
+
+		return (data: BasicVariantPack, isOver: boolean) => {
+			const base = props.icons?.(data, isOver) || []
+			const isLiked = translationLike.isLiked
+			return [
+				...base,
+				{
+					icon: (
+						<Box
+							display={'flex'}
+							flexDirection={'row'}
+							alignItems={'center'}
+							gap={0.5}
+						>
+							{user && (
+								<IconButton
+									tooltip="Preferuji tento překlad"
+									small
+									sx={{
+										opacity: isLiked || isOver ? 1 : 0,
+										transition: 'opacity 0.2s',
+									}}
+									disabled={apiState.loading}
+									onClick={(e) => {
+										e.stopPropagation()
+										e.preventDefault()
+
+										fetchApiState(async () => {
+											isLiked
+												? translationLike.removeLike()
+												: translationLike.addLike()
+										})
+									}}
+								>
+									{isLiked ? (
+										<ThumbUpAlt fontSize="small" />
+									) : (
+										<ThumbUpOffAlt fontSize="small" />
+									)}
+								</IconButton>
+							)}
+							{translationLikes > 0 && (
+								<Typography
+									size={'small'}
+									sx={{
+										display: 'flex',
+										justifyContent: 'center',
+									}}
+								>
+									+ {translationLikes}
+								</Typography>
+							)}
+						</Box>
+					),
+				},
+			]
+		}
+	}, [
+		translationLike,
+		isOver,
+		props.icons,
+		translationLikeEnabled,
+		user,
+		translationLikes,
+	])
 
 	return (
 		<DraggableSong
@@ -259,7 +344,7 @@ export const SongVariantCard = memo(function S({
 							<SongCardAdditional
 								isOver={isOver}
 								data={data}
-								icons={props.icons}
+								icons={additionalIcons}
 							/>
 						</Box>
 					</Box>

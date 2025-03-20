@@ -14,15 +14,20 @@ import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/(te
 import { BottomPanelProvider } from '@/app/providers/BottomPanelProvider'
 import { FeatureFlagsProvider } from '@/common/providers/FeatureFlags'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
+import { TranslationLikesProvider } from '@/common/ui/SongCard/hooks/useTranslationsLikes'
+import { AllCommonData } from '@/hooks/common-data/common-data.types'
+import { CommonDataProvider } from '@/hooks/common-data/useCommonData'
 import { FavouritesProvider } from '@/hooks/favourites/useFavourites'
 import { PermissionsProvider } from '@/hooks/permissions/usePermissions'
 import { SubdomainPathnameAliasProvider } from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import 'dayjs/locale/cs'
 type AppClientProvidersProps = {
+	initialCommonData: AllCommonData
 	children?: React.ReactNode
 }
 export default function AppClientProviders({
 	children,
+	initialCommonData,
 }: AppClientProvidersProps) {
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
@@ -38,25 +43,29 @@ export default function AppClientProviders({
 						<FeatureFlagsProvider>
 							<PermissionsProvider>
 								<ErrorHandlerProvider>
-									<BottomPanelProvider>
-										<FavouritesProvider>
-											<ToolbarProvider>
-												<FooterProvider>
-													<OutsideLinkBlockerProvider>
-														<StableTeamSubdomainProvider>
-															<AppSongSelectSpecifierProvider>
-																<CurrentPlaylistProvider>
-																	<SongDragProvider>
-																		{children}
-																	</SongDragProvider>
-																</CurrentPlaylistProvider>
-															</AppSongSelectSpecifierProvider>
-														</StableTeamSubdomainProvider>
-													</OutsideLinkBlockerProvider>
-												</FooterProvider>
-											</ToolbarProvider>
-										</FavouritesProvider>
-									</BottomPanelProvider>
+									<CommonDataProvider initialData={initialCommonData}>
+										<TranslationLikesProvider>
+											<BottomPanelProvider>
+												<FavouritesProvider>
+													<ToolbarProvider>
+														<FooterProvider>
+															<OutsideLinkBlockerProvider>
+																<StableTeamSubdomainProvider>
+																	<AppSongSelectSpecifierProvider>
+																		<CurrentPlaylistProvider>
+																			<SongDragProvider>
+																				{children}
+																			</SongDragProvider>
+																		</CurrentPlaylistProvider>
+																	</AppSongSelectSpecifierProvider>
+																</StableTeamSubdomainProvider>
+															</OutsideLinkBlockerProvider>
+														</FooterProvider>
+													</ToolbarProvider>
+												</FavouritesProvider>
+											</BottomPanelProvider>
+										</TranslationLikesProvider>
+									</CommonDataProvider>
 								</ErrorHandlerProvider>
 							</PermissionsProvider>
 						</FeatureFlagsProvider>

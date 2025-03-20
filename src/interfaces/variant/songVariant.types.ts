@@ -6,6 +6,7 @@ import { SourceDto } from '../../api/dtos/source/SourceDto'
 export type SongVariantGuid = string & { readonly brand: unique symbol }
 
 export type VariantPackGuid = string & { readonly brand: unique symbol }
+export type PackGuid = VariantPackGuid
 
 export type VariantPackAlias = string & { readonly brand: unique symbol }
 

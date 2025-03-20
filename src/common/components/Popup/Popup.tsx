@@ -84,6 +84,13 @@ export default function Popup({
 			const c: any = document.querySelector(`#${POPUP_CONTENT_ID}`)
 			c?.focus()
 		}
+
+		document.body.style.overflow = open ? 'hidden' : 'auto'
+		document.body.style.paddingRight = open ? '15px' : '0px'
+
+		return () => {
+			document.body.style.overflow = 'auto'
+		}
 	}, [open])
 
 	return ref.current && mounted ? (

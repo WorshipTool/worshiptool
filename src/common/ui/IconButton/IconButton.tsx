@@ -28,6 +28,9 @@ type IconButtonProps<T extends RoutesKeys> = {
 	disabled?: boolean
 
 	squared?: boolean
+
+	// aliases
+	small?: boolean
 }
 
 const ButtonComponent = ({
@@ -36,6 +39,7 @@ const ButtonComponent = ({
 	...props
 }: IconButtonProps<RoutesKeys>) => {
 	props.alt = props.alt || props.tooltip
+	props.size = props.small ? 'small' : props.size
 
 	const theme = useTheme()
 

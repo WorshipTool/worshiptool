@@ -188,11 +188,13 @@ export default function SongGroupCard({
 					flexDirection={'column'}
 				>
 					{packs.map((d) => (
-						<SongVariantCard
-							key={d.packGuid}
-							data={d}
-							properties={['SHOW_PRIVATE_LABEL']}
-						/>
+						<Box key={d.packGuid} position={'relative'}>
+							<SongVariantCard
+								key={d.packGuid}
+								data={d}
+								properties={['SHOW_PRIVATE_LABEL', 'ENABLE_TRANSLATION_LIKE']}
+							/>
+						</Box>
 					))}
 				</Box>
 			</Popup>

@@ -13,8 +13,8 @@ type SongCardAdditionalProps = {
 export default function SongCardAdditional(props: SongCardAdditionalProps) {
 	const icons = useMemo(() => {
 		if (!props.icons) return []
-		return props.icons(props.data)
-	}, [props.data, props.icons])
+		return props.icons(props.data, props.isOver || false)
+	}, [props.data, props.icons, props.isOver])
 
 	const moveOffset = '0.5rem'
 	return (

@@ -191,6 +191,19 @@ export interface AddTeamNoteToVariantInDto {
 /**
  * 
  * @export
+ * @interface AddUserLikeToTranslationInDto
+ */
+export interface AddUserLikeToTranslationInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddUserLikeToTranslationInDto
+     */
+    'packGuid': string;
+}
+/**
+ * 
+ * @export
  * @interface AddVariantToPlaylistInDto
  */
 export interface AddVariantToPlaylistInDto {
@@ -389,6 +402,12 @@ export interface BasicVariantPackDto {
      * @memberof BasicVariantPackDto
      */
     'translationType': BasicVariantPackDtoTranslationTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof BasicVariantPackDto
+     */
+    'translationLikes': number;
     /**
      * 
      * @type {object}
@@ -887,6 +906,12 @@ export interface ExtendedVariantPackDto {
      * @memberof ExtendedVariantPackDto
      */
     'translationType': ExtendedVariantPackDtoTranslationTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ExtendedVariantPackDto
+     */
+    'translationLikes': number;
     /**
      * 
      * @type {object}
@@ -1444,6 +1469,19 @@ export interface GetUserPermissionOutDto {
      * @memberof GetUserPermissionOutDto
      */
     'payload'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserTranslationLikesOutDto
+ */
+export interface GetUserTranslationLikesOutDto {
+    /**
+     * 
+     * @type {Array<TranslationLikeItemOutDto>}
+     * @memberof GetUserTranslationLikesOutDto
+     */
+    'likes': Array<TranslationLikeItemOutDto>;
 }
 /**
  * 
@@ -3991,6 +4029,19 @@ export interface TeamPlaylistData {
      * @memberof TeamPlaylistData
      */
     'title': string;
+}
+/**
+ * 
+ * @export
+ * @interface TranslationLikeItemOutDto
+ */
+export interface TranslationLikeItemOutDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TranslationLikeItemOutDto
+     */
+    'packGuid': string;
 }
 /**
  * 
@@ -12566,6 +12617,249 @@ export class SongSearchingApi extends BaseAPI {
      */
     public songSearchingControllerSearch(searchKey: string, page?: number, options?: RawAxiosRequestConfig) {
         return SongSearchingApiFp(this.configuration).songSearchingControllerSearch(searchKey, page, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongUserManagementApi - axios parameter creator
+ * @export
+ */
+export const SongUserManagementApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerAddUserLikeToTranslation: async (addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addUserLikeToTranslationInDto' is not null or undefined
+            assertParamExists('songTranslationLikeControllerAddUserLikeToTranslation', 'addUserLikeToTranslationInDto', addUserLikeToTranslationInDto)
+            const localVarPath = `/song/translation-like/add-user-like-to-translation`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addUserLikeToTranslationInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerGetUserLikes: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/translation-like/get-user-likes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerRemoveUserLikeFromTranslation: async (addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addUserLikeToTranslationInDto' is not null or undefined
+            assertParamExists('songTranslationLikeControllerRemoveUserLikeFromTranslation', 'addUserLikeToTranslationInDto', addUserLikeToTranslationInDto)
+            const localVarPath = `/song/translation-like/remove-user-like-from-translation`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addUserLikeToTranslationInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongUserManagementApi - functional programming interface
+ * @export
+ */
+export const SongUserManagementApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongUserManagementApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserTranslationLikesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongUserManagementApi.songTranslationLikeControllerAddUserLikeToTranslation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songTranslationLikeControllerGetUserLikes(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserTranslationLikesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songTranslationLikeControllerGetUserLikes(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongUserManagementApi.songTranslationLikeControllerGetUserLikes']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserTranslationLikesOutDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongUserManagementApi.songTranslationLikeControllerRemoveUserLikeFromTranslation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongUserManagementApi - factory interface
+ * @export
+ */
+export const SongUserManagementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongUserManagementApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: any): AxiosPromise<GetUserTranslationLikesOutDto> {
+            return localVarFp.songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerGetUserLikes(options?: any): AxiosPromise<GetUserTranslationLikesOutDto> {
+            return localVarFp.songTranslationLikeControllerGetUserLikes(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: any): AxiosPromise<GetUserTranslationLikesOutDto> {
+            return localVarFp.songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongUserManagementApi - object-oriented interface
+ * @export
+ * @class SongUserManagementApi
+ * @extends {BaseAPI}
+ */
+export class SongUserManagementApi extends BaseAPI {
+    /**
+     * 
+     * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongUserManagementApi
+     */
+    public songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: RawAxiosRequestConfig) {
+        return SongUserManagementApiFp(this.configuration).songTranslationLikeControllerAddUserLikeToTranslation(addUserLikeToTranslationInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongUserManagementApi
+     */
+    public songTranslationLikeControllerGetUserLikes(options?: RawAxiosRequestConfig) {
+        return SongUserManagementApiFp(this.configuration).songTranslationLikeControllerGetUserLikes(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AddUserLikeToTranslationInDto} addUserLikeToTranslationInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongUserManagementApi
+     */
+    public songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto: AddUserLikeToTranslationInDto, options?: RawAxiosRequestConfig) {
+        return SongUserManagementApiFp(this.configuration).songTranslationLikeControllerRemoveUserLikeFromTranslation(addUserLikeToTranslationInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

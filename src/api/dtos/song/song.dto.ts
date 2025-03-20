@@ -28,6 +28,7 @@ export type BasicVariantPack = {
 	public: boolean
 	language: SongLanguage
 	translationType: PackTranslationType
+	translationLikes: number
 	ggValidated: boolean
 
 	// Dates

@@ -2,6 +2,7 @@
 
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
+import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
@@ -11,10 +12,9 @@ import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
-import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
@@ -106,17 +106,6 @@ export default function HomeDesktop() {
 	}, [])
 
 	const [smartSearch, setSmartSearch] = useState(false)
-
-	const SearchList = useMemo(() => {
-		return (
-			searchString && (
-				<SearchedSongsList
-					searchString={searchString}
-					useSmartSearch={smartSearch}
-				/>
-			)
-		)
-	}, [searchString, smartSearch])
 
 	return (
 		<>
@@ -240,7 +229,12 @@ export default function HomeDesktop() {
 						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
-					{SearchList}
+					{searchString && (
+						<SearchedSongsList
+							searchString={searchString}
+							useSmartSearch={smartSearch}
+						/>
+					)}
 					<RecommendedSongsList />
 				</div>
 			</Box>

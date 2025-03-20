@@ -25,6 +25,8 @@ const SearchedSongsList = memo(function S({
 	searchString,
 	useSmartSearch,
 }: SearchedSongsListProps) {
+	console.log('SearchList generating')
+
 	const loadNextLevelRef = useRef(null)
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -43,11 +45,16 @@ const SearchedSongsList = memo(function S({
 				page,
 				signal: controller.signal,
 				useSmartSearch,
-			}).then((data) => {
-				setLoading(false)
-				setNextLoading(false)
-				resolve(data)
 			})
+				.then((data) => {
+					setLoading(false)
+					setNextLoading(false)
+					resolve(data)
+				})
+				.catch(() => {
+					resolve([])
+					setNextLoading(false)
+				})
 		},
 		[searchString, searchSongs, useSmartSearch]
 	)
@@ -76,7 +83,7 @@ const SearchedSongsList = memo(function S({
 	useChangeDelayer(
 		normalizeSearchText(searchString),
 		(value) => {
-			loadPage(0, true).then(() => {
+			loadPage(0, true).finally(() => {
 				setEnableLoadNext(true)
 			})
 		},
@@ -84,7 +91,7 @@ const SearchedSongsList = memo(function S({
 	)
 
 	useEffect(() => {
-		loadPage(0, true).then(() => {
+		loadPage(0, true).finally(() => {
 			setEnableLoadNext(true)
 		})
 	}, [useSmartSearch])
@@ -103,21 +110,9 @@ const SearchedSongsList = memo(function S({
 					<SmartSongListCards
 						data={songs}
 						key={'songlistcards'}
-						properties={[
-							'SHOW_ADDED_BY_LOADER',
-							'SHOW_PRIVATE_LABEL',
-							// 'SHOW_YOUR_PUBLIC_LABEL',
-						]}
+						properties={['SHOW_ADDED_BY_LOADER', 'SHOW_PRIVATE_LABEL']}
 					></SmartSongListCards>
 				)}
-
-				{/* {!loading &&
-					songs.length > 0 &&
-					songs.map((song) => {
-						return (
-							<Typography key={song.packGuid}>{song.preferredTitle}</Typography>
-						)
-					})} */}
 			</>
 
 			<div ref={loadNextLevelRef}></div>

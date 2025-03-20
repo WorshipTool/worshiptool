@@ -5,6 +5,7 @@ type ExistingFlags =
 	| 'enable_smart_search'
 	| 'show_loading_screen'
 	| 'show_media_on_song_page'
+	| 'allow_translation_likes'
 
 export type FeatureFlag = ExistingFlags | String
 

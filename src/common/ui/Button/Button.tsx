@@ -39,6 +39,11 @@ export type ButtonProps<T extends RoutesKeys> = {
 	className?: string
 
 	disableUppercase?: boolean
+
+	// aliases
+	small?: boolean
+	outlined?: boolean
+	contained?: boolean
 }
 
 export const Button = memo(
@@ -58,6 +63,13 @@ export const Button = memo(
 			() => props.loading || props.disabled,
 			[props.loading, props.disabled]
 		)
+
+		size = props.small ? 'small' : size
+		variant = props.outlined
+			? 'outlined'
+			: props.contained
+			? 'contained'
+			: variant
 
 		const ButtonComponent = useCallback(
 			() => (
