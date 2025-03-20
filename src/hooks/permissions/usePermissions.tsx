@@ -1,9 +1,10 @@
-import { createContext, useContext } from 'react'
+import { useCommonData } from '@/hooks/common-data/useCommonData'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
 	apiToPermissionPayload,
 	permissionPayloadToApi,
 } from '../../api/dtos/permission'
-import { useApiStateEffect } from '../../tech/ApiState'
+import { useApiState } from '../../tech/ApiState'
 import { handleApiCall } from '../../tech/handleApiCall'
 import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
@@ -28,11 +29,11 @@ type Rt = ReturnType<typeof useProvidePermissions>
 
 const permissionsContext = createContext<Rt>({
 	notInitialized: true,
-} as Rt)
+} as any as Rt)
 
 export const usePermissions = (): Rt => {
 	const d = useContext(permissionsContext)
-	if (d.notInitialized) {
+	if ((d as any).notInitialized) {
 		throw new Error('usePermissions must be used inside PermissionsProvider')
 	}
 	return d
@@ -57,23 +58,47 @@ export const PermissionsProvider = ({ children }: { children: any }) => {
 function useProvidePermissions<
 	A extends PermissionsTypes[] = [PermissionsTypes]
 >(userGuid?: string) {
+	const initialValue = useCommonData('permissionsOfUser')
+
+	const [data, setData] = useState<
+		PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[]
+	>(initialValue as PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[])
+
 	const { permissionApi } = useApi()
 	const { user, isAdmin, isLoggedIn } = useAuth()
-	const [state, reload] = useApiStateEffect<
-		PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[]
-	>(async () => {
-		if (!isLoggedIn()) return []
-		const data = await handleApiCall(
-			permissionApi.permissionControllerGetUserPermissions(userGuid)
-		)
-		return data.map((p) => {
-			return {
-				type: p.type as PermissionType<Merge<A>>,
-				payload: apiToPermissionPayload(p.payload),
-				guid: p.guid,
-			}
+
+	const { fetchApiState, apiState } =
+		useApiState<PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[]>()
+
+	const reload = async () => {
+		fetchApiState(async () => {
+			if (!isLoggedIn()) return []
+			const data = await handleApiCall(
+				permissionApi.permissionControllerGetUserPermissions(userGuid)
+			)
+			return data.map((p) => {
+				return {
+					type: p.type as PermissionType<Merge<A>>,
+					payload: apiToPermissionPayload(p.payload),
+					guid: p.guid,
+				}
+			})
 		})
-	}, [userGuid, isLoggedIn])
+			.then((r) => {
+				if (r) setData(r)
+			})
+			.catch(() => {})
+	}
+
+	const first = useRef(true)
+	useEffect(() => {
+		if (first.current) {
+			first.current = false
+			return
+		}
+
+		reload()
+	}, [userGuid])
 
 	const getUsersWithPermission = async <T extends PermissionType<Merge<A>>>(
 		type: T,
@@ -91,8 +116,8 @@ function useProvidePermissions<
 
 	return {
 		reload,
-		state: state,
-		permissions: state.data || [],
+		state: apiState,
+		permissions: data || [],
 		getUsersWithPermission,
 		includesPermission: <T extends PermissionType<Merge<A>>>(
 			type: T,
@@ -101,7 +126,7 @@ function useProvidePermissions<
 			if ((!userGuid || user?.guid === userGuid) && isAdmin()) return true
 
 			return (
-				state.data?.some(
+				data?.some(
 					(p) =>
 						p.type === type &&
 						(!payload || JSON.stringify(p.payload) === JSON.stringify(payload))

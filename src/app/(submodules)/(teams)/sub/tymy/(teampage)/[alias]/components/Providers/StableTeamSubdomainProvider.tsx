@@ -1,9 +1,7 @@
 'use client'
-import { useApi } from '@/hooks/api/useApi'
+import { useCommonData } from '@/hooks/common-data/useCommonData'
 import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
-import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import React, { useEffect } from 'react'
 
 type StableSubdomainLinkProviderProps = {
@@ -15,15 +13,7 @@ export default function StableTeamSubdomainProvider(
 ) {
 	const { addAliases } = useSubdomainPathnameAlias()
 
-	const { teamGettingApi } = useApi()
-	const [apiState] = useApiStateEffect(async () => {
-		const result = await handleApiCall(
-			teamGettingApi.teamGettingControllerGetAllSubdomains()
-		)
-		return result.aliases
-	}, [])
-
-	const aliases = apiState.data || []
+	const aliases = useCommonData('allsubdomains')
 
 	useEffect(() => {
 		if (aliases.length === 0) return

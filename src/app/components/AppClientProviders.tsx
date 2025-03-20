@@ -41,9 +41,9 @@ export default function AppClientProviders({
 				<SubdomainPathnameAliasProvider>
 					<AuthProvider>
 						<FeatureFlagsProvider>
-							<PermissionsProvider>
-								<ErrorHandlerProvider>
-									<CommonDataProvider initialData={initialCommonData}>
+							<CommonDataProvider initialData={initialCommonData}>
+								<PermissionsProvider>
+									<ErrorHandlerProvider>
 										<TranslationLikesProvider>
 											<BottomPanelProvider>
 												<FavouritesProvider>
@@ -65,9 +65,9 @@ export default function AppClientProviders({
 												</FavouritesProvider>
 											</BottomPanelProvider>
 										</TranslationLikesProvider>
-									</CommonDataProvider>
-								</ErrorHandlerProvider>
-							</PermissionsProvider>
+									</ErrorHandlerProvider>
+								</PermissionsProvider>
+							</CommonDataProvider>
 						</FeatureFlagsProvider>
 					</AuthProvider>
 				</SubdomainPathnameAliasProvider>
