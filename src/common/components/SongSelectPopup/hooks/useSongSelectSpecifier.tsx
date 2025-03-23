@@ -16,11 +16,14 @@ const specifierContext = createContext<SpecifierContextType>(
 
 export const useSongSelectSpecifier = () => {
 	const context = useContext(specifierContext)
+
 	if (!context) {
 		throw new Error(
 			'useSongSelectSpecifier must be used within a SongSelectSpecifierProvider'
 		)
 	}
+
+	useEffect(() => context.tickActive(), [])
 
 	return context
 }
@@ -37,8 +40,12 @@ export type CustomSourceList = {
 export const SongSelectSpecifierProvider = (props: {
 	children: ReactNode
 	customSourceList: CustomSourceList[]
+	onActiveChange?: (active: boolean) => void
 }) => {
-	const p = useProvideSongSelectSpecifier(props.customSourceList)
+	const p = useProvideSongSelectSpecifier(
+		props.customSourceList,
+		props.onActiveChange
+	)
 	return (
 		<specifierContext.Provider value={p}>
 			{props.children}
@@ -46,13 +53,21 @@ export const SongSelectSpecifierProvider = (props: {
 	)
 }
 
-const useProvideSongSelectSpecifier = (_custom: CustomSourceList[]) => {
+const useProvideSongSelectSpecifier = (
+	_custom: CustomSourceList[],
+	onActiveChange?: (active: boolean) => void
+) => {
 	const [custom, setCustom] = useState<CustomSourceList[]>(_custom || [])
 
 	useEffect(() => {
 		setCustom(_custom)
 	}, [_custom])
+
+	const tickActive = () => {
+		onActiveChange?.(true)
+	}
 	return {
 		custom,
+		tickActive,
 	}
 }

@@ -30,6 +30,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/storybook">
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>
+    | StaticRoute<"/sub/admin">
     | StaticRoute<"/sub/test">
     | StaticRoute<"/sub/tymy">
     | DynamicRoute<"/sub/tymy/[alias]", { "alias": string }>

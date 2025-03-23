@@ -58,8 +58,10 @@ export default function VariantCardColorPoint({
 	const { color, message } = getColor()
 
 	const SIZE = 12
+
 	return !color || !enabled ? null : (
 		<Box
+			component={'span'}
 			sx={{
 				bgcolor: color,
 				width: SIZE,
@@ -69,8 +71,9 @@ export default function VariantCardColorPoint({
 				marginRight: 1,
 			}}
 		>
-			<Tooltip title={message}>
+			<Tooltip title={message} component={'span'}>
 				<Box
+					component={'span'}
 					sx={{
 						width: SIZE,
 						height: SIZE,

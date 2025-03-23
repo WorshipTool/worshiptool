@@ -49,6 +49,14 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 		}))
 
 		return {
+			translationLikes: [],
+			teamsOfUser: [],
+			playlistsOfUser: [],
+			allsubdomains: [],
+			permissionsOfUser: [],
+		}
+
+		return {
 			translationLikes: tlFormatted,
 			teamsOfUser: teams.teams,
 			playlistsOfUser: playlists.playlists,

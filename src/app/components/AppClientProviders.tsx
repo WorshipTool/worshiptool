@@ -10,7 +10,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
-import StableTeamSubdomainProvider from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/Providers/StableTeamSubdomainProvider'
 import { BottomPanelProvider } from '@/app/providers/BottomPanelProvider'
 import { FeatureFlagsProvider } from '@/common/providers/FeatureFlags'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
@@ -23,11 +22,13 @@ import { SubdomainPathnameAliasProvider } from '@/routes/subdomains/SubdomainPat
 import 'dayjs/locale/cs'
 type AppClientProvidersProps = {
 	initialCommonData: AllCommonData
+	test: string
 	children?: React.ReactNode
 }
 export default function AppClientProviders({
 	children,
 	initialCommonData,
+	test,
 }: AppClientProvidersProps) {
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
@@ -38,10 +39,10 @@ export default function AppClientProviders({
 				preventDuplicate
 			>
 				{/* <BrowserRouter> */}
-				<SubdomainPathnameAliasProvider>
-					<AuthProvider>
-						<FeatureFlagsProvider>
-							<CommonDataProvider initialData={initialCommonData}>
+				<CommonDataProvider initialData={initialCommonData}>
+					<SubdomainPathnameAliasProvider>
+						<AuthProvider>
+							<FeatureFlagsProvider>
 								<PermissionsProvider>
 									<ErrorHandlerProvider>
 										<TranslationLikesProvider>
@@ -50,15 +51,13 @@ export default function AppClientProviders({
 													<ToolbarProvider>
 														<FooterProvider>
 															<OutsideLinkBlockerProvider>
-																<StableTeamSubdomainProvider>
-																	<AppSongSelectSpecifierProvider>
-																		<CurrentPlaylistProvider>
-																			<SongDragProvider>
-																				{children}
-																			</SongDragProvider>
-																		</CurrentPlaylistProvider>
-																	</AppSongSelectSpecifierProvider>
-																</StableTeamSubdomainProvider>
+																<AppSongSelectSpecifierProvider>
+																	<CurrentPlaylistProvider>
+																		<SongDragProvider>
+																			{children}
+																		</SongDragProvider>
+																	</CurrentPlaylistProvider>
+																</AppSongSelectSpecifierProvider>
 															</OutsideLinkBlockerProvider>
 														</FooterProvider>
 													</ToolbarProvider>
@@ -67,10 +66,10 @@ export default function AppClientProviders({
 										</TranslationLikesProvider>
 									</ErrorHandlerProvider>
 								</PermissionsProvider>
-							</CommonDataProvider>
-						</FeatureFlagsProvider>
-					</AuthProvider>
-				</SubdomainPathnameAliasProvider>
+							</FeatureFlagsProvider>
+						</AuthProvider>
+					</SubdomainPathnameAliasProvider>
+				</CommonDataProvider>
 				{/* </BrowserRouter> */}
 			</SnackbarProvider>
 		</LocalizationProvider>

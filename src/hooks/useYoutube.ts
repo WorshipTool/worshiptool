@@ -22,7 +22,6 @@ export default function useYoutube() {
 
 	const getRealUrl = (url: string) => {
 		const id = getId(url)
-		console.log(url, id)
 		return `https://www.youtube.com/watch?v=${id}`
 	}
 

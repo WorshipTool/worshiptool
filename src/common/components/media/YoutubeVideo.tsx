@@ -1,18 +1,19 @@
-import { Box } from '@/common/ui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import useYoutube from '@/hooks/useYoutube'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type Props = {
 	url: string
-	width?: number | string
 	showInvalidVideo?: boolean
 }
 
-export default function YoutubeVideo({ url, width = '100%', ...props }: Props) {
+export default function YoutubeVideo({ url, ...props }: Props) {
 	const [embedHtml, setEmbedHtml] = useState<string | null>(null)
 	const [error, setError] = useState<boolean>(false)
 	const containerRef = useRef<HTMLDivElement>(null)
+
+	const height = useMemo(() => '40vh', [])
+	const width = useMemo(() => '100%', [])
 
 	const { getRealUrl } = useYoutube()
 
@@ -26,7 +27,6 @@ export default function YoutubeVideo({ url, width = '100%', ...props }: Props) {
 
 				// if (!response.ok) throw new Error('Video not available')
 				const data = await response.json()
-				console.log(data)
 				setEmbedHtml(data.html)
 			} catch {
 				setError(true)
@@ -61,18 +61,11 @@ export default function YoutubeVideo({ url, width = '100%', ...props }: Props) {
 			ref={containerRef}
 			style={{
 				width: width,
-				aspectRatio: 16 / 9,
+				height: height,
 			}}
 		>
 			{!embedHtml && (
-				<Box
-					sx={{
-						width: width,
-						aspectRatio: (16 / 9) * 0.987, // video is actually higher
-					}}
-				>
-					<Skeleton width={'100%'} height={'100%'} variant="rectangular" />
-				</Box>
+				<Skeleton width={'100%'} height={'100%'} variant="rectangular" />
 			)}
 		</div>
 	)

@@ -14,15 +14,18 @@ type AppProvidersProps = {
 
 export default async function AppProviders(props: AppProvidersProps) {
 	const commonData = await fetchAllCommonDataServer()
+
 	return (
-		<ThemeProvider>
-			<CookiesProvider>
-				<GoogleOAuthProvider clientId="736869166999-nckrpcdmab26hkp7s1cjbgdfu51igac9.apps.googleusercontent.com">
-					<AppClientProviders initialCommonData={commonData}>
-						{props.children}
-					</AppClientProviders>
-				</GoogleOAuthProvider>
-			</CookiesProvider>
-		</ThemeProvider>
+		<>
+			<ThemeProvider>
+				<CookiesProvider>
+					<GoogleOAuthProvider clientId="736869166999-nckrpcdmab26hkp7s1cjbgdfu51igac9.apps.googleusercontent.com">
+						<AppClientProviders test={'ahoj'} initialCommonData={commonData}>
+							{props.children}
+						</AppClientProviders>
+					</GoogleOAuthProvider>
+				</CookiesProvider>
+			</ThemeProvider>
+		</>
 	)
 }

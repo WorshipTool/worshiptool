@@ -25,11 +25,15 @@ type AppSongSelectSpecifierProviderProps = {
 export default function AppSongSelectSpecifierProvider(
 	props: AppSongSelectSpecifierProviderProps
 ) {
+	// Check if songselect is used and active
+	const [active, setActive] = useState(false)
+
 	const [searchString, setSearchString] = React.useState('')
 	const { songGettingApi, teamGettingApi } = useApi()
 	const { user } = useAuth()
 
 	const [globalApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		const result = await handleApiCall(
 			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
 		)
@@ -37,9 +41,10 @@ export default function AppSongSelectSpecifierProvider(
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
 		})
-	}, [searchString])
+	}, [searchString, active])
 
 	const [usersApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		if (!user) {
 			return []
 		}
@@ -51,7 +56,7 @@ export default function AppSongSelectSpecifierProvider(
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
 		})
-	}, [searchString, user])
+	}, [searchString, user, active])
 
 	const team = useCurrentTeam()
 	const { teams: t } = useUserTeams()
@@ -68,6 +73,7 @@ export default function AppSongSelectSpecifierProvider(
 	const playlist = usePlaylistsGeneral()
 
 	const [teamApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		if (!selectedTeamAlias) {
 			return []
 		}
@@ -92,7 +98,7 @@ export default function AppSongSelectSpecifierProvider(
 		return result.items.map((v) => {
 			return mapBasicVariantPackApiToDto(v.pack)
 		})
-	}, [selectedTeamAlias, searchString])
+	}, [selectedTeamAlias, searchString, active])
 
 	useEffect(() => {
 		if (teams) {
@@ -106,6 +112,7 @@ export default function AppSongSelectSpecifierProvider(
 
 	return (
 		<SongSelectSpecifierProvider
+			onActiveChange={setActive}
 			customSourceList={[
 				{
 					label: 'Z globálního zpěvníku',
