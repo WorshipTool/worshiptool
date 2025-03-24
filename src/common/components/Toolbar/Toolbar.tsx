@@ -23,11 +23,7 @@ const TopBar = styled(Box)(({ theme }) => ({
 	transition: 'all 0.3s ease',
 }))
 
-interface ToolbarProps {
-	// transparent?: boolean
-	// white?: boolean
-}
-export function Toolbar({}: ToolbarProps) {
+export function Toolbar() {
 	const theme = useTheme()
 
 	const { transparent, whiteVersion, hidden } = useToolbar()

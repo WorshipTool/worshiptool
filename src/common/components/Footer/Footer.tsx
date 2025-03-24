@@ -112,6 +112,7 @@ export default function Footer() {
 							style={{
 								objectFit: 'contain',
 							}}
+							priority
 						/>
 					</Box>
 				</Link>
