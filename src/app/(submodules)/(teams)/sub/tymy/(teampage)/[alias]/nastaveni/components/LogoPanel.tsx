@@ -47,8 +47,8 @@ export default function LogoPanel(props: LogoPanelProps) {
 						<Image
 							alt="logo"
 							src={props.imageUrl}
-							width={'100%'}
 							style={{
+								width: '100%',
 								objectFit: 'contain',
 								pointerEvents: 'none',
 								userSelect: 'none',

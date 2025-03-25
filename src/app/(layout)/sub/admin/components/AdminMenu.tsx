@@ -11,13 +11,18 @@ type ItemProps = {
 	icon?: React.ReactNode
 	to?: RoutesKeys
 	selected?: boolean
+	disabled?: boolean
 }
 function Item(props: ItemProps) {
 	const selectedColor = alpha('#fff', 0.1)
 	const smartSelected = useSmartMatch(props.to || 'home')
 	const selected = props.selected || smartSelected
 	return (
-		<Link to={props.to || 'home'} params={{}} disabled={!props.to}>
+		<Link
+			to={props.to || 'home'}
+			params={{}}
+			disabled={!props.to || props.disabled}
+		>
 			<Box
 				color={'white'}
 				sx={{
@@ -34,6 +39,11 @@ function Item(props: ItemProps) {
 					userSelect: 'none',
 					cursor: 'pointer',
 					transition: 'all 0.3s',
+
+					...(props.disabled && {
+						opacity: 0.3,
+						cursor: 'not-allowed',
+					}),
 				}}
 			>
 				{props.icon}
@@ -62,7 +72,7 @@ export default function AdminMenu() {
 				icon={<MusicNote fontSize="small" />}
 				to={'adminSongs'}
 			/>
-			<Item label="Tagy" icon={<Tag fontSize="small" />} />
+			<Item label="Tagy" icon={<Tag fontSize="small" />} disabled />
 		</Box>
 	)
 }
