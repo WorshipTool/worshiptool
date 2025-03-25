@@ -1,15 +1,17 @@
 'use client'
 
+import { ErrorPageProps } from '@/common/types'
 import { Box, Button, Typography } from '@/common/ui'
-import { useEffect } from 'react'
+import { LockPerson } from '@mui/icons-material'
+import { useEffect, useMemo } from 'react'
 
-export default function Error({
-	error,
-	reset,
-}: {
-	error: Error & { digest?: string }
-	reset: () => void
-}) {
+type ErrorType = 'forbidden' | 'default'
+
+export default function Error({ error, reset }: ErrorPageProps) {
+	const errorType: ErrorType = useMemo(() => {
+		return error.message.includes('Forbidden') ? 'forbidden' : 'default'
+	}, [error])
+
 	useEffect(() => {
 		console.error(error)
 		//TODO: send report to admin
@@ -24,13 +26,30 @@ export default function Error({
 				transform: 'translate(-50%, -50%)',
 				display: 'flex',
 				flexDirection: 'column',
-				gap: 1,
+				gap: 3,
+
+				alignItems: 'center',
 			}}
 		>
-			<Typography align="center" variant="h3">
-				Někde nastala chyba!
-			</Typography>
-			<Button onClick={reset}>Zkusit znovu</Button>
+			{errorType === 'forbidden' ? (
+				<>
+					<LockPerson
+						sx={{
+							fontSize: 60,
+						}}
+					/>
+					<Typography align="center" variant="h6">
+						K zobrazení obsahu nemáte dostatečná oprávnění!
+					</Typography>
+				</>
+			) : (
+				<>
+					<Typography align="center" variant="h3">
+						Někde nastala chyba!
+					</Typography>
+					<Button onClick={reset}>Zkusit znovu</Button>
+				</>
+			)}
 		</Box>
 	)
 }

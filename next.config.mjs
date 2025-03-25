@@ -30,6 +30,9 @@ const nextConfig = withRoutes({
 				hostname: 'localhost',
 			},
 			{
+				hostname: 'test-chvalotce.cz',
+			},
+			{
 				hostname: 'chvalotce.cz',
 			},
 		],

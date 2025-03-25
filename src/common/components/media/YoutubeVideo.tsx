@@ -1,3 +1,5 @@
+'use client'
+
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import useYoutube from '@/hooks/useYoutube'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -5,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 type Props = {
 	url: string
 	showInvalidVideo?: boolean
+	maxHeight?: string
 }
 
 export default function YoutubeVideo({ url, ...props }: Props) {
@@ -62,6 +65,7 @@ export default function YoutubeVideo({ url, ...props }: Props) {
 			style={{
 				width: width,
 				height: height,
+				maxHeight: props.maxHeight,
 			}}
 		>
 			{!embedHtml && (

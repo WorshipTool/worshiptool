@@ -17,6 +17,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/nahrat/hledani">
     | StaticRoute<"/o-nas">
     | DynamicRoute<"/pisen/[hex]/[alias]", { "hex": string; "alias": string }>
+    | DynamicRoute<"/pisen/[hex]/[alias]/preview-image", { "hex": string; "alias": string }>
     | DynamicRoute<"/pisen/[hex]/[alias]/tisk", { "hex": string; "alias": string }>
     | DynamicRoute<"/pisen/[hex]/[alias]/zverejnit", { "hex": string; "alias": string }>
     | DynamicRoute<"/playlist/[guid]", { "guid": string }>
@@ -31,6 +32,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/sub/[subdomain]", { "subdomain": string }>
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>
     | StaticRoute<"/sub/admin">
+    | DynamicRoute<"/sub/admin/pisen/[hex]/[alias]", { "hex": string; "alias": string }>
     | StaticRoute<"/sub/test">
     | StaticRoute<"/sub/tymy">
     | DynamicRoute<"/sub/tymy/[alias]", { "alias": string }>

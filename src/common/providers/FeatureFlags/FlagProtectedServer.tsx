@@ -1,5 +1,6 @@
 import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
+import { getServerUser } from '@/tech/auth/getServerUser'
 import React from 'react'
 
 type Props = {
@@ -8,6 +9,8 @@ type Props = {
 }
 
 export default async function FlagProtectedServer(props: Props) {
-	const value = await checkFlag(props.flag)
+	const user = getServerUser()
+	const value = await checkFlag(props.flag, user)
+
 	return value ? <>{props.children}</> : null
 }

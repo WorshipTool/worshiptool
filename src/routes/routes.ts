@@ -8,6 +8,7 @@ export const routesPaths = {
 	variant: '/pisen/[hex]/[alias]',
 	variantPublish: '/pisen/[hex]/[alias]/zverejnit',
 	variantPrint: '/pisen/[hex]/[alias]/tisk',
+	variantPreviewImage: '/pisen/[hex]/[alias]/preview-image',
 	playlist: '/playlist/[guid]',
 	playlistPrint: '/playlist/[guid]/tisk',
 	playlistCards: '/playlist/[guid]/prezentace',
@@ -30,6 +31,8 @@ export const routesPaths = {
 	about: '/o-nas',
 	contact: '/kontakt',
 	teams: '/sub/tymy',
+	admin: '/sub/admin',
+	adminPack: '/sub/admin/pisen/[hex]/[alias]',
 
 	team: '/sub/tymy/[alias]',
 	teamSongbook: '/sub/tymy/[alias]/zpevnik',

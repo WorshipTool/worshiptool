@@ -1,4 +1,5 @@
 'use server'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
 import { notFound } from 'next/navigation'
@@ -20,6 +21,10 @@ export const generateMetadata = generateSmartMetadata(
 				songTitle + ` (${sheet.getKeyNote() ? 'Píseň s akordy' : 'Text písně'})`
 			return {
 				title: title,
+				description: sheet.getText(),
+				openGraph: {
+					images: [getRouteUrlWithParams('variantPreviewImage', params)],
+				},
 			}
 		} catch (e) {
 			notFound()

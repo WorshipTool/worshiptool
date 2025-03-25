@@ -1,7 +1,6 @@
-import AddMediaAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AddMediaAdminOption'
-import GGFilterAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/GGFilterAdminOption'
-import SetTranslationTypeAdminOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/SetTranslationTypeAdminOption'
-import VerifyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/VerifyButton'
+import GGFilterAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/GGFilterAdminButton'
+import SetTranslationTypeAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/SetTranslationTypeAdminButton'
+import VerifyButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/VerifyButton'
 import AdminOption from '@/common/components/admin/AdminOption'
 import CustomMenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
@@ -121,8 +120,8 @@ export default function SongAdvancedAdminOptions({
 					/>
 				)}
 				<Divider />
-				<SetTranslationTypeAdminOption />
-				<GGFilterAdminOption />
+				<SetTranslationTypeAdminButton />
+				<GGFilterAdminButton />
 				<Divider />
 
 				{isAdmin() &&
@@ -152,8 +151,6 @@ export default function SongAdvancedAdminOptions({
 					onClick={onCopyClick}
 					icon={<CopyAll fontSize="small" />}
 				/>
-
-				<AddMediaAdminOption />
 			</Menu>
 
 			<Popup

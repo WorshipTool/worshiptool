@@ -9,6 +9,8 @@ type Props = {
 
 	spotify?: boolean
 	youtube?: boolean
+
+	maxHeight?: string
 }
 export default function MediaPlayer(props: Props) {
 	const type = props.spotify
@@ -18,9 +20,13 @@ export default function MediaPlayer(props: Props) {
 		: props.type ?? null
 
 	return (
-		<Box maxWidth={'560px'} sx={{}}>
+		<Box maxWidth={'560px'} maxHeight={props.maxHeight}>
 			{type === MediaTypes.Youtube ? (
-				<YoutubeVideo url={props.src} key={props.src}></YoutubeVideo>
+				<YoutubeVideo
+					url={props.src}
+					key={props.src}
+					maxHeight={props.maxHeight}
+				></YoutubeVideo>
 			) : type === MediaTypes.Spotify ? (
 				<SpotifyPlayer url={props.src} key={props.src}></SpotifyPlayer>
 			) : (

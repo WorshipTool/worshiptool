@@ -4,7 +4,7 @@ import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnaly
 import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
-import { checkFlag } from '@/common/providers/FeatureFlags'
+import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { Box } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { VariantPackAlias } from '@/types/song'

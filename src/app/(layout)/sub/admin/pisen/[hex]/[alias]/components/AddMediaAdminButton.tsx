@@ -1,8 +1,8 @@
+'use client'
 import {
 	useInnerSong,
 	useInnerVariant,
 } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import MenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Box, Button, Gap, TextField } from '@/common/ui'
 import { Switch } from '@/common/ui/mui'
@@ -12,7 +12,7 @@ import { handleApiCall } from '@/tech/handleApiCall'
 import { MusicVideo } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
-export default function AddMediaAdminOption() {
+export default function AddMediaAdminButton() {
 	const [open, setOpen] = useState(false)
 	const [url, setUrl] = useState('')
 
@@ -70,11 +70,12 @@ export default function AddMediaAdminOption() {
 
 	return (
 		<>
-			<MenuItem
+			<Button
 				onClick={() => setOpen(true)}
-				icon={<MusicVideo fontSize="small" />}
-				title={'Přidat nahrávku'}
-			/>
+				startIcon={<MusicVideo fontSize="small" />}
+			>
+				Přidat nahrávku
+			</Button>
 
 			<Popup
 				onClose={() => setOpen(false)}

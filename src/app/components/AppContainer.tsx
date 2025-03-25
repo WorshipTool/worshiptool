@@ -1,5 +1,5 @@
 import AppLayout from '@/common/components/app/AppLayout/AppLayout'
-import { checkFlag } from '@/common/providers/FeatureFlags'
+import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {

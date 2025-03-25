@@ -11,7 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SnackbarProvider } from 'notistack'
 
 import { BottomPanelProvider } from '@/app/providers/BottomPanelProvider'
-import { FeatureFlagsProvider } from '@/common/providers/FeatureFlags'
+import { FeatureFlagsProvider } from '@/common/providers/FeatureFlags/FeatureFlagsProvider'
 import { OutsideLinkBlockerProvider } from '@/common/ui/Link/useOutsideBlocker'
 import { TranslationLikesProvider } from '@/common/ui/SongCard/hooks/useTranslationsLikes'
 import { AllCommonData } from '@/hooks/common-data/common-data.types'

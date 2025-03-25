@@ -1,8 +1,6 @@
-import { userDtoToConfigCatUser } from '@/common/providers/FeatureFlags/flags.tech'
 import { CloudNumber } from '@/common/providers/FeatureFlags/flags.types'
-import useAuth from '@/hooks/auth/useAuth'
-import { useFeatureFlag } from 'configcat-react'
-import { useMemo } from 'react'
+import { useParameterStore } from '@statsig/react-bindings'
+import { useEffect, useState } from 'react'
 
 /**
  * Hook to get the value of a feature flag typed number.
@@ -10,14 +8,14 @@ import { useMemo } from 'react'
  * @returns The value of the feature flag and a loading state.
  */
 export function useCloudNumber(key: CloudNumber, defaultValue: number) {
-	const { user } = useAuth()
+	const a = useParameterStore('global')
 
-	const userObject = useMemo(() => {
-		if (!user) return undefined
-		return userDtoToConfigCatUser(user)
-	}, [user])
+	const [value, setValue] = useState<number | null>(defaultValue)
 
-	const data = useFeatureFlag(key as string, defaultValue, userObject)
+	useEffect(() => {
+		const v = a.get<number>(key as string)
+		setValue(v ?? defaultValue)
+	}, [a, key, defaultValue])
 
-	return data
+	return value
 }

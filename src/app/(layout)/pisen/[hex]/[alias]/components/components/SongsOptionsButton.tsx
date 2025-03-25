@@ -7,7 +7,6 @@ import { Sheet } from '@pepavlin/sheet-api'
 import React, { useState } from 'react'
 import { SongDto } from '../../../../../../../api/dtos'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
-import SongAdvancedAdminOptions from '../admin/SongAdvancedAdminOptions'
 import DeleteButton from './DeleteButton'
 
 type SongsOptionsButtonProps = {
@@ -75,7 +74,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 				]}
 			</Menu>
 
-			<SongAdvancedAdminOptions
+			{/* <SongAdvancedAdminOptions
 				key={'sheet-admin-buttons'}
 				sheet={props.sheet}
 				song={props.song}
@@ -86,7 +85,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 				editLoading={props.saving}
 				editedTitle={props.editedTitle}
 				anyChange={props.anyChange}
-			/>
+			/> */}
 		</>
 	)
 }

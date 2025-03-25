@@ -1,15 +1,26 @@
 // TODO: this component has to be as most basic as possible, no hooks, only client imports, apod.
-import { Typography } from '@/common/ui'
 import { signature } from '@pepavlin/sheet-api/lib/models/note'
 import {
 	Section,
 	SectionType,
 } from '@pepavlin/sheet-api/lib/models/song/section'
 import { Segment } from '@pepavlin/sheet-api/lib/models/song/segment'
+import { DetailedHTMLProps, HTMLAttributes } from 'react'
 import { SheetStyleComponentType } from './config'
 
 const chordHeight = '1.5em'
 const sectionsGap = '2rem'
+
+const StyledP = (
+	props: DetailedHTMLProps<
+		HTMLAttributes<HTMLParagraphElement>,
+		HTMLParagraphElement
+	>
+) => {
+	return (
+		<p {...props} style={{ marginTop: 0, marginBottom: 0, ...props.style }} />
+	)
+}
 
 const SegmentElement = ({
 	segment,
@@ -43,29 +54,48 @@ const SegmentElement = ({
 	const words = getWords()
 
 	return (
-		<>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				gap: '0.1rem',
+			}}
+		>
 			{words.map((word, index) => {
 				return (
-					<div key={word + index}>
+					<div
+						key={word + index}
+						style={{
+							display: 'flex', // Explicitly set display to flex
+							flexDirection: 'column',
+						}}
+					>
 						{showChords &&
 							(index == 0 && segment.chord ? (
-								<>
-									<Typography
-										sx={{ height: chordHeight, paddingRight: '0.5rem' }}
-										strong={900}
-									>
-										{segment.chord?.toString(signature)}
-									</Typography>
-								</>
+								<StyledP
+									style={{
+										height: chordHeight,
+										paddingRight: '0.5rem',
+										fontWeight: 900,
+									}}
+								>
+									{segment.chord?.toString(signature)}
+								</StyledP>
 							) : (
-								<div style={{ height: chordHeight }} />
+								<StyledP
+									style={{
+										height: chordHeight,
+										display: 'flex',
+									}}
+								/>
 							))}
 
-						<Typography>{word}</Typography>
+						<StyledP>{word}</StyledP>
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
 
@@ -125,55 +155,59 @@ const SectionComponent = ({
 		>
 			<div
 				style={{
+					display: 'flex', // Explicitly set display to flex
+					flexDirection: 'column',
 					paddingTop: hasChords && hasFirstLineText ? chordHeight : 0,
 				}}
 			>
 				{sectionName && (
-					<Typography
-						// fontStyle={'italic'}
-						noWrap
-						strong={section.type === SectionType.CHORUS ? 600 : 400}
-						sx={{
+					<StyledP
+						style={{
+							fontWeight: section.type === SectionType.CHORUS ? 600 : 400,
 							width: '2rem',
+							whiteSpace: 'nowrap',
 						}}
 					>
 						{sectionName}
-					</Typography>
+					</StyledP>
 				)}
 			</div>
-			<div>
+			<div
+				style={{
+					display: 'flex', // Explicitly set display to flex
+					flexDirection: 'column',
+				}}
+			>
 				{section.lines ? (
-					<>
-						{section.lines.map((line, index) => {
-							return (
-								<div
-									key={index}
-									style={{
-										display: 'flex',
-										flexDirection: 'row',
-										flexWrap: 'wrap',
-									}}
-								>
-									{line.segments.map((segment, index) => {
-										return (
-											<SegmentElement
-												key={index}
-												segment={segment}
-												signature={signature}
-												showChords={hasChords}
-											/>
-										)
-									})}
-								</div>
-							)
-						})}
-					</>
+					section.lines.map((line, index) => {
+						return (
+							<div
+								key={index}
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									flexWrap: 'wrap',
+								}}
+							>
+								{line.segments.map((segment, index) => {
+									return (
+										<SegmentElement
+											key={index}
+											segment={segment}
+											signature={signature}
+											showChords={hasChords}
+										/>
+									)
+								})}
+							</div>
+						)
+					})
 				) : (
 					<></>
 				)}
 				{!isLast && (
 					<>
-						<div style={{ height: sectionsGap }} />
+						<div style={{ height: sectionsGap, display: 'flex' }} />
 					</>
 				)}
 			</div>
@@ -181,7 +215,7 @@ const SectionComponent = ({
 	)
 }
 
-const DefaultStyle: SheetStyleComponentType = ({
+const DefaultStylePreview: SheetStyleComponentType = ({
 	sheet,
 	title,
 	signature,
@@ -198,51 +232,55 @@ const DefaultStyle: SheetStyleComponentType = ({
 	const sections = getSections()
 
 	return (
-		<div>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					// alignItems: 'center',
-					// justifyContent: 'center',
-				}}
-			>
-				{sections.map((section, index) => {
-					return (
-						<div
-							key={section.name + index}
-							style={{
-								breakInside: 'avoid',
-							}}
-						>
-							{index == 0 && title && (
-								<>
-									<div
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			{sections.map((section, index) => {
+				return (
+					<div
+						key={section.name + index}
+						style={{
+							display: 'flex', // Explicitly set display to flex
+							flexDirection: 'column',
+							breakInside: 'avoid',
+							gap: '1rem',
+						}}
+					>
+						{index == 0 && title && (
+							<>
+								<div
+									style={{
+										display: 'flex', // Explicitly set display to flex
+										marginBottom: 2,
+									}}
+								>
+									<StyledP
 										style={{
-											marginBottom: 2,
-											// display: 'flex',
-											// justifyContent: 'center',
+											fontSize: '1.25rem',
+											fontWeight: 'bold',
+											whiteSpace: 'nowrap',
 										}}
 									>
-										<Typography variant="h5" noWrap>
-											<b>{title}</b>
-										</Typography>
-									</div>
-								</>
-							)}
+										{title}
+									</StyledP>
+								</div>
+							</>
+						)}
 
-							<SectionComponent
-								key={section.name + index}
-								section={section}
-								signature={signature}
-								isLast={index === sections.length - 1}
-								hideChords={hideChords}
-							/>
-						</div>
-					)
-				})}
-			</div>
+						<SectionComponent
+							key={section.name + index}
+							section={section}
+							signature={signature}
+							isLast={index === sections.length - 1}
+							hideChords={hideChords}
+						/>
+					</div>
+				)
+			})}
 		</div>
 	)
 }
-export default DefaultStyle
+export default DefaultStylePreview

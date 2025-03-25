@@ -1,3 +1,4 @@
+import DefaultStylePreview from '@/common/components/SheetDisplay/styles/DefaultStylePreview'
 import PrintCompactStyle from '@/common/components/SheetDisplay/styles/PrintCompactStyle'
 import SmartStyle from '@/common/components/SheetDisplay/styles/SmartStyle'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -8,6 +9,7 @@ import ModernStyle from './ModernStyle'
 
 export type SheetStyle =
 	| 'default'
+	| 'default-preview'
 	| 'experimental'
 	| 'modern'
 	| 'printCompact'
@@ -29,4 +31,5 @@ export const sheetStyles: { [style in SheetStyle]: SheetStyleComponentType } = {
 	['modern']: ModernStyle,
 	['printCompact']: PrintCompactStyle,
 	['smart']: SmartStyle,
+	['default-preview']: DefaultStylePreview,
 }

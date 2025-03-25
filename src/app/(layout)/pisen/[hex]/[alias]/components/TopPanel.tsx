@@ -1,7 +1,6 @@
 import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
 import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
 import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import AdminOption from '@/common/components/admin/AdminOption'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
@@ -9,10 +8,9 @@ import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { ExtendedVariantPack } from '@/types/song'
-import { Language, Polyline } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import {
 	CreatedType,
 	SongDto,
@@ -77,39 +75,39 @@ export default function TopPanel(props: TopPanelProps) {
 		return t || s
 	}, [props.sheet, props.editedTitle, props.variant])
 
-	const [languageGenerating, setLanguageGenerating] = React.useState(false)
-	const generateLanguage = async () => {
-		setLanguageGenerating(true)
-		try {
-			await handleApiCall(
-				songEditingApi.songEditingControllerChangeLanguage({
-					packGuid: props.variant.packGuid,
-				})
-			)
-			// Reload page
-			window.location.reload()
-			enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
-		} catch (e) {
-			enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
-		}
-		setLanguageGenerating(false)
-	}
-	const [keywordsGenerating, setKeywordsGenerating] = React.useState(false)
-	const generateKeyword = async () => {
-		setKeywordsGenerating(true)
-		try {
-			await handleApiCall(
-				songPublishingApi.songPublishingControllerGenerateKeywords({
-					packGuid: props.variant.packGuid,
-				})
-			)
-			window.location.reload()
-			enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
-		} catch (e) {
-			enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
-		}
-		setKeywordsGenerating(false)
-	}
+	// const [languageGenerating, setLanguageGenerating] = React.useState(false)
+	// const generateLanguage = async () => {
+	// 	setLanguageGenerating(true)
+	// 	try {
+	// 		await handleApiCall(
+	// 			songEditingApi.songEditingControllerChangeLanguage({
+	// 				packGuid: props.variant.packGuid,
+	// 			})
+	// 		)
+	// 		// Reload page
+	// 		window.location.reload()
+	// 		enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
+	// 	} catch (e) {
+	// 		enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
+	// 	}
+	// 	setLanguageGenerating(false)
+	// }
+	// const [keywordsGenerating, setKeywordsGenerating] = React.useState(false)
+	// const generateKeyword = async () => {
+	// 	setKeywordsGenerating(true)
+	// 	try {
+	// 		await handleApiCall(
+	// 			songPublishingApi.songPublishingControllerGenerateKeywords({
+	// 				packGuid: props.variant.packGuid,
+	// 			})
+	// 		)
+	// 		window.location.reload()
+	// 		enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
+	// 	} catch (e) {
+	// 		enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
+	// 	}
+	// 	setKeywordsGenerating(false)
+	// }
 
 	const onEditClick = async (editable: boolean) => {
 		if (editable) {
@@ -257,7 +255,7 @@ export default function TopPanel(props: TopPanelProps) {
 
 			<AllSongAdminOptions />
 
-			{props.variant.public && (
+			{/* {props.variant.public && (
 				<>
 					{!props.variant.language && (
 						<>
@@ -284,7 +282,7 @@ export default function TopPanel(props: TopPanelProps) {
 						</>
 					)}
 				</>
-			)}
+			)} */}
 		</>
 	)
 }

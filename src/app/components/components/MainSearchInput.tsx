@@ -1,4 +1,4 @@
-import { useFlag } from '@/common/providers/FeatureFlags'
+import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { Box, IconButton, useTheme } from '@/common/ui'
 import { InputBase } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
@@ -66,7 +66,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 		}
 	}, [])
 
-	const { value: showSmartSearch } = useFlag('enable_smart_search')
+	const showSmartSearch = useFlag('enable_smart_search')
 
 	return (
 		<div

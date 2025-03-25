@@ -1,3 +1,12 @@
-export default function page() {
-	return <div>Adminn</div>
+import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+
+export default SmartPage(Page, [
+	'fullWidth',
+	'hideFooter',
+	'hideMiddleNavigation',
+	'darkToolbar',
+])
+
+function Page() {
+	return <>ahoj in admin page global</>
 }

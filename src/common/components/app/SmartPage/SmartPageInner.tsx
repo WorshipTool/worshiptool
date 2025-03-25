@@ -11,6 +11,7 @@ type Nullable<T> = {
 
 export type SmartPageOptions = Nullable<{
 	transparentToolbar: boolean
+	darkToolbar: boolean
 	whiteToolbarVersion: boolean
 	hideMiddleNavigation: boolean
 	hideTitle: boolean
@@ -36,6 +37,7 @@ export const SmartPageInnerProvider = ({
 	const options: SmartPageOptions = useMemo(
 		() => ({
 			transparentToolbar: false,
+			darkToolbar: false,
 			whiteToolbarVersion: false,
 			hideMiddleNavigation: false,
 			hideTitle: false,
@@ -57,6 +59,8 @@ export const SmartPageInnerProvider = ({
 	useEffect(() => {
 		if (options.transparentToolbar !== null)
 			toolbar.setTransparent(options.transparentToolbar)
+
+		if (options.darkToolbar !== null) toolbar.setDark(options.darkToolbar)
 
 		if (options.whiteToolbarVersion !== null)
 			toolbar.setWhiteVersion(options.whiteToolbarVersion)

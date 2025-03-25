@@ -1,55 +1,33 @@
-import {
-	CloudNumber,
-	FeatureFlag,
-} from '@/common/providers/FeatureFlags/flags.types'
+import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
 import { ROLES, UserDto } from '@/interfaces/user'
-import { User } from 'configcat-js'
-import * as configcat from 'configcat-js-ssr'
 
-import dotenv from 'dotenv'
-import { isDevelopment } from '../../../tech/development.tech'
-dotenv.config()
+import { StatsigClient, StatsigUser } from '@statsig/js-client'
+// import dotenv from 'dotenv'
+// dotenv.config()
 
-export const configcatApiKey = process.env.NEXT_PUBLIC_CONFIGCAT_API_KEY
 
-export const userDtoToConfigCatUser = (user: UserDto) => {
+export const userDtoToStatsigUser = (user: UserDto): StatsigUser => {
 	const role = user.role === ROLES.Admin ? 'admin' : 'user'
 
-	return new User(user.guid, user.email, 'Czech Republic', {
-		role: role,
-	})
-}
-const getLogger = () => {
-	return isDevelopment
-		? configcat.createConsoleLogger(configcat.LogLevel.Error)
-		: undefined
+	return {
+		userID: user.guid,
+		email: user.email,
+		custom: {
+			role: role,
+		},
+	}
 }
 
-export const checkFlag = async (key: FeatureFlag): Promise<boolean> => {
-	const configCatClient = configcat.getClient(
-		configcatApiKey,
-		configcat.PollingMode.AutoPoll,
-		{
-			logger: getLogger(),
-		}
+export const checkFlag = async (
+	key: FeatureFlag,
+	user?: UserDto
+): Promise<boolean> => {
+	const myStatsigClient = new StatsigClient(
+		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
+		user ? userDtoToStatsigUser(user) : {}
 	)
 
-	const ret = await configCatClient.getValueAsync(key as string, false)
-	return ret
-}
+	await myStatsigClient.initializeAsync()
 
-export const getCloudNumber = async (
-	key: CloudNumber,
-	defaultValue: number
-): Promise<number> => {
-	const configCatClient = configcat.getClient(
-		configcatApiKey,
-		configcat.PollingMode.AutoPoll,
-		{
-			logger: getLogger(),
-		}
-	)
-
-	const ret = await configCatClient.getValueAsync(key as string, defaultValue)
-	return ret
+	return myStatsigClient.checkGate(key as string)
 }

@@ -28,7 +28,7 @@ export default function Footer() {
 	const { hledat: searchString } = useSmartParams('home')
 	const isHome = useSmartMatch('home')
 
-	const { value: year } = useCloudNumber('year', 2024)
+	const year = useCloudNumber('year', 2024)
 
 	const links: Links = useMemo(
 		() => [

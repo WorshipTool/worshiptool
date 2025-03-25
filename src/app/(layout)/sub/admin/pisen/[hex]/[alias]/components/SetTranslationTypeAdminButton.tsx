@@ -1,5 +1,5 @@
+'use client'
 import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import MenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
@@ -18,7 +18,7 @@ const OPTIONS: { label: string; value: PackTranslationType }[] = [
 	{ label: 'Neznámé', value: PackTranslationType.Unknown },
 ]
 
-export default function SetTranslationTypeAdminOption() {
+export default function SetTranslationTypeAdminButton() {
 	const [open, setOpen] = useState(false)
 
 	const { enqueueSnackbar } = useSnackbar()
@@ -39,10 +39,15 @@ export default function SetTranslationTypeAdminOption() {
 
 	return (
 		<>
-			<MenuItem
+			<Button
 				title={'Nastavit typ'}
 				subtitle="Zvolit typ překladu"
 				onClick={() => setOpen(true)}
+				small
+				outlined
+				sx={{
+					width: 'fit-content',
+				}}
 			/>
 
 			<Popup

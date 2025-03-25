@@ -1,3 +1,5 @@
+'use client'
+
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { useEffect, useRef, useState } from 'react'
 

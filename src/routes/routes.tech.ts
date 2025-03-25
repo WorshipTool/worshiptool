@@ -217,6 +217,10 @@ export const parseVariantAlias = (variantAlias: VariantPackAlias) => {
 	return { hex, alias: code }
 }
 
+export const makeVariantAlias = (hex: string, code: string) => {
+	return `${hex}-${code}`
+}
+
 export const getPathnameFromUrl = (url: string): string => {
 	// get with regex
 	const regex = /https?:\/\/[^/]+(\/.*)/

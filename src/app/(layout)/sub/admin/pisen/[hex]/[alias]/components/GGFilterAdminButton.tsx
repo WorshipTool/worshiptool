@@ -1,5 +1,5 @@
+'use client'
 import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import MenuItem from '@/common/components/Menu/MenuItem'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
@@ -13,7 +13,7 @@ const OPTIONS: { label: string; value: boolean | null }[] = [
 	{ label: 'Automaticky', value: null },
 ]
 
-export default function GGFilterAdminOption() {
+export default function GGFilterAdminButton() {
 	const [open, setOpen] = useState(false)
 
 	const { enqueueSnackbar } = useSnackbar()
@@ -42,10 +42,15 @@ export default function GGFilterAdminOption() {
 
 	return (
 		<>
-			<MenuItem
+			<Button
 				title={'(GG) Validace obsahu'}
 				subtitle="Zvolit zda se má píseň filtrovat"
 				onClick={() => setOpen(true)}
+				small
+				outlined
+				sx={{
+					width: 'fit-content',
+				}}
 			/>
 
 			<Popup
