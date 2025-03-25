@@ -3,6 +3,7 @@ import {
 	mapGetVariantDataApiToSongDto,
 } from '@/api/dtos'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { makeVariantAlias } from '@/routes/routes.tech'
@@ -25,6 +26,13 @@ export default async function layout(props: LayoutProps<'adminPack'>) {
 			}}
 			variantAlias={alias}
 		>
+			<AdminBreadItem label="Písně" to="adminSongs" toParams={{}} />
+
+			<AdminBreadItem
+				label={variant.title}
+				to="adminPack"
+				toParams={props.params}
+			/>
 			{props.children}
 		</InnerSongProvider>
 	)

@@ -10,7 +10,7 @@ import GGFilterAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/co
 import SetTranslationTypeAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/SetTranslationTypeAdminButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PageProps } from '@/common/types'
-import { Box, Button, Gap, Typography } from '@/common/ui'
+import { Box, Button, Chip, Gap, Typography } from '@/common/ui'
 import { getTranslationData } from '@/common/ui/SongCard/components/tech'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { makeVariantAlias } from '@/routes/routes.tech'
@@ -42,31 +42,44 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 	return (
 		<Box display={'flex'} gap={2} flexDirection={'column'}>
 			<Box display={'flex'} flexDirection={'row'} gap={2}>
-				<Typography small color="grey.500">
-					Dashboard {'<'} Písně {'<'} {main.title}
-				</Typography>
-			</Box>
-			<Box display={'flex'} flexDirection={'row'} gap={2}>
-				<AdminSongPreview width={150} height={150} />
+				<AdminSongPreview
+					sx={{
+						width: 150,
+						height: 150,
+					}}
+				/>
 
 				<Box display={'flex'} flexDirection={'column'} gap={2} padding={2}>
-					<Typography variant="h5" strong>
-						{main.title}
-					</Typography>
+					<Box display={'flex'} gap={2} alignItems={'center'}>
+						<Typography variant="h5" strong>
+							{main.title}
+						</Typography>
+
+						<Chip
+							label={'568'}
+							color="success"
+							// size="small"
+							sx={{
+								fontSize: '1rem',
+								fontWeight: '700',
+							}}
+						/>
+					</Box>
 
 					{translationData.message && (
 						<Typography>{translationData.message}</Typography>
 					)}
+
+					{main.createdByLoader && <Typography>Nahráno programem</Typography>}
 				</Box>
 			</Box>
-			<Gap />
 
-			<AdminCopySheetDataButton />
-			<GGFilterAdminButton />
-			<SetTranslationTypeAdminButton />
-			<AdminVerifyButton />
-
-			<Gap />
+			<Box display={'flex'} flexDirection={'row'} gap={2}>
+				<SetTranslationTypeAdminButton />
+				<GGFilterAdminButton />
+				<AdminVerifyButton />
+				<AdminCopySheetDataButton />
+			</Box>
 
 			<AdminSectionCollapsible title="Rozšiřující informace">
 				<AdminItem title="Jazyk">{main.language as SongLanguage}</AdminItem>

@@ -40,15 +40,16 @@ export default function SetTranslationTypeAdminButton() {
 	return (
 		<>
 			<Button
-				title={'Nastavit typ'}
-				subtitle="Zvolit typ překladu"
+				// title={'Nastavit typ'}
+				// subtitle="Zvolit typ překladu"
 				onClick={() => setOpen(true)}
 				small
-				outlined
 				sx={{
 					width: 'fit-content',
 				}}
-			/>
+			>
+				Zvolit typ překladu
+			</Button>
 
 			<Popup
 				title={'Zvol typ překladu'}

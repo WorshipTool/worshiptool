@@ -12,7 +12,7 @@ export default function AdminVerifyButton() {
 		<>
 			<Button
 				small
-				outlined
+				color="success"
 				onClick={() => setVerifyPopupOpen(true)}
 				sx={{
 					width: 'fit-content',

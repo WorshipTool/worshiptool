@@ -1,11 +1,16 @@
+import AdminBreadcrumbs from '@/app/(layout)/sub/admin/components/AdminBreadcrumbs'
+import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
+import AdminMenu from '@/app/(layout)/sub/admin/components/AdminMenu'
+import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { LayoutProps } from '@/common/types'
 import { Box } from '@/common/ui'
 import { getServerUser } from '@/tech/auth/getServerUser'
 import { forbidden } from '@/tech/error/error.tech'
 
-export default function Layout(props: LayoutProps<'admin'>) {
+export default async function Layout(props: LayoutProps<'admin'>) {
 	const user = getServerUser()
-	if (!user) forbidden()
+	const show = await checkFlag('show_admin_page', user)
+	if (!show) forbidden()
 	// throw forbidden exception with status code 403
 
 	return (
@@ -31,17 +36,31 @@ export default function Layout(props: LayoutProps<'admin'>) {
 				<Box
 					sx={{
 						height: 'calc(100vh - 56px)',
-						width: 300,
+						width: 250,
 						bgcolor: 'grey.800',
 						position: 'sticky',
 						top: 56,
 					}}
-				/>
+				>
+					<Box
+						sx={{
+							margin: 2,
+						}}
+					>
+						<AdminMenu />
+					</Box>
+				</Box>
 				<Box
 					sx={{
-						padding: 2,
+						padding: 3,
+						flex: 1,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 2,
 					}}
 				>
+					<AdminBreadcrumbs />
+					<AdminBreadItem label="Dashboard" to="admin" toParams={{}} base />
 					{props.children}
 				</Box>
 			</Box>

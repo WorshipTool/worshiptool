@@ -77,8 +77,8 @@ export default function ToolsMenuItem<T extends RoutesKeys>(
 					<Image
 						alt={props.title}
 						src={imageUrl}
-						height={50}
-						width={60}
+						height={50 * (props.imageSizeCoef || 1)}
+						width={60 * (props.imageSizeCoef || 1)}
 						style={{
 							objectFit: 'contain',
 							pointerEvents: 'none',

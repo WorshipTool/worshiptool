@@ -1,4 +1,5 @@
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { Box } from '@/common/ui'
 
 export default SmartPage(Page, [
 	'fullWidth',
@@ -8,5 +9,5 @@ export default SmartPage(Page, [
 ])
 
 function Page() {
-	return <>ahoj in admin page global</>
+	return <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}></Box>
 }

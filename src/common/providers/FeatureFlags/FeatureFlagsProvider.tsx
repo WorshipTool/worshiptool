@@ -2,7 +2,7 @@
 import { userDtoToStatsigUser } from '@/common/providers/FeatureFlags/flags.tech'
 import useAuth from '@/hooks/auth/useAuth'
 import { StatsigProvider, useClientAsyncInit } from '@statsig/react-bindings'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 type Props = {
 	children: React.ReactNode
@@ -11,20 +11,20 @@ type Props = {
 export function FeatureFlagsProvider(props: Props) {
 	const { user } = useAuth()
 
-	const [userData, setUserData] = useState({})
+	const { client } = useClientAsyncInit(
+		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
+		{}
+	)
 
 	useEffect(() => {
 		if (user) {
-			setUserData(userDtoToStatsigUser(user))
+			const data = userDtoToStatsigUser(user)
+			client.updateUserAsync(data)
 		} else {
-			setUserData({})
+			client.updateUserAsync({})
 		}
 	}, [user])
 
-	const { client } = useClientAsyncInit(
-		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
-		userData
-	)
 	return (
 		<>
 			<StatsigProvider client={client}>{props.children}</StatsigProvider>

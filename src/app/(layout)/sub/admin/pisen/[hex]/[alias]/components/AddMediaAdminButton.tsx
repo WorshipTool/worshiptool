@@ -48,7 +48,7 @@ export default function AddMediaAdminButton() {
 				)
 			)
 		} else {
-			await fetchApiState(() =>
+			const a = await fetchApiState(() =>
 				handleApiCall(
 					songManagementApi.songMediaControllerRemoveMediaFromPack({
 						packGuid,

@@ -6,6 +6,7 @@ type ExistingFlags =
 	| 'show_loading_screen'
 	| 'show_media_on_song_page'
 	| 'allow_translation_likes'
+	| 'show_admin_page'
 
 export type FeatureFlag = ExistingFlags | String
 

@@ -43,15 +43,16 @@ export default function GGFilterAdminButton() {
 	return (
 		<>
 			<Button
-				title={'(GG) Validace obsahu'}
-				subtitle="Zvolit zda se má píseň filtrovat"
+				// title={'(GG) Validace obsahu'}
+				// subtitle="Zvolit zda se má píseň filtrovat"
 				onClick={() => setOpen(true)}
 				small
-				outlined
 				sx={{
 					width: 'fit-content',
 				}}
-			/>
+			>
+				{'(GG) Validace obsahu'}
+			</Button>
 
 			<Popup
 				title={'Zvol validaci obsahu'}

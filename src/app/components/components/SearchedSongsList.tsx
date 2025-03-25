@@ -7,7 +7,6 @@ import ContainerGrid from '../../../common/components/ContainerGrid'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
-import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import SmartSongListCards from '@/common/components/songLists/SongListCards/SmartSongListCards'
@@ -81,7 +80,7 @@ const SearchedSongsList = memo(function S({
 		}
 	})
 	useChangeDelayer(
-		normalizeSearchText(searchString),
+		searchString,
 		(value) => {
 			loadPage(0, true).finally(() => {
 				setEnableLoadNext(true)

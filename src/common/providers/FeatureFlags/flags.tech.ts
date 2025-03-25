@@ -5,7 +5,6 @@ import { StatsigClient, StatsigUser } from '@statsig/js-client'
 // import dotenv from 'dotenv'
 // dotenv.config()
 
-
 export const userDtoToStatsigUser = (user: UserDto): StatsigUser => {
 	const role = user.role === ROLES.Admin ? 'admin' : 'user'
 
@@ -14,6 +13,7 @@ export const userDtoToStatsigUser = (user: UserDto): StatsigUser => {
 		email: user.email,
 		custom: {
 			role: role,
+			name: user.firstName + ' ' + user.lastName,
 		},
 	}
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import { IconButton } from '@/common/ui/IconButton'
+import { AutoAwesome } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, InputBase, SxProps, styled } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
@@ -28,9 +30,12 @@ interface SearchBarProps {
 	value?: string
 	onChange?: (value: string) => void
 	sx?: SxProps
+	useSmartSearch?: boolean
+	onSmartSearchChange?: (value: boolean) => void
+	showSmartSearch?: boolean
 }
 
-export function SearchBar({ value, onChange, sx }: SearchBarProps) {
+export function SearchBar({ value, onChange, sx, ...props }: SearchBarProps) {
 	const inputRef = useRef()
 
 	const onChangeHandler = (e: any) => {
@@ -77,13 +82,27 @@ export function SearchBar({ value, onChange, sx }: SearchBarProps) {
 			/>
 			<SearchIcon />
 			<SearchInput
-				placeholder="Vyhledej píseň..."
+				placeholder="Hledej podle názvu nebo části textu"
 				autoFocus={!isMobile}
 				value={value}
 				onChange={onChangeHandler}
 				inputRef={inputRef}
 				sx={{}}
 			></SearchInput>
+
+			{props.showSmartSearch && (
+				<>
+					<IconButton
+						color={props.useSmartSearch ? 'primary.main' : 'grey.400'}
+						size="small"
+						onClick={() => {
+							props.onSmartSearchChange?.(!props.useSmartSearch)
+						}}
+					>
+						<AutoAwesome fontSize="small" />
+					</IconButton>
+				</>
+			)}
 		</SearchContainer>
 	)
 }
