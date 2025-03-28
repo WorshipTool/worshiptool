@@ -1,12 +1,12 @@
 'use client'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import VerifyButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/VerifyButton'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, Typography } from '@/common/ui'
 import { useState } from 'react'
 
 export default function AdminVerifyButton() {
-	const variant = useInnerVariant()
+	const variant = useInnerPack()
 	const [verifyPopupOpen, setVerifyPopupOpen] = useState(false)
 	return (
 		<>

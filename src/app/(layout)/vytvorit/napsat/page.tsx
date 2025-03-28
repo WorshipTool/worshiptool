@@ -1,16 +1,16 @@
 'use client'
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
-import ToolPanel from '@/app/(layout)/vytvorit/napsat/components/ToolPanel'
 import WrittenPreview from '@/app/(layout)/vytvorit/napsat/components/WrittenPreview'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, Button, Tooltip } from '@/common/ui'
-import { InputBase, styled } from '@/common/ui/mui'
+import { styled } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
@@ -25,15 +25,6 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.grey[100],
 	boxShadow: `0px 0px 5px ${theme.palette.grey[400]}`,
 	display: 'flex',
-}))
-
-const TitleInput = styled(InputBase)(({ theme }) => ({
-	fontWeight: theme.typography.fontWeightBold,
-}))
-const SheetInput = styled(InputBase)(({}) => ({
-	minHeight: 200,
-	justifyContent: 'start',
-	alignItems: 'start',
 }))
 
 export default SmartPage(Create)
@@ -91,54 +82,6 @@ function Create() {
 		)
 	}
 
-	const newSection = (name: string) => {
-		const target = sheetInputRef.current
-		let textToInsert = `{${name}}`
-		let cursorPosition = target.selectionStart
-		let textBeforeCursorPosition = target.value.substring(0, cursorPosition)
-		let textAfterCursorPosition = target.value.substring(
-			cursorPosition,
-			target.value.length
-		)
-		setSheetData(
-			textBeforeCursorPosition + textToInsert + textAfterCursorPosition
-		)
-
-		const pos = target.selectionEnd + textToInsert.length
-		cursorRef.current = {
-			start: pos,
-			end: pos,
-		}
-	}
-
-	const newChord = () => {
-		const target = sheetInputRef.current
-		if (!target) return
-
-		const textToInsert = '[C]'
-		const cursorPosition = target.selectionStart
-		const textBefore = sheetData.substring(0, cursorPosition)
-		const textAfter = sheetData.substring(cursorPosition)
-		const newValue = textBefore + textToInsert + textAfter
-
-		setSheetData(newValue)
-
-		// Nastavení pozice kurzoru na 'C'
-		cursorRef.current = {
-			start: cursorPosition + 1, // Pozice 'C'
-			end: cursorPosition + 2, // Za 'C'
-		}
-	}
-
-	useLayoutEffect(() => {
-		if (cursorRef.current !== null) {
-			const target = sheetInputRef.current
-			if (cursorRef.current)
-				target.setSelectionRange(cursorRef.current.start, cursorRef.current.end)
-			target.focus()
-			cursorRef.current = null // Resetování ref po nastavení kurzoru
-		}
-	}, [sheetData])
 
 	const isSmall = useDownSize('sm')
 
@@ -167,27 +110,10 @@ function Create() {
 								gap: 1,
 							}}
 						>
-							<Box display={'flex'} flexDirection={'column'} flex={1}>
-								<TitleInput
-									placeholder="Zadejte název písně"
-									inputRef={titleInputRef}
-									value={title}
-									onChange={(e) => {
-										setTitle(e.target.value)
-									}}
-								/>
-								<SheetInput
-									placeholder="Zde je místo pro obsah písně..."
-									inputRef={sheetInputRef}
-									multiline
-									value={sheetData}
-									onChange={(e) => {
-										setSheetData(e.target.value)
-									}}
-								/>
-								<Box flex={1} />
-								<ToolPanel onNewSection={newSection} onNewChord={newChord} />
-							</Box>
+							<SheetEditor
+								onTitleChange={setTitle}
+								onSheetDataChange={setSheetData}
+							/>
 							<Box
 								flex={1}
 								sx={{
@@ -199,7 +125,6 @@ function Create() {
 								<WrittenPreview sheet={sheet} title={title} />
 							</Box>
 
-							{/* <ToolPanel onNewSection={newSection} onNewChord={newChord} /> */}
 						</StyledContainer>
 
 						<Gap />

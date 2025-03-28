@@ -1,7 +1,10 @@
 import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui/Box'
 import { Clickable } from '@/common/ui/Clickable'
-import { SongVariantCard } from '@/common/ui/SongCard/SongVariantCard'
+import {
+	SongVariantCard,
+	ToLinkProps,
+} from '@/common/ui/SongCard/SongVariantCard'
 import { Typography } from '@/common/ui/Typography'
 import { BasicVariantPack } from '@/types/song'
 import { useState } from 'react'
@@ -10,6 +13,7 @@ type SongGroupCardProps = {
 	packs: BasicVariantPack[]
 	original?: BasicVariantPack
 	flexibleHeight?: boolean
+	toLinkProps?: ToLinkProps
 }
 
 export default function SongGroupCard({
@@ -101,6 +105,7 @@ export default function SongGroupCard({
 						borderColor: BORDER_COLOR,
 					}}
 					properties={['SHOW_PRIVATE_LABEL']}
+					toLinkProps={props.toLinkProps}
 				/>
 
 				{original && (
@@ -193,6 +198,7 @@ export default function SongGroupCard({
 								key={d.packGuid}
 								data={d}
 								properties={['SHOW_PRIVATE_LABEL', 'ENABLE_TRANSLATION_LIKE']}
+								toLinkProps={props.toLinkProps}
 							/>
 						</Box>
 					))}

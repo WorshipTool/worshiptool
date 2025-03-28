@@ -1,12 +1,9 @@
 'use client'
-import {
-	mapExtendedVariantPackApiToDto,
-	mapGetVariantDataApiToSongDto,
-	SongDto,
-} from '@/api/dtos'
-import { getVariantByAlias } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { mapBasicSongApiToDto } from '@/api/dtos'
+import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { ExtendedVariantPack } from '@/types/song'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { BasicSong, SongGuid } from '@/types/song'
 import { createContext, useContext } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerSong>
@@ -23,48 +20,39 @@ export function useInnerSong() {
 	return r
 }
 
-export function useInnerVariant() {
-	const s = useInnerSong()
-	return s.variant
-}
-
-type InData = {
-	song: SongDto
-	variant: ExtendedVariantPack
-}
+type InData = BasicSong
 
 type ProviderProps = {
 	children: any
-	variantAlias: string
+	songGuid: SongGuid
 
 	startData?: InData
 }
 
 export const InnerSongProvider = (props: ProviderProps) => {
-	const p = useProvideInnerSong(props.variantAlias, props.startData)
+	const p = useProvideInnerSong(props.songGuid, props.startData)
 
-	return p.song && p.variant ? (
+	return true ? (
 		<songContext.Provider value={p}>{props.children}</songContext.Provider>
 	) : (
 		<p>Načítání</p>
 	)
 }
 
-const useProvideInnerSong = (variantAlias: string, startData?: InData) => {
+const useProvideInnerSong = (songGuid: SongGuid, startData?: InData) => {
+	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v = await getVariantByAlias(variantAlias)
-		const variant = v.main
+		const v = await handleApiCall(
+			songGettingApi.songOneGettingControllerGetSongDataByGuid(songGuid)
+		)
+		const data = mapBasicSongApiToDto(v)
 
-		const song = mapGetVariantDataApiToSongDto(v)
-		const variantData = mapExtendedVariantPackApiToDto(variant)
-
-		return { song, variant: variantData }
-	}, [variantAlias, startData])
+		return data
+	}, [songGuid, startData])
 
 	return {
 		loading: apiState.loading,
-		song: apiState.data?.song! || startData?.song,
-		variant: apiState.data?.variant! || startData?.variant,
+		data: apiState.data || startData,
 	}
 }

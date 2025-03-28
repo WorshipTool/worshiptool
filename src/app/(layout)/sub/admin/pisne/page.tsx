@@ -2,11 +2,13 @@
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import SongSearchBarBase from '@/common/components/SearchBar/SongSearchBarBase'
-import SongListCard from '@/common/components/songLists/SongListCards/SongListCards'
-import { Box } from '@/common/ui'
+import { Box, Button } from '@/common/ui'
+import { Masonry } from '@/common/ui/Masonry'
+import SongGroupCard from '@/common/ui/SongCard/SongGroupCard'
 import useSongSearchPaginated from '@/hooks/song/useSongSearchPaginated'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { parseVariantAlias } from '@/routes/routes.tech'
+import { Add } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 export default SmartPage(Page, [
 	'fullWidth',
@@ -47,16 +49,28 @@ function Page() {
 				/>
 			</Box>
 
-			{songs && (
-				<SongListCard
-					data={songs.map((s) => s.found[0])}
-					cardToLinkProps={(data) => ({
-						to: 'adminPack',
-						params: {
-							...parseVariantAlias(data.packAlias),
-						},
-					})}
-				/>
+			{songs && songs.length > 0 ? (
+				<Masonry columns={4}>
+					{songs.map((song) => (
+						<SongGroupCard
+							key={song.found[0].packGuid}
+							packs={song.found}
+							original={song.original}
+							toLinkProps={(v) => ({
+								to: 'adminPack',
+								params: {
+									...parseVariantAlias(v.packAlias),
+								},
+							})}
+						/>
+					))}
+				</Masonry>
+			) : (
+				<Box display={'flex'}>
+					<Button to="adminCreateSong" startIcon={<Add />}>
+						Vytvořit píseň
+					</Button>
+				</Box>
 			)}
 		</Box>
 	)

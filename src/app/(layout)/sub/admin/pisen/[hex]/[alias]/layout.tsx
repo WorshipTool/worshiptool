@@ -1,13 +1,16 @@
 import {
+	mapBasicSongApiToDto,
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
 } from '@/api/dtos'
+import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { makeVariantAlias } from '@/routes/routes.tech'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
+import { SongGuid } from '@/types/song'
 
 export default async function layout(props: LayoutProps<'adminPack'>) {
 	const { songGettingApi } = await useServerApi()
@@ -18,22 +21,36 @@ export default async function layout(props: LayoutProps<'adminPack'>) {
 
 	const song = mapGetVariantDataApiToSongDto(data)
 	const variant = mapExtendedVariantPackApiToDto(data.main)
-	return (
-		<InnerSongProvider
-			startData={{
-				song,
-				variant,
-			}}
-			variantAlias={alias}
-		>
-			<AdminBreadItem label="Písně" to="adminSongs" toParams={{}} />
 
-			<AdminBreadItem
-				label={variant.title}
-				to="adminPack"
-				toParams={props.params}
-			/>
-			{props.children}
+	const songData = await handleServerApiCall(
+		songGettingApi.songOneGettingControllerGetSongDataByGuid(song.guid)
+	)
+
+	const formatted = mapBasicSongApiToDto(songData)
+	return (
+		<InnerSongProvider startData={formatted} songGuid={song.guid as SongGuid}>
+			<InnerPackProvider
+				startData={{
+					song,
+					variant,
+				}}
+				variantAlias={alias}
+			>
+				<AdminBreadItem label={'Písně'} to="adminSongs" toParams={{}} />
+				<AdminBreadItem
+					label={formatted.title}
+					to="adminSong"
+					toParams={{
+						songGuid: formatted.guid,
+					}}
+				/>
+				<AdminBreadItem
+					label={variant.title}
+					to="adminPack"
+					toParams={props.params}
+				/>
+				{props.children}
+			</InnerPackProvider>
 		</InnerSongProvider>
 	)
 }

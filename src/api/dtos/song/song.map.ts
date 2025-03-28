@@ -5,12 +5,15 @@ import {
 } from '@/interfaces/variant/songVariant.types'
 import { PlaylistGuid } from '@/types/playlist'
 import {
+	BasicSong,
 	ExtendedVariantPack,
 	PackTranslationType,
 	SongGuid,
 	SongLanguage,
+	SongTitle,
 } from '@/types/song'
 import {
+	BasicSongDto,
 	BasicVariantPackDto,
 	ExtendedVariantPackDto,
 	GetVariantDataOutDto,
@@ -64,5 +67,16 @@ export const mapExtendedVariantPackApiToDto = (
 		deleted: api.deleted,
 
 		createdForPlaylistGuid: api.createdForPlaylistGuid as PlaylistGuid,
+	}
+}
+
+export const mapBasicSongApiToDto = (api: BasicSongDto): BasicSong => {
+	return {
+		guid: api.guid as SongGuid,
+		title: api.title as SongTitle,
+		original: api.original
+			? mapBasicVariantPackApiToDto(api.original)
+			: undefined,
+		packs: api.packs.map((v) => mapBasicVariantPackApiToDto(v)),
 	}
 }

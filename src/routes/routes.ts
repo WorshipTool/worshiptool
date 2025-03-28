@@ -33,7 +33,9 @@ export const routesPaths = {
 	teams: '/sub/tymy',
 	admin: '/sub/admin',
 	adminPack: '/sub/admin/pisen/[hex]/[alias]',
+	adminSong: '/sub/admin/pisen/rodina/[songGuid]',
 	adminSongs: '/sub/admin/pisne',
+	adminCreateSong: `/sub/admin/pisen/vytvorit`,
 
 	team: '/sub/tymy/[alias]',
 	teamSongbook: '/sub/tymy/[alias]/zpevnik',

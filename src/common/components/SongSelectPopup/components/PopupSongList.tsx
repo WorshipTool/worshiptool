@@ -8,8 +8,8 @@ import { ApiState } from '@/tech/ApiState'
 import './GlobalSongList.styles.css'
 
 type GlobalSongListProps = {
-	onSongSelect: (packGuid: VariantPackGuid, songTitle: string) => void
-	onSongDeselect: (packGuid: VariantPackGuid) => void
+	onSongSelect: (pack: BasicVariantPack) => void
+	onSongDeselect: (pack: BasicVariantPack) => void
 	selectedSongs: VariantPackGuid[]
 	apiState: ApiState<BasicVariantPack[]>
 	multiselect?: boolean
@@ -27,10 +27,10 @@ export default function PopupSongList(props: GlobalSongListProps) {
 		>
 			{props.items.map((song) => {
 				const onSelect = () => {
-					props.onSongSelect(song.packGuid, song.title)
+					props.onSongSelect(song)
 				}
 				const onDeselect = () => {
-					props.onSongDeselect(song.packGuid)
+					props.onSongDeselect(song)
 				}
 				return (
 					<PopupSongCard

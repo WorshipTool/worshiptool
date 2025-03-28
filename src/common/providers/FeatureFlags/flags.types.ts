@@ -7,6 +7,7 @@ type ExistingFlags =
 	| 'show_media_on_song_page'
 	| 'allow_translation_likes'
 	| 'show_admin_page'
+	| 'use_subdomains'
 
 export type FeatureFlag = ExistingFlags | String
 

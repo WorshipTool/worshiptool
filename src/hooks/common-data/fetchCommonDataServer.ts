@@ -48,12 +48,18 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 			guid: p.guid,
 		}))
 
+		/** Get user favourites */
+		const favourites = await handleServerApiCall(
+			api.songFavouritesApi.songFavouritesControllerGetFavourites()
+		)
+
 		return {
 			translationLikes: tlFormatted,
 			teamsOfUser: teams.teams,
 			playlistsOfUser: playlists.playlists,
 			allsubdomains: subdomains.aliases,
 			permissionsOfUser: pFormatted,
+			favourites: favourites,
 		}
 	} catch (e) {
 		return {
@@ -62,6 +68,7 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 			playlistsOfUser: [],
 			allsubdomains: [],
 			permissionsOfUser: [],
+			favourites: { items: [], selectionGuid: '' },
 		}
 	}
 }

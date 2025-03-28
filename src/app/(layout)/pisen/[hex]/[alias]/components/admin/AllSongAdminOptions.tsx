@@ -1,5 +1,5 @@
 import ShowPackFamilyOption from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/ShowPackFamilyOption'
-import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import AdminOption from '@/common/components/admin/AdminOption'
 import OnlyAdmin from '@/common/components/admin/OnlyAdmin'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
@@ -7,11 +7,14 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { AdminPanelSettings } from '@mui/icons-material'
 
 export default function AllSongAdminOptions() {
-	const { variant } = useInnerSong()
+	const { variant } = useInnerPackSong()
 	const prop = useSmartParams('variant')
 	const navigate = useSmartNavigate()
 	const goToAdmin = () => {
-		navigate('adminPack', { hex: prop.hex, alias: prop.alias })
+		navigate('adminPack', {
+			hex: prop.hex,
+			alias: prop.alias,
+		})
 	}
 	return (
 		<OnlyAdmin hideEnvelope>

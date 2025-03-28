@@ -1,8 +1,8 @@
 'use client'
 import {
-	useInnerSong,
-	useInnerVariant,
-} from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+	useInnerPack,
+	useInnerPackSong,
+} from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import Popup from '@/common/components/Popup/Popup'
 import { Box, Button, Gap, TextField } from '@/common/ui'
 import { Switch } from '@/common/ui/mui'
@@ -18,8 +18,8 @@ export default function AddMediaAdminButton() {
 
 	const [adding, setAdding] = useState(true)
 
-	const { packGuid } = useInnerVariant()
-	const { song } = useInnerSong()
+	const { packGuid } = useInnerPack()
+	const { song } = useInnerPackSong()
 	const { songManagementApi } = useApi()
 	const onSubmit = async () => {
 		doFetch(true)

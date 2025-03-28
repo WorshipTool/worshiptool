@@ -1,6 +1,6 @@
 import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
 import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
-import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
@@ -56,7 +56,7 @@ export default function TopPanel(props: TopPanelProps) {
 		return props.variant.createdByGuid === user?.guid
 	}, [user, props.variant])
 
-	const { song } = useInnerSong()
+	const { song } = useInnerPackSong()
 
 	const { enqueueSnackbar } = useSnackbar()
 	const navigate = useSmartNavigate()

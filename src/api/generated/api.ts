@@ -351,6 +351,37 @@ export type BaseUserInfoOutDtoLoginMethodsEnum = typeof BaseUserInfoOutDtoLoginM
 /**
  * 
  * @export
+ * @interface BasicSongDto
+ */
+export interface BasicSongDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicSongDto
+     */
+    'guid': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicSongDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {BasicVariantPackDto}
+     * @memberof BasicSongDto
+     */
+    'original'?: BasicVariantPackDto;
+    /**
+     * 
+     * @type {Array<BasicVariantPackDto>}
+     * @memberof BasicSongDto
+     */
+    'packs': Array<BasicVariantPackDto>;
+}
+/**
+ * 
+ * @export
  * @interface BasicVariantPackDto
  */
 export interface BasicVariantPackDto {
@@ -10199,6 +10230,46 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songOneGettingControllerGetSongDataByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'guid' is not null or undefined
+            assertParamExists('songOneGettingControllerGetSongDataByGuid', 'guid', guid)
+            const localVarPath = `/songDataByGuid`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (guid !== undefined) {
+                localVarQueryParameter['guid'] = guid;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} alias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10403,6 +10474,18 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songOneGettingControllerGetSongDataByGuid(guid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BasicSongDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songOneGettingControllerGetSongDataByGuid(guid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songOneGettingControllerGetSongDataByGuid']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} alias 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10537,6 +10620,15 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
          */
         songGettingControllerSearchMySongsInPopup(searchString?: string, options?: any): AxiosPromise<GetGlobalSongsOutDto> {
             return localVarFp.songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} guid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songOneGettingControllerGetSongDataByGuid(guid: string, options?: any): AxiosPromise<BasicSongDto> {
+            return localVarFp.songOneGettingControllerGetSongDataByGuid(guid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10696,6 +10788,17 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerSearchMySongsInPopup(searchString?: string, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerSearchMySongsInPopup(searchString, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} guid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songOneGettingControllerGetSongDataByGuid(guid: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songOneGettingControllerGetSongDataByGuid(guid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

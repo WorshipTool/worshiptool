@@ -1,11 +1,10 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
-import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
 import SongListCard from '@/common/components/songLists/SongListCards/SongListCards'
 import { Box } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
-import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { AltRoute } from '@mui/icons-material'
@@ -14,7 +13,7 @@ import { useState } from 'react'
 export default function ShowPackFamilyOption() {
 	const [popupOpen, setPopupOpen] = useState(false)
 
-	const { variant } = useInnerSong()
+	const { variant } = useInnerPackSong()
 	const { packEmbeddingApi } = useApi()
 
 	const [apiState] = useApiStateEffect(async () => {

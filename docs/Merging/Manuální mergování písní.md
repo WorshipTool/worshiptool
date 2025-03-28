@@ -15,3 +15,8 @@ Příklad postupu:
 	a. pokud nic nezvolí, písním se vytvoří vlastní písně a přidají se do [[Automatické mergování písní]]	
 	b. uživateli se nabídnou nejblížší rodiny, které může zvolit a do kterých se píseň přidá
 	c. uživatel zvolí, že se má přidat do vlastní rodiny, bez následného automatického dohledávání a [[Automatické mergování písní]]
+
+Moznosti:
+1. Na stránce překladu uživatel vidí v jaké rodině překlad je. Možnost změnit
+2. Na stránce písně uživatel vidí všechny překlady. Má možnost nějaký odebrat, nebo naopak nějaké přidat. Při odebrání může zvolit kam se dané písně mají přidat namísto toho.
+3. Ná stránce všech písní, může admin označit více rodin a říct, že se mají spojit. Před spojením, může vybrat písně, které zahrnout nemá.

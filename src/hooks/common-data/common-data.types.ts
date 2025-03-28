@@ -1,6 +1,7 @@
 import { PackGuid } from '@/api/dtos'
 import {
 	AllTeamSubdomainAlias,
+	GetFavouritesOutDto,
 	PlaylistData,
 	TeamOfUserDto,
 } from '@/api/generated'
@@ -12,6 +13,7 @@ export type AllCommonData = {
 	playlistsOfUser: PlaylistData[]
 	permissionsOfUser: UntypedPermissionDataType
 	allsubdomains: AllTeamSubdomainAlias[]
+	favourites: GetFavouritesOutDto
 }
 
 export type TranslationLike = {

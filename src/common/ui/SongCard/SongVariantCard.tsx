@@ -45,7 +45,7 @@ const SONG_CARD_PROPERTIES = [
 ] as const
 type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
-type ToLinkProps = (data: BasicVariantPack) => {
+export type ToLinkProps = (data: BasicVariantPack) => {
 	to: CommonLinkProps['to']
 	params: CommonLinkProps['params']
 } | null
@@ -286,7 +286,7 @@ export const SongVariantCard = memo(function S({
 								{title}
 							</Typography>
 							<Box>
-								{(showPrivate || showYourPublic) && (
+								{showPrivate || showYourPublic ? (
 									<CustomChip
 										icon={showPrivate ? <Lock /> : <Public />}
 										label={showPrivate ? 'Soukromé' : 'Vytvořeno vámi'}
@@ -301,10 +301,10 @@ export const SongVariantCard = memo(function S({
 												: theme.palette.primary.main
 										}
 									/>
-								)}
-								{createdByLoaderEnabled && data.createdByLoader && (
+								) : null}
+								{createdByLoaderEnabled && data.createdByLoader ? (
 									<Typography size={'small'}>Nahráno programem</Typography>
-								)}
+								) : null}
 							</Box>
 						</Box>
 

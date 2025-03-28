@@ -33,6 +33,8 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/sub/[subdomain]/sub/[subsubdomain]", { "subdomain": string; "subsubdomain": string }>
     | StaticRoute<"/sub/admin">
     | DynamicRoute<"/sub/admin/pisen/[hex]/[alias]", { "hex": string; "alias": string }>
+    | DynamicRoute<"/sub/admin/pisen/rodina/[songGuid]", { "songGuid": string }>
+    | StaticRoute<"/sub/admin/pisen/vytvorit">
     | StaticRoute<"/sub/admin/pisne">
     | StaticRoute<"/sub/test">
     | StaticRoute<"/sub/tymy">

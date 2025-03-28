@@ -19,22 +19,23 @@ import './styles.css'
 type PopupProps = {
 	onClose?: () => void
 	open: boolean
-	onSubmit?: (packs: VariantPackGuid[]) => void
+	onSubmit?: (packs: BasicVariantPack[]) => void
 
 	upDirection?: boolean
 
 	anchorRef: React.RefObject<HTMLElement>
-	anchorName: string
+	anchorName?: string
 
 	// Filter function, for example to filter out previously selected songs
-	filterFunc?: (pack: VariantPackGuid) => boolean
+	filterFunc?: (pack: BasicVariantPack) => boolean
 
 	disableMultiselect?: boolean
+	submitLabel?: string
 }
 
 export type ChosenSong = {
 	guid: VariantPackGuid
-	title: string
+	data: BasicVariantPack
 }
 
 export default function SongSelectPopup({ ...props }: PopupProps) {
@@ -90,14 +91,14 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 			.filter((v, i, a) => a.findIndex((t) => t.packGuid === v.packGuid) === i)
 
 		const filteredVariants = variants.filter((v) => {
-			return props.filterFunc?.(v.packGuid) ?? true
+			return props.filterFunc?.(v) ?? true
 		})
 
 		return filteredVariants
 	}, [searchString, props.filterFunc, selectSpecifier, optionSelected, options])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		props.onSubmit?.(chosen.map((c) => c.guid))
+		props.onSubmit?.(chosen.map((c) => c.data))
 		onClose()
 		e.preventDefault()
 		// reinvalidate()
@@ -165,17 +166,19 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 		setSearchStringRaw('')
 	}
 
-	const onSongSelect = (g: VariantPackGuid, t: string) => {
+	const onSongSelect = (pack: BasicVariantPack) => {
+		const g = pack.packGuid
+		const t = pack.title
 		if (chosen.find((c) => c.guid === g)) return
 		if (!props.disableMultiselect) {
-			setChosen([...chosen, { guid: g, title: t }])
+			setChosen([...chosen, { guid: g, data: pack }])
 		} else {
-			setChosen([{ guid: g, title: t }])
+			setChosen([{ guid: g, data: pack }])
 		}
 	}
 
-	const onSongDeselect = (g: VariantPackGuid) => {
-		setChosen(chosen.filter((c) => c.guid !== g))
+	const onSongDeselect = (pack: BasicVariantPack) => {
+		setChosen(chosen.filter((c) => c.guid !== pack.packGuid))
 	}
 
 	const multiselect = useMemo(
@@ -274,7 +277,7 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 														items={
 															(c.apiState || customApiState)?.data
 																?.filter((a) => {
-																	return props.filterFunc?.(a.packGuid) ?? true
+																	return props.filterFunc?.(a) ?? true
 																})
 																.filter((a, i, arr) => {
 																	// Make unique
@@ -313,7 +316,8 @@ export default function SongSelectPopup({ ...props }: PopupProps) {
 										type="submit"
 										disabled={chosen.length === 0}
 									>
-										{multiselect ? 'Přidat vybrané' : 'Přidat píseň'}
+										{props.submitLabel ||
+											(multiselect ? 'Přidat vybrané' : 'Přidat píseň')}
 									</Button>
 								</Box>
 							</Box>

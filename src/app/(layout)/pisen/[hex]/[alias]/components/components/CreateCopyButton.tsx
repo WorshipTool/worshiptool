@@ -1,5 +1,5 @@
 import { VariantPackAlias } from '@/api/dtos'
-import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button, CircularProgress, Gap, Tooltip, useTheme } from '@/common/ui'
@@ -51,7 +51,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const icon = <EggAlt color="inherit" />
 
 	const { user } = useAuth()
-	const { variant } = useInnerSong()
+	const { variant } = useInnerPackSong()
 	const isOwner = useMemo(() => {
 		if (!user) return false
 		return variant.createdByGuid === user?.guid

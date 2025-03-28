@@ -1,5 +1,5 @@
 'use client'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { Button } from '@/common/ui'
 import { copyToClipboard } from '@/tech/string/copy.tech'
 import { CopyAll } from '@mui/icons-material'
@@ -7,7 +7,7 @@ import { Sheet } from '@pepavlin/sheet-api'
 import { enqueueSnackbar } from 'notistack'
 
 export default function AdminCopySheetDataButton() {
-	const { sheetData } = useInnerVariant()
+	const { sheetData } = useInnerPack()
 	const onCopyClick = () => {
 		const sheet = new Sheet(sheetData)
 		const data = sheet.getOriginalSheetData()

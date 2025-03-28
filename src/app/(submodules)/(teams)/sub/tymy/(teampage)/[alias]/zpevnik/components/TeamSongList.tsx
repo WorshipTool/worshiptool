@@ -65,8 +65,8 @@ export const TeamSongList = (props: Props) => {
 	}, [selection.items, thereHasBeenItems, addSongPermission])
 
 	const filterFunc = useCallback(
-		(pack: VariantPackGuid) => {
-			return !selection.items.some((i) => i.pack.packGuid === pack)
+		(pack: BasicVariantPack) => {
+			return !selection.items.some((i) => i.pack.packGuid === pack.packGuid)
 		},
 		[selection.items]
 	)
@@ -78,8 +78,8 @@ export const TeamSongList = (props: Props) => {
 		setOpen(true)
 	}
 
-	const onSongAddSubmit = (packs: VariantPackGuid[]) => {
-		selection.addPacks(packs)
+	const onSongAddSubmit = (packs: BasicVariantPack[]) => {
+		selection.addPacks(packs.map((p) => p.packGuid))
 	}
 
 	const onCardSelect = useCallback((d: BasicVariantPack) => {

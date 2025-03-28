@@ -1,5 +1,5 @@
 'use client'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
@@ -22,7 +22,7 @@ export default function SetTranslationTypeAdminButton() {
 	const [open, setOpen] = useState(false)
 
 	const { enqueueSnackbar } = useSnackbar()
-	const { packGuid } = useInnerVariant()
+	const { packGuid } = useInnerPack()
 	const { songManagementApi } = useApi()
 
 	const onOptionClick = async (value: PackTranslationType) => {

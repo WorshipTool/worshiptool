@@ -4,6 +4,7 @@ export const czechConjugation = (
 	five: string,
 	count: number
 ) => {
+	if (count === 0) return five
 	if (count <= 1) return one
 	if (count <= 4) return two
 	return five

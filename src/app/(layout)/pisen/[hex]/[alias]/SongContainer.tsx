@@ -6,7 +6,7 @@ import { SONG_OPTIONS_BUTTON_ID } from '@/app/(layout)/pisen/[hex]/[alias]/compo
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
-import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box, Gap } from '@/common/ui'
@@ -80,7 +80,7 @@ export default function SongContainer({
 	}
 
 	return (
-		<InnerSongProvider
+		<InnerPackProvider
 			variantAlias={variant.packAlias}
 			startData={{
 				variant,
@@ -176,6 +176,6 @@ export default function SongContainer({
 					)}
 				</Box>
 			</SmartPortalMenuProvider>
-		</InnerSongProvider>
+		</InnerPackProvider>
 	)
 }

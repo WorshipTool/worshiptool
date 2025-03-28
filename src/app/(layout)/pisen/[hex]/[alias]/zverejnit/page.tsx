@@ -2,7 +2,7 @@
 
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
 import { ValidationResult } from '@/api/generated'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Button } from '@/common/ui'
@@ -24,7 +24,7 @@ import { handleApiCall } from '../../../../../../tech/handleApiCall'
 export default SmartPage(Page)
 function Page() {
 	const { hex, alias } = useSmartParams('variantPublish')
-	const variant = useInnerVariant()
+	const variant = useInnerPack()
 
 	const {
 		songValidationApi,

@@ -7,6 +7,7 @@ import AdminMediaSection from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/comp
 import AdminSongPreview from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/AdminSongPreview'
 import AdminVerifyButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/AdminVerifyButton'
 import GGFilterAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/GGFilterAdminButton'
+import ParentSongSection from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/ParentSongSection'
 import SetTranslationTypeAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/SetTranslationTypeAdminButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PageProps } from '@/common/types'
@@ -71,6 +72,8 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 					)}
 
 					{main.createdByLoader && <Typography>Nahráno programem</Typography>}
+
+					<ParentSongSection />
 				</Box>
 			</Box>
 
