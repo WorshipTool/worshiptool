@@ -12,4 +12,5 @@ export default defineConfig({
 		headless: true,
 	},
 	fullyParallel: true,
+	outputDir: 'tests/results/',
 })
