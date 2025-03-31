@@ -1,8 +1,9 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
-import { SearchSongPacksDto, SongSearchingApi } from '@/api/generated'
+import { SongSearchingApi } from '@/api/generated'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 import { getRandomString } from '@/tech/string/random.string.tech'
 import { expect, Page, test } from '@playwright/test'
+import { test_tech_loginWithData } from '../test.tech'
 
 async function searchWithSearchBar(str: string, page: Page) {
 	await page.getByPlaceholder(/.*Hledej.*/i).fill(str)
@@ -65,23 +66,6 @@ test('Načíst další', async ({ page }) => {
 	await expect(b).toBeVisible()
 })
 
-// Check if the user dont see songs of other users
-
-const checkResponse = async (response: SearchSongPacksDto[], mess: string) => {
-	for (const result of response) {
-		const whole = [
-			...result.found,
-			...(result.other || []),
-			...(result.original ? [result.original] : []),
-		]
-
-		for (const song of whole) {
-			const data = mapBasicVariantPackApiToDto(song)
-			expect(data.public, mess).toBeTruthy()
-		}
-	}
-}
-
 test('Neobsahuje cizí soukromé písně', async ({ page }) => {
 	await page.goto('/')
 
@@ -106,6 +90,62 @@ test('Neobsahuje cizí soukromé písně', async ({ page }) => {
 			api.songSearchingControllerSearch(searchString)
 		)
 
-		await checkResponse(response, `Vyhledávání podle "${searchString}"`)
+		for (const result of response) {
+			const whole = [
+				...result.found,
+				...(result.other || []),
+				...(result.original ? [result.original] : []),
+			]
+
+			for (const song of whole) {
+				const data = mapBasicVariantPackApiToDto(song)
+				await expect(
+					data.public,
+					`Vyhledávání podle "${searchString}"`
+				).toBeTruthy()
+			}
+		}
 	}
+})
+
+test('Při přihlášení obsahuje uživatelovy soukromé písně', async ({ page }) => {
+	await page.goto('/')
+
+	const user = await test_tech_loginWithData(page)
+
+	const api = new SongSearchingApi()
+	const searchStrings = ['Oceany']
+	const randomStrings = Array.from({ length: 50 }, () => getRandomString(1))
+
+	const allSearchStrings = [...searchStrings, ...randomStrings]
+
+	let count = 0
+
+	for (const searchString of allSearchStrings) {
+		const response = await handleServerApiCall(
+			api.songSearchingControllerSearch(searchString)
+		)
+		count += response.length
+
+		for (const result of response) {
+			const whole = [
+				...result.found,
+				...(result.other || []),
+				...(result.original ? [result.original] : []),
+			]
+
+			for (const song of whole) {
+				const data = mapBasicVariantPackApiToDto(song)
+
+				if (!data.public) {
+					await expect(
+						data.createdByGuid,
+						`Soukromá píseň: vyhledána pomocí "${searchString}"`
+					).toBe(user.guid)
+				}
+			}
+		}
+	}
+
+	await expect(count).toBeGreaterThan(0)
 })
