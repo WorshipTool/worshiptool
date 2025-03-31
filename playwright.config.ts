@@ -14,6 +14,6 @@ export default defineConfig({
 		baseURL: 'http://test-chvalotce.cz:5500/',
 		headless: true,
 	},
-	fullyParallel: true,
+	// fullyParallel: true,
 	outputDir: 'tests/results/',
 })

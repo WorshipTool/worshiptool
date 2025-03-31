@@ -5,6 +5,8 @@ test('Contain title and list', async ({ page }) => {
 
 	await expect(page.getByText('Seznam všech písní')).toBeVisible()
 
+	await expect(page.locator('.MuiPaper-root').first()).toBeVisible()
+
 	const items = await page.locator('.MuiPaper-root')
 	await expect(await items.count()).toBeGreaterThan(10)
 

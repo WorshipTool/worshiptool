@@ -16,7 +16,11 @@ test('Vyhledávání podle názvu', async ({ page }) => {
 	await searchWithSearchBar('Oceány', page)
 
 	// Existuje výsledek
-	const textPisne = await page.locator('text=/.*Voláš.*/i').first()
+
+	const textPisne = await page.getByRole('link', {
+		name: 'Český překlad Oceány Voláš nás do mořských hlubin, těch neznámých, dalekých. Tam tě najdu, tam jsi skrytý, v hlubinách budu s vírou stát.',
+		exact: true,
+	})
 	await expect(textPisne).toBeVisible()
 
 	// 4. Klikneme na výsledek
