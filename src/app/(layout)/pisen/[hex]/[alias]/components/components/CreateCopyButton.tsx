@@ -93,6 +93,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 						title={'Vytvořit úpravu'}
 						subtitle="Vytvoří soukromou kopii písně,"
 						icon={icon}
+						onClick={onClick}
 					/>
 				</>
 			)}
