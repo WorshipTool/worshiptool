@@ -89,6 +89,7 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 				<AdminItem title="Vyhovuje GG filtru">
 					{main.ggValidated ? 'Ano' : 'Ne'}
 				</AdminItem>
+				<AdminItem title="Veřejné" value={main.public ? 'Ano' : 'Ne'} />
 				<Gap />
 
 				<AdminItem title="PackGuid" value={main.packGuid} />

@@ -1,5 +1,6 @@
 'use client'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
+import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { Masonry } from '@/common/ui/Masonry'
 import { Grid } from '@/common/ui/mui/Grid'
 import SongGroupCard from '@/common/ui/SongCard/SongGroupCard'
@@ -87,6 +88,8 @@ export const SmartSongListCard = memo(function SongListCards({
 		[props]
 	)
 
+	const useGroupCards = useFlag('group_translations')
+
 	return data.length === 0 ? (
 		<></>
 	) : variant === 'row' ? (
@@ -96,6 +99,16 @@ export const SmartSongListCard = memo(function SongListCards({
 					<Grid item key={v.found[0].packGuid} xs={1}>
 						{data
 							.map((v) => {
+								if (!useGroupCards) {
+									return v.found.map((v) => (
+										<SongVariantCard
+											data={v}
+											key={v.packGuid}
+											properties={['SHOW_PRIVATE_LABEL']}
+										/>
+									))
+								}
+
 								const publicPacks = v.found.filter((v) => v.public)
 								const privatePacks = v.found.filter((v) => !v.public)
 								return [
@@ -122,6 +135,16 @@ export const SmartSongListCard = memo(function SongListCards({
 		<Masonry columns={columns} sx={{}} spacing={spacing}>
 			{data
 				.map((v) => {
+					if (!useGroupCards) {
+						return v.found.map((v) => (
+							<SongVariantCard
+								data={v}
+								key={v.packGuid}
+								properties={['SHOW_PRIVATE_LABEL']}
+							/>
+						))
+					}
+
 					const publicPacks = v.found.filter((v) => v.public)
 					const privatePacks = v.found.filter((v) => !v.public)
 					return [

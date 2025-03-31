@@ -8,6 +8,7 @@ type ExistingFlags =
 	| 'allow_translation_likes'
 	| 'show_admin_page'
 	| 'use_subdomains'
+	| 'group_translations'
 
 export type FeatureFlag = ExistingFlags | String
 

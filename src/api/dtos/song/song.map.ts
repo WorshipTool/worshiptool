@@ -47,6 +47,8 @@ export const mapBasicVariantPackApiToDto = (
 		translationType: api.translationType as PackTranslationType,
 		ggValidated: api.ggValidated,
 
+		public: Boolean(api.public),
+
 		// Dates
 		createdAt: new Date(api.createdAt),
 		updatedAt: new Date(api.updatedAt),
