@@ -65,4 +65,9 @@ test('Create new song, validity', async ({ page }) => {
 	await expect(page).toHaveURL(/.*\/pisen\/.*/)
 
 	await expect(page.locator('b')).toContainText(title)
+
+	// Check if the song is in the list
+	await page.goto('/ucet/pisne')
+
+	await expect(page.getByRole('link', { name: title })).toBeVisible()
 })
