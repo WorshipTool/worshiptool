@@ -93,7 +93,7 @@ test('Neobsahuje cizí soukromé písně', async ({ page }) => {
 		'B',
 		'C',
 	]
-	const randomStrings = Array.from({ length: 5 }, () => getRandomString(4))
+	const randomStrings = Array.from({ length: 50 }, () => getRandomString(4))
 
 	const allSearchStrings = [...searchStrings, ...randomStrings]
 
