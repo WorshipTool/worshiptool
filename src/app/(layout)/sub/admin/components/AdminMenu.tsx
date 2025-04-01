@@ -4,7 +4,13 @@ import { Link } from '@/common/ui/Link/Link'
 import { alpha } from '@/common/ui/mui'
 import { RoutesKeys } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
-import { Dashboard, MusicNote, Tag } from '@mui/icons-material'
+import {
+	Dashboard,
+	MusicNote,
+	Publish,
+	Schedule,
+	Tag,
+} from '@mui/icons-material'
 
 type ItemProps = {
 	label: string
@@ -71,6 +77,16 @@ export default function AdminMenu() {
 				label="Písně"
 				icon={<MusicNote fontSize="small" />}
 				to={'adminSongs'}
+			/>
+			<Item
+				label="Čeká ke schválení"
+				icon={<Publish fontSize="small" />}
+				to="adminPublishApproval"
+			/>
+			<Item
+				label="Poslední"
+				icon={<Schedule fontSize="small" />}
+				to="adminLastAdded"
 			/>
 			<Item label="Tagy" icon={<Tag fontSize="small" />} disabled />
 		</Box>

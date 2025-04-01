@@ -1,3 +1,4 @@
+import SendToApproval from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SendToApproval'
 import Menu from '@/common/components/Menu/Menu'
 import { Divider, IconButton, Tooltip, useTheme } from '@/common/ui'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
@@ -64,6 +65,13 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 				</ChildrenCounter>
 
 				{props.isOwner && [
+					<Divider
+						key={'div-aunalk'}
+						sx={{
+							marginBottom: 1,
+						}}
+					/>,
+					<SendToApproval />,
 					<Divider key={'div-aunalk'} />,
 					<DeleteButton
 						key={'delete-button'}

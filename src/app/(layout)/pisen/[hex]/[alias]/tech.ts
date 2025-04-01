@@ -6,6 +6,7 @@ export const getVariantAliasFromParams = (hex: string, code: string) => {
 	return `${hex}-${code}`
 }
 
+/** Server side func */
 export const getVariantByAlias = async (
 	alias: string
 ): Promise<GetVariantDataOutDto> => {

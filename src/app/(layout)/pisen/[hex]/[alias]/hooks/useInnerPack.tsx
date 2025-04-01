@@ -4,8 +4,9 @@ import {
 	mapGetVariantDataApiToSongDto,
 	SongDto,
 } from '@/api/dtos'
-import { getVariantByAlias } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
 import { ExtendedVariantPack } from '@/types/song'
 import { createContext, useContext } from 'react'
 
@@ -51,9 +52,12 @@ export const InnerPackProvider = (props: ProviderProps) => {
 }
 
 const useProvideInnerPack = (variantAlias: string, startData?: InData) => {
+	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v = await getVariantByAlias(variantAlias)
+		const v = await handleApiCall(
+			songGettingApi.songOneGettingControllerGetVariantDataByAlias(variantAlias)
+		)
 		const variant = v.main
 
 		const song = mapGetVariantDataApiToSongDto(v)

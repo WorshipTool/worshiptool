@@ -14,6 +14,13 @@ export type SongDto = {
 	tags: string[]
 }
 
+export enum PublishApprovalStatus {
+	None = 0,
+	Approved = 1,
+	Denied = 2,
+	Pending = 3,
+}
+
 export type BasicVariantPack = {
 	// Basic info
 	packGuid: VariantPackGuid
@@ -26,6 +33,8 @@ export type BasicVariantPack = {
 	// Additional info
 	verified: boolean
 	public: boolean
+	publishApprovalStatus: PublishApprovalStatus
+
 	language: SongLanguage
 	translationType: PackTranslationType
 	translationLikes: number

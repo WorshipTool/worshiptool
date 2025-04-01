@@ -18,7 +18,7 @@ import {
 	ExtendedVariantPackDto,
 	GetVariantDataOutDto,
 } from '../../generated'
-import { BasicVariantPack, SongDto } from './song.dto'
+import { BasicVariantPack, PublishApprovalStatus, SongDto } from './song.dto'
 
 export const mapGetVariantDataApiToSongDto = (
 	api: GetVariantDataOutDto
@@ -48,6 +48,7 @@ export const mapBasicVariantPackApiToDto = (
 		ggValidated: api.ggValidated,
 
 		public: Boolean(api.public),
+		publishApprovalStatus: api.publishApprovalStatus as PublishApprovalStatus,
 
 		// Dates
 		createdAt: new Date(api.createdAt),

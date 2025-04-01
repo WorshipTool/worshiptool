@@ -36,6 +36,8 @@ export const routesPaths = {
 	adminSong: '/sub/admin/pisen/rodina/[songGuid]',
 	adminSongs: '/sub/admin/pisne',
 	adminCreateSong: `/sub/admin/pisen/vytvorit`,
+	adminPublishApproval: '/sub/admin/ke-schvaleni',
+	adminLastAdded: '/sub/admin/posledni-pridane',
 
 	team: '/sub/tymy/[alias]',
 	teamSongbook: '/sub/tymy/[alias]/zpevnik',

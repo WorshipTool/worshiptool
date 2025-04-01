@@ -423,6 +423,12 @@ export interface BasicVariantPackDto {
     'public': boolean;
     /**
      * 
+     * @type {number}
+     * @memberof BasicVariantPackDto
+     */
+    'publishApprovalStatus': BasicVariantPackDtoPublishApprovalStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof BasicVariantPackDto
      */
@@ -477,6 +483,14 @@ export interface BasicVariantPackDto {
     'createdByLoader': boolean;
 }
 
+export const BasicVariantPackDtoPublishApprovalStatusEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3
+} as const;
+
+export type BasicVariantPackDtoPublishApprovalStatusEnum = typeof BasicVariantPackDtoPublishApprovalStatusEnum[keyof typeof BasicVariantPackDtoPublishApprovalStatusEnum];
 export const BasicVariantPackDtoTranslationTypeEnum = {
     NUMBER_0: 0,
     NUMBER_1: 1,
@@ -927,6 +941,12 @@ export interface ExtendedVariantPackDto {
     'public': boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ExtendedVariantPackDto
+     */
+    'publishApprovalStatus': ExtendedVariantPackDtoPublishApprovalStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof ExtendedVariantPackDto
      */
@@ -1011,6 +1031,14 @@ export interface ExtendedVariantPackDto {
     'sources': Array<SourceDTO>;
 }
 
+export const ExtendedVariantPackDtoPublishApprovalStatusEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3
+} as const;
+
+export type ExtendedVariantPackDtoPublishApprovalStatusEnum = typeof ExtendedVariantPackDtoPublishApprovalStatusEnum[keyof typeof ExtendedVariantPackDtoPublishApprovalStatusEnum];
 export const ExtendedVariantPackDtoTranslationTypeEnum = {
     NUMBER_0: 0,
     NUMBER_1: 1,
@@ -2593,6 +2621,19 @@ export interface PostSendMailFeedbackInDto {
 /**
  * 
  * @export
+ * @interface PostSendPackToApprovalInDto
+ */
+export interface PostSendPackToApprovalInDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof PostSendPackToApprovalInDto
+     */
+    'packGuid': object;
+}
+/**
+ * 
+ * @export
  * @interface PostValidateSheetDataAndTitleInDto
  */
 export interface PostValidateSheetDataAndTitleInDto {
@@ -3489,12 +3530,6 @@ export interface SongVariantHistoryPack {
     'deleted': boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof SongVariantHistoryPack
-     */
-    'public': boolean;
-    /**
-     * 
      * @type {number}
      * @memberof SongVariantHistoryPack
      */
@@ -3505,6 +3540,24 @@ export interface SongVariantHistoryPack {
      * @memberof SongVariantHistoryPack
      */
     'ggFilter': SongVariantHistoryPackGgFilterEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SongVariantHistoryPack
+     */
+    'public': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof SongVariantHistoryPack
+     */
+    'publishApprovalStatus': SongVariantHistoryPackPublishApprovalStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongVariantHistoryPack
+     */
+    'publishedAt': string | null;
     /**
      * 
      * @type {Playlist}
@@ -3554,6 +3607,14 @@ export const SongVariantHistoryPackGgFilterEnum = {
 } as const;
 
 export type SongVariantHistoryPackGgFilterEnum = typeof SongVariantHistoryPackGgFilterEnum[keyof typeof SongVariantHistoryPackGgFilterEnum];
+export const SongVariantHistoryPackPublishApprovalStatusEnum = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3
+} as const;
+
+export type SongVariantHistoryPackPublishApprovalStatusEnum = typeof SongVariantHistoryPackPublishApprovalStatusEnum[keyof typeof SongVariantHistoryPackPublishApprovalStatusEnum];
 
 /**
  * 
@@ -9797,6 +9858,39 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetLastAdded: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/getlastadded`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} [page] 
          * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
@@ -10333,6 +10427,17 @@ export const SongGettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songGettingControllerGetLastAdded(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songGettingControllerGetLastAdded(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.songGettingControllerGetLastAdded']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} [page] 
          * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
@@ -10518,6 +10623,14 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songGettingControllerGetLastAdded(options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
+            return localVarFp.songGettingControllerGetLastAdded(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [page] 
          * @param {number} [perPage] 
          * @param {*} [options] Override http request option.
@@ -10659,6 +10772,16 @@ export class SongGettingApi extends BaseAPI {
      */
     public songGettingControllerGetBySearch(searchKey: string, page?: number, options?: RawAxiosRequestConfig) {
         return SongGettingApiFp(this.configuration).songGettingControllerGetBySearch(searchKey, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public songGettingControllerGetLastAdded(options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).songGettingControllerGetLastAdded(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12259,6 +12382,39 @@ export const SongPublishingApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGetApprovalPacks: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/song/getapprovalpacks`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12329,6 +12485,84 @@ export const SongPublishingApiAxiosParamCreator = function (configuration?: Conf
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(postPublishVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerRejectPublishApproval: async (postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postSendPackToApprovalInDto' is not null or undefined
+            assertParamExists('songPublishingControllerRejectPublishApproval', 'postSendPackToApprovalInDto', postSendPackToApprovalInDto)
+            const localVarPath = `/song/rejectPublishApproval`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postSendPackToApprovalInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerSendPackToApproval: async (postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postSendPackToApprovalInDto' is not null or undefined
+            assertParamExists('songPublishingControllerSendPackToApproval', 'postSendPackToApprovalInDto', postSendPackToApprovalInDto)
+            const localVarPath = `/song/sendpacktoapproval`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postSendPackToApprovalInDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12437,6 +12671,17 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerGetApprovalPacks(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicVariantPackDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerGetApprovalPacks(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerGetApprovalPacks']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12457,6 +12702,30 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerPublishVariant(postPublishVariantInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerPublishVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerRejectPublishApproval']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.songPublishingControllerSendPackToApproval']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12504,6 +12773,14 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerGetApprovalPacks(options?: any): AxiosPromise<Array<BasicVariantPackDto>> {
+            return localVarFp.songPublishingControllerGetApprovalPacks(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12519,6 +12796,24 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
          */
         songPublishingControllerPublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.songPublishingControllerPublishVariant(postPublishVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12561,6 +12856,16 @@ export class SongPublishingApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerGetApprovalPacks(options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerGetApprovalPacks(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {PostGetKeywordsInDto} postGetKeywordsInDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12579,6 +12884,28 @@ export class SongPublishingApi extends BaseAPI {
      */
     public songPublishingControllerPublishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig) {
         return SongPublishingApiFp(this.configuration).songPublishingControllerPublishVariant(postPublishVariantInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerRejectPublishApproval(postSendPackToApprovalInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostSendPackToApprovalInDto} postSendPackToApprovalInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto: PostSendPackToApprovalInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).songPublishingControllerSendPackToApproval(postSendPackToApprovalInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

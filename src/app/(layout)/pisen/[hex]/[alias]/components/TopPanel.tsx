@@ -75,40 +75,6 @@ export default function TopPanel(props: TopPanelProps) {
 		return t || s
 	}, [props.sheet, props.editedTitle, props.variant])
 
-	// const [languageGenerating, setLanguageGenerating] = React.useState(false)
-	// const generateLanguage = async () => {
-	// 	setLanguageGenerating(true)
-	// 	try {
-	// 		await handleApiCall(
-	// 			songEditingApi.songEditingControllerChangeLanguage({
-	// 				packGuid: props.variant.packGuid,
-	// 			})
-	// 		)
-	// 		// Reload page
-	// 		window.location.reload()
-	// 		enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
-	// 	} catch (e) {
-	// 		enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
-	// 	}
-	// 	setLanguageGenerating(false)
-	// }
-	// const [keywordsGenerating, setKeywordsGenerating] = React.useState(false)
-	// const generateKeyword = async () => {
-	// 	setKeywordsGenerating(true)
-	// 	try {
-	// 		await handleApiCall(
-	// 			songPublishingApi.songPublishingControllerGenerateKeywords({
-	// 				packGuid: props.variant.packGuid,
-	// 			})
-	// 		)
-	// 		window.location.reload()
-	// 		enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
-	// 	} catch (e) {
-	// 		enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
-	// 	}
-	// 	setKeywordsGenerating(false)
-	// }
-
 	const onEditClick = async (editable: boolean) => {
 		if (editable) {
 			if (props.variant.verified) {
