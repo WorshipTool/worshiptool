@@ -1,5 +1,5 @@
 import Img from 'next/image'
-import { CSSProperties } from 'react'
+import { ComponentProps, CSSProperties } from 'react'
 
 type ImageProps = {
 	src: string
@@ -10,7 +10,7 @@ type ImageProps = {
 	style?: CSSProperties
 	fill?: boolean
 	priority?: boolean
-}
+} & ComponentProps<typeof Img>
 
 export function Image({
 	src,

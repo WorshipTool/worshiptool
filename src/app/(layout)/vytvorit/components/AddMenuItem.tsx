@@ -2,12 +2,12 @@ import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Paper } from '@/common/ui/mui'
 import React from 'react'
 import { Gap } from '../../../../common/ui/Gap'
-import { Link, LinkProps } from '../../../../common/ui/Link/Link'
+import { Link } from '../../../../common/ui/Link/Link'
 import { RoutesKeys } from '../../../../routes'
 
 interface AddMenuItemProps {
 	title?: string
-	to: LinkProps<RoutesKeys>['to']
+	to: RoutesKeys
 	icon?: React.ReactNode
 	iconSize?: number
 	disabled?: boolean

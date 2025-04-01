@@ -24,16 +24,13 @@ function List() {
 
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
-	const countPerPage = isSmall ? 10 : isMiddle ? 20 : 30
-	const getPageData = (page: number) => {
-		return handleApiCall(
-			songGettingApi.songGettingControllerGetList(page, countPerPage)
-		).then((data) => {
-			const uniq = data.filter((v, i, a) => {
-				return a.findIndex((t) => t.guid === v.guid) === i
-			})
-			return uniq
-		})
+	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
+	const getPageData = async (page: number) => {
+		const r = await handleApiCall(
+			songGettingApi.songGettingControllerGetList(page, countPerPage + 1)
+		)
+
+		return r.slice(0, countPerPage)
 	}
 
 	return (
@@ -84,7 +81,13 @@ function List() {
 								<Grid container columns={3} spacing={1} paddingBottom={2}>
 									{data.map((s, index) => {
 										return (
-											<Grid item xs={3} md={1.5} lg={1} key={s.guid}>
+											<Grid
+												item
+												xs={3}
+												md={1.5}
+												lg={1}
+												key={s.main.songGuid as any}
+											>
 												<AllSongItem data={s} index={startIndex + index + 1} />
 											</Grid>
 										)
@@ -95,7 +98,7 @@ function List() {
 					}}
 				</Pager>
 
-				<Gap value={3} />
+				<Gap value={2} />
 			</Container>
 		</Box>
 	)

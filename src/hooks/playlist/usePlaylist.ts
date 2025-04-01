@@ -2,7 +2,7 @@ import { VariantPackGuid } from '@/api/dtos'
 import { ReorderPlaylistItem } from '@/api/generated'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useApiState } from '@/tech/ApiState'
-import { Chord, Sheet } from '@pepavlin/sheet-api'
+import { Chord } from '@pepavlin/sheet-api'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '../../api/dtos/playlist/playlist.map'
 import PlaylistDto, {
@@ -140,7 +140,7 @@ export default function usePlaylist(
 	const removeVariant = async (packGuid: VariantPackGuid): Promise<boolean> => {
 		const r = await removeVariantFromPlaylist(packGuid, guid)
 
-		setItems((items) => items.filter((i) => i.variant.packGuid !== packGuid))
+		setItems((items) => items.filter((i) => i.pack.packGuid !== packGuid))
 
 		changeCallback()
 		return r
@@ -159,7 +159,7 @@ export default function usePlaylist(
 
 		// Remove items from the list
 		setItems((items) =>
-			items.filter((i) => !newItems.includes(i.variant.packGuid))
+			items.filter((i) => !newItems.includes(i.pack.packGuid))
 		)
 		changeCallback()
 	}
@@ -209,11 +209,11 @@ export default function usePlaylist(
 		await general.editPlaylistItem(itemGuid, data)
 
 		if (data.sheetData) {
-			item.variant.sheetData = data.sheetData
-			item.variant.sheet = new Sheet(data.sheetData)
+			item.pack.sheetData = data.sheetData
+			// item.pack.sheet = new Sheet(data.sheetData)
 			//TODO: do in some better way
 		}
-		if (data.title) item.variant.preferredTitle = data.title
+		if (data.title) item.pack.title = data.title
 
 		setItems((items) => {
 			const newItems: PlaylistItemDto[] = [...items]

@@ -38,7 +38,11 @@ export default function RecommendedSongsList({
 				width: '100%',
 			}}
 		>
-			{<Typography strong>Nějaký nápad:</Typography>}
+			{
+				<Typography strong key={'idea'}>
+					Nějaký nápad:
+				</Typography>
+			}
 
 			{isError && (
 				<>

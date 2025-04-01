@@ -47,7 +47,7 @@ export default function SelectedPanel(props: SelectedPanelProps) {
 										userSelect: 'none',
 									}}
 								>
-									{props.selected[0].title}
+									{props.selected[0].data.title}
 								</Typography>
 							</>
 						)}
@@ -81,7 +81,7 @@ export default function SelectedPanel(props: SelectedPanelProps) {
 													transition: 'all 0.2s',
 												}}
 											>
-												{c.title}
+												{c.data.title}
 												{i !== props.selected.length - 1 && ','}
 											</Typography>
 										</Tooltip>

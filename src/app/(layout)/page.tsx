@@ -2,8 +2,6 @@
 
 import HomeDesktop from '@/app/components/HomeDesktop'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { useEffect } from 'react'
-import useGroup from '../../hooks/group/useGroup'
 
 export default SmartPage(Home, {
 	hideTitle: true,
@@ -12,12 +10,6 @@ export default SmartPage(Home, {
 })
 
 function Home() {
-	const { turnOff } = useGroup()
-
-	useEffect(() => {
-		turnOff()
-	}, [])
-
 	return (
 		<>
 			<HomeDesktop />

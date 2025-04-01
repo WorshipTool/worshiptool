@@ -10,6 +10,10 @@
 					{
 						"name": "@mui/material",
 						"message": "Import from @mui/material is not allowed. Import specific modules from @ui or @common instead."
+					},
+					{
+						"name": "vm",
+						"message": "Import from vm is not allowed. "
 					}
 				],
 				"patterns": ["@/app/submodules/teams/*"]

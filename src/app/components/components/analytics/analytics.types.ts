@@ -1,3 +1,5 @@
+import { VariantPackGuid } from '@/api/dtos'
+
 export const AnalyticsTrackEventNames: Record<AnalyticsEventNameType, string> =
 	{
 		VISIT_SONG: 'VISIT_SONG',
@@ -6,7 +8,7 @@ export const AnalyticsTrackEventNames: Record<AnalyticsEventNameType, string> =
 export type AnalyticsTrackData = {
 	VISIT_SONG: {
 		songGuid: string
-		variantGuid: string
+		packGuid: VariantPackGuid
 		title: string
 		hasChords: boolean
 	}

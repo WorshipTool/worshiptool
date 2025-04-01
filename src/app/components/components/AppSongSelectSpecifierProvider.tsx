@@ -1,5 +1,5 @@
 'use client'
-import { mapSongVariantDataOutDtoToSongVariantDto } from '@/api/dtos'
+import { mapBasicVariantPackApiToDto } from '@/api/dtos'
 import { TeamOfUserDto } from '@/api/generated'
 import { useCurrentTeam } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import useUserTeams from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
@@ -25,21 +25,26 @@ type AppSongSelectSpecifierProviderProps = {
 export default function AppSongSelectSpecifierProvider(
 	props: AppSongSelectSpecifierProviderProps
 ) {
+	// Check if songselect is used and active
+	const [active, setActive] = useState(false)
+
 	const [searchString, setSearchString] = React.useState('')
 	const { songGettingApi, teamGettingApi } = useApi()
 	const { user } = useAuth()
 
 	const [globalApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		const result = await handleApiCall(
 			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
 		)
 
 		return result.variants.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v)
+			return mapBasicVariantPackApiToDto(v)
 		})
-	}, [searchString])
+	}, [searchString, active])
 
 	const [usersApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		if (!user) {
 			return []
 		}
@@ -49,9 +54,9 @@ export default function AppSongSelectSpecifierProvider(
 		)
 
 		return result.variants.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v)
+			return mapBasicVariantPackApiToDto(v)
 		})
-	}, [searchString, user])
+	}, [searchString, user, active])
 
 	const team = useCurrentTeam()
 	const { teams: t } = useUserTeams()
@@ -68,7 +73,12 @@ export default function AppSongSelectSpecifierProvider(
 	const playlist = usePlaylistsGeneral()
 
 	const [teamApiState] = useApiStateEffect(async () => {
+		if (!active) return []
 		if (!selectedTeamAlias) {
+			return []
+		}
+
+		if (!teams) {
 			return []
 		}
 
@@ -76,7 +86,7 @@ export default function AppSongSelectSpecifierProvider(
 			(t) => t.alias === selectedTeamAlias
 		)?.selectionGuid
 		if (!selectionGuid) {
-			throw new Error('Selection guid not found - fix this, not necessary')
+			console.error('Selection guid not found - fix this, not necessary')
 			return []
 		}
 
@@ -86,9 +96,9 @@ export default function AppSongSelectSpecifierProvider(
 		)
 
 		return result.items.map((v) => {
-			return mapSongVariantDataOutDtoToSongVariantDto(v.variant)
+			return mapBasicVariantPackApiToDto(v.pack)
 		})
-	}, [selectedTeamAlias, searchString])
+	}, [selectedTeamAlias, searchString, active])
 
 	useEffect(() => {
 		if (teams) {
@@ -102,6 +112,7 @@ export default function AppSongSelectSpecifierProvider(
 
 	return (
 		<SongSelectSpecifierProvider
+			onActiveChange={setActive}
 			customSourceList={[
 				{
 					label: 'Z globálního zpěvníku',

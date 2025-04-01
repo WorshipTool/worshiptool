@@ -26,35 +26,69 @@ export type AllSongItemProps = {
 }
 export default function AllSongItem({ data: s, index }: AllSongItemProps) {
 	const navigate = useSmartNavigate()
-	const isFavorite = useFavourite(s.packGuid as VariantPackGuid)
+	const isFavorite = useFavourite(s.main.packGuid as VariantPackGuid)
 
 	return (
 		<DraggableSong
 			data={{
-				packGuid: s.packGuid as VariantPackGuid,
-				title: s.title,
-				alias: s.alias as VariantPackAlias,
+				packGuid: s.main.packGuid as VariantPackGuid,
+				title: s.main.title,
+				alias: s.main.packAlias as VariantPackAlias,
 			}}
 		>
 			<StyledPaper
 				onClick={() => {
 					navigate('variant', {
-						...parseVariantAlias(s.alias as VariantPackAlias),
+						...parseVariantAlias(s.main.packAlias as VariantPackAlias),
 					})
 				}}
 			>
-				<Box display={'flex'} gap={1}>
-					<Typography strong>{index}</Typography>
-					<Divider orientation="vertical" flexItem />
+				<Box display={'flex'} gap={1} alignItems={'center'}>
 					<Typography
-						strong={300}
-						noWrap
+						strong
 						sx={{
-							flex: 1,
+							alignItems: 'center',
+							display: 'flex',
 						}}
 					>
-						{s.title}{' '}
+						{index}
 					</Typography>
+					<Divider orientation="vertical" flexItem />
+					<Box
+						display={'flex'}
+						flexDirection={'column'}
+						height={'2rem'}
+						justifyContent={'center'}
+						gap={0.1}
+						flex={1}
+					>
+						{s.original && (
+							<Typography
+								color={'grey.500'}
+								small
+								thin
+								noWrap
+								sx={{
+									flex: 1,
+									lineHeight: '1.2rem',
+								}}
+							>
+								{s.original.title}
+							</Typography>
+						)}
+						<Typography
+							strong={300}
+							noWrap
+							sx={{
+								flex: 1,
+								lineHeight: '1.2rem',
+								alignItems: 'center',
+								display: 'flex',
+							}}
+						>
+							{s.main.title}{' '}
+						</Typography>
+					</Box>
 
 					{isFavorite && (
 						<Favorite

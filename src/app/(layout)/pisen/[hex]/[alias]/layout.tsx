@@ -1,3 +1,5 @@
+'use server'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
 import { notFound } from 'next/navigation'
@@ -10,16 +12,19 @@ export const generateMetadata = generateSmartMetadata(
 		const alias = getVariantAliasFromParams(params.hex, params.alias)
 		try {
 			const variantData = await getVariantByAlias(alias)
-			const variant = variantData.variants[0]
-			const songTitle = variant.prefferedTitle
+			const variant = variantData.main
+			const songTitle = variant.title
 
 			const sheet = new Sheet(variant.sheetData)
 
 			const title =
-				songTitle +
-				` (${sheet.getKeyChord() ? 'Píseň s akordy' : 'Text písně'})`
+				songTitle + ` (${sheet.getKeyNote() ? 'Píseň s akordy' : 'Text písně'})`
 			return {
 				title: title,
+				description: sheet.getText(),
+				openGraph: {
+					images: [getRouteUrlWithParams('variantPreviewImage', params)],
+				},
 			}
 		} catch (e) {
 			notFound()
@@ -27,6 +32,6 @@ export const generateMetadata = generateSmartMetadata(
 	}
 )
 
-export default function layout(props: LayoutProps) {
+export default async function layout(props: LayoutProps<'variant'>) {
 	return props.children
 }

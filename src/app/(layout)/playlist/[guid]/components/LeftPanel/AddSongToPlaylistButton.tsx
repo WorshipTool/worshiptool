@@ -1,8 +1,8 @@
-import { VariantPackGuid } from '@/api/dtos'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, Tooltip } from '@/common/ui'
 import { Fab } from '@/common/ui/mui'
+import { BasicVariantPack } from '@/types/song'
 import { Add } from '@mui/icons-material'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -37,14 +37,14 @@ export default function AddSongToPlaylistButton() {
 		setOpen(false)
 	}, [])
 
-	const onSubmit = async (packs: VariantPackGuid[]) => {
+	const onSubmit = async (packs: BasicVariantPack[]) => {
 		for (const pack of packs) {
-			await addItem(pack)
+			await addItem(pack.packGuid)
 		}
 	}
 
-	const filterFunc = (pack: VariantPackGuid) => {
-		return !items.some((i) => i.variant.packGuid === pack)
+	const filterFunc = (pack: BasicVariantPack) => {
+		return !items.some((i) => i.pack.packGuid === pack.packGuid)
 	}
 
 	// Auto open

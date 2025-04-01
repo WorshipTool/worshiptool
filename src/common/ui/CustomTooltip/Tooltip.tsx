@@ -1,3 +1,4 @@
+import { Box } from '@/common/ui/Box'
 import { Tooltip as Tltp, TooltipProps } from '@mui/material'
 import React, { ReactElement } from 'react'
 
@@ -6,24 +7,31 @@ type CustomTooltipProps = {
 	label?: string
 	title?: string
 	disabled?: boolean
+	component?: React.ElementType
 } & Omit<TooltipProps, 'title'>
 
-const MyComponent = React.forwardRef(function Component(innerProps: any, ref) {
+const MyComponent = React.forwardRef(function Component(
+	innerProps: {
+		children: ReactElement
+		component?: CustomTooltipProps['component']
+	},
+	ref
+) {
 	return (
-		<div {...innerProps} ref={ref as any}>
+		<Box {...innerProps} ref={ref as any} component={innerProps.component}>
 			{innerProps.children}
-		</div>
+		</Box>
 	)
 })
 
-export function Tooltip(props: CustomTooltipProps) {
+export function Tooltip({ component = 'span', ...props }: CustomTooltipProps) {
 	const title = props.title || props.label
 
 	return props.disabled || !title || title.length === 0 ? (
 		<>{props.children}</>
 	) : (
 		<Tltp {...props} title={title}>
-			<MyComponent>{props.children}</MyComponent>
+			<MyComponent component={component}>{props.children}</MyComponent>
 		</Tltp>
 	)
 }

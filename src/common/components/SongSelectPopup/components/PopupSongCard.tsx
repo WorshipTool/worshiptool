@@ -1,4 +1,4 @@
-import { SongVariantDto } from '@/api/dtos'
+import { BasicVariantPack } from '@/api/dtos'
 import { theme } from '@/common/constants/theme'
 import { Box } from '@/common/ui'
 import { IconButton } from '@/common/ui/IconButton'
@@ -7,11 +7,12 @@ import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { parseVariantAlias } from '@/routes/routes.tech'
 import { OpenInNew } from '@mui/icons-material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { memo, useCallback } from 'react'
 
 type PopupSongCardProps = {
 	selected?: boolean
-	song: SongVariantDto
+	song: BasicVariantPack
 	onSelect: () => void
 	onDeselect: () => void
 }
@@ -24,6 +25,8 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 		}
 		props.onSelect()
 	}, [props.selected, props.onSelect, props.onDeselect])
+
+	const sheet = new Sheet(props.song.sheetData)
 
 	return (
 		<Box
@@ -57,7 +60,7 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 				data={{
 					packGuid: props.song.packGuid,
 					alias: props.song.packAlias,
-					title: props.song.preferredTitle,
+					title: props.song.title,
 				}}
 				style={{
 					height: '100%',
@@ -111,7 +114,7 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 							WebkitLineClamp: 2,
 						}}
 					>
-						{props.song.preferredTitle}
+						{props.song.title}
 					</Typography>
 
 					<Typography
@@ -123,7 +126,7 @@ const PopupSongCard = memo(function PopupSongCard(props: PopupSongCardProps) {
 							flex: 1,
 						}}
 					>
-						{props.song.sheet.getSections()[0].text}
+						{sheet.getSections()[0].text}
 					</Typography>
 				</Box>
 			</DraggableSong>

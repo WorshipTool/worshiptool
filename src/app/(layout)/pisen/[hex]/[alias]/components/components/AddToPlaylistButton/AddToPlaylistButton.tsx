@@ -12,12 +12,12 @@ import {
 	useMediaQuery,
 } from '@/common/ui/mui'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { BasicVariantPack } from '@/types/song'
 import { KeyboardArrowDown, PlaylistAddCircle } from '@mui/icons-material'
 import React, { useCallback, useMemo } from 'react'
-import { SongVariantDto } from '../../../../../../../../api/dtos'
 
 interface AddToPlaylistButtonProps {
-	variant: SongVariantDto
+	variant: BasicVariantPack
 	asMenuItem?: boolean
 }
 

@@ -7,6 +7,7 @@ import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'
 import { urlMatchPatterns } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { isDevelopment } from '@/tech/development.tech'
 import { jwtDecode } from 'jwt-decode'
 import { useCookies } from 'next-client-cookies'
 import { useSnackbar } from 'notistack'
@@ -105,6 +106,7 @@ export function useProvideAuth() {
 		},
 	})
 	useEffect(() => {
+		if (isDevelopment) return
 		if (!_getCookie()) {
 			setGoogleShouldLogin(true)
 		}

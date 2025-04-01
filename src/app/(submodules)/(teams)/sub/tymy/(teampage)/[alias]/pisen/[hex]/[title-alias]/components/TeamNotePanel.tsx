@@ -1,5 +1,5 @@
 import NoteContent from '@/app/(layout)/pisen/[hex]/[alias]/components/NoteContent'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { MoreTeamSongOption } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongOption'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
@@ -18,18 +18,18 @@ import { useEffect, useState } from 'react'
 
 export default function TeamNotePanel() {
 	const { teamSongNotesApi } = useApi()
-	const { guid: variantGuid } = useInnerVariant()
+	const { packGuid } = useInnerPack()
 	const { guid: teamGuid, notes: allTeamNotes } = useInnerTeam()
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
 			return handleApiCall(
 				teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
-					variantGuid,
+					packGuid,
 					teamGuid
 				)
 			)
-		}, [teamSongNotesApi, variantGuid])
+		}, [teamSongNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
 
@@ -71,7 +71,7 @@ export default function TeamNotePanel() {
 				return handleApiCall(
 					teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
 						content: cnt,
-						variantGuid,
+						packGuid: packGuid,
 						teamGuid: teamGuid,
 					})
 				)

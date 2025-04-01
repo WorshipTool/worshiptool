@@ -6,6 +6,7 @@ import NavigationMobilePanel from '@/common/components/Toolbar/components/Middle
 import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
+import { grey } from '@/common/ui/mui/colors'
 import { styled, useMediaQuery } from '@mui/system'
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
@@ -23,14 +24,10 @@ const TopBar = styled(Box)(({ theme }) => ({
 	transition: 'all 0.3s ease',
 }))
 
-interface ToolbarProps {
-	// transparent?: boolean
-	// white?: boolean
-}
-export function Toolbar({}: ToolbarProps) {
+export function Toolbar() {
 	const theme = useTheme()
 
-	const { transparent, whiteVersion, hidden } = useToolbar()
+	const { transparent, variant, whiteVersion, hidden } = useToolbar()
 
 	const white = useMemo(() => {
 		return whiteVersion || !transparent
@@ -62,15 +59,18 @@ export function Toolbar({}: ToolbarProps) {
 			>
 				<motion.div
 					style={{
-						background: `linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+						background:
+							variant === 'dark'
+								? grey[900]
+								: `linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
 						position: 'absolute',
 						left: 0,
 						right: 0,
 						top: 0,
 						bottom: 0,
 					}}
-					initial={{ opacity: transparent ? 0 : 1 }}
-					animate={{ opacity: transparent ? 0 : 1 }}
+					initial={{ opacity: variant === 'transparent' ? 0 : 1 }}
+					animate={{ opacity: variant === 'transparent' ? 0 : 1 }}
 					transition={{ duration: 0.3 }}
 				/>
 

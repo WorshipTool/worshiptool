@@ -41,15 +41,13 @@ function page() {
 					return a.order > b.order ? -1 : 1
 				}
 				if (sortOption === 'title') {
-					return a.variant.preferredTitle.localeCompare(
-						b.variant.preferredTitle
-					)
+					return a.pack.title.localeCompare(b.pack.title)
 				}
 				return 0
 			})
 			.map((variant, index) => {
 				const team = bsItems?.find(
-					(item) => item.packGuid === variant.variant.packGuid
+					(item) => item.packGuid === variant.pack.packGuid
 				)
 				return {
 					data: variant,

@@ -1,5 +1,5 @@
 'use client'
-import { SongVariantDto, VariantPackGuid } from '@/api/dtos'
+import { BasicVariantPack, VariantPackGuid } from '@/api/dtos'
 import PopupSongCard from '@/common/components/SongSelectPopup/components/PopupSongCard'
 import { Box } from '@/common/ui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -8,12 +8,12 @@ import { ApiState } from '@/tech/ApiState'
 import './GlobalSongList.styles.css'
 
 type GlobalSongListProps = {
-	onSongSelect: (packGuid: VariantPackGuid, songTitle: string) => void
-	onSongDeselect: (packGuid: VariantPackGuid) => void
+	onSongSelect: (pack: BasicVariantPack) => void
+	onSongDeselect: (pack: BasicVariantPack) => void
 	selectedSongs: VariantPackGuid[]
-	apiState: ApiState<SongVariantDto[]>
+	apiState: ApiState<BasicVariantPack[]>
 	multiselect?: boolean
-	items: SongVariantDto[]
+	items: BasicVariantPack[]
 }
 
 export default function PopupSongList(props: GlobalSongListProps) {
@@ -27,14 +27,14 @@ export default function PopupSongList(props: GlobalSongListProps) {
 		>
 			{props.items.map((song) => {
 				const onSelect = () => {
-					props.onSongSelect(song.packGuid, song.preferredTitle)
+					props.onSongSelect(song)
 				}
 				const onDeselect = () => {
-					props.onSongDeselect(song.packGuid)
+					props.onSongDeselect(song)
 				}
 				return (
 					<PopupSongCard
-						key={song.guid}
+						key={song.packGuid}
 						song={song}
 						onSelect={onSelect}
 						onDeselect={onDeselect}

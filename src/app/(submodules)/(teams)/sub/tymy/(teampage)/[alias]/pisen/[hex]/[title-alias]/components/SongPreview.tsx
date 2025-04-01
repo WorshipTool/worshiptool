@@ -1,5 +1,5 @@
 'use client'
-import { CreatedType, SongVariantDto } from '@/api/dtos'
+import { CreatedType } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
 import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import PrintVariantButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/PrintButton'
@@ -24,12 +24,12 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
+import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useRef, useState } from 'react'
 
 type SongPreviewProps = {
-	// sheet: Sheet
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 }
 
 export default function SongPreview({ variant }: SongPreviewProps) {
@@ -51,7 +51,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 
 	const [hideChords, setHideChords] = useState(false)
 
-	const [sheet, setSheet] = useState<Sheet>(variant.sheet)
+	const [sheet, setSheet] = useState<Sheet>(new Sheet(variant.sheetData))
 
 	const [justNumber, setJustNumber] = useState(0)
 	const rerender = useCallback(() => {
@@ -79,9 +79,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 
 		const newData = {
 			title:
-				editedTitle.current !== variant.preferredTitle
-					? editedTitle.current
-					: undefined,
+				editedTitle.current !== variant.title ? editedTitle.current : undefined,
 			sheetData:
 				editedSheetData.current !== variant.sheetData
 					? editedSheetData.current
@@ -281,7 +279,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 							sheet={sheet}
 							hideChords={hideChords}
 							editMode={Boolean(inEditMode)}
-							title={inEditMode ? variant.preferredTitle : undefined}
+							title={inEditMode ? variant.title : undefined}
 							onChange={onSheetChange}
 						/>
 					</Box>

@@ -1,3 +1,5 @@
+// This component has to be as most basic as possible, no hooks, only client imports, apod.
+// for default setting, of course
 import HandleCopyProvider from '@/common/components/SheetDisplay/components/HandleCopyProvider'
 import { Sheet } from '@pepavlin/sheet-api'
 import { note, signature } from '@pepavlin/sheet-api/lib/models/note'

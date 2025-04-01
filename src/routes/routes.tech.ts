@@ -1,5 +1,6 @@
 import { FRONTEND_URL } from '@/api/constants'
 import { VariantPackAlias } from '@/api/dtos'
+import { UserDto } from '@/interfaces/user'
 import { routesPaths } from '@/routes/routes'
 import {
 	ParamValueType,
@@ -8,8 +9,11 @@ import {
 	SmartParams,
 } from '@/routes/routes.types'
 
-export const shouldUseSubdomains = () =>
-	process.env.NEXT_PUBLIC_DONT_USE_SUBDOMAINS !== 'true'
+// Its possible to send user, but its not used
+export const shouldUseSubdomains = (user?: UserDto) => {
+	const v = process.env.useSubdomains === 'true'
+	return v
+}
 
 export const urlMatchPatterns = (
 	pathname: string,
@@ -143,11 +147,11 @@ type GetReplacedUrlWithParamsOptions = {
 export const getReplacedUrlWithParams = (
 	url: string,
 	params: { [key: string]: ParamValueType | undefined },
-	options: GetReplacedUrlWithParamsOptions = {
-		subdomains: true,
-		absolute: true,
-	}
+	_options: GetReplacedUrlWithParamsOptions = {}
 ) => {
+	// Defaults
+	const options = { subdomains: true, absolute: true, ..._options }
+
 	// Check options
 	if (!options.absolute && options.subdomains)
 		throw new Error('Cannot use subdomains without absolute url')
@@ -215,6 +219,10 @@ export const parseVariantAlias = (variantAlias: VariantPackAlias) => {
 	const code = alias.split('-').slice(1).join('-')
 
 	return { hex, alias: code }
+}
+
+export const makeVariantAlias = (hex: string, code: string) => {
+	return `${hex}-${code}`
 }
 
 export const getPathnameFromUrl = (url: string): string => {

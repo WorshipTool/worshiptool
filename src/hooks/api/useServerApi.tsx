@@ -2,17 +2,12 @@
 
 import { Configuration } from '@/api/generated'
 import { getApiClasses } from '@/hooks/api/tech'
-import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { UserDto } from '@/interfaces/user'
-import { cookies } from 'next/headers'
+import { getServerUser } from '@/tech/auth/getServerUser'
 
 export async function useServerApi() {
 	// Get user info
-	const cookie = cookies()
-	const cookieData = cookie.get(AUTH_COOKIE_NAME)
-	const user: UserDto | undefined = cookieData
-		? JSON.parse(cookieData.value)
-		: undefined
+	const user: UserDto | undefined = getServerUser()
 
 	// Create API configuration
 	const apiConfiguration: Configuration = {

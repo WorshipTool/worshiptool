@@ -5,7 +5,8 @@ const unsecuredCopyToClipboard = (text: string) => {
 	textArea.focus()
 	textArea.select()
 	try {
-		document.execCommand('copy')
+		const d = document.execCommand('copy')
+		if (!d) return console.error('Unable to copy to clipboard (in)')
 	} catch (err) {
 		console.error('Unable to copy to clipboard', err)
 	}
@@ -18,7 +19,7 @@ const unsecuredCopyToClipboard = (text: string) => {
  * Then uses standard clipboard API, otherwise uses fallback
  */
 export const copyToClipboard = (content: string) => {
-	if (window.isSecureContext && navigator.clipboard) {
+	if (navigator.clipboard) {
 		navigator.clipboard.writeText(content)
 	} else {
 		unsecuredCopyToClipboard(content)

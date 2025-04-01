@@ -102,7 +102,7 @@ export default function SlideCard({ item, order }: SlideCardProps) {
 	const onItemChange = useCallback((item: PlaylistItemDto) => {
 		if (!item) return
 
-		const newSheet = new Sheet(item.variant.sheetData)
+		const newSheet = new Sheet(item.pack.sheetData)
 		if (item.toneKey) newSheet.setKey(item.toneKey)
 
 		setSheet(newSheet)
@@ -232,7 +232,7 @@ export default function SlideCard({ item, order }: SlideCardProps) {
 					}}
 				>
 					{order ? order + 1 + '. ' : ''}
-					{item?.variant?.preferredTitle.toUpperCase()}
+					{item?.pack?.title.toUpperCase()}
 				</Typography>
 				{sheet?.getSections()?.map((section, index) => {
 					return (
@@ -270,7 +270,7 @@ export default function SlideCard({ item, order }: SlideCardProps) {
 			>
 				<CircularProgress color="inherit" />
 				<Gap horizontal value={2} />
-				<Typography variant="h6">{item?.variant?.preferredTitle}</Typography>
+				<Typography variant="h6">{item?.pack?.title}</Typography>
 			</Box>
 		</Box>
 	)

@@ -1,11 +1,11 @@
-import { Box, Typography } from '@/common/ui'
+// TODO: this component has to be as most basic as possible, no hooks, only client imports, apod.
+import { Typography } from '@/common/ui'
 import { signature } from '@pepavlin/sheet-api/lib/models/note'
 import {
 	Section,
 	SectionType,
 } from '@pepavlin/sheet-api/lib/models/song/section'
 import { Segment } from '@pepavlin/sheet-api/lib/models/song/segment'
-import { useMemo } from 'react'
 import { SheetStyleComponentType } from './config'
 
 const chordHeight = '1.5em'
@@ -20,7 +20,7 @@ const SegmentElement = ({
 	signature?: signature
 	showChords: boolean
 }) => {
-	const words = useMemo(() => {
+	const getWords = () => {
 		const arr = segment.text?.split(/(\s+)/) || []
 		// first item must be longer than chord
 		const chord = segment.chord?.toString(signature)
@@ -38,13 +38,15 @@ const SegmentElement = ({
 			}
 			return acc
 		}, [] as string[])
-	}, [segment])
+	}
+
+	const words = getWords()
 
 	return (
 		<>
 			{words.map((word, index) => {
 				return (
-					<Box key={word + index}>
+					<div key={word + index}>
 						{showChords &&
 							(index == 0 && segment.chord ? (
 								<>
@@ -56,11 +58,11 @@ const SegmentElement = ({
 									</Typography>
 								</>
 							) : (
-								<Box sx={{ height: chordHeight }} />
+								<div style={{ height: chordHeight }} />
 							))}
 
 						<Typography>{word}</Typography>
-					</Box>
+					</div>
 				)
 			})}
 		</>
@@ -78,7 +80,7 @@ const SectionComponent = ({
 	isLast: boolean
 	hideChords: boolean
 }) => {
-	const sectionName = useMemo(() => {
+	const getSectionName = () => {
 		if (section.type === SectionType.UNKNOWN) return section.name
 
 		let text = ''
@@ -100,23 +102,29 @@ const SectionComponent = ({
 		const index = section.index > 0 ? section.index : ''
 
 		return index + text
-	}, [section])
+	}
+	const sectionName = getSectionName()
 
-	const hasChords = useMemo(() => {
+	const getHasChords = () => {
 		// return true
 		if (hideChords) return false
 		return section.lines?.some((line) =>
 			line.segments.some((segment) => segment.chord)
 		)
-	}, [section, hideChords])
+	}
+	const hasChords = getHasChords()
 
-	const hasFirstLineText = useMemo(() => {
-		return section.lines?.[0]?.text && section.lines?.[0]?.text?.length > 0
-	}, [section])
+	const hasFirstLineText =
+		section.lines?.[0]?.text && section.lines?.[0]?.text?.length > 0
 	return (
-		<Box display={'flex'} flexDirection={'row'}>
-			<Box
-				sx={{
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+			}}
+		>
+			<div
+				style={{
 					paddingTop: hasChords && hasFirstLineText ? chordHeight : 0,
 				}}
 			>
@@ -132,8 +140,8 @@ const SectionComponent = ({
 						{sectionName}
 					</Typography>
 				)}
-			</Box>
-			<Box sx={{}}>
+			</div>
+			<div>
 				{section.lines ? (
 					<>
 						{section.lines.map((line, index) => {
@@ -165,11 +173,11 @@ const SectionComponent = ({
 				)}
 				{!isLast && (
 					<>
-						<Box sx={{ height: sectionsGap }} />
+						<div style={{ height: sectionsGap }} />
 					</>
 				)}
-			</Box>
-		</Box>
+			</div>
+		</div>
 	)
 }
 
@@ -180,18 +188,19 @@ const DefaultStyle: SheetStyleComponentType = ({
 	columns,
 	hideChords,
 }) => {
-	const sections = useMemo(() => {
+	const getSections = () => {
 		const r = sheet?.getSections() || []
 		if (r.length == 0) {
 			r.push(new Section(''))
 		}
 		return r
-	}, [sheet])
+	}
+	const sections = getSections()
 
 	return (
-		<Box sx={{}}>
-			<Box
-				sx={{
+		<div>
+			<div
+				style={{
 					display: 'flex',
 					flexDirection: 'column',
 					// alignItems: 'center',
@@ -208,8 +217,8 @@ const DefaultStyle: SheetStyleComponentType = ({
 						>
 							{index == 0 && title && (
 								<>
-									<Box
-										sx={{
+									<div
+										style={{
 											marginBottom: 2,
 											// display: 'flex',
 											// justifyContent: 'center',
@@ -218,7 +227,7 @@ const DefaultStyle: SheetStyleComponentType = ({
 										<Typography variant="h5" noWrap>
 											<b>{title}</b>
 										</Typography>
-									</Box>
+									</div>
 								</>
 							)}
 
@@ -232,8 +241,8 @@ const DefaultStyle: SheetStyleComponentType = ({
 						</div>
 					)
 				})}
-			</Box>
-		</Box>
+			</div>
+		</div>
 	)
 }
 export default DefaultStyle

@@ -1,11 +1,12 @@
 import { VariantPackAlias } from '@/api/dtos'
-import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button, CircularProgress, Gap, Tooltip, useTheme } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { parseVariantAlias } from '@/routes/routes.tech'
+import { VariantPackGuid } from '@/types/song'
 import { EggAlt } from '@mui/icons-material'
 import { useMemo } from 'react'
 import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
@@ -15,7 +16,7 @@ import { useApiState } from '../../../../../../../tech/ApiState'
 import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 export type CreateCopyButtonProps = {
-	variantGuid: string
+	packGuid: VariantPackGuid
 	asMenuItem?: boolean
 }
 
@@ -30,7 +31,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 			async () => {
 				const result = await handleApiCall(
 					songAddingApi.songAddingControllerCreateCopy({
-						variantGuid: props.variantGuid,
+						packGuid: props.packGuid,
 					})
 				)
 
@@ -50,10 +51,10 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const icon = <EggAlt color="inherit" />
 
 	const { user } = useAuth()
-	const { variant } = useInnerSong()
+	const { variant } = useInnerPackSong()
 	const isOwner = useMemo(() => {
 		if (!user) return false
-		return variant.createdBy === user?.guid
+		return variant.createdByGuid === user?.guid
 	}, [user, variant])
 
 	const showAsButton = !(isOwner && !variant.public)
@@ -92,6 +93,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 						title={'Vytvořit úpravu'}
 						subtitle="Vytvoří soukromou kopii písně,"
 						icon={icon}
+						onClick={onClick}
 					/>
 				</>
 			)}

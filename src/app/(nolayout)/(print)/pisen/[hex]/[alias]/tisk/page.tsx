@@ -1,10 +1,11 @@
 import { Box } from '@/common/ui'
+import { Sheet } from '@pepavlin/sheet-api'
 import { Metadata } from 'next'
 import {
 	getVariantAliasFromParams,
 	getVariantByAlias,
 } from '../../../../../../(layout)/pisen/[hex]/[alias]/tech'
-import { mapSongDataVariantApiToSongVariantDto } from '../../../../../../../api/dtos'
+import { mapBasicVariantPackApiToDto } from '../../../../../../../api/dtos'
 import SheetDisplay from '../../../../../../../common/components/SheetDisplay/SheetDisplay'
 import { MetadataProps } from '../../../../../../../common/types'
 import { SmartParams, SmartSearchParams } from '../../../../../../../routes'
@@ -29,11 +30,11 @@ export default async function page({ params, searchParams }: PageProps) {
 	try {
 		const alias = getVariantAliasFromParams(params.hex, params.alias)
 		const v = await getVariantByAlias(alias)
-		const variant = v.variants[0]
+		const variant = v.main
 
-		const variantData = mapSongDataVariantApiToSongVariantDto(variant)
+		const variantData = mapBasicVariantPackApiToDto(variant)
 
-		const sheet = variantData.sheet
+		const sheet = new Sheet(variant.sheetData)
 		if (searchParams.key) sheet.setKey(searchParams.key)
 
 		return (
@@ -50,7 +51,7 @@ export default async function page({ params, searchParams }: PageProps) {
 					{/* <PrintOptionsPanel /> */}
 				</Box>
 				<SheetDisplay
-					title={variantData.preferredTitle}
+					title={variantData.title}
 					sheet={sheet}
 					variant="printCompact"
 					columns={2}

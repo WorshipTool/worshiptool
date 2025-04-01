@@ -1,32 +1,71 @@
 import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
 import { ROLES, UserDto } from '@/interfaces/user'
-import * as configcat from 'configcat-js'
-import { User } from 'configcat-js'
 
-import dotenv from 'dotenv'
-dotenv.config()
+import { StatsigClient, StatsigUser } from '@statsig/js-client'
+// import dotenv from 'dotenv'
+// dotenv.config()
 
-export const configcatApiKey = process.env.NEXT_PUBLIC_CONFIGCAT_API_KEY
+export const userDtoToStatsigUser = (user?: UserDto): StatsigUser => {
+	if (!user) {
+		return {}
+	}
 
-export const checkFlag = async (key: FeatureFlag): Promise<boolean> => {
-	const logger = configcat.createConsoleLogger(configcat.LogLevel.Error)
-
-	const configCatClient = configcat.getClient(
-		configcatApiKey,
-		configcat.PollingMode.AutoPoll,
-		{
-			logger: logger,
-		}
-	)
-
-	const ret = await configCatClient.getValueAsync(key as string, false)
-	return ret
-}
-
-export const userDtoToConfigCatUser = (user: UserDto) => {
 	const role = user.role === ROLES.Admin ? 'admin' : 'user'
 
-	return new User(user.guid, user.email, 'Czech Republic', {
-		role: role,
-	})
+	return {
+		userID: user.guid,
+		email: user.email,
+		custom: {
+			role: role,
+			name: user.firstName + ' ' + user.lastName,
+		},
+	}
+}
+
+const cache: Record<string, { value: boolean; expiresAt: number }> = {}
+const CACHE_DURATION_MS = 60 * 1000 // 1 minuta
+//TODO: is cache really needed? Its better with cache?
+
+const getFlagWithCache = (key: FeatureFlag, user?: UserDto): boolean | null => {
+	// Zkontroluj cache
+	const cacheKey = `${key}-${user?.guid || 'global'}`
+	const cached = cache[cacheKey]
+
+	if (cached && cached.expiresAt > Date.now()) {
+		return cached.value
+	}
+	return null
+}
+
+const saveFlagToCache = (
+	key: FeatureFlag,
+	value: boolean,
+	user?: UserDto
+): void => {
+	const cacheKey = `${key}-${user?.guid || 'global'}`
+	cache[cacheKey] = {
+		value,
+		expiresAt: Date.now() + CACHE_DURATION_MS,
+	}
+}
+
+export const checkFlag = async (
+	key: FeatureFlag,
+	user?: UserDto
+): Promise<boolean> => {
+	const cachedValue = getFlagWithCache(key, user)
+	if (cachedValue !== null) return cachedValue
+
+	const myStatsigClient = new StatsigClient(
+		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
+		user ? userDtoToStatsigUser(user) : {}
+	)
+
+	await myStatsigClient.initializeAsync()
+
+	const value = myStatsigClient.checkGate(key as string)
+
+	saveFlagToCache(key, value, user)
+
+	return value
 }

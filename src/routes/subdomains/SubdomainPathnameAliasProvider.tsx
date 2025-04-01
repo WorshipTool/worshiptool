@@ -1,4 +1,6 @@
-import { createContext, useContext, useState } from 'react'
+import { useCommonData } from '@/hooks/common-data/useCommonData'
+import { getRouteUrlWithParams } from '@/routes/routes.tech'
+import { createContext, useContext, useMemo } from 'react'
 
 type Rt = ReturnType<typeof useProvideSubdomainPathnameAlias>
 
@@ -35,32 +37,26 @@ export type SubdomainData = {
 }
 
 const useProvideSubdomainPathnameAlias = () => {
-	const [aliases, setAliases] = useState<SubdomainData[]>([])
-
-	const addAliases = (subdomains: SubdomainData[]) => {
-		setAliases((prev) => {
-			const newAliases = subdomains.filter(
-				(newAlias) =>
-					!prev.some((prevAlias) => prevAlias.subdomain === newAlias.subdomain)
+	const d = useCommonData('allsubdomains')
+	const aliases = useMemo(() => {
+		return d.map((alias) => {
+			const url = getRouteUrlWithParams(
+				'team',
+				{ alias: alias.teamAlias },
+				{
+					subdomains: false,
+					relative: true,
+				}
 			)
-			return [...prev, ...newAliases]
-		})
-	}
 
-	const removeAliases = (subdomains: SubdomainData[]) => {
-		setAliases((prev) => {
-			return prev.filter(
-				(prevAlias) =>
-					!subdomains.some(
-						(newAlias) => newAlias.subdomain === prevAlias.subdomain
-					)
-			)
+			return {
+				subdomain: alias.subdomain,
+				pathname: url,
+			}
 		})
-	}
+	}, [d])
 
 	return {
-		addAliases,
-		removeAliases,
 		aliases,
 	}
 }

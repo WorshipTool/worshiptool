@@ -1,0 +1,68 @@
+'use client'
+import { Box, Button, Typography } from '@/common/ui'
+import { Link } from '@/common/ui/Link/Link'
+import { useApi } from '@/hooks/api/useApi'
+import { parseVariantAlias } from '@/routes/routes.tech'
+import { useApiState } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { BasicVariantPack } from '@/types/song'
+import { ChevronRight } from '@mui/icons-material'
+
+type Props = {
+	pack: BasicVariantPack
+}
+
+export default function ApprovalItem({ pack }: Props) {
+	const { songPublishingApi } = useApi()
+
+	const { fetchApiState, apiState } = useApiState()
+	const onRejectClick = async () => {
+		await fetchApiState(async () =>
+			handleApiCall(
+				songPublishingApi.songPublishingControllerRejectPublishApproval({
+					packGuid: pack.packGuid,
+				})
+			)
+		)
+
+		window.location.reload()
+	}
+
+	return (
+		<Box
+			sx={{
+				bgcolor: 'grey.100',
+				padding: 2,
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				alignItems: 'center',
+			}}
+		>
+			<Link
+				to="variant"
+				params={{
+					...parseVariantAlias(pack.packAlias),
+				}}
+				newTab
+			>
+				<Typography strong>{pack.title}</Typography>
+			</Link>
+			<Box display={'flex'} gap={1}>
+				<Button small color="error" outlined onClick={onRejectClick}>
+					Odmítnout
+				</Button>
+				<Button
+					small
+					endIcon={<ChevronRight />}
+					to="variantPublish"
+					toParams={{
+						...parseVariantAlias(pack.packAlias),
+					}}
+				>
+					Pokračovat
+				</Button>
+			</Box>
+		</Box>
+	)
+}

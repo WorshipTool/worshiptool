@@ -10,6 +10,7 @@ import {
 	MoreHoriz,
 	PlaylistRemove,
 } from '@mui/icons-material'
+import { Sheet } from '@pepavlin/sheet-api'
 import { useMemo, useState } from 'react'
 
 type FavouritesRowItemProps = {
@@ -18,16 +19,17 @@ type FavouritesRowItemProps = {
 }
 
 export default function FavouritesRowItem(props: FavouritesRowItemProps) {
-	const variant = props.data.data.variant
+	const variantPack = props.data.data.pack
 
 	const hintText = useMemo(() => {
-		return variant.sheet.getSections()[0].text
-	}, [variant])
+		const sheet = new Sheet(variantPack.sheetData)
+		return sheet.getSections()[0].text
+	}, [variantPack])
 
 	const navigate = useSmartNavigate()
 	const onOpenClick = () => {
 		if (props.data.teamAlias) {
-			const variantAlias = parseVariantAlias(variant.packAlias)
+			const variantAlias = parseVariantAlias(variantPack.packAlias)
 			navigate('teamSong', {
 				hex: variantAlias.hex,
 				'title-alias': variantAlias.alias,
@@ -36,7 +38,7 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 			})
 		} else {
 			navigate('variant', {
-				...parseVariantAlias(variant.packAlias),
+				...parseVariantAlias(variantPack.packAlias),
 			})
 		}
 	}
@@ -46,15 +48,15 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 	const { remove, loading } = useFavourites()
 
 	const onRemove = () => {
-		remove(variant.packGuid)
+		remove(variantPack.packGuid)
 	}
 	return (
 		<>
 			<DraggableSong
 				data={{
-					packGuid: variant.packGuid,
-					alias: variant.packAlias,
-					title: variant.preferredTitle,
+					packGuid: variantPack.packGuid,
+					alias: variantPack.packAlias,
+					title: variantPack.title,
 				}}
 			>
 				<Box
@@ -99,7 +101,7 @@ export default function FavouritesRowItem(props: FavouritesRowItemProps) {
 						</Typography>
 						<Box display={'flex'} flexDirection={'column'}>
 							<Box display={'flex'} gap={1}>
-								<Typography strong>{variant.preferredTitle}</Typography>
+								<Typography strong>{variantPack.title}</Typography>
 								{props.data.teamName && (
 									<Tooltip label="Píseň vytvořena v rámci týmu">
 										<Chip

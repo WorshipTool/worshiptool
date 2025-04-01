@@ -16,8 +16,8 @@ export default function TeamSelectSpecifierProvider(
 	const getData = useCallback(
 		async (searchString: string) => {
 			if (searchString.length > 0)
-				return selection.searchedItems.map((i) => i.variant)
-			return selection.items.map((i) => i.variant)
+				return selection.searchedItems.map((i) => i.pack)
+			return selection.items.map((i) => i.pack)
 		},
 		[selection.items, selection.searchedItems, selection]
 	)

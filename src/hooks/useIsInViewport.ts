@@ -1,16 +1,22 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function useIsInViewport(
 	ref: any,
 	rootMargin = '0px',
 	callback?: (intersecting: boolean) => void
 ) {
-	const [isIntersecting, setIntersecting] = useState(false)
+	const isIntersecting = useRef(false)
+	const lastValue = useRef(false)
+
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				setIntersecting(entry.isIntersecting)
+				isIntersecting.current = entry.isIntersecting
+				if (callback && lastValue.current !== isIntersecting.current) {
+					lastValue.current = isIntersecting.current
+					callback(isIntersecting.current)
+				}
 			},
 			{
 				rootMargin,
@@ -22,19 +28,5 @@ export function useIsInViewport(
 		return () => {
 			if (ref.current) observer.unobserve(ref.current)
 		}
-	}, [ref])
-
-	const lastValue = useRef(isIntersecting)
-	useEffect(() => {
-		if (callback) {
-			if (lastValue.current !== isIntersecting) {
-				lastValue.current = isIntersecting
-			} else {
-				return
-			}
-			callback(isIntersecting)
-		}
-	}, [isIntersecting, callback])
-
-	return isIntersecting
+	}, [ref, callback, rootMargin])
 }

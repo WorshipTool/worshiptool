@@ -1,28 +1,40 @@
+import { PlaylistData } from '@/api/generated'
+import { useCommonData } from '@/hooks/common-data/useCommonData'
 import usePlaylistsGeneral, {
 	PLAYLIST_UPDATE_EVENT_NAME,
 } from '@/hooks/playlist/usePlaylistsGeneral'
-import { useApiStateEffect } from '@/tech/ApiState'
-import { useEffect } from 'react'
+import { useApiState } from '@/tech/ApiState'
+import { useEffect, useState } from 'react'
 
 export function useUsersPlaylists() {
+	const initialValue = useCommonData('playlistsOfUser')
+	const [data, setData] = useState<PlaylistData[]>(initialValue)
+
 	const { getPlaylistsOfUser } = usePlaylistsGeneral()
-	const [{ data: playlists, loading }, reload] = useApiStateEffect(() => {
-		return getPlaylistsOfUser().then((r) => {
-			return r.playlists
+	const { fetchApiState, apiState } = useApiState<PlaylistData[]>()
+
+	const revalidate = async () => {
+		fetchApiState(async () => {
+			const data = await getPlaylistsOfUser()
+			return data.playlists
 		})
-	}, [])
+			.then((r) => {
+				if (r) setData(r)
+			})
+			.catch(() => {})
+	}
 
 	useEffect(() => {
 		const handler = (e: Event) => {
-			if (!playlists) return
+			if (!data) return
 			const event = e as CustomEvent
 
 			const guid = event.detail as string
 			if (!guid) return
 
 			// if guid is in playlists, reload
-			if (playlists?.some((p) => p.guid === guid)) {
-				reload()
+			if (data?.some((p) => p.guid === guid)) {
+				revalidate()
 			}
 		}
 
@@ -31,10 +43,10 @@ export function useUsersPlaylists() {
 		return () => {
 			window.removeEventListener(PLAYLIST_UPDATE_EVENT_NAME, handler)
 		}
-	}, [playlists, reload, getPlaylistsOfUser])
+	}, [data, revalidate, getPlaylistsOfUser])
 
 	return {
-		playlists,
-		loading,
+		playlists: data,
+		loading: apiState.loading,
 	}
 }

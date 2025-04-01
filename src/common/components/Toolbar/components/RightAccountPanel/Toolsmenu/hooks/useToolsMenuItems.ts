@@ -1,7 +1,8 @@
 import { BACKEND_URL } from '@/api/constants'
 import { ImagesApiAxiosParamCreator } from '@/api/generated'
 import { useTeamChecker } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { LinkProps } from '@/common/ui/Link/Link'
+import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
+import { CommonLinkProps } from '@/common/ui/Link/Link'
 import { SxProps } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys } from '@/routes'
@@ -16,11 +17,12 @@ export type MenuItemProps<T extends RoutesKeys> = {
 	image: string
 	asyncImage?: () => Promise<string>
 	action?: () => void
-	to?: LinkProps<T>['to']
-	toParams?: LinkProps<T>['params']
+	to?: CommonLinkProps<T>['to']
+	toParams?: CommonLinkProps<T>['params']
 	disabled?: boolean
 	hidden?: boolean
 	sx?: SxProps
+	imageSizeCoef?: number
 }
 
 export const searchGroupsEvent = new Event('searchGroups')
@@ -32,6 +34,8 @@ export default function useToolsMenuItems() {
 
 	const { teams } = useUserTeams()
 	const isTeamOn = useTeamChecker()
+
+	const showAdminPage = useFlag('show_admin_page')
 
 	const imagesApi = ImagesApiAxiosParamCreator({
 		isJsonMime: () => true,
@@ -86,6 +90,13 @@ export default function useToolsMenuItems() {
 				to: 'home',
 				hidden: !isTeamOn,
 			},
+			{
+				title: 'Admin',
+				to: 'admin',
+				image: getIconUrl('admin.png'),
+				hidden: !showAdminPage,
+				imageSizeCoef: 0.8,
+			},
 
 			...(isDevelopment
 				? [
@@ -105,7 +116,7 @@ export default function useToolsMenuItems() {
 				: []),
 			...teamsItems,
 		]
-	}, [isAdmin, isLoggedIn, teamsItems])
+	}, [isAdmin, isLoggedIn, teamsItems, showAdminPage])
 
 	return {
 		items,

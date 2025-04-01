@@ -1,5 +1,5 @@
 'use client'
-import { useFlag } from '@/common/providers/FeatureFlags'
+import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
@@ -12,7 +12,7 @@ export default function UnavailableMessage() {
 		process.env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE === 'true'
 	)
 
-	const { value: flagEnabled } = useFlag('app_temporarily_unavailable')
+	const flagEnabled = useFlag('app_temporarily_unavailable')
 	useEffect(() => {
 		if (flagEnabled) setIsUnvailable(flagEnabled)
 	}, [flagEnabled])

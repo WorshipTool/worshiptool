@@ -5,9 +5,13 @@ import { Typography } from '@/common/ui/Typography'
 import { Favorite } from '@mui/icons-material'
 
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
+import { useCloudNumber } from '@/common/providers/FeatureFlags/useCloudNumber'
 import { Gap } from '@/common/ui/Gap'
+import { Link } from '@/common/ui/Link/Link'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import { useSmartParams } from '@/routes/useSmartParams'
+import { getAssetUrl } from '@/tech/paths.tech'
+import Image from 'next/image'
 import { useMemo } from 'react'
 import './footer.styles.css'
 
@@ -23,6 +27,8 @@ type Links = [
 export default function Footer() {
 	const { hledat: searchString } = useSmartParams('home')
 	const isHome = useSmartMatch('home')
+
+	const year = useCloudNumber('year', 2024)
 
 	const links: Links = useMemo(
 		() => [
@@ -79,7 +85,38 @@ export default function Footer() {
 					height: '100%',
 				}}
 			>
-				<Gap value={0.5} />
+				<Gap value={1} />
+				<Link href={'https://worshipko.com' as any} target="_blank" external>
+					<Box
+						display={'flex'}
+						flexDirection={'row'}
+						gap={1}
+						alignItems={'center'}
+						// bgcolor={'grey.300'}
+						sx={{
+							borderRadius: 5,
+							paddingX: 2,
+							// border: '1px solid',
+							borderColor: 'grey.400',
+							paddingY: 0.5,
+						}}
+					>
+						<Typography small color="grey.500">
+							Ve spolupráci s
+						</Typography>
+						<Image
+							src={getAssetUrl('worshipko.png')}
+							alt={'Logo worshipko.com'}
+							width={150}
+							height={30}
+							style={{
+								objectFit: 'contain',
+							}}
+							priority
+						/>
+					</Box>
+				</Link>
+				<Gap value={1} />
 				<Box
 					display={'flex'}
 					flexDirection={'row'}
@@ -105,6 +142,8 @@ export default function Footer() {
 						)
 					})}
 				</Box>
+				<Gap value={0.5} />
+
 				<Box display={'flex'} flexDirection={'row'} gap={1}>
 					<Typography strong size={'small'}>
 						Vytvořeno s{' '}
@@ -116,10 +155,10 @@ export default function Footer() {
 							}}
 						/>
 					</Typography>
-					<Typography size={'small'}>2024</Typography>
+					<Typography size={'small'}>{year}</Typography>
 					<Typography size={'small'}>© Všechna práva vyhrazena</Typography>
 				</Box>
-				<Gap />
+				<Gap value={2} />
 			</Box>
 		</footer>
 	)

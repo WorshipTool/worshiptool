@@ -22,6 +22,7 @@ export default function usePagination<T>(
 					replace ? [] : array
 				)
 			})
+
 			const continues = result.length > countPerPage
 			const newData = result.slice(0, countPerPage)
 			setNextExists(continues)

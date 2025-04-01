@@ -1,26 +1,19 @@
-'use client'
+'use server'
 import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
-import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
-import { Analytics } from '@/app/components/components/analytics/analytics.tech'
+import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnalyze'
+import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
+import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { Box } from '@/common/ui'
-import { Typography } from '@/common/ui/Typography'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
-import { Sheet } from '@pepavlin/sheet-api'
-import { useEffect, useMemo, useState } from 'react'
+import { VariantPackAlias } from '@/types/song'
 import {
-	SongDto,
-	SongVariantDto,
-	VariantPackAlias,
 	VariantPackGuid,
-	mapGetSongDataApiToSongDto,
-	mapSongDataVariantApiToSongVariantDto,
+	mapExtendedVariantPackApiToDto,
+	mapGetVariantDataApiToSongDto,
 } from '../../../../../api/dtos'
-import { SongGettingApi } from '../../../../../api/generated'
 import { SmartParams } from '../../../../../routes'
-import { handleApiCall } from '../../../../../tech/handleApiCall'
-import SongContainer from './SongContainer'
 import { getVariantAliasFromParams, getVariantByAlias } from './tech'
 
 type SongRoutePageProps = {
@@ -29,91 +22,66 @@ type SongRoutePageProps = {
 
 export default SmartPage(SongRoutePage)
 
-function SongRoutePage({ params }: SongRoutePageProps) {
-	const alias = useMemo(() => {
-		return getVariantAliasFromParams(params.hex, params.alias)
-	}, [params.hex, params.alias])
+async function SongRoutePage({ params }: SongRoutePageProps) {
+	const alias = getVariantAliasFromParams(params.hex, params.alias)
 
-	const [song, setSong] = useState<SongDto>()
-	const [variantData, setVariantData] = useState<SongVariantDto>()
-	useEffect(() => {
-		const doFetchStuff = async () => {
-			const v = await getVariantByAlias(alias)
-			const variant = v.variants[0]
+	const v = await getVariantByAlias(alias)
+	const mainPack = v.main
 
-			const songGettingApi = new SongGettingApi()
+	const song = mapGetVariantDataApiToSongDto(v)
+	const variantData = mapExtendedVariantPackApiToDto(mainPack)
 
-			const data = await handleApiCall(
-				songGettingApi.songGettingControllerGetSongDataByVariantGuid(
-					variant.guid
-				)
-			)
-
-			const song = mapGetSongDataApiToSongDto(data)
-			const variantData = mapSongDataVariantApiToSongVariantDto(variant)
-
-			setSong(song)
-			setVariantData(variantData)
-
-			const s = new Sheet(variant.sheetData)
-
-			Analytics.track('VISIT_SONG', {
-				songGuid: song.guid,
-				variantGuid: variant.guid,
-				title: song.title,
-				hasChords: s.getKeyNote() !== null,
-			})
-		}
-		doFetchStuff()
-	}, [alias])
+	const showMedia = await checkFlag('show_media_on_song_page')
 	return (
-		<InnerSongProvider variantAlias={alias}>
-			<Box
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				position: 'relative',
+			}}
+		>
+			{/* Just a client analytics */}
+			<SongAnalyze data={variantData} />
+
+			<ContainerGrid
 				sx={{
+					marginTop: 2,
+					marginBottom: 2,
+					padding: 3,
+					backgroundColor: 'grey.200',
+					borderStyle: 'solid',
+					borderWidth: 1,
+					borderColor: 'grey.400',
+					borderRadius: 1,
+					flex: 1,
 					display: 'flex',
 					flexDirection: 'column',
-					alignItems: 'center',
+					displayPrint: 'none',
 					position: 'relative',
 				}}
 			>
-				<ContainerGrid
-					sx={{
-						marginTop: 2,
-						marginBottom: 2,
-						padding: 3,
-						backgroundColor: 'grey.200',
-						borderStyle: 'solid',
-						borderWidth: 1,
-						borderColor: 'grey.400',
-						borderRadius: 1,
-						flex: 1,
-						display: 'flex',
-						flexDirection: 'column',
-						displayPrint: 'none',
-						position: 'relative',
+				{Array.from({ length: 4 }).map((_, i) => (
+					<DraggableSong
+						key={i}
+						data={{
+							packGuid: variantData?.packGuid || ('' as VariantPackGuid),
+							title: variantData?.title || '',
+							alias: variantData?.packAlias || ('' as VariantPackAlias),
+						}}
+					>
+						<DragCorner index={i} />
+					</DraggableSong>
+				))}
+
+				<SongContainer
+					variant={variantData}
+					song={song}
+					flags={{
+						showMedia: showMedia,
 					}}
-				>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<DraggableSong
-							key={i}
-							data={{
-								packGuid: variantData?.packGuid || ('' as VariantPackGuid),
-								title: variantData?.preferredTitle || '',
-								alias: variantData?.packAlias || ('' as VariantPackAlias),
-							}}
-						>
-							<DragCorner index={i} />
-						</DraggableSong>
-					))}
-					{song && variantData ? (
-						<SongContainer variant={variantData} song={song} />
-					) : (
-						<>
-							<Typography>Načítání...</Typography>
-						</>
-					)}
-				</ContainerGrid>
-			</Box>
-		</InnerSongProvider>
+				/>
+			</ContainerGrid>
+		</Box>
 	)
 }

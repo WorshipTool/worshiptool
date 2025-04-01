@@ -3,5 +3,13 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always"
 	},
-	"diffEditor.codeLens": true
+	"diffEditor.codeLens": true,
+	"github.copilot.chat.commitMessageGeneration.instructions": [
+		{
+			"text": "Always start with prefix (feature, fix, refactor, chore) followed by a colon and a space."
+		},
+		{
+			"text": "the main message should be a short but descriptive and particular"
+		}
+	]
 }

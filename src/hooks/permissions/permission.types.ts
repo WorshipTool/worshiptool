@@ -26,3 +26,8 @@ export type PermissionDataType<
 	payload?: PermissionPayloadType<A, T>
 	guid?: string
 }
+
+export type UntypedPermissionDataType = PermissionDataType<
+	PermissionsTypes,
+	PermissionType<PermissionsTypes>
+>[]

@@ -8,6 +8,8 @@ import { Typography } from '@/common/ui/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FormEvent, ReactNode, useEffect, useRef, useState } from 'react'
 
+const POPUP_CONTENT_ID = 'popup-content'
+
 type PopupProps = {
 	open: boolean
 	onClose?: () => void
@@ -77,6 +79,20 @@ export default function Popup({
 		}
 	}, [onClose])
 
+	useEffect(() => {
+		if (open) {
+			const c: any = document.querySelector(`#${POPUP_CONTENT_ID}`)
+			c?.focus()
+		}
+
+		document.body.style.overflow = open ? 'hidden' : 'auto'
+		document.body.style.paddingRight = open ? '15px' : '0px'
+
+		return () => {
+			document.body.style.overflow = 'auto'
+		}
+	}, [open])
+
 	return ref.current && mounted ? (
 		<PopupContainer>
 			<AnimatePresence>
@@ -92,6 +108,9 @@ export default function Popup({
 							backgroundColor: alpha('#000', 0.5),
 							pointerEvents: 'auto',
 						}}
+						id={POPUP_CONTENT_ID}
+						tabIndex={0}
+						onKeyDown={(e) => e.stopPropagation()}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}

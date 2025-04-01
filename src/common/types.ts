@@ -13,3 +13,8 @@ export type PageProps<T extends RoutesKeys = RoutesKeys> = {
 export type MetadataProps<T extends RoutesKeys> = {
 	params: SmartParams<T>
 }
+
+export type ErrorPageProps = {
+	error: Error & { digest?: number }
+	reset: () => void
+}

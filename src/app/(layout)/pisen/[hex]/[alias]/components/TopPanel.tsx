@@ -1,24 +1,19 @@
-import AdminOption from '@/common/components/admin/AdminOption'
+import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
+import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
+import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/routes/routes.tech'
-import {
-	DomainVerification,
-	Language,
-	Polyline,
-	Public,
-	PublicOff,
-} from '@mui/icons-material'
+import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSnackbar } from 'notistack'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import {
 	CreatedType,
 	SongDto,
-	SongVariantDto,
 	VariantPackAlias,
 } from '../../../../../../api/dtos'
 import {
@@ -33,7 +28,6 @@ import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../../../tech/sheet.tech'
 import NotValidWarning from '../../../../vytvorit/napsat/components/NotValidWarning'
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
-import CreateCopyButton from './components/CreateCopyButton'
 import EditButton from './components/EditButton'
 import PrintVariantButton from './components/PrintButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
@@ -41,7 +35,7 @@ import TransposePanel from './TransposePanel'
 
 interface TopPanelProps {
 	transpose: (i: number) => void
-	variant: SongVariantDto
+	variant: ExtendedVariantPack
 	reloadSong: () => void
 	sheet: Sheet
 	title: string
@@ -57,11 +51,12 @@ interface TopPanelProps {
 
 export default function TopPanel(props: TopPanelProps) {
 	const { isAdmin, isTrustee, isLoggedIn, user, apiConfiguration } = useAuth()
-
 	const isOwner = useMemo(() => {
 		if (!user) return false
-		return props.variant.createdBy === user?.guid
+		return props.variant.createdByGuid === user?.guid
 	}, [user, props.variant])
+
+	const { song } = useInnerPackSong()
 
 	const { enqueueSnackbar } = useSnackbar()
 	const navigate = useSmartNavigate()
@@ -74,45 +69,11 @@ export default function TopPanel(props: TopPanelProps) {
 	} = useApiState<EditVariantOutDto>()
 
 	const anyChange = useMemo(() => {
-		const t = props.variant.preferredTitle !== props.editedTitle
+		const t = props.variant.title !== props.editedTitle
 		const s =
 			new Sheet(props.variant?.sheetData).toString() !== props.sheet?.toString()
 		return t || s
 	}, [props.sheet, props.editedTitle, props.variant])
-
-	const [languageGenerating, setLanguageGenerating] = React.useState(false)
-	const generateLanguage = async () => {
-		setLanguageGenerating(true)
-		try {
-			await handleApiCall(
-				songEditingApi.songEditingControllerChangeLanguage({
-					variantGuid: props.variant.guid,
-				})
-			)
-			// Reload page
-			window.location.reload()
-			enqueueSnackbar('Jazyk byl úspěšně dogenerován.')
-		} catch (e) {
-			enqueueSnackbar('Jazyk se nepodařilo dogenerovat.')
-		}
-		setLanguageGenerating(false)
-	}
-	const [keywordsGenerating, setKeywordsGenerating] = React.useState(false)
-	const generateKeyword = async () => {
-		setKeywordsGenerating(true)
-		try {
-			await handleApiCall(
-				songPublishingApi.songPublishingControllerGenerateKeywords({
-					variantGuid: props.variant.guid,
-				})
-			)
-			window.location.reload()
-			enqueueSnackbar('Klíčová slova byla úspěšně dogenerována.')
-		} catch (e) {
-			enqueueSnackbar('Klíčová slova se nepodařilo dogenerovat.')
-		}
-		setKeywordsGenerating(false)
-	}
 
 	const onEditClick = async (editable: boolean) => {
 		if (editable) {
@@ -139,7 +100,7 @@ export default function TopPanel(props: TopPanelProps) {
 			async (result) => {
 				await props.onEditClick?.(editable)
 				enqueueSnackbar(
-					`Píseň ${(props.variant.preferredTitle && ' ') || ''}byla upravena.`
+					`Píseň ${(props.variant.title && ' ') || ''}byla upravena.`
 				)
 				navigate('variant', {
 					...parseVariantAlias(result.alias as VariantPackAlias),
@@ -197,13 +158,9 @@ export default function TopPanel(props: TopPanelProps) {
 							transpose={props.transpose}
 							disabled={!Boolean(props.sheet?.getKeyChord())}
 						/>
-
 						{/* {isOwner && <VisibilityLabel public={props.variant.public} />} */}
-
 						<Box flex={1} />
-
 						{/* {isOwner && <VisibilityLabel public={props.variant.public} right />} */}
-
 						<Box display={'flex'} alignItems={'center'}>
 							{user && (
 								<HeartLikeButton
@@ -236,9 +193,8 @@ export default function TopPanel(props: TopPanelProps) {
 							/>
 						</Box>
 						{isLoggedIn() && (
-							<CreateCopyButton variantGuid={props.variant.guid} />
+							<CreateCopyButton packGuid={props.variant.packGuid} />
 						)}
-
 						{isOwner && !props.variant.public && (
 							<EditButton
 								onClick={onEditClick}
@@ -249,9 +205,7 @@ export default function TopPanel(props: TopPanelProps) {
 								title={props.editedTitle}
 							/>
 						)}
-
 						{isLoggedIn() && <AddToPlaylistButton variant={props.variant} />}
-
 						{!isSmall && (
 							<PrintVariantButton
 								params={{
@@ -265,19 +219,9 @@ export default function TopPanel(props: TopPanelProps) {
 				)}
 			</Box>
 
-			<AdminOption
-				label={props.variant.inFormat ? 'Správný formát' : 'Nevalidní formát'}
-				icon={<DomainVerification />}
-				onlyNotification
-			/>
+			<AllSongAdminOptions />
 
-			<AdminOption
-				label={props.variant.public ? 'Píseň je veřejná' : 'Soukromá píseň'}
-				icon={props.variant.public ? <Public /> : <PublicOff />}
-				onlyNotification
-			/>
-
-			{props.variant.public && (
+			{/* {props.variant.public && (
 				<>
 					{!props.variant.language && (
 						<>
@@ -291,7 +235,7 @@ export default function TopPanel(props: TopPanelProps) {
 							/>
 						</>
 					)}
-					{(!props.variant.tags || props.variant.tags.length === 0) && (
+					{(!song.tags || song.tags.length === 0) && (
 						<>
 							<AdminOption
 								title="Dogenerovat keywords"
@@ -304,7 +248,7 @@ export default function TopPanel(props: TopPanelProps) {
 						</>
 					)}
 				</>
-			)}
+			)} */}
 		</>
 	)
 }

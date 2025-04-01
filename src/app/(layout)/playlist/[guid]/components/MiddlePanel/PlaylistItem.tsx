@@ -58,11 +58,11 @@ export const PlaylistItem = memo(function A({
 	}, [items, itemGuid])
 
 	const sheet = useMemo(() => {
-		return new Sheet(item.variant.sheetData)
-	}, [item.variant.sheetData])
+		return new Sheet(item.pack.sheetData)
+	}, [item.pack.sheetData])
 	const title = useMemo(() => {
-		return item.variant.preferredTitle
-	}, [item.variant.preferredTitle])
+		return item.pack.title
+	}, [item.pack.title])
 	const [number, setNumber] = React.useState(0)
 
 	const rerender = () => {
@@ -102,7 +102,7 @@ export const PlaylistItem = memo(function A({
 				></Box>
 				<TopPlaylistItemPanel
 					itemGuid={item.guid}
-					packAlias={item.variant.packAlias}
+					packAlias={item.pack.packAlias}
 					sheet={sheet}
 					inEditMode={inEditMode}
 					setInEditMode={setInEditMode}

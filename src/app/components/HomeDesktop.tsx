@@ -2,6 +2,7 @@
 
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
+import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
@@ -10,12 +11,10 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import normalizeSearchText from '@/tech/string/normalizeSearchText'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
-import RecommendedSongsList from './components/RecommendedSongsList/RecommendedSongsList'
 import SearchedSongsList from './components/SearchedSongsList'
 
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
@@ -30,6 +29,7 @@ export default function HomeDesktop() {
 
 	// Manage search input, and url state with delay
 	const [searchString, setSearchString] = useUrlState('hledat')
+	// const [searchStringRaw, setSearchStringRaw] = useState(searchString || '')
 	const [searchInputValue, setSearchInputValue] = useState(searchString || '')
 
 	const onSearchValueChange = useCallback(
@@ -43,7 +43,9 @@ export default function HomeDesktop() {
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') setSearchString(normalizeSearchText(value))
+			if (value !== '') {
+				setSearchString(value)
+			}
 		},
 		[]
 	)
@@ -103,9 +105,7 @@ export default function HomeDesktop() {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
-	const SearchList = useMemo(() => {
-		return searchString && <SearchedSongsList searchString={searchString} />
-	}, [searchString])
+	const [smartSearch, setSmartSearch] = useState(false)
 
 	return (
 		<>
@@ -197,6 +197,8 @@ export default function HomeDesktop() {
 										gradientBorder={isTop && !phoneVersion}
 										value={searchInputValue}
 										onChange={onSearchValueChange}
+										smartSearch={smartSearch}
+										onSmartSearchChange={setSmartSearch}
 									/>
 								</Grid>
 							</Grid>
@@ -227,7 +229,12 @@ export default function HomeDesktop() {
 						transition: `all ${ANIMATION_DURATION}s ease`,
 					}}
 				>
-					{SearchList}
+					{searchString && (
+						<SearchedSongsList
+							searchString={searchString}
+							useSmartSearch={smartSearch}
+						/>
+					)}
 					<RecommendedSongsList />
 				</div>
 			</Box>

@@ -1,5 +1,5 @@
 import NoteContent from '@/app/(layout)/pisen/[hex]/[alias]/components/NoteContent'
-import { useInnerVariant } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
+import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
@@ -14,14 +14,14 @@ import { useEffect, useState } from 'react'
 
 export default function UserNotePanel() {
 	const { songNotesApi } = useApi()
-	const { guid: variantGuid } = useInnerVariant()
+	const { packGuid } = useInnerPack()
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
 			return handleApiCall(
-				songNotesApi.songNotesControllerGetNotesOfVariantAndUser(variantGuid)
+				songNotesApi.songNotesControllerGetNotesOfVariantAndUser(packGuid)
 			)
-		}, [songNotesApi, variantGuid])
+		}, [songNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
 
@@ -63,7 +63,7 @@ export default function UserNotePanel() {
 				return handleApiCall(
 					songNotesApi.songNotesControllerAddNoteToVariant({
 						content: cnt,
-						variantGuid,
+						packGuid,
 					})
 				)
 			},

@@ -7,21 +7,25 @@ import ContainerGrid from '../../../common/components/ContainerGrid'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
-import normalizeSearchText from '../../../tech/string/normalizeSearchText'
 
-import SongListCards from '@/common/components/songLists/SongListCards/SongListCards'
+import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
+import SmartSongListCards from '@/common/components/songLists/SongListCards/SmartSongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
-import { SongVariantDto } from '../../../api/dtos'
+import { SearchKey } from '@/types/song/search.types'
 
 interface SearchedSongsListProps {
 	searchString: string
+	useSmartSearch?: boolean
 }
 const controller = new AbortController()
 
 const SearchedSongsList = memo(function S({
 	searchString,
+	useSmartSearch,
 }: SearchedSongsListProps) {
+	console.log('SearchList generating')
+
 	const loadNextLevelRef = useRef(null)
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -33,23 +37,25 @@ const SearchedSongsList = memo(function S({
 	const func = useCallback(
 		(
 			page: number,
-			resolve: (a: SongVariantDto[]) => void,
-			arr: SongVariantDto[]
+			resolve: (a: SearchSongDto[]) => void,
+			arr: SearchSongDto[]
 		) => {
-			searchSongs({
-				searchKey: searchString,
+			searchSongs(searchString as SearchKey, {
 				page,
 				signal: controller.signal,
-			}).then((data) => {
-				const filtered = data.filter((v) => {
-					return !arr.find((s) => s.guid == v.guid)
-				})
-				setLoading(false)
-				setNextLoading(false)
-				resolve(filtered)
+				useSmartSearch,
 			})
+				.then((data) => {
+					setLoading(false)
+					setNextLoading(false)
+					resolve(data)
+				})
+				.catch(() => {
+					resolve([])
+					setNextLoading(false)
+				})
 		},
-		[searchString, searchSongs]
+		[searchString, searchSongs, useSmartSearch]
 	)
 
 	const {
@@ -58,7 +64,7 @@ const SearchedSongsList = memo(function S({
 		data: songs,
 		pagedData: pagedSongs,
 		nextExists,
-	} = usePagination<SongVariantDto>(func)
+	} = usePagination<SearchSongDto>(func)
 
 	useEffect(() => {
 		setEnableLoadNext(false)
@@ -74,39 +80,38 @@ const SearchedSongsList = memo(function S({
 		}
 	})
 	useChangeDelayer(
-		normalizeSearchText(searchString),
+		searchString,
 		(value) => {
-			loadPage(0, true).then(() => {
+			loadPage(0, true).finally(() => {
 				setEnableLoadNext(true)
 			})
 		},
 		[]
 	)
 
+	useEffect(() => {
+		loadPage(0, true).finally(() => {
+			setEnableLoadNext(true)
+		})
+	}, [useSmartSearch])
+
+	const showMoreButton =
+		!loading && songs.length > 0 && (nextExists || useSmartSearch)
+
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography strong>Výsledky vyhledávání:</Typography>
+				<Typography strong key={'results'}>
+					Výsledky vyhledávání:
+				</Typography>
 
 				{!loading && songs.length > 0 && (
-					<SongListCards
+					<SmartSongListCards
 						data={songs}
 						key={'songlistcards'}
-						properties={[
-							'SHOW_ADDED_BY_LOADER',
-							'SHOW_PRIVATE_LABEL',
-							// 'SHOW_YOUR_PUBLIC_LABEL',
-						]}
-					></SongListCards>
+						properties={['SHOW_ADDED_BY_LOADER', 'SHOW_PRIVATE_LABEL']}
+					></SmartSongListCards>
 				)}
-
-				{/* {!loading &&
-					songs.length > 0 &&
-					songs.map((song) => {
-						return (
-							<Typography key={song.packGuid}>{song.preferredTitle}</Typography>
-						)
-					})} */}
 			</>
 
 			<div ref={loadNextLevelRef}></div>
@@ -118,7 +123,7 @@ const SearchedSongsList = memo(function S({
 			)}
 
 			<>
-				{!loading && songs.length > 0 && nextExists && (
+				{showMoreButton && (
 					<>
 						<Box
 							sx={{

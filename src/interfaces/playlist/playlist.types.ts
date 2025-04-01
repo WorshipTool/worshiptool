@@ -1,5 +1,5 @@
 import { note } from '@pepavlin/sheet-api'
-import { SongVariantDto } from '../../api/dtos'
+import { BasicVariantPack } from '../../api/dtos'
 import { TeamGuid } from '../../app/(submodules)/(teams)/sub/tymy/tech'
 
 export type PlaylistGuid = string & { readonly brand: unique symbol }
@@ -19,5 +19,5 @@ export interface PlaylistItemDto {
 	guid: PlaylistItemGuid
 	toneKey: note
 	order: number
-	variant: SongVariantDto
+	pack: BasicVariantPack
 }

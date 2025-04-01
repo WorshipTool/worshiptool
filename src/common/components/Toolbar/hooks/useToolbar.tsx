@@ -20,9 +20,12 @@ export const ToolbarProvider = ({ children }: { children: ReactNode }) => {
 	return <toolbarContext.Provider value={p}>{children}</toolbarContext.Provider>
 }
 
+type ToolbarVariant = 'default' | 'dark' | 'transparent'
+
 export const useProvideToolbar = () => {
 	const [showTitle, setShowTitle] = useState(false)
 	const [_transparent, setTransparent] = useState(false)
+	const [dark, setDark] = useState(false)
 	const [_tempSolid, _setTempSolid] = useState(false)
 	const [whiteVersion, setWhiteVersion] = useState(false)
 	const [hideMiddleNavigation, setHideMiddleNavigation] = useState(false)
@@ -32,11 +35,17 @@ export const useProvideToolbar = () => {
 		return (_transparent && !_tempSolid) || hidden
 	}, [_transparent, hidden, _tempSolid])
 
+	const variant: ToolbarVariant = useMemo(() => {
+		return transparent ? 'transparent' : dark ? 'dark' : 'default'
+	}, [transparent, dark])
+
 	return {
 		showTitle,
 		setShowTitle,
 		transparent,
+		variant,
 		setTransparent,
+		setDark,
 		whiteVersion,
 		setWhiteVersion,
 		hideMiddleNavigation,

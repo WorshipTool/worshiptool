@@ -1,20 +1,19 @@
-import { SongGettingApi } from '../../../../../api/generated'
+import { useServerApi } from '@/hooks/api/useServerApi'
+import { GetVariantDataOutDto } from '../../../../../api/generated'
 import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 export const getVariantAliasFromParams = (hex: string, code: string) => {
 	return `${hex}-${code}`
 }
 
-export const getVariantByAlias = async (alias: string) => {
-	// const aliasApi = new UrlAliasApi()
-	const variantApi = new SongGettingApi()
-
-	const variantGuid = await handleApiCall(
-		variantApi.songGettingControllerGetVariantFromAlias(alias)
-	)
+/** Server side func */
+export const getVariantByAlias = async (
+	alias: string
+): Promise<GetVariantDataOutDto> => {
+	const { songGettingApi } = await useServerApi()
 
 	const variant = await handleApiCall(
-		variantApi.songGettingControllerGetSongDataByVariantGuid(variantGuid)
+		songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
 	)
 
 	return variant

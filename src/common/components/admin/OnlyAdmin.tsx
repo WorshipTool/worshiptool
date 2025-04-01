@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 type OnlyAdminProps = {
 	children?: React.ReactNode
 	notCollapse?: boolean
+	hideEnvelope?: boolean
 }
 
 export default function OnlyAdmin(props: OnlyAdminProps) {
@@ -16,7 +17,9 @@ export default function OnlyAdmin(props: OnlyAdminProps) {
 	const [collapsed, setCollapsed] = useState<boolean>(
 		!Boolean(props.notCollapse)
 	)
-	return (
+	return props.hideEnvelope ? (
+		props.children
+	) : (
 		<>
 			{isAdmin() ? (
 				<Tooltip

@@ -58,7 +58,7 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 		<Link
 			to="variant"
 			params={{
-				...parseVariantAlias(item.variant.packAlias),
+				...parseVariantAlias(item.pack.packAlias),
 			}}
 			onlyWithShift
 		>
@@ -75,7 +75,7 @@ export default function PanelItem({ itemGuid, itemIndex }: PanelItemProps) {
 							{itemIndex + 1}.
 						</Typography>
 						<StyledPanelButton onClick={() => onPanelItemClickCall(item.guid)}>
-							{item.variant.preferredTitle}
+							{item.pack.title}
 						</StyledPanelButton>
 					</>
 				) : (

@@ -49,9 +49,9 @@ function Page({ params, ...props }: PageProps<'playlistPrint'>) {
 	const items = data?.items
 		.sort((a, b) => a.order - b.order)
 		.map((item, index) => {
-			const sheet = new Sheet(item.variant.sheetData)
+			const sheet = new Sheet(item.pack.sheetData)
 			if (item.toneKey) sheet.setKey(item.toneKey as note)
-			const title = `${item.order + 1}.  ${item.variant.prefferedTitle}`
+			const title = `${item.order + 1}.  ${item.pack.title}`
 			return {
 				item: item,
 				sheet: sheet,
