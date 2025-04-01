@@ -13,7 +13,7 @@ export function FeatureFlagsProvider(props: Props) {
 	const { user } = useAuth()
 
 	const { client } = useClientAsyncInit(
-		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
+		process.env.NEXT_PUBLIC_STATSIG_API_KEY,
 		{},
 		{
 			plugins: [
