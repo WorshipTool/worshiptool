@@ -9,8 +9,8 @@ export default async (phase, { defaultConfig }) => {
 			process.env.NEXT_PUBLIC_STATSIG_API_KEY,
 			{}
 		)
-
 		await myStatsigClient.initializeAsync()
+
 
 		return myStatsigClient.checkGate(key)
 	}
