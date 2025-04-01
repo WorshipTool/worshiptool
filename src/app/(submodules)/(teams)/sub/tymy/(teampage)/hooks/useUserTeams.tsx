@@ -25,17 +25,19 @@ export default function useUserTeams() {
 			return result.teams
 		})
 			.then((r) => {
-				if (r) setData(r)
+				if (r) {
+					setData(r)
+				}
 			})
 			.catch(() => {})
 	}
 
 	const first = useRef(true)
 	useEffect(() => {
-		if (first.current) {
-			first.current = false
-			return
-		}
+		// if (first.current) {
+		// 	first.current = false
+		// 	return
+		// }
 		revalidate()
 	}, [user])
 
@@ -50,6 +52,7 @@ export default function useUserTeams() {
 			window.removeEventListener(EVENT_NAME_CHANGE_TEAM_LOGO, reload)
 		}
 	}, [])
+
 	return {
 		loading: apiState.loading,
 		teams: data,
