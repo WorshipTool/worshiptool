@@ -48,6 +48,7 @@ export async function middleware(request: NextRequest) {
 	if (shouldUseSubdomains()) {
 		const checkSub = await checkSubdomain(request, auth.user)
 		if (checkSub !== true) return checkSub
+	} else {
 	}
 
 	const url = request.nextUrl.clone()
@@ -195,6 +196,7 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 		{ alias },
 		{
 			subdomains: false,
+			relative: true,
 		}
 	)
 
