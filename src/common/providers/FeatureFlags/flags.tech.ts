@@ -57,7 +57,7 @@ export const checkFlag = async (
 	if (cachedValue !== null) return cachedValue
 
 	const myStatsigClient = new StatsigClient(
-		'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
+		process.env.NEXT_PUBLIC_STATSIG_API_KEY,
 		user ? userDtoToStatsigUser(user) : {}
 	)
 
