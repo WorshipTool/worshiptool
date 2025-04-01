@@ -9,8 +9,8 @@ export default async (phase, { defaultConfig }) => {
 			'client-GOgms4XNEEcqTZIdb8HglbeeQXITNSUPGQkOMD0nPFV',
 			{}
 		)
-
 		await myStatsigClient.initializeAsync()
+
 
 		return myStatsigClient.checkGate(key)
 	}
