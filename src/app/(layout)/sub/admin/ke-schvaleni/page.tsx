@@ -39,7 +39,7 @@ async function Page() {
 					}}
 				>
 					{packs.map((pack) => (
-						<ApprovalItem pack={pack} />
+						<ApprovalItem pack={pack} key={pack.packGuid} />
 					))}
 				</Box>
 			) : (

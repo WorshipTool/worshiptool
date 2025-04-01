@@ -29,7 +29,7 @@ async function Page() {
 			/>
 			<Box display={'flex'} flexDirection={'column'} gap={1}>
 				{packs.map((pack, index) => (
-					<Clickable>
+					<Clickable key={pack.packGuid}>
 						<Link to="variant" params={parseVariantAlias(pack.packAlias)}>
 							<Box
 								key={pack.packGuid}

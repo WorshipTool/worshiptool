@@ -71,7 +71,7 @@ export default function SongsOptionsButton(props: SongsOptionsButtonProps) {
 							marginBottom: 1,
 						}}
 					/>,
-					<SendToApproval />,
+					<SendToApproval key={'approval'} />,
 					<Divider key={'div-aunalk'} />,
 					<DeleteButton
 						key={'delete-button'}

@@ -34,6 +34,7 @@ export default function SendToApproval() {
 	return (
 		<>
 			<MenuItem
+				key={'send-to-approval item'}
 				title={'Zveřejnit'}
 				icon={<Publish />}
 				subtitle="Poslat píseň ke zveřejnění"
@@ -43,15 +44,21 @@ export default function SendToApproval() {
 			/>
 
 			<Popup
+				key={'send-to-approval popup'}
 				open={open}
 				onClose={() => setOpen(false)}
 				title="Zveřejnit"
 				onSubmit={send}
 				actions={[
-					<Button type="reset" outlined>
+					<Button type="reset" outlined key={'cancel'}>
 						Zrušit
 					</Button>,
-					<Button type="submit" color="primary" loading={apiState.loading}>
+					<Button
+						type="submit"
+						color="primary"
+						loading={apiState.loading}
+						key={'send'}
+					>
 						Ano, zveřejnit
 					</Button>,
 				]}
