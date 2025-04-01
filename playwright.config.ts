@@ -6,7 +6,7 @@ dotenv.config()
 export default defineConfig({
 	testDir: './tests/e2e',
 	webServer: {
-		command: 'npm run dev',
+		command: 'npm run build && npm run start',
 		port: 5500,
 		reuseExistingServer: !process.env.CI,
 	},
