@@ -6,7 +6,7 @@ import {
 	useOutsideBlockerLinkCheck,
 } from '@/common/ui/Link/useOutsideBlocker'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
-import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
+import { getComplexReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { styled, SxProps } from '@mui/material'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -49,31 +49,26 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 			}
 		}
 
-		const absoluteUrl = getReplacedUrlWithParams(
+		const absoluteUrl = getComplexReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
 			{
 				returnFormat: 'absolute',
+				subdomainAliases: aliases,
 			}
 		)
-		const relativeUrl = getReplacedUrlWithParams(
+		const relativeUrl = getComplexReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
 			{
 				returnFormat: 'relative',
 				returnSubdomains: 'never',
+				subdomainAliases: aliases,
 			}
 		)
 
-		//TODO: what if absoluteUrl contains subdomain-formatted url?
-		const urlWithAliases = getUrlWithSubdomainPathnameAliases(
-			absoluteUrl,
-			aliases
-		)
-		console.log('urlWithAliases', urlWithAliases, absoluteUrl, aliases)
-
 		return {
-			url: urlWithAliases,
+			url: absoluteUrl,
 			relativeUrl,
 		}
 	}, [
