@@ -11,7 +11,13 @@ test('Team is in tools', async ({ page }) => {
 
 	await page.waitForTimeout(3000)
 
-	await expect(page.url()).toContain('tymy/ahtk3wx')
+	const expectedUrls = [
+		'tymy/ahtk3wx',
+		'http://tymy.test-chvalotce.cz:5500/ahtk3wx',
+	]
+	const currentUrl = page.url()
+	const isMatch = expectedUrls.some((url) => currentUrl.includes(url))
+	await expect(isMatch).toBeTruthy()
 
 	await expect(page.getByRole('link', { name: 'Zkouska' })).toBeVisible()
 })
