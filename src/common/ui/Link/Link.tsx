@@ -63,7 +63,8 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 			{
 				returnFormat: 'relative',
 				returnSubdomains: 'never',
-				subdomainAliases: aliases,
+				// Dont use subdomain aliases for relative urls!
+				// because this is used for link blockers
 			}
 		)
 
