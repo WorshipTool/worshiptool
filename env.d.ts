@@ -9,6 +9,7 @@ declare namespace NodeJS {
 		NEXT_PUBLIC_DISABLE_WEBSOCKETS: 'true' | 'false' | undefined
 
 		NEXT_PUBLIC_STATSIG_API_KEY: string
+		STATSTIG_SERVER_SECRET_KEY: string
 
 		useSubdomains: 'true' | 'false' // Handle by feature-flag
 	}

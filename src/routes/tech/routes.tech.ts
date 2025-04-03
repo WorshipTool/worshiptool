@@ -3,11 +3,12 @@ import { UserDto } from '@/interfaces/user'
 import { routesPaths } from '@/routes/routes'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 
-// Its possible to send user, but its not used
+/**
+ * Its possible to send user, but its not used
+ * UseSubdomain flag is not possible use more dynamicly, beacuse this func is used in middleware also
+ * */
 export const shouldUseSubdomains = (user?: UserDto) => {
-	return false
-	const v = process.env.useSubdomains === 'true'
-	return v
+	return process.env.useSubdomains === 'true'
 }
 
 export const urlMatchPatterns = (

@@ -7,10 +7,17 @@ export default async (phase, { defaultConfig }) => {
 	const checkFlag = async (key) => {
 		const myStatsigClient = new StatsigClient(
 			process.env.NEXT_PUBLIC_STATSIG_API_KEY,
-			{}
+			{},
+			{
+				environment: {
+					tier:
+						process.env.NODE_ENV === 'development'
+							? 'development'
+							: 'production',
+				},
+			}
 		)
 		await myStatsigClient.initializeAsync()
-
 
 		return myStatsigClient.checkGate(key)
 	}

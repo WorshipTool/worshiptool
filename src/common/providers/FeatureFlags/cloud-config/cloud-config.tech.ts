@@ -3,26 +3,21 @@ import {
 	BasicCloudConfig,
 } from '@/common/providers/FeatureFlags/cloud-config/cloud-config.types'
 import { userDtoToStatsigUser } from '@/common/providers/FeatureFlags/flags.tech'
+import { ensureStatsigInitialized } from '@/common/providers/FeatureFlags/statsig/statsig.config'
 import { UserDto } from '@/interfaces/user'
-import { StatsigClient } from '@statsig/js-client'
-import { getEnvironmentStatsigConfig } from '../flags.tech'
+import Statsig from 'statsig-node'
 
 export const getCloudConfig = async <T extends keyof BasicCloudConfig>(
 	key: T,
 	defaultValue: BasicCloudConfig[T],
 	user?: UserDto
 ): Promise<BasicCloudConfig[T]> => {
-	const myStatsigClient = new StatsigClient(
-		process.env.NEXT_PUBLIC_STATSIG_API_KEY,
-		user ? userDtoToStatsigUser(user) : {},
-		{
-			...getEnvironmentStatsigConfig(),
-		}
+	await ensureStatsigInitialized()
+
+	const config = Statsig.getConfig(
+		userDtoToStatsigUser(user),
+		BASIC_CLOUD_CONFIG_NAME
 	)
-
-	await myStatsigClient.initializeAsync()
-
-	const config = myStatsigClient.getDynamicConfig(BASIC_CLOUD_CONFIG_NAME)
 
 	const value = (config.value[key] as BasicCloudConfig[T]) ?? defaultValue
 	return value
