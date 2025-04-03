@@ -24,8 +24,6 @@ const SearchedSongsList = memo(function S({
 	searchString,
 	useSmartSearch,
 }: SearchedSongsListProps) {
-	console.log('SearchList generating')
-
 	const loadNextLevelRef = useRef(null)
 
 	const [loading, setLoading] = useState<boolean>(false)

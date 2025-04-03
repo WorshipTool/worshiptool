@@ -1,5 +1,6 @@
 import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
 import { ROLES, UserDto } from '@/interfaces/user'
+import { isDevelopment } from '@/tech/development.tech'
 
 import { StatsigClient, StatsigUser } from '@statsig/js-client'
 // import dotenv from 'dotenv'
@@ -21,6 +22,12 @@ export const userDtoToStatsigUser = (user?: UserDto): StatsigUser => {
 		},
 	}
 }
+
+export const getEnvironmentStatsigConfig = () => ({
+	environment: {
+		tier: isDevelopment ? 'development' : 'production',
+	},
+})
 
 const cache: Record<string, { value: boolean; expiresAt: number }> = {}
 const CACHE_DURATION_MS = 60 * 1000 // 1 minuta
@@ -53,19 +60,22 @@ export const checkFlag = async (
 	key: FeatureFlag,
 	user?: UserDto
 ): Promise<boolean> => {
-	const cachedValue = getFlagWithCache(key, user)
-	if (cachedValue !== null) return cachedValue
+	// const cachedValue = getFlagWithCache(key, user)
+	// if (cachedValue !== null) return cachedValue
 
 	const myStatsigClient = new StatsigClient(
 		process.env.NEXT_PUBLIC_STATSIG_API_KEY,
-		user ? userDtoToStatsigUser(user) : {}
+		user ? userDtoToStatsigUser(user) : {},
+		{
+			...getEnvironmentStatsigConfig(),
+		}
 	)
 
 	await myStatsigClient.initializeAsync()
 
 	const value = myStatsigClient.checkGate(key as string)
 
-	saveFlagToCache(key, value, user)
+	// saveFlagToCache(key, value, user)
 
 	return value
 }

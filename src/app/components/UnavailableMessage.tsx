@@ -1,5 +1,5 @@
 'use client'
-import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
+import { useCloudConfig } from '@/common/providers/FeatureFlags/cloud-config/useCloudConfig'
 import { Box } from '@/common/ui'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
@@ -8,11 +8,9 @@ import { useEffect, useState } from 'react'
 import { Gap } from '../../common/ui/Gap/Gap'
 
 export default function UnavailableMessage() {
-	const [isUnvailable, setIsUnvailable] = useState(
-		process.env.NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE === 'true'
-	)
+	const [isUnavailable, setIsUnvailable] = useState(false)
 
-	const flagEnabled = useFlag('app_temporarily_unavailable')
+	const flagEnabled = useCloudConfig('APP_TEMPORARILY_UNAVAILABLE', false)
 	useEffect(() => {
 		if (flagEnabled) setIsUnvailable(flagEnabled)
 	}, [flagEnabled])
@@ -42,7 +40,7 @@ export default function UnavailableMessage() {
 	const padding = '0rem'
 	return (
 		<>
-			{isUnvailable && (
+			{isUnavailable && (
 				<Card
 					style={{
 						position: 'fixed',

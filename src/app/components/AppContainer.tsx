@@ -1,5 +1,5 @@
 import AppLayout from '@/common/components/app/AppLayout/AppLayout'
-import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
+import { getCloudConfig } from '@/common/providers/FeatureFlags/cloud-config/cloud-config.tech'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
 
 type AppContainerProps = {
@@ -7,7 +7,7 @@ type AppContainerProps = {
 }
 
 export async function AppContainer(props: AppContainerProps) {
-	const showLoadingScreen = await checkFlag('show_loading_screen')
+	const showLoadingScreen = await getCloudConfig('SHOW_LOADING_SCREEN', true)
 	return (
 		<>
 			{/* <Snow /> */}

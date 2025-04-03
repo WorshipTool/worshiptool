@@ -5,6 +5,7 @@ import { StatsigProvider, useClientAsyncInit } from '@statsig/react-bindings'
 import { StatsigSessionReplayPlugin } from '@statsig/session-replay'
 import { StatsigAutoCapturePlugin } from '@statsig/web-analytics'
 import { useEffect } from 'react'
+import { getEnvironmentStatsigConfig } from './flags.tech'
 type Props = {
 	children: React.ReactNode
 }
@@ -20,6 +21,8 @@ export function FeatureFlagsProvider(props: Props) {
 				new StatsigAutoCapturePlugin(),
 				new StatsigSessionReplayPlugin(),
 			],
+			...getEnvironmentStatsigConfig(),
+			disableStorage: true,
 		}
 	)
 
