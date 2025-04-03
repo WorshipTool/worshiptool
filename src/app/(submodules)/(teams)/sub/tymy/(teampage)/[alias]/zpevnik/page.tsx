@@ -6,8 +6,8 @@ import FloatingPlaylist from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[al
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamSongList } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/zpevnik/components/TeamSongList'
 import { RoutesKeys, SmartParams } from '@/routes'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartParams } from '@/routes/useSmartParams'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { useCallback } from 'react'
 import './styles.css'
 

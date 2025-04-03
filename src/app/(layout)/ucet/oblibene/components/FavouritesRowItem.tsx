@@ -3,8 +3,8 @@ import Menu from '@/common/components/Menu/Menu'
 import { Box, Chip, IconButton, Tooltip, Typography } from '@/common/ui'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { useFavourites } from '@/hooks/favourites/useFavourites'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
 	KeyboardArrowLeft,
 	MoreHoriz,

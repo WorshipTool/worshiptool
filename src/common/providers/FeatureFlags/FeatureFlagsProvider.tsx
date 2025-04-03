@@ -22,7 +22,6 @@ export function FeatureFlagsProvider(props: Props) {
 				new StatsigSessionReplayPlugin(),
 			],
 			...getEnvironmentStatsigConfig(),
-			disableStorage: true,
 		}
 	)
 

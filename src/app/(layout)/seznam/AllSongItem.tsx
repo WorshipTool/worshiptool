@@ -5,8 +5,8 @@ import { Paper, styled } from '@/common/ui/mui'
 import { heartColor } from '@/common/ui/SongCard/components/HeartLikeButton'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import useFavourite from '@/hooks/favourites/useFavourite'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { Favorite } from '@mui/icons-material'
 
 const StyledPaper = styled(Paper)(({ theme }) => ({

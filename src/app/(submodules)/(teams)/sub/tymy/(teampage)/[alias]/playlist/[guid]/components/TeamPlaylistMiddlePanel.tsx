@@ -4,7 +4,7 @@ import CannotEditOnPhone from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[a
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
-import { parseVariantAlias } from '@/routes/routes.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { useMemo } from 'react'
 
 export default function TeamPlaylistMiddlePanel() {

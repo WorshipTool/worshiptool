@@ -1,6 +1,6 @@
 'use client'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
-import { urlMatchPatterns } from '@/routes/routes.tech'
+import { urlMatchPatterns } from '@/routes/tech/routes.tech'
 import { routesPaths } from './routes'
 import { RoutesKeys } from './routes.types'
 

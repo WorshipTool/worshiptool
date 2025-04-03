@@ -1,6 +1,6 @@
 'use server'
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
-import { urlMatchPatterns } from '@/routes/routes.tech'
+import { urlMatchPatterns } from '@/routes/tech/routes.tech'
 import { routesPaths } from './routes'
 import { RoutesKeys } from './routes.types'
 

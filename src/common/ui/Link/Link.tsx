@@ -1,13 +1,12 @@
 'use client'
 import { Box } from '@/common/ui/Box'
 import BlockLinkPopup from '@/common/ui/Link/BlockLinkPopup'
-import { getUrlWithSubdomainPathnameAliases } from '@/common/ui/Link/link.tech'
 import {
 	LinkBlockerPopupData,
 	useOutsideBlockerLinkCheck,
 } from '@/common/ui/Link/useOutsideBlocker'
-import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
+import { getComplexReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { styled, SxProps } from '@mui/material'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -50,31 +49,26 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 			}
 		}
 
-		const absoluteUrl = getReplacedUrlWithParams(
+		const absoluteUrl = getComplexReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
 			{
-				absolute: true,
+				returnFormat: 'absolute',
+				subdomainAliases: aliases,
 			}
 		)
-		const relativeUrl = getReplacedUrlWithParams(
+		const relativeUrl = getComplexReplacedUrlWithParams(
 			routesPaths[props.to] || '/',
 			(props.params as Record<string, string>) || {},
 			{
-				subdomains: false,
-				relative: true,
+				returnFormat: 'relative',
+				returnSubdomains: 'never',
+				subdomainAliases: aliases,
 			}
-		)
-
-		// Check aliases and change absoluteUrl to subdomain if needed
-		// Relative url let as is
-		const urlWithAliases = getUrlWithSubdomainPathnameAliases(
-			absoluteUrl,
-			aliases
 		)
 
 		return {
-			url: urlWithAliases,
+			url: absoluteUrl,
 			relativeUrl,
 		}
 	}, [

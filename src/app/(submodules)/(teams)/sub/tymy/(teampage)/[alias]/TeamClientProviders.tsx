@@ -3,7 +3,7 @@ import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/u
 import AppSongSelectSpecifierProvider from '@/app/components/components/AppSongSelectSpecifierProvider'
 import OutsideLinkBlocker from '@/common/ui/Link/OutsideLinkBlocker'
 import { routesPaths, SmartAllParams } from '@/routes'
-import { urlMatchPatterns } from '@/routes/routes.tech'
+import { urlMatchPatterns } from '@/routes/tech/routes.tech'
 import React from 'react'
 
 type Props = {

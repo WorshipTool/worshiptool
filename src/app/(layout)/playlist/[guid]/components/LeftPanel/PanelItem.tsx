@@ -1,6 +1,6 @@
 import { Box, Typography } from '@/common/ui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
-import { parseVariantAlias } from '@/routes/routes.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { styled } from '@mui/system'
 import { useMemo } from 'react'
 import { Link } from '../../../../../../common/ui/Link/Link'

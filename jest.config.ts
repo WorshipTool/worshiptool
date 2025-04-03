@@ -17,6 +17,7 @@ const config: Config = {
 	// },
 	// moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
 	// transformIgnorePatterns: ['/node_modules/'],
+	testMatch: ['<rootDir>/src/**/*.(test|spec).(ts|tsx)'],
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

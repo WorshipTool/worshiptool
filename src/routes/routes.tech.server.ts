@@ -1,6 +1,6 @@
 import { routesPaths } from '@/routes/routes'
-import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
+import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { redirect } from 'next/navigation'
 
 export const smartRedirect = <T extends RoutesKeys>(
@@ -14,7 +14,9 @@ export const smartRedirect = <T extends RoutesKeys>(
 	const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
 	const urlWithParams =
 		Object.keys(params).length > 0
-			? getReplacedUrlWithParams(toUrl, params)
+			? getReplacedUrlWithParams(toUrl, params, {
+					returnFormat: 'absolute',
+			  })
 			: toUrl
 
 	redirect(urlWithParams)

@@ -1,7 +1,9 @@
 'use client'
 import SongCardDragTemplate from '@/common/ui/SongCard/SongCardDragTemplate'
 import { DragSongDto, SONG_DRAG_DATA_TYPE } from '@/hooks/dragsong/tech'
-import { getRouteUrlWithParams, parseVariantAlias } from '@/routes/routes.tech'
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
+
 import React, {
 	DragEventHandler,
 	useCallback,

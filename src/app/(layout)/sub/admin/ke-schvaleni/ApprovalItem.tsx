@@ -2,9 +2,9 @@
 import { Box, Button, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { useApi } from '@/hooks/api/useApi'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { ChevronRight } from '@mui/icons-material'
 

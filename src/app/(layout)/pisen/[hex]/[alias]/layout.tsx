@@ -1,5 +1,5 @@
 'use server'
-import { getRouteUrlWithParams } from '@/routes/routes.tech'
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
 import { notFound } from 'next/navigation'
