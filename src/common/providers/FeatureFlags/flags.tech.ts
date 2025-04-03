@@ -1,4 +1,5 @@
 import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
+import { ensureStatsigInitialized } from '@/common/providers/FeatureFlags/statsig/statsig.config'
 import { ROLES, UserDto } from '@/interfaces/user'
 import { isDevelopment } from '@/tech/development.tech'
 
@@ -71,6 +72,8 @@ export const checkFlag = async (
 	key: FeatureFlag,
 	user?: UserDto
 ): Promise<boolean> => {
+	await ensureStatsigInitialized()
+
 	const userData = userDtoToStatsigUser(user)
 
 	const value = Statsig.checkGate(userData, key as string)
