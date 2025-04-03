@@ -14,14 +14,16 @@ test('Vyhledávání podle názvu', async ({ page }) => {
 	await page.goto('/')
 
 	// Vyhledáme podle názvu
-	await searchWithSearchBar('Oceány', page)
+	await searchWithSearchBar('Vira', page)
 
 	// Existuje výsledek
 
-	const textPisne = await page.getByRole('link', {
-		name: 'Oceány Voláš nás do mořských hlubin, těch neznámých, dalekých. Tam tě najdu, tam jsi skrytý, v hlubinách budu s vírou stát.',
-	})
-	await expect(textPisne.first()).toBeVisible()
+	const textPisne = await page
+		.getByRole('link', {
+			name: 'Kde je zápis ptačí melodie?',
+		})
+		.first()
+	await expect(textPisne).toBeVisible()
 
 	// 4. Klikneme na výsledek
 	await textPisne.click()
@@ -30,7 +32,7 @@ test('Vyhledávání podle názvu', async ({ page }) => {
 	await expect(page).toHaveURL(/\/pisen\/[a-z0-9-]+/)
 
 	// 6. Zobrazí se text písně
-	const newText = await page.locator('text=/.*Voláš.*/i').first()
+	const newText = await page.locator('text=/.*Kde.*/i').first()
 	await expect(newText).toBeVisible()
 })
 
