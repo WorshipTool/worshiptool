@@ -8,8 +8,8 @@ import { Box, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { RoutesKeys, SmartParams } from '@/routes'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { useCallback, useEffect, useState } from 'react'
 
 export default function Page(props: PageProps<'teamPublic'>) {

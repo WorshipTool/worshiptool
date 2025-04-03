@@ -1,6 +1,6 @@
 import { openNewPrintWindow } from '@/app/(nolayout)/(print)/print.tech'
 import { useTheme } from '@/common/ui'
-import { getReplacedUrlWithParams } from '@/routes/routes.tech'
+import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { Print } from '@mui/icons-material'
 import { Button } from '../../../../../../../common/ui/Button'
 import { IconButton } from '../../../../../../../common/ui/IconButton'

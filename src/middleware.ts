@@ -12,11 +12,9 @@ import {
 } from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
 import { routesPaths } from '@/routes'
-import {
-	getReplacedUrlWithParams,
-	shouldUseSubdomains,
-} from '@/routes/routes.tech'
 import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
+import { shouldUseSubdomains } from '@/routes/tech/routes.tech'
+import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { safeFetch } from '@/tech/fetch/fetch'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
@@ -98,7 +96,10 @@ const checkSubdomain = async (
 			const aPathname = getReplacedUrlWithParams(
 				FRONTEND_URL + url,
 				{ subdomain },
-				{ subdomains: false, relative: true }
+				{
+					returnSubdomains: 'never',
+					returnFormat: 'relative',
+				}
 			)
 
 			pathname = aPathname + pathname
@@ -195,8 +196,8 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 		routesPaths.team,
 		{ alias },
 		{
-			subdomains: false,
-			relative: true,
+			returnFormat: 'relative',
+			returnSubdomains: 'never',
 		}
 	)
 

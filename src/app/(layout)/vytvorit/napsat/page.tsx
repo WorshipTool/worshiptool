@@ -7,7 +7,7 @@ import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, Button, Tooltip } from '@/common/ui'
 import { styled } from '@/common/ui/mui'
-import { parseVariantAlias } from '@/routes/routes.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -82,7 +82,6 @@ function Create() {
 		)
 	}
 
-
 	const isSmall = useDownSize('sm')
 
 	return (
@@ -124,7 +123,6 @@ function Create() {
 							>
 								<WrittenPreview sheet={sheet} title={title} />
 							</Box>
-
 						</StyledContainer>
 
 						<Gap />

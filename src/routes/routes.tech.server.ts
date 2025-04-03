@@ -1,6 +1,6 @@
 import { routesPaths } from '@/routes/routes'
-import { getReplacedUrlWithParams } from '@/routes/routes.tech'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
+import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { redirect } from 'next/navigation'
 
 export const smartRedirect = <T extends RoutesKeys>(

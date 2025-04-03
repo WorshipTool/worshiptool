@@ -1,5 +1,7 @@
 import { VariantPackAlias } from '@/api/dtos'
-import { getRouteUrlWithParams, parseVariantAlias } from '@/routes/routes.tech'
+
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import type { MetadataRoute } from 'next'
 import { GetListSongData, SongGettingApi } from '../api/generated'
 import { routesPaths } from '../routes/routes'

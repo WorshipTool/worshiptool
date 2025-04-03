@@ -2,7 +2,8 @@ import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlayl
 import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Button } from '@/common/ui/Button'
-import { getRouteUrlWithParams } from '@/routes/routes.tech'
+
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { Share } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'

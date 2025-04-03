@@ -2,7 +2,8 @@
 import { Box, CircularProgress, Image, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { SxProps } from '@/common/ui/mui'
-import { getRouteUrlWithParams } from '@/routes/routes.tech'
+
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useState } from 'react'
 

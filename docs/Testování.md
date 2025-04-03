@@ -1,4 +1,4 @@
-Většina základních testů bude provedena pomocí Playwright
+Většina základních testů bude provedena pomocí Playwright a jest. Playwright pouzivam pro end to end testovani, jest na mensi testovani funkci
 
 Co chci vsechno testovat?
 

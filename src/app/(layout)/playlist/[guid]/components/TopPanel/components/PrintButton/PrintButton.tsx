@@ -4,7 +4,7 @@ import { useDownSize } from '@/common/hooks/useDownSize'
 import { IconButton } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { SmartAllParams, routesPaths } from '@/routes'
-import { getReplacedUrlWithParams } from '@/routes/routes.tech'
+import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { Print } from '@mui/icons-material'
 
 export default function PrintButton() {

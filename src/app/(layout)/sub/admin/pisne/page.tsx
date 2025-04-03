@@ -7,7 +7,7 @@ import { Masonry } from '@/common/ui/Masonry'
 import SongGroupCard from '@/common/ui/SongCard/SongGroupCard'
 import useSongSearchPaginated from '@/hooks/song/useSongSearchPaginated'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
-import { parseVariantAlias } from '@/routes/routes.tech'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { Add } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 export default SmartPage(Page, [

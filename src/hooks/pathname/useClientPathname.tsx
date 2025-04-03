@@ -1,8 +1,9 @@
 'use client'
 import { useClientHostname } from '@/hooks/pathname/useClientHostname'
-import { getPathnameFromUrl, getRouteUrlWithParams } from '@/routes/routes.tech'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
+import { getPathnameFromUrl } from '@/routes/tech/routes.tech'
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { useCookies } from 'next-client-cookies'
 import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
@@ -45,7 +46,7 @@ export const useClientPathname = (): string => {
 					'subdomain',
 					{ subdomain },
 					{
-						subdomains: false,
+						returnSubdomains: 'never',
 					}
 				) + appliedAliases
 			appliedAliases = getPathnameFromUrl(url)

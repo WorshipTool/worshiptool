@@ -4,8 +4,8 @@ import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { useServerApi } from '@/hooks/api/useServerApi'
-import { parseVariantAlias } from '@/routes/routes.tech'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
+import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 
 export default SmartPage(Page, [
 	'fullWidth',

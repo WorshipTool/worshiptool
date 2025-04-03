@@ -8,8 +8,8 @@ import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useI
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
 import { useServerApi } from '@/hooks/api/useServerApi'
-import { makeVariantAlias } from '@/routes/routes.tech'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
+import { makeVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SongGuid } from '@/types/song'
 
 export default async function layout(props: LayoutProps<'adminPack'>) {

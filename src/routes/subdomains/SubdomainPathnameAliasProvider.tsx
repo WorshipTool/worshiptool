@@ -1,5 +1,6 @@
 import { useCommonData } from '@/hooks/common-data/useCommonData'
-import { getRouteUrlWithParams } from '@/routes/routes.tech'
+
+import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { createContext, useContext, useMemo } from 'react'
 
 type Rt = ReturnType<typeof useProvideSubdomainPathnameAlias>
@@ -44,8 +45,8 @@ const useProvideSubdomainPathnameAlias = () => {
 				'team',
 				{ alias: alias.teamAlias },
 				{
-					subdomains: false,
-					relative: true,
+					returnSubdomains: 'never',
+					returnFormat: 'relative',
 				}
 			)
 
