@@ -13,9 +13,8 @@ export default defineConfig({
 		port: 5500,
 		reuseExistingServer: !process.env.CI,
 		timeout: 120 * 1000, // 2 minutes
-		env: {
-			LOG_LEVEL: 'silent', // Disable logs from the webserver
-		},
+		// "stdout": "ignore",
+		stderr: 'ignore',
 	},
 	use: {
 		baseURL: 'http://test-chvalotce.cz:5500/',
