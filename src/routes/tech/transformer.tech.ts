@@ -1,8 +1,13 @@
 import { FRONTEND_URL } from '@/api/constants'
 import { routesPaths } from '@/routes/routes'
 import { ParamValueType, RoutesKeys, SmartParams } from '@/routes/routes.types'
+import { SubdomainData } from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { shouldUseSubdomains } from '@/routes/tech/routes.tech'
-import { changeUrlToSubdomains } from '@/routes/tech/subdomains.tech'
+import {
+	changeUrlToSubdomains,
+	getUrlWithSubdomainPathnameAliases,
+} from '@/routes/tech/subdomains.tech'
+import { isUrlAbsolute } from '@/tech/url/url.tech'
 
 /**
  * Get url from pretyped-route with given parameters.
@@ -18,19 +23,45 @@ export const getRouteUrlWithParams = <T extends RoutesKeys>(
 	return result
 }
 
+type GetComplexReplacedUrlWithParamsOptions =
+	GetReplacedUrlWithParamsOptions & {
+		subdomainAliases?: SubdomainData[]
+	}
+
+export const getComplexReplacedUrlWithParams = (
+	url: string,
+	params: { [key: string]: ParamValueType | undefined },
+	_options: GetComplexReplacedUrlWithParamsOptions = {}
+) => {
+	const absoluteUrl = getReplacedUrlWithParams(url, params, {
+		..._options,
+		returnSubdomains: 'never',
+	})
+
+	const urlWithAliases = getUrlWithSubdomainPathnameAliases(
+		absoluteUrl,
+		_options.subdomainAliases || []
+	)
+
+	if (_options.returnSubdomains === 'never') return urlWithAliases
+
+	return getReplacedUrlWithParams(urlWithAliases, {}, _options)
+}
+
 /**
  * Options for generating a replaced URL with parameters.
  *
  * @property subdomains - Whether to return url as subdomains.
  */
-type GetReplacedUrlWithParamsOptions = {
-	returnSubdomains?: 'auto' | 'never'
+export type GetReplacedUrlWithParamsOptions = {
+	returnSubdomains?: 'auto' | 'never' | 'always'
 	returnFormat?: 'absolute' | 'relative'
 }
 
 /**
  * Generates a URL with replaced parameters and optional query parameters.
  * It also transform subdomains if needed.
+ * If the URL is relative, it will be transformed to relative, if no other options are given.
  * Warning: It does not handle subdomain aliases!
  */
 export const getReplacedUrlWithParams = (
@@ -41,17 +72,21 @@ export const getReplacedUrlWithParams = (
 	// Defaults
 	const options = {
 		returnSubdomains: 'auto',
-		returnFormat: 'absolute',
+		returnFormat: isUrlAbsolute(url) ? 'absolute' : 'relative',
 		..._options,
 	}
 
 	const returnAbsolute = options.returnFormat === 'absolute'
-	const _subdomains = options.returnSubdomains === 'auto'
-	const subdomains = _subdomains ? shouldUseSubdomains() : _subdomains // If auto, func transform subdomains in
+	const _subdomains =
+		options.returnSubdomains === 'auto' || options.returnSubdomains === 'always'
+	const subdomains = _subdomains
+		? options.returnSubdomains === 'always' || shouldUseSubdomains()
+		: _subdomains // If auto, func transform subdomains
 
 	// Check options
 	if (!returnAbsolute && _subdomains)
-		throw new Error('Cannot use subdomains without absolute url')
+		throw new Error(`Please set transforming to subdomains or make sure that you return relative url.
+                        Cannot use subdomains without absolute url`)
 
 	const queryParams: Record<string, ParamValueType> = {}
 

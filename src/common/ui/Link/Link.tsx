@@ -1,7 +1,6 @@
 'use client'
 import { Box } from '@/common/ui/Box'
 import BlockLinkPopup from '@/common/ui/Link/BlockLinkPopup'
-import { getUrlWithSubdomainPathnameAliases } from '@/common/ui/Link/link.tech'
 import {
 	LinkBlockerPopupData,
 	useOutsideBlockerLinkCheck,

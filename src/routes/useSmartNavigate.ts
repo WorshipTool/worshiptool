@@ -1,7 +1,7 @@
 'use client'
 // import { useNavigate } from "react-router-dom";
-import { getUrlWithSubdomainPathnameAliases } from '@/common/ui/Link/link.tech'
 import useSubdomainPathnameAlias from '@/routes/subdomains/SubdomainPathnameAliasProvider'
+import { getUrlWithSubdomainPathnameAliases } from '@/routes/tech/link.tech'
 import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
 import { NavigateOptions as NO } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
