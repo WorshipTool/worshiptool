@@ -14,7 +14,9 @@ export const smartRedirect = <T extends RoutesKeys>(
 	const toUrl = typeof to === 'string' ? routesPaths[to] : to.url
 	const urlWithParams =
 		Object.keys(params).length > 0
-			? getReplacedUrlWithParams(toUrl, params)
+			? getReplacedUrlWithParams(toUrl, params, {
+					returnFormat: 'absolute',
+			  })
 			: toUrl
 
 	redirect(urlWithParams)

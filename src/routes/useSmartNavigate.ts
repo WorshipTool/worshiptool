@@ -28,7 +28,7 @@ export const useSmartNavigate = () => {
 		const urlWithAliases =
 			Object.keys(params).length > 0
 				? getComplexReplacedUrlWithParams(toUrl, params, {
-						returnFormat: 'relative',
+						returnFormat: 'absolute',
 						subdomainAliases: aliases,
 				  })
 				: toUrl

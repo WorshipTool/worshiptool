@@ -5,20 +5,21 @@ import { Print } from '@mui/icons-material'
 import { Button } from '../../../../../../../common/ui/Button'
 import { IconButton } from '../../../../../../../common/ui/IconButton'
 import { routesPaths, SmartAllParams } from '../../../../../../../routes'
-import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
-import { useSmartParams } from '../../../../../../../routes/useSmartParams'
 
 type PrintVariantButtonProps = {
 	params: SmartAllParams<'variantPrint'>
 } & React.ComponentProps<typeof Button>
 
 export default function PrintVariantButton(props: PrintVariantButtonProps) {
-	const navigate = useSmartNavigate()
-	const params = useSmartParams('variant')
 	const onPrintClick = () => {
 		// open new window on url
-		const urlPattern = routesPaths.variantPrint
-		const url = getReplacedUrlWithParams(urlPattern, props.params)
+		const url = getReplacedUrlWithParams(
+			routesPaths['variantPrint'],
+			props.params,
+			{
+				returnFormat: 'absolute',
+			}
+		)
 
 		openNewPrintWindow(url)
 	}

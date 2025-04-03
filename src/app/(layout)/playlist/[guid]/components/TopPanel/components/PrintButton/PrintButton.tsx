@@ -18,7 +18,9 @@ export default function PrintButton() {
 			guid,
 			landscapeMode: false,
 		}
-		const url = getReplacedUrlWithParams(urlPattern, printParams)
+		const url = getReplacedUrlWithParams(urlPattern, printParams, {
+			returnFormat: 'absolute',
+		})
 
 		openNewPrintWindow(url)
 	}
