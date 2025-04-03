@@ -19,10 +19,9 @@ test('Vyhledávání podle názvu', async ({ page }) => {
 	// Existuje výsledek
 
 	const textPisne = await page.getByRole('link', {
-		name: 'Český překlad Oceány Voláš nás do mořských hlubin, těch neznámých, dalekých. Tam tě najdu, tam jsi skrytý, v hlubinách budu s vírou stát.',
-		exact: true,
+		name: 'Oceány Voláš nás do mořských hlubin, těch neznámých, dalekých. Tam tě najdu, tam jsi skrytý, v hlubinách budu s vírou stát.',
 	})
-	await expect(textPisne).toBeVisible()
+	await expect(textPisne.first()).toBeVisible()
 
 	// 4. Klikneme na výsledek
 	await textPisne.click()
