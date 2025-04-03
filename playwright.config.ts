@@ -10,15 +10,16 @@ export default defineConfig({
 		command: fs.existsSync('.next/routes-manifest.json')
 			? 'npm run start'
 			: 'npm run build && npm run start',
-		// command: 'npm run dev',
 		port: 5500,
 		reuseExistingServer: !process.env.CI,
 		timeout: 120 * 1000, // 2 minutes
+		env: {
+			LOG_LEVEL: 'silent', // Disable logs from the webserver
+		},
 	},
 	use: {
 		baseURL: 'http://test-chvalotce.cz:5500/',
 		headless: true,
 	},
-	// fullyParallel: true,
 	outputDir: 'tests/results/',
 })
