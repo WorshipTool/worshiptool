@@ -2,13 +2,23 @@ import { FeatureFlag } from '@/common/providers/FeatureFlags/flags.types'
 import { ROLES, UserDto } from '@/interfaces/user'
 import { isDevelopment } from '@/tech/development.tech'
 
-import { StatsigClient, StatsigUser } from '@statsig/js-client'
+import Statsig, { StatsigUser } from 'statsig-node'
 // import dotenv from 'dotenv'
 // dotenv.config()
 
+export const getEnvironmentStatsigConfig = () => ({
+	environment: {
+		tier: isDevelopment ? 'development' : 'production',
+	},
+})
+
+export const STATSIG_ANON_USER = {
+	userID: 'anonymous',
+}
+
 export const userDtoToStatsigUser = (user?: UserDto): StatsigUser => {
 	if (!user) {
-		return {}
+		return STATSIG_ANON_USER
 	}
 
 	const role = user.role === ROLES.Admin ? 'admin' : 'user'
@@ -22,12 +32,6 @@ export const userDtoToStatsigUser = (user?: UserDto): StatsigUser => {
 		},
 	}
 }
-
-export const getEnvironmentStatsigConfig = () => ({
-	environment: {
-		tier: isDevelopment ? 'development' : 'production',
-	},
-})
 
 const cache: Record<string, { value: boolean; expiresAt: number }> = {}
 const CACHE_DURATION_MS = 60 * 1000 // 1 minuta
@@ -56,26 +60,20 @@ const saveFlagToCache = (
 	}
 }
 
+type CheckFlagOptions = {
+	useCache?: boolean
+}
+
+/**
+ * Check flag on serverside
+ */
 export const checkFlag = async (
 	key: FeatureFlag,
 	user?: UserDto
 ): Promise<boolean> => {
-	// const cachedValue = getFlagWithCache(key, user)
-	// if (cachedValue !== null) return cachedValue
+	const userData = userDtoToStatsigUser(user)
 
-	const myStatsigClient = new StatsigClient(
-		process.env.NEXT_PUBLIC_STATSIG_API_KEY,
-		user ? userDtoToStatsigUser(user) : {},
-		{
-			...getEnvironmentStatsigConfig(),
-		}
-	)
-
-	await myStatsigClient.initializeAsync()
-
-	const value = myStatsigClient.checkGate(key as string)
-
-	// saveFlagToCache(key, value, user)
+	const value = Statsig.checkGate(userData, key as string)
 
 	return value
 }
