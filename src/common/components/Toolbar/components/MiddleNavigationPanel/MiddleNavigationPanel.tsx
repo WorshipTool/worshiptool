@@ -66,6 +66,8 @@ export default function MiddleNavigationPanel() {
 			sx={{
 				opacity: hideMiddleNavigation ? 0 : 1,
 				transition: 'all 0.3s ease',
+				display: 'flex',
+				alignItems: 'center',
 			}}
 			position={'relative'}
 		>
@@ -102,6 +104,7 @@ export default function MiddleNavigationPanel() {
 					onClick={() => {
 						setShowMobileMenu(!showMobileMenu)
 					}}
+					size="small"
 				>
 					<Menu />
 				</IconButton>
