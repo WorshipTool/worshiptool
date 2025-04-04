@@ -1,11 +1,11 @@
 import { Box } from '@/common/ui/Box'
 import { getColorHex } from '@/tech/theme/theme.tech'
 import { IconButton as IconBtn, SxProps, darken, useTheme } from '@mui/material'
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useMemo } from 'react'
 import { RoutesKeys } from '../../../routes'
 import { Clickable } from '../Clickable'
 import { Tooltip } from '../CustomTooltip/Tooltip'
-import { CommonLinkProps } from '../Link/Link'
+import { CommonLinkProps, Link } from '../Link/Link'
 import { ColorType } from '../ui.types'
 
 type IconButtonProps<T extends RoutesKeys> = {
@@ -99,24 +99,19 @@ const ButtonComponent = ({
 	)
 }
 
-// const LinkComponent = <T extends RoutesKeys>(props: IconButtonProps<T>) => {
-// 	const typedParams: CommonLinkProps<T>['params'] = useMemo(
-// 		() => props.toParams as CommonLinkProps<T>['params'],
-// 		[props.toParams]
-// 	)
-// 	return props.to ? (
-// 		<Link
-// 			to={props.to}
-// 			params={typedParams}
-// 			sx={props.sx}
-// 			target={props.target}
-// 		>
-// 			<ButtonComponent {...props} />
-// 		</Link>
-// 	) : (
-// 		<ButtonComponent {...props} />
-// 	)
-// }
+const LinkComponent = <T extends RoutesKeys>(props: IconButtonProps<T>) => {
+	const typedParams: CommonLinkProps<T>['params'] = useMemo(
+		() => props.toParams as CommonLinkProps<T>['params'],
+		[props.toParams]
+	)
+	return props.to ? (
+		<Link to={props.to} params={typedParams} target={props.target}>
+			<ButtonComponent {...props} />
+		</Link>
+	) : (
+		<ButtonComponent {...props} />
+	)
+}
 
 const ClickableComponent = <T extends RoutesKeys>({
 	...props
@@ -129,10 +124,10 @@ const ClickableComponent = <T extends RoutesKeys>({
 					placement={props.tooltipPlacement}
 					disabled={props.disabled}
 				>
-					<ButtonComponent {...props} />
+					<LinkComponent {...props} />
 				</Tooltip>
 			) : (
-				<ButtonComponent {...props} />
+				<LinkComponent {...props} />
 			)}
 		</Clickable>
 	)
