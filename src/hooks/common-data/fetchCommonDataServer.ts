@@ -6,6 +6,8 @@ import {
 } from '@/hooks/common-data/common-data.types'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 
+// This all is sent on every first request... so optimize it!
+
 export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 	const api = await useServerApi()
 
