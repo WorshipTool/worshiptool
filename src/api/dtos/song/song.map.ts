@@ -49,6 +49,7 @@ export const mapBasicVariantPackApiToDto = (
 
 		public: Boolean(api.public),
 		publishApprovalStatus: api.publishApprovalStatus as PublishApprovalStatus,
+		publishedAt: api.publishedAt ? new Date(api.publishedAt) : null,
 
 		// Dates
 		createdAt: new Date(api.createdAt),

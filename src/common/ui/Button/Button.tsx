@@ -173,7 +173,6 @@ export const Button = memo(
 						to={props.to}
 						params={typedParams}
 						sx={{
-							display: 'flex',
 							...props.sx,
 						}}
 						target={props.target}

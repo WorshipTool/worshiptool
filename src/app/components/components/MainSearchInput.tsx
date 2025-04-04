@@ -78,6 +78,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 				padding: props.gradientBorder ? 2 : 0,
 				transform: earlyFocused ? 'scale(107%)' : '',
 				transition: 'all 0.3s ease',
+				pointerEvents: 'auto',
 			}}
 		>
 			<SearchContainer>

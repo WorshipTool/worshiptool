@@ -3,17 +3,20 @@
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
+import RightSheepPanel from '@/app/components/components/RightSheepPanel/RightSheepPanel'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
-import { Box, Typography, useTheme } from '@/common/ui'
+import { Box, Image, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
-import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import { getAssetUrl } from '@/tech/paths.tech'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import ContainerGrid from '../../common/components/ContainerGrid'
+import ContainerGrid, {
+	containerMaxWidth,
+} from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
 import SearchedSongsList from './components/SearchedSongsList'
 
@@ -107,8 +110,28 @@ export default function HomeDesktop() {
 
 	const [smartSearch, setSmartSearch] = useState(false)
 
+	const paddingX = 32
+	const gapString = `calc(max(${paddingX}px, (100vw - ${containerMaxWidth}px) / 2) )`
+
 	return (
 		<>
+			<Box
+				sx={{
+					position: 'fixed',
+					top: isTop ? 300 : '-100%',
+					right: isTop ? 0 : '-100%',
+					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
+					zIndex: -1,
+					transition: 'top 0.2s ease, right 0.2s ease',
+				}}
+			>
+				<Image
+					src={getAssetUrl('/gradient-shapes/shape1.svg')}
+					alt={'Tvar na pozadí'}
+					width={1000}
+					height={1000}
+				/>
+			</Box>
 			<Box
 				sx={{
 					flex: 1,
@@ -131,22 +154,26 @@ export default function HomeDesktop() {
 					initial={{
 						top: !phoneVersion
 							? isTop
-								? `35%`
+								? `32%`
 								: 'calc(-7rem + 22px)'
 							: 'calc( 64px)',
 
-						left: !phoneVersion ? 0 : theme.spacing(1),
-						right: !phoneVersion ? 0 : theme.spacing(1),
+						left: !phoneVersion ? paddingX : theme.spacing(1),
+						right: !phoneVersion ? paddingX : theme.spacing(1),
 					}}
 					animate={{
 						top: !phoneVersion
 							? isTop
-								? `35%`
-								: 'calc(-7rem + 22px)'
+								? `32%`
+								: 'calc(-7rem + 22px - 24px)'
 							: 'calc( 64px)',
 
-						left: !phoneVersion ? 0 : theme.spacing(1),
-						right: !phoneVersion ? 0 : theme.spacing(1),
+						left: !phoneVersion
+							? isTop
+								? paddingX
+								: `calc( ${paddingX}px + ${gapString} )`
+							: theme.spacing(1),
+						right: !phoneVersion ? paddingX : theme.spacing(1),
 					}}
 					transition={{
 						type: 'keyframes',
@@ -154,9 +181,31 @@ export default function HomeDesktop() {
 					}}
 				>
 					<ContainerGrid>
-						<Grid item xs={12}>
-							<Grid container justifyContent="center">
-								<Grid item sm={6} xs={12} sx={{ pointerEvents: 'auto' }}>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: ' space-between',
+								width: '100%',
+								gap: gapString,
+								flexWrap: 'wrap',
+							}}
+						>
+							<Box
+								flex={1}
+								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+								}}
+							>
+								<Box
+									maxWidth={550}
+									flex={1}
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: 3,
+									}}
+								>
 									<AnimatePresence>
 										{!phoneVersion && (
 											<motion.div
@@ -200,9 +249,26 @@ export default function HomeDesktop() {
 										smartSearch={smartSearch}
 										onSmartSearchChange={setSmartSearch}
 									/>
-								</Grid>
-							</Grid>
-						</Grid>
+								</Box>
+							</Box>
+
+							<Box
+								sx={{
+									maxWidth: isTop ? 500 : 0,
+									// maxHeight: isTop ? 500 : 0,
+									// transform: 'translateY(-50px)',
+									opacity: isTop ? 1 : 0,
+									transition:
+										'max-width 0.2s ease, opacity 0.2s ease, max-height 0.2s ease',
+									// display: 'flex',
+									// flexDirection: 'column',
+									// gap: 2,
+									pointerEvents: 'auto',
+								}}
+							>
+								<RightSheepPanel />
+							</Box>
+						</Box>
 					</ContainerGrid>
 				</motion.div>
 				<Box sx={{ height: phoneVersion ? 0 : 65 }}></Box>
@@ -236,6 +302,7 @@ export default function HomeDesktop() {
 						/>
 					)}
 					<RecommendedSongsList />
+					{/* <LastAddedSongsList /> */}
 				</div>
 			</Box>
 

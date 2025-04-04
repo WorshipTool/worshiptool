@@ -429,6 +429,12 @@ export interface BasicVariantPackDto {
     'publishApprovalStatus': BasicVariantPackDtoPublishApprovalStatusEnum;
     /**
      * 
+     * @type {string}
+     * @memberof BasicVariantPackDto
+     */
+    'publishedAt': string | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof BasicVariantPackDto
      */
@@ -945,6 +951,12 @@ export interface ExtendedVariantPackDto {
      * @memberof ExtendedVariantPackDto
      */
     'publishApprovalStatus': ExtendedVariantPackDtoPublishApprovalStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedVariantPackDto
+     */
+    'publishedAt': string | null;
     /**
      * 
      * @type {boolean}

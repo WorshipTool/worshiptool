@@ -34,6 +34,7 @@ export type BasicVariantPack = {
 	verified: boolean
 	public: boolean
 	publishApprovalStatus: PublishApprovalStatus
+	publishedAt: Date | null
 
 	language: SongLanguage
 	translationType: PackTranslationType

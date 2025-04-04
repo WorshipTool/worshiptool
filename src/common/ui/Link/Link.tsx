@@ -143,6 +143,9 @@ export function Link<T extends RoutesKeys>(props: LinkProps<T>) {
 					// @ts-ignore
 					href={url}
 					passHref
+					sx={{
+						...props.sx,
+					}}
 					style={{
 						color: 'inherit',
 						textDecoration: 'none',
