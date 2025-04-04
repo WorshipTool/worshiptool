@@ -105,12 +105,7 @@ const LinkComponent = <T extends RoutesKeys>(props: IconButtonProps<T>) => {
 		[props.toParams]
 	)
 	return props.to ? (
-		<Link
-			to={props.to}
-			params={typedParams}
-			sx={props.sx}
-			target={props.target}
-		>
+		<Link to={props.to} params={typedParams} target={props.target}>
 			<ButtonComponent {...props} />
 		</Link>
 	) : (

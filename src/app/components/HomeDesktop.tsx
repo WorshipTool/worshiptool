@@ -3,17 +3,20 @@
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
+import RightSheepPanel from '@/app/components/components/RightSheepPanel/RightSheepPanel'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
-import { Box, Typography, useTheme } from '@/common/ui'
+import { Box, Image, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
-import { Grid } from '@/common/ui/mui/Grid'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import { getAssetUrl } from '@/tech/paths.tech'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import ContainerGrid from '../../common/components/ContainerGrid'
+import ContainerGrid, {
+	containerMaxWidth,
+} from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
 import SearchedSongsList from './components/SearchedSongsList'
 
@@ -23,7 +26,8 @@ const ANIMATION_DURATION = 0.2
 
 export default function HomeDesktop() {
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down('sm'))
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const isMobile = phoneVersion
 
 	const scrollPointRef = useRef(null)
 
@@ -84,9 +88,9 @@ export default function HomeDesktop() {
 	const footer = useFooter()
 
 	useEffect(() => {
-		toolbar.setTransparent(isTop && !phoneVersion)
-		toolbar.setHideMiddleNavigation(!isTop && !phoneVersion)
-		toolbar.setShowTitle(!isTop || phoneVersion)
+		toolbar.setTransparent(isTop)
+		toolbar.setHideMiddleNavigation(!isTop)
+		toolbar.setShowTitle(!isTop)
 	}, [isTop, toolbar, phoneVersion])
 
 	useEffect(() => {
@@ -107,8 +111,43 @@ export default function HomeDesktop() {
 
 	const [smartSearch, setSmartSearch] = useState(false)
 
+	const paddingX = 32
+	const gapString = `calc(max(${paddingX}px, (100vw - ${containerMaxWidth}px) / 2) )`
+
+	const shapeSizeString = `calc(max(50vw, 50vh) * 1.35)`
 	return (
 		<>
+			<Box
+				sx={{
+					position: 'fixed',
+					top: isTop ? '38vh' : '-100%',
+					right: isTop ? 0 : '-100%',
+					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
+					zIndex: -1,
+					opacity: isMobile ? 0 : 1,
+					transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
+					width: shapeSizeString,
+					height: shapeSizeString,
+				}}
+			>
+				<Image
+					src={getAssetUrl('/gradient-shapes/shape1.svg')}
+					alt={'Tvar na pozadí'}
+					fill
+					style={{
+						filter: 'brightness(1)',
+					}}
+				/>
+				<Image
+					src={getAssetUrl('/gradient-shapes/shape2.svg')}
+					alt={'Tvar na pozadí'}
+					fill
+					style={{
+						filter: 'brightness(1.1)',
+					}}
+				/>
+			</Box>
+
 			<Box
 				sx={{
 					flex: 1,
@@ -131,22 +170,31 @@ export default function HomeDesktop() {
 					initial={{
 						top: !phoneVersion
 							? isTop
-								? `35%`
+								? `32%`
 								: 'calc(-7rem + 22px)'
-							: 'calc( 64px)',
+							: isTop
+							? '64px'
+							: 'calc( 64px - 64px)',
 
-						left: !phoneVersion ? 0 : theme.spacing(1),
-						right: !phoneVersion ? 0 : theme.spacing(1),
+						left: !phoneVersion ? paddingX : theme.spacing(1),
+						right: !phoneVersion ? paddingX : theme.spacing(1),
 					}}
 					animate={{
+						// position: phoneVersion ? 'sticky' : 'fixed',
 						top: !phoneVersion
 							? isTop
-								? `35%`
-								: 'calc(-7rem + 22px)'
-							: 'calc( 64px)',
+								? `32%`
+								: 'calc(-7rem + 22px - 24px)'
+							: isTop
+							? '64px'
+							: 'calc( 64px - 64px)',
 
-						left: !phoneVersion ? 0 : theme.spacing(1),
-						right: !phoneVersion ? 0 : theme.spacing(1),
+						left: !phoneVersion
+							? isTop
+								? paddingX
+								: `calc( ${paddingX}px + ${gapString} )`
+							: theme.spacing(1),
+						right: !phoneVersion ? paddingX : theme.spacing(1),
 					}}
 					transition={{
 						type: 'keyframes',
@@ -154,11 +202,32 @@ export default function HomeDesktop() {
 					}}
 				>
 					<ContainerGrid>
-						<Grid item xs={12}>
-							<Grid container justifyContent="center">
-								<Grid item sm={6} xs={12} sx={{ pointerEvents: 'auto' }}>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: ' space-between',
+								width: '100%',
+								gap: gapString,
+							}}
+						>
+							<Box
+								flex={1}
+								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+								}}
+							>
+								<Box
+									maxWidth={isMobile ? '100vw' : `min(550px, 50vw)`}
+									flex={1}
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: isMobile ? 1 : 3,
+									}}
+								>
 									<AnimatePresence>
-										{!phoneVersion && (
+										{!phoneVersion ? (
 											<motion.div
 												initial={{
 													height: '7rem',
@@ -190,6 +259,20 @@ export default function HomeDesktop() {
 													Chval Otce
 												</Typography>
 											</motion.div>
+										) : (
+											<Box
+												sx={{
+													display: 'flex',
+													flexDirection: 'column',
+												}}
+											>
+												<Typography variant="h4" strong={200}>
+													Jsi-li ovce, tak...
+												</Typography>
+												<Typography variant="h3" strong={900} noWrap>
+													Chval Otce
+												</Typography>
+											</Box>
 										)}
 									</AnimatePresence>
 
@@ -200,17 +283,33 @@ export default function HomeDesktop() {
 										smartSearch={smartSearch}
 										onSmartSearchChange={setSmartSearch}
 									/>
-								</Grid>
-							</Grid>
-						</Grid>
+								</Box>
+							</Box>
+
+							{!isMobile && (
+								<Box
+									sx={{
+										maxWidth: isTop ? 500 : 0,
+										// maxHeight: isTop ? 500 : 0,
+										// transform: 'translateY(-50px)',
+										opacity: isTop ? 1 : 0,
+										transition:
+											'max-width 0.2s ease, opacity 0.2s ease, max-height 0.2s ease',
+										// display: 'flex',
+										// flexDirection: 'column',
+										// gap: 2,
+										pointerEvents: 'auto',
+									}}
+								>
+									<RightSheepPanel />
+								</Box>
+							)}
+						</Box>
 					</ContainerGrid>
 				</motion.div>
-				<Box sx={{ height: phoneVersion ? 0 : 65 }}></Box>
-
+				<Box sx={{ height: 65 }}></Box>
 				<div ref={scrollPointRef}></div>
-
 				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
-
 				<div
 					style={{
 						left: 0,
@@ -220,7 +319,7 @@ export default function HomeDesktop() {
 						flexDirection: 'column',
 						alignItems: 'center',
 						padding: 0,
-						top: !phoneVersion ? 'calc(100% - 275px)' : '66px',
+						top: !phoneVersion ? 'calc(100% - 275px)' : '155px',
 						// TODO: fix height jumping on one column preview
 						transform:
 							isTop || phoneVersion
@@ -236,6 +335,16 @@ export default function HomeDesktop() {
 						/>
 					)}
 					<RecommendedSongsList />
+					{isMobile && (
+						<Box
+							sx={{
+								paddingTop: 16,
+								paddingBottom: 4,
+							}}
+						>
+							<RightSheepPanel />
+						</Box>
+					)}
 				</div>
 			</Box>
 

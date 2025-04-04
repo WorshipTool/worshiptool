@@ -8,6 +8,7 @@ type ExistingFlags =
 	| 'show_admin_page'
 	| 'use_subdomains'
 	| 'group_translations'
+	| 'show_last_added_songs'
 
 export type FeatureFlag = ExistingFlags | String
 

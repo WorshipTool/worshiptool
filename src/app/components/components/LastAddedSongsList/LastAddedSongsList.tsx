@@ -1,5 +1,5 @@
 'use client'
-import { Typography, useTheme } from '@/common/ui'
+import { Box, Typography, useTheme } from '@/common/ui'
 import { styled } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useEffect, useState } from 'react'
@@ -7,8 +7,9 @@ import ContainerGrid from '../../../../common/components/ContainerGrid'
 import SongListCards, {
 	SongListCardsProps,
 } from '../../../../common/components/songLists/SongListCards/SongListCards'
+import { Button } from '../../../../common/ui/Button'
 import SongCardSkeleton from './SongCardSkeleton'
-import useRecommendedSongs from './hooks/useRecommendedSongs'
+import useLastAddedSongs from './hooks/useLastAddedSongs'
 
 const GridContainer = styled(Grid)(({ theme }) => ({
 	padding: 10,
@@ -19,11 +20,11 @@ type RecommendedSongsListProps = {
 	listType?: SongListCardsProps['variant']
 }
 
-export default function RecommendedSongsList({
+export default function LastAddedSongsList({
 	listType = 'row',
 }: RecommendedSongsListProps) {
 	const theme = useTheme()
-	const { data, isLoading, isError, isSuccess } = useRecommendedSongs()
+	const { data, isLoading, isError, isSuccess } = useLastAddedSongs()
 
 	// const navigate = useSmartNavigate()
 	const [init, setInit] = useState(false)
@@ -39,7 +40,7 @@ export default function RecommendedSongsList({
 		>
 			{
 				<Typography strong key={'idea'}>
-					Nějaký nápad:
+					Poslední přidané:
 				</Typography>
 			}
 
@@ -73,9 +74,24 @@ export default function RecommendedSongsList({
 				<SongListCards
 					data={data.slice(0, 4)}
 					variant={listType}
-					// properties={['SHOW_ADDED_BY_LOADER']}
+					properties={['SHOW_PUBLISHED_DATE']}
 				/>
 			</GridContainer>
+
+			{init && (
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					alignItems={'center'}
+					flexWrap={'wrap'}
+				>
+					<Typography>Nebo si vyberte ze </Typography>
+					<Button size="small" variant="text" to="songsList">
+						Seznamu
+					</Button>
+					<Typography>všech písní ve zpěvníku</Typography>
+				</Box>
+			)}
 		</ContainerGrid>
 	)
 }

@@ -42,6 +42,7 @@ const SONG_CARD_PROPERTIES = [
 	'SHOW_YOUR_PUBLIC_LABEL',
 	'SHOW_ADDED_BY_LOADER',
 	'ENABLE_TRANSLATION_LIKE',
+	'SHOW_PUBLISHED_DATE',
 ] as const
 type SongCardProperty = (typeof SONG_CARD_PROPERTIES)[number]
 
@@ -99,6 +100,7 @@ export const SongVariantCard = memo(function S({
 	const createdByLoaderEnabled = properties.SHOW_ADDED_BY_LOADER
 	const privateLabelEnabled = properties.SHOW_PRIVATE_LABEL
 	const yourPublicLabelEnabled = properties.SHOW_YOUR_PUBLIC_LABEL
+	const publishedDateEnabled = properties.SHOW_PUBLISHED_DATE
 
 	// What display
 	const showPrivate = !data.public && createdByYou && privateLabelEnabled
@@ -304,6 +306,12 @@ export const SongVariantCard = memo(function S({
 								) : null}
 								{createdByLoaderEnabled && data.createdByLoader ? (
 									<Typography size={'small'}>Nahráno programem</Typography>
+								) : null}
+
+								{publishedDateEnabled && data.publishedAt ? (
+									<Typography size={'small'}>
+										Přidáno {data.publishedAt.toLocaleDateString('cs-CZ')}
+									</Typography>
 								) : null}
 							</Box>
 						</Box>
