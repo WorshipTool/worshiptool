@@ -52,7 +52,7 @@ export default function LastAddedPanel() {
 									variant="rounded"
 									sx={{
 										width: '100%',
-										height: 40,
+										height: 42,
 										borderRadius: 2,
 										bgcolor: theme.palette.grey[300],
 									}}

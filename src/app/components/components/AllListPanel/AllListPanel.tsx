@@ -33,9 +33,9 @@ export default function AllListPanel() {
 				// color="primarygradient"
 			>
 				<Typography small color="grey.500">
-					Vybrat si ze
+					procházet
 				</Typography>
-				Seznamu všech písní
+				Seznam všech písní
 			</Button>
 		</Box>
 	)

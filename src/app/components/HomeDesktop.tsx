@@ -26,7 +26,8 @@ const ANIMATION_DURATION = 0.2
 
 export default function HomeDesktop() {
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down('sm'))
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const isMobile = phoneVersion
 
 	const scrollPointRef = useRef(null)
 
@@ -87,9 +88,9 @@ export default function HomeDesktop() {
 	const footer = useFooter()
 
 	useEffect(() => {
-		toolbar.setTransparent(isTop && !phoneVersion)
-		toolbar.setHideMiddleNavigation(!isTop && !phoneVersion)
-		toolbar.setShowTitle(!isTop || phoneVersion)
+		toolbar.setTransparent(isTop)
+		toolbar.setHideMiddleNavigation(!isTop)
+		toolbar.setShowTitle(!isTop)
 	}, [isTop, toolbar, phoneVersion])
 
 	useEffect(() => {
@@ -113,25 +114,40 @@ export default function HomeDesktop() {
 	const paddingX = 32
 	const gapString = `calc(max(${paddingX}px, (100vw - ${containerMaxWidth}px) / 2) )`
 
+	const shapeSizeString = `calc(max(50vw, 50vh) * 1.35)`
 	return (
 		<>
 			<Box
 				sx={{
 					position: 'fixed',
-					top: isTop ? 300 : '-100%',
+					top: isTop ? '38vh' : '-100%',
 					right: isTop ? 0 : '-100%',
 					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
 					zIndex: -1,
-					transition: 'top 0.2s ease, right 0.2s ease',
+					opacity: isMobile ? 0 : 1,
+					transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
+					width: shapeSizeString,
+					height: shapeSizeString,
 				}}
 			>
 				<Image
 					src={getAssetUrl('/gradient-shapes/shape1.svg')}
 					alt={'Tvar na pozadí'}
-					width={1000}
-					height={1000}
+					fill
+					style={{
+						filter: 'brightness(1)',
+					}}
+				/>
+				<Image
+					src={getAssetUrl('/gradient-shapes/shape2.svg')}
+					alt={'Tvar na pozadí'}
+					fill
+					style={{
+						filter: 'brightness(1.1)',
+					}}
 				/>
 			</Box>
+
 			<Box
 				sx={{
 					flex: 1,
@@ -156,17 +172,22 @@ export default function HomeDesktop() {
 							? isTop
 								? `32%`
 								: 'calc(-7rem + 22px)'
-							: 'calc( 64px)',
+							: isTop
+							? '64px'
+							: 'calc( 64px - 64px)',
 
 						left: !phoneVersion ? paddingX : theme.spacing(1),
 						right: !phoneVersion ? paddingX : theme.spacing(1),
 					}}
 					animate={{
+						// position: phoneVersion ? 'sticky' : 'fixed',
 						top: !phoneVersion
 							? isTop
 								? `32%`
 								: 'calc(-7rem + 22px - 24px)'
-							: 'calc( 64px)',
+							: isTop
+							? '64px'
+							: 'calc( 64px - 64px)',
 
 						left: !phoneVersion
 							? isTop
@@ -187,7 +208,6 @@ export default function HomeDesktop() {
 								justifyContent: ' space-between',
 								width: '100%',
 								gap: gapString,
-								flexWrap: 'wrap',
 							}}
 						>
 							<Box
@@ -198,16 +218,16 @@ export default function HomeDesktop() {
 								}}
 							>
 								<Box
-									maxWidth={550}
+									maxWidth={isMobile ? '100vw' : `min(550px, 50vw)`}
 									flex={1}
 									sx={{
 										display: 'flex',
 										flexDirection: 'column',
-										gap: 3,
+										gap: isMobile ? 1 : 3,
 									}}
 								>
 									<AnimatePresence>
-										{!phoneVersion && (
+										{!phoneVersion ? (
 											<motion.div
 												initial={{
 													height: '7rem',
@@ -239,6 +259,20 @@ export default function HomeDesktop() {
 													Chval Otce
 												</Typography>
 											</motion.div>
+										) : (
+											<Box
+												sx={{
+													display: 'flex',
+													flexDirection: 'column',
+												}}
+											>
+												<Typography variant="h4" strong={200}>
+													Jsi-li ovce, tak...
+												</Typography>
+												<Typography variant="h3" strong={900} noWrap>
+													Chval Otce
+												</Typography>
+											</Box>
 										)}
 									</AnimatePresence>
 
@@ -252,31 +286,30 @@ export default function HomeDesktop() {
 								</Box>
 							</Box>
 
-							<Box
-								sx={{
-									maxWidth: isTop ? 500 : 0,
-									// maxHeight: isTop ? 500 : 0,
-									// transform: 'translateY(-50px)',
-									opacity: isTop ? 1 : 0,
-									transition:
-										'max-width 0.2s ease, opacity 0.2s ease, max-height 0.2s ease',
-									// display: 'flex',
-									// flexDirection: 'column',
-									// gap: 2,
-									pointerEvents: 'auto',
-								}}
-							>
-								<RightSheepPanel />
-							</Box>
+							{!isMobile && (
+								<Box
+									sx={{
+										maxWidth: isTop ? 500 : 0,
+										// maxHeight: isTop ? 500 : 0,
+										// transform: 'translateY(-50px)',
+										opacity: isTop ? 1 : 0,
+										transition:
+											'max-width 0.2s ease, opacity 0.2s ease, max-height 0.2s ease',
+										// display: 'flex',
+										// flexDirection: 'column',
+										// gap: 2,
+										pointerEvents: 'auto',
+									}}
+								>
+									<RightSheepPanel />
+								</Box>
+							)}
 						</Box>
 					</ContainerGrid>
 				</motion.div>
-				<Box sx={{ height: phoneVersion ? 0 : 65 }}></Box>
-
+				<Box sx={{ height: 65 }}></Box>
 				<div ref={scrollPointRef}></div>
-
 				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
-
 				<div
 					style={{
 						left: 0,
@@ -286,7 +319,7 @@ export default function HomeDesktop() {
 						flexDirection: 'column',
 						alignItems: 'center',
 						padding: 0,
-						top: !phoneVersion ? 'calc(100% - 275px)' : '66px',
+						top: !phoneVersion ? 'calc(100% - 275px)' : '155px',
 						// TODO: fix height jumping on one column preview
 						transform:
 							isTop || phoneVersion
@@ -302,7 +335,16 @@ export default function HomeDesktop() {
 						/>
 					)}
 					<RecommendedSongsList />
-					{/* <LastAddedSongsList /> */}
+					{isMobile && (
+						<Box
+							sx={{
+								paddingTop: 16,
+								paddingBottom: 4,
+							}}
+						>
+							<RightSheepPanel />
+						</Box>
+					)}
 				</div>
 			</Box>
 
