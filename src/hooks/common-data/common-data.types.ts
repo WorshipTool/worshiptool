@@ -1,19 +1,13 @@
 import { PackGuid } from '@/api/dtos'
-import {
-	AllTeamSubdomainAlias,
-	GetFavouritesOutDto,
-	PlaylistData,
-	TeamOfUserDto,
-} from '@/api/generated'
-import { UntypedPermissionDataType } from '@/hooks/permissions/permission.types'
+import { AllTeamSubdomainAlias, TeamOfUserDto } from '@/api/generated'
 
 export type AllCommonData = {
 	translationLikes: TranslationLike[]
 	teamsOfUser: TeamOfUserDto[]
-	playlistsOfUser: PlaylistData[]
-	permissionsOfUser: UntypedPermissionDataType
+	// playlistsOfUser: PlaylistData[]
+	// permissionsOfUser: UntypedPermissionDataType
 	allsubdomains: AllTeamSubdomainAlias[]
-	favourites: GetFavouritesOutDto
+	// favourites: GetFavouritesOutDto
 }
 
 export type TranslationLike = {

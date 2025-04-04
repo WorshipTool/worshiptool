@@ -1,14 +1,9 @@
 import { PackGuid } from '@/api/dtos'
-import { apiToPermissionPayload } from '@/api/dtos/permission'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import {
 	AllCommonData,
 	TranslationLike,
 } from '@/hooks/common-data/common-data.types'
-import {
-	PermissionsTypes,
-	PermissionType,
-} from '@/hooks/permissions/permission.types'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 
 export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
@@ -29,9 +24,9 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 		)
 
 		/** Get playlist of user */
-		const playlists = await handleServerApiCall(
-			api.playlistGettingApi.playlistGettingControllerGetPlaylistsOfUser()
-		)
+		// const playlists = await handleServerApiCall(
+		// 	api.playlistGettingApi.playlistGettingControllerGetPlaylistsOfUser()
+		// )
 
 		/** Get all subdomains */
 		const subdomains = await handleServerApiCall(
@@ -39,36 +34,37 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 		)
 
 		/** Get user permissions */
-		const p = await handleServerApiCall(
-			api.permissionApi.permissionControllerGetUserPermissions()
-		)
-		const pFormatted = p.map((p) => ({
-			type: p.type as PermissionType<PermissionsTypes>,
-			payload: apiToPermissionPayload(p.payload),
-			guid: p.guid,
-		}))
+		// const p = await handleServerApiCall(
+		// 	api.permissionApi.permissionControllerGetUserPermissions()
+		// )
+		// const pFormatted = p.map((p) => ({
+		// 	type: p.type as PermissionType<PermissionsTypes>,
+		// 	payload: apiToPermissionPayload(p.payload),
+		// 	guid: p.guid,
+		// }))
+		// can be too large
 
 		/** Get user favourites */
-		const favourites = await handleServerApiCall(
-			api.songFavouritesApi.songFavouritesControllerGetFavourites()
-		)
+		// const favourites = await handleServerApiCall(
+		// 	api.songFavouritesApi.songFavouritesControllerGetFavourites()
+		// )
 
 		return {
 			translationLikes: tlFormatted,
 			teamsOfUser: teams.teams,
-			playlistsOfUser: playlists.playlists,
+			// playlistsOfUser: playlists.playlists,
 			allsubdomains: subdomains.aliases,
-			permissionsOfUser: pFormatted,
-			favourites: favourites,
+			// permissionsOfUser: pFormatted,
+			// favourites: favourites,
 		}
 	} catch (e) {
 		return {
 			translationLikes: [],
 			teamsOfUser: [],
-			playlistsOfUser: [],
+			// playlistsOfUser: [],
 			allsubdomains: [],
-			permissionsOfUser: [],
-			favourites: { items: [], selectionGuid: '' },
+			// permissionsOfUser: [],
+			// favourites: { items: [], selectionGuid: '' },
 		}
 	}
 }

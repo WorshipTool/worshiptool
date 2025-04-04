@@ -1,41 +1,42 @@
-import { Box, Button, Typography } from '@/common/ui'
-import { Home } from '@mui/icons-material'
-import { Gap } from '../common/ui/Gap'
+import { Link } from '@/common/ui/Link/Link'
 
 export default function ErrorPage() {
 	return (
-		<Box
-			sx={{
+		<div
+			style={{
 				height: '100vh',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
 			}}
 		>
-			<Box
-				display={'flex'}
-				flexDirection={'column'}
-				justifyContent={'end'}
-				alignItems={'center'}
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'end',
+					alignItems: 'center',
+					// gap: '1rem',
+				}}
 			>
-				<Typography variant="h2" strong={900}>
-					Oops...
-				</Typography>
-				<Gap value={2} />
-				<Typography variant="h6">
-					Něco se nepovedlo. Stránka nebyla nalezena.
-				</Typography>
-				<Gap value={2} />
-				<Button
-					variant="contained"
-					color="primary"
+				<h1>
+					<strong>Stránka nenalezena</strong>
+				</h1>
+				<p style={{ textAlign: 'center' }}>
+					Zdá se, že jsi zabloudil do neprobádaných končin aplikace.
+					<br />
+					Můžeš zkusit jít cestou zpět na hlavní stránku.
+				</p>
+
+				<Link
 					to="home"
-					size="medium"
-					endIcon={<Home />}
+					params={{
+						hledat: '',
+					}}
 				>
-					Jít domů
-				</Button>
-			</Box>
-		</Box>
+					JÍT DOMŮ
+				</Link>
+			</div>
+		</div>
 	)
 }
