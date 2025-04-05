@@ -1,5 +1,5 @@
 import { PlaylistData } from '@/api/generated'
-import { useCommonData } from '@/hooks/common-data/useCommonData'
+import useAuth from '@/hooks/auth/useAuth'
 import usePlaylistsGeneral, {
 	PLAYLIST_UPDATE_EVENT_NAME,
 } from '@/hooks/playlist/usePlaylistsGeneral'
@@ -7,11 +7,12 @@ import { useApiState } from '@/tech/ApiState'
 import { useEffect, useState } from 'react'
 
 export function useUsersPlaylists() {
-	const initialValue = useCommonData('playlistsOfUser')
-	const [data, setData] = useState<PlaylistData[]>(initialValue)
+	// const initialValue = useCommonData('playlistsOfUser')
+	const [data, setData] = useState<PlaylistData[]>([])
 
 	const { getPlaylistsOfUser } = usePlaylistsGeneral()
 	const { fetchApiState, apiState } = useApiState<PlaylistData[]>()
+	const { user } = useAuth()
 
 	const revalidate = async () => {
 		fetchApiState(async () => {
@@ -44,6 +45,10 @@ export function useUsersPlaylists() {
 			window.removeEventListener(PLAYLIST_UPDATE_EVENT_NAME, handler)
 		}
 	}, [data, revalidate, getPlaylistsOfUser])
+
+	useEffect(() => {
+		revalidate()
+	}, [user])
 
 	return {
 		playlists: data,

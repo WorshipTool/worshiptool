@@ -2,7 +2,6 @@ import { VariantPackGuid } from '@/api/dtos'
 import { GetFavouritesOutDto } from '@/api/generated'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
-import { useCommonData } from '@/hooks/common-data/useCommonData'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
@@ -33,13 +32,14 @@ const useProvideFavourites = () => {
 	const { user } = useAuth()
 	const { songFavouritesApi } = useApi()
 
-	const { favourites: common } = useCommonData()
+	// const { favourites: common } = useCommonData()
 
-	const [favourites, setFavourites] = useState<GetFavouritesOutDto>(common)
+	const [favourites, setFavourites] = useState<GetFavouritesOutDto>()
 
 	const { fetchApiState, apiState } = useApiState<GetFavouritesOutDto>()
 
 	const reload = async () => {
+		if (!user) return
 		const data = await fetchApiState(() =>
 			handleApiCall(songFavouritesApi.songFavouritesControllerGetFavourites())
 		)
@@ -50,7 +50,7 @@ const useProvideFavourites = () => {
 	useEffect(() => {
 		if (first.current) {
 			first.current = false
-			return
+			// return
 		}
 		reload()
 	}, [user])

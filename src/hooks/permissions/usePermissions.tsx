@@ -1,5 +1,4 @@
-import { useCommonData } from '@/hooks/common-data/useCommonData'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import {
 	apiToPermissionPayload,
 	permissionPayloadToApi,
@@ -58,11 +57,11 @@ export const PermissionsProvider = ({ children }: { children: any }) => {
 function useProvidePermissions<
 	A extends PermissionsTypes[] = [PermissionsTypes]
 >(userGuid?: string) {
-	const initialValue = useCommonData('permissionsOfUser')
+	// const initialValue = useCommonData('permissionsOfUser')
 
 	const [data, setData] = useState<
 		PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[]
-	>(initialValue as PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[])
+	>([])
 
 	const { permissionApi } = useApi()
 	const { user, isAdmin, isLoggedIn } = useAuth()
@@ -90,13 +89,7 @@ function useProvidePermissions<
 			.catch(() => {})
 	}
 
-	const first = useRef(true)
 	useEffect(() => {
-		if (first.current) {
-			first.current = false
-			return
-		}
-
 		reload()
 	}, [userGuid])
 
