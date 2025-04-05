@@ -39,6 +39,7 @@ const useProvideFavourites = () => {
 	const { fetchApiState, apiState } = useApiState<GetFavouritesOutDto>()
 
 	const reload = async () => {
+		if (!user) return
 		const data = await fetchApiState(() =>
 			handleApiCall(songFavouritesApi.songFavouritesControllerGetFavourites())
 		)
