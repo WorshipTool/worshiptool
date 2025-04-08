@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# WorshipTool
 
-## Getting Started
+**WorshipTool** je nástroj pro správu chval, navržený speciálně pro potřeby církevních chválících týmů. Umožňuje snadnou správu písní, variant, statistik a sdílení napříč sbory.
 
-First, run the development server:
+## ✨ Hlavní funkce
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 📝 **Přehledný zpěvník** s podporou více variant textů i akordů  
+- 🔍 **Fulltextové i chytré vyhledávání pomocí embeddingů**  
+- 🌍 **Automatické propojování překladů** – různé jazykové verze jedné písně se propojují díky podobnosti textu  
+- 📊 **Statistiky hraní písní** – víte, které písně hrajete nejčastěji  
+- 👥 **Podpora více sborů** – každá církev si spravuje svůj vlastní zpěvník  
+- 📅 **Plánování setů** – přehledné plánování nedělních setkání a chval  
+- 🔒 **Přístupová práva** – oddělení rolí (admin, editor, hráč)  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧑‍💻 Technologie
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Projekt je postaven na moderním JavaScript/TypeScript stacku:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Frontend**: [Next.js](https://nextjs.org/) + [Material UI](https://mui.com/)  
+- **Backend**: [NestJS](https://nestjs.com/)  
+- **Databáze**: PostgreSQL + [TypeORM](https://typeorm.io/)  
+- **AI / ML**:  
+  - Embeddingy písní pomocí jazykových modelů pro:  
+    - inteligentní vyhledávání  
+    - automatické spojování překladů stejné písně  
+- **Deploy**: Vercel / Railway / Docker-ready  
