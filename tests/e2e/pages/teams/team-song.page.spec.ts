@@ -1,0 +1,13 @@
+import test, { expect } from '@playwright/test'
+import { test_tech_loginWithData } from '../../../test.tech'
+
+test('Team is visible', async ({ page }) => {
+	await page.goto('/')
+
+	await test_tech_loginWithData(page)
+
+	await page.goto('sub/tymy/ahtk3wx/pisen/a32c2/oceany')
+
+	await expect(page.getByText('Oceány')).toBeVisible()
+	await expect(page.getByText('Říkáš')).toBeVisible()
+})
