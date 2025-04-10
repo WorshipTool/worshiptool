@@ -1,9 +1,6 @@
 'use client'
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
-import {
-	getVariantAliasFromParams,
-	getVariantByAlias,
-} from '@/app/(layout)/pisen/[hex]/[alias]/tech'
+import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
 import { MORE_TEAM_SONG_BUTTON_ID } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongButton'
@@ -14,8 +11,10 @@ import { Box, IconButton, LinearProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
+import { useApi } from '@/hooks/api/useApi'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
 import { AudioFile, KeyboardArrowLeft, OpenInNew } from '@mui/icons-material'
 import { useMemo } from 'react'
 
@@ -26,15 +25,18 @@ type TeamPisenPageProps = {
 export default SmartTeamPage(TeamPisenPage)
 export function TeamPisenPage(props: TeamPisenPageProps) {
 	const { selection } = useInnerTeam()
+	const { songGettingApi } = useApi()
 
 	const [apiState] = useApiStateEffect(async () => {
 		const alias = getVariantAliasFromParams(
 			props.params.hex,
 			props.params['title-alias']
 		)
-		const v = await getVariantByAlias(alias)
-		const variant = v.main
-		const d = mapExtendedVariantPackApiToDto(variant)
+		const v = await handleApiCall(
+			songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+		)
+
+		const d = mapExtendedVariantPackApiToDto(v.main)
 
 		return d
 	}, [props.params.hex, props.params['title-alias']])
