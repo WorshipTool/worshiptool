@@ -160,6 +160,7 @@ function ContactPage() {
 									height: '100px',
 									overflowY: 'auto',
 									backgroundColor: 'grey.100',
+									paddingLeft: '10px',
 								}}
 								onChange={(e) => setMessage(e)}
 								value={message}
