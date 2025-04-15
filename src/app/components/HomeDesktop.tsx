@@ -255,14 +255,15 @@ export default function HomeDesktop() {
 													pointerEvents: 'none',
 												}}
 											>
-												<Box>
-													<Typography variant="h3" strong={200}>
-														Jsi-li ovce, tak...
-													</Typography>
-													<Typography variant="h1" strong={900} noWrap>
-														Chval Otce
-													</Typography>
-													{useWorshipVersion && (
+												{useWorshipVersion ? (
+													<Box>
+														<Typography variant="h3" strong={200}>
+															Jsi-li ovce, tak...
+														</Typography>
+														<Typography variant="h1" strong={900} noWrap>
+															Chval Otce
+														</Typography>
+
 														<>
 															<Typography
 																// variant="h5"
@@ -278,8 +279,17 @@ export default function HomeDesktop() {
 																Na worship.cz
 															</Typography>
 														</>
-													)}
-												</Box>
+													</Box>
+												) : (
+													<>
+														<Typography variant="h3" strong={200}>
+															Jsi-li ovce, tak...
+														</Typography>
+														<Typography variant="h1" strong={900} noWrap>
+															Chval Otce
+														</Typography>
+													</>
+												)}
 											</motion.div>
 										) : (
 											<Box

@@ -100,16 +100,21 @@ const ButtonComponent = ({
 }
 
 const LinkComponent = <T extends RoutesKeys>(props: IconButtonProps<T>) => {
-	const typedParams: CommonLinkProps<T>['params'] = useMemo(
-		() => props.toParams as CommonLinkProps<T>['params'],
-		[props.toParams]
-	)
+	const button = useMemo(() => {
+		return <ButtonComponent {...props} />
+	}, [props])
+
 	return props.to ? (
-		<Link to={props.to} params={typedParams} target={props.target}>
-			<ButtonComponent {...props} />
+		<Link
+			key={props.to + JSON.stringify(props.toParams)}
+			to={props.to}
+			params={props.toParams as CommonLinkProps<T>['params']}
+			target={props.target}
+		>
+			{button}
 		</Link>
 	) : (
-		<ButtonComponent {...props} />
+		button
 	)
 }
 

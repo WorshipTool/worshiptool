@@ -56,7 +56,7 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 
 	const iconStyle: SxProps<Theme> = {
 		filter: `drop-shadow(4px 4px 2px ${shadowColor})`,
-		transition: 'all 0.1s ease',
+		// transition: 'all 0.1s ease',
 		'&:hover': {
 			// filter: "drop-shadow(0px 4px 4px #00000044)",
 			filter: `drop-shadow(4px 4px 4px ${shadowColor})`,
@@ -97,6 +97,10 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 		setLoginNextUrl(window.location.href)
 	}, [])
 
+	const onAddClick = () => {
+		navigate('addMenu', {})
+	}
+
 	return (
 		<>
 			<Container>
@@ -113,15 +117,16 @@ export default function RightAccountPanel({}: RightAccountPanelProps) {
 							tooltip={'Přidat novou píseň'}
 							color={'inherit'}
 							sx={iconButtonStyle}
-							to="addMenu"
+							// to="addMenu"
 							disabled={false}
+							onClick={onAddClick}
 						>
 							<AddBox sx={iconStyle} fontSize={fontSize} />
 						</IconButton>
 						<IconButton
 							tooltip="Nástroje"
 							color={'inherit'}
-							sx={iconButtonStyle}
+							sx={{ ...iconButtonStyle }}
 							onClick={onToolsMenuClick}
 						>
 							<Apps sx={iconStyle} fontSize={fontSize} />
