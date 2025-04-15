@@ -11,6 +11,7 @@ import { Box, Image, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import useWorshipCzVersion from '@/hooks/worshipcz/useWorshipCzVersion'
 import { getAssetUrl } from '@/tech/paths.tech'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -108,6 +109,8 @@ export default function HomeDesktop() {
 		window.addEventListener('resize', handleResize)
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
+
+	const useWorshipVersion = useWorshipCzVersion()
 
 	const [smartSearch, setSmartSearch] = useState(false)
 
@@ -252,12 +255,31 @@ export default function HomeDesktop() {
 													pointerEvents: 'none',
 												}}
 											>
-												<Typography variant="h3" strong={200}>
-													Jsi-li ovce, tak...
-												</Typography>
-												<Typography variant="h1" strong={900} noWrap>
-													Chval Otce
-												</Typography>
+												<Box>
+													<Typography variant="h3" strong={200}>
+														Jsi-li ovce, tak...
+													</Typography>
+													<Typography variant="h1" strong={900} noWrap>
+														Chval Otce
+													</Typography>
+													{useWorshipVersion && (
+														<>
+															<Typography
+																// variant="h5"
+																strong={400}
+																noWrap
+																uppercase
+																// small
+																color="grey.500"
+																sx={{
+																	paddingLeft: 1,
+																}}
+															>
+																Na worship.cz
+															</Typography>
+														</>
+													)}
+												</Box>
 											</motion.div>
 										) : (
 											<Box
@@ -272,6 +294,14 @@ export default function HomeDesktop() {
 												<Typography variant="h3" strong={900} noWrap>
 													Chval Otce
 												</Typography>
+
+												{useWorshipVersion && (
+													<>
+														<Typography variant="h4" strong={200} noWrap>
+															na worship.cz
+														</Typography>
+													</>
+												)}
 											</Box>
 										)}
 									</AnimatePresence>

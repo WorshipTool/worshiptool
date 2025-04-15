@@ -3,6 +3,7 @@ import SvgIcon from '@/assets/icon.svg'
 import { Box, Typography } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Link } from '@/common/ui/Link/Link'
+import useWorshipCzVersion from '@/hooks/worshipcz/useWorshipCzVersion'
 type LogoTitleProps = {
 	hideTitle?: boolean
 	nonInteractive?: boolean
@@ -18,6 +19,8 @@ export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 		})
 		window.dispatchEvent(new Event(RESET_HOME_SCREEN_EVENT_NAME))
 	}
+
+	const worshipVersion = useWorshipCzVersion()
 	return (
 		<Link
 			to="home"
@@ -42,7 +45,7 @@ export default function LogoTitle({ hideTitle = false }: LogoTitleProps) {
 							transition: 'opacity 0.2s ease',
 						}}
 					>
-						Chvalotce
+						{worshipVersion ? 'Worship.cz' : 'Chvalotce'}
 					</Typography>
 				</Box>
 			</Clickable>
