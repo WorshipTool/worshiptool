@@ -341,7 +341,7 @@ export default function HomeDesktop() {
 										pointerEvents: 'auto',
 									}}
 								>
-									<RightSheepPanel />
+									<RightSheepPanel mobileVersion={isMobile} />
 								</Box>
 							)}
 						</Box>
