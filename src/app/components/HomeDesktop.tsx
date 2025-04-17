@@ -382,7 +382,7 @@ export default function HomeDesktop() {
 								paddingBottom: 4,
 							}}
 						>
-							<RightSheepPanel />
+							<RightSheepPanel mobileVersion={isMobile} />
 						</Box>
 					)}
 				</div>

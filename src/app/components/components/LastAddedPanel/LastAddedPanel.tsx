@@ -3,11 +3,16 @@
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
+import { useMediaQuery } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { useEffect, useState } from 'react'
 
-export default function LastAddedPanel() {
+type Props = {
+	mobileVersion: boolean
+}
+
+export default function LastAddedPanel(props: Props) {
 	const theme = useTheme()
 	const { data, isLoading, isError, isSuccess } = useLastAddedSongs()
 
@@ -17,7 +22,20 @@ export default function LastAddedPanel() {
 		setInit(true)
 	}, [])
 
-	const ideasCount = 4
+	const isTiny = useMediaQuery('(max-height:550px)')
+	const isShort = useMediaQuery('(min-height:551px) and (max-height:650px)')
+	const isMedium = useMediaQuery('(min-height:651px) and (max-height:800px)')
+
+	// Pak můžeš nastavit ideasCount:
+	const ideasCount = props.mobileVersion
+		? 4
+		: isTiny
+		? 1
+		: isShort
+		? 2
+		: isMedium
+		? 3
+		: 4
 
 	return (
 		<Box position={'relative'}>

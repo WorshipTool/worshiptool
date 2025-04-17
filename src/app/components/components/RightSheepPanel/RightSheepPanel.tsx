@@ -5,7 +5,11 @@ import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { Box, Image, Typography } from '@/common/ui'
 import { getAssetUrl } from '@/tech/paths.tech'
 
-export default function RightSheepPanel() {
+type Props = {
+	mobileVersion: boolean
+}
+
+export default function RightSheepPanel(props: Props) {
 	const sheepSize = 140
 	const showLastAdded = useFlag('show_last_added_songs')
 	return (
@@ -33,7 +37,7 @@ export default function RightSheepPanel() {
 				/>
 			</Box>
 			{showLastAdded ? (
-				<LastAddedPanel />
+				<LastAddedPanel mobileVersion={props.mobileVersion} />
 			) : (
 				<Box
 					sx={{
