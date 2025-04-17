@@ -1,13 +1,44 @@
-import { Box, Typography } from '@/common/ui'
+import { Box, Button, Gap, Typography } from '@/common/ui'
 import { Card } from '@/common/ui/Card'
 import { TextField } from '@/common/ui/mui'
+import { useApi } from '@/hooks/api/useApi'
+import useAuth from '@/hooks/auth/useAuth'
+import { ROLES } from '@/interfaces/user'
+import { useApiState } from '@/tech/ApiState'
+import { handleApiCall } from '@/tech/handleApiCall'
+import { Edit, Save } from '@mui/icons-material'
 import Image from 'next/image'
-import { Gap } from '../../../../common/ui/Gap/Gap'
-import useAuth from '../../../../hooks/auth/useAuth'
-import { ROLES } from '../../../../interfaces/user'
+import { useState } from 'react'
 
 export default function BasicInfo() {
-	const { info } = useAuth()
+	const [editMode, setEditMode] = useState(false)
+	const { info, reloadInfo } = useAuth()
+
+	const [editedName, setEditedName] = useState<string | null>(null)
+	const [editedSurname, setEditedSurname] = useState<string | null>(null)
+
+	const { authApi } = useApi()
+
+	const { fetchApiState, apiState } = useApiState<boolean>()
+
+	const onSaveClick = () => {
+		const data = {
+			firstName: editedName || info.firstName,
+			lastName: editedSurname || info.lastName,
+		}
+		fetchApiState(async () =>
+			handleApiCall(authApi.authControllerChangeUserName(data))
+		).finally(() => {
+			setEditMode(false)
+			reloadInfo(data)
+		})
+	}
+	const onCancelClick = () => {
+		setEditMode(false)
+		setEditedName(null)
+		setEditedSurname(null)
+	}
+
 	return (
 		<>
 			<Card>
@@ -38,18 +69,72 @@ export default function BasicInfo() {
 								: ROLES[info.role]}
 						</Typography>
 					</Box>
+					<Box flex={1} />
+					{!editMode ? (
+						<Box>
+							<Button
+								outlined
+								startIcon={<Edit />}
+								small
+								onClick={() => setEditMode(true)}
+							>
+								Upravit
+							</Button>
+						</Box>
+					) : (
+						<Box
+							flexDirection={'row'}
+							display={'flex'}
+							gap={1}
+							alignItems={'start'}
+						>
+							<Button
+								small
+								onClick={onSaveClick}
+								startIcon={<Save />}
+								loading={apiState.loading}
+							>
+								Uložit
+							</Button>
+							<Button
+								small
+								outlined
+								onClick={onCancelClick}
+								disabled={apiState.loading}
+							>
+								Zrušit
+							</Button>
+						</Box>
+					)}
 				</Box>
 
 				<Gap value={3} />
 
-				<Box display={'flex'} flexDirection={'row'} gap={3}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					gap={3}
+					alignItems={'center'}
+				>
 					<Box>
 						<Typography>Křestní jméno</Typography>
-						<TextField size="small" fullWidth value={info.firstName} disabled />
+						<TextField
+							size="small"
+							fullWidth
+							value={editedName === null ? info.firstName : editedName}
+							onChange={(e) => setEditedName(e.target.value)}
+							disabled={!editMode}
+						/>
 					</Box>
 					<Box>
 						<Typography>Příjmení</Typography>
-						<TextField size="small" fullWidth value={info.lastName} disabled />
+						<TextField
+							size="small"
+							fullWidth
+							value={editedSurname === null ? info.lastName : editedSurname}
+							disabled={!editMode}
+							onChange={(e) => setEditedSurname(e.target.value)}
+						/>
 					</Box>
 				</Box>
 
