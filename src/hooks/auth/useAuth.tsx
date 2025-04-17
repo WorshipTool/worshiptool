@@ -32,6 +32,7 @@ export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	isLoggedIn: () => false,
 	user: undefined,
 	info: {} as UserDto,
+	reloadInfo: () => {},
 	isTrustee: () => false,
 	isAdmin: () => false,
 	loading: false,
@@ -247,6 +248,16 @@ export function useProvideAuth() {
 		[authApi]
 	)
 
+	const reloadInfo = useCallback(
+		(partialUser: Partial<UserDto>) => {
+			_innerLogin({
+				...user!,
+				...partialUser,
+			})
+		},
+		[user]
+	)
+
 	return {
 		login,
 		logout,
@@ -255,6 +266,7 @@ export function useProvideAuth() {
 		isLoggedIn,
 		user,
 		info: user ? user : ({} as UserDto),
+		reloadInfo,
 		isTrustee: () => user != undefined && user.role == ROLES.Trustee,
 		isAdmin: () => user != undefined && user.role == ROLES.Admin,
 		loading,

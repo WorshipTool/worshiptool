@@ -604,6 +604,25 @@ export interface ChangeTeamInfoInDto {
 /**
  * 
  * @export
+ * @interface ChangeUserNameInDto
+ */
+export interface ChangeUserNameInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeUserNameInDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeUserNameInDto
+     */
+    'lastName': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateTeamEventInDto
  */
 export interface CreateTeamEventInDto {
@@ -4745,6 +4764,45 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {ChangeUserNameInDto} changeUserNameInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeUserName: async (changeUserNameInDto: ChangeUserNameInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeUserNameInDto' is not null or undefined
+            assertParamExists('authControllerChangeUserName', 'changeUserNameInDto', changeUserNameInDto)
+            const localVarPath = `/auth/change-user-name`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeUserNameInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5124,6 +5182,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {ChangeUserNameInDto} changeUserNameInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerChangeUserName(changeUserNameInDto: ChangeUserNameInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangeUserName(changeUserNameInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerChangeUserName']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5262,6 +5332,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {ChangeUserNameInDto} changeUserNameInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangeUserName(changeUserNameInDto: ChangeUserNameInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.authControllerChangeUserName(changeUserNameInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5373,6 +5452,17 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerChangeProfilePhoto(changeProfilePhotoInDto: ChangeProfilePhotoInDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerChangeProfilePhoto(changeProfilePhotoInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ChangeUserNameInDto} changeUserNameInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerChangeUserName(changeUserNameInDto: ChangeUserNameInDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerChangeUserName(changeUserNameInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
