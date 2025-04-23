@@ -36,8 +36,7 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 		<Box
 			sx={{
 				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
+				// flexDirection: 'row',
 				position: 'relative',
 			}}
 		>
@@ -48,39 +47,49 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 				sx={{
 					marginTop: 2,
 					marginBottom: 2,
-					padding: 3,
-					backgroundColor: 'grey.200',
-					borderStyle: 'solid',
-					borderWidth: 1,
-					borderColor: 'grey.400',
-					borderRadius: 1,
-					flex: 1,
-					display: 'flex',
-					flexDirection: 'column',
-					displayPrint: 'none',
-					position: 'relative',
+					gap: 2,
+					alignItems: 'start',
 				}}
 			>
-				{Array.from({ length: 4 }).map((_, i) => (
-					<DraggableSong
-						key={i}
-						data={{
-							packGuid: variantData?.packGuid || ('' as VariantPackGuid),
-							title: variantData?.title || '',
-							alias: variantData?.packAlias || ('' as VariantPackAlias),
-						}}
-					>
-						<DragCorner index={i} />
-					</DraggableSong>
-				))}
-
-				<SongContainer
-					variant={variantData}
-					song={song}
-					flags={{
-						showMedia: showMedia,
+				<Box
+					sx={{
+						padding: 3,
+						backgroundColor: 'grey.200',
+						borderStyle: 'solid',
+						borderWidth: 1,
+						borderColor: 'grey.300',
+						boxShadow: '0px 2px 3px 1px rgba(0, 0, 0, 0.1)',
+						borderRadius: 1,
+						flex: 1,
+						display: 'flex',
+						flexDirection: 'column',
+						displayPrint: 'none',
+						position: 'relative',
 					}}
-				/>
+				>
+					{Array.from({ length: 4 }).map((_, i) => (
+						<DraggableSong
+							key={i}
+							data={{
+								packGuid: variantData?.packGuid || ('' as VariantPackGuid),
+								title: variantData?.title || '',
+								alias: variantData?.packAlias || ('' as VariantPackAlias),
+							}}
+						>
+							<DragCorner index={i} />
+						</DraggableSong>
+					))}
+
+					<SongContainer
+						variant={variantData}
+						song={song}
+						flags={{
+							showMedia: showMedia,
+						}}
+					/>
+				</Box>
+
+				{/* <SongRightPanel /> */}
 			</ContainerGrid>
 		</Box>
 	)
