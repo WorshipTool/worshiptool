@@ -138,7 +138,7 @@ export default function SongRightPanel(props: Props) {
 				</Container>
 			)}
 
-			<Container>
+			{/* <Container>
 				<Typography variant="h6">Podobné chvály</Typography>
 				{['Ocean1', 'Ocean2', 'Ocean1', 'Ocean2', 'Ocean1'].map(
 					(title, index) => (
@@ -147,7 +147,7 @@ export default function SongRightPanel(props: Props) {
 						</Typography>
 					)
 				)}
-			</Container>
+			</Container> */}
 		</Box>
 	)
 }
