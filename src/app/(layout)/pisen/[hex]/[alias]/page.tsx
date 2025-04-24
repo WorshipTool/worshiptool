@@ -48,7 +48,7 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 				sx={{
 					marginTop: 2,
 					marginBottom: 2,
-					paddingX: 6,
+					// paddingX: 6,
 					gap: 2,
 					alignItems: 'start',
 				}}
