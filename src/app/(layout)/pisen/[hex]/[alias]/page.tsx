@@ -1,5 +1,6 @@
 'use server'
 import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
+import SongRightPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/RightPanel/SongRightPanel'
 import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnalyze'
 import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -47,6 +48,7 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 				sx={{
 					marginTop: 2,
 					marginBottom: 2,
+					paddingX: 6,
 					gap: 2,
 					alignItems: 'start',
 				}}
@@ -89,7 +91,7 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 					/>
 				</Box>
 
-				{/* <SongRightPanel /> */}
+				<SongRightPanel pack={variantData} song={song} />
 			</ContainerGrid>
 		</Box>
 	)

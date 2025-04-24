@@ -7,7 +7,11 @@ type AppContainerProps = {
 }
 
 export async function AppContainer(props: AppContainerProps) {
-	const showLoadingScreen = await getCloudConfig('SHOW_LOADING_SCREEN', true)
+	const showLoadingScreen = await getCloudConfig(
+		'basic',
+		'SHOW_LOADING_SCREEN',
+		true
+	)
 	return (
 		<>
 			{/* <Snow /> */}

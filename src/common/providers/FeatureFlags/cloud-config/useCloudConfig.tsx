@@ -1,25 +1,21 @@
 import {
-	BASIC_CLOUD_CONFIG_NAME,
-	BasicCloudConfig,
+	CloudConfigs,
+	cloudConfigsNames,
 } from '@/common/providers/FeatureFlags/cloud-config/cloud-config.types'
 import { useDynamicConfig } from '@statsig/react-bindings'
 
 /**
  * Hook to get the value of a cloud prop (Dynamic config value) typed boolean.
  */
-export const useCloudConfig = <T extends keyof BasicCloudConfig>(
-	key: T,
-	defaultValue: BasicCloudConfig[T]
-): BasicCloudConfig[T] => {
-	const a = useDynamicConfig(BASIC_CLOUD_CONFIG_NAME)
+export const useCloudConfig = <
+	T extends keyof CloudConfigs,
+	R extends keyof CloudConfigs[T]
+>(
+	config: T,
+	key: R,
+	defaultValue: CloudConfigs[T][R]
+): CloudConfigs[T][R] => {
+	const a = useDynamicConfig(cloudConfigsNames[config])
 
-	// const [value, setValue] = useState<CloudConfig[T]>(defaultValue)
-
-	// useEffect(() => {
-	// 	const v = a.get<CloudConfig[T]>(key as string, defaultValue)
-	// 	console.log('a.get', v, key, a)
-	// 	setValue(v)
-	// }, [a, key, defaultValue])
-
-	return (a.value[key] as BasicCloudConfig[T]) ?? defaultValue
+	return (a.value[key as string] as CloudConfigs[T][R]) ?? defaultValue
 }

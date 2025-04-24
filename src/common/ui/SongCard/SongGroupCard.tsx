@@ -1,6 +1,6 @@
-import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui/Box'
 import { Clickable } from '@/common/ui/Clickable'
+import TranslationsSelectPopup from '@/common/ui/SongCard/components/TranslationsSelectPopup'
 import {
 	SongVariantCard,
 	ToLinkProps,
@@ -180,30 +180,12 @@ export default function SongGroupCard({
 				)}
 			</Box>
 
-			<Popup
+			<TranslationsSelectPopup
 				open={variantsShown}
 				onClose={() => setVariantsShown(false)}
-				title="Vybrat jiný překlad"
-			>
-				<Box
-					maxHeight={600}
-					overflow="auto"
-					display={'flex'}
-					gap={1}
-					flexDirection={'column'}
-				>
-					{packs.map((d) => (
-						<Box key={d.packGuid} position={'relative'}>
-							<SongVariantCard
-								key={d.packGuid}
-								data={d}
-								properties={['SHOW_PRIVATE_LABEL', 'ENABLE_TRANSLATION_LIKE']}
-								toLinkProps={props.toLinkProps}
-							/>
-						</Box>
-					))}
-				</Box>
-			</Popup>
+				packs={packs}
+				toLinkProps={props.toLinkProps}
+			/>
 		</>
 	)
 }

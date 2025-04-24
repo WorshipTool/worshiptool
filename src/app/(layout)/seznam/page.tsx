@@ -14,7 +14,10 @@ import { handleApiCall } from '../../../tech/handleApiCall'
 
 export default SmartPage(List)
 function List() {
-	const [page, setPage] = useUrlState('stránka', 1)
+	const [page, setPage] = useUrlState('stránka', 1, {
+		parse: (v) => parseInt(v),
+		stringify: (v) => v.toString(),
+	})
 	console.log('page', page)
 
 	const { songGettingApi } = useApi()
