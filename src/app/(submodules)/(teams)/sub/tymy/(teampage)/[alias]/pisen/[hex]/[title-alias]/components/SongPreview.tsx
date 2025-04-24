@@ -36,7 +36,10 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 	const { guid: teamGuid, alias: teamAlias } = useInnerTeam()
 
 	const { 'title-alias': titleAlias, hex } = useSmartParams('teamSong')
-	const [inEditMode, setInEditMode] = useSmartUrlState('teamSong', 'edit')
+	const [inEditMode, setInEditMode] = useSmartUrlState('teamSong', 'edit', {
+		parse: (v) => v === 'true',
+		stringify: (v) => (v ? 'true' : 'false'),
+	})
 
 	const hasPermissionToEdit = usePermission<TeamPermissions>(
 		'team.edit_songs',

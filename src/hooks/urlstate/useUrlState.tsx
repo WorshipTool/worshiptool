@@ -56,7 +56,12 @@ export function useUrlState<T = string>(...props: UseUrlStateProps<T>) {
 	return [value, setValue] as const
 }
 
-export const useSmartUrlState = <T extends RoutesKeys>(
+export const useSmartUrlState = <
+	T extends RoutesKeys,
+	R extends keyof SmartSearchParams<T>
+>(
 	page: T,
-	paramKey: keyof SmartSearchParams<T>
-) => useUrlState(paramKey as string, undefined)
+	paramKey: R,
+	options: UseURLStateOptionsRequired<SmartSearchParams<T>[R]>
+) =>
+	useUrlState(paramKey as string, undefined as SmartSearchParams<T>[R], options)
