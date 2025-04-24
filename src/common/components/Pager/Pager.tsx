@@ -7,6 +7,8 @@ export type PagerProps<T> = {
 	take?: number
 	allCount?: number
 	data: T[] | ((page: number) => Promise<T[]>)
+	onPageChange?: (page: number) => void
+	startPage?: number
 }
 
 export default function Pager<T>({
@@ -16,7 +18,7 @@ export default function Pager<T>({
 }: PagerProps<T>) {
 	const staticMode = Array.isArray(props.data)
 
-	const [page, setPage] = useState(1)
+	const [page, _setPage] = useState(props.startPage ?? 1)
 	const pagesCount = useMemo(() => {
 		if (staticMode) {
 			return Math.ceil((props.data as T[]).length / take)
@@ -50,6 +52,11 @@ export default function Pager<T>({
 		() => children(pageData, loading, (page - 1) * take),
 		[children, pageData, loading, take, page]
 	)
+
+	const setPage = (p: number) => {
+		_setPage(p)
+		props.onPageChange?.(p)
+	}
 
 	return (
 		<Box display={'flex'} flexDirection={'column'} gap={2}>

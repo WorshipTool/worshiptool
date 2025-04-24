@@ -2,17 +2,30 @@ import { RoutesKeys, SmartSearchParams } from '@/routes'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-type UseURLStateOptions = {}
+type UseURLStateOptionsRequired<T> = {
+	parse: (value: string) => T
+	stringify: (value: T) => string
+}
 
-export function useUrlState<T = string>(
-	key: string,
-	startValue?: T,
-	options?: UseURLStateOptions
-) {
+type UseUrlStateProps<T = string> =
+	| [key: string, startValue?: string]
+	| [key: string, startValue: T, options: UseURLStateOptionsRequired<T>]
+
+export function useUrlState<T = string>(...props: UseUrlStateProps<T>) {
+	const [key] = props
+	const startValue = props[1] as T | undefined
+
+	const { parse, stringify } = (props[2] as UseURLStateOptionsRequired<T>) || {
+		parse: (value: string) => value as T,
+		stringify: (value: T) => value as unknown as string,
+	}
+
 	const [value, _setValue] = useState<T | null>(() => {
 		if (typeof window === 'undefined') return startValue || null
 		const params = new URLSearchParams(window.location.search)
-		return (params.get(key) || startValue || null) as T | null
+		const v = params.get(key)
+		const vv = v ? parse(v) : null
+		return vv || startValue || null
 	})
 
 	const setValue = (value: T | null) => {
@@ -22,7 +35,8 @@ export function useUrlState<T = string>(
 		if (value === null) {
 			params.delete(key)
 		} else {
-			params.set(key, value as string)
+			const strValue = stringify(value)
+			params.set(key, strValue)
 		}
 
 		const url = `${window.location.pathname}?${params.toString()}`
@@ -42,13 +56,12 @@ export function useUrlState<T = string>(
 	return [value, setValue] as const
 }
 
-export const useSmartUrlState = <T extends RoutesKeys>(
+export const useSmartUrlState = <
+	T extends RoutesKeys,
+	R extends keyof SmartSearchParams<T>
+>(
 	page: T,
-	paramKey: keyof SmartSearchParams<T>,
-	options?: UseURLStateOptions
+	paramKey: R,
+	options: UseURLStateOptionsRequired<SmartSearchParams<T>[R]>
 ) =>
-	useUrlState<SmartSearchParams<T>[typeof paramKey]>(
-		paramKey as string,
-		undefined,
-		options
-	)
+	useUrlState(paramKey as string, undefined as SmartSearchParams<T>[R], options)

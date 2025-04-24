@@ -10,7 +10,11 @@ type PlaylistPrintOptionsProps = {
 export default function PlaylistPrintOptions(props: PlaylistPrintOptionsProps) {
 	const [checked, setChecked] = useSmartSearchParam(
 		'playlistPrint',
-		'landscapeMode'
+		'landscapeMode',
+		{
+			parse: (v) => v === 'true',
+			stringify: (v) => (v ? 'true' : 'false'),
+		}
 	)
 
 	const onChange = (v: boolean) => {
@@ -30,7 +34,7 @@ export default function PlaylistPrintOptions(props: PlaylistPrintOptionsProps) {
 
 			<Checkbox
 				onChange={(e, v) => onChange(v)}
-				checked={checked == true}
+				checked={checked === true}
 				label="Použít zobrazení na šířku"
 			/>
 

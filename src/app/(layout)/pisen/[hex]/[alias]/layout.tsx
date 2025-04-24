@@ -33,5 +33,5 @@ export const generateMetadata = generateSmartMetadata(
 )
 
 export default async function layout(props: LayoutProps<'variant'>) {
-	return props.children
+	return <>{props.children}</>
 }

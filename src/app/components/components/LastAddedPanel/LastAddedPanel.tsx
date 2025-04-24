@@ -1,11 +1,10 @@
 'use client'
 
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
-import { Box, Clickable, Typography, useTheme } from '@/common/ui'
-import { Link } from '@/common/ui/Link/Link'
+import RowSongPackCard from '@/common/components/song/RowSongPackCard'
+import { Box, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
-import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { useEffect, useState } from 'react'
 
 type Props = {
@@ -78,32 +77,9 @@ export default function LastAddedPanel(props: Props) {
 							))}
 						</>
 					) : (
-						data.slice(0, ideasCount).map((s) => (
-							<Clickable key={s.packAlias}>
-								<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-									<Box
-										sx={{
-											padding: 1,
-											paddingX: 1.5,
-											bgcolor: 'grey.100',
-											borderRadius: 2,
-											border: `2px solid ${theme.palette.grey[300]}`,
-											display: 'flex',
-											justifyContent: 'space-between',
-										}}
-									>
-										<Typography>{s.title}</Typography>
-
-										{/* {s.publishedAt && (
-											<Chip
-												label={getSmartDateAgoString(s.publishedAt)}
-												size="small"
-											/>
-										)} */}
-									</Box>
-								</Link>
-							</Clickable>
-						))
+						data
+							.slice(0, ideasCount)
+							.map((s) => <RowSongPackCard key={s.packAlias} data={s} />)
 					)}
 				</Box>
 			</Box>

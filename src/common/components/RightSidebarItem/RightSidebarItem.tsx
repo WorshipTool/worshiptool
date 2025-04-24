@@ -1,3 +1,4 @@
+'use client'
 import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
 import { createPortal } from 'react-dom'
 import './styles.css'

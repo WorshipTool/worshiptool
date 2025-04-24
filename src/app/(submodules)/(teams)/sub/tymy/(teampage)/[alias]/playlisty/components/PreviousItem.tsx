@@ -18,7 +18,11 @@ type PreviousItemProps = {
 export default function PreviousItem(props: PreviousItemProps) {
 	const [openedEventGuid, setOpenedEventGuid] = useSmartUrlState(
 		'teamPlaylists',
-		'openedEvent'
+		'openedEvent',
+		{
+			parse: (v) => v,
+			stringify: (v) => v as string,
+		}
 	)
 	const open = useMemo(
 		() => openedEventGuid === props.data.guid,

@@ -9,12 +9,15 @@ import { Grid } from '@/common/ui/mui/Grid'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { Gap } from '../../../common/ui/Gap/Gap'
 import { useApi } from '../../../hooks/api/useApi'
+import { useSmartUrlState } from '../../../hooks/urlstate/useUrlState'
 import { handleApiCall } from '../../../tech/handleApiCall'
 
 export default SmartPage(List)
 function List() {
-	// const [page, setPage] = useState(1)
-	// const [pageCount, setPageCount] = useState(1)
+	const [page, setPage] = useSmartUrlState('songsList', 's', {
+		parse: (v) => parseInt(v),
+		stringify: (v) => (v as number).toString(),
+	})
 
 	const { songGettingApi } = useApi()
 
@@ -50,7 +53,13 @@ function List() {
 						Seznam všech písní
 					</Typography>
 				</Box>
-				<Pager data={getPageData} allCount={count || 0} take={countPerPage}>
+				<Pager
+					data={getPageData}
+					allCount={count || 0}
+					take={countPerPage}
+					startPage={page || 1}
+					onPageChange={setPage}
+				>
 					{(data, loading, startIndex) => {
 						return (
 							<Box

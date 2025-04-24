@@ -10,7 +10,11 @@ import { Gap } from '../../common/ui/Gap/Gap'
 export default function UnavailableMessage() {
 	const [isUnavailable, setIsUnvailable] = useState(false)
 
-	const flagEnabled = useCloudConfig('APP_TEMPORARILY_UNAVAILABLE', false)
+	const flagEnabled = useCloudConfig(
+		'basic',
+		'APP_TEMPORARILY_UNAVAILABLE',
+		false
+	)
 	useEffect(() => {
 		if (flagEnabled) setIsUnvailable(flagEnabled)
 	}, [flagEnabled])

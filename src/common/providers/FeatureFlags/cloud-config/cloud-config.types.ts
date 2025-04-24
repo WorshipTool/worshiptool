@@ -4,4 +4,15 @@ export type BasicCloudConfig = {
 	USE_WORSHIP_CZ_VERSION: boolean
 }
 
-export const BASIC_CLOUD_CONFIG_NAME = 'basic_config'
+export type CloudConfigs = {
+	basic: BasicCloudConfig
+	songPage: {
+		SHOW_FINANCIAL_SUPPORT_CARD: boolean
+		SHOW_RIGHT_PANEL: boolean
+	}
+}
+
+export const cloudConfigsNames: Record<keyof CloudConfigs, string> = {
+	basic: 'basic_config',
+	songPage: 'songpage_config',
+}

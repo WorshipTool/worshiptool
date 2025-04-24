@@ -88,4 +88,7 @@ export const routesSearchParams = {
 	contact: {
 		wantToJoin: false as boolean | undefined,
 	},
+	songsList: {
+		s: 0 as number | undefined,
+	},
 }
