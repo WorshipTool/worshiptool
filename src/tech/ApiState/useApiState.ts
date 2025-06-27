@@ -55,6 +55,7 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 			return data
 		} catch (err) {
 			console.log(err)
+
 			dispatchErrorAction(err as ApiError | string)
 
 			return null
@@ -73,23 +74,27 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 	}
 
 	const dispatchErrorAction = (error: ApiError | string | any) => {
-		console.log('error', error)
-		setState({
-			...getState(),
-			error: {
-				status:
-					(typeof error === 'object'
-						? error.errorCode || error.request.status
-						: 500) || 500,
-				message:
-					(typeof error === 'object' ? error.message : error) ||
-					(error as string),
-			},
-			loading: false,
-			success: false,
-			data: null,
-			isDispatched: true,
-		})
+		try {
+			console.log('error', error)
+			setState({
+				...getState(),
+				error: {
+					status:
+						(typeof error === 'object'
+							? error.errorCode || error.request.status
+							: 500) || 500,
+					message:
+						(typeof error === 'object' ? error.message : error) ||
+						(error as string),
+				},
+				loading: false,
+				success: false,
+				data: null,
+				isDispatched: true,
+			})
+		} catch (e) {
+			console.error('Error while dispatching error action:', e)
+		}
 	}
 
 	return {

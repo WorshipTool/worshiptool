@@ -1,7 +1,8 @@
 import ToolPanel from '@/app/(layout)/vytvorit/napsat/components/ToolPanel'
+import { useSheetEditorTempData } from '@/common/components/SheetEditor/useSheetEditorTempData'
 import { Box } from '@/common/ui'
 import { InputBase, styled, SxProps } from '@/common/ui/mui'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 const TitleInput = styled(InputBase)(({ theme }) => ({
 	fontWeight: theme.typography.fontWeightBold,
@@ -19,15 +20,25 @@ interface SheetEditorProps {
 	startSheetData?: string
 
 	sx?: SxProps
+	useExampleData?: boolean
 }
 
 export default function SheetEditor(props: SheetEditorProps) {
-	const [title, _setTitle] = useState(props.startTitle || '')
-	const [sheetData, _setSheetData] = useState(props.startSheetData || '')
+	//TODO: maybe remove this line
+	const { title: t, sheetData: sd } = useSheetEditorTempData(
+		!props.useExampleData
+	)
+	const [title, _setTitle] = useState(props.startTitle || t)
+	const [sheetData, _setSheetData] = useState(props.startSheetData || sd)
 
 	const sheetInputRef: any = useRef(null)
 	const titleInputRef: any = useRef(null)
 	const cursorRef = useRef<{ start: number; end: number } | null>() // Ref pro uchování pozice kurzoru
+
+	useEffect(() => {
+		props.onTitleChange?.(title)
+		props.onSheetDataChange?.(sheetData)
+	}, [])
 
 	const setSheetData = (data: string) => {
 		_setSheetData(data)

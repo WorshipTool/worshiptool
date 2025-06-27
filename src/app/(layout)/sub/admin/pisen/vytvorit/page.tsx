@@ -1,20 +1,13 @@
 'use client'
 
-import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { useAdditionInfoAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useAdditionInfoAdminSection'
+import usePublishAdminSection from '@/app/(layout)/sub/admin/pisen/vytvorit/usePublishAdminSection'
+import { useTextChordAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useTextChordAdminSection'
+import { useValidationAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useValidationAdminSection'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
-import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
-import { Box, Button, Typography } from '@/common/ui'
+import { Box, Button } from '@/common/ui'
 import { Step, StepLabel, Stepper } from '@/common/ui/mui'
-import { grey } from '@/common/ui/mui/colors'
-import { useApi } from '@/hooks/api/useApi'
-import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
-import { isSheetDataValid } from '@/tech/sheet.tech'
-import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
-import { Sheet } from '@pepavlin/sheet-api'
 import { useMemo, useState } from 'react'
 
 export default SmartPage(CreateSongPage, [
@@ -24,20 +17,29 @@ export default SmartPage(CreateSongPage, [
 	'darkToolbar',
 ])
 
-const STEP_COUNT = 2
+export type AdminStepperItem = {
+	label: string
+	component: React.ReactNode
+	completed?: boolean
+	actions?: (cont: () => void, disabledContinue: boolean) => React.ReactNode
+	disabledContinue?: boolean
+}
+
+const STEP_COUNT = 3
 
 function CreateSongPage() {
-	const { songManagementApi, songAddingApi } = useApi()
+	const [packData, setPackData] = useState<PostCreateVariantOutDto | null>(null)
 
-	const [sheetData, setSheetData] = useState('')
-	const sheet = useMemo(() => {
-		return new Sheet(sheetData)
-	}, [sheetData])
-	const [title, setTitle] = useState('')
+	const first = useTextChordAdminSection(packData, (data) => {
+		setPackData(data)
+	})
+	const second = useValidationAdminSection(packData!)
+	const third = useAdditionInfoAdminSection(packData!)
+	const fourth = usePublishAdminSection(packData!)
 
-	const isSheetValid = useMemo(() => {
-		return isSheetDataValid(sheetData)
-	}, [sheet])
+	const items: AdminStepperItem[] = useMemo(() => {
+		return [first, second, third, fourth]
+	}, [first, second])
 
 	const [step, setStep] = useState(0)
 	const nextStep = () => {
@@ -47,109 +49,64 @@ function CreateSongPage() {
 		setStep((prev) => prev - 1)
 	}
 
-	const { fetchApiState, apiState } = useApiState<PostCreateVariantOutDto>()
-	const navigate = useSmartNavigate()
-
-	const onPostClick = () => {
-		if (!isSheetValid) return
-		fetchApiState(
-			async () => {
-				return handleApiCall(
-					songAddingApi.songAddingControllerCreate({
-						title,
-						sheetData,
-						createdType: CreatedType.Manual,
-					})
-				)
-			},
-			(result) => {
-				const a = parseVariantAlias(result.alias as VariantPackAlias)
-				navigate(
-					'adminPack',
-					{
-						hex: a.hex,
-						alias: a.alias,
-					},
-					{
-						replace: false,
-					}
-				)
-			}
-		)
-	}
-
 	return (
 		<Box display={'flex'} flexDirection={'column'} gap={2} minHeight={'100%'}>
 			<Stepper activeStep={step}>
-				<Step key={'one'} completed={isSheetValid}>
-					<StepLabel>Text a akordy</StepLabel>
-				</Step>
-				{/* <Step key={'two'}>
-					<StepLabel>Doprovodné informace</StepLabel>
-				</Step> */}
-				<Step key={'three'}>
-					<StepLabel>Zveřejnění</StepLabel>
-				</Step>
+				{items.map((item, index) => (
+					<Step key={index} completed={item.completed}>
+						<StepLabel>{item.label}</StepLabel>
+					</Step>
+				))}
 			</Stepper>
-			{step === 0 ? (
-				<>
-					<Box
-						sx={{
-							display: 'flex',
-							bgcolor: 'grey.100',
-							padding: 3,
-							backgroundColor: 'grey.100',
-							boxShadow: `0px 0px 5px ${grey[400]}`,
-							gap: 3,
-						}}
-					>
-						<SheetEditor
-							onSheetDataChange={(s) => setSheetData(s)}
-							onTitleChange={(t) => setTitle(t)}
-							startSheetData={sheetData}
-							startTitle={title}
-						/>
-						<Box
-							flex={1}
-							sx={{
-								bgcolor: 'grey.200',
-								padding: 3,
-								borderRadius: 2,
-							}}
-						>
-							<SheetDisplay sheet={sheet} title={title} hideChords={false} />
-						</Box>
-					</Box>
-					{!isSheetValid && (
-						<Typography color="grey.500" strong>
-							Píseň není validní.
-						</Typography>
-					)}
-				</>
-			) : (
-				// : step === 1 ? (
-				// 	<>informace</>
-				// )
-				<>Pro zveřejnění klikni na tlačítko dole</>
-			)}
-
+			{items[step]?.component || <Box>Neznámý krok</Box>}
 			<Box flex={1} />
-
 			<Box display={'flex'} gap={2} justifyContent={'space-between'}>
 				<Button onClick={prevStep} disabled={step === 0} outlined>
 					Předchozí
 				</Button>
-				{step < STEP_COUNT - 1 ? (
-					<Button onClick={nextStep}>Pokračovat</Button>
+
+				{items[step]?.actions ? (
+					items[step]?.actions(nextStep, items[step]?.disabledContinue || false)
 				) : (
-					<Button
-						loading={apiState.loading}
-						onClick={onPostClick}
-						disabled={!isSheetValid}
+					<>
+						<Button onClick={nextStep} disabled={items[step]?.disabledContinue}>
+							Pokračovat
+						</Button>
+					</>
+				)}
+
+				{/* {step === 0 ? (
+					<Box
+						sx={{
+							display: 'flex',
+							gap: 1,
+						}}
 					>
+						<Button
+							onClick={onOnlySaveClick}
+							variant="outlined"
+							disabled={!isSheetValid}
+							loading={apiState.loading}
+						>
+							Uložit píseň
+						</Button>
+						<Button
+							onClick={onSaveAndContinue}
+							disabled={!isSheetValid}
+							loading={apiState.loading}
+						>
+							Uložit a pokračovat
+						</Button>
+					</Box>
+				) : step < STEP_COUNT - 1 ? (
+					<Button onClick={nextStep} loading={apiState.loading}>
+						pokračovat
+					</Button>
+				) : (
+					<Button loading={apiState.loading} onClick={onPublishClick}>
 						Zveřejnit
 					</Button>
-				)}
+				)} */}
 			</Box>
 		</Box>
 	)
