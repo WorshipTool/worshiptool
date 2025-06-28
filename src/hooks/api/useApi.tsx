@@ -1,4 +1,4 @@
-import { getApiClasses } from '@/hooks/api/tech'
+import { getApiClasses } from '@/hooks/api/api-classes'
 import { useMemo } from 'react'
 import useAuth from '../auth/useAuth'
 

@@ -8,7 +8,9 @@ export const norequiredPermissionEvent = 'norequiredPermissionEvent'
 // Handle function for all API calls
 // parameters: request - asynchronous function that returns a promise
 // Handles errors and returns the promise response
-export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
+export const handleApiCall = <T>(
+	request: Promise<AxiosResponse<T>>
+): Promise<T> => {
 	return request
 		.then((res) => {
 			return res.data
