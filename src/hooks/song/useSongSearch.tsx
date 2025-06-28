@@ -1,11 +1,6 @@
-import {
-	mapSearchSongPacksApiToDto,
-	SearchSongDto,
-} from '@/api/dtos/song/song.search.dto'
+import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import { SearchKey } from '@/types/song/search.types'
 import { useCallback } from 'react'
-import { mapBasicVariantPackApiToDto } from '../../api/dtos'
-import { handleApiCall } from '../../tech/handleApiCall'
 import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
 
@@ -21,7 +16,7 @@ type GetSongFunction = (
 ) => Promise<SearchSongDto[]>
 
 export default function useSongSearch() {
-	const { songGettingApi, packEmbeddingApi, songSearchingApi } = useApi()
+        const { songGettingApi, packEmbeddingApi, songSearchingApi } = useApi()
 	const { user } = useAuth()
 
 	const getSongs: GetSongFunction = useCallback(
@@ -31,33 +26,25 @@ export default function useSongSearch() {
 		): Promise<SearchSongDto[]> => {
 			try {
 				// Handle smart search
-				if (additionalParams?.useSmartSearch) {
-					return (
-						await handleApiCall(
-							packEmbeddingApi.packEmbeddingSearchControllerSearch(
-								searchKey,
-								additionalParams?.page || 0,
-								{
-									signal: additionalParams.signal,
-								}
-							)
-						)
-					).map((s) => ({
-						found: [mapBasicVariantPackApiToDto(s)],
-					}))
-				}
+                                if (additionalParams?.useSmartSearch) {
+                                        return packEmbeddingApi.packEmbeddingSearchControllerSearch(
+                                                searchKey,
+                                                additionalParams?.page || 0,
+                                                {
+                                                        signal: additionalParams.signal,
+                                                }
+                                        )
+                                }
 
-				const result = await handleApiCall(
-					songSearchingApi.songSearchingControllerSearch(
-						searchKey,
-						additionalParams?.page || 0,
-						{
-							signal: additionalParams?.signal,
-						}
-					)
-				)
+                                const result = await songSearchingApi.songSearchingControllerSearch(
+                                        searchKey,
+                                        additionalParams?.page || 0,
+                                        {
+                                                signal: additionalParams?.signal,
+                                        }
+                                )
 
-				return result.map((d) => mapSearchSongPacksApiToDto(d))
+                                return result
 			} catch (e) {
 				console.log(e)
 			}

@@ -3,7 +3,6 @@ import { GetFavouritesOutDto } from '@/api/generated'
 import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 type Rt = ReturnType<typeof useProvideFavourites>
@@ -38,12 +37,12 @@ const useProvideFavourites = () => {
 
 	const { fetchApiState, apiState } = useApiState<GetFavouritesOutDto>()
 
-	const reload = async () => {
-		if (!user) return
-		const data = await fetchApiState(() =>
-			handleApiCall(songFavouritesApi.songFavouritesControllerGetFavourites())
-		)
-		if (data) setFavourites(data)
+        const reload = async () => {
+                if (!user) return
+                const data = await fetchApiState(() =>
+                        songFavouritesApi.songFavouritesControllerGetFavourites()
+                )
+                if (data) setFavourites(data)
 	}
 
 	const first = useRef(true)
@@ -55,20 +54,16 @@ const useProvideFavourites = () => {
 		reload()
 	}, [user])
 
-	const add = async (packGuid: VariantPackGuid) => {
-		const result = await handleApiCall(
-			songFavouritesApi.songFavouritesControllerAddFavourite({ packGuid })
-		)
-		reload()
-		return result
-	}
-	const remove = async (packGuid: VariantPackGuid) => {
-		const result = await handleApiCall(
-			songFavouritesApi.songFavouritesControllerRemoveFavourite({ packGuid })
-		)
-		reload()
-		return result
-	}
+        const add = async (packGuid: VariantPackGuid) => {
+                const result = await songFavouritesApi.songFavouritesControllerAddFavourite({ packGuid })
+                reload()
+                return result
+        }
+        const remove = async (packGuid: VariantPackGuid) => {
+                const result = await songFavouritesApi.songFavouritesControllerRemoveFavourite({ packGuid })
+                reload()
+                return result
+        }
 
 	return {
 		items: favourites?.items || null,
