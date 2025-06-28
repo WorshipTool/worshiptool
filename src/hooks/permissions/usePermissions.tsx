@@ -4,7 +4,6 @@ import {
 	permissionPayloadToApi,
 } from '../../api/dtos/permission'
 import { useApiState } from '../../tech/ApiState'
-import { handleApiCall } from '../../tech/handleApiCall'
 import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
 import {
@@ -70,17 +69,15 @@ function useProvidePermissions<
 		useApiState<PermissionDataType<Merge<A>, PermissionType<Merge<A>>>[]>()
 
 	const reload = async () => {
-		fetchApiState(async () => {
-			if (!isLoggedIn()) return []
-			const data = await handleApiCall(
-				permissionApi.permissionControllerGetUserPermissions(userGuid)
-			)
-			return data.map((p) => {
-				return {
-					type: p.type as PermissionType<Merge<A>>,
-					payload: apiToPermissionPayload(p.payload),
-					guid: p.guid,
-				}
+                fetchApiState(async () => {
+                        if (!isLoggedIn()) return []
+                        const data = await permissionApi.permissionControllerGetUserPermissions(userGuid)
+                        return data.map((p) => {
+                                return {
+                                        type: p.type as PermissionType<Merge<A>>,
+                                        payload: apiToPermissionPayload(p.payload),
+                                        guid: p.guid,
+                                }
 			})
 		})
 			.then((r) => {
@@ -98,14 +95,12 @@ function useProvidePermissions<
 		payload: PermissionPayloadType<Merge<A>, T>
 	) => {
 		if (!isLoggedIn()) return []
-		const data = await handleApiCall(
-			permissionApi.permissionControllerGetAllUsersWithPermission(
-				type,
-				permissionPayloadToApi(payload)
-			)
-		)
-		return data
-	}
+                const data = await permissionApi.permissionControllerGetAllUsersWithPermission(
+                        type,
+                        permissionPayloadToApi(payload)
+                )
+                return data
+        }
 
 	return {
 		reload,

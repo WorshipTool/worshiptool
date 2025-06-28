@@ -4,7 +4,6 @@ import {
 	AllCommonData,
 	TranslationLike,
 } from '@/hooks/common-data/common-data.types'
-import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 
 // This all is sent on every first request... so optimize it!
 
@@ -13,17 +12,13 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 
 	try {
 		/** Get translation likes of user */
-		const tLikes = await handleServerApiCall(
-			api.songUserManagementApi.songTranslationLikeControllerGetUserLikes()
-		)
+                const tLikes = await api.songUserManagementApi.songTranslationLikeControllerGetUserLikes()
 		const tlFormatted: TranslationLike[] = tLikes.likes.map((tl) => ({
 			packGuid: tl.packGuid as PackGuid,
 		}))
 
 		/** Get teams of user */
-		const teams = await handleServerApiCall(
-			api.teamMembersApi.teamMemberControllerGetTeamsOfUser()
-		)
+                const teams = await api.teamMembersApi.teamMemberControllerGetTeamsOfUser()
 
 		/** Get playlist of user */
 		// const playlists = await handleServerApiCall(
@@ -31,9 +26,7 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 		// )
 
 		/** Get all subdomains */
-		const subdomains = await handleServerApiCall(
-			api.teamGettingApi.teamGettingControllerGetAllSubdomains()
-		)
+                const subdomains = await api.teamGettingApi.teamGettingControllerGetAllSubdomains()
 
 		/** Get user permissions */
 		// const p = await handleServerApiCall(
