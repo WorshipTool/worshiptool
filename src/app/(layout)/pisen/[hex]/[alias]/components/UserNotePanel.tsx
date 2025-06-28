@@ -8,7 +8,6 @@ import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AddComment, Edit } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
@@ -18,9 +17,7 @@ export default function UserNotePanel() {
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
-			return handleApiCall(
-				songNotesApi.songNotesControllerGetNotesOfVariantAndUser(packGuid)
-			)
+			return songNotesApi.songNotesControllerGetNotesOfVariantAndUser(packGuid)
 		}, [songNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
@@ -41,31 +38,25 @@ export default function UserNotePanel() {
 			async () => {
 				if (cnt.length === 0) {
 					if (notes.length > 0) {
-						return handleApiCall(
-							songNotesApi.songNotesControllerDeleteNote({
-								noteGuid: notes[0].guid,
-							})
-						)
+						return songNotesApi.songNotesControllerDeleteNote({
+							noteGuid: notes[0].guid,
+						})
 					} else {
 						return
 					}
 				}
 
 				if (notes.length > 0) {
-					return handleApiCall(
-						songNotesApi.songNotesControllerEditNote({
-							content: cnt,
-							noteGuid: notes[0].guid,
-						})
-					)
+					return songNotesApi.songNotesControllerEditNote({
+						content: cnt,
+						noteGuid: notes[0].guid,
+					})
 				}
 
-				return handleApiCall(
-					songNotesApi.songNotesControllerAddNoteToVariant({
-						content: cnt,
-						packGuid,
-					})
-				)
+				return songNotesApi.songNotesControllerAddNoteToVariant({
+					content: cnt,
+					packGuid,
+				})
 			},
 			() => {
 				reload()

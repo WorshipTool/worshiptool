@@ -13,7 +13,6 @@ import { PostCreateCopyOutDto } from '../../../../../../../api/generated'
 import { useApi } from '../../../../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 export type CreateCopyButtonProps = {
 	packGuid: VariantPackGuid
@@ -29,11 +28,9 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const onClick = async () => {
 		await fetchApiState(
 			async () => {
-				const result = await handleApiCall(
-					songAddingApi.songAddingControllerCreateCopy({
-						packGuid: props.packGuid,
-					})
-				)
+				const result = await songAddingApi.songAddingControllerCreateCopy({
+					packGuid: props.packGuid,
+				})
 
 				return result
 			},

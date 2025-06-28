@@ -3,7 +3,6 @@ import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerP
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { PackTranslationType } from '@/types/song'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -26,12 +25,10 @@ export default function SetTranslationTypeAdminButton() {
 	const { songManagementApi } = useApi()
 
 	const onOptionClick = async (value: PackTranslationType) => {
-		await handleApiCall(
-			songManagementApi.packSettingControllerSetTranslationType({
-				packGuid: packGuid,
-				translationType: value,
-			})
-		)
+		await songManagementApi.packSettingControllerSetTranslationType({
+			packGuid: packGuid,
+			translationType: value,
+		})
 		const label = OPTIONS.find((o) => o.value === value)?.label
 		enqueueSnackbar('Typ překladu nastaven na ' + label)
 		setOpen(false)

@@ -1,12 +1,11 @@
 import { Box, Button, Typography } from '@/common/ui'
+import { useApi } from '@/hooks/api/useApi'
 import { BasicVariantPack } from '@/types/song'
 import { Restore } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { SongDeletingApi } from '../../../../../../../api/generated'
 import { Gap } from '../../../../../../../common/ui/Gap'
 import useAuth from '../../../../../../../hooks/auth/useAuth'
 import { useApiState } from '../../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 interface DeletedInfoPanelProps {
 	variant: BasicVariantPack
@@ -20,7 +19,7 @@ export default function DeletedInfoPanel({
 	const { isAdmin, apiConfiguration } = useAuth()
 	const { enqueueSnackbar } = useSnackbar()
 
-	const songsApi = new SongDeletingApi(apiConfiguration)
+	const { songDeletingApi } = useApi()
 	const {
 		fetchApiState,
 		apiState: { loading },
@@ -28,9 +27,7 @@ export default function DeletedInfoPanel({
 	const restore = () => {
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songsApi.songDeletingControllerRestore(variant.packGuid)
-				)
+				return songDeletingApi.songDeletingControllerRestore(variant.packGuid)
 			},
 			() => {
 				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla obnovena.`)

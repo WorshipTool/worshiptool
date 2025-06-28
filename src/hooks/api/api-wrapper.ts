@@ -4,11 +4,16 @@ import { AxiosResponse } from 'axios'
 
 type AnyFn = (...args: any[]) => any
 
+// Typ mappingu, který umožňuje přístup ke správnému typu z AxiosResponse
 type Mapping<T extends Record<string, AnyFn>> = Partial<{
-	[K in keyof T]: (data: any) => any
+	[K in keyof T]: T[K] extends (
+		...args: any[]
+	) => Promise<AxiosResponse<infer R>>
+		? (data: R) => any
+		: never
 }>
 
-// typ který bere v potaz mapping:
+// Hlavní typ wrapperu s mappingem nebo bez něj
 type WrappedWithMapping<
 	T extends Record<string, AnyFn>,
 	M extends Mapping<T>
@@ -46,11 +51,23 @@ const baseWrap = <T extends Record<string, AnyFn>, M extends Mapping<T>>(
 	return wrapped as WrappedWithMapping<T, M>
 }
 
-export const wrapApi = <T extends Record<string, any>, M extends Mapping<T>>(
+export function wrapApi<T extends Record<string, any>>(
+	api: T
+): WrappedWithMapping<T, {}>
+export function wrapApi<T extends Record<string, any>, M extends Mapping<T>>(
 	api: T,
-	mapping: M = {} as M
-) => baseWrap(api, mapping, handleApiCall)
-
+	mapping: M
+): WrappedWithMapping<T, M>
+export function wrapApi<T extends Record<string, any>, M extends Mapping<T>>(
+	api: T,
+	mapping?: M
+): WrappedWithMapping<T, M> {
+	return baseWrap(
+		api,
+		(mapping ?? {}) as Mapping<T>,
+		handleApiCall
+	) as WrappedWithMapping<T, M>
+}
 export const wrapServerApi = <
 	T extends Record<string, any>,
 	M extends Mapping<T>

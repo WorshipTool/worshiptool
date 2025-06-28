@@ -6,7 +6,6 @@ import {
 } from '@/api/dtos'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { ExtendedVariantPack } from '@/types/song'
 import { createContext, useContext } from 'react'
 
@@ -55,9 +54,10 @@ const useProvideInnerPack = (variantAlias: string, startData?: InData) => {
 	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v = await handleApiCall(
-			songGettingApi.songOneGettingControllerGetVariantDataByAlias(variantAlias)
-		)
+		const v =
+			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(
+				variantAlias
+			)
 		const variant = v.main
 
 		const song = mapGetVariantDataApiToSongDto(v)

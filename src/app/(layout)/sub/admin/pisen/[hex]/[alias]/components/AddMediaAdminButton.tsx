@@ -8,7 +8,6 @@ import { Box, Button, Gap, TextField } from '@/common/ui'
 import { Switch } from '@/common/ui/mui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { MusicVideo } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
@@ -40,21 +39,17 @@ export default function AddMediaAdminButton() {
 		// 1. Add or remove the media
 		if (add) {
 			await fetchApiState(() =>
-				handleApiCall(
-					songManagementApi.songMediaControllerAddMediaToPack({
-						packGuid,
-						mediaUrl: url,
-					})
-				)
+				songManagementApi.songMediaControllerAddMediaToPack({
+					packGuid,
+					mediaUrl: url,
+				})
 			)
 		} else {
 			const a = await fetchApiState(() =>
-				handleApiCall(
-					songManagementApi.songMediaControllerRemoveMediaFromPack({
-						packGuid,
-						mediaGuid: url,
-					})
-				)
+				songManagementApi.songMediaControllerRemoveMediaFromPack({
+					packGuid,
+					mediaGuid: url,
+				})
 			)
 		}
 		setOpen(false)

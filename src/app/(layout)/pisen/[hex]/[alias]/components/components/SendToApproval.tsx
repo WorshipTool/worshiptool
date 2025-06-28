@@ -4,7 +4,6 @@ import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Publish } from '@mui/icons-material'
 import { enqueueSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -19,11 +18,9 @@ export default function SendToApproval() {
 
 	const send = async () => {
 		await fetchApiState(async () =>
-			handleApiCall(
-				songPublishingApi.songPublishingControllerSendPackToApproval({
-					packGuid: packGuid,
-				})
-			)
+			songPublishingApi.songPublishingControllerSendPackToApproval({
+				packGuid: packGuid,
+			})
 		)
 
 		enqueueSnackbar('Píseň byla úspěšně zveřejněna a odeslána ke schválení.')

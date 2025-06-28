@@ -8,7 +8,6 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { grey } from '@mui/material/colors'
 import { useState } from 'react'
 
@@ -37,11 +36,9 @@ export default function CreateTeamButton() {
 	const onCreateClick = () => {
 		fetchApiState(
 			() =>
-				handleApiCall(
-					teamAddingApi.teamAddingControllerCreateNewTeam({
-						teamName,
-					})
-				),
+				teamAddingApi.teamAddingControllerCreateNewTeam({
+					teamName,
+				}),
 			(data) => {
 				navigate('team', {
 					alias: data.alias,

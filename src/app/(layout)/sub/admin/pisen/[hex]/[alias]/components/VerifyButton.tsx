@@ -2,7 +2,6 @@
 import { Button } from '@/common/ui'
 import { ButtonGroup } from '@/common/ui/ButtonGroup'
 import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { BasicVariantPack } from '@/types/song'
 
 type VerifyButtonProps = {
@@ -13,12 +12,10 @@ export default function VerifyButton(props: VerifyButtonProps) {
 	const { songPublishingApi } = useApi()
 
 	const setVerify = async (status: boolean | null) => {
-		await handleApiCall(
-			songPublishingApi.songPublishingControllerVerifyVariant({
-				packGuid: props.variant.packGuid,
-				verify: status,
-			})
-		)
+		await songPublishingApi.songPublishingControllerVerifyVariant({
+			packGuid: props.variant.packGuid,
+			verify: status,
+		})
 
 		window.location.reload()
 	}

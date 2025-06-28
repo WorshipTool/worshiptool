@@ -5,7 +5,6 @@ import SongListCard from '@/common/components/songLists/SongListCards/SongListCa
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, Button, Typography } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { Add } from '@mui/icons-material'
@@ -58,11 +57,9 @@ function Page() {
 	const { songManagementApi } = useApi()
 	const onRemoveClick = () => {
 		// TODO: Smart remove and transfer to another song
-		handleApiCall(
-			songManagementApi.songMergingControllerMovePacksToFamily({
-				packGuids: selectedPacks.map((p) => p.packGuid),
-			})
-		)
+		songManagementApi.songMergingControllerMovePacksToFamily({
+			packGuids: selectedPacks.map((p) => p.packGuid),
+		})
 
 		cancelSelection()
 
@@ -71,12 +68,10 @@ function Page() {
 
 	const onSongSubmit = async (packs: BasicVariantPack[]) => {
 		if (!data) return
-		await handleApiCall(
-			songManagementApi.songMergingControllerMovePacksToFamily({
-				packGuids: packs.map((p) => p.packGuid),
-				targetSongGuid: data.guid,
-			})
-		)
+		await songManagementApi.songMergingControllerMovePacksToFamily({
+			packGuids: packs.map((p) => p.packGuid),
+			targetSongGuid: data.guid,
+		})
 
 		window.location.reload()
 	}
@@ -89,11 +84,9 @@ function Page() {
 
 	const onMergeSubmit = async (packs: BasicVariantPack[]) => {
 		if (!data) return
-		await handleApiCall(
-			songManagementApi.songMergingControllerMergeFamilies({
-				songGuids: [data.guid, ...packs.map((p) => p.songGuid)],
-			})
-		)
+		await songManagementApi.songMergingControllerMergeFamilies({
+			songGuids: [data.guid, ...packs.map((p) => p.songGuid)],
+		})
 		window.location.reload()
 	}
 

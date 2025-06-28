@@ -2,7 +2,6 @@
 import { mapBasicSongApiToDto } from '@/api/dtos'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { BasicSong, SongGuid } from '@/types/song'
 import { createContext, useContext } from 'react'
 
@@ -43,8 +42,8 @@ const useProvideInnerSong = (songGuid: SongGuid, startData?: InData) => {
 	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v = await handleApiCall(
-			songGettingApi.songOneGettingControllerGetSongDataByGuid(songGuid)
+		const v = await songGettingApi.songOneGettingControllerGetSongDataByGuid(
+			songGuid
 		)
 		const data = mapBasicSongApiToDto(v)
 

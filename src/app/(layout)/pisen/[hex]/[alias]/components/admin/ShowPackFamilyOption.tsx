@@ -6,7 +6,6 @@ import SongListCard from '@/common/components/songLists/SongListCards/SongListCa
 import { Box } from '@/common/ui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AltRoute } from '@mui/icons-material'
 import { useState } from 'react'
 
@@ -18,8 +17,8 @@ export default function ShowPackFamilyOption() {
 
 	const [apiState] = useApiStateEffect(async () => {
 		const packGuid = variant.packGuid
-		const data = await handleApiCall(
-			packEmbeddingApi.packEmbeddingSearchControllerFindFamily(packGuid)
+		const data = await packEmbeddingApi.packEmbeddingSearchControllerFindFamily(
+			packGuid
 		)
 
 		return data
