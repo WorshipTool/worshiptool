@@ -1,4 +1,5 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import InvitationPanel from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/InvitationPanel'
 import PeopleList from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/PeopleList'
@@ -8,7 +9,6 @@ import Popup from '@/common/components/Popup/Popup'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
-import { useApi } from '@/hooks/api/useApi'
 
 import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { useSmartParams } from '@/routes/useSmartParams'

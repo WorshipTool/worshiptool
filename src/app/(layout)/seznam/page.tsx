@@ -7,8 +7,8 @@ import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Container } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { useApi } from '../../../api/tech-and-hooks/useApi'
 import { Gap } from '../../../common/ui/Gap/Gap'
-import { useApi } from '../../../hooks/api/useApi'
 import { useSmartUrlState } from '../../../hooks/urlstate/useUrlState'
 
 export default SmartPage(List)

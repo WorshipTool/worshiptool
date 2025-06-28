@@ -1,5 +1,5 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { Box, Button, Typography } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import { BasicVariantPack } from '@/types/song'
 import { Restore } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'

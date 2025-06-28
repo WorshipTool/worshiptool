@@ -1,5 +1,5 @@
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import DefaultStylePreview from '@/common/components/SheetDisplay/styles/DefaultStylePreview'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { PageParams } from '@/routes'
 import { makeVariantAlias } from '@/tech/song/variant/variant.utils'
 import { Sheet } from '@pepavlin/sheet-api'

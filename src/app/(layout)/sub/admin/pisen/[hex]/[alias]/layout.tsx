@@ -3,11 +3,11 @@ import {
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
 } from '@/api/dtos'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { makeVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SongGuid } from '@/types/song'
 

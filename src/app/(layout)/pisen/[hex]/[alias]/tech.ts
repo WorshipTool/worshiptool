@@ -1,4 +1,4 @@
-import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import { GetVariantDataOutDto } from '../../../../../api/generated'
 
 export const getVariantAliasFromParams = (hex: string, code: string) => {

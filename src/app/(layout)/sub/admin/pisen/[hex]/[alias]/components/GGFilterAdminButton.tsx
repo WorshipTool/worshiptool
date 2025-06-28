@@ -1,8 +1,8 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 

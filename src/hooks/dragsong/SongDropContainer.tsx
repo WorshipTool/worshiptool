@@ -1,5 +1,5 @@
 'use client'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	DragSongDto,
 	getSongDataFromDragEvent,

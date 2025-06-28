@@ -1,9 +1,9 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	TeamPayload,
 	teamPayloadDefaults,
 } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/payload/tech'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import { usePayload } from '@/hooks/payloads/usePayload'
 import { useCallback } from 'react'
 

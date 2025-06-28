@@ -1,10 +1,10 @@
 import { PackGuid } from '@/api/dtos'
 import { mapTranslationLikeApiToDto } from '@/api/map/translation-like.map'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	getTranslationLikeCountDecreaseEventName,
 	getTranslationLikeCountIncreaseEventName,
 } from '@/common/ui/SongCard/hooks/useTranslationLikesCount'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { TranslationLike } from '@/hooks/common-data/common-data.types'
 import { useCommonData } from '@/hooks/common-data/useCommonData'

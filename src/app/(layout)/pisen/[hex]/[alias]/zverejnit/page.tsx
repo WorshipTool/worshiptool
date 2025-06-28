@@ -2,6 +2,7 @@
 
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
 import { ValidationResult } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -14,7 +15,6 @@ import {
 	SelectChangeEvent,
 } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { SongLanguage } from '@/types/song'

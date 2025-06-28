@@ -1,4 +1,4 @@
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	EVENT_NAME_SONG_DRAG_END,
 	EVENT_NAME_SONG_DRAG_START,

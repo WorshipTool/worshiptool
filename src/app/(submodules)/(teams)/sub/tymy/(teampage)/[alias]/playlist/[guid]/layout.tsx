@@ -1,6 +1,6 @@
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import TeamPlaylistClientProviders from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/playlist/[guid]/PlaylistClientProviders'
 import { LayoutProps } from '@/common/types'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 
 export const generateMetadata = generateSmartMetadata(

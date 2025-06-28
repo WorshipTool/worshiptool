@@ -1,5 +1,5 @@
 import { VariantPackGuid } from '@/api/dtos'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { Chord } from '@pepavlin/sheet-api'
 import { useCallback } from 'react'

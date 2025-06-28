@@ -1,6 +1,6 @@
 'use server'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import { InnerPlaylistProvider } from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { smartRedirect } from '@/routes/routes.tech.server'

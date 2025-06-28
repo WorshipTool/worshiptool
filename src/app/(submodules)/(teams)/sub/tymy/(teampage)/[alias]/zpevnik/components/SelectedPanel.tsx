@@ -1,4 +1,5 @@
 import { VariantPackGuid } from '@/api/dtos'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { TeamPermissions } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import Menu from '@/common/components/Menu/Menu'
@@ -6,7 +7,6 @@ import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/Sele
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'

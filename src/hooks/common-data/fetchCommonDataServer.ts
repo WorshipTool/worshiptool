@@ -1,5 +1,5 @@
 import { PackGuid } from '@/api/dtos'
-import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import {
 	AllCommonData,
 	TranslationLike,
@@ -12,13 +12,14 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 
 	try {
 		/** Get translation likes of user */
-                const tLikes = await api.songUserManagementApi.songTranslationLikeControllerGetUserLikes()
+		const tLikes =
+			await api.songUserManagementApi.songTranslationLikeControllerGetUserLikes()
 		const tlFormatted: TranslationLike[] = tLikes.likes.map((tl) => ({
 			packGuid: tl.packGuid as PackGuid,
 		}))
 
 		/** Get teams of user */
-                const teams = await api.teamMembersApi.teamMemberControllerGetTeamsOfUser()
+		const teams = await api.teamMembersApi.teamMemberControllerGetTeamsOfUser()
 
 		/** Get playlist of user */
 		// const playlists = await handleServerApiCall(
@@ -26,7 +27,8 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 		// )
 
 		/** Get all subdomains */
-                const subdomains = await api.teamGettingApi.teamGettingControllerGetAllSubdomains()
+		const subdomains =
+			await api.teamGettingApi.teamGettingControllerGetAllSubdomains()
 
 		/** Get user permissions */
 		// const p = await handleServerApiCall(

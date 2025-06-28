@@ -1,5 +1,5 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
 

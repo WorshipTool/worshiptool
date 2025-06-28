@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	Box,
 	Button,
@@ -9,7 +10,6 @@ import {
 	Typography,
 } from '@/common/ui'
 import { Chip } from '@/common/ui/mui'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { Lan, LastPage, Refresh } from '@mui/icons-material'
 import { useState } from 'react'

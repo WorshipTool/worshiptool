@@ -5,7 +5,7 @@ import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { Public, PublicOff } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { useApi } from '../../../../../../../hooks/api/useApi'
+import { useApi } from '../../../../../../../api/tech-and-hooks/useApi'
 import { useApiState } from '../../../../../../../tech/ApiState'
 
 export interface PublishButtonProps {
@@ -33,11 +33,9 @@ export default function PublishButton(props: PublishButtonProps) {
 	const unverify = () => {
 		fetchApiState(
 			() => {
-				return (
-					songPublishingApi.songPublishingControllerUnpublishVariant({
-						packGuid: props.variant.packGuid,
-					})
-				)
+				return songPublishingApi.songPublishingControllerUnpublishVariant({
+					packGuid: props.variant.packGuid,
+				})
 			},
 			() => {
 				reload()

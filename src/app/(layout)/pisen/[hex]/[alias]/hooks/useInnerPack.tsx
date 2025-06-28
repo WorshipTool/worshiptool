@@ -4,7 +4,7 @@ import {
 	mapGetVariantDataApiToSongDto,
 	SongDto,
 } from '@/api/dtos'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { ExtendedVariantPack } from '@/types/song'
 import { createContext, useContext } from 'react'

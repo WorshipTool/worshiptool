@@ -1,6 +1,6 @@
 import { TeamOfUserDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { EVENT_NAME_CHANGE_TEAM_LOGO } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/hooks/useTeamLogo'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useCommonData } from '@/hooks/common-data/useCommonData'
 import { useApiState } from '@/tech/ApiState'

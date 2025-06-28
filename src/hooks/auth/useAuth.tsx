@@ -2,7 +2,7 @@
 
 import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google'
 // import Cookies from 'js-cookie'
-import { getApiClass } from '@/hooks/api/api-classes'
+import { getApiClass } from '@/api/tech-and-hooks/api-classes'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'

@@ -1,6 +1,6 @@
 'use client'
 import { mapBasicSongApiToDto } from '@/api/dtos'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { BasicSong, SongGuid } from '@/types/song'
 import { createContext, useContext } from 'react'

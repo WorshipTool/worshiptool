@@ -15,7 +15,7 @@ import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { useMemo, useState } from 'react'
 import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
-import { useApi } from '../../../../hooks/api/useApi'
+import { useApi } from '../../../../api/tech-and-hooks/useApi'
 
 export default SmartPage(MySongsList, ['middleWidth'])
 

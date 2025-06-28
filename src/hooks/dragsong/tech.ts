@@ -1,6 +1,6 @@
 import { SongVariantDto, VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import { SongGettingApi } from '@/api/generated'
-import { ApiWrappedWithMapping } from '@/hooks/api/api-wrapper'
+import { ApiWrappedWithMapping } from '@/api/tech-and-hooks/api-wrapper'
 
 export type DragSongDto = {
 	packGuid: VariantPackGuid

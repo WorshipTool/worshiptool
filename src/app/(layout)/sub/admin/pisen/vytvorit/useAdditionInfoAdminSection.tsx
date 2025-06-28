@@ -1,5 +1,6 @@
 import { PackGuid } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import InterpretField from '@/app/(layout)/sub/admin/pisen/vytvorit/components/InterpretField'
 import { AdminStepperItem } from '@/app/(layout)/sub/admin/pisen/vytvorit/page'
 import { Box, Button, Typography } from '@/common/ui'
@@ -9,7 +10,6 @@ import {
 	Select,
 	SelectChangeEvent,
 } from '@/common/ui/mui'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
 import { SongLanguage } from '@/types/song'
 import { useState } from 'react'

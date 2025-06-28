@@ -4,8 +4,8 @@ import { copyToClipboard } from '@/tech/string/copy.tech'
 import { Token } from '@mui/icons-material'
 import { useState } from 'react'
 import { LoginRequestDTO } from '../../../../../../api/dtos/dtosAuth'
+import { useApi } from '../../../../../../api/tech-and-hooks/useApi'
 import { Card } from '../../../../../../common/ui/Card/Card'
-import { useApi } from '../../../../../../hooks/api/useApi'
 import useAuth from '../../../../../../hooks/auth/useAuth'
 
 export default function GetToken() {

@@ -1,7 +1,7 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { LineChart } from '@mui/x-charts'
 import { useEffect, useMemo, useState } from 'react'
 

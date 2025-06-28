@@ -3,7 +3,7 @@ import {
 	EditTeamEventInDto,
 	TeamEvent,
 } from '@/api/generated'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
 
 export function useTeamEvents(guid: string) {

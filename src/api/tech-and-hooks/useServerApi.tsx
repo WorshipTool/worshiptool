@@ -1,7 +1,7 @@
 'use server'
 
 import { Configuration } from '@/api/generated'
-import { getServerApiClasses } from '@/hooks/api/api-classes'
+import { getServerApiClasses } from '@/api/tech-and-hooks/api-classes'
 import { UserDto } from '@/interfaces/user'
 import { getServerUser } from '@/tech/auth/getServerUser'
 

@@ -1,8 +1,8 @@
 import { mapBasicSongApiToDto } from '@/api/dtos'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { SongGuid } from '@/types/song'
 
 export default async function layout(props: LayoutProps<'adminSong'>) {

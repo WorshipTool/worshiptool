@@ -1,7 +1,7 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '@/api/dtos/playlist/playlist.map'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import usePlaylist from '@/hooks/playlist/usePlaylist'
 import {
 	PlaylistGuid,

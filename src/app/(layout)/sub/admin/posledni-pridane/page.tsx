@@ -1,9 +1,9 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
-import { useServerApi } from '@/hooks/api/useServerApi'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 
 export default SmartPage(Page, [

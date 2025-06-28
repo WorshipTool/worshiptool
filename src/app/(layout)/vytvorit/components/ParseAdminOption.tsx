@@ -4,12 +4,12 @@ import {
 	ParserApiAxiosParamCreator,
 	ParserSongDataResult,
 } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { getUrl } from '@/api/urls'
 import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
 import { Box, Button, Chip, LinearProgress, Typography } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/handleApiCall'

@@ -1,6 +1,6 @@
 'use server'
 
-import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 
 /**
  * This function works similarily to console.error, but it can also send errors to messenger

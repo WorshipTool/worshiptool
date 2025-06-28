@@ -1,7 +1,7 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { Button } from '@/common/ui'
 import { ButtonGroup } from '@/common/ui/ButtonGroup'
-import { useApi } from '@/hooks/api/useApi'
 import { BasicVariantPack } from '@/types/song'
 
 type VerifyButtonProps = {

@@ -1,7 +1,7 @@
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import { SearchKey } from '@/types/song/search.types'
 import { useCallback } from 'react'
-import { useApi } from '../api/useApi'
+import { useApi } from '../../api/tech-and-hooks/useApi'
 import useAuth from '../auth/useAuth'
 
 type useSongSearchProps = {
@@ -16,7 +16,7 @@ type GetSongFunction = (
 ) => Promise<SearchSongDto[]>
 
 export default function useSongSearch() {
-        const { songGettingApi, packEmbeddingApi, songSearchingApi } = useApi()
+	const { songGettingApi, packEmbeddingApi, songSearchingApi } = useApi()
 	const { user } = useAuth()
 
 	const getSongs: GetSongFunction = useCallback(
@@ -26,25 +26,25 @@ export default function useSongSearch() {
 		): Promise<SearchSongDto[]> => {
 			try {
 				// Handle smart search
-                                if (additionalParams?.useSmartSearch) {
-                                        return packEmbeddingApi.packEmbeddingSearchControllerSearch(
-                                                searchKey,
-                                                additionalParams?.page || 0,
-                                                {
-                                                        signal: additionalParams.signal,
-                                                }
-                                        )
-                                }
+				if (additionalParams?.useSmartSearch) {
+					return packEmbeddingApi.packEmbeddingSearchControllerSearch(
+						searchKey,
+						additionalParams?.page || 0,
+						{
+							signal: additionalParams.signal,
+						}
+					)
+				}
 
-                                const result = await songSearchingApi.songSearchingControllerSearch(
-                                        searchKey,
-                                        additionalParams?.page || 0,
-                                        {
-                                                signal: additionalParams?.signal,
-                                        }
-                                )
+				const result = await songSearchingApi.songSearchingControllerSearch(
+					searchKey,
+					additionalParams?.page || 0,
+					{
+						signal: additionalParams?.signal,
+					}
+				)
 
-                                return result
+				return result
 			} catch (e) {
 				console.log(e)
 			}

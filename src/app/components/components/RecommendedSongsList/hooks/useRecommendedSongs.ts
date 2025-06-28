@@ -3,7 +3,7 @@ import {
 	BasicVariantPack,
 	mapBasicVariantPackApiToDto,
 } from '../../../../../api/dtos'
-import { useApi } from '../../../../../hooks/api/useApi'
+import { useApi } from '../../../../../api/tech-and-hooks/useApi'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
 
 export default function useRecommendedSongs() {

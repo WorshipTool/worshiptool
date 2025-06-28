@@ -1,11 +1,11 @@
 import { JoinTeamOutDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	NEW_TEAM_MEMBER_MESSAGE_GROUP,
 	NEW_TEAM_MEMBER_MESSAGE_NAME,
 } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamMembers'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, TextInput, Typography } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import { useLiveMessage } from '@/hooks/sockets/useLiveMessage'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
