@@ -6,7 +6,6 @@ import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Add } from '@mui/icons-material'
 import { useCallback } from 'react'
 
@@ -25,16 +24,17 @@ export default function UsersTeamPlaylistsAddButton() {
 	const onCreateClick = useCallback(() => {
 		fetchApiState(
 			async () => {
-				const p = await handleApiCall(
-					playlistEditingApi.playlistEditingControllerCreatePlaylist()
-				)
+				const p =
+					await playlistEditingApi.playlistEditingControllerCreatePlaylist()
 
 				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
 					teamGuid: guid,
-					playlistGuid: p.guid,
+					playlistGuid: p,
 				})
 
-				return p
+				return {
+					guid: p,
+				}
 			},
 			(d) => {
 				turnOn(d.guid as PlaylistGuid)

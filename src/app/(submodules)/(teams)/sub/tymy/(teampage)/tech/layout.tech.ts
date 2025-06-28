@@ -13,6 +13,7 @@ import { UserDto } from '@/interfaces/user'
 import { handleApiCall } from '@/tech/handleApiCall'
 import { cookies } from 'next/headers'
 
+//TODO: dont create api instance, use useApi() hook instead
 export const getLayoutTeamInfo = async (teamAlias: string) => {
 	const gettingApi = new TeamGettingApi()
 	try {

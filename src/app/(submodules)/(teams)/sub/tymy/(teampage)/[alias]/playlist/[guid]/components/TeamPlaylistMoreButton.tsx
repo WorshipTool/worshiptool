@@ -15,7 +15,6 @@ import { IconButton } from '@/common/ui/IconButton'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import {
 	CalendarMonth,
@@ -38,9 +37,7 @@ export default function TeamPlaylistMoreButton() {
 	const [apiState, reload] =
 		useApiStateEffect<TeamEventData | null>(async () => {
 			if (!playlistGuid) return null
-			return handleApiCall(
-				teamEventsApi.teamEventControllerGetEventByPlaylist(playlistGuid)
-			)
+			return teamEventsApi.teamEventControllerGetEventByPlaylist(playlistGuid)
 		}, [playlistGuid])
 
 	const hasEvent = useMemo(() => Boolean(apiState.data), [apiState.data])
@@ -93,10 +90,8 @@ export default function TeamPlaylistMoreButton() {
 	const onRemove = async () => {
 		await fetchDelete(
 			async () => {
-				return handleApiCall(
-					playlistEditingApi.playlistEditingControllerDeletePlaylist(
-						playlistGuid
-					)
+				return playlistEditingApi.playlistEditingControllerDeletePlaylist(
+					playlistGuid
 				)
 			},
 			(d) => {

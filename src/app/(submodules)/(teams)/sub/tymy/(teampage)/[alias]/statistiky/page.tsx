@@ -11,7 +11,6 @@ import { Box, LinearProgress } from '@/common/ui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 export default SmartTeamPage(TeamStatistikyPage)
 
 function TeamStatistikyPage() {
@@ -20,8 +19,8 @@ function TeamStatistikyPage() {
 	const [{ data: statisticsData, loading: statisticsLoading }] =
 		useApiStateEffect(async () => {
 			if (!teamGuid) return null
-			return handleApiCall(
-				teamStatisticsApi.teamStatisticsControllerGetTeamStatistics(teamGuid)
+			return teamStatisticsApi.teamStatisticsControllerGetTeamStatistics(
+				teamGuid
 			)
 		}, [teamGuid])
 

@@ -10,7 +10,6 @@ import useAuth from '@/hooks/auth/useAuth'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import React, { useEffect, useMemo, useState } from 'react'
 
 type AppSongSelectSpecifierProviderProps = {
@@ -34,9 +33,10 @@ export default function AppSongSelectSpecifierProvider(
 
 	const [globalApiState] = useApiStateEffect(async () => {
 		if (!active) return []
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
-		)
+		const result =
+			await songGettingApi.songGettingControllerSearchGlobalSongsInPopup(
+				searchString
+			)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
@@ -49,9 +49,10 @@ export default function AppSongSelectSpecifierProvider(
 			return []
 		}
 
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchMySongsInPopup(searchString)
-		)
+		const result =
+			await songGettingApi.songGettingControllerSearchMySongsInPopup(
+				searchString
+			)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)

@@ -14,7 +14,6 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AudioFile, KeyboardArrowLeft, OpenInNew } from '@mui/icons-material'
 import { useMemo } from 'react'
 
@@ -32,9 +31,8 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 			props.params.hex,
 			props.params['title-alias']
 		)
-		const v = await handleApiCall(
-			songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
-		)
+		const v =
+			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
 
 		const d = mapExtendedVariantPackApiToDto(v.main)
 

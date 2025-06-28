@@ -16,7 +16,6 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Delete } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useState } from 'react'
@@ -74,13 +73,11 @@ function TeamSettingsPage() {
 
 	const onSave = async () => {
 		try {
-			await handleApiCall(
-				teamEditingApi.teamEditingControllerChangeTeamInfo({
-					teamGuid: guid,
-					teamName: name,
-					joinCode,
-				})
-			)
+			await teamEditingApi.teamEditingControllerChangeTeamInfo({
+				teamGuid: guid,
+				teamName: name,
+				joinCode,
+			})
 		} catch (e) {
 			enqueueSnackbar(
 				'Nepodařilo se uložit změny. Nejspíše je tento kód již použitý.'
@@ -98,11 +95,9 @@ function TeamSettingsPage() {
 	const { enqueueSnackbar } = useSnackbar()
 	const onTeamPermanentRemove = async () => {
 		setDeletePopupOpen(false)
-		await handleApiCall(
-			teamEditingApi.teamEditingControllerDeleteTeam({
-				teamGuid: guid,
-			})
-		)
+		await teamEditingApi.teamEditingControllerDeleteTeam({
+			teamGuid: guid,
+		})
 		navigate('teams', {})
 		enqueueSnackbar('Tým byl odstraněn')
 	}

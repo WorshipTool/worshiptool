@@ -16,7 +16,6 @@ import { Gap } from '../../../../common/ui/Gap'
 import { useApi } from '../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../tech/ApiState'
-import { handleApiCall } from '../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../tech/sheet.tech'
 import NotValidWarning from './components/NotValidWarning'
 
@@ -58,13 +57,11 @@ function Create() {
 	const onPostClick = () => {
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songAddingApi.songAddingControllerCreate({
-						title,
-						sheetData,
-						createdType: CreatedType.Manual,
-					})
-				)
+				return songAddingApi.songAddingControllerCreate({
+					title,
+					sheetData,
+					createdType: CreatedType.Manual,
+				})
 			},
 			(result) => {
 				const a = parseVariantAlias(result.alias as VariantPackAlias)

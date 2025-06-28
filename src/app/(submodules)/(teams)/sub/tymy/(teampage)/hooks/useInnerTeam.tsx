@@ -9,7 +9,6 @@ import useAuth from '@/hooks/auth/useAuth'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { UserGuid } from '@/interfaces/user'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useMemo } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerTeam>
@@ -54,9 +53,7 @@ export const InnerTeamProvider = ({
 const useProvideInnerTeam = (teamAlias: string) => {
 	const { teamGettingApi, teamMembersApi } = useApi()
 	const [apiState, reload] = useApiStateEffect(() => {
-		return handleApiCall(
-			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
-		)
+		return teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
 	})
 	const guid = useMemo(
 		() => (apiState.data?.guid || '') as TeamGuid,

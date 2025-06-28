@@ -16,7 +16,6 @@ import { useApiStateEffect } from '@/tech/ApiState'
 import { useMemo, useState } from 'react'
 import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
 import { useApi } from '../../../../hooks/api/useApi'
-import { handleApiCall } from '../../../../tech/handleApiCall'
 
 export default SmartPage(MySongsList, ['middleWidth'])
 
@@ -30,9 +29,8 @@ function MySongsList() {
 
 	const [{ data: allVariants, loading }, reload] = useApiStateEffect(
 		async () => {
-			const result = await handleApiCall(
-				songGettingApi.songGettingControllerGetSongListOfUser()
-			)
+			const result =
+				await songGettingApi.songGettingControllerGetSongListOfUser()
 			const variants = result.variants.map((variant) => {
 				return mapBasicVariantPackApiToDto(variant)
 			})

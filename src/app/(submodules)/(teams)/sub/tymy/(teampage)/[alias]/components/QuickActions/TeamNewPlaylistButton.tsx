@@ -9,7 +9,6 @@ import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { Add } from '@mui/icons-material'
 import { useCallback } from 'react'
-import { handleApiCall } from '../../../../../../../../../tech/handleApiCall'
 
 export default function TeamNewPlaylistButton() {
 	const { playlistEditingApi, teamEditingApi } = useApi()
@@ -24,16 +23,17 @@ export default function TeamNewPlaylistButton() {
 	const onCreateClick = useCallback(() => {
 		fetchApiState(
 			async () => {
-				const p = await handleApiCall(
-					playlistEditingApi.playlistEditingControllerCreatePlaylist()
-				)
+				const p =
+					await playlistEditingApi.playlistEditingControllerCreatePlaylist()
 
 				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
 					teamGuid: guid,
-					playlistGuid: p.guid,
+					playlistGuid: p,
 				})
 
-				return p
+				return {
+					guid: p,
+				}
 			},
 			(d) => {
 				// const url = getRouteUrlWithParams('teamPlaylist', {

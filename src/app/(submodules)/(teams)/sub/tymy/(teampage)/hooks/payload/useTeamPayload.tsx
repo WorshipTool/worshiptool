@@ -5,7 +5,6 @@ import {
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { useApi } from '@/hooks/api/useApi'
 import { usePayload } from '@/hooks/payloads/usePayload'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useCallback } from 'react'
 
 export const useTeamPayload = (teamGuid: TeamGuid) => {
@@ -14,9 +13,7 @@ export const useTeamPayload = (teamGuid: TeamGuid) => {
 	const getFunc = useCallback(async () => {
 		if (!teamGuid) return ''
 
-		return handleApiCall(
-			teamGettingApi.teamGettingControllerGetTeamPayload(teamGuid)
-		)
+		return teamGettingApi.teamGettingControllerGetTeamPayload(teamGuid)
 	}, [teamGuid])
 
 	const setFunc = useCallback(

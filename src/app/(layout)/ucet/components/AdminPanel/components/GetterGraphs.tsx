@@ -2,7 +2,6 @@
 import { Card } from '@/common/ui/Card/Card'
 import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { LineChart } from '@mui/x-charts'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -33,8 +32,8 @@ export default function GetterGraphs() {
 
 	useEffect(() => {
 		const doStuff = async () => {
-			const data = await handleApiCall(
-				analyticsApi.analyticsControllerGetAnalytics(targetDaysCount)
+			const data = await analyticsApi.analyticsControllerGetAnalytics(
+				targetDaysCount
 			)
 			const arr = data.graphs.map((graph) => {
 				const titles: Record<string, string> = {}

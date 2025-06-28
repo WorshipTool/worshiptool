@@ -14,8 +14,8 @@ type Mapping<T extends Record<string, AnyFn>> = Partial<{
 }>
 
 // Hlavní typ wrapperu s mappingem nebo bez něj
-type WrappedWithMapping<
-	T extends Record<string, AnyFn>,
+export type ApiWrappedWithMapping<
+	T extends Record<string, any>,
 	M extends Mapping<T>
 > = {
 	[K in keyof T]: (
@@ -33,40 +33,43 @@ const baseWrap = <T extends Record<string, AnyFn>, M extends Mapping<T>>(
 	api: T,
 	mapping: M,
 	handler: <U>(p: Promise<AxiosResponse<U>>) => Promise<U>
-): WrappedWithMapping<T, M> => {
-	const wrapped: Partial<WrappedWithMapping<T, M>> = {}
+): ApiWrappedWithMapping<T, M> => {
+	const wrapped: Partial<ApiWrappedWithMapping<T, M>> = {}
 
-	for (const key of Object.keys(api) as (keyof T)[]) {
+	const proto = Object.getPrototypeOf(api)
+	const methodNames = Object.getOwnPropertyNames(proto).filter(
+		(key) => typeof (api as any)[key] === 'function' && key !== 'constructor'
+	) as (keyof T)[]
+
+	for (const key of methodNames) {
 		const fn = api[key]
-		if (typeof fn === 'function') {
-			wrapped[key] = ((...args: any[]) => {
-				const promise = fn.apply(api, args)
-				const call = handler(promise)
-				const mapFn = mapping?.[key]
-				return mapFn ? call.then(mapFn) : call
-			}) as WrappedWithMapping<T, M>[typeof key]
-		}
+		wrapped[key] = ((...args: any[]) => {
+			const promise = fn.apply(api, args)
+			const call = handler(promise)
+			const mapFn = mapping?.[key]
+			return mapFn ? call.then(mapFn) : call
+		}) as ApiWrappedWithMapping<T, M>[typeof key]
 	}
 
-	return wrapped as WrappedWithMapping<T, M>
+	return wrapped as ApiWrappedWithMapping<T, M>
 }
 
 export function wrapApi<T extends Record<string, any>>(
 	api: T
-): WrappedWithMapping<T, {}>
+): ApiWrappedWithMapping<T, {}>
 export function wrapApi<T extends Record<string, any>, M extends Mapping<T>>(
 	api: T,
 	mapping: M
-): WrappedWithMapping<T, M>
+): ApiWrappedWithMapping<T, M>
 export function wrapApi<T extends Record<string, any>, M extends Mapping<T>>(
 	api: T,
 	mapping?: M
-): WrappedWithMapping<T, M> {
+): ApiWrappedWithMapping<T, M> {
 	return baseWrap(
 		api,
 		(mapping ?? {}) as Mapping<T>,
 		handleApiCall
-	) as WrappedWithMapping<T, M>
+	) as ApiWrappedWithMapping<T, M>
 }
 export const wrapServerApi = <
 	T extends Record<string, any>,

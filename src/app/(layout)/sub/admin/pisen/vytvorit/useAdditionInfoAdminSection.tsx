@@ -11,7 +11,6 @@ import {
 } from '@/common/ui/mui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { SongLanguage } from '@/types/song'
 import { useState } from 'react'
 
@@ -39,12 +38,10 @@ export const useAdditionInfoAdminSection = (
 			<Button
 				onClick={async () => {
 					await fetchApiState(async () => {
-						await handleApiCall(
-							songEditingApi.songEditingControllerChangeLanguage({
-								packGuid: packData.variant.historyPack.guid as PackGuid,
-								languageString: language as string,
-							})
-						)
+						await songEditingApi.songEditingControllerChangeLanguage({
+							packGuid: packData.variant.historyPack.guid as PackGuid,
+							languageString: language as string,
+						})
 					})
 
 					cont()

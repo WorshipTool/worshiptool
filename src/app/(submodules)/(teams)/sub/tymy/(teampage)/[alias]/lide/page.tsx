@@ -13,7 +13,6 @@ import { useApi } from '@/hooks/api/useApi'
 import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Link, PersonAdd } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useCallback, useMemo, useState } from 'react'
@@ -27,7 +26,7 @@ function TeamPeoplePage() {
 	const { teamJoiningApi } = useApi()
 
 	const [apiState] = useApiStateEffect(async () => {
-		return handleApiCall(teamJoiningApi.teamJoiningControllerGetJoinCode(alias))
+		return teamJoiningApi.teamJoiningControllerGetJoinCode(alias)
 	}, [alias])
 
 	const joinCode = useMemo(() => {

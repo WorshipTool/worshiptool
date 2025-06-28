@@ -8,7 +8,6 @@ import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { TranslationLike } from '@/hooks/common-data/common-data.types'
 import { useCommonData } from '@/hooks/common-data/useCommonData'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 type Rt = ReturnType<typeof useProvideTranslationsLikes>
@@ -38,32 +37,29 @@ export function useProvideTranslationsLikes() {
 	const { songUserManagementApi } = useApi()
 
 	const addLike = async (packGuid: PackGuid) => {
-		const r = await handleApiCall(
-			songUserManagementApi.songTranslationLikeControllerAddUserLikeToTranslation(
+		const r =
+			await songUserManagementApi.songTranslationLikeControllerAddUserLikeToTranslation(
 				{
 					packGuid: packGuid,
 				}
 			)
-		)
 
 		validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}
 	const removeLike = async (packGuid: PackGuid) => {
-		const r = await handleApiCall(
-			songUserManagementApi.songTranslationLikeControllerRemoveUserLikeFromTranslation(
+		const r =
+			await songUserManagementApi.songTranslationLikeControllerRemoveUserLikeFromTranslation(
 				{
 					packGuid: packGuid,
 				}
 			)
-		)
 		const newData = validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}
 
 	/** Do smart reload on user change */
 	const reload = async () => {
-		const r = await handleApiCall(
-			songUserManagementApi.songTranslationLikeControllerGetUserLikes()
-		)
+		const r =
+			await songUserManagementApi.songTranslationLikeControllerGetUserLikes()
 
 		validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}

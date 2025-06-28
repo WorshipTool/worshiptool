@@ -42,9 +42,19 @@ import { mapSearchSongPacksApiToDto } from '@/api/dtos/song/song.search.dto'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { wrapApi, wrapServerApi } from './api-wrapper'
 
-export type ApiClasses = ReturnType<typeof getApiClasses>
+export type ApiClasses = ReturnType<typeof getInternalApiClasses>
 
 export const getApiClasses = (apiConfiguration: Configuration) => {
+	return getInternalApiClasses(apiConfiguration, wrapApi) as ApiClasses
+}
+
+export const getServerApiClasses = (apiConfiguration: Configuration) => {
+	return getInternalApiClasses(apiConfiguration, wrapServerApi) as ApiClasses
+}
+const getInternalApiClasses = (
+	apiConfiguration: Configuration,
+	wrapFunc: typeof wrapApi
+) => {
 	const playlistGettingApi = new PlaylistGettingApi(apiConfiguration)
 	const playlistEditingApi = new PlaylistEditingApi(apiConfiguration)
 	const songGettingApi = new SongGettingApi(apiConfiguration)
@@ -79,66 +89,73 @@ export const getApiClasses = (apiConfiguration: Configuration) => {
 	const teamSongNotesApi = new TeamSongNotesApi(apiConfiguration)
 	const teamStatisticsApi = new TeamStatisticsApi(apiConfiguration)
 
-	return {
-		playlistGettingApi: wrapApi(playlistGettingApi, {
+	const wrappedClasses = {
+		playlistGettingApi: wrapFunc(playlistGettingApi, {
 			playlistGettingControllerGetPlaylistDataByGuid:
 				mapPlaylistDataOutDtoToPlaylistDto,
 		}),
-		playlistEditingApi: wrapApi(playlistEditingApi, {
+		playlistEditingApi: wrapFunc(playlistEditingApi, {
 			playlistEditingControllerAddVariantToPlaylist:
 				mapPlaylistItemOutDtoApiToPlaylistItemDto,
 			playlistEditingControllerCreatePlaylist: (r: any) =>
 				r.guid as PlaylistGuid,
 		}),
-		songGettingApi: wrapApi(songGettingApi),
-		songSearchingApi: wrapApi(songSearchingApi, {
+		songGettingApi: wrapFunc(songGettingApi),
+		songSearchingApi: wrapFunc(songSearchingApi, {
 			songSearchingControllerSearch: (d: any) =>
 				d.map((i: any) => mapSearchSongPacksApiToDto(i)),
 		}),
-		songAddingApi: wrapApi(songAddingApi),
-		songEditingApi: wrapApi(songEditingApi, {
+		songAddingApi: wrapFunc(songAddingApi),
+		songEditingApi: wrapFunc(songEditingApi, {
 			songEditingControllerEditVariant: (b) => b,
 		}),
-		songDeletingApi: wrapApi(songDeletingApi, {}),
-		songPublishingApi: wrapApi(songPublishingApi),
-		songValidationApi: wrapApi(songValidationApi),
-		songNotesApi: wrapApi(songNotesApi, {}),
-		songFavouritesApi: wrapApi(songFavouritesApi),
-		authApi: wrapApi(authApi),
-		permissionApi: wrapApi(permissionApi),
-		analyticsApi: wrapApi(analyticsApi),
-		mailApi: wrapApi(mailApi),
-		imagesApi: wrapApi(imagesApi),
-		bridgeApi: wrapApi(bridgeApi),
-		parserApi: wrapApi(parserApi),
-		packEmbeddingApi: wrapApi(packEmbeddingApi, {
+		songDeletingApi: wrapFunc(songDeletingApi, {}),
+		songPublishingApi: wrapFunc(songPublishingApi),
+		songValidationApi: wrapFunc(songValidationApi),
+		songNotesApi: wrapFunc(songNotesApi, {}),
+		songFavouritesApi: wrapFunc(songFavouritesApi),
+		authApi: wrapFunc(authApi),
+		permissionApi: wrapFunc(permissionApi),
+		analyticsApi: wrapFunc(analyticsApi),
+		mailApi: wrapFunc(mailApi),
+		imagesApi: wrapFunc(imagesApi),
+		bridgeApi: wrapFunc(bridgeApi),
+		parserApi: wrapFunc(parserApi),
+		packEmbeddingApi: wrapFunc(packEmbeddingApi, {
 			packEmbeddingSearchControllerSearch: (arr: any[]) =>
 				arr.map((s: any) => ({
 					found: [mapBasicVariantPackApiToDto(s)],
 				})),
 		}),
-		songManagementApi: wrapApi(songManagementApi),
-		songUserManagementApi: wrapApi(songUserManagementApi),
-		messengerApi: wrapApi(messengerApi),
+		songManagementApi: wrapFunc(songManagementApi),
+		songUserManagementApi: wrapFunc(songUserManagementApi),
+		messengerApi: wrapFunc(messengerApi),
 
 		// submodules
-		teamAddingApi: wrapApi(teamAddingApi),
-		teamGettingApi: wrapApi(teamGettingApi),
-		teamEditingApi: wrapApi(teamEditingApi),
-		teamJoiningApi: wrapApi(teamJoiningApi),
-		teamMembersApi: wrapApi(teamMembersApi),
-		teamEventsApi: wrapApi(teamEventsApi),
-		teamPlaylistsApi: wrapApi(teamPlaylistsApi),
-		teamSongNotesApi: wrapApi(teamSongNotesApi),
-		teamStatisticsApi: wrapApi(teamStatisticsApi),
+		teamAddingApi: wrapFunc(teamAddingApi),
+		teamGettingApi: wrapFunc(teamGettingApi),
+		teamEditingApi: wrapFunc(teamEditingApi),
+		teamJoiningApi: wrapFunc(teamJoiningApi),
+		teamMembersApi: wrapFunc(teamMembersApi),
+		teamEventsApi: wrapFunc(teamEventsApi),
+		teamPlaylistsApi: wrapFunc(teamPlaylistsApi),
+		teamSongNotesApi: wrapFunc(teamSongNotesApi),
+		teamStatisticsApi: wrapFunc(teamStatisticsApi),
 	}
+
+	// console.log('wrapped songGettingApi', wrappedClasses.songGettingApi)
+
+	return wrappedClasses
 }
 
-export const getServerApiClasses = (apiConfiguration: Configuration) => {
+export const getApiClass = <T extends keyof ApiClasses>(
+	className: T,
+	apiConfiguration: Configuration
+): ApiClasses[T] => {
 	const classes = getApiClasses(apiConfiguration)
-	const wrapped: any = {}
-	for (const [key, api] of Object.entries(classes)) {
-		wrapped[key] = wrapServerApi(api as any)
+	if (className in classes) {
+		return classes[className]
+	} else {
+		throw new Error(`API class ${className} does not exist`)
 	}
-	return wrapped as ApiClasses
 }

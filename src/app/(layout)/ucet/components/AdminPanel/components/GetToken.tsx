@@ -7,7 +7,6 @@ import { LoginRequestDTO } from '../../../../../../api/dtos/dtosAuth'
 import { Card } from '../../../../../../common/ui/Card/Card'
 import { useApi } from '../../../../../../hooks/api/useApi'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
 export default function GetToken() {
 	const { authApi } = useApi()
@@ -23,7 +22,8 @@ export default function GetToken() {
 			email,
 			password,
 		}
-		handleApiCall(authApi.authControllerLogin(body))
+		authApi
+			.authControllerLogin(body)
 			.then((r) => {
 				setToken(r.token)
 				navigator.clipboard.writeText(r.token)

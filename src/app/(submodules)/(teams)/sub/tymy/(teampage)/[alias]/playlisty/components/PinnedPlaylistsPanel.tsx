@@ -11,7 +11,6 @@ import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { PushPin } from '@mui/icons-material'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -34,11 +33,10 @@ export default function PinnedPlaylistsPanel() {
 
 	const [{ data: pinnedPlaylists, loading: pinnedPlaylistsLoading }, reload] =
 		useApiStateEffect(async () => {
-			const result = await handleApiCall(
-				teamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam(
+			const result =
+				await teamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam(
 					teamGuid
 				)
-			)
 			return result.playlists
 		}, [teamGuid])
 
@@ -48,12 +46,10 @@ export default function PinnedPlaylistsPanel() {
 
 			fetchPinApiState(
 				async () => {
-					return handleApiCall(
-						teamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam({
-							teamGuid: teamGuid,
-							playlistGuid: data.guid,
-						})
-					)
+					return teamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam({
+						teamGuid: teamGuid,
+						playlistGuid: data.guid,
+					})
 				},
 				() => reload()
 			)
@@ -65,12 +61,10 @@ export default function PinnedPlaylistsPanel() {
 		(playlistGuid: string) => {
 			fetchPinApiState(
 				async () => {
-					return handleApiCall(
-						teamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam({
-							teamGuid: teamGuid,
-							playlistGuid: playlistGuid,
-						})
-					)
+					return teamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam({
+						teamGuid: teamGuid,
+						playlistGuid: playlistGuid,
+					})
 				},
 				() => reload()
 			)

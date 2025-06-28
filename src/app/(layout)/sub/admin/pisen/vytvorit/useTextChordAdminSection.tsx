@@ -8,7 +8,6 @@ import { grey } from '@/common/ui/mui/colors'
 import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { isSheetDataValid } from '@/tech/sheet.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -34,13 +33,11 @@ export const useTextChordAdminSection = (
 
 	const saveSong = async (): Promise<PostCreateVariantOutDto> => {
 		const result = (await fetchApiState(async () => {
-			return handleApiCall(
-				songAddingApi.songAddingControllerCreate({
-					title,
-					sheetData,
-					createdType: CreatedType.Manual,
-				})
-			)
+			return songAddingApi.songAddingControllerCreate({
+				title,
+				sheetData,
+				createdType: CreatedType.Manual,
+			})
 		})) as PostCreateVariantOutDto
 
 		onSongSave(result)

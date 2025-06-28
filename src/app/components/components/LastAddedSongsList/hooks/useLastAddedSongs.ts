@@ -5,15 +5,12 @@ import {
 } from '../../../../../api/dtos'
 import { useApi } from '../../../../../hooks/api/useApi'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 export default function useLastAddedSongs() {
 	const { songGettingApi } = useApi()
 
 	const [state] = useApiStateEffect<BasicVariantPack[]>(async () => {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerGetLastAdded()
-		)
+		const result = await songGettingApi.songGettingControllerGetLastAdded()
 		return result.map((v) => mapBasicVariantPackApiToDto(v))
 	}, [])
 

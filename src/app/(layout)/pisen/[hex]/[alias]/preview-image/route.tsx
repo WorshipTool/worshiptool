@@ -1,7 +1,6 @@
 import DefaultStylePreview from '@/common/components/SheetDisplay/styles/DefaultStylePreview'
 import { useServerApi } from '@/hooks/api/useServerApi'
 import { PageParams } from '@/routes'
-import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 import { makeVariantAlias } from '@/tech/song/variant/variant.utils'
 import { Sheet } from '@pepavlin/sheet-api'
 import { ImageResponse } from 'next/og'
@@ -13,9 +12,8 @@ export async function GET(req: NextRequest, { params }: PageParams<'variant'>) {
 	const { songGettingApi } = await useServerApi()
 
 	const alias = makeVariantAlias(params.hex, params.alias)
-	const data = await handleServerApiCall(
-		songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
-	)
+	const data =
+		await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
 
 	const sheet = new Sheet(data.main.sheetData)
 

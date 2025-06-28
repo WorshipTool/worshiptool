@@ -4,7 +4,6 @@ import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { useServerApi } from '@/hooks/api/useServerApi'
-import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 
 export default SmartPage(Page, [
@@ -16,9 +15,7 @@ export default SmartPage(Page, [
 
 async function Page() {
 	const { songGettingApi } = await useServerApi()
-	const data = await handleServerApiCall(
-		songGettingApi.songGettingControllerGetLastAdded()
-	)
+	const data = await songGettingApi.songGettingControllerGetLastAdded()
 	const packs = data.map((p) => mapBasicVariantPackApiToDto(p))
 	return (
 		<>

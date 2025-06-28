@@ -5,7 +5,6 @@ import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { ROLES } from '@/interfaces/user'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Edit, Save } from '@mui/icons-material'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -27,7 +26,7 @@ export default function BasicInfo() {
 			lastName: editedSurname || info.lastName,
 		}
 		fetchApiState(async () =>
-			handleApiCall(authApi.authControllerChangeUserName(data))
+			authApi.authControllerChangeUserName(data)
 		).finally(() => {
 			setEditMode(false)
 			reloadInfo(data)

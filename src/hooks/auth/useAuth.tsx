@@ -2,6 +2,7 @@
 
 import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google'
 // import Cookies from 'js-cookie'
+import { getApiClass } from '@/hooks/api/api-classes'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'
@@ -20,7 +21,7 @@ import {
 	useState,
 } from 'react'
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
-import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
+import { Configuration, LoginInputData } from '../../api/generated'
 import { ROLES, UserDto } from '../../interfaces/user'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
@@ -116,7 +117,7 @@ export function useProvideAuth() {
 	const { enqueueSnackbar } = useSnackbar()
 
 	// API
-	const authApi = new AuthApi(apiConfiguration)
+	const authApi = getApiClass('authApi', apiConfiguration)
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const login = async (
@@ -133,8 +134,8 @@ export function useProvideAuth() {
 		return authApi
 			.authControllerLogin(body)
 			.then((result) => {
-				_innerLogin(loginResultDTOToUser(result.data))
-				if (after) after(result.data)
+				_innerLogin(loginResultDTOToUser(result))
+				if (after) after(result)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -199,8 +200,8 @@ export function useProvideAuth() {
 		authApi
 			.authControllerLoginWithGoogle(data)
 			.then((result) => {
-				_innerLogin(loginResultDTOToUser(result.data))
-				if (after) after(result.data)
+				_innerLogin(loginResultDTOToUser(result))
+				if (after) after(result)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -218,28 +219,28 @@ export function useProvideAuth() {
 		return _getCookie() !== undefined
 	}
 
-        const changePassword = useCallback(
-                async (oldPassword: string, newPassword: string) => {
-                        if (!user) return
-                        await authApi.authControllerChangePassword({ newPassword, oldPassword })
-                },
-                [authApi, user]
-        )
+	const changePassword = useCallback(
+		async (oldPassword: string, newPassword: string) => {
+			if (!user) return
+			await authApi.authControllerChangePassword({ newPassword, oldPassword })
+		},
+		[authApi, user]
+	)
 
-        const resetPassword = useCallback(
-                async (resetToken: string, newPassword: string) => {
-                        await authApi.authControllerResetPassword({ resetToken, newPassword })
-                },
-                [authApi]
-        )
+	const resetPassword = useCallback(
+		async (resetToken: string, newPassword: string) => {
+			await authApi.authControllerResetPassword({ resetToken, newPassword })
+		},
+		[authApi]
+	)
 
-        const sendResetLink = useCallback(
-                async (email: string) => {
-                        const result = await authApi.authControllerSendResetToken(email)
-                        return result
-                },
-                [authApi]
-        )
+	const sendResetLink = useCallback(
+		async (email: string) => {
+			const result = await authApi.authControllerSendResetToken(email)
+			return result
+		},
+		[authApi]
+	)
 
 	const reloadInfo = useCallback(
 		(partialUser: Partial<UserDto>) => {

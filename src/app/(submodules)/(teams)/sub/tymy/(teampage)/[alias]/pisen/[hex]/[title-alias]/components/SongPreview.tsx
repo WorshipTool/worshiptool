@@ -23,7 +23,6 @@ import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useRef, useState } from 'react'
@@ -92,14 +91,12 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 		// Save data
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songEditingApi.songEditingControllerEditVariant({
-						variantAlias: variant.packAlias,
-						createdType: CreatedType.Manual,
-						title: newData.title || undefined,
-						sheetData: newData.sheetData || undefined,
-					})
-				)
+				return songEditingApi.songEditingControllerEditVariant({
+					variantAlias: variant.packAlias,
+					createdType: CreatedType.Manual,
+					title: newData.title || undefined,
+					sheetData: newData.sheetData || undefined,
+				})
 			},
 			() => {
 				if (newData.title) {

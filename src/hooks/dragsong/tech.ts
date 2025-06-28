@@ -1,5 +1,6 @@
 import { SongVariantDto, VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import { SongGettingApi } from '@/api/generated'
+import { ApiWrappedWithMapping } from '@/hooks/api/api-wrapper'
 
 export type DragSongDto = {
 	packGuid: VariantPackGuid
@@ -20,7 +21,7 @@ export const mapVariantToDragDto = (variant: SongVariantDto): DragSongDto => {
 
 export const getSongDataFromDragEvent = async (
 	event: React.DragEvent<HTMLDivElement>,
-	songGettingApi: SongGettingApi
+	songGettingApi: ApiWrappedWithMapping<SongGettingApi, any>
 ): Promise<DragSongDto | null> => {
 	const data = event.dataTransfer.getData(SONG_DRAG_DATA_TYPE)
 	if (!data) {
@@ -34,18 +35,19 @@ export const getSongDataFromDragEvent = async (
 
 const getSongDataFromExternalUrl = async (
 	url: string,
-	songGettingApi: SongGettingApi
+	songGettingApi: ApiWrappedWithMapping<SongGettingApi, any>
 ): Promise<DragSongDto | null> => {
 	console.log(url)
 
-        try {
-                const data = await songGettingApi.songGettingControllerGetPublicSongBySource(url)
-                return {
-                        packGuid: data.packGuid as VariantPackGuid,
-                        alias: data.alias as VariantPackAlias,
-                        title: data.title,
-                        draggedFromExternalSource: true,
-                }
+	try {
+		const data =
+			await songGettingApi.songGettingControllerGetPublicSongBySource(url)
+		return {
+			packGuid: data.packGuid as VariantPackGuid,
+			alias: data.alias as VariantPackAlias,
+			title: data.title,
+			draggedFromExternalSource: true,
+		}
 	} catch (e) {}
 	return null
 }

@@ -1,7 +1,6 @@
 import { CircularProgress } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { Public, PublicOff } from '@mui/icons-material'
@@ -34,7 +33,7 @@ export default function PublishButton(props: PublishButtonProps) {
 	const unverify = () => {
 		fetchApiState(
 			() => {
-				return handleApiCall(
+				return (
 					songPublishingApi.songPublishingControllerUnpublishVariant({
 						packGuid: props.variant.packGuid,
 					})

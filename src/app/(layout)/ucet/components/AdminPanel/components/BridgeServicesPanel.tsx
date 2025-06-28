@@ -11,7 +11,6 @@ import {
 import { Chip } from '@/common/ui/mui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Lan, LastPage, Refresh } from '@mui/icons-material'
 import { useState } from 'react'
 
@@ -27,7 +26,7 @@ export default function BridgeServicesPanel() {
 	const { bridgeApi } = useApi()
 	const [apiState, refresh] = useApiStateEffect<BridgeServiceData[]>(
 		async () => {
-			return handleApiCall(bridgeApi.bridgeControllerGetServices()) as any
+			return bridgeApi.bridgeControllerGetServices() as any
 		}
 	)
 

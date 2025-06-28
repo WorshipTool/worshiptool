@@ -5,7 +5,6 @@ import { Box, Button, Gap, Typography, useTheme } from '@/common/ui'
 import { alpha } from '@/common/ui/mui'
 import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Toys } from '@mui/icons-material'
 import { useState } from 'react'
 
@@ -26,17 +25,19 @@ export const useValidationAdminSection = (
 	const [apiState] = useApiStateEffect(async () => {
 		const aliasString = variantData.alias
 
-		const data = await handleApiCall(
-			songGettingApi.songOneGettingControllerGetVariantDataByAlias(aliasString)
-		)
+		const data =
+			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(
+				aliasString
+			)
 		const variant = mapExtendedVariantPackApiToDto(data.main)
 
-		const validation = await handleApiCall(
-			songValidationApi.songValidationControllerValidateSheetDataAndTitle({
-				sheetData: variant.sheetData,
-				title: variant.title,
-			})
-		)
+		const validation =
+			await songValidationApi.songValidationControllerValidateSheetDataAndTitle(
+				{
+					sheetData: variant.sheetData,
+					title: variant.title,
+				}
+			)
 
 		if (!validation) setQualities({})
 		const q: { [key: string]: any } = validation.qualities

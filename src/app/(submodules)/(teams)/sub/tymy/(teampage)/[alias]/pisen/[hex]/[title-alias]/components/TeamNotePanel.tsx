@@ -12,7 +12,6 @@ import { Typography } from '@/common/ui/Typography'
 import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { StickyNote2 } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
@@ -23,11 +22,9 @@ export default function TeamNotePanel() {
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
-			return handleApiCall(
-				teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
-					packGuid,
-					teamGuid
-				)
+			return teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
+				packGuid,
+				teamGuid
 			)
 		}, [teamSongNotesApi, packGuid])
 
@@ -49,32 +46,26 @@ export default function TeamNotePanel() {
 			async () => {
 				if (cnt.length === 0) {
 					if (notes.length > 0) {
-						return handleApiCall(
-							teamSongNotesApi.teamSongNoteControllerDeleteNote({
-								noteGuid: notes[0].guid,
-							})
-						)
+						return teamSongNotesApi.teamSongNoteControllerDeleteNote({
+							noteGuid: notes[0].guid,
+						})
 					} else {
 						return
 					}
 				}
 
 				if (notes.length > 0) {
-					return handleApiCall(
-						teamSongNotesApi.teamSongNoteControllerEditNote({
-							content: cnt,
-							noteGuid: notes[0].guid,
-						})
-					)
+					return teamSongNotesApi.teamSongNoteControllerEditNote({
+						content: cnt,
+						noteGuid: notes[0].guid,
+					})
 				}
 
-				return handleApiCall(
-					teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
-						content: cnt,
-						packGuid: packGuid,
-						teamGuid: teamGuid,
-					})
-				)
+				return teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
+					content: cnt,
+					packGuid: packGuid,
+					teamGuid: teamGuid,
+				})
 			},
 			() => {
 				reload()

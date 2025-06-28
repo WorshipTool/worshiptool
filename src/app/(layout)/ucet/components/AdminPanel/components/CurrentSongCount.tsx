@@ -3,7 +3,6 @@ import { AutoMode, FiberManualRecord, Numbers } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { Card } from '../../../../../../common/ui/Card/Card'
 import { useApi } from '../../../../../../hooks/api/useApi'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
 export default function CurrentSongCount() {
 	const { songGettingApi } = useApi()
@@ -13,7 +12,8 @@ export default function CurrentSongCount() {
 
 	const getCount = async (ignore: boolean = false) => {
 		if (ignore || autoRefresh) {
-			handleApiCall(songGettingApi.songGettingControllerGetSongsCount())
+			songGettingApi
+				.songGettingControllerGetSongsCount()
 				.then((r) => {
 					setSongCount(r)
 				})
