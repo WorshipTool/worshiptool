@@ -60,6 +60,9 @@ export default async (phase, { defaultConfig }) => {
 				},
 				{
 					hostname: 'worship.cz',
+				},
+				{
+					hostname: 'worshiptool-end.fly.dev',
 				}
 			],
 			dangerouslyAllowSVG: true,
