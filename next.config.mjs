@@ -58,6 +58,9 @@ export default async (phase, { defaultConfig }) => {
 				{
 					hostname: 'chvalotce.cz',
 				},
+				{
+					hostname: 'worship.cz',
+				}
 			],
 			dangerouslyAllowSVG: true,
 		},
