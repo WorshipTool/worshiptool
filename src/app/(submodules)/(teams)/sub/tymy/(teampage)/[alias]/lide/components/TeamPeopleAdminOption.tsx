@@ -18,7 +18,7 @@ export default function TeamPeopleAdminOption() {
 		if (!email) return
 		fetchApiState(
 			async () => {
-				return teamJoiningApi.teamJoiningControllerAddByEmail({
+				return teamJoiningApi.addByEmail({
 					email,
 					teamGuid: guid,
 				})

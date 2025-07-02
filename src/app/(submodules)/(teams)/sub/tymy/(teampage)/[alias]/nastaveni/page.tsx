@@ -73,7 +73,7 @@ function TeamSettingsPage() {
 
 	const onSave = async () => {
 		try {
-			await teamEditingApi.teamEditingControllerChangeTeamInfo({
+			await teamEditingApi.changeTeamInfo({
 				teamGuid: guid,
 				teamName: name,
 				joinCode,
@@ -95,7 +95,7 @@ function TeamSettingsPage() {
 	const { enqueueSnackbar } = useSnackbar()
 	const onTeamPermanentRemove = async () => {
 		setDeletePopupOpen(false)
-		await teamEditingApi.teamEditingControllerDeleteTeam({
+		await teamEditingApi.deleteTeam({
 			teamGuid: guid,
 		})
 		navigate('teams', {})

@@ -18,7 +18,7 @@ export default function SendToApproval() {
 
 	const send = async () => {
 		await fetchApiState(async () =>
-			songPublishingApi.songPublishingControllerSendPackToApproval({
+			songPublishingApi.sendPackToApproval({
 				packGuid: packGuid,
 			})
 		)

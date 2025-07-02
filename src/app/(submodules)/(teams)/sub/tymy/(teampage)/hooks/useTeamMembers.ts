@@ -10,9 +10,7 @@ export const NEW_TEAM_MEMBER_MESSAGE_GROUP = 'joiningteamgroup'
 export function useTeamMembers(teamAlias: string, teamGuid: string) {
 	const { teamMembersApi } = useApi()
 	const [apiState, fetchData] = useApiStateEffect(async () => {
-		const data = await teamMembersApi.teamMemberControllerGetTeamMembers(
-			teamAlias
-		)
+		const data = await teamMembersApi.getTeamMembers(teamAlias)
 		return data
 	}, [teamAlias])
 

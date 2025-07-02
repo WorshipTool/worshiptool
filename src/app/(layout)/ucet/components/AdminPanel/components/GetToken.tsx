@@ -23,7 +23,7 @@ export default function GetToken() {
 			password,
 		}
 		authApi
-			.authControllerLogin(body)
+			.login(body)
 			.then((r) => {
 				setToken(r.token)
 				navigator.clipboard.writeText(r.token)

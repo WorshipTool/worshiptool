@@ -37,7 +37,7 @@ export default function TeamPlaylistMoreButton() {
 	const [apiState, reload] =
 		useApiStateEffect<TeamEventData | null>(async () => {
 			if (!playlistGuid) return null
-			return teamEventsApi.teamEventControllerGetEventByPlaylist(playlistGuid)
+			return teamEventsApi.getEventByPlaylist(playlistGuid)
 		}, [playlistGuid])
 
 	const hasEvent = useMemo(() => Boolean(apiState.data), [apiState.data])
@@ -90,9 +90,7 @@ export default function TeamPlaylistMoreButton() {
 	const onRemove = async () => {
 		await fetchDelete(
 			async () => {
-				return playlistEditingApi.playlistEditingControllerDeletePlaylist(
-					playlistGuid
-				)
+				return playlistEditingApi.deletePlaylist(playlistGuid)
 			},
 			(d) => {
 				if (d) {

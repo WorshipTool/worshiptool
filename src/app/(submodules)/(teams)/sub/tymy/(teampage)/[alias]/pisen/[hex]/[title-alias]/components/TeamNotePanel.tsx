@@ -22,10 +22,7 @@ export default function TeamNotePanel() {
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
-			return teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
-				packGuid,
-				teamGuid
-			)
+			return teamSongNotesApi.getNotesOfVariantAndTeam(packGuid, teamGuid)
 		}, [teamSongNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
@@ -46,7 +43,7 @@ export default function TeamNotePanel() {
 			async () => {
 				if (cnt.length === 0) {
 					if (notes.length > 0) {
-						return teamSongNotesApi.teamSongNoteControllerDeleteNote({
+						return teamSongNotesApi.deleteNote({
 							noteGuid: notes[0].guid,
 						})
 					} else {
@@ -55,13 +52,13 @@ export default function TeamNotePanel() {
 				}
 
 				if (notes.length > 0) {
-					return teamSongNotesApi.teamSongNoteControllerEditNote({
+					return teamSongNotesApi.editNote({
 						content: cnt,
 						noteGuid: notes[0].guid,
 					})
 				}
 
-				return teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
+				return teamSongNotesApi.addNoteToVariant({
 					content: cnt,
 					packGuid: packGuid,
 					teamGuid: teamGuid,

@@ -19,7 +19,7 @@ export default function useMySongs(): IUseMySongs {
 	const [loaded, setLoaded] = useState(false)
 	const [apiState] = useApiStateEffect(async () => {
 		if (!isLoggedIn) return
-		const result = await songGettingApi.songGettingControllerGetSongListOfUser()
+		const result = await songGettingApi.getSongListOfUser()
 		return result.variants.map((variant) => {
 			return mapBasicVariantPackApiToDto(variant)
 		})

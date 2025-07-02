@@ -40,8 +40,7 @@ const getSongDataFromExternalUrl = async (
 	console.log(url)
 
 	try {
-		const data =
-			await songGettingApi.songGettingControllerGetPublicSongBySource(url)
+		const data = await songGettingApi.getPublicSongBySource(url)
 		return {
 			packGuid: data.packGuid as VariantPackGuid,
 			alias: data.alias as VariantPackAlias,

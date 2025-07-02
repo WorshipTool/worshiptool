@@ -12,10 +12,9 @@ export const generateMetadata = generateSmartMetadata(
 	async ({ params }: MetadataProps<'playlist'>) => {
 		const { playlistGettingApi } = await useServerApi()
 		try {
-			const playlist =
-				await playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
-					params.guid
-				)
+			const playlist = await playlistGettingApi.getPlaylistDataByGuid(
+				params.guid
+			)
 
 			const title = playlist ? playlist.title + ' (Playlist)' : 'Playlist'
 			return {
@@ -31,16 +30,13 @@ export const generateMetadata = generateSmartMetadata(
 
 export default async function Layout(props: LayoutProps<'playlist'>) {
 	const { playlistGettingApi } = await useServerApi()
-	const playlist =
-		await playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
-			props.params.guid
-		)
+	const playlist = await playlistGettingApi.getPlaylistDataByGuid(
+		props.params.guid
+	)
 
 	try {
 		// Send tick to backend
-		await playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
-			props.params.guid
-		)
+		await playlistGettingApi.updatePlaylistOpenDate(props.params.guid)
 	} catch (e) {
 		console.log('Please log-in')
 		// console.error(e)

@@ -19,9 +19,7 @@ function TeamStatistikyPage() {
 	const [{ data: statisticsData, loading: statisticsLoading }] =
 		useApiStateEffect(async () => {
 			if (!teamGuid) return null
-			return teamStatisticsApi.teamStatisticsControllerGetTeamStatistics(
-				teamGuid
-			)
+			return teamStatisticsApi.getTeamStatistics(teamGuid)
 		}, [teamGuid])
 
 	return (

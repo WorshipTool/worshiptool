@@ -25,7 +25,7 @@ export default function SetTranslationTypeAdminButton() {
 	const { songManagementApi } = useApi()
 
 	const onOptionClick = async (value: PackTranslationType) => {
-		await songManagementApi.packSettingControllerSetTranslationType({
+		await songManagementApi.setTranslationType({
 			packGuid: packGuid,
 			translationType: value,
 		})

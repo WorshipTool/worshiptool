@@ -26,7 +26,7 @@ export default function BridgeServicesPanel() {
 	const { bridgeApi } = useApi()
 	const [apiState, refresh] = useApiStateEffect<BridgeServiceData[]>(
 		async () => {
-			return bridgeApi.bridgeControllerGetServices() as any
+			return bridgeApi.getServices() as any
 		}
 	)
 

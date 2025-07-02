@@ -33,7 +33,7 @@ export default function PublishButton(props: PublishButtonProps) {
 	const unverify = () => {
 		fetchApiState(
 			() => {
-				return songPublishingApi.songPublishingControllerUnpublishVariant({
+				return songPublishingApi.unpublishVariant({
 					packGuid: props.variant.packGuid,
 				})
 			},

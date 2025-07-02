@@ -57,7 +57,7 @@ function Create() {
 	const onPostClick = () => {
 		fetchApiState(
 			async () => {
-				return songAddingApi.songAddingControllerCreate({
+				return songAddingApi.create({
 					title,
 					sheetData,
 					createdType: CreatedType.Manual,

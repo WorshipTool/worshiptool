@@ -42,9 +42,7 @@ const useProvideInnerSong = (songGuid: SongGuid, startData?: InData) => {
 	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v = await songGettingApi.songOneGettingControllerGetSongDataByGuid(
-			songGuid
-		)
+		const v = await songGettingApi.getSongDataByGuid(songGuid)
 		const data = mapBasicSongApiToDto(v)
 
 		return data

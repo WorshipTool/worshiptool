@@ -91,7 +91,7 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 		// Save data
 		fetchApiState(
 			async () => {
-				return songEditingApi.songEditingControllerEditVariant({
+				return songEditingApi.editVariant({
 					variantAlias: variant.packAlias,
 					createdType: CreatedType.Manual,
 					title: newData.title || undefined,

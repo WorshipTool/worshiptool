@@ -28,7 +28,7 @@ export default function CreateCopyButton(props: CreateCopyButtonProps) {
 	const onClick = async () => {
 		await fetchApiState(
 			async () => {
-				const result = await songAddingApi.songAddingControllerCreateCopy({
+				const result = await songAddingApi.createCopy({
 					packGuid: props.packGuid,
 				})
 

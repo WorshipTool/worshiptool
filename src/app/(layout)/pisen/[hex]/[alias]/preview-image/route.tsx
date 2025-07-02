@@ -12,8 +12,7 @@ export async function GET(req: NextRequest, { params }: PageParams<'variant'>) {
 	const { songGettingApi } = await useServerApi()
 
 	const alias = makeVariantAlias(params.hex, params.alias)
-	const data =
-		await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+	const data = await songGettingApi.getVariantDataByAlias(alias)
 
 	const sheet = new Sheet(data.main.sheetData)
 

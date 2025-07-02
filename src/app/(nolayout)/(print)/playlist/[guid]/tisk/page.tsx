@@ -40,9 +40,7 @@ function Page({ params, ...props }: PageProps<'playlistPrint'>) {
 	const { playlistGettingApi } = useApi()
 
 	const [{ data, loading }] = useApiStateEffect(async () => {
-		return await playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
-			params.guid
-		) //TODO: what is this?
+		return await playlistGettingApi.getPlaylistDataByGuid(params.guid) //TODO: what is this?
 	}, [params.guid])
 	useEffect(() => {
 		if (!data) return

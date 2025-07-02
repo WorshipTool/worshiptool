@@ -61,7 +61,7 @@ export default function PeopleList(props: PeopleListDto) {
 
 	const onMemberRemove = useCallback(async (guid: UserGuid) => {
 		try {
-			await teamMembersApi.teamMemberControllerLeaveTeam({
+			await teamMembersApi.leaveTeam({
 				userGuid: guid,
 				teamAlias: teamAlias,
 			})
@@ -74,7 +74,7 @@ export default function PeopleList(props: PeopleListDto) {
 	const onSetRole = useCallback(
 		async (guid: UserGuid, role: TeamMemberRole) => {
 			try {
-				await teamMembersApi.teamMemberControllerSetMemberRole({
+				await teamMembersApi.setMemberRole({
 					role: role,
 					teamGuid,
 					userGuid: guid,

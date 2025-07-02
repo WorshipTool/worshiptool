@@ -91,23 +91,19 @@ const getInternalApiClasses = (
 
 	const wrappedClasses = {
 		playlistGettingApi: wrapFunc(playlistGettingApi, {
-			playlistGettingControllerGetPlaylistDataByGuid:
-				mapPlaylistDataOutDtoToPlaylistDto,
+			getPlaylistDataByGuid: mapPlaylistDataOutDtoToPlaylistDto,
 		}),
 		playlistEditingApi: wrapFunc(playlistEditingApi, {
-			playlistEditingControllerAddVariantToPlaylist:
-				mapPlaylistItemOutDtoApiToPlaylistItemDto,
-			playlistEditingControllerCreatePlaylist: (r: any) =>
-				r.guid as PlaylistGuid,
+			addVariantToPlaylist: mapPlaylistItemOutDtoApiToPlaylistItemDto,
+			createPlaylist: (r: any) => r.guid as PlaylistGuid,
 		}),
 		songGettingApi: wrapFunc(songGettingApi),
 		songSearchingApi: wrapFunc(songSearchingApi, {
-			songSearchingControllerSearch: (d: any) =>
-				d.map((i: any) => mapSearchSongPacksApiToDto(i)),
+			search: (d: any) => d.map((i: any) => mapSearchSongPacksApiToDto(i)),
 		}),
 		songAddingApi: wrapFunc(songAddingApi),
 		songEditingApi: wrapFunc(songEditingApi, {
-			songEditingControllerEditVariant: (b) => b,
+			editVariant: (b) => b,
 		}),
 		songDeletingApi: wrapFunc(songDeletingApi, {}),
 		songPublishingApi: wrapFunc(songPublishingApi),
@@ -122,7 +118,7 @@ const getInternalApiClasses = (
 		bridgeApi: wrapFunc(bridgeApi),
 		parserApi: wrapFunc(parserApi),
 		packEmbeddingApi: wrapFunc(packEmbeddingApi, {
-			packEmbeddingSearchControllerSearch: (arr: any[]) =>
+			search: (arr: any[]) =>
 				arr.map((s: any) => ({
 					found: [mapBasicVariantPackApiToDto(s)],
 				})),

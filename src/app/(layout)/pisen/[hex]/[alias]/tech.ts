@@ -11,8 +11,7 @@ export const getVariantByAlias = async (
 ): Promise<GetVariantDataOutDto> => {
 	const { songGettingApi } = await useServerApi()
 
-	const variant =
-		await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+	const variant = await songGettingApi.getVariantDataByAlias(alias)
 
 	return variant
 }

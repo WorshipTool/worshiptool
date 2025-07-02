@@ -21,14 +21,9 @@ export default function GGFilterAdminButton() {
 
 	const onOptionClick = async (value: boolean | null) => {
 		if (value === null) {
-			await songManagementApi.songGGFilterControllerSetFilterStatusToAutoForPack(
-				packGuid
-			)
+			await songManagementApi.setFilterStatusToAutoForPack(packGuid)
 		} else {
-			await songManagementApi.songGGFilterControllerSetFilterStatusForPack(
-				packGuid,
-				value
-			)
+			await songManagementApi.setFilterStatusForPack(packGuid, value)
 		}
 		const label = OPTIONS.find((o) => o.value === value)?.label
 		enqueueSnackbar('Filtrace nastavena na ' + label)

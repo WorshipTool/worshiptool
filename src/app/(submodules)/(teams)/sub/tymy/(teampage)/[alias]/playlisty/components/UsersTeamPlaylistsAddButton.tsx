@@ -24,10 +24,9 @@ export default function UsersTeamPlaylistsAddButton() {
 	const onCreateClick = useCallback(() => {
 		fetchApiState(
 			async () => {
-				const p =
-					await playlistEditingApi.playlistEditingControllerCreatePlaylist()
+				const p = await playlistEditingApi.createPlaylist()
 
-				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+				await teamEditingApi.attachPlaylistToTeam({
 					teamGuid: guid,
 					playlistGuid: p,
 				})

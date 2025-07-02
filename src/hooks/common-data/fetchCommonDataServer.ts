@@ -12,27 +12,25 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 
 	try {
 		/** Get translation likes of user */
-		const tLikes =
-			await api.songUserManagementApi.songTranslationLikeControllerGetUserLikes()
+		const tLikes = await api.songUserManagementApi.getUserLikes()
 		const tlFormatted: TranslationLike[] = tLikes.likes.map((tl) => ({
 			packGuid: tl.packGuid as PackGuid,
 		}))
 
 		/** Get teams of user */
-		const teams = await api.teamMembersApi.teamMemberControllerGetTeamsOfUser()
+		const teams = await api.teamMembersApi.getTeamsOfUser()
 
 		/** Get playlist of user */
 		// const playlists = await handleServerApiCall(
-		// 	api.playlistGettingApi.playlistGettingControllerGetPlaylistsOfUser()
+		// 	Api.getPlaylistsOfUser()
 		// )
 
 		/** Get all subdomains */
-		const subdomains =
-			await api.teamGettingApi.teamGettingControllerGetAllSubdomains()
+		const subdomains = await api.teamGettingApi.getAllSubdomains()
 
 		/** Get user permissions */
 		// const p = await handleServerApiCall(
-		// 	api.permissionApi.permissionControllerGetUserPermissions()
+		// 	Api.getUserPermissions()
 		// )
 		// const pFormatted = p.map((p) => ({
 		// 	type: p.type as PermissionType<PermissionsTypes>,
@@ -43,7 +41,7 @@ export const fetchAllCommonDataServer = async (): Promise<AllCommonData> => {
 
 		/** Get user favourites */
 		// const favourites = await handleServerApiCall(
-		// 	api.songFavouritesApi.songFavouritesControllerGetFavourites()
+		// 	Api.getFavourites()
 		// )
 
 		return {

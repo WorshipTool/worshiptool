@@ -17,7 +17,7 @@ export default function UserNotePanel() {
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
-			return songNotesApi.songNotesControllerGetNotesOfVariantAndUser(packGuid)
+			return songNotesApi.getNotesOfVariantAndUser(packGuid)
 		}, [songNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
@@ -38,7 +38,7 @@ export default function UserNotePanel() {
 			async () => {
 				if (cnt.length === 0) {
 					if (notes.length > 0) {
-						return songNotesApi.songNotesControllerDeleteNote({
+						return songNotesApi.deleteNote({
 							noteGuid: notes[0].guid,
 						})
 					} else {
@@ -47,13 +47,13 @@ export default function UserNotePanel() {
 				}
 
 				if (notes.length > 0) {
-					return songNotesApi.songNotesControllerEditNote({
+					return songNotesApi.editNote({
 						content: cnt,
 						noteGuid: notes[0].guid,
 					})
 				}
 
-				return songNotesApi.songNotesControllerAddNoteToVariant({
+				return songNotesApi.addNoteToVariant({
 					content: cnt,
 					packGuid,
 				})

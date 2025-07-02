@@ -32,9 +32,7 @@ export default function GetterGraphs() {
 
 	useEffect(() => {
 		const doStuff = async () => {
-			const data = await analyticsApi.analyticsControllerGetAnalytics(
-				targetDaysCount
-			)
+			const data = await analyticsApi.getAnalytics(targetDaysCount)
 			const arr = data.graphs.map((graph) => {
 				const titles: Record<string, string> = {}
 				const records: Record<string, RecordData> = {}

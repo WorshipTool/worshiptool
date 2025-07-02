@@ -31,7 +31,7 @@ export default function JoinTeamPopup(props: Props) {
 	const onJoinClick = () => {
 		fetchApiState(
 			async () => {
-				return teamJoiningApi.teamJoiningControllerJoinTeam({
+				return teamJoiningApi.joinTeam({
 					joinCode,
 				})
 			},

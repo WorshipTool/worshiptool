@@ -14,14 +14,12 @@ import { SongGuid } from '@/types/song'
 export default async function layout(props: LayoutProps<'adminPack'>) {
 	const { songGettingApi } = await useServerApi()
 	const alias = makeVariantAlias(props.params.hex, props.params.alias)
-	const data =
-		await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+	const data = await songGettingApi.getVariantDataByAlias(alias)
 
 	const song = mapGetVariantDataApiToSongDto(data)
 	const variant = mapExtendedVariantPackApiToDto(data.main)
 
-	const songData =
-		await songGettingApi.songOneGettingControllerGetSongDataByGuid(song.guid)
+	const songData = await songGettingApi.getSongDataByGuid(song.guid)
 
 	const formatted = mapBasicSongApiToDto(songData)
 	return (

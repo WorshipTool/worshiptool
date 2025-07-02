@@ -21,17 +21,14 @@ function List() {
 	const { songGettingApi } = useApi()
 
 	const [{ data: count }] = useApiStateEffect(async () =>
-		songGettingApi.songGettingControllerGetListSongCount()
+		songGettingApi.getListSongCount()
 	)
 
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
 	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
 	const getPageData = async (page: number) => {
-		const r = await songGettingApi.songGettingControllerGetList(
-			page,
-			countPerPage + 1
-		)
+		const r = await songGettingApi.getList(page, countPerPage + 1)
 
 		return r.slice(0, countPerPage)
 	}

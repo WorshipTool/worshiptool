@@ -71,9 +71,7 @@ function useProvidePermissions<
 	const reload = async () => {
 		fetchApiState(async () => {
 			if (!isLoggedIn()) return []
-			const data = await permissionApi.permissionControllerGetUserPermissions(
-				userGuid
-			)
+			const data = await permissionApi.getUserPermissions(userGuid)
 			return data.map((p) => {
 				return {
 					type: p.type as PermissionType<Merge<A>>,
@@ -97,11 +95,10 @@ function useProvidePermissions<
 		payload: PermissionPayloadType<Merge<A>, T>
 	) => {
 		if (!isLoggedIn()) return []
-		const data =
-			await permissionApi.permissionControllerGetAllUsersWithPermission(
-				type,
-				permissionPayloadToApi(payload)
-			)
+		const data = await permissionApi.getAllUsersWithPermission(
+			type,
+			permissionPayloadToApi(payload)
+		)
 		return data
 	}
 

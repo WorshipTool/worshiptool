@@ -39,14 +39,14 @@ export default function AddMediaAdminButton() {
 		// 1. Add or remove the media
 		if (add) {
 			await fetchApiState(() =>
-				songManagementApi.songMediaControllerAddMediaToPack({
+				songManagementApi.addMediaToPack({
 					packGuid,
 					mediaUrl: url,
 				})
 			)
 		} else {
 			const a = await fetchApiState(() =>
-				songManagementApi.songMediaControllerRemoveMediaFromPack({
+				songManagementApi.removeMediaFromPack({
 					packGuid,
 					mediaGuid: url,
 				})

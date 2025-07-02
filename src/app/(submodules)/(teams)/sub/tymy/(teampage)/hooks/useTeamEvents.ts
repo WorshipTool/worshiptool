@@ -10,14 +10,14 @@ export function useTeamEvents(guid: string) {
 	const { teamEventsApi } = useApi()
 
 	const [apiState, reload] = useApiStateEffect(async () => {
-		const data = await teamEventsApi.teamEventControllerGetEvents(guid)
+		const data = await teamEventsApi.getEvents(guid)
 		return data
 	}, [guid])
 
 	const { fetchApiState, apiState: createApiState } = useApiState<TeamEvent>()
 	const addEvent = async (data: CreateTeamEventInDto) => {
 		const result = await fetchApiState(async () => {
-			return teamEventsApi.teamEventControllerCreateEvent(data)
+			return teamEventsApi.createEvent(data)
 		})
 
 		if (result) {
@@ -30,7 +30,7 @@ export function useTeamEvents(guid: string) {
 
 	const editEvent = async (data: EditTeamEventInDto) => {
 		const result = await fetchApiState(async () => {
-			return teamEventsApi.teamEventControllerEditEvent(data)
+			return teamEventsApi.editEvent(data)
 		})
 
 		if (result) {
@@ -43,7 +43,7 @@ export function useTeamEvents(guid: string) {
 
 	const deleteEvent = async (guid: string) => {
 		const result = await fetchApiState(async () => {
-			return teamEventsApi.teamEventControllerDeleteEvent(guid)
+			return teamEventsApi.deleteEvent(guid)
 		})
 
 		if (result) {

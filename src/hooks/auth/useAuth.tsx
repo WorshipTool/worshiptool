@@ -132,7 +132,7 @@ export function useProvideAuth() {
 		}
 
 		return authApi
-			.authControllerLogin(body)
+			.login(body)
 			.then((result) => {
 				_innerLogin(loginResultDTOToUser(result))
 				if (after) after(result)
@@ -155,7 +155,7 @@ export function useProvideAuth() {
 	}
 	const logout = async () => {
 		setLoading(false)
-		if (checkIfCookieExists()) await authApi.authControllerLogout()
+		if (checkIfCookieExists()) await authApi.logout()
 		if (user) {
 			setUser(undefined)
 			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
@@ -169,7 +169,7 @@ export function useProvideAuth() {
 		const body = data
 
 		authApi
-			.authControllerSignup(body)
+			.signup(body)
 			.then((result) => {
 				if (after) after(true)
 			})
@@ -198,7 +198,7 @@ export function useProvideAuth() {
 		}
 
 		authApi
-			.authControllerLoginWithGoogle(data)
+			.loginWithGoogle(data)
 			.then((result) => {
 				_innerLogin(loginResultDTOToUser(result))
 				if (after) after(result)
@@ -222,21 +222,21 @@ export function useProvideAuth() {
 	const changePassword = useCallback(
 		async (oldPassword: string, newPassword: string) => {
 			if (!user) return
-			await authApi.authControllerChangePassword({ newPassword, oldPassword })
+			await authApi.changePassword({ newPassword, oldPassword })
 		},
 		[authApi, user]
 	)
 
 	const resetPassword = useCallback(
 		async (resetToken: string, newPassword: string) => {
-			await authApi.authControllerResetPassword({ resetToken, newPassword })
+			await authApi.resetPassword({ resetToken, newPassword })
 		},
 		[authApi]
 	)
 
 	const sendResetLink = useCallback(
 		async (email: string) => {
-			const result = await authApi.authControllerSendResetToken(email)
+			const result = await authApi.sendResetToken(email)
 			return result
 		},
 		[authApi]

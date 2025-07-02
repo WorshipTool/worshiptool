@@ -27,7 +27,7 @@ export default function useSongSearch() {
 			try {
 				// Handle smart search
 				if (additionalParams?.useSmartSearch) {
-					return packEmbeddingApi.packEmbeddingSearchControllerSearch(
+					return packEmbeddingApi.search(
 						searchKey,
 						additionalParams?.page || 0,
 						{
@@ -36,7 +36,7 @@ export default function useSongSearch() {
 					)
 				}
 
-				const result = await songSearchingApi.songSearchingControllerSearch(
+				const result = await songSearchingApi.search(
 					searchKey,
 					additionalParams?.page || 0,
 					{

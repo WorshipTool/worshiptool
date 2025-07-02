@@ -39,9 +39,7 @@ const useProvideFavourites = () => {
 
 	const reload = async () => {
 		if (!user) return
-		const data = await fetchApiState(() =>
-			songFavouritesApi.songFavouritesControllerGetFavourites()
-		)
+		const data = await fetchApiState(() => songFavouritesApi.getFavourites())
 		if (data) setFavourites(data)
 	}
 
@@ -55,17 +53,14 @@ const useProvideFavourites = () => {
 	}, [user])
 
 	const add = async (packGuid: VariantPackGuid) => {
-		const result = await songFavouritesApi.songFavouritesControllerAddFavourite(
-			{ packGuid }
-		)
+		const result = await songFavouritesApi.addFavourite({ packGuid })
 		reload()
 		return result
 	}
 	const remove = async (packGuid: VariantPackGuid) => {
-		const result =
-			await songFavouritesApi.songFavouritesControllerRemoveFavourite({
-				packGuid,
-			})
+		const result = await songFavouritesApi.removeFavourite({
+			packGuid,
+		})
 		reload()
 		return result
 	}

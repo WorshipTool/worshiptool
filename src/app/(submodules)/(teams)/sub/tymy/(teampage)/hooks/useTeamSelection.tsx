@@ -18,7 +18,7 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 		const newItems: PlaylistItemDto[] = []
 		for (const packGuid of packGuids) {
 			try {
-				const r = await teamEditingApi.teamSelectionControllerAddPackToTeam({
+				const r = await teamEditingApi.addPackToTeam({
 					packGuid: packGuid,
 					teamGuid,
 				})
@@ -39,11 +39,10 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 		const newItems: VariantPackGuid[] = []
 		for (const packGuid of packGuids) {
 			try {
-				const data =
-					await teamEditingApi.teamSelectionControllerRemovePackFromTeam({
-						packGuid: packGuid,
-						teamGuid,
-					})
+				const data = await teamEditingApi.removePackFromTeam({
+					packGuid: packGuid,
+					teamGuid,
+				})
 				if (data) newItems.push(packGuid)
 			} catch (e) {
 				return false

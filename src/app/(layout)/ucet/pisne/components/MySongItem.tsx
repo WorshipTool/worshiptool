@@ -61,9 +61,7 @@ export default function MySongItem(props: MySongItemProps) {
 	const deleteSong = () => {
 		fetchApiState(
 			async () => {
-				return await songDeletingApi.songDeletingControllerDelete(
-					props.variant.packGuid
-				)
+				return await songDeletingApi._delete(props.variant.packGuid)
 			},
 			() => {
 				props.onDelete()

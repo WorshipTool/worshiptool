@@ -13,7 +13,7 @@ export default function CurrentSongCount() {
 	const getCount = async (ignore: boolean = false) => {
 		if (ignore || autoRefresh) {
 			songGettingApi
-				.songGettingControllerGetSongsCount()
+				.getSongsCount()
 				.then((r) => {
 					setSongCount(r)
 				})

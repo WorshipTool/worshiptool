@@ -17,7 +17,7 @@ export default function ApprovalItem({ pack }: Props) {
 	const { fetchApiState, apiState } = useApiState()
 	const onRejectClick = async () => {
 		await fetchApiState(async () =>
-			songPublishingApi.songPublishingControllerRejectPublishApproval({
+			songPublishingApi.rejectPublishApproval({
 				packGuid: pack.packGuid,
 			})
 		)

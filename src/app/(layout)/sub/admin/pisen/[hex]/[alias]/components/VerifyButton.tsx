@@ -12,7 +12,7 @@ export default function VerifyButton(props: VerifyButtonProps) {
 	const { songPublishingApi } = useApi()
 
 	const setVerify = async (status: boolean | null) => {
-		await songPublishingApi.songPublishingControllerVerifyVariant({
+		await songPublishingApi.verifyVariant({
 			packGuid: props.variant.packGuid,
 			verify: status,
 		})

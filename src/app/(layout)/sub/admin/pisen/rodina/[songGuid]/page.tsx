@@ -57,7 +57,7 @@ function Page() {
 	const { songManagementApi } = useApi()
 	const onRemoveClick = () => {
 		// TODO: Smart remove and transfer to another song
-		songManagementApi.songMergingControllerMovePacksToFamily({
+		songManagementApi.movePacksToFamily({
 			packGuids: selectedPacks.map((p) => p.packGuid),
 		})
 
@@ -68,7 +68,7 @@ function Page() {
 
 	const onSongSubmit = async (packs: BasicVariantPack[]) => {
 		if (!data) return
-		await songManagementApi.songMergingControllerMovePacksToFamily({
+		await songManagementApi.movePacksToFamily({
 			packGuids: packs.map((p) => p.packGuid),
 			targetSongGuid: data.guid,
 		})
@@ -84,7 +84,7 @@ function Page() {
 
 	const onMergeSubmit = async (packs: BasicVariantPack[]) => {
 		if (!data) return
-		await songManagementApi.songMergingControllerMergeFamilies({
+		await songManagementApi.mergeFamilies({
 			songGuids: [data.guid, ...packs.map((p) => p.songGuid)],
 		})
 		window.location.reload()

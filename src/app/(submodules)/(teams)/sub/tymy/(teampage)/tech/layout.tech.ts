@@ -17,9 +17,7 @@ import { cookies } from 'next/headers'
 export const getLayoutTeamInfo = async (teamAlias: string) => {
 	const gettingApi = new TeamGettingApi()
 	try {
-		const team = await handleApiCall(
-			gettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
-		)
+		const team = await handleApiCall(gettingApi.getTeamBasicInfo(teamAlias))
 		return team
 	} catch (e: any) {
 		return null
@@ -32,7 +30,7 @@ export const getLayoutTeamPayload = async (
 	const gettingApi = new TeamGettingApi()
 	try {
 		const payloadString = await handleApiCall(
-			gettingApi.teamGettingControllerGetTeamPayload(teamGuid)
+			gettingApi.getTeamPayload(teamGuid)
 		)
 
 		const data =
@@ -69,9 +67,7 @@ export const checkLayoutUserMembership = async (
 	})
 
 	try {
-		const fetchData = await creator.teamMemberControllerIsUserMemberOfTeam(
-			teamAlias
-		)
+		const fetchData = await creator.isUserMemberOfTeam(teamAlias)
 		const url = BASE_PATH + fetchData.url
 		const result = await fetch(url, { ...(fetchData.options as any) })
 

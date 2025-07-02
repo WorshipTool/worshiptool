@@ -18,7 +18,7 @@ export default function useUserTeams() {
 	const revalidate = async () => {
 		fetchApiState(async () => {
 			if (!user) return []
-			const result = await teamMembersApi.teamMemberControllerGetTeamsOfUser()
+			const result = await teamMembersApi.getTeamsOfUser()
 			return result.teams
 		})
 			.then((r) => {

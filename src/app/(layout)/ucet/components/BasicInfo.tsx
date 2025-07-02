@@ -25,9 +25,7 @@ export default function BasicInfo() {
 			firstName: editedName || info.firstName,
 			lastName: editedSurname || info.lastName,
 		}
-		fetchApiState(async () =>
-			authApi.authControllerChangeUserName(data)
-		).finally(() => {
+		fetchApiState(async () => authApi.changeUserName(data)).finally(() => {
 			setEditMode(false)
 			reloadInfo(data)
 		})

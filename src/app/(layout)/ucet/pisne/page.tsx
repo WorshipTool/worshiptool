@@ -29,8 +29,7 @@ function MySongsList() {
 
 	const [{ data: allVariants, loading }, reload] = useApiStateEffect(
 		async () => {
-			const result =
-				await songGettingApi.songGettingControllerGetSongListOfUser()
+			const result = await songGettingApi.getSongListOfUser()
 			const variants = result.variants.map((variant) => {
 				return mapBasicVariantPackApiToDto(variant)
 			})

@@ -17,7 +17,7 @@ export default function ParentSongSection() {
 
 	const handleSelectParent = async (newParentGuid: string) => {
 		// try {
-		// 	await api.songMergingControllerMergeSongs({
+		// 	await Api.mergeSongs({
 		// 		currentSongGuid: data.guid,
 		// 		newParentGuid,
 		// 	})
@@ -32,7 +32,7 @@ export default function ParentSongSection() {
 	const anchorRef = useRef(null)
 
 	const onSubmit = async (packs: BasicVariantPack[]) => {
-		await songManagementApi.songMergingControllerMovePacksToFamily({
+		await songManagementApi.movePacksToFamily({
 			packGuids: [packGuid],
 			targetSongGuid: packs[0].songGuid,
 		})
@@ -41,7 +41,7 @@ export default function ParentSongSection() {
 	}
 
 	const addToEmptyFamily = async () => {
-		await songManagementApi.songMergingControllerMovePacksToFamily({
+		await songManagementApi.movePacksToFamily({
 			packGuids: [packGuid],
 		})
 

@@ -33,7 +33,7 @@ export const useTextChordAdminSection = (
 
 	const saveSong = async (): Promise<PostCreateVariantOutDto> => {
 		const result = (await fetchApiState(async () => {
-			return songAddingApi.songAddingControllerCreate({
+			return songAddingApi.create({
 				title,
 				sheetData,
 				createdType: CreatedType.Manual,

@@ -13,12 +13,12 @@ export const useTeamPayload = (teamGuid: TeamGuid) => {
 	const getFunc = useCallback(async () => {
 		if (!teamGuid) return ''
 
-		return teamGettingApi.teamGettingControllerGetTeamPayload(teamGuid)
+		return teamGettingApi.getTeamPayload(teamGuid)
 	}, [teamGuid])
 
 	const setFunc = useCallback(
 		(payload: string) =>
-			teamEditingApi.teamEditingControllerEditPayload({
+			teamEditingApi.editPayload({
 				teamGuid,
 				payload,
 			}),

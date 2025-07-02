@@ -44,19 +44,13 @@ function Page() {
 		const doStuff = async () => {
 			const aliasString = getVariantAliasFromParams(hex, alias)
 
-			const data =
-				await songGettingApi.songOneGettingControllerGetVariantDataByAlias(
-					aliasString
-				)
+			const data = await songGettingApi.getVariantDataByAlias(aliasString)
 			const variant = mapExtendedVariantPackApiToDto(data.main)
 
-			const validation =
-				await songValidationApi.songValidationControllerValidateSheetDataAndTitle(
-					{
-						sheetData: variant.sheetData,
-						title: variant.title,
-					}
-				)
+			const validation = await songValidationApi.validateSheetDataAndTitle({
+				sheetData: variant.sheetData,
+				title: variant.title,
+			})
 
 			if (!validation) setQualities({})
 			const q: { [key: string]: any } = validation.qualities
@@ -73,7 +67,7 @@ function Page() {
 				const lang: SongLanguage =
 					variant.language ||
 					(
-						await songEditingApi.songEditingControllerChangeLanguage({
+						await songEditingApi.changeLanguage({
 							packGuid: variant.packGuid,
 						})
 					).language
@@ -97,16 +91,15 @@ function Page() {
 	const handlePublish = async () => {
 		try {
 			if (!autoFound) {
-				await songEditingApi.songEditingControllerChangeLanguage({
+				await songEditingApi.changeLanguage({
 					packGuid: variant.packGuid,
 					languageString: language as string,
 				})
 			}
 
-			const result =
-				await songPublishingApi.songPublishingControllerPublishVariant({
-					packGuid: variant.packGuid,
-				})
+			const result = await songPublishingApi.publishVariant({
+				packGuid: variant.packGuid,
+			})
 
 			navigate('variant', { hex, alias })
 			enqueueSnackbar(`Píseň byla zveřejněna.`)

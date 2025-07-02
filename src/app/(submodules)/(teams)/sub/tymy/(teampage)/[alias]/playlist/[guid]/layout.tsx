@@ -8,10 +8,9 @@ export const generateMetadata = generateSmartMetadata(
 	async ({ params }) => {
 		try {
 			const api = await useServerApi()
-			const playlist =
-				await api.playlistGettingApi.playlistGettingControllerGetPlaylistDataByGuid(
-					params.guid
-				)
+			const playlist = await api.playlistGettingApi.getPlaylistDataByGuid(
+				params.guid
+			)
 			if (playlist) {
 				return {
 					title: `${playlist.title} (Playlist)`,
@@ -32,9 +31,7 @@ export default async function Layout(props: LayoutProps<'teamPlaylist'>) {
 	const { playlistGettingApi } = await useServerApi()
 
 	// Send tick to backend
-	await playlistGettingApi.playlistGettingControllerUpdatePlaylistOpenDate(
-		props.params.guid
-	)
+	await playlistGettingApi.updatePlaylistOpenDate(props.params.guid)
 
 	return (
 		<TeamPlaylistClientProviders>{props.children}</TeamPlaylistClientProviders>

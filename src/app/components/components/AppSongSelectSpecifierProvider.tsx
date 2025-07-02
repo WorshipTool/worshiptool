@@ -33,10 +33,7 @@ export default function AppSongSelectSpecifierProvider(
 
 	const [globalApiState] = useApiStateEffect(async () => {
 		if (!active) return []
-		const result =
-			await songGettingApi.songGettingControllerSearchGlobalSongsInPopup(
-				searchString
-			)
+		const result = await songGettingApi.searchGlobalSongsInPopup(searchString)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
@@ -49,10 +46,7 @@ export default function AppSongSelectSpecifierProvider(
 			return []
 		}
 
-		const result =
-			await songGettingApi.songGettingControllerSearchMySongsInPopup(
-				searchString
-			)
+		const result = await songGettingApi.searchMySongsInPopup(searchString)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)

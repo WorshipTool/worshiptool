@@ -11,7 +11,7 @@ export async function logServerError(title: string, description: string) {
 	console.error(title + ':', description)
 
 	try {
-		messengerApi.messengerControllerSendError({
+		messengerApi.sendError({
 			title: title,
 			description: description,
 		})

@@ -7,9 +7,7 @@ import { SongGuid } from '@/types/song'
 
 export default async function layout(props: LayoutProps<'adminSong'>) {
 	const { songGettingApi } = await useServerApi()
-	const data = await songGettingApi.songOneGettingControllerGetSongDataByGuid(
-		props.params.songGuid
-	)
+	const data = await songGettingApi.getSongDataByGuid(props.params.songGuid)
 
 	const formatted = mapBasicSongApiToDto(data)
 

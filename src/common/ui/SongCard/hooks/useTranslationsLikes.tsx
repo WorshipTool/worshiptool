@@ -37,29 +37,22 @@ export function useProvideTranslationsLikes() {
 	const { songUserManagementApi } = useApi()
 
 	const addLike = async (packGuid: PackGuid) => {
-		const r =
-			await songUserManagementApi.songTranslationLikeControllerAddUserLikeToTranslation(
-				{
-					packGuid: packGuid,
-				}
-			)
+		const r = await songUserManagementApi.addUserLikeToTranslation({
+			packGuid: packGuid,
+		})
 
 		validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}
 	const removeLike = async (packGuid: PackGuid) => {
-		const r =
-			await songUserManagementApi.songTranslationLikeControllerRemoveUserLikeFromTranslation(
-				{
-					packGuid: packGuid,
-				}
-			)
+		const r = await songUserManagementApi.removeUserLikeFromTranslation({
+			packGuid: packGuid,
+		})
 		const newData = validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}
 
 	/** Do smart reload on user change */
 	const reload = async () => {
-		const r =
-			await songUserManagementApi.songTranslationLikeControllerGetUserLikes()
+		const r = await songUserManagementApi.getUserLikes()
 
 		validate(r.likes.map((v) => mapTranslationLikeApiToDto(v)))
 	}

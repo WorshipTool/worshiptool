@@ -17,9 +17,7 @@ export default function ShowPackFamilyOption() {
 
 	const [apiState] = useApiStateEffect(async () => {
 		const packGuid = variant.packGuid
-		const data = await packEmbeddingApi.packEmbeddingSearchControllerFindFamily(
-			packGuid
-		)
+		const data = await packEmbeddingApi.findFamily(packGuid)
 
 		return data
 			.filter((v) => v.packGuid !== variant.packGuid)

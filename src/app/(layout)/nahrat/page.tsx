@@ -82,7 +82,7 @@ function Upload() {
 
 	const parse = async (files: File[]) => {
 		const a = await ParserApiAxiosParamCreator(apiConfiguration)
-		const parse = await a.parserControllerParse()
+		const parse = await a.parse()
 		const url = getUrl(parse.url)
 
 		const form = new FormData()
@@ -106,7 +106,7 @@ function Upload() {
 		// 1. Get url
 
 		const a = await ParserApiAxiosParamCreator(apiConfiguration)
-		const parse = await a.parserControllerGetJobStatus(jobId)
+		const parse = await a.getJobStatus(jobId)
 		const url = getUrl(parse.url)
 
 		const eventSource = new EventSource(url)

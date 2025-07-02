@@ -10,8 +10,7 @@ export default function useRecommendedSongs() {
 	const { songGettingApi } = useApi()
 
 	const [state] = useApiStateEffect<BasicVariantPack[]>(async () => {
-		const result =
-			await songGettingApi.songGettingControllerGetRecommendedSongs()
+		const result = await songGettingApi.getRecommendedSongs()
 		return result.variants.map((v) => mapBasicVariantPackApiToDto(v))
 	}, [])
 

@@ -15,7 +15,7 @@ export default SmartPage(Page, [
 
 async function Page() {
 	const { songGettingApi } = await useServerApi()
-	const data = await songGettingApi.songGettingControllerGetLastAdded()
+	const data = await songGettingApi.getLastAdded()
 	const packs = data.map((p) => mapBasicVariantPackApiToDto(p))
 	return (
 		<>

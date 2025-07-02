@@ -31,8 +31,7 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 			props.params.hex,
 			props.params['title-alias']
 		)
-		const v =
-			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+		const v = await songGettingApi.getVariantDataByAlias(alias)
 
 		const d = mapExtendedVariantPackApiToDto(v.main)
 

@@ -26,7 +26,7 @@ function TeamPeoplePage() {
 	const { teamJoiningApi } = useApi()
 
 	const [apiState] = useApiStateEffect(async () => {
-		return teamJoiningApi.teamJoiningControllerGetJoinCode(alias)
+		return teamJoiningApi.getJoinCode(alias)
 	}, [alias])
 
 	const joinCode = useMemo(() => {

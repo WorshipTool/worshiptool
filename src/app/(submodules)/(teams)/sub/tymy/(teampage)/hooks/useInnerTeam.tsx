@@ -53,7 +53,7 @@ export const InnerTeamProvider = ({
 const useProvideInnerTeam = (teamAlias: string) => {
 	const { teamGettingApi, teamMembersApi } = useApi()
 	const [apiState, reload] = useApiStateEffect(() => {
-		return teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
+		return teamGettingApi.getTeamBasicInfo(teamAlias)
 	})
 	const guid = useMemo(
 		() => (apiState.data?.guid || '') as TeamGuid,

@@ -36,7 +36,7 @@ export default function CreateTeamButton() {
 	const onCreateClick = () => {
 		fetchApiState(
 			() =>
-				teamAddingApi.teamAddingControllerCreateNewTeam({
+				teamAddingApi.createNewTeam({
 					teamName,
 				}),
 			(data) => {

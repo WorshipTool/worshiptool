@@ -29,8 +29,7 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 	const { songGettingApi } = await useServerApi()
 
 	const alias = makeVariantAlias(pageProps.params.hex, pageProps.params.alias)
-	const data =
-		await songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
+	const data = await songGettingApi.getVariantDataByAlias(alias)
 	const main = mapExtendedVariantPackApiToDto(data.main)
 
 	const translationData = getTranslationData(

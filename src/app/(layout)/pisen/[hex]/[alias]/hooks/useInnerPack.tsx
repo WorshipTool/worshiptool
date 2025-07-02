@@ -54,10 +54,7 @@ const useProvideInnerPack = (variantAlias: string, startData?: InData) => {
 	const { songGettingApi } = useApi()
 	const [apiState] = useApiStateEffect(async () => {
 		if (startData) return null
-		const v =
-			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(
-				variantAlias
-			)
+		const v = await songGettingApi.getVariantDataByAlias(variantAlias)
 		const variant = v.main
 
 		const song = mapGetVariantDataApiToSongDto(v)

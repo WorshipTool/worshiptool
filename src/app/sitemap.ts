@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const api = new SongGettingApi()
 	let songs: GetListSongData[] = []
 	try {
-		songs = await handleApiCall(api.songGettingControllerGetSitemapList())
+		songs = await handleApiCall(api.getSitemapList())
 	} catch (e) {
 		console.warn('Failed to fetch songs for sitemap -> ignoring songs')
 	}

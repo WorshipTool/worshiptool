@@ -9,9 +9,7 @@ export const useTeamNotes = (teamGuid: TeamGuid) => {
 	const [apiState, fetchData] = useApiStateEffect(async () => {
 		if (!user || !teamGuid) return []
 
-		const data = await teamSongNotesApi.teamSongNoteControllerGetAllNotesOfTeam(
-			teamGuid
-		)
+		const data = await teamSongNotesApi.getAllNotesOfTeam(teamGuid)
 		return data.notes
 	}, [teamGuid, teamSongNotesApi, user])
 

@@ -27,7 +27,7 @@ export default function DeletedInfoPanel({
 	const restore = () => {
 		fetchApiState(
 			async () => {
-				return songDeletingApi.songDeletingControllerRestore(variant.packGuid)
+				return songDeletingApi.restore(variant.packGuid)
 			},
 			() => {
 				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla obnovena.`)

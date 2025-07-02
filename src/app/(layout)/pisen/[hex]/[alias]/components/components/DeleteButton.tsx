@@ -47,7 +47,7 @@ export default function DeleteButton({
 	const indeedDelete = async () => {
 		fetchApiState(
 			async () => {
-				return songDeletingApi.songDeletingControllerDelete(variant.packGuid)
+				return songDeletingApi._delete(variant.packGuid)
 			},
 			(result) => {
 				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla smazána.`)

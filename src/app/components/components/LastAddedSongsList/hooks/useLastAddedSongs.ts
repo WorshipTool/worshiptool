@@ -10,7 +10,7 @@ export default function useLastAddedSongs() {
 	const { songGettingApi } = useApi()
 
 	const [state] = useApiStateEffect<BasicVariantPack[]>(async () => {
-		const result = await songGettingApi.songGettingControllerGetLastAdded()
+		const result = await songGettingApi.getLastAdded()
 		return result.map((v) => mapBasicVariantPackApiToDto(v))
 	}, [])
 

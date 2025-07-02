@@ -25,19 +25,13 @@ export const useValidationAdminSection = (
 	const [apiState] = useApiStateEffect(async () => {
 		const aliasString = variantData.alias
 
-		const data =
-			await songGettingApi.songOneGettingControllerGetVariantDataByAlias(
-				aliasString
-			)
+		const data = await songGettingApi.getVariantDataByAlias(aliasString)
 		const variant = mapExtendedVariantPackApiToDto(data.main)
 
-		const validation =
-			await songValidationApi.songValidationControllerValidateSheetDataAndTitle(
-				{
-					sheetData: variant.sheetData,
-					title: variant.title,
-				}
-			)
+		const validation = await songValidationApi.validateSheetDataAndTitle({
+			sheetData: variant.sheetData,
+			title: variant.title,
+		})
 
 		if (!validation) setQualities({})
 		const q: { [key: string]: any } = validation.qualities

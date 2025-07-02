@@ -53,8 +53,7 @@ export default function useToolsMenuItems() {
 					? async () => {
 							// console.log('getting logo in tool item')
 							const url =
-								BACKEND_URL +
-								(await imagesApi.imagesControllerGetImage(team.logoGuid!)).url
+								BACKEND_URL + (await imagesApi.getImage(team.logoGuid!)).url
 							return url
 					  }
 					: undefined,

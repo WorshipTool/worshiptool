@@ -90,7 +90,7 @@ export default function TopPanel(props: TopPanelProps) {
 		}
 		fetchApiState(
 			async () => {
-				return await songEditingApi.songEditingControllerEditVariant(body)
+				return await songEditingApi.editVariant(body)
 			},
 			async (result) => {
 				await props.onEditClick?.(editable)

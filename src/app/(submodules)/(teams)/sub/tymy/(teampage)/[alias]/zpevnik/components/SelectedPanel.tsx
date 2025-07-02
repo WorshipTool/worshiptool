@@ -71,7 +71,7 @@ export default function SelectedPanel({
 			// 1. Create new playlist
 			const newGuid = await createPlaylist()
 
-			await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+			await teamEditingApi.attachPlaylistToTeam({
 				playlistGuid: newGuid,
 				teamGuid,
 			})

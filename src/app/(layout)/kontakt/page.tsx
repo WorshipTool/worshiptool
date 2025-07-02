@@ -48,7 +48,7 @@ function ContactPage() {
 
 		setLoading(true)
 		mailApi
-			.mailControllerSendFeedbackMail({
+			.sendFeedbackMail({
 				name,
 				email,
 				message,

@@ -33,10 +33,7 @@ export default function PinnedPlaylistsPanel() {
 
 	const [{ data: pinnedPlaylists, loading: pinnedPlaylistsLoading }, reload] =
 		useApiStateEffect(async () => {
-			const result =
-				await teamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam(
-					teamGuid
-				)
+			const result = await teamPlaylistsApi.getPinnedPlaylistsToTeam(teamGuid)
 			return result.playlists
 		}, [teamGuid])
 
@@ -46,7 +43,7 @@ export default function PinnedPlaylistsPanel() {
 
 			fetchPinApiState(
 				async () => {
-					return teamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam({
+					return teamPlaylistsApi.pinPlaylistToTeam({
 						teamGuid: teamGuid,
 						playlistGuid: data.guid,
 					})
@@ -61,7 +58,7 @@ export default function PinnedPlaylistsPanel() {
 		(playlistGuid: string) => {
 			fetchPinApiState(
 				async () => {
-					return teamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam({
+					return teamPlaylistsApi.unpinPlaylistFromTeam({
 						teamGuid: teamGuid,
 						playlistGuid: playlistGuid,
 					})
