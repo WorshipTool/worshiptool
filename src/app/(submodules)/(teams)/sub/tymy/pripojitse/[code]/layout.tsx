@@ -27,7 +27,7 @@ const joinTeam = async (code: string) => {
 		accessToken: user?.token,
 	})
 
-	const fetchData = await creator.teamJoiningControllerJoinTeam({
+	const fetchData = await creator.joinTeam({
 		joinCode: code,
 	})
 	const url = BASE_PATH + fetchData.url

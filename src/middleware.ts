@@ -135,7 +135,7 @@ const checkAuthentication = async (
 	})
 
 	try {
-		const fetchData = await creator.authControllerCheckTokenExpiration()
+		const fetchData = await creator.checkTokenExpiration()
 		const url = BASE_PATH + fetchData.url
 		const result = await safeFetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) throw new Error('Unauthorized')
@@ -169,9 +169,7 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 		const creator = TeamGettingApiAxiosParamCreator({
 			isJsonMime: () => true,
 		})
-		const fetchData = await creator.teamGettingControllerGetAliasBySubdomain(
-			subdomain
-		)
+		const fetchData = await creator.getAliasBySubdomain(subdomain)
 
 		try {
 			const url = BASE_PATH + fetchData.url
