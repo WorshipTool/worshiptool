@@ -3,7 +3,6 @@ import {
 	mapPlaylistItemOutDtoApiToPlaylistItemDto,
 } from '@/api/dtos/playlist/playlist.map'
 import {
-	AnalyticsApi,
 	AuthApi,
 	BridgeApi,
 	Configuration,
@@ -68,7 +67,6 @@ const getInternalApiClasses = (
 	const songFavouritesApi = new SongFavouritesApi(apiConfiguration)
 	const authApi = new AuthApi(apiConfiguration)
 	const permissionApi = new PermissionsApi(apiConfiguration)
-	const analyticsApi = new AnalyticsApi(apiConfiguration)
 	const mailApi = new MailApi(apiConfiguration)
 	const imagesApi = new ImagesApi(apiConfiguration)
 	const bridgeApi = new BridgeApi(apiConfiguration)
@@ -112,7 +110,6 @@ const getInternalApiClasses = (
 		songFavouritesApi: wrapFunc(songFavouritesApi),
 		authApi: wrapFunc(authApi),
 		permissionApi: wrapFunc(permissionApi),
-		analyticsApi: wrapFunc(analyticsApi),
 		mailApi: wrapFunc(mailApi),
 		imagesApi: wrapFunc(imagesApi),
 		bridgeApi: wrapFunc(bridgeApi),
