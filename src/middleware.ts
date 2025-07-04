@@ -138,9 +138,11 @@ const checkAuthentication = async (
 		const fetchData = await creator.checkTokenExpiration()
 		const url = BASE_PATH + fetchData.url
 		const result = await safeFetch(url, { ...(fetchData.options as any) })
-		if (result.status === 401) throw new Error('Unauthorized')
+		if (result.status === 401) {
+			throw new Error('Unauthorized')
+		}
 	} catch (e) {
-		console.log('going to login', e)
+		console.log('token expired, going to login', e)
 		const response: NextResponse = await setResponse(
 			NextResponse.redirect(new URL('/prihlaseni', request.url)),
 			'/prihlaseni'

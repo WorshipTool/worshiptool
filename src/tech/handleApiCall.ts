@@ -36,5 +36,3 @@ export const handleApiCall = <T>(
 			throw err
 		})
 }
-
-export const hac = handleApiCall
