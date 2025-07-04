@@ -44,6 +44,21 @@ export default (phase, { defaultConfig }) => {
 				{
 					hostname: 'worshiptool-end.fly.dev',
 				},
+				...(process.env.NEXT_PUBLIC_BACKEND_URL
+					? [
+							{
+								hostname: new URL(process.env.NEXT_PUBLIC_BACKEND_URL).hostname,
+							},
+					  ]
+					: []),
+				...(process.env.NEXT_PUBLIC_FRONTEND_URL
+					? [
+							{
+								hostname: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL)
+									.hostname,
+							},
+					  ]
+					: []),
 			],
 			dangerouslyAllowSVG: true,
 		},
