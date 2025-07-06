@@ -158,11 +158,11 @@ export function useProvideAuth() {
 		try {
 			setLoading(false)
 			if (checkIfCookieExists()) await authApi.logout()
+		} finally {
 			if (user) {
 				setUser(undefined)
 				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 			}
-		} finally {
 			setLoading(false)
 			_emptyCookie()
 		}
