@@ -59,6 +59,7 @@ export default (phase, { defaultConfig }) => {
 							},
 					  ]
 					: []),
+				}
 			],
 			dangerouslyAllowSVG: true,
 		},
