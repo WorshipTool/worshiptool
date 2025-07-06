@@ -158,6 +158,8 @@ export function useProvideAuth() {
 		try {
 			setLoading(false)
 			if (checkIfCookieExists()) await authApi.logout()
+		} catch (e) {
+			console.error('Logout failed:', e)
 		} finally {
 			if (user) {
 				setUser(undefined)
