@@ -154,14 +154,17 @@ export function useProvideAuth() {
 		_setCookie(user)
 	}
 	const logout = async () => {
-		setLoading(false)
-		if (checkIfCookieExists()) await authApi.logout()
-		if (user) {
-			setUser(undefined)
-			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+		try {
+			setLoading(false)
+			if (checkIfCookieExists()) await authApi.logout()
+			if (user) {
+				setUser(undefined)
+				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+			}
+		} finally {
 			_emptyCookie()
+			setLoading(false)
 		}
-		setLoading(false)
 	}
 
 	const signup = (data: SignUpRequestDTO, after?: (r: boolean) => void) => {
