@@ -139,7 +139,7 @@ const checkAuthentication = async (
 		const url = BASE_PATH + fetchData.url
 		const result = await safeFetch(url, { ...(fetchData.options as any) })
 		if (result.status === 401) {
-			throw new Error('Unauthorized')
+			throw new Error('Unauthorized, token expired')
 		}
 	} catch (e) {
 		console.log('token expired, going to login', e)
