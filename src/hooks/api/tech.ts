@@ -1,8 +1,8 @@
 import {
-	AnalyticsApi,
-	AuthApi,
-	BridgeApi,
-	Configuration,
+        AnalyticsApi,
+        AuthApi,
+        BridgeApi,
+        Configuration,
 	ImagesApi,
 	MailApi,
 	MessengerApi,
@@ -30,43 +30,114 @@ import {
 	TeamMembersApi,
 	TeamPlaylistsApi,
 	TeamSongNotesApi,
-	TeamStatisticsApi,
+        TeamStatisticsApi,
 } from '@/api/generated'
+import {
+        mapPlaylistDataOutDtoToPlaylistDto,
+        mapPlaylistItemOutDtoApiToPlaylistItemDto,
+} from '@/api/dtos/playlist/playlist.map'
+import {
+        mapSearchSongPacksApiToDto,
+        mapBasicVariantPackApiToDto,
+} from '@/api/dtos/song'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { wrapApi, wrapServerApi } from './apiWrapper'
 
 export type ApiClasses = ReturnType<typeof getApiClasses>
 
-export const getApiClasses = (apiConfiguration: Configuration) => ({
-	playlistGettingApi: new PlaylistGettingApi(apiConfiguration),
-	playlistEditingApi: new PlaylistEditingApi(apiConfiguration),
-	songGettingApi: new SongGettingApi(apiConfiguration),
-	songSearchingApi: new SongSearchingApi(apiConfiguration),
-	songAddingApi: new SongAddingApi(apiConfiguration),
-	songEditingApi: new SongEditingApi(apiConfiguration),
-	songDeletingApi: new SongDeletingApi(apiConfiguration),
-	songPublishingApi: new SongPublishingApi(apiConfiguration),
-	songValidationApi: new SongValidationApi(apiConfiguration),
-	songNotesApi: new SongNotesApi(apiConfiguration),
-	songFavouritesApi: new SongFavouritesApi(apiConfiguration),
-	authApi: new AuthApi(apiConfiguration),
-	permissionApi: new PermissionsApi(apiConfiguration),
-	analyticsApi: new AnalyticsApi(apiConfiguration),
-	mailApi: new MailApi(apiConfiguration),
-	imagesApi: new ImagesApi(apiConfiguration),
-	bridgeApi: new BridgeApi(apiConfiguration),
-	parserApi: new ParserApi(apiConfiguration),
-	packEmbeddingApi: new PackEmbeddingApi(apiConfiguration),
-	songManagementApi: new SongManagementApi(apiConfiguration),
-	songUserManagementApi: new SongUserManagementApi(apiConfiguration),
-	messengerApi: new MessengerApi(apiConfiguration),
+export const getApiClasses = (apiConfiguration: Configuration) => {
+        const playlistGettingApi = new PlaylistGettingApi(apiConfiguration)
+        const playlistEditingApi = new PlaylistEditingApi(apiConfiguration)
+        const songGettingApi = new SongGettingApi(apiConfiguration)
+        const songSearchingApi = new SongSearchingApi(apiConfiguration)
+        const songAddingApi = new SongAddingApi(apiConfiguration)
+        const songEditingApi = new SongEditingApi(apiConfiguration)
+        const songDeletingApi = new SongDeletingApi(apiConfiguration)
+        const songPublishingApi = new SongPublishingApi(apiConfiguration)
+        const songValidationApi = new SongValidationApi(apiConfiguration)
+        const songNotesApi = new SongNotesApi(apiConfiguration)
+        const songFavouritesApi = new SongFavouritesApi(apiConfiguration)
+        const authApi = new AuthApi(apiConfiguration)
+        const permissionApi = new PermissionsApi(apiConfiguration)
+        const analyticsApi = new AnalyticsApi(apiConfiguration)
+        const mailApi = new MailApi(apiConfiguration)
+        const imagesApi = new ImagesApi(apiConfiguration)
+        const bridgeApi = new BridgeApi(apiConfiguration)
+        const parserApi = new ParserApi(apiConfiguration)
+        const packEmbeddingApi = new PackEmbeddingApi(apiConfiguration)
+        const songManagementApi = new SongManagementApi(apiConfiguration)
+        const songUserManagementApi = new SongUserManagementApi(apiConfiguration)
+        const messengerApi = new MessengerApi(apiConfiguration)
 
-	// submodules
-	teamAddingApi: new TeamAddingApi(apiConfiguration),
-	teamGettingApi: new TeamGettingApi(apiConfiguration),
-	teamEditingApi: new TeamEditingApi(apiConfiguration),
-	teamJoiningApi: new TeamJoiningApi(apiConfiguration),
-	teamMembersApi: new TeamMembersApi(apiConfiguration),
-	teamEventsApi: new TeamEventsApi(apiConfiguration),
-	teamPlaylistsApi: new TeamPlaylistsApi(apiConfiguration),
-	teamSongNotesApi: new TeamSongNotesApi(apiConfiguration),
-	teamStatisticsApi: new TeamStatisticsApi(apiConfiguration),
-})
+        // submodules
+        const teamAddingApi = new TeamAddingApi(apiConfiguration)
+        const teamGettingApi = new TeamGettingApi(apiConfiguration)
+        const teamEditingApi = new TeamEditingApi(apiConfiguration)
+        const teamJoiningApi = new TeamJoiningApi(apiConfiguration)
+        const teamMembersApi = new TeamMembersApi(apiConfiguration)
+        const teamEventsApi = new TeamEventsApi(apiConfiguration)
+        const teamPlaylistsApi = new TeamPlaylistsApi(apiConfiguration)
+        const teamSongNotesApi = new TeamSongNotesApi(apiConfiguration)
+        const teamStatisticsApi = new TeamStatisticsApi(apiConfiguration)
+
+        return {
+                playlistGettingApi: wrapApi(playlistGettingApi, {
+                        playlistGettingControllerGetPlaylistDataByGuid:
+                                mapPlaylistDataOutDtoToPlaylistDto,
+                }),
+                playlistEditingApi: wrapApi(playlistEditingApi, {
+                        playlistEditingControllerAddVariantToPlaylist:
+                                mapPlaylistItemOutDtoApiToPlaylistItemDto,
+                        playlistEditingControllerCreatePlaylist: (r: any) =>
+                                r.guid as PlaylistGuid,
+                }),
+                songGettingApi: wrapApi(songGettingApi),
+                songSearchingApi: wrapApi(songSearchingApi, {
+                        songSearchingControllerSearch: (d: any) =>
+                                d.map((i: any) => mapSearchSongPacksApiToDto(i)),
+                }),
+                songAddingApi: wrapApi(songAddingApi),
+                songEditingApi: wrapApi(songEditingApi),
+                songDeletingApi: wrapApi(songDeletingApi),
+                songPublishingApi: wrapApi(songPublishingApi),
+                songValidationApi: wrapApi(songValidationApi),
+                songNotesApi: wrapApi(songNotesApi),
+                songFavouritesApi: wrapApi(songFavouritesApi),
+                authApi: wrapApi(authApi),
+                permissionApi: wrapApi(permissionApi),
+                analyticsApi: wrapApi(analyticsApi),
+                mailApi: wrapApi(mailApi),
+                imagesApi: wrapApi(imagesApi),
+                bridgeApi: wrapApi(bridgeApi),
+                parserApi: wrapApi(parserApi),
+                packEmbeddingApi: wrapApi(packEmbeddingApi, {
+                        packEmbeddingSearchControllerSearch: (arr: any[]) =>
+                                arr.map((s: any) => ({
+                                        found: [mapBasicVariantPackApiToDto(s)],
+                                })),
+                }),
+                songManagementApi: wrapApi(songManagementApi),
+                songUserManagementApi: wrapApi(songUserManagementApi),
+                messengerApi: wrapApi(messengerApi),
+
+                // submodules
+                teamAddingApi: wrapApi(teamAddingApi),
+                teamGettingApi: wrapApi(teamGettingApi),
+                teamEditingApi: wrapApi(teamEditingApi),
+                teamJoiningApi: wrapApi(teamJoiningApi),
+                teamMembersApi: wrapApi(teamMembersApi),
+                teamEventsApi: wrapApi(teamEventsApi),
+                teamPlaylistsApi: wrapApi(teamPlaylistsApi),
+                teamSongNotesApi: wrapApi(teamSongNotesApi),
+                teamStatisticsApi: wrapApi(teamStatisticsApi),
+        }
+}
+
+export const getServerApiClasses = (apiConfiguration: Configuration) => {
+        const classes = getApiClasses(apiConfiguration)
+        const wrapped: any = {}
+        for (const [key, api] of Object.entries(classes)) {
+                wrapped[key] = wrapServerApi(api as any)
+        }
+        return wrapped as ApiClasses
+}

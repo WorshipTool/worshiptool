@@ -22,7 +22,6 @@ import {
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
 import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
 import { ROLES, UserDto } from '../../interfaces/user'
-import { handleApiCall } from '../../tech/handleApiCall'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	login: async () => {},
@@ -219,34 +218,28 @@ export function useProvideAuth() {
 		return _getCookie() !== undefined
 	}
 
-	const changePassword = useCallback(
-		async (oldPassword: string, newPassword: string) => {
-			if (!user) return
-			await handleApiCall(
-				authApi.authControllerChangePassword({ newPassword, oldPassword })
-			)
-		},
-		[authApi, user]
-	)
+        const changePassword = useCallback(
+                async (oldPassword: string, newPassword: string) => {
+                        if (!user) return
+                        await authApi.authControllerChangePassword({ newPassword, oldPassword })
+                },
+                [authApi, user]
+        )
 
-	const resetPassword = useCallback(
-		async (resetToken: string, newPassword: string) => {
-			await handleApiCall(
-				authApi.authControllerResetPassword({ resetToken, newPassword })
-			)
-		},
-		[authApi]
-	)
+        const resetPassword = useCallback(
+                async (resetToken: string, newPassword: string) => {
+                        await authApi.authControllerResetPassword({ resetToken, newPassword })
+                },
+                [authApi]
+        )
 
-	const sendResetLink = useCallback(
-		async (email: string) => {
-			const result = await handleApiCall(
-				authApi.authControllerSendResetToken(email)
-			)
-			return result
-		},
-		[authApi]
-	)
+        const sendResetLink = useCallback(
+                async (email: string) => {
+                        const result = await authApi.authControllerSendResetToken(email)
+                        return result
+                },
+                [authApi]
+        )
 
 	const reloadInfo = useCallback(
 		(partialUser: Partial<UserDto>) => {

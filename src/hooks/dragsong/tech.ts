@@ -1,6 +1,5 @@
 import { SongVariantDto, VariantPackAlias, VariantPackGuid } from '@/api/dtos'
 import { SongGettingApi } from '@/api/generated'
-import { handleApiCall } from '../../tech/handleApiCall'
 
 export type DragSongDto = {
 	packGuid: VariantPackGuid
@@ -39,16 +38,14 @@ const getSongDataFromExternalUrl = async (
 ): Promise<DragSongDto | null> => {
 	console.log(url)
 
-	try {
-		const data = await handleApiCall(
-			songGettingApi.songGettingControllerGetPublicSongBySource(url)
-		)
-		return {
-			packGuid: data.packGuid as VariantPackGuid,
-			alias: data.alias as VariantPackAlias,
-			title: data.title,
-			draggedFromExternalSource: true,
-		}
+        try {
+                const data = await songGettingApi.songGettingControllerGetPublicSongBySource(url)
+                return {
+                        packGuid: data.packGuid as VariantPackGuid,
+                        alias: data.alias as VariantPackAlias,
+                        title: data.title,
+                        draggedFromExternalSource: true,
+                }
 	} catch (e) {}
 	return null
 }
