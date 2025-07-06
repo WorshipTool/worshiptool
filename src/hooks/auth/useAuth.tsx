@@ -61,7 +61,7 @@ export function useProvideAuth() {
 	const _setCookie = (user: UserDto) => {
 		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user), {
 			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
-			// expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
+			expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
 		})
 	}
 	const _getCookie = (): UserDto | undefined => {
