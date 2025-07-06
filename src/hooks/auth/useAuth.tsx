@@ -163,8 +163,8 @@ export function useProvideAuth() {
 				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 			}
 		} finally {
-			_emptyCookie()
 			setLoading(false)
+			_emptyCookie()
 		}
 	}
 
