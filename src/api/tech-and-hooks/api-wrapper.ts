@@ -14,8 +14,8 @@ type Mapping<T extends Record<string, AnyFn>> = {
 	[K in keyof T]?: MappingEntry<T[K]>
 }
 
-type ApiWrappedWithMapping<
-	T extends Record<string, AnyFn>,
+export type ApiWrappedWithMapping<
+	T extends Record<string, any>,
 	M extends Mapping<T>
 > = {
 	[K in keyof T]: (

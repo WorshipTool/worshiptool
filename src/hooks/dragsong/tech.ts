@@ -21,7 +21,7 @@ export const mapVariantToDragDto = (variant: SongVariantDto): DragSongDto => {
 
 export const getSongDataFromDragEvent = async (
 	event: React.DragEvent<HTMLDivElement>,
-	songGettingApi: ApiWrappedWithMapping<SongGettingApi, any>
+	songGettingApi: ApiWrappedWithMapping<SongGettingApi, {}>
 ): Promise<DragSongDto | null> => {
 	const data = event.dataTransfer.getData(SONG_DRAG_DATA_TYPE)
 	if (!data) {
@@ -35,7 +35,7 @@ export const getSongDataFromDragEvent = async (
 
 const getSongDataFromExternalUrl = async (
 	url: string,
-	songGettingApi: ApiWrappedWithMapping<SongGettingApi, any>
+	songGettingApi: ApiWrappedWithMapping<SongGettingApi, {}>
 ): Promise<DragSongDto | null> => {
 	console.log(url)
 
