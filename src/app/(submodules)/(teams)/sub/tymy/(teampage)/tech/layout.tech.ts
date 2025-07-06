@@ -10,7 +10,7 @@ import {
 } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/payload/tech'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { UserDto } from '@/interfaces/user'
-import { handleApiCall } from '@/tech/handleApiCall'
+import { handleApiCall } from '@/tech/fetch/handleApiCall'
 import { cookies } from 'next/headers'
 
 //TODO: dont create api instance, use useApi() hook instead

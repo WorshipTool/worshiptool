@@ -1,38 +1,41 @@
+import { handleApiCall, HandleApiCallOptions } from '@/tech/fetch/handleApiCall'
 import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AxiosResponse } from 'axios'
 
 type AnyFn = (...args: any[]) => any
 
-// Typ mappingu, který umožňuje přístup ke správnému typu z AxiosResponse
-type Mapping<T extends Record<string, AnyFn>> = Partial<{
-	[K in keyof T]: T[K] extends (
-		...args: any[]
-	) => Promise<AxiosResponse<infer R>>
-		? (data: R) => any
-		: never
-}>
+type MappingEntry<F extends AnyFn> = F extends (
+	...args: any[]
+) => Promise<AxiosResponse<infer R>>
+	? { map?: (data: R) => any } & HandleApiCallOptions
+	: {}
 
-// Hlavní typ wrapperu s mappingem nebo bez něj
-export type ApiWrappedWithMapping<
-	T extends Record<string, any>,
+type Mapping<T extends Record<string, AnyFn>> = {
+	[K in keyof T]?: MappingEntry<T[K]>
+}
+
+type ApiWrappedWithMapping<
+	T extends Record<string, AnyFn>,
 	M extends Mapping<T>
 > = {
 	[K in keyof T]: (
 		...args: Parameters<T[K]>
 	) => Promise<
-		K extends keyof M
-			? ReturnType<NonNullable<M[K]>>
-			: T[K] extends (...args: any[]) => Promise<AxiosResponse<infer R>>
+		M[K] extends { map: (...args: any[]) => infer R }
 			? R
+			: T[K] extends (...args: any[]) => Promise<AxiosResponse<infer D>>
+			? D
 			: never
 	>
 }
 
 const baseWrap = <T extends Record<string, AnyFn>, M extends Mapping<T>>(
 	api: T,
-	mapping: M,
-	handler: <U>(p: Promise<AxiosResponse<U>>) => Promise<U>
+	methodOptions: M,
+	handler: <U>(
+		p: Promise<AxiosResponse<U>>,
+		options: HandleApiCallOptions
+	) => Promise<U>
 ): ApiWrappedWithMapping<T, M> => {
 	const wrapped: Partial<ApiWrappedWithMapping<T, M>> = {}
 
@@ -45,8 +48,10 @@ const baseWrap = <T extends Record<string, AnyFn>, M extends Mapping<T>>(
 		const fn = api[key]
 		wrapped[key] = ((...args: any[]) => {
 			const promise = fn.apply(api, args)
-			const call = handler(promise)
-			const mapFn = mapping?.[key]
+			const options = methodOptions?.[key]
+
+			const call = handler(promise, options ?? {})
+			const mapFn = options?.map
 			return mapFn ? call.then(mapFn) : call
 		}) as ApiWrappedWithMapping<T, M>[typeof key]
 	}

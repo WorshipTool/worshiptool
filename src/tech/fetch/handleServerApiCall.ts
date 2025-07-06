@@ -1,10 +1,12 @@
+import { HandleApiCallOptions } from '@/tech/fetch/handleApiCall'
 import { AxiosResponse } from 'axios'
 
 // Handle function for all API calls
 // parameters: request - asynchronous function that returns a promise
 // Handles errors and returns the promise response
 export const handleServerApiCall = async <T>(
-	request: Promise<AxiosResponse<T>>
+	request: Promise<AxiosResponse<T>>,
+	options: HandleApiCallOptions = {}
 ) => {
 	try {
 		const res = await request

@@ -5,7 +5,7 @@ import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import type { MetadataRoute } from 'next'
 import { GetListSongData, SongGettingApi } from '../api/generated'
 import { routesPaths } from '../routes/routes'
-import { handleApiCall } from '../tech/handleApiCall'
+import { handleApiCall } from '../tech/fetch/handleApiCall'
 
 export const revalidate = 60 * 60 // 1 hour
 

@@ -76,7 +76,6 @@ const getInternalApiClasses = (
 	const songUserManagementApi = new SongUserManagementApi(apiConfiguration)
 	const messengerApi = new MessengerApi(apiConfiguration)
 
-	// submodules
 	const teamAddingApi = new TeamAddingApi(apiConfiguration)
 	const teamGettingApi = new TeamGettingApi(apiConfiguration)
 	const teamEditingApi = new TeamEditingApi(apiConfiguration)
@@ -89,24 +88,34 @@ const getInternalApiClasses = (
 
 	const wrappedClasses = {
 		playlistGettingApi: wrapFunc(playlistGettingApi, {
-			getPlaylistDataByGuid: mapPlaylistDataOutDtoToPlaylistDto,
+			getPlaylistDataByGuid: {
+				map: mapPlaylistDataOutDtoToPlaylistDto,
+			},
 		}),
 		playlistEditingApi: wrapFunc(playlistEditingApi, {
-			addVariantToPlaylist: mapPlaylistItemOutDtoApiToPlaylistItemDto,
-			createPlaylist: (r: any) => r.guid as PlaylistGuid,
+			addVariantToPlaylist: {
+				map: mapPlaylistItemOutDtoApiToPlaylistItemDto,
+			},
+			createPlaylist: {
+				map: (r: any) => r.guid as PlaylistGuid,
+			},
 		}),
 		songGettingApi: wrapFunc(songGettingApi),
 		songSearchingApi: wrapFunc(songSearchingApi, {
-			search: (d: any) => d.map((i: any) => mapSearchSongPacksApiToDto(i)),
+			search: {
+				map: (d: any) => d.map((i: any) => mapSearchSongPacksApiToDto(i)),
+			},
 		}),
 		songAddingApi: wrapFunc(songAddingApi),
 		songEditingApi: wrapFunc(songEditingApi, {
-			editVariant: (b) => b,
+			editVariant: {
+				map: (b: any) => b,
+			},
 		}),
-		songDeletingApi: wrapFunc(songDeletingApi, {}),
+		songDeletingApi: wrapFunc(songDeletingApi),
 		songPublishingApi: wrapFunc(songPublishingApi),
 		songValidationApi: wrapFunc(songValidationApi),
-		songNotesApi: wrapFunc(songNotesApi, {}),
+		songNotesApi: wrapFunc(songNotesApi),
 		songFavouritesApi: wrapFunc(songFavouritesApi),
 		authApi: wrapFunc(authApi),
 		permissionApi: wrapFunc(permissionApi),
@@ -115,16 +124,17 @@ const getInternalApiClasses = (
 		bridgeApi: wrapFunc(bridgeApi),
 		parserApi: wrapFunc(parserApi),
 		packEmbeddingApi: wrapFunc(packEmbeddingApi, {
-			search: (arr: any[]) =>
-				arr.map((s: any) => ({
-					found: [mapBasicVariantPackApiToDto(s)],
-				})),
+			search: {
+				map: (arr: any[]) =>
+					arr.map((s: any) => ({
+						found: [mapBasicVariantPackApiToDto(s)],
+					})),
+			},
 		}),
 		songManagementApi: wrapFunc(songManagementApi),
 		songUserManagementApi: wrapFunc(songUserManagementApi),
 		messengerApi: wrapFunc(messengerApi),
 
-		// submodules
 		teamAddingApi: wrapFunc(teamAddingApi),
 		teamGettingApi: wrapFunc(teamGettingApi),
 		teamEditingApi: wrapFunc(teamEditingApi),
@@ -135,8 +145,6 @@ const getInternalApiClasses = (
 		teamSongNotesApi: wrapFunc(teamSongNotesApi),
 		teamStatisticsApi: wrapFunc(teamStatisticsApi),
 	}
-
-	// console.log('wrapped songGettingApi', wrappedClasses.songGettingApi)
 
 	return wrappedClasses
 }
