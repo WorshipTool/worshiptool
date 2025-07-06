@@ -117,7 +117,11 @@ const getInternalApiClasses = (
 		songValidationApi: wrapFunc(songValidationApi),
 		songNotesApi: wrapFunc(songNotesApi),
 		songFavouritesApi: wrapFunc(songFavouritesApi),
-		authApi: wrapFunc(authApi),
+		authApi: wrapFunc(authApi, {
+			logout: {
+				ignoreUnauthorizedError: true,
+			},
+		}),
 		permissionApi: wrapFunc(permissionApi),
 		mailApi: wrapFunc(mailApi),
 		imagesApi: wrapFunc(imagesApi),
