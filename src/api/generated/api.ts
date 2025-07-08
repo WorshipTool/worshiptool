@@ -2419,6 +2419,12 @@ export interface PostCreateVariantOutDto {
      * @memberof PostCreateVariantOutDto
      */
     'alias': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof PostCreateVariantOutDto
+     */
+    'packGuid': object;
 }
 /**
  * 
@@ -12238,6 +12244,45 @@ export const SongPublishingApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        publishOfficialVariant: async (postPublishVariantInDto: PostPublishVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postPublishVariantInDto' is not null or undefined
+            assertParamExists('publishOfficialVariant', 'postPublishVariantInDto', postPublishVariantInDto)
+            const localVarPath = `/song/publish-official`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postPublishVariantInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         publishVariant: async (postPublishVariantInDto: PostPublishVariantInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postPublishVariantInDto' is not null or undefined
             assertParamExists('publishVariant', 'postPublishVariantInDto', postPublishVariantInDto)
@@ -12478,6 +12523,18 @@ export const SongPublishingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async publishOfficialVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishOfficialVariant(postPublishVariantInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongPublishingApi.publishOfficialVariant']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async publishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.publishVariant(postPublishVariantInDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -12574,6 +12631,15 @@ export const SongPublishingApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        publishOfficialVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: any): AxiosPromise<boolean> {
+            return localVarFp.publishOfficialVariant(postPublishVariantInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostPublishVariantInDto} postPublishVariantInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         publishVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: any): AxiosPromise<boolean> {
             return localVarFp.publishVariant(postPublishVariantInDto, options).then((request) => request(axios, basePath));
         },
@@ -12653,6 +12719,17 @@ export class SongPublishingApi extends BaseAPI {
      */
     public getKeywords(postGetKeywordsInDto: PostGetKeywordsInDto, options?: RawAxiosRequestConfig) {
         return SongPublishingApiFp(this.configuration).getKeywords(postGetKeywordsInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostPublishVariantInDto} postPublishVariantInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongPublishingApi
+     */
+    public publishOfficialVariant(postPublishVariantInDto: PostPublishVariantInDto, options?: RawAxiosRequestConfig) {
+        return SongPublishingApiFp(this.configuration).publishOfficialVariant(postPublishVariantInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

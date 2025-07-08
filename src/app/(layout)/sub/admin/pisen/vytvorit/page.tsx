@@ -1,7 +1,9 @@
 'use client'
 
 import { PostCreateVariantOutDto } from '@/api/generated'
+import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { useAdditionInfoAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useAdditionInfoAdminSection'
+import { useMediaAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useMediaAdminSection'
 import usePublishAdminSection from '@/app/(layout)/sub/admin/pisen/vytvorit/usePublishAdminSection'
 import { useTextChordAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useTextChordAdminSection'
 import { useValidationAdminSection } from '@/app/(layout)/sub/admin/pisen/vytvorit/useValidationAdminSection'
@@ -35,10 +37,11 @@ function CreateSongPage() {
 	})
 	const second = useValidationAdminSection(packData!)
 	const third = useAdditionInfoAdminSection(packData!)
-	const fourth = usePublishAdminSection(packData!)
+	const fourth = useMediaAdminSection(packData!)
+	const final = usePublishAdminSection(packData!)
 
 	const items: AdminStepperItem[] = useMemo(() => {
-		return [first, second, third, fourth]
+		return [first, second, third, fourth, final]
 	}, [first, second])
 
 	const [step, setStep] = useState(0)
@@ -58,7 +61,13 @@ function CreateSongPage() {
 					</Step>
 				))}
 			</Stepper>
-			{items[step]?.component || <Box>Neznámý krok</Box>}
+			{step > 0 && packData?.alias ? (
+				<InnerPackProvider variantAlias={packData?.alias}>
+					{items[step]?.component || <Box>Neznámý krok</Box>}
+				</InnerPackProvider>
+			) : (
+				<>{items[step]?.component || <Box>Neznámý krok</Box>}</>
+			)}
 			<Box flex={1} />
 			<Box display={'flex'} gap={2} justifyContent={'space-between'}>
 				<Button onClick={prevStep} disabled={step === 0} outlined>
@@ -74,39 +83,6 @@ function CreateSongPage() {
 						</Button>
 					</>
 				)}
-
-				{/* {step === 0 ? (
-					<Box
-						sx={{
-							display: 'flex',
-							gap: 1,
-						}}
-					>
-						<Button
-							onClick={onOnlySaveClick}
-							variant="outlined"
-							disabled={!isSheetValid}
-							loading={apiState.loading}
-						>
-							Uložit píseň
-						</Button>
-						<Button
-							onClick={onSaveAndContinue}
-							disabled={!isSheetValid}
-							loading={apiState.loading}
-						>
-							Uložit a pokračovat
-						</Button>
-					</Box>
-				) : step < STEP_COUNT - 1 ? (
-					<Button onClick={nextStep} loading={apiState.loading}>
-						pokračovat
-					</Button>
-				) : (
-					<Button loading={apiState.loading} onClick={onPublishClick}>
-						Zveřejnit
-					</Button>
-				)} */}
 			</Box>
 		</Box>
 	)

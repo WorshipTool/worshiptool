@@ -39,7 +39,7 @@ export const useAdditionInfoAdminSection = (
 				onClick={async () => {
 					await fetchApiState(async () => {
 						await songEditingApi.changeLanguage({
-							packGuid: packData.variant.historyPack.guid as PackGuid,
+							packGuid: packData.packGuid as PackGuid,
 							languageString: language as string,
 						})
 					})
