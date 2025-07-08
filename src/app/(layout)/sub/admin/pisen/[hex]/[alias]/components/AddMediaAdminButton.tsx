@@ -11,7 +11,11 @@ import { useApiState } from '@/tech/ApiState'
 import { MusicVideo } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
-export default function AddMediaAdminButton() {
+type Props = {
+	onChange?: () => void
+}
+
+export default function AddMediaAdminButton({ onChange }: Props) {
 	const [open, setOpen] = useState(false)
 	const [url, setUrl] = useState('')
 
@@ -21,11 +25,13 @@ export default function AddMediaAdminButton() {
 	const { song } = useInnerPackSong()
 	const { songManagementApi } = useApi()
 	const onSubmit = async () => {
-		doFetch(true)
+		await doFetch(true)
+		onChange?.()
 	}
 
 	const remove = async () => {
-		doFetch(false)
+		await doFetch(false)
+		onChange?.()
 	}
 
 	const { fetchApiState, apiState } = useApiState()
@@ -54,7 +60,7 @@ export default function AddMediaAdminButton() {
 		}
 		setOpen(false)
 		// 2. Reload the page
-		window.location.reload()
+		// window.location.reload()
 	}
 
 	useEffect(() => {

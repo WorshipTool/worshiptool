@@ -1,6 +1,7 @@
-import { Box, Clickable, Typography } from '@/common/ui'
+import { Box, Chip, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { grey } from '@/common/ui/mui/colors'
+import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 
@@ -25,12 +26,13 @@ export default function RowSongPackCard({ data: s }: Props) {
 				>
 					<Typography>{s.title}</Typography>
 
-					{/* {s.publishedAt && (
-                                                <Chip
-                                                    label={getSmartDateAgoString(s.publishedAt)}
-                                                    size="small"
-                                                />
-                                            )} */}
+					{s.publishedAt && (
+						<Chip
+							label={getSmartDateAgoString(s.publishedAt)}
+							size="small"
+							variant="filled"
+						/>
+					)}
 				</Box>
 			</Link>
 		</Clickable>

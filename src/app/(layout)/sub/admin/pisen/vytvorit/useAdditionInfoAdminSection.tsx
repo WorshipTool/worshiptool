@@ -1,7 +1,6 @@
 import { PackGuid } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
-import InterpretField from '@/app/(layout)/sub/admin/pisen/vytvorit/components/InterpretField'
 import { AdminStepperItem } from '@/app/(layout)/sub/admin/pisen/vytvorit/page'
 import { Box, Button, Typography } from '@/common/ui'
 import {
@@ -39,7 +38,7 @@ export const useAdditionInfoAdminSection = (
 				onClick={async () => {
 					await fetchApiState(async () => {
 						await songEditingApi.changeLanguage({
-							packGuid: packData.variant.historyPack.guid as PackGuid,
+							packGuid: packData.packGuid as PackGuid,
 							languageString: language as string,
 						})
 					})
@@ -90,7 +89,7 @@ export const useAdditionInfoAdminSection = (
 									<MenuItem value={'en'}>Angličtina</MenuItem>
 								</Select>
 							</FormControl>
-							<InterpretField />
+							{/* <InterpretField /> */}
 						</div>
 					</>
 				)}

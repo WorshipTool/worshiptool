@@ -9,6 +9,7 @@ import AdminSongPreview from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/compo
 import AdminVerifyButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/AdminVerifyButton'
 import GGFilterAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/GGFilterAdminButton'
 import ParentSongSection from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/ParentSongSection'
+import PublishAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/PublishAdminButton'
 import SetTranslationTypeAdminButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/SetTranslationTypeAdminButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PageProps } from '@/common/types'
@@ -79,6 +80,7 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 				<GGFilterAdminButton />
 				<AdminVerifyButton />
 				<AdminCopySheetDataButton />
+				<PublishAdminButton />
 			</Box>
 
 			<AdminSectionCollapsible title="Rozšiřující informace">
