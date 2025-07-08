@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, CircularProgress } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
@@ -7,10 +8,7 @@ import { Delete } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import { useSnackbar } from 'notistack'
 import React from 'react'
-import { SongDeletingApi } from '../../../../../../../api/generated'
-import useAuth from '../../../../../../../hooks/auth/useAuth'
 import { useApiState } from '../../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../../tech/handleApiCall'
 
 interface DeleteButtonProps {
 	variant: ExtendedVariantPack
@@ -27,8 +25,7 @@ export default function DeleteButton({
 	const [loading, setLoading] = React.useState(false)
 	const navigate = useRouter()
 
-	const { apiConfiguration } = useAuth()
-	const songsApi = new SongDeletingApi(apiConfiguration)
+	const { songDeletingApi } = useApi()
 
 	const {
 		fetchApiState,
@@ -50,9 +47,7 @@ export default function DeleteButton({
 	const indeedDelete = async () => {
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songsApi.songDeletingControllerDelete(variant.packGuid)
-				)
+				return songDeletingApi._delete(variant.packGuid)
 			},
 			(result) => {
 				enqueueSnackbar(`Píseň ${(variant.title && ' ') || ''}byla smazána.`)

@@ -1,4 +1,5 @@
 import { PlaylistData } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import TeamPlaylistSelect from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TeamPlaylistSelect/TeamPlaylistSelect'
 import PinnedPlaylistPanelItem from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/playlisty/components/PinnedPlaylistPanelItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
@@ -7,11 +8,9 @@ import { Box, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { PushPin } from '@mui/icons-material'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -34,11 +33,7 @@ export default function PinnedPlaylistsPanel() {
 
 	const [{ data: pinnedPlaylists, loading: pinnedPlaylistsLoading }, reload] =
 		useApiStateEffect(async () => {
-			const result = await handleApiCall(
-				teamPlaylistsApi.teamPlaylistsControllerGetPinnedPlaylistsToTeam(
-					teamGuid
-				)
-			)
+			const result = await teamPlaylistsApi.getPinnedPlaylistsToTeam(teamGuid)
 			return result.playlists
 		}, [teamGuid])
 
@@ -48,12 +43,10 @@ export default function PinnedPlaylistsPanel() {
 
 			fetchPinApiState(
 				async () => {
-					return handleApiCall(
-						teamPlaylistsApi.teamPlaylistsControllerPinPlaylistToTeam({
-							teamGuid: teamGuid,
-							playlistGuid: data.guid,
-						})
-					)
+					return teamPlaylistsApi.pinPlaylistToTeam({
+						teamGuid: teamGuid,
+						playlistGuid: data.guid,
+					})
 				},
 				() => reload()
 			)
@@ -65,12 +58,10 @@ export default function PinnedPlaylistsPanel() {
 		(playlistGuid: string) => {
 			fetchPinApiState(
 				async () => {
-					return handleApiCall(
-						teamPlaylistsApi.teamPlaylistsControllerUnpinPlaylistFromTeam({
-							teamGuid: teamGuid,
-							playlistGuid: playlistGuid,
-						})
-					)
+					return teamPlaylistsApi.unpinPlaylistFromTeam({
+						teamGuid: teamGuid,
+						playlistGuid: playlistGuid,
+					})
 				},
 				() => reload()
 			)

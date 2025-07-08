@@ -1,12 +1,11 @@
 import { CircularProgress } from '@/common/ui'
 import { ListItemIcon, ListItemText, MenuItem } from '@/common/ui/mui'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { Public, PublicOff } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { useApi } from '../../../../../../../hooks/api/useApi'
+import { useApi } from '../../../../../../../api/tech-and-hooks/useApi'
 import { useApiState } from '../../../../../../../tech/ApiState'
 
 export interface PublishButtonProps {
@@ -34,11 +33,9 @@ export default function PublishButton(props: PublishButtonProps) {
 	const unverify = () => {
 		fetchApiState(
 			() => {
-				return handleApiCall(
-					songPublishingApi.songPublishingControllerUnpublishVariant({
-						packGuid: props.variant.packGuid,
-					})
-				)
+				return songPublishingApi.unpublishVariant({
+					packGuid: props.variant.packGuid,
+				})
 			},
 			() => {
 				reload()

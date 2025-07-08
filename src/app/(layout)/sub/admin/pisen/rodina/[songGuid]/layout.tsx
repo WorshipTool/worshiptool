@@ -1,18 +1,13 @@
 import { mapBasicSongApiToDto } from '@/api/dtos'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import { InnerSongProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import AdminBreadItem from '@/app/(layout)/sub/admin/components/AdminBreadItem'
 import { LayoutProps } from '@/common/types'
-import { useServerApi } from '@/hooks/api/useServerApi'
-import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 import { SongGuid } from '@/types/song'
 
 export default async function layout(props: LayoutProps<'adminSong'>) {
 	const { songGettingApi } = await useServerApi()
-	const data = await handleServerApiCall(
-		songGettingApi.songOneGettingControllerGetSongDataByGuid(
-			props.params.songGuid
-		)
-	)
+	const data = await songGettingApi.getSongDataByGuid(props.params.songGuid)
 
 	const formatted = mapBasicSongApiToDto(data)
 

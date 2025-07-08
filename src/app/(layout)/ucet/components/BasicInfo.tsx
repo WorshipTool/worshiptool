@@ -1,11 +1,10 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { Box, Button, Gap, Typography } from '@/common/ui'
 import { Card } from '@/common/ui/Card'
 import { TextField } from '@/common/ui/mui'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { ROLES } from '@/interfaces/user'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Edit, Save } from '@mui/icons-material'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -26,9 +25,7 @@ export default function BasicInfo() {
 			firstName: editedName || info.firstName,
 			lastName: editedSurname || info.lastName,
 		}
-		fetchApiState(async () =>
-			handleApiCall(authApi.authControllerChangeUserName(data))
-		).finally(() => {
+		fetchApiState(async () => authApi.changeUserName(data)).finally(() => {
 			setEditMode(false)
 			reloadInfo(data)
 		})

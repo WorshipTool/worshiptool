@@ -1,13 +1,12 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { mapPlaylistItemOutDtoApiToPlaylistItemDto } from '@/api/dtos/playlist/playlist.map'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import usePlaylist from '@/hooks/playlist/usePlaylist'
 import {
 	PlaylistGuid,
 	PlaylistItemDto,
 } from '@/interfaces/playlist/playlist.types'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { ExtendedVariantPack } from '@/types/song'
 
 export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
@@ -19,12 +18,10 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 		const newItems: PlaylistItemDto[] = []
 		for (const packGuid of packGuids) {
 			try {
-				const r = await handleApiCall(
-					teamEditingApi.teamSelectionControllerAddPackToTeam({
-						packGuid: packGuid,
-						teamGuid,
-					})
-				)
+				const r = await teamEditingApi.addPackToTeam({
+					packGuid: packGuid,
+					teamGuid,
+				})
 
 				if (!r) return false
 				const data = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
@@ -42,12 +39,10 @@ export const useTeamSelection = (guid: PlaylistGuid, teamGuid: TeamGuid) => {
 		const newItems: VariantPackGuid[] = []
 		for (const packGuid of packGuids) {
 			try {
-				const data = await handleApiCall(
-					teamEditingApi.teamSelectionControllerRemovePackFromTeam({
-						packGuid: packGuid,
-						teamGuid,
-					})
-				)
+				const data = await teamEditingApi.removePackFromTeam({
+					packGuid: packGuid,
+					teamGuid,
+				})
 				if (data) newItems.push(packGuid)
 			} catch (e) {
 				return false

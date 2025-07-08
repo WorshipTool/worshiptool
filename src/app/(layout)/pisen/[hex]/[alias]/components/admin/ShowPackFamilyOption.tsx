@@ -1,12 +1,11 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
 import SongListCard from '@/common/components/songLists/SongListCards/SongListCards'
 import { Box } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AltRoute } from '@mui/icons-material'
 import { useState } from 'react'
 
@@ -18,9 +17,7 @@ export default function ShowPackFamilyOption() {
 
 	const [apiState] = useApiStateEffect(async () => {
 		const packGuid = variant.packGuid
-		const data = await handleApiCall(
-			packEmbeddingApi.packEmbeddingSearchControllerFindFamily(packGuid)
-		)
+		const data = await packEmbeddingApi.findFamily(packGuid)
 
 		return data
 			.filter((v) => v.packGuid !== variant.packGuid)

@@ -3,9 +3,8 @@ import {
 	apiToPermissionPayload,
 	permissionPayloadToApi,
 } from '../../api/dtos/permission'
+import { useApi } from '../../api/tech-and-hooks/useApi'
 import { useApiState } from '../../tech/ApiState'
-import { handleApiCall } from '../../tech/handleApiCall'
-import { useApi } from '../api/useApi'
 import useAuth from '../auth/useAuth'
 import {
 	PermissionDataType,
@@ -72,9 +71,7 @@ function useProvidePermissions<
 	const reload = async () => {
 		fetchApiState(async () => {
 			if (!isLoggedIn()) return []
-			const data = await handleApiCall(
-				permissionApi.permissionControllerGetUserPermissions(userGuid)
-			)
+			const data = await permissionApi.getUserPermissions(userGuid)
 			return data.map((p) => {
 				return {
 					type: p.type as PermissionType<Merge<A>>,
@@ -98,11 +95,9 @@ function useProvidePermissions<
 		payload: PermissionPayloadType<Merge<A>, T>
 	) => {
 		if (!isLoggedIn()) return []
-		const data = await handleApiCall(
-			permissionApi.permissionControllerGetAllUsersWithPermission(
-				type,
-				permissionPayloadToApi(payload)
-			)
+		const data = await permissionApi.getAllUsersWithPermission(
+			type,
+			permissionPayloadToApi(payload)
 		)
 		return data
 	}

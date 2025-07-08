@@ -5,7 +5,7 @@ import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import type { MetadataRoute } from 'next'
 import { GetListSongData, SongGettingApi } from '../api/generated'
 import { routesPaths } from '../routes/routes'
-import { handleApiCall } from '../tech/handleApiCall'
+import { handleApiCall } from '../tech/fetch/handleApiCall'
 
 export const revalidate = 60 * 60 // 1 hour
 
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const api = new SongGettingApi()
 	let songs: GetListSongData[] = []
 	try {
-		songs = await handleApiCall(api.songGettingControllerGetSitemapList())
+		songs = await handleApiCall(api.getSitemapList())
 	} catch (e) {
 		console.warn('Failed to fetch songs for sitemap -> ignoring songs')
 	}

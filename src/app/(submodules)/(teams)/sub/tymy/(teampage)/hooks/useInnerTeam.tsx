@@ -1,15 +1,14 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useTeamEvents } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamEvents'
 import { useTeamMembers } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamMembers'
 import { useTeamNotes } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamNotes'
 import { useTeamSelection } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useTeamSelection'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { UserGuid } from '@/interfaces/user'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useMemo } from 'react'
 
 type Rt = ReturnType<typeof useProvideInnerTeam>
@@ -54,9 +53,7 @@ export const InnerTeamProvider = ({
 const useProvideInnerTeam = (teamAlias: string) => {
 	const { teamGettingApi, teamMembersApi } = useApi()
 	const [apiState, reload] = useApiStateEffect(() => {
-		return handleApiCall(
-			teamGettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
-		)
+		return teamGettingApi.getTeamBasicInfo(teamAlias)
 	})
 	const guid = useMemo(
 		() => (apiState.data?.guid || '') as TeamGuid,

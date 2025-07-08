@@ -1,5 +1,6 @@
 'use client'
 import { TeamEventData } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlaylist'
 import TeamEventPopup, {
 	TeamEventPopupData,
@@ -12,10 +13,8 @@ import Popup from '@/common/components/Popup/Popup'
 import { Box, Typography } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
-import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import ChildrenCounter from '@/tech/portal/ChildrenCounter'
 import {
 	CalendarMonth,
@@ -38,9 +37,7 @@ export default function TeamPlaylistMoreButton() {
 	const [apiState, reload] =
 		useApiStateEffect<TeamEventData | null>(async () => {
 			if (!playlistGuid) return null
-			return handleApiCall(
-				teamEventsApi.teamEventControllerGetEventByPlaylist(playlistGuid)
-			)
+			return teamEventsApi.getEventByPlaylist(playlistGuid)
 		}, [playlistGuid])
 
 	const hasEvent = useMemo(() => Boolean(apiState.data), [apiState.data])
@@ -93,11 +90,7 @@ export default function TeamPlaylistMoreButton() {
 	const onRemove = async () => {
 		await fetchDelete(
 			async () => {
-				return handleApiCall(
-					playlistEditingApi.playlistEditingControllerDeletePlaylist(
-						playlistGuid
-					)
-				)
+				return playlistEditingApi.deletePlaylist(playlistGuid)
 			},
 			(d) => {
 				if (d) {

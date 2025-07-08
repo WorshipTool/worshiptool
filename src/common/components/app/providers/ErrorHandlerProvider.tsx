@@ -10,7 +10,7 @@ import {
 	networkErrorEvent,
 	norequiredPermissionEvent,
 	unauthorizedEvent,
-} from '../../../../tech/handleApiCall'
+} from '../../../../tech/fetch/handleApiCall'
 
 interface ErrorHandlerProviderProps {
 	children: React.ReactNode

@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { MySongsOrderOptions } from '@/app/(layout)/ucet/pisne/components/MySongListOrderSelect'
 import Menu from '@/common/components/Menu/Menu'
 import Popup from '@/common/components/Popup/Popup'
@@ -6,7 +7,6 @@ import { Button } from '@/common/ui/Button'
 import { IconButton } from '@/common/ui/IconButton'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
@@ -61,9 +61,7 @@ export default function MySongItem(props: MySongItemProps) {
 	const deleteSong = () => {
 		fetchApiState(
 			async () => {
-				return await songDeletingApi.songDeletingControllerDelete(
-					props.variant.packGuid
-				)
+				return await songDeletingApi._delete(props.variant.packGuid)
 			},
 			() => {
 				props.onDelete()

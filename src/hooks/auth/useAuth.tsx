@@ -2,6 +2,7 @@
 
 import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google'
 // import Cookies from 'js-cookie'
+import { getApiClass } from '@/api/tech-and-hooks/api-classes'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'
@@ -20,9 +21,8 @@ import {
 	useState,
 } from 'react'
 import { SignUpRequestDTO, loginResultDTOToUser } from '../../api/dtos/dtosAuth'
-import { AuthApi, Configuration, LoginInputData } from '../../api/generated'
+import { Configuration, LoginInputData } from '../../api/generated'
 import { ROLES, UserDto } from '../../interfaces/user'
-import { handleApiCall } from '../../tech/handleApiCall'
 
 export const authContext = createContext<ReturnType<typeof useProvideAuth>>({
 	login: async () => {},
@@ -61,6 +61,7 @@ export function useProvideAuth() {
 	const _setCookie = (user: UserDto) => {
 		cookies.set(AUTH_COOKIE_NAME, JSON.stringify(user), {
 			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+			expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
 		})
 	}
 	const _getCookie = (): UserDto | undefined => {
@@ -117,7 +118,7 @@ export function useProvideAuth() {
 	const { enqueueSnackbar } = useSnackbar()
 
 	// API
-	const authApi = new AuthApi(apiConfiguration)
+	const authApi = getApiClass('authApi', apiConfiguration)
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const login = async (
@@ -132,10 +133,10 @@ export function useProvideAuth() {
 		}
 
 		return authApi
-			.authControllerLogin(body)
+			.login(body)
 			.then((result) => {
-				_innerLogin(loginResultDTOToUser(result.data))
-				if (after) after(result.data)
+				_innerLogin(loginResultDTOToUser(result))
+				if (after) after(result)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -154,14 +155,19 @@ export function useProvideAuth() {
 		_setCookie(user)
 	}
 	const logout = async () => {
-		setLoading(false)
-		if (checkIfCookieExists()) await authApi.authControllerLogout()
-		if (user) {
-			setUser(undefined)
-			// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+		try {
+			setLoading(false)
+			if (checkIfCookieExists()) await authApi.logout()
+		} catch (e) {
+			console.error('Logout failed:', e)
+		} finally {
+			if (user) {
+				setUser(undefined)
+				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
+			}
+			setLoading(false)
 			_emptyCookie()
 		}
-		setLoading(false)
 	}
 
 	const signup = (data: SignUpRequestDTO, after?: (r: boolean) => void) => {
@@ -169,7 +175,7 @@ export function useProvideAuth() {
 		const body = data
 
 		authApi
-			.authControllerSignup(body)
+			.signup(body)
 			.then((result) => {
 				if (after) after(true)
 			})
@@ -198,10 +204,10 @@ export function useProvideAuth() {
 		}
 
 		authApi
-			.authControllerLoginWithGoogle(data)
+			.loginWithGoogle(data)
 			.then((result) => {
-				_innerLogin(loginResultDTOToUser(result.data))
-				if (after) after(result.data)
+				_innerLogin(loginResultDTOToUser(result))
+				if (after) after(result)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -222,27 +228,21 @@ export function useProvideAuth() {
 	const changePassword = useCallback(
 		async (oldPassword: string, newPassword: string) => {
 			if (!user) return
-			await handleApiCall(
-				authApi.authControllerChangePassword({ newPassword, oldPassword })
-			)
+			await authApi.changePassword({ newPassword, oldPassword })
 		},
 		[authApi, user]
 	)
 
 	const resetPassword = useCallback(
 		async (resetToken: string, newPassword: string) => {
-			await handleApiCall(
-				authApi.authControllerResetPassword({ resetToken, newPassword })
-			)
+			await authApi.resetPassword({ resetToken, newPassword })
 		},
 		[authApi]
 	)
 
 	const sendResetLink = useCallback(
 		async (email: string) => {
-			const result = await handleApiCall(
-				authApi.authControllerSendResetToken(email)
-			)
+			const result = await authApi.sendResetToken(email)
 			return result
 		},
 		[authApi]

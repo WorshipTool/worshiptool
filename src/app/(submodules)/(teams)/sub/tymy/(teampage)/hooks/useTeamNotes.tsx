@@ -1,8 +1,7 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 
 export const useTeamNotes = (teamGuid: TeamGuid) => {
 	const { user } = useAuth()
@@ -10,9 +9,7 @@ export const useTeamNotes = (teamGuid: TeamGuid) => {
 	const [apiState, fetchData] = useApiStateEffect(async () => {
 		if (!user || !teamGuid) return []
 
-		const data = await handleApiCall(
-			teamSongNotesApi.teamSongNoteControllerGetAllNotesOfTeam(teamGuid)
-		)
+		const data = await teamSongNotesApi.getAllNotesOfTeam(teamGuid)
 		return data.notes
 	}, [teamGuid, teamSongNotesApi, user])
 

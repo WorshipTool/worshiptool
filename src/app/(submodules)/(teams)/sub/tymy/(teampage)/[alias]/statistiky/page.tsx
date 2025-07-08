@@ -1,4 +1,5 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
 import EverySongPlayedCard from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/statistiky/components/EverySongPlayedCard'
@@ -9,9 +10,7 @@ import MostTrendSong from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { Box, LinearProgress } from '@/common/ui'
 import { Grid } from '@/common/ui/mui/Grid'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 export default SmartTeamPage(TeamStatistikyPage)
 
 function TeamStatistikyPage() {
@@ -20,9 +19,7 @@ function TeamStatistikyPage() {
 	const [{ data: statisticsData, loading: statisticsLoading }] =
 		useApiStateEffect(async () => {
 			if (!teamGuid) return null
-			return handleApiCall(
-				teamStatisticsApi.teamStatisticsControllerGetTeamStatistics(teamGuid)
-			)
+			return teamStatisticsApi.getTeamStatistics(teamGuid)
 		}, [teamGuid])
 
 	return (

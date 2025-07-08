@@ -3,10 +3,9 @@ import {
 	BasicVariantPack,
 	mapBasicVariantPackApiToDto,
 } from '../../../../../api/dtos'
-import { useApi } from '../../../../../hooks/api/useApi'
+import { useApi } from '../../../../../api/tech-and-hooks/useApi'
 import useAuth from '../../../../../hooks/auth/useAuth'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 interface IUseMySongs {
 	variants: BasicVariantPack[]
@@ -20,9 +19,7 @@ export default function useMySongs(): IUseMySongs {
 	const [loaded, setLoaded] = useState(false)
 	const [apiState] = useApiStateEffect(async () => {
 		if (!isLoggedIn) return
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerGetSongListOfUser()
-		)
+		const result = await songGettingApi.getSongListOfUser()
 		return result.variants.map((variant) => {
 			return mapBasicVariantPackApiToDto(variant)
 		})

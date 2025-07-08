@@ -1,5 +1,6 @@
 'use server'
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 import AdminSectionCollapsible from '@/app/(layout)/sub/admin/components/AdminSectionCollapsible'
 import AdminCopySheetDataButton from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/AdminCopySheetDataButton'
 import AdminItem from '@/app/(layout)/sub/admin/pisen/[hex]/[alias]/components/AdminItem'
@@ -13,8 +14,6 @@ import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { PageProps } from '@/common/types'
 import { Box, Button, Chip, Gap, Typography } from '@/common/ui'
 import { getTranslationData } from '@/common/ui/SongCard/components/tech'
-import { useServerApi } from '@/hooks/api/useServerApi'
-import { handleServerApiCall } from '@/tech/fetch/handleServerApiCall'
 import { makeVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SongLanguage } from '@/types/song'
 import { OpenInNew } from '@mui/icons-material'
@@ -30,9 +29,7 @@ async function Page(pageProps: PageProps<'adminPack'>) {
 	const { songGettingApi } = await useServerApi()
 
 	const alias = makeVariantAlias(pageProps.params.hex, pageProps.params.alias)
-	const data = await handleServerApiCall(
-		songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
-	)
+	const data = await songGettingApi.getVariantDataByAlias(alias)
 	const main = mapExtendedVariantPackApiToDto(data.main)
 
 	const translationData = getTranslationData(

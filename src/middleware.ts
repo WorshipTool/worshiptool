@@ -6,10 +6,7 @@ import {
 } from '@/api/generated'
 import { BASE_PATH } from '@/api/generated/base'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
-import {
-	COOKIES_SUBDOMAINS_PATHNAME_NAME,
-	HEADERS_PATHNAME_NAME,
-} from '@/hooks/pathname/constants'
+import { HEADERS_PATHNAME_NAME } from '@/hooks/pathname/constants'
 import { UserDto } from '@/interfaces/user'
 import { routesPaths } from '@/routes'
 import { getSubdomains } from '@/routes/subdomains/subdomains.tech'
@@ -45,7 +42,10 @@ export async function middleware(request: NextRequest) {
 	// Subdomains
 	if (shouldUseSubdomains()) {
 		const checkSub = await checkSubdomain(request, auth.user)
-		if (checkSub !== true) return checkSub
+		if (checkSub !== true) {
+			if (auth.removeAuthCookie) removeAuthCookie(checkSub)
+			return checkSub
+		}
 	} else {
 	}
 
@@ -53,23 +53,35 @@ export async function middleware(request: NextRequest) {
 	const newPathname = await replaceTeamInSubPathname(url.pathname)
 	if (newPathname !== url.pathname) {
 		url.pathname = newPathname
-		return setResponse(NextResponse.rewrite(url), newPathname)
+		const r = await setResponse(NextResponse.rewrite(url), newPathname)
+
+		if (auth.removeAuthCookie) removeAuthCookie(r)
+		return r
 	}
 
-	return setResponse(NextResponse.next(), pathname)
+	const a = await setResponse(NextResponse.next(), pathname)
+	if (auth.removeAuthCookie) removeAuthCookie(a)
+	return a
 }
 
 const setResponse = async (
 	response: NextResponse,
-	pathname: string,
-	subdomainsPrefixPathname?: string
+	pathname: string
+	// cookies: Cookies
 ): Promise<NextResponse> => {
-	if (subdomainsPrefixPathname) {
-		response.cookies.set(
-			COOKIES_SUBDOMAINS_PATHNAME_NAME,
-			subdomainsPrefixPathname
-		)
-	}
+	// if (r.cookies.get(AUTH_COOKIE_NAME)?.value === '') {
+	// 	response.cookies.set(AUTH_COOKIE_NAME, '', {
+	// 		expires: new Date(0),
+	// 		domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+	// 	})
+	// }
+
+	// if (subdomainsPrefixPathname) {
+	// 	response.cookies.set(
+	// 		COOKIES_SUBDOMAINS_PATHNAME_NAME,
+	// 		subdomainsPrefixPathname
+	// 	)
+	// }
 
 	response.headers.set(HEADERS_PATHNAME_NAME, pathname)
 
@@ -113,11 +125,20 @@ const checkSubdomain = async (
 	return true
 }
 
+const removeAuthCookie = (response: NextResponse): NextResponse => {
+	response.cookies.set(AUTH_COOKIE_NAME, '', {
+		expires: new Date(0),
+		domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
+	})
+	return response
+}
+
 const checkAuthentication = async (
 	request: NextRequest
 ): Promise<{
 	user?: UserDto | undefined
 	response?: NextResponse
+	removeAuthCookie?: boolean
 }> => {
 	const { cookies } = request
 	const tokenCookie = cookies.get(AUTH_COOKIE_NAME)
@@ -135,26 +156,25 @@ const checkAuthentication = async (
 	})
 
 	try {
-		const fetchData = await creator.authControllerCheckTokenExpiration()
+		const fetchData = await creator.checkTokenExpiration()
 		const url = BASE_PATH + fetchData.url
 		const result = await safeFetch(url, { ...(fetchData.options as any) })
-		if (result.status === 401) throw new Error('Unauthorized')
+		if (result.status === 401) {
+			throw new Error('Unauthorized, token expired')
+		}
 	} catch (e) {
-		console.log('going to login', e)
+		console.log('token expired, going to login', e)
 		const response: NextResponse = await setResponse(
 			NextResponse.redirect(new URL('/prihlaseni', request.url)),
 			'/prihlaseni'
 		)
-		response.cookies.set(AUTH_COOKIE_NAME, '', {
-			expires: new Date(0),
-			domain: `.${process.env.NEXT_PUBLIC_FRONTEND_HOSTNAME}`,
-		})
+		removeAuthCookie(response)
 
 		// Not redicert if the user is already on the login page
 		const onLoginPage: boolean =
 			request.nextUrl.pathname.startsWith('/prihlaseni')
 		if (onLoginPage) {
-			return { user }
+			return { user, removeAuthCookie: true }
 		}
 
 		return { user, response }
@@ -169,9 +189,7 @@ const replaceTeamInSubPathname = async (pathname: string) => {
 		const creator = TeamGettingApiAxiosParamCreator({
 			isJsonMime: () => true,
 		})
-		const fetchData = await creator.teamGettingControllerGetAliasBySubdomain(
-			subdomain
-		)
+		const fetchData = await creator.getAliasBySubdomain(subdomain)
 
 		try {
 			const url = BASE_PATH + fetchData.url

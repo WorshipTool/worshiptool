@@ -5,10 +5,17 @@ export const unauthorizedEvent = 'unauthorizedEvent'
 
 export const norequiredPermissionEvent = 'norequiredPermissionEvent'
 
+export type HandleApiCallOptions = {
+	ignoreUnauthorizedError?: boolean
+}
+
 // Handle function for all API calls
 // parameters: request - asynchronous function that returns a promise
 // Handles errors and returns the promise response
-export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
+export const handleApiCall = <T>(
+	request: Promise<AxiosResponse<T>>,
+	options: HandleApiCallOptions = {}
+): Promise<T> => {
 	return request
 		.then((res) => {
 			return res.data
@@ -24,6 +31,7 @@ export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
 			if (err.response.status) {
 				switch (err.response.status) {
 					case 401:
+						if (options?.ignoreUnauthorizedError) break
 						window?.dispatchEvent(new CustomEvent(unauthorizedEvent))
 						break
 					case 403:
@@ -34,5 +42,3 @@ export const handleApiCall = <T>(request: Promise<AxiosResponse<T>>) => {
 			throw err
 		})
 }
-
-export const hac = handleApiCall

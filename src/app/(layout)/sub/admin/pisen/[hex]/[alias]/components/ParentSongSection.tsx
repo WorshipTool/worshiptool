@@ -1,11 +1,10 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { useInnerSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerSong'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, Button, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
-import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { czechConjugation } from '@/tech/string/string.tech'
 import { BasicVariantPack } from '@/types/song'
 import { useRef, useState } from 'react'
@@ -18,7 +17,7 @@ export default function ParentSongSection() {
 
 	const handleSelectParent = async (newParentGuid: string) => {
 		// try {
-		// 	await api.songMergingControllerMergeSongs({
+		// 	await Api.mergeSongs({
 		// 		currentSongGuid: data.guid,
 		// 		newParentGuid,
 		// 	})
@@ -33,22 +32,18 @@ export default function ParentSongSection() {
 	const anchorRef = useRef(null)
 
 	const onSubmit = async (packs: BasicVariantPack[]) => {
-		await handleApiCall(
-			songManagementApi.songMergingControllerMovePacksToFamily({
-				packGuids: [packGuid],
-				targetSongGuid: packs[0].songGuid,
-			})
-		)
+		await songManagementApi.movePacksToFamily({
+			packGuids: [packGuid],
+			targetSongGuid: packs[0].songGuid,
+		})
 
 		window.location.reload()
 	}
 
 	const addToEmptyFamily = async () => {
-		await handleApiCall(
-			songManagementApi.songMergingControllerMovePacksToFamily({
-				packGuids: [packGuid],
-			})
-		)
+		await songManagementApi.movePacksToFamily({
+			packGuids: [packGuid],
+		})
 
 		window.location.reload()
 	}

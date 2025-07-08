@@ -1,6 +1,6 @@
 'use server'
 
-import { useServerApi } from '@/hooks/api/useServerApi'
+import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
 
 /**
  * This function works similarily to console.error, but it can also send errors to messenger
@@ -11,7 +11,7 @@ export async function logServerError(title: string, description: string) {
 	console.error(title + ':', description)
 
 	try {
-		messengerApi.messengerControllerSendError({
+		messengerApi.sendError({
 			title: title,
 			description: description,
 		})

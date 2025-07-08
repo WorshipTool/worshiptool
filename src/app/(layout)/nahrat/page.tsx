@@ -4,15 +4,15 @@ import {
 	ParserApiAxiosParamCreator,
 	ParserSongDataResult,
 } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { getUrl } from '@/api/urls'
 import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Popup from '@/common/components/Popup/Popup'
 import { Box, Button, Chip, LinearProgress, Typography } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
+import { handleApiCall } from '@/tech/fetch/handleApiCall'
 import { copyToClipboard } from '@/tech/string/copy.tech'
 import { AutoAwesome, ContentCopy } from '@mui/icons-material'
 import axios from 'axios'
@@ -82,7 +82,7 @@ function Upload() {
 
 	const parse = async (files: File[]) => {
 		const a = await ParserApiAxiosParamCreator(apiConfiguration)
-		const parse = await a.parserControllerParse()
+		const parse = await a.parse()
 		const url = getUrl(parse.url)
 
 		const form = new FormData()
@@ -106,7 +106,7 @@ function Upload() {
 		// 1. Get url
 
 		const a = await ParserApiAxiosParamCreator(apiConfiguration)
-		const parse = await a.parserControllerGetJobStatus(jobId)
+		const parse = await a.getJobStatus(jobId)
 		const url = getUrl(parse.url)
 
 		const eventSource = new EventSource(url)

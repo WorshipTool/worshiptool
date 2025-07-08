@@ -10,15 +10,14 @@ import {
 } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/payload/tech'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { UserDto } from '@/interfaces/user'
-import { handleApiCall } from '@/tech/handleApiCall'
+import { handleApiCall } from '@/tech/fetch/handleApiCall'
 import { cookies } from 'next/headers'
 
+//TODO: dont create api instance, use useApi() hook instead
 export const getLayoutTeamInfo = async (teamAlias: string) => {
 	const gettingApi = new TeamGettingApi()
 	try {
-		const team = await handleApiCall(
-			gettingApi.teamGettingControllerGetTeamBasicInfo(teamAlias)
-		)
+		const team = await handleApiCall(gettingApi.getTeamBasicInfo(teamAlias))
 		return team
 	} catch (e: any) {
 		return null
@@ -31,7 +30,7 @@ export const getLayoutTeamPayload = async (
 	const gettingApi = new TeamGettingApi()
 	try {
 		const payloadString = await handleApiCall(
-			gettingApi.teamGettingControllerGetTeamPayload(teamGuid)
+			gettingApi.getTeamPayload(teamGuid)
 		)
 
 		const data =
@@ -68,9 +67,7 @@ export const checkLayoutUserMembership = async (
 	})
 
 	try {
-		const fetchData = await creator.teamMemberControllerIsUserMemberOfTeam(
-			teamAlias
-		)
+		const fetchData = await creator.isUserMemberOfTeam(teamAlias)
 		const url = BASE_PATH + fetchData.url
 		const result = await fetch(url, { ...(fetchData.options as any) })
 

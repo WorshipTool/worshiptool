@@ -1,16 +1,15 @@
 'use client'
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
 import { TeamOfUserDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useCurrentTeam } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import useUserTeams from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useUserTeams'
 import { SongSelectSpecifierProvider } from '@/common/components/SongSelectPopup/hooks/useSongSelectSpecifier'
 import { Box, Button } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import React, { useEffect, useMemo, useState } from 'react'
 
 type AppSongSelectSpecifierProviderProps = {
@@ -34,9 +33,7 @@ export default function AppSongSelectSpecifierProvider(
 
 	const [globalApiState] = useApiStateEffect(async () => {
 		if (!active) return []
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchGlobalSongsInPopup(searchString)
-		)
+		const result = await songGettingApi.searchGlobalSongsInPopup(searchString)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)
@@ -49,9 +46,7 @@ export default function AppSongSelectSpecifierProvider(
 			return []
 		}
 
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerSearchMySongsInPopup(searchString)
-		)
+		const result = await songGettingApi.searchMySongsInPopup(searchString)
 
 		return result.variants.map((v) => {
 			return mapBasicVariantPackApiToDto(v)

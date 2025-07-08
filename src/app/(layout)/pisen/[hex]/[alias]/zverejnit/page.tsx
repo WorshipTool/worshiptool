@@ -2,6 +2,7 @@
 
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
 import { ValidationResult } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -14,13 +15,11 @@ import {
 	SelectChangeEvent,
 } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { SongLanguage } from '@/types/song'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 export default SmartPage(Page)
 function Page() {
 	const { hex, alias } = useSmartParams('variantPublish')
@@ -45,19 +44,13 @@ function Page() {
 		const doStuff = async () => {
 			const aliasString = getVariantAliasFromParams(hex, alias)
 
-			const data = await handleApiCall(
-				songGettingApi.songOneGettingControllerGetVariantDataByAlias(
-					aliasString
-				)
-			)
+			const data = await songGettingApi.getVariantDataByAlias(aliasString)
 			const variant = mapExtendedVariantPackApiToDto(data.main)
 
-			const validation = await handleApiCall(
-				songValidationApi.songValidationControllerValidateSheetDataAndTitle({
-					sheetData: variant.sheetData,
-					title: variant.title,
-				})
-			)
+			const validation = await songValidationApi.validateSheetDataAndTitle({
+				sheetData: variant.sheetData,
+				title: variant.title,
+			})
 
 			if (!validation) setQualities({})
 			const q: { [key: string]: any } = validation.qualities
@@ -74,11 +67,9 @@ function Page() {
 				const lang: SongLanguage =
 					variant.language ||
 					(
-						await handleApiCall(
-							songEditingApi.songEditingControllerChangeLanguage({
-								packGuid: variant.packGuid,
-							})
-						)
+						await songEditingApi.changeLanguage({
+							packGuid: variant.packGuid,
+						})
 					).language
 				setLanguage(lang)
 				setAutoFound(true)
@@ -100,19 +91,15 @@ function Page() {
 	const handlePublish = async () => {
 		try {
 			if (!autoFound) {
-				await handleApiCall(
-					songEditingApi.songEditingControllerChangeLanguage({
-						packGuid: variant.packGuid,
-						languageString: language as string,
-					})
-				)
+				await songEditingApi.changeLanguage({
+					packGuid: variant.packGuid,
+					languageString: language as string,
+				})
 			}
 
-			const result = await handleApiCall(
-				songPublishingApi.songPublishingControllerPublishVariant({
-					packGuid: variant.packGuid,
-				})
-			)
+			const result = await songPublishingApi.publishVariant({
+				packGuid: variant.packGuid,
+			})
 
 			navigate('variant', { hex, alias })
 			enqueueSnackbar(`Píseň byla zveřejněna.`)

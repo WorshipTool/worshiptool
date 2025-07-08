@@ -1,8 +1,7 @@
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useLiveMessage } from '@/hooks/sockets/useLiveMessage'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useMemo } from 'react'
 
 export const NEW_TEAM_MEMBER_MESSAGE_NAME = 'newTeamMemberJoined'
@@ -11,9 +10,7 @@ export const NEW_TEAM_MEMBER_MESSAGE_GROUP = 'joiningteamgroup'
 export function useTeamMembers(teamAlias: string, teamGuid: string) {
 	const { teamMembersApi } = useApi()
 	const [apiState, fetchData] = useApiStateEffect(async () => {
-		const data = await handleApiCall(
-			teamMembersApi.teamMemberControllerGetTeamMembers(teamAlias)
-		)
+		const data = await teamMembersApi.getTeamMembers(teamAlias)
 		return data
 	}, [teamAlias])
 

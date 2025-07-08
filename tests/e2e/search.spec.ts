@@ -87,9 +87,7 @@ test('Neobsahuje cizí soukromé písně', async ({ page }) => {
 	const allSearchStrings = [...searchStrings, ...randomStrings]
 
 	for (const searchString of allSearchStrings) {
-		const response = await handleServerApiCall(
-			api.songSearchingControllerSearch(searchString)
-		)
+		const response = await handleServerApiCall(api.search(searchString))
 
 		for (const result of response) {
 			const whole = [
@@ -123,9 +121,7 @@ test('Při přihlášení obsahuje uživatelovy soukromé písně', async ({ pag
 	let count = 0
 
 	for (const searchString of allSearchStrings) {
-		const response = await handleServerApiCall(
-			api.songSearchingControllerSearch(searchString)
-		)
+		const response = await handleServerApiCall(api.search(searchString))
 		count += response.length
 
 		for (const result of response) {

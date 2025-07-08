@@ -1,7 +1,7 @@
 'use server'
 
 import { Configuration } from '@/api/generated'
-import { getApiClasses } from '@/hooks/api/tech'
+import { getServerApiClasses } from '@/api/tech-and-hooks/api-classes'
 import { UserDto } from '@/interfaces/user'
 import { getServerUser } from '@/tech/auth/getServerUser'
 
@@ -16,7 +16,7 @@ export async function useServerApi() {
 	}
 
 	// Return APIs
-	const apis = getApiClasses(apiConfiguration)
+	const apis = getServerApiClasses(apiConfiguration)
 
 	return apis
 }

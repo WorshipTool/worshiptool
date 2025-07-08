@@ -1,29 +1,9 @@
-import { StatsigClient } from '@statsig/js-client'
 import nextRoutes from 'nextjs-routes/config'
 const withRoutes = nextRoutes()
 
 // @ts-check
-export default async (phase, { defaultConfig }) => {
-	const checkFlag = async (key) => {
-		const myStatsigClient = new StatsigClient(
-			process.env.NEXT_PUBLIC_STATSIG_API_KEY,
-			{},
-			{
-				environment: {
-					tier:
-						process.env.NODE_ENV === 'development'
-							? 'development'
-							: 'production',
-				},
-			}
-		)
-		await myStatsigClient.initializeAsync()
-
-		return myStatsigClient.checkGate(key)
-	}
-
-	const useSubdomains = await checkFlag('use_subdomains')
-
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (phase, { defaultConfig }) => {
 	/** @type {import('next').NextConfig} */
 	const nextConfig = withRoutes({
 		webpack(config) {
@@ -33,7 +13,7 @@ export default async (phase, { defaultConfig }) => {
 			})
 			return config
 		},
-		async redirects() {
+		redirects() {
 			return [
 				{
 					source: '/p/:hex/:alias',
@@ -43,7 +23,7 @@ export default async (phase, { defaultConfig }) => {
 			]
 		},
 
-		async rewrites() {
+		rewrites() {
 			return []
 		},
 
@@ -63,11 +43,27 @@ export default async (phase, { defaultConfig }) => {
 				},
 				{
 					hostname: 'worshiptool-end.fly.dev',
-				}
+				},
+				...(process.env.NEXT_PUBLIC_BACKEND_URL
+					? [
+							{
+								hostname: new URL(process.env.NEXT_PUBLIC_BACKEND_URL).hostname,
+							},
+					  ]
+					: []),
+				...(process.env.NEXT_PUBLIC_FRONTEND_URL
+					? [
+							{
+								hostname: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL)
+									.hostname,
+							},
+					  ]
+					: []),
+				
 			],
 			dangerouslyAllowSVG: true,
 		},
-		async headers() {
+		headers() {
 			return [
 				{
 					// Nastavení hlavičky pro všechny cesty
@@ -84,7 +80,7 @@ export default async (phase, { defaultConfig }) => {
 		reactStrictMode: false,
 		output: 'standalone',
 		env: {
-			useSubdomains: useSubdomains ? 'true' : 'false',
+			useSubdomains: process.env.USE_SUBDOMAINS || 'false',
 		},
 	})
 	return nextConfig

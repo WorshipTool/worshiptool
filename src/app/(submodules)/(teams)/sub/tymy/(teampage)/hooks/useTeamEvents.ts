@@ -3,24 +3,21 @@ import {
 	EditTeamEventInDto,
 	TeamEvent,
 } from '@/api/generated'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 
 export function useTeamEvents(guid: string) {
 	const { teamEventsApi } = useApi()
 
 	const [apiState, reload] = useApiStateEffect(async () => {
-		const data = await handleApiCall(
-			teamEventsApi.teamEventControllerGetEvents(guid)
-		)
+		const data = await teamEventsApi.getEvents(guid)
 		return data
 	}, [guid])
 
 	const { fetchApiState, apiState: createApiState } = useApiState<TeamEvent>()
 	const addEvent = async (data: CreateTeamEventInDto) => {
 		const result = await fetchApiState(async () => {
-			return handleApiCall(teamEventsApi.teamEventControllerCreateEvent(data))
+			return teamEventsApi.createEvent(data)
 		})
 
 		if (result) {
@@ -33,7 +30,7 @@ export function useTeamEvents(guid: string) {
 
 	const editEvent = async (data: EditTeamEventInDto) => {
 		const result = await fetchApiState(async () => {
-			return handleApiCall(teamEventsApi.teamEventControllerEditEvent(data))
+			return teamEventsApi.editEvent(data)
 		})
 
 		if (result) {
@@ -46,7 +43,7 @@ export function useTeamEvents(guid: string) {
 
 	const deleteEvent = async (guid: string) => {
 		const result = await fetchApiState(async () => {
-			return handleApiCall(teamEventsApi.teamEventControllerDeleteEvent(guid))
+			return teamEventsApi.deleteEvent(guid)
 		})
 
 		if (result) {

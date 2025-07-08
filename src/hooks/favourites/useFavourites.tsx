@@ -1,9 +1,8 @@
 import { VariantPackGuid } from '@/api/dtos'
 import { GetFavouritesOutDto } from '@/api/generated'
-import { useApi } from '@/hooks/api/useApi'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 type Rt = ReturnType<typeof useProvideFavourites>
@@ -40,9 +39,7 @@ const useProvideFavourites = () => {
 
 	const reload = async () => {
 		if (!user) return
-		const data = await fetchApiState(() =>
-			handleApiCall(songFavouritesApi.songFavouritesControllerGetFavourites())
-		)
+		const data = await fetchApiState(() => songFavouritesApi.getFavourites())
 		if (data) setFavourites(data)
 	}
 
@@ -56,16 +53,14 @@ const useProvideFavourites = () => {
 	}, [user])
 
 	const add = async (packGuid: VariantPackGuid) => {
-		const result = await handleApiCall(
-			songFavouritesApi.songFavouritesControllerAddFavourite({ packGuid })
-		)
+		const result = await songFavouritesApi.addFavourite({ packGuid })
 		reload()
 		return result
 	}
 	const remove = async (packGuid: VariantPackGuid) => {
-		const result = await handleApiCall(
-			songFavouritesApi.songFavouritesControllerRemoveFavourite({ packGuid })
-		)
+		const result = await songFavouritesApi.removeFavourite({
+			packGuid,
+		})
 		reload()
 		return result
 	}

@@ -1,9 +1,8 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { Box, Button, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { BasicVariantPack } from '@/types/song'
 import { ChevronRight } from '@mui/icons-material'
@@ -18,11 +17,9 @@ export default function ApprovalItem({ pack }: Props) {
 	const { fetchApiState, apiState } = useApiState()
 	const onRejectClick = async () => {
 		await fetchApiState(async () =>
-			handleApiCall(
-				songPublishingApi.songPublishingControllerRejectPublishApproval({
-					packGuid: pack.packGuid,
-				})
-			)
+			songPublishingApi.rejectPublishApproval({
+				packGuid: pack.packGuid,
+			})
 		)
 
 		window.location.reload()

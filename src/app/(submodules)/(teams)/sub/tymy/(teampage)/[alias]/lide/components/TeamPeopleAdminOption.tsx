@@ -1,8 +1,8 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import AdminOption from '@/common/components/admin/AdminOption'
 import Popup from '@/common/components/Popup/Popup'
 import { Button, TextInput, Typography } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import { useApiState } from '@/tech/ApiState'
 import { useState } from 'react'
 
@@ -18,7 +18,7 @@ export default function TeamPeopleAdminOption() {
 		if (!email) return
 		fetchApiState(
 			async () => {
-				return teamJoiningApi.teamJoiningControllerAddByEmail({
+				return teamJoiningApi.addByEmail({
 					email,
 					teamGuid: guid,
 				})

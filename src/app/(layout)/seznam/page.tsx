@@ -7,10 +7,9 @@ import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Container } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { useApi } from '../../../api/tech-and-hooks/useApi'
 import { Gap } from '../../../common/ui/Gap/Gap'
-import { useApi } from '../../../hooks/api/useApi'
 import { useSmartUrlState } from '../../../hooks/urlstate/useUrlState'
-import { handleApiCall } from '../../../tech/handleApiCall'
 
 export default SmartPage(List)
 function List() {
@@ -22,16 +21,14 @@ function List() {
 	const { songGettingApi } = useApi()
 
 	const [{ data: count }] = useApiStateEffect(async () =>
-		handleApiCall(songGettingApi.songGettingControllerGetListSongCount())
+		songGettingApi.getListSongCount()
 	)
 
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
 	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
 	const getPageData = async (page: number) => {
-		const r = await handleApiCall(
-			songGettingApi.songGettingControllerGetList(page, countPerPage + 1)
-		)
+		const r = await songGettingApi.getList(page, countPerPage + 1)
 
 		return r.slice(0, countPerPage)
 	}

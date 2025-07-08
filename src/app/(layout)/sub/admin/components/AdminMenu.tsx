@@ -5,6 +5,7 @@ import { alpha } from '@/common/ui/mui'
 import { RoutesKeys } from '@/routes'
 import { useSmartMatch } from '@/routes/useSmartMatch'
 import {
+	Add,
 	Dashboard,
 	MusicNote,
 	Publish,
@@ -72,6 +73,11 @@ export default function AdminMenu() {
 				label="Dashboard"
 				icon={<Dashboard fontSize="small" />}
 				to={'admin'}
+			/>
+			<Item
+				label="Přidat píseň"
+				icon={<Add fontSize="small" />}
+				to={'adminCreateSong'}
 			/>
 			<Item
 				label="Písně"

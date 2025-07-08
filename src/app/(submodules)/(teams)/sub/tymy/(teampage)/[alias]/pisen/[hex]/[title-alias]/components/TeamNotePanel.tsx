@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import NoteContent from '@/app/(layout)/pisen/[hex]/[alias]/components/NoteContent'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import { MoreTeamSongOption } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/pisen/[hex]/[title-alias]/components/MoreTeamSongOption'
@@ -9,10 +10,8 @@ import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { TextField } from '@/common/ui/TextField/TextField'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useApiState, useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { StickyNote2 } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 
@@ -23,12 +22,7 @@ export default function TeamNotePanel() {
 
 	const [{ data, loading: getLoading }, reload] =
 		useApiStateEffect(async () => {
-			return handleApiCall(
-				teamSongNotesApi.teamSongNoteControllerGetNotesOfVariantAndTeam(
-					packGuid,
-					teamGuid
-				)
-			)
+			return teamSongNotesApi.getNotesOfVariantAndTeam(packGuid, teamGuid)
 		}, [teamSongNotesApi, packGuid])
 
 	const { fetchApiState: fetchSave, apiState: saveApiState } = useApiState()
@@ -49,32 +43,26 @@ export default function TeamNotePanel() {
 			async () => {
 				if (cnt.length === 0) {
 					if (notes.length > 0) {
-						return handleApiCall(
-							teamSongNotesApi.teamSongNoteControllerDeleteNote({
-								noteGuid: notes[0].guid,
-							})
-						)
+						return teamSongNotesApi.deleteNote({
+							noteGuid: notes[0].guid,
+						})
 					} else {
 						return
 					}
 				}
 
 				if (notes.length > 0) {
-					return handleApiCall(
-						teamSongNotesApi.teamSongNoteControllerEditNote({
-							content: cnt,
-							noteGuid: notes[0].guid,
-						})
-					)
+					return teamSongNotesApi.editNote({
+						content: cnt,
+						noteGuid: notes[0].guid,
+					})
 				}
 
-				return handleApiCall(
-					teamSongNotesApi.teamSongNoteControllerAddNoteToVariant({
-						content: cnt,
-						packGuid: packGuid,
-						teamGuid: teamGuid,
-					})
-				)
+				return teamSongNotesApi.addNoteToVariant({
+					content: cnt,
+					packGuid: packGuid,
+					teamGuid: teamGuid,
+				})
 			},
 			() => {
 				reload()

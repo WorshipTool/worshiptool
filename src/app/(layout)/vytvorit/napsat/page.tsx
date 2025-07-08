@@ -11,12 +11,11 @@ import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useApi } from '../../../../api/tech-and-hooks/useApi'
 import ContainerGrid from '../../../../common/components/ContainerGrid'
 import { Gap } from '../../../../common/ui/Gap'
-import { useApi } from '../../../../hooks/api/useApi'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../tech/ApiState'
-import { handleApiCall } from '../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../tech/sheet.tech'
 import NotValidWarning from './components/NotValidWarning'
 
@@ -58,13 +57,11 @@ function Create() {
 	const onPostClick = () => {
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songAddingApi.songAddingControllerCreate({
-						title,
-						sheetData,
-						createdType: CreatedType.Manual,
-					})
-				)
+				return songAddingApi.create({
+					title,
+					sheetData,
+					createdType: CreatedType.Manual,
+				})
 			},
 			(result) => {
 				const a = parseVariantAlias(result.alias as VariantPackAlias)

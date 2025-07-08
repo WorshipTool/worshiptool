@@ -1,6 +1,7 @@
 'use client'
 import { CreatedType } from '@/api/dtos'
 import { EditVariantOutDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import PrintVariantButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/PrintButton'
 import TransposePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TransposePanel'
@@ -16,14 +17,12 @@ import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { usePermission } from '@/hooks/permissions/usePermission'
 import { useSmartUrlState } from '@/hooks/urlstate/useUrlState'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useCallback, useRef, useState } from 'react'
@@ -92,14 +91,12 @@ export default function SongPreview({ variant }: SongPreviewProps) {
 		// Save data
 		fetchApiState(
 			async () => {
-				return handleApiCall(
-					songEditingApi.songEditingControllerEditVariant({
-						variantAlias: variant.packAlias,
-						createdType: CreatedType.Manual,
-						title: newData.title || undefined,
-						sheetData: newData.sheetData || undefined,
-					})
-				)
+				return songEditingApi.editVariant({
+					variantAlias: variant.packAlias,
+					createdType: CreatedType.Manual,
+					title: newData.title || undefined,
+					sheetData: newData.sheetData || undefined,
+				})
 			},
 			() => {
 				if (newData.title) {

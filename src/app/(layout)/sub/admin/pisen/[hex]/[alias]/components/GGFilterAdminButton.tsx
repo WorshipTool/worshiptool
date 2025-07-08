@@ -1,9 +1,8 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { useInnerPack } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
 import Popup from '@/common/components/Popup/Popup'
 import { Button } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 
@@ -22,18 +21,9 @@ export default function GGFilterAdminButton() {
 
 	const onOptionClick = async (value: boolean | null) => {
 		if (value === null) {
-			await handleApiCall(
-				songManagementApi.songGGFilterControllerSetFilterStatusToAutoForPack(
-					packGuid
-				)
-			)
+			await songManagementApi.setFilterStatusToAutoForPack(packGuid)
 		} else {
-			await handleApiCall(
-				songManagementApi.songGGFilterControllerSetFilterStatusForPack(
-					packGuid,
-					value
-				)
-			)
+			await songManagementApi.setFilterStatusForPack(packGuid, value)
 		}
 		const label = OPTIONS.find((o) => o.value === value)?.label
 		enqueueSnackbar('Filtrace nastavena na ' + label)

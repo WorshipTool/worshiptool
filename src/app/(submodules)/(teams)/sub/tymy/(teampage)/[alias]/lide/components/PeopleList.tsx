@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import ListTopPanelPeople from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/ListTopPanelPeople'
 import PeopleListItem from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/lide/components/PeopleListItem'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
@@ -5,7 +6,6 @@ import { TeamMemberRole } from '@/app/(submodules)/(teams)/sub/tymy/tech'
 import { Box, LinearProgress, Tooltip, useTheme } from '@/common/ui'
 import { Checkbox, useMediaQuery } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { UserGuid } from '@/interfaces/user'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { useSnackbar } from 'notistack'
@@ -61,7 +61,7 @@ export default function PeopleList(props: PeopleListDto) {
 
 	const onMemberRemove = useCallback(async (guid: UserGuid) => {
 		try {
-			await teamMembersApi.teamMemberControllerLeaveTeam({
+			await teamMembersApi.leaveTeam({
 				userGuid: guid,
 				teamAlias: teamAlias,
 			})
@@ -74,7 +74,7 @@ export default function PeopleList(props: PeopleListDto) {
 	const onSetRole = useCallback(
 		async (guid: UserGuid, role: TeamMemberRole) => {
 			try {
-				await teamMembersApi.teamMemberControllerSetMemberRole({
+				await teamMembersApi.setMemberRole({
 					role: role,
 					teamGuid,
 					userGuid: guid,

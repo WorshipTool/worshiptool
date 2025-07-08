@@ -4,10 +4,9 @@ import { copyToClipboard } from '@/tech/string/copy.tech'
 import { Token } from '@mui/icons-material'
 import { useState } from 'react'
 import { LoginRequestDTO } from '../../../../../../api/dtos/dtosAuth'
+import { useApi } from '../../../../../../api/tech-and-hooks/useApi'
 import { Card } from '../../../../../../common/ui/Card/Card'
-import { useApi } from '../../../../../../hooks/api/useApi'
 import useAuth from '../../../../../../hooks/auth/useAuth'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 
 export default function GetToken() {
 	const { authApi } = useApi()
@@ -23,7 +22,8 @@ export default function GetToken() {
 			email,
 			password,
 		}
-		handleApiCall(authApi.authControllerLogin(body))
+		authApi
+			.login(body)
 			.then((r) => {
 				setToken(r.token)
 				navigator.clipboard.writeText(r.token)

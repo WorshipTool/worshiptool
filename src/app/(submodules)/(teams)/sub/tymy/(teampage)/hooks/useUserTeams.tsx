@@ -1,10 +1,9 @@
 import { TeamOfUserDto } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { EVENT_NAME_CHANGE_TEAM_LOGO } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/hooks/useTeamLogo'
-import { useApi } from '@/hooks/api/useApi'
 import useAuth from '@/hooks/auth/useAuth'
 import { useCommonData } from '@/hooks/common-data/useCommonData'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useEffect, useRef, useState } from 'react'
 
 export default function useUserTeams() {
@@ -19,9 +18,7 @@ export default function useUserTeams() {
 	const revalidate = async () => {
 		fetchApiState(async () => {
 			if (!user) return []
-			const result = await handleApiCall(
-				teamMembersApi.teamMemberControllerGetTeamsOfUser()
-			)
+			const result = await teamMembersApi.getTeamsOfUser()
 			return result.teams
 		})
 			.then((r) => {

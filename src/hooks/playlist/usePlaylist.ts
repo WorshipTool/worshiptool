@@ -110,9 +110,8 @@ export default function usePlaylist(
 	): Promise<PlaylistItemDto | false> => {
 		try {
 			const data = await addVariantToPlaylist(packGuid, guid).then(
-				async (r) => {
-					if (!r) return false
-					const item = mapPlaylistItemOutDtoApiToPlaylistItemDto(r)
+				async (item) => {
+					if (!item) return false
 					setItems((items) => [...items, item])
 					return item
 				}

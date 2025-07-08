@@ -33,11 +33,7 @@ export const useTeamLogo = () => {
 		if (!hasLogo) return ''
 		return (
 			BACKEND_URL +
-			(
-				await imagesApiCreator.imagesControllerGetImage(
-					apiState.data?.logoGuid!
-				)
-			).url
+			(await imagesApiCreator.getImage(apiState.data?.logoGuid!)).url
 		)
 	}, [apiState, hasLogo])
 
@@ -62,7 +58,7 @@ export const useTeamLogo = () => {
 		form.append('teamGuid', apiState.data?.guid!)
 
 		// 2. Get url
-		const pre = await teamEditingCreator.teamEditingControllerChangeTeamLogo()
+		const pre = await teamEditingCreator.changeTeamLogo()
 		const partUrl = pre.url
 		const wholeUrl = getUrl(partUrl)
 

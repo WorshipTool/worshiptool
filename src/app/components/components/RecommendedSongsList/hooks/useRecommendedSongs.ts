@@ -3,17 +3,14 @@ import {
 	BasicVariantPack,
 	mapBasicVariantPackApiToDto,
 } from '../../../../../api/dtos'
-import { useApi } from '../../../../../hooks/api/useApi'
+import { useApi } from '../../../../../api/tech-and-hooks/useApi'
 import { useApiStateEffect } from '../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../tech/handleApiCall'
 
 export default function useRecommendedSongs() {
 	const { songGettingApi } = useApi()
 
 	const [state] = useApiStateEffect<BasicVariantPack[]>(async () => {
-		const result = await handleApiCall(
-			songGettingApi.songGettingControllerGetRecommendedSongs()
-		)
+		const result = await songGettingApi.getRecommendedSongs()
 		return result.variants.map((v) => mapBasicVariantPackApiToDto(v))
 	}, [])
 

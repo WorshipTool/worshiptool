@@ -2,7 +2,6 @@ import BridgeServicesPanel from '@/app/(layout)/ucet/components/AdminPanel/compo
 import { Box, Divider } from '@/common/ui'
 import CurrentSongCount from './components/CurrentSongCount'
 import GetToken from './components/GetToken'
-import GetterGraphs from './components/GetterGraphs'
 
 export default function AdminPanel() {
 	return (
@@ -22,9 +21,6 @@ export default function AdminPanel() {
 			</Box>
 			<Box>
 				<Divider orientation={'vertical'} />
-			</Box>
-			<Box flex={1} gap={1} display={'flex'} flexDirection={'column'}>
-				<GetterGraphs />
 			</Box>
 		</Box>
 	)

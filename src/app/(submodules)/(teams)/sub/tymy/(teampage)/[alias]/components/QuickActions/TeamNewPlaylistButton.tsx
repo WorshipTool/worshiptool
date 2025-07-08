@@ -1,15 +1,14 @@
 'use client'
 import { PostCreatePlaylistResult } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import TeamQuickActionButton from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/QuickActions/TeamQuickActionButton'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
-import { useApi } from '@/hooks/api/useApi'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { Add } from '@mui/icons-material'
 import { useCallback } from 'react'
-import { handleApiCall } from '../../../../../../../../../tech/handleApiCall'
 
 export default function TeamNewPlaylistButton() {
 	const { playlistEditingApi, teamEditingApi } = useApi()
@@ -24,16 +23,16 @@ export default function TeamNewPlaylistButton() {
 	const onCreateClick = useCallback(() => {
 		fetchApiState(
 			async () => {
-				const p = await handleApiCall(
-					playlistEditingApi.playlistEditingControllerCreatePlaylist()
-				)
+				const p = await playlistEditingApi.createPlaylist()
 
-				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+				await teamEditingApi.attachPlaylistToTeam({
 					teamGuid: guid,
-					playlistGuid: p.guid,
+					playlistGuid: p,
 				})
 
-				return p
+				return {
+					guid: p,
+				}
 			},
 			(d) => {
 				// const url = getRouteUrlWithParams('teamPlaylist', {

@@ -1,12 +1,11 @@
 import { PostCreatePlaylistResult } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import { Box, Clickable, IconButton, useTheme } from '@/common/ui'
-import { useApi } from '@/hooks/api/useApi'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { Add } from '@mui/icons-material'
 import { useCallback } from 'react'
 
@@ -25,16 +24,16 @@ export default function UsersTeamPlaylistsAddButton() {
 	const onCreateClick = useCallback(() => {
 		fetchApiState(
 			async () => {
-				const p = await handleApiCall(
-					playlistEditingApi.playlistEditingControllerCreatePlaylist()
-				)
+				const p = await playlistEditingApi.createPlaylist()
 
-				await teamEditingApi.teamSelectionControllerAttachPlaylistToTeam({
+				await teamEditingApi.attachPlaylistToTeam({
 					teamGuid: guid,
-					playlistGuid: p.guid,
+					playlistGuid: p,
 				})
 
-				return p
+				return {
+					guid: p,
+				}
 			},
 			(d) => {
 				turnOn(d.guid as PlaylistGuid)

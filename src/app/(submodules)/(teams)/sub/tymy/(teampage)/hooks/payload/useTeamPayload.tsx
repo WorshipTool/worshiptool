@@ -1,11 +1,10 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import {
 	TeamPayload,
 	teamPayloadDefaults,
 } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/payload/tech'
 import { TeamGuid } from '@/app/(submodules)/(teams)/sub/tymy/tech'
-import { useApi } from '@/hooks/api/useApi'
 import { usePayload } from '@/hooks/payloads/usePayload'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { useCallback } from 'react'
 
 export const useTeamPayload = (teamGuid: TeamGuid) => {
@@ -14,14 +13,12 @@ export const useTeamPayload = (teamGuid: TeamGuid) => {
 	const getFunc = useCallback(async () => {
 		if (!teamGuid) return ''
 
-		return handleApiCall(
-			teamGettingApi.teamGettingControllerGetTeamPayload(teamGuid)
-		)
+		return teamGettingApi.getTeamPayload(teamGuid)
 	}, [teamGuid])
 
 	const setFunc = useCallback(
 		(payload: string) =>
-			teamEditingApi.teamEditingControllerEditPayload({
+			teamEditingApi.editPayload({
 				teamGuid,
 				payload,
 			}),

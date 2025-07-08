@@ -1,3 +1,4 @@
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
 import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
 import { useInnerPackSong } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
@@ -5,7 +6,6 @@ import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
-import { useApi } from '@/hooks/api/useApi'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { ExtendedVariantPack } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -19,12 +19,10 @@ import {
 import {
 	EditVariantOutDto,
 	PostEditVariantInDto,
-	SongEditingApi,
 } from '../../../../../../api/generated'
 import useAuth from '../../../../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../../../../routes/useSmartNavigate'
 import { useApiState } from '../../../../../../tech/ApiState'
-import { handleApiCall } from '../../../../../../tech/handleApiCall'
 import { isSheetDataValid } from '../../../../../../tech/sheet.tech'
 import NotValidWarning from '../../../../vytvorit/napsat/components/NotValidWarning'
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
@@ -61,8 +59,7 @@ export default function TopPanel(props: TopPanelProps) {
 	const { enqueueSnackbar } = useSnackbar()
 	const navigate = useSmartNavigate()
 
-	const songsApi = new SongEditingApi(apiConfiguration)
-	const { songEditingApi, songPublishingApi } = useApi()
+	const { songEditingApi } = useApi()
 	const {
 		fetchApiState,
 		apiState: { loading: saving },
@@ -93,9 +90,7 @@ export default function TopPanel(props: TopPanelProps) {
 		}
 		fetchApiState(
 			async () => {
-				return await handleApiCall(
-					songsApi.songEditingControllerEditVariant(body)
-				)
+				return await songEditingApi.editVariant(body)
 			},
 			async (result) => {
 				await props.onEditClick?.(editable)

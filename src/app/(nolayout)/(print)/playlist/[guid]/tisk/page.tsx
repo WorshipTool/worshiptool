@@ -1,6 +1,6 @@
 'use client'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import NotFound from '@/app/(layout)/pisen/[hex]/[alias]/not-found'
-import { getPlaylistDataByGuid } from '@/app/(layout)/playlist/[guid]/playlist.tech'
 import PlaylistPrintOptions from '@/app/(nolayout)/(print)/playlist/[guid]/tisk/components/PlaylistPrintOptions'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -37,10 +37,11 @@ function Page({ params, ...props }: PageProps<'playlistPrint'>) {
 		window.print()
 	}
 
-	const [{ data, loading }] = useApiStateEffect(
-		async () => getPlaylistDataByGuid(params.guid),
-		[params.guid]
-	)
+	const { playlistGettingApi } = useApi()
+
+	const [{ data, loading }] = useApiStateEffect(async () => {
+		return await playlistGettingApi.getPlaylistDataByGuid(params.guid) //TODO: what is this?
+	}, [params.guid])
 	useEffect(() => {
 		if (!data) return
 		onPrintClick()

@@ -1,5 +1,6 @@
 'use client'
 import { mapExtendedVariantPackApiToDto } from '@/api/dtos'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import { getVariantAliasFromParams } from '@/app/(layout)/pisen/[hex]/[alias]/tech'
 import { SmartTeamPage } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/SmartTeamPage/SmartTeamPage'
 import { TeamPageTitle } from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TopPanel/components/TeamPageTitle'
@@ -11,10 +12,8 @@ import { Box, IconButton, LinearProgress } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
-import { useApi } from '@/hooks/api/useApi'
 import { SmartParams } from '@/routes'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { handleApiCall } from '@/tech/handleApiCall'
 import { AudioFile, KeyboardArrowLeft, OpenInNew } from '@mui/icons-material'
 import { useMemo } from 'react'
 
@@ -32,9 +31,7 @@ export function TeamPisenPage(props: TeamPisenPageProps) {
 			props.params.hex,
 			props.params['title-alias']
 		)
-		const v = await handleApiCall(
-			songGettingApi.songOneGettingControllerGetVariantDataByAlias(alias)
-		)
+		const v = await songGettingApi.getVariantDataByAlias(alias)
 
 		const d = mapExtendedVariantPackApiToDto(v.main)
 
