@@ -1096,6 +1096,25 @@ export interface GetAllTeamSubdomainAliasesOutDto {
 /**
  * 
  * @export
+ * @interface GetCreatorAutoCompleteItemDto
+ */
+export interface GetCreatorAutoCompleteItemDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCreatorAutoCompleteItemDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCreatorAutoCompleteItemDto
+     */
+    'guid': string;
+}
+/**
+ * 
+ * @export
  * @interface GetFavouritesItemData
  */
 export interface GetFavouritesItemData {
@@ -2566,6 +2585,25 @@ export interface PostSendPackToApprovalInDto {
      * @memberof PostSendPackToApprovalInDto
      */
     'packGuid': object;
+}
+/**
+ * 
+ * @export
+ * @interface PostSetCreatorsToPackInDto
+ */
+export interface PostSetCreatorsToPackInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostSetCreatorsToPackInDto
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostSetCreatorsToPackInDto
+     */
+    'creators': Array<string>;
 }
 /**
  * 
@@ -8985,6 +9023,196 @@ export class SongAddingApi extends BaseAPI {
      */
     public createCopy(postCreateCopyInDto: PostCreateCopyInDto, options?: RawAxiosRequestConfig) {
         return SongAddingApiFp(this.configuration).createCopy(postCreateCopyInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SongCreatorsApi - axios parameter creator
+ * @export
+ */
+export const SongCreatorsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} input 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        autoComplete: async (input: string, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'input' is not null or undefined
+            assertParamExists('autoComplete', 'input', input)
+            const localVarPath = `/song/creators/autocomplete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (input !== undefined) {
+                localVarQueryParameter['input'] = input;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PostSetCreatorsToPackInDto} postSetCreatorsToPackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setToPack: async (postSetCreatorsToPackInDto: PostSetCreatorsToPackInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postSetCreatorsToPackInDto' is not null or undefined
+            assertParamExists('setToPack', 'postSetCreatorsToPackInDto', postSetCreatorsToPackInDto)
+            const localVarPath = `/song/creators/set-to-pack`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postSetCreatorsToPackInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SongCreatorsApi - functional programming interface
+ * @export
+ */
+export const SongCreatorsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SongCreatorsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} input 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async autoComplete(input: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetCreatorAutoCompleteItemDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.autoComplete(input, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongCreatorsApi.autoComplete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PostSetCreatorsToPackInDto} postSetCreatorsToPackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setToPack(postSetCreatorsToPackInDto: PostSetCreatorsToPackInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setToPack(postSetCreatorsToPackInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongCreatorsApi.setToPack']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SongCreatorsApi - factory interface
+ * @export
+ */
+export const SongCreatorsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SongCreatorsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} input 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        autoComplete(input: string, limit?: number, options?: any): AxiosPromise<Array<GetCreatorAutoCompleteItemDto>> {
+            return localVarFp.autoComplete(input, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PostSetCreatorsToPackInDto} postSetCreatorsToPackInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setToPack(postSetCreatorsToPackInDto: PostSetCreatorsToPackInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.setToPack(postSetCreatorsToPackInDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SongCreatorsApi - object-oriented interface
+ * @export
+ * @class SongCreatorsApi
+ * @extends {BaseAPI}
+ */
+export class SongCreatorsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} input 
+     * @param {number} [limit] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongCreatorsApi
+     */
+    public autoComplete(input: string, limit?: number, options?: RawAxiosRequestConfig) {
+        return SongCreatorsApiFp(this.configuration).autoComplete(input, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PostSetCreatorsToPackInDto} postSetCreatorsToPackInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongCreatorsApi
+     */
+    public setToPack(postSetCreatorsToPackInDto: PostSetCreatorsToPackInDto, options?: RawAxiosRequestConfig) {
+        return SongCreatorsApiFp(this.configuration).setToPack(postSetCreatorsToPackInDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
