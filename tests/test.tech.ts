@@ -1,3 +1,4 @@
+import { FRONTEND_URL } from '@/api/constants'
 import { loginResultDTOToUser } from '@/api/dtos/dtosAuth'
 import { JwtResult } from '@/api/generated'
 import { UserDto } from '@/interfaces/user'
@@ -23,4 +24,8 @@ export const test_tech_loginWithData = async (
 	const responseData: JwtResult = await loginResponse.json()
 
 	return loginResultDTOToUser(responseData)
+}
+
+export const getTestBaseUrlHostname = () => {
+	return FRONTEND_URL.replace(/^https?:\/\//, '')
 }

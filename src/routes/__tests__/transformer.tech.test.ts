@@ -4,7 +4,9 @@ import {
 	getReplacedUrlWithParams,
 	GetReplacedUrlWithParamsOptions,
 } from '@/routes/tech/transformer.tech'
+import { getTestBaseUrlHostname } from '../../../tests/test.tech'
 
+const baseUrlHostname = getTestBaseUrlHostname()
 describe('getReplacedUrlWithParams', () => {
 	it('should replace parameters in the URL', () => {
 		const url = `${FRONTEND_URL}/page/[id]/details`
@@ -71,7 +73,7 @@ describe('getReplacedUrlWithParams', () => {
 		const result = getReplacedUrlWithParams(url, params, {
 			returnSubdomains: 'always', // always is never used on other places... use auto in real code
 		})
-		expect(result).toBe(`http://page.test-chvalotce.cz:5500/123/details`)
+		expect(result).toBe(`http://page.${baseUrlHostname}/123/details`)
 	})
 
 	it('should handle subdomains when returnSubdomains is on', () => {
@@ -81,7 +83,7 @@ describe('getReplacedUrlWithParams', () => {
 		const result = getReplacedUrlWithParams(url, params, {
 			returnSubdomains: 'always', // always is never used on other places... use auto in real code
 		})
-		expect(result).toBe(`http://page.test-chvalotce.cz:5500/123/details`)
+		expect(result).toBe(`http://page.${baseUrlHostname}/123/details`)
 	})
 })
 
@@ -99,7 +101,7 @@ describe('getComplexReplacedUrlWithParams', () => {
 			subdomainAliases,
 			returnSubdomains: 'always',
 		})
-		expect(result).toBe(`http://test.test-chvalotce.cz:5500/123/details`)
+		expect(result).toBe(`http://test.${baseUrlHostname}/123/details`)
 	})
 
 	it('complex replace with relative', () => {
