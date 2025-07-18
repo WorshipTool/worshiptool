@@ -1,7 +1,10 @@
 import { FRONTEND_URL } from '@/api/constants'
 import { SubdomainData } from '@/routes/subdomains/SubdomainPathnameAliasProvider'
 import { getUrlWithSubdomainPathnameAliases } from '@/routes/tech/subdomains.tech'
-import { getTestBaseUrlHostname } from '../../../tests/test.tech'
+import {
+	getTestBaseUrlHostname,
+	getTestBaseUrlProtocol,
+} from '../../../tests/test.tech'
 
 const baseUrlHostname = getTestBaseUrlHostname()
 describe('Most basic absolute', () => {
@@ -58,5 +61,7 @@ describe('Absolute url with given subdomain in format with trailing slash', () =
 		},
 	]
 	const result = getUrlWithSubdomainPathnameAliases(url, subdomainAliases)
-	expect(result).toBe(`http://${baseUrlHostname}/sub/test/[id]/details`)
+	expect(result).toBe(
+		`${getTestBaseUrlProtocol()}://${baseUrlHostname}/sub/test/[id]/details`
+	)
 })
