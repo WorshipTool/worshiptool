@@ -2,7 +2,7 @@ name: Tests
 
 on:
   workflow_run:
-    workflows: ['Vercel Preview Deployment']
+    workflows: ['Vercel']
     types:
       - completed
 
