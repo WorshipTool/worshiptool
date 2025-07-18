@@ -26,6 +26,9 @@ jobs:
         run: |
           echo "PREVIEW_URL=https://preview.chvalotce.cz" >> $GITHUB_ENV
 
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
