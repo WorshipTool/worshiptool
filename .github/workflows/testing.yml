@@ -43,5 +43,3 @@ jobs:
 
       - name: Run all tests
         run: npm run test
-        env:
-          BASE_URL: ${{ env.PREVIEW_URL }}

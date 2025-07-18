@@ -17,7 +17,7 @@ export default defineConfig({
 		stderr: 'ignore',
 	},
 	use: {
-		baseURL: 'http://test-chvalotce.cz:5500/',
+		baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
 		headless: true,
 	},
 	outputDir: 'tests/results/',
