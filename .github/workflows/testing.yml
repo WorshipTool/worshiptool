@@ -15,7 +15,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-          running-workflow-name: 'Wait for Vercel' # nebo jméno tohoto workflow
+          check-name: 'Vercel'
+        #   running-workflow-name: 'Wait for Vercel' # nebo jméno tohoto workflow
 
   run-tests:
     needs: wait-for-vercel
