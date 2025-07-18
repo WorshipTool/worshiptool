@@ -29,16 +29,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
       - name: Install deps
         run: npm ci
+
+      - name: Run jest tests
+        run: npm run test-jest
 
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Vytvoř .env ze secretu
-        run: echo "${{ secrets.TEST_ENVS }}" > .env
-
-      - name: Run Playwright tests
-        run: npm run  test
+      - name: Run all tests
+        run: npm run test
         env:
           BASE_URL: ${{ env.PREVIEW_URL }}

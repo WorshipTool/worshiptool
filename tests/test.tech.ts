@@ -29,3 +29,6 @@ export const test_tech_loginWithData = async (
 export const getTestBaseUrlHostname = () => {
 	return FRONTEND_URL.replace(/^https?:\/\//, '')
 }
+export const getTestBaseUrlProtocol = () => {
+	return FRONTEND_URL.startsWith('https') ? 'https' : 'http'
+}
