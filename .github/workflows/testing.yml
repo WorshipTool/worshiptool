@@ -6,15 +6,16 @@ on:
 
 jobs:
   wait-for-vercel:
+    name: Wait for Vercel
     runs-on: ubuntu-latest
     steps:
       - name: Wait for all checks to complete
         uses: lewagon/wait-on-check-action@v1.4.0
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.ref }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-          running-workflow-name: 'Tests' # nebo jméno tohoto workflow
+          running-workflow-name: 'Wait for Vercel' # nebo jméno tohoto workflow
 
   run-tests:
     needs: wait-for-vercel
