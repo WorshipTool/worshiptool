@@ -1,0 +1,31 @@
+name: Tests
+
+on:
+  workflow_run:
+    workflows: ['Vercel Preview Deployment']
+    types:
+      - completed
+
+jobs:
+  run-tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get preview deployment URL
+        run: |
+          echo "PREVIEW_URL=https://preview.chvalotce.cz" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npm run  test
+        env:
+          BASE_URL: ${{ env.PREVIEW_URL }}
