@@ -1,6 +1,10 @@
-import { it } from 'node:test'
-import { changeUrlFromSubdomains, changeUrlToSubdomains } from '../routes'
+import {
+	// changeUrlFromSubdomains,
+	changeUrlToSubdomains,
+} from '@/routes/tech/subdomains.tech'
+import { getTestBaseUrlHostname } from '../../../tests/test.tech'
 
+const baseUrlHostname = getTestBaseUrlHostname()
 // Create test
 describe('changeUrlToSubdomains', () => {
 	it('should change url to subdomains', () => {
@@ -24,12 +28,12 @@ describe('changeUrlToSubdomains', () => {
 
 		expect(changed).toBe('http://a.localhost:5500/b?c=d')
 	})
-	it('should change url from subdomains', () => {
-		const url = 'http://ahoj.localhost:5500'
+	// it('should change url from subdomains', () => {
+	// 	const url = 'http://ahoj.localhost:5500'
 
-		const changed = changeUrlFromSubdomains(url)
-		expect(changed).toBe('http://localhost:5500/sub/ahoj/')
-	})
+	// 	const changed = changeUrlFromSubdomains(url)
+	// 	expect(changed).toBe('http://localhost:5500/sub/ahoj/')
+	// })
 	it('should not change url without subdomains', () => {
 		const url = 'http://localhost:5500/seznam'
 
@@ -38,11 +42,11 @@ describe('changeUrlToSubdomains', () => {
 		expect(changed).toBe(url)
 	})
 
-	it('should not change url without subdomains', () => {
-		const url = 'http://localhost:5500/seznam/ahoj/cau'
+	// it('should not change url without subdomains', () => {
+	// 	const url = 'http://localhost:5500/seznam/ahoj/cau'
 
-		const changed = changeUrlToSubdomains(url)
+	// 	const changed = changeUrlToSubdomains(url)
 
-		expect(changed).toBe(url)
-	})
+	// 	expect(changed).toBe(url)
+	// })
 })

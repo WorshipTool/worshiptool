@@ -29,7 +29,7 @@ export const changeUrlToSubdomains = (url: string): string => {
 
 	const leftStr = leftParts.join('/')
 
-	const urlObject = new URL(leftStr, FRONTEND_URL)
+	const urlObject = new URL(leftStr, uo.origin)
 	subdomains.reverse()
 	subdomains.push(urlObject.hostname)
 	urlObject.hostname = subdomains.join('.')
@@ -43,27 +43,47 @@ export const changeUrlToSubdomains = (url: string): string => {
 }
 
 // Input url has to be absolute
-export const changeUrlFromSubdomains = (url: string): string => {
-	const key = routesPaths.subdomain.split('/')[1]
+// export const changeUrlFromSubdomains = (url: string): string => {
+// 	const key = routesPaths.subdomain.split('/')[1]
 
-	const uo = new URL(url)
+// 	const uo = new URL(url, FRONTEND_URL)
 
-	// get subdomains
-	const subdomains = uo.hostname.split('.')
-	subdomains.pop()
+// 	// get subdomains
+// 	const subdomains = uo.hostname.split('.')
+// 	subdomains.pop()
 
-	const additional = subdomains
-		.map((subdomain) => {
-			return `${key}/${subdomain}`
-		})
-		.join('/')
+// 	const additional = subdomains
+// 		.map((subdomain) => {
+// 			return `${key}/${subdomain}`
+// 		})
+// 		.join('/')
 
-	// Add to begining of pathname
-	const pathname = uo.pathname
-	const newUrl = new URL(additional + pathname, FRONTEND_URL)
+// 	// Add to begining of pathname
+// 	const pathname = uo.pathname
 
-	return newUrl.toString()
-}
+// 	// Get the base host
+// 	const hostnameParts = uo.hostname.split('.')
+// 	let baseHost: string
+
+// 	if (
+// 		hostnameParts.length === 1 ||
+// 		hostnameParts[hostnameParts.length - 1].includes(':')
+// 	) {
+// 		baseHost = uo.host
+// 	} else {
+// 		baseHost = hostnameParts.slice(-2).join('.')
+// 		if (uo.port && !baseHost.includes(':')) {
+// 			baseHost += `:${uo.port}`
+// 		}
+// 	}
+
+// 	const newOrigin = `${uo.protocol}//${baseHost}`
+// 	console.log('newOrigin', newOrigin)
+
+// 	const newUrl = new URL(additional + pathname, newOrigin)
+
+// 	return newUrl.toString()
+// }
 
 /**
  * This function transform the url path with subdomain pathname aliases.

@@ -98,6 +98,8 @@ const songEdit = async (page: Page, newTitle: string, newContent: string) => {
 	}
 
 	await page.getByRole('button', { name: 'Uložit' }).click()
+
+	await page.waitForTimeout(10000) // wait for save to finish
 }
 
 test('Edit song saves changes', async ({ page }) => {
@@ -123,6 +125,7 @@ test('Creating clone', async ({ page }) => {
 
 	await page.getByLabel('Další možnosti').getByRole('button').click()
 	await page.getByText('Vytvořit úpravu').click()
+	await page.waitForTimeout(10000) // wait for save to finish
 
 	// check if url is different... not equal to original
 	await expect(page).not.toHaveURL(/\/pisen\/26515\/52k6a/)

@@ -2,6 +2,7 @@ import { PackGuid } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
 import { AdminStepperItem } from '@/app/(layout)/sub/admin/pisen/vytvorit/page'
+import CreatorAutoComplete from '@/common/components/creators/CreatorAutoComplete'
 import { Box, Button, Typography } from '@/common/ui'
 import {
 	FormControl,
@@ -16,14 +17,11 @@ import { useState } from 'react'
 export const useAdditionInfoAdminSection = (
 	packData: PostCreateVariantOutDto
 ): AdminStepperItem => {
-	const {
-		songValidationApi,
-		songGettingApi,
-		songPublishingApi,
-		songEditingApi,
-	} = useApi()
+	const { songCreatorsApi, songEditingApi } = useApi()
 	const [language, setLanguage] = useState<SongLanguage>('cs')
 	const [autoFound, setAutoFound] = useState<boolean>(false)
+
+	const [creators, setCreators] = useState<string[]>([])
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setLanguage(event.target.value)
@@ -31,18 +29,26 @@ export const useAdditionInfoAdminSection = (
 	}
 
 	const { fetchApiState, apiState } = useApiState()
+
+	const onClick = async () => {
+		await fetchApiState(async () => {
+			await songEditingApi.changeLanguage({
+				packGuid: packData.packGuid as PackGuid,
+				languageString: language as string,
+			})
+
+			await songCreatorsApi.setToPack({
+				packGuid: packData.packGuid as PackGuid,
+				creators: creators,
+			})
+		})
+	}
 	return {
 		label: 'Doprovodné informace',
 		actions: (cont, disabledContinue) => (
 			<Button
 				onClick={async () => {
-					await fetchApiState(async () => {
-						await songEditingApi.changeLanguage({
-							packGuid: packData.packGuid as PackGuid,
-							languageString: language as string,
-						})
-					})
-
+					await onClick()
 					cont()
 				}}
 				disabled={disabledContinue}
@@ -89,6 +95,8 @@ export const useAdditionInfoAdminSection = (
 									<MenuItem value={'en'}>Angličtina</MenuItem>
 								</Select>
 							</FormControl>
+
+							<CreatorAutoComplete onChange={setCreators} />
 							{/* <InterpretField /> */}
 						</div>
 					</>

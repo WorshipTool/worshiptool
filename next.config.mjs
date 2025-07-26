@@ -59,7 +59,6 @@ export default (phase, { defaultConfig }) => {
 							},
 					  ]
 					: []),
-				
 			],
 			dangerouslyAllowSVG: true,
 		},
@@ -79,9 +78,6 @@ export default (phase, { defaultConfig }) => {
 		},
 		reactStrictMode: false,
 		output: 'standalone',
-		env: {
-			useSubdomains: process.env.USE_SUBDOMAINS || 'false',
-		},
 	})
 	return nextConfig
 }

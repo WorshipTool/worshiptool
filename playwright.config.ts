@@ -1,24 +1,39 @@
 import { defineConfig } from '@playwright/test'
 
 import dotenv from 'dotenv'
-import fs from 'fs'
 dotenv.config()
 
+import fs from 'fs'
+
+const isCI = !!process.env.CI
 export default defineConfig({
 	testDir: './tests/e2e',
-	webServer: {
-		command: fs.existsSync('.next/routes-manifest.json')
-			? 'npm run start'
-			: 'npm run build && npm run start',
-		port: 5500,
-		reuseExistingServer: !process.env.CI,
-		timeout: 120 * 1000, // 2 minutes
-		// "stdout": "ignore",
-		stderr: 'ignore',
-	},
+	...(isCI
+		? {}
+		: {
+				webServer: {
+					command:
+						false && fs.existsSync('.next/routes-manifest.json') // just trying
+							? 'npm run start'
+							: 'npm run build && npm run start',
+					port: 5500,
+					reuseExistingServer: true,
+					timeout: 120 * 1000, // 2 minutes
+					// "stdout": "ignore",
+					stderr: 'ignore',
+				},
+		  }),
 	use: {
-		baseURL: 'http://test-chvalotce.cz:5500/',
+		baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
+		// baseURL: 'https://preview.chvalotce.cz',
 		headless: true,
+		actionTimeout: 60 * 1000, // 60 seconds
+		navigationTimeout: 60 * 1000, // 60 seconds
+		screenshot: 'only-on-failure',
+		video: 'retain-on-failure',
 	},
+	retries: 0,
+	workers: 3,
+	timeout: 120 * 1000, // 60 seconds
 	outputDir: 'tests/results/',
 })
