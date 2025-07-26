@@ -4,6 +4,7 @@ const withRoutes = nextRoutes()
 // @ts-check
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (phase, { defaultConfig }) => {
+	console.log('LALALA', process.env.USE_SUBDOMAINS)
 	/** @type {import('next').NextConfig} */
 	const nextConfig = withRoutes({
 		webpack(config) {
