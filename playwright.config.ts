@@ -3,6 +3,8 @@ import { defineConfig } from '@playwright/test'
 import dotenv from 'dotenv'
 dotenv.config()
 
+import fs from 'fs'
+
 const isCI = !!process.env.CI
 export default defineConfig({
 	testDir: './tests/e2e',
