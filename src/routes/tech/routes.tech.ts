@@ -8,6 +8,7 @@ import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
  * UseSubdomain flag is not possible use more dynamicly, beacuse this func is used in middleware also
  * */
 export const shouldUseSubdomains = (user?: UserDto) => {
+	console.log("SUBB", process.env.NEXT_PUBLIC_USE_SUBDOMAINS)
 	return process.env.NEXT_PUBLIC_USE_SUBDOMAINS?.toLocaleLowerCase() === 'true'
 }
 
