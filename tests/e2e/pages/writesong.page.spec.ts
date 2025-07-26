@@ -5,11 +5,13 @@ import { test_tech_loginWithData } from '../../test.tech'
 test('Link, routing', async ({ page }) => {
 	await page.goto('/')
 
+	await page.waitForLoadState('networkidle')
 	await test_tech_loginWithData(page)
 
 	await page.getByRole('button', { name: 'Přidat novou píseň' }).click()
 	await page.getByRole('link', { name: 'Sepsat ručně' }).click()
 
+	await page.waitForLoadState('networkidle')
 	await expect(
 		page.getByRole('textbox', { name: 'Zadejte název písně' })
 	).toBeVisible()
@@ -26,8 +28,11 @@ test('Link, routing', async ({ page }) => {
 
 test('Create new song, validity', async ({ page }) => {
 	await page.goto('/')
+	await page.waitForLoadState('networkidle')
+
 	await test_tech_loginWithData(page)
 	await page.goto('/vytvorit/napsat')
+	await page.waitForLoadState('networkidle')
 
 	const title = getRandomString(10, 5)
 	const notValidText = getRandomString(10, 10)

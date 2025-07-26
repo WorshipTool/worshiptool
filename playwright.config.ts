@@ -1,7 +1,6 @@
 import { defineConfig } from '@playwright/test'
 
 import dotenv from 'dotenv'
-import fs from 'fs'
 dotenv.config()
 
 const isCI = !!process.env.CI
@@ -24,7 +23,15 @@ export default defineConfig({
 		  }),
 	use: {
 		baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
+		// baseURL: 'https://preview.chvalotce.cz',
 		headless: true,
+		actionTimeout: 60 * 1000, // 60 seconds
+		navigationTimeout: 60 * 1000, // 60 seconds
+		screenshot: 'only-on-failure',
+		video: 'retain-on-failure',
 	},
+	retries: 0,
+	workers: 3,
+	timeout: 120 * 1000, // 60 seconds
 	outputDir: 'tests/results/',
 })

@@ -18,6 +18,8 @@ test('Vyhledávání podle názvu', async ({ page }) => {
 
 	// Existuje výsledek
 
+	await page.waitForLoadState('networkidle')
+
 	const textPisne = await page
 		.getByRole('link', {
 			name: 'Kde je zápis ptačí melodie?',
