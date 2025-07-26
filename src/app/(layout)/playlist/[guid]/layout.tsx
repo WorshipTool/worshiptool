@@ -4,6 +4,7 @@ import { InnerPlaylistProvider } from '@/app/(layout)/playlist/[guid]/hooks/useI
 import { useServerPathname } from '@/hooks/pathname/useServerPathname'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { smartRedirect } from '@/routes/routes.tech.server'
+import { getServerUser } from '@/tech/auth/getServerUser'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { LayoutProps, MetadataProps } from '../../../../common/types'
 
@@ -42,16 +43,17 @@ export default async function Layout(props: LayoutProps<'playlist'>) {
 		// console.error(e)
 	}
 
-	const pathname = await useServerPathname()
-	const afterPlaylist = pathname.split('playlist')[1]
-	const isSomethingAfter = afterPlaylist.split('/').length > 2
+       const pathname = await useServerPathname()
+       const afterPlaylist = pathname.split('playlist')[1]
+       const isSomethingAfter = afterPlaylist.split('/').length > 2
+       const user = getServerUser()
 
-	if (playlist.teamAlias && !isSomethingAfter) {
-		smartRedirect('teamPlaylist', {
-			alias: playlist.teamAlias,
-			guid: props.params.guid,
-		})
-	}
+       if (playlist.teamAlias && !isSomethingAfter && user) {
+               smartRedirect('teamPlaylist', {
+                       alias: playlist.teamAlias,
+                       guid: props.params.guid,
+               })
+       }
 	return (
 		<InnerPlaylistProvider guid={props.params.guid as PlaylistGuid}>
 			{props.children}
