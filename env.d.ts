@@ -5,8 +5,8 @@ declare namespace NodeJS {
 		NEXT_PUBLIC_FRONTEND_URL: string
 		NEXT_PUBLIC_FRONTEND_HOSTNAME: string
 
-		NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE: 'true' | 'false' | undefined
-		NEXT_PUBLIC_DISABLE_WEBSOCKETS: 'true' | 'false' | undefined
+		NEXT_PUBLIC_TEMPORARILY_UNAVAILABLE?: 'true' | 'false' | undefined
+		NEXT_PUBLIC_DISABLE_WEBSOCKETS?: 'true' | 'false' | undefined
 
 		NEXT_PUBLIC_STATSIG_API_KEY: string
 		STATSTIG_SERVER_SECRET_KEY: string
