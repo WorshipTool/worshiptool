@@ -35,9 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.github
 .env
 .obsidian
 docs/.obsidian
 
 tests/results
+*.log

@@ -15,6 +15,7 @@ import {
 	PlaylistEditingApi,
 	PlaylistGettingApi,
 	SongAddingApi,
+	SongCreatorsApi,
 	SongDeletingApi,
 	SongEditingApi,
 	SongFavouritesApi,
@@ -38,6 +39,7 @@ import {
 
 import { mapBasicVariantPackApiToDto } from '@/api/dtos'
 import { mapSearchSongPacksApiToDto } from '@/api/dtos/song/song.search.dto'
+import { mapCreatorAutocompleteApiToDto } from '@/api/map/creator.map'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { wrapApi, wrapServerApi } from './api-wrapper'
 
@@ -75,6 +77,7 @@ const getInternalApiClasses = (
 	const songManagementApi = new SongManagementApi(apiConfiguration)
 	const songUserManagementApi = new SongUserManagementApi(apiConfiguration)
 	const messengerApi = new MessengerApi(apiConfiguration)
+	const songCreatorsApi = new SongCreatorsApi(apiConfiguration)
 
 	const teamAddingApi = new TeamAddingApi(apiConfiguration)
 	const teamGettingApi = new TeamGettingApi(apiConfiguration)
@@ -117,6 +120,11 @@ const getInternalApiClasses = (
 		songValidationApi: wrapFunc(songValidationApi),
 		songNotesApi: wrapFunc(songNotesApi),
 		songFavouritesApi: wrapFunc(songFavouritesApi),
+		songCreatorsApi: wrapFunc(songCreatorsApi, {
+			autoComplete: {
+				map: mapCreatorAutocompleteApiToDto,
+			},
+		}),
 		authApi: wrapFunc(authApi, {
 			logout: {
 				ignoreUnauthorizedError: true,
