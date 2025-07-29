@@ -16,6 +16,12 @@ import { safeFetch } from '@/tech/fetch/fetch'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
+export const config = {
+	// Exclude everything with dot in the path
+
+	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets).*)'],
+}
+
 const excludedPaths = ['/_next', '/static', '/manifest', '/public']
 
 /**
@@ -86,11 +92,6 @@ const setResponse = async (
 	response.headers.set(HEADERS_PATHNAME_NAME, pathname)
 
 	return response
-}
-
-export const config = {
-	// Exclude everything with dot in the path
-	matcher: ['/((?!.*\\..*).*)'],
 }
 
 const checkSubdomain = async (
