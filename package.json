@@ -9,7 +9,7 @@
 		"lint": "next lint",
 		"generate-api": "bash ./src/api/generate_api.sh",
 		"test": "npm run test:jest && npm run test:e2e",
-		"test:e2e": "rm -rf tests/results/* && playwright test",
+		"test:e2e": "playwright test",
 		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests"
 	},
 	"dependencies": {
