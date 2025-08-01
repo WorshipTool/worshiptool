@@ -77,6 +77,13 @@ const savePlaylist = async (page: Page) => {
 	await page.waitForTimeout(100)
 }
 
+const checkSongs = async (page: Page, songs: string[], message?: string) => {
+	const paragraphs = (
+		await page.locator('.song-menu-list p').allTextContents()
+	).filter((_, i) => i % 2 === 1)
+	expect(paragraphs, message).toEqual(songs)
+}
+
 const testEditing = async (page: Page) => {
 	await startWithCreatePlaylist(page)
 
@@ -138,10 +145,7 @@ const testEditing = async (page: Page) => {
 	await savePlaylist(page)
 
 	/* Check songs names */
-	const paragraphs = (
-		await page.locator('.song-menu-list p').allTextContents()
-	).filter((_, i) => i % 2 === 1)
-	expect(paragraphs).toEqual(songs)
+	await checkSongs(page, songs)
 
 	await page.reload()
 
@@ -149,12 +153,7 @@ const testEditing = async (page: Page) => {
 		page.getByRole('textbox', { name: 'Název playlistu' })
 	).toHaveValue(name)
 
-	const refreshedParagraphs = (
-		await page.locator('.song-menu-list p').allTextContents()
-	).filter((_, i) => i % 2 === 1)
-	expect(refreshedParagraphs, 'Refreshed song list does not match').toEqual(
-		songs
-	)
+	await checkSongs(page, songs, 'Refreshed song list does not match')
 }
 
 test('Can edit a playlist 1', async ({ page }) => {
