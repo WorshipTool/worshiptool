@@ -27,8 +27,8 @@ export default defineConfig({
 		baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
 		// baseURL: 'https://preview.chvalotce.cz',
 		headless: true,
-		actionTimeout: 60 * 1000, // 60 seconds
-		navigationTimeout: 60 * 1000, // 60 seconds
+		actionTimeout: 10 * 1000, // 10 seconds
+		navigationTimeout: 10 * 1000, // 10 seconds
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 	},
