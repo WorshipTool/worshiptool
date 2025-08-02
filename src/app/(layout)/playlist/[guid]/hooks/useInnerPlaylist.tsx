@@ -1,5 +1,7 @@
 'use client'
-import { VariantPackGuid } from '@/api/dtos'
+import { PackGuid } from '@/api/dtos'
+import { PlaylistComplextEditItem } from '@/api/generated'
+import { useApi } from '@/api/tech-and-hooks/useApi'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
 import usePlaylist from '@/hooks/playlist/usePlaylist'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
@@ -9,6 +11,7 @@ import {
 	PlaylistItemDto,
 	PlaylistItemGuid,
 } from '@/interfaces/playlist/playlist.types'
+import { BasicVariantPack } from '@/types/song'
 import { Chord } from '@pepavlin/sheet-api'
 import {
 	createContext,
@@ -18,6 +21,7 @@ import {
 	useMemo,
 	useState,
 } from 'react'
+import { v4 } from 'uuid'
 
 type Rt = ReturnType<typeof useProvideInnerPlaylist>
 export const innerPlaylistContext = createContext<Rt>({} as Rt)
@@ -73,6 +77,9 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 	const [hasInitialized, setHasInitialized] = useState(false)
 
+	const editingApi = useApi('playlistEditingApi')
+	const packGettingApi = useApi('songGettingApi')
+
 	useEffect(() => {
 		if (playlist.playlist && !playlist.loading && !hasInitialized) {
 			setState({
@@ -119,45 +126,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 	const save = async () => {
 		if (!canUserEdit) return
 
-		// Save name
-		if (playlist.title !== state.title && state.title) {
-			await playlist.rename(state.title)
-		}
-
-		// Remove items
-		const removedItems = playlist.items.filter(
-			(i) => !state.items.some((j) => j.guid === i.guid)
-		)
-		for (const item of removedItems) {
-			await playlist.removeVariant(item.pack.packGuid)
-		}
-
-		// Add new items
-		const newItems = state.items.filter(
-			(i) => !playlist.items.some((j) => j.guid === i.guid)
-		)
-		for (const item of newItems) {
-			await playlist.addVariant(item.pack.packGuid)
-		}
-
-		// Save items order
-		if (state.items.length > 0) {
-			await playlist.reorder(
-				state.items.map((item, index) => ({ guid: item.guid, order: index }))
-			)
-		}
-
-		// Transpose items
-		const transposedItems = state.items.filter(
-			(i) =>
-				i.toneKey !== playlist.items.find((j) => j.guid === i.guid)?.toneKey
-		)
-
-		for (const item of transposedItems) {
-			await playlist.setItemsKeyChord(item, new Chord(item.toneKey))
-		}
-
-		// Check if title or sheetData has been changed
+		// sheetdata or title change only for changed items
 		const changedItems = state.items.filter((i) => {
 			const oldItem = playlist.items.find((j) => j.guid === i.guid)
 			return (
@@ -165,18 +134,27 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 				oldItem?.pack.sheetData !== i.pack.sheetData
 			)
 		})
-		for (const item of changedItems) {
-			// 1. Require item edit
-			await playlist.requireItemEdit(item.guid)
-
-			// 2. Then edit the item
-			await playlist.editItem(item.guid, {
-				title: item.pack.title,
-				sheetData: item.pack.sheetData,
+		// Use complex edit for everything - items in order with all their changes
+		const complexEditItems: PlaylistComplextEditItem[] = state.items.map(
+			(item, index) => ({
+				packGuid: item.pack.packGuid,
+				toneKey: item.toneKey,
+				newData: changedItems.some(
+					(i) => item.pack.packGuid === item.pack.packGuid
+				)
+					? {
+							title: item.pack.title,
+							sheetData: item.pack.sheetData,
+					  }
+					: {},
 			})
-		}
+		)
+		await editingApi.complexPlaylistEdit({
+			playlistGuid: guid,
+			items: complexEditItems,
+			name: state.title,
+		})
 
-		// reset()
 		setIsSaved(true)
 	}
 
@@ -280,12 +258,23 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItems(newItems)
 	}
 
-	const addItem = async (packGuid: VariantPackGuid) => {
-		const item = await playlist.addVariant(packGuid)
+	const addItem = async (pack: BasicVariantPack) => {
+		const item: PlaylistItemDto = {
+			guid: v4() as PlaylistItemGuid,
+			pack: pack,
+			toneKey: 'C',
+			order: state.items.length,
+		}
 		if (!item) return
 
 		const newItems = [...state.items, item].sort((a, b) => a.order - b.order)
 		setItems(newItems)
+	}
+
+	const addItemWithGuid = async (packGuid: PackGuid) => {
+		const data = await packGettingApi.getBasicPackDataByPackGuid(packGuid)
+		if (!data) return
+		addItem(data)
 	}
 
 	const editItem = async (
@@ -331,6 +320,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 		setItemKeyChord,
 		removeItem,
 		addItem,
+		addItemWithGuid,
 		editItem,
 		data: playlist.playlist,
 	}

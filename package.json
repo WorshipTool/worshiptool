@@ -10,7 +10,8 @@
 		"generate-api": "bash ./src/api/generate_api.sh",
 		"test": "npm run test:jest && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests"
+		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests",
+		"check-types": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@emotion/cache": "^11.13.5",
@@ -59,7 +60,8 @@
 		"socket.io-client": "^4.8.1",
 		"statsig-node": "^6.3.1",
 		"swipe-event-listener": "^1.2.1",
-		"typed-env": "^1.0.1"
+		"typed-env": "^1.0.1",
+		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
