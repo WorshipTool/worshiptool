@@ -9,7 +9,9 @@ test('Playlist list loads', async ({ page }) => {
 
 	await page.goto('/ucet/playlisty')
 
-	await expect(page.getByText('jjeja')).toBeVisible()
+	await expect(
+		page.getByRole('heading', { name: 'Moje playlisty' })
+	).toBeVisible()
 })
 
 const startWithCreatePlaylist = async (page: Page) => {
@@ -26,10 +28,42 @@ test('Can create a new playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	await expect(page).toHaveURL(/\/playlist/)
+
+	await page.waitForTimeout(1000)
+	// close popup
+	await page.mouse.click(10, 10)
 })
 
 const addRandomSong = async (page: Page): Promise<string> => {
 	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
+
+	await page.locator('.global-song-list-item').first().click()
+
+	await page
+		.locator('#popup-div-container')
+		.getByRole('button', { name: 'Přidat píseň' })
+		.click()
+
+	await page.mouse.click(10, 10)
+
+	await page.waitForTimeout(100)
+
+	const lastParagraph = await page
+		.locator('.song-menu-list p')
+		.last()
+		.textContent()
+	return lastParagraph || ''
+}
+
+const addSearchedSong = async (
+	page: Page,
+	searchQuery: string
+): Promise<string> => {
+	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
+
+	await page.getByRole('textbox', { name: 'Vyhledej píseň' }).fill(searchQuery)
+
+	await page.waitForLoadState('networkidle')
 
 	await page.locator('.global-song-list-item').first().click()
 
@@ -84,12 +118,280 @@ const checkSongs = async (page: Page, songs: string[], message?: string) => {
 	expect(paragraphs, message).toEqual(songs)
 }
 
-const testEditing = async (page: Page) => {
+const pageReload = async (page: Page) => {
+	await page.reload()
+	await page.waitForLoadState('networkidle')
+}
+const move = async (
+	page: Page,
+	songs: string[],
+	fromIndex: number,
+	toIndex: number
+) => {
+	const songToMove = songs[fromIndex]
+	const fromElement = page.locator('.song-menu-list p', {
+		hasText: songToMove,
+	})
+	const toElement = page.locator('.song-menu-list p', {
+		hasText: songs[toIndex],
+	})
+
+	const fromBox = await fromElement.boundingBox()
+	const toBox = await toElement.boundingBox()
+
+	if (!fromBox || !toBox) {
+		expect(true).toBe(false)
+		return
+	}
+
+	await page.mouse.move(
+		fromBox.x + fromBox.width / 2,
+		fromBox.y + fromBox.height / 2
+	)
+	await page.mouse.down()
+	await page.mouse.move(toBox.x + toBox.width / 2, toBox.y + toBox.height / 2, {
+		steps: 10, // Smooth drag
+	})
+	await page.mouse.up()
+
+	// reorder songs list
+	const temp = songs[fromIndex]
+	songs[fromIndex] = songs[toIndex]
+	songs[toIndex] = temp
+}
+
+const transposeSong = async (
+	page: Page,
+	songIndex: number,
+	transpose: number
+) => {
+	for (let i = 0; i < Math.abs(transpose); i++) {
+		if (transpose > 0) {
+			const button = page
+				.getByRole('button', { name: 'Transpose up' })
+				.nth(songIndex)
+			await expect(button).toBeVisible()
+
+			await button.click()
+		} else {
+			const button = page
+				.getByRole('button', { name: 'Transpose down' })
+				.nth(songIndex)
+			await expect(button).toBeVisible()
+
+			await button.click()
+		}
+
+		await page.waitForTimeout(500)
+	}
+}
+
+const checkSongTransposition = async (
+	page: Page,
+	songIndex: number,
+	songs: string[],
+	toneKey: string,
+	message?: string
+) => {
+	// Find the div that starts with the song name
+	const songDiv = page
+		.locator('.playlist-middle-song-list > div')
+		.nth(songIndex)
+
+	// Ensure the div is visible
+	await expect(songDiv).toBeVisible()
+
+	// Find the first element with class .chord inside this div
+	const chordElement = songDiv.locator('.chord').first()
+
+	// Ensure the chord element is visible
+	await expect(chordElement).toBeVisible()
+
+	// Get the text content of the chord element
+	const chordText = await chordElement.textContent()
+
+	// Assert the chord matches the expected toneKey
+	expect(chordText?.trim().startsWith(toneKey), message).toBe(true)
+}
+
+test('Can rename a playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
-	await page.waitForTimeout(1000)
-	// close popup
-	await page.mouse.click(10, 10)
+	await expect(
+		page.getByRole('textbox', { name: 'Název playlistu' })
+	).toBeVisible()
+
+	const newName = 'asdfihelhalhi ohi'
+	await renamePlaylist(page, newName)
+
+	await expect(
+		page.getByRole('textbox', { name: 'Název playlistu' })
+	).toHaveValue(newName)
+
+	await savePlaylist(page)
+
+	await page.reload()
+	await page.waitForLoadState('networkidle')
+
+	await expect(
+		page.getByRole('textbox', { name: 'Název playlistu' })
+	).toHaveValue(newName)
+})
+
+test('Can add a song to a playlist', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+
+	const song = await addRandomSong(page)
+	await checkSongs(page, [song], 'Before save: song not added to playlist')
+	await savePlaylist(page)
+
+	await checkSongs(page, [song], 'After save: song not added to playlist')
+	await page.reload()
+	await page.waitForLoadState('networkidle')
+	await checkSongs(page, [song], 'After reload: song not added to playlist')
+})
+
+test('Song not added to playlist without save', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+
+	const song = await addRandomSong(page)
+	await checkSongs(page, [song])
+
+	await pageReload(page)
+	await checkSongs(page, [])
+})
+
+test('Song can be removed from playlist', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+
+	const song = await addRandomSong(page)
+
+	await checkSongs(
+		page,
+		[song],
+		'Song was not added to playlist before removal'
+	)
+	await savePlaylist(page)
+	await pageReload(page)
+
+	await checkSongs(page, [song], 'Song was not added to playlist after reload')
+
+	await removeSong(page, 0)
+	await checkSongs(
+		page,
+		[],
+		'Song was not removed from playlist before refresh'
+	)
+
+	await savePlaylist(page)
+	await pageReload(page)
+	await checkSongs(page, [], 'Song was not removed from playlist after refresh')
+})
+
+test('Songs can be reordered in playlist', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+
+	const songs: string[] = [
+		await addRandomSong(page),
+		await addRandomSong(page),
+		await addRandomSong(page),
+	]
+
+	await savePlaylist(page)
+	await pageReload(page)
+
+	await checkSongs(page, songs, 'Songs were not added to playlist after save')
+
+	// Reorder songs by dragging and dropping
+
+	await move(page, songs, 0, 1)
+	await checkSongs(
+		page,
+		songs,
+		'Songs were not reordered after first move before save'
+	)
+	await savePlaylist(page)
+	await pageReload(page)
+	await checkSongs(page, songs, 'Songs were not reordered after first save')
+})
+
+test('Song can be searched in playlist', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+
+	const songs = [
+		await addSearchedSong(page, 'Ocean'),
+		await addSearchedSong(page, 'Rano cely den'),
+	]
+
+	await checkSongs(page, songs, 'Song not added to playlist after search')
+
+	await savePlaylist(page)
+	await pageReload(page)
+	await checkSongs(
+		page,
+		songs,
+		'Song not added to playlist after search and save'
+	)
+})
+
+test('Song can be transposed in playlist', async ({ page }) => {
+	await startWithCreatePlaylist(page)
+	const songs = [
+		await addSearchedSong(page, 'Ocean'),
+		await addSearchedSong(page, 'Rano cely den'),
+	]
+	await checkSongs(page, songs, 'Song not added to playlist after search')
+
+	await transposeSong(page, 0, 4)
+	await checkSongTransposition(
+		page,
+		0,
+		songs,
+		'E',
+		'Song not transposed before save'
+	)
+	await savePlaylist(page)
+
+	await pageReload(page)
+	await checkSongs(page, songs)
+	await checkSongTransposition(
+		page,
+		0,
+		songs,
+		'E',
+		'First song not transposed after reload'
+	)
+	// also check transposition
+
+	await transposeSong(page, 1, -5)
+	await checkSongTransposition(
+		page,
+		1,
+		songs,
+		'G',
+		'Second song not transposed after reload'
+	)
+	await savePlaylist(page)
+	await pageReload(page)
+
+	await checkSongTransposition(
+		page,
+		0,
+		songs,
+		'E',
+		'First song not transposed after second reload'
+	)
+	await checkSongTransposition(
+		page,
+		1,
+		songs,
+		'G',
+		'Second song not transposed after second reload'
+	)
+})
+
+const testEditing = async ({ page }: { page: Page }) => {
+	await startWithCreatePlaylist(page)
 
 	await expect(
 		page.getByRole('textbox', { name: 'Název playlistu' })
@@ -107,61 +409,81 @@ const testEditing = async (page: Page) => {
 	}
 	type Action = AddAction | RemoveAction | RenameAction
 
-	const addCount = getRandomInt(5, 10)
-	const removeCount = Math.floor(Math.random() * (addCount - 1)) + 1
-	const actions: Action[] = [
-		...(Array.from({ length: addCount }, () => ({
-			type: 'add',
-		})) satisfies AddAction[]),
-		...(Array.from({ length: removeCount }, () => ({
-			type: 'remove',
-		})) satisfies RemoveAction[]),
-		{
-			type: 'rename',
-		},
-	]
-
-	// Shuffle actions array
-	actions.sort(() => Math.random() - 0.5)
-
 	let name = 'Nový playlist'
 	const songs: string[] = []
-	for (const action of actions) {
-		if (action.type === 'add') {
-			const song = await addRandomSong(page)
-			songs.push(song)
-		} else if (action.type === 'remove') {
-			if (songs.length === 0) {
-				continue // skip if no songs to remove
+
+	const doChangeIterations = async () => {
+		const addCount = getRandomInt(5, 10)
+		const removeCount = Math.floor(Math.random() * (addCount - 1)) + 1
+		const actions: Action[] = [
+			...(Array.from({ length: addCount }, () => ({
+				type: 'add',
+			})) satisfies AddAction[]),
+			...(Array.from({ length: removeCount }, () => ({
+				type: 'remove',
+			})) satisfies RemoveAction[]),
+			{
+				type: 'rename',
+			},
+		]
+
+		// Shuffle actions array
+		actions.sort(() => Math.random() - 0.5)
+		for (const action of actions) {
+			if (action.type === 'add') {
+				const song = await addRandomSong(page)
+				songs.push(song)
+			} else if (action.type === 'remove') {
+				if (songs.length === 0) {
+					continue // skip if no songs to remove
+				}
+				const i = Math.floor(Math.random() * songs.length)
+				await removeSong(page, i)
+				songs.splice(i, 1)
+			} else if (action.type === 'rename') {
+				name = await renamePlaylist(page, action.name)
 			}
-			const i = Math.floor(Math.random() * songs.length)
-			await removeSong(page, i)
-			songs.splice(i, 1)
-		} else if (action.type === 'rename') {
-			name = await renamePlaylist(page, action.name)
 		}
 	}
-
+	await doChangeIterations()
 	await savePlaylist(page)
-
-	/* Check songs names */
 	await checkSongs(page, songs)
 
+	await doChangeIterations()
+	await savePlaylist(page)
+	await checkSongs(
+		page,
+		songs,
+		'Songs do not match after changes after second save'
+	)
+
 	await page.reload()
+	await page.waitForLoadState('networkidle')
 
 	await expect(
 		page.getByRole('textbox', { name: 'Název playlistu' })
 	).toHaveValue(name)
 
 	await checkSongs(page, songs, 'Refreshed song list does not match')
+
+	await doChangeIterations()
+	await savePlaylist(page)
+	await checkSongs(
+		page,
+		songs,
+		'Songs do not match after changes after refresh'
+	)
+
+	await page.reload()
+	await page.waitForLoadState('networkidle')
+
+	await expect(
+		page.getByRole('textbox', { name: 'Název playlistu' })
+	).toHaveValue(name)
+
+	await checkSongs(page, songs, 'Songs do not match after final refresh')
 }
 
-test('Can edit a playlist 1', async ({ page }) => {
-	await testEditing(page)
-})
-test('Can edit a playlist 2', async ({ page }) => {
-	await testEditing(page)
-})
-test('Can edit a playlist 3', async ({ page }) => {
-	await testEditing(page)
-})
+test('Can edit a playlist 1', testEditing)
+test('Can edit a playlist 2', testEditing)
+test('Can edit a playlist 3', testEditing)
