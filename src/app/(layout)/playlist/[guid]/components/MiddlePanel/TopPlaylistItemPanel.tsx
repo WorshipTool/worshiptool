@@ -60,7 +60,6 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 							transpose(1)
 						}}
 						color="inherit"
-						alt="Transpose up"
 					>
 						<Add />
 					</IconButton>
@@ -69,7 +68,6 @@ export const TopPlaylistItemPanel = memo(function TopPlaylistItemPanel({
 							transpose(-1)
 						}}
 						color="inherit"
-						alt="Transpose down"
 					>
 						<Remove />
 					</IconButton>

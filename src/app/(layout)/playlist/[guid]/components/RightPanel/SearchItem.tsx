@@ -39,7 +39,7 @@ export default function SearchItem({
 }: SearchItemProps) {
 	const [bottomPanelOpen, setBottomPanelOpen] = useState(false)
 
-	const { addItemWithGuid } = useInnerPlaylist()
+	const { addItem } = useInnerPlaylist()
 
 	const sheet = new Sheet(variant.sheetData)
 
@@ -55,7 +55,7 @@ export default function SearchItem({
 
 	const addToPlaylist = async () => {
 		fetchApiState(async () => {
-			return await addItemWithGuid(variant.packGuid)
+			return await addItem(variant.packGuid)
 		})
 	}
 
