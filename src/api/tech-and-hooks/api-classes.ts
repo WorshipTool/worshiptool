@@ -103,11 +103,7 @@ const getInternalApiClasses = (
 				map: (r: any) => r.guid as PlaylistGuid,
 			},
 		}),
-		songGettingApi: wrapFunc(songGettingApi, {
-			getBasicPackDataByPackGuid: {
-				map: mapBasicVariantPackApiToDto,
-			},
-		}),
+		songGettingApi: wrapFunc(songGettingApi),
 		songSearchingApi: wrapFunc(songSearchingApi, {
 			search: {
 				map: (d: any) => d.map((i: any) => mapSearchSongPacksApiToDto(i)),

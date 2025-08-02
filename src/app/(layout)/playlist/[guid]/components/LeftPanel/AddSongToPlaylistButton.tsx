@@ -39,7 +39,7 @@ export default function AddSongToPlaylistButton() {
 
 	const onSubmit = async (packs: BasicVariantPack[]) => {
 		for (const pack of packs) {
-			await addItem(pack)
+			await addItem(pack.packGuid)
 		}
 	}
 

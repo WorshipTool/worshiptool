@@ -196,7 +196,7 @@ export default function usePlaylist(
 	}
 
 	const setItemsKeyChord = (item: PlaylistItemDto, keyChord: Chord) => {
-		return setKeyChordOfItem(item.pack.packGuid, guid, keyChord)
+		return setKeyChordOfItem(item.guid, keyChord)
 	}
 
 	const editItem = async (

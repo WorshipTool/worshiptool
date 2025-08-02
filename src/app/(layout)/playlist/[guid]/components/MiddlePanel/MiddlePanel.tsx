@@ -21,12 +21,7 @@ export default function MiddlePanel() {
 	)
 
 	return (
-		<Box
-			flex={1}
-			padding={2}
-			position={'relative'}
-			className="playlist-middle-song-list"
-		>
+		<Box flex={1} padding={2} position={'relative'}>
 			<CannotEditOnPhone />
 			{loading || !items ? <>Načítání...</> : <>{itemsArr}</>}
 		</Box>
