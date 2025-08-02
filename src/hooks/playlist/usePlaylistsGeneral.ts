@@ -1,10 +1,11 @@
-import { VariantPackGuid } from '@/api/dtos'
+import { PackGuid, VariantPackGuid } from '@/api/dtos'
 import { useApi } from '@/api/tech-and-hooks/useApi'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { Chord } from '@pepavlin/sheet-api'
 import { useCallback } from 'react'
 import {
 	GetSearchInPlaylistResult,
+	PlaylistComplexEditInDto,
 	ReorderPlaylistInDto,
 } from '../../api/generated'
 import Playlist, {
@@ -111,9 +112,14 @@ export default function usePlaylistsGeneral() {
 		})
 	}
 
-	const setKeyChordOfItem = async (guid: PlaylistItemGuid, keyChord: Chord) => {
+	const setKeyChordOfItem = async (
+		packGuid: PackGuid,
+		playlistGuid: PlaylistGuid,
+		keyChord: Chord
+	) => {
 		return await playlistEditingApi.transposePlaylistItem({
-			guid,
+			packGuid,
+			playlistGuid,
 			key: keyChord.data.rootNote.toString(),
 		})
 	}
@@ -137,6 +143,10 @@ export default function usePlaylistsGeneral() {
 		},
 		[playlistEditingApi]
 	)
+
+	const complexEdit = async (data: PlaylistComplexEditInDto) => {
+		return await playlistEditingApi.complexPlaylistEdit(data)
+	}
 
 	const updatePlaylistTick = async (guid: PlaylistGuid) => {
 		window.dispatchEvent(
@@ -163,6 +173,7 @@ export default function usePlaylistsGeneral() {
 		// Item editing
 		editPlaylistItem,
 		requireItemEdit,
+		complexEdit,
 
 		// loading
 	}

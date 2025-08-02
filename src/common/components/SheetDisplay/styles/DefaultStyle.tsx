@@ -53,6 +53,7 @@ const SegmentElement = ({
 									<Typography
 										sx={{ height: chordHeight, paddingRight: '0.5rem' }}
 										strong={900}
+										className="chord"
 									>
 										{segment.chord?.toString(signature)}
 									</Typography>

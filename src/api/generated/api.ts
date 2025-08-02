@@ -2121,6 +2121,75 @@ export interface Playlist {
 /**
  * 
  * @export
+ * @interface PlaylistComplexEditInDto
+ */
+export interface PlaylistComplexEditInDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplexEditInDto
+     */
+    'playlistGuid': string;
+    /**
+     * 
+     * @type {Array<PlaylistComplextEditItem>}
+     * @memberof PlaylistComplexEditInDto
+     */
+    'items': Array<PlaylistComplextEditItem>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplexEditInDto
+     */
+    'name': string;
+}
+/**
+ * 
+ * @export
+ * @interface PlaylistComplextEditItem
+ */
+export interface PlaylistComplextEditItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplextEditItem
+     */
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplextEditItem
+     */
+    'toneKey': string;
+    /**
+     * 
+     * @type {PlaylistComplextEditItemNewData}
+     * @memberof PlaylistComplextEditItem
+     */
+    'newData': PlaylistComplextEditItemNewData;
+}
+/**
+ * 
+ * @export
+ * @interface PlaylistComplextEditItemNewData
+ */
+export interface PlaylistComplextEditItemNewData {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplextEditItemNewData
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaylistComplextEditItemNewData
+     */
+    'sheetData'?: string;
+}
+/**
+ * 
+ * @export
  * @interface PlaylistData
  */
 export interface PlaylistData {
@@ -2224,10 +2293,10 @@ export interface PlaylistDataOutDto {
 export interface PlaylistItem {
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof PlaylistItem
      */
-    'guid': string;
+    'guid': object;
     /**
      * 
      * @type {object}
@@ -4082,7 +4151,13 @@ export interface TransposePlaylistItemInDto {
      * @type {string}
      * @memberof TransposePlaylistItemInDto
      */
-    'guid': string;
+    'packGuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransposePlaylistItemInDto
+     */
+    'playlistGuid': string;
     /**
      * 
      * @type {string}
@@ -7548,6 +7623,45 @@ export const PlaylistEditingApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {PlaylistComplexEditInDto} playlistComplexEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        complexPlaylistEdit: async (playlistComplexEditInDto: PlaylistComplexEditInDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'playlistComplexEditInDto' is not null or undefined
+            assertParamExists('complexPlaylistEdit', 'playlistComplexEditInDto', playlistComplexEditInDto)
+            const localVarPath = `/playlist/complex`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(playlistComplexEditInDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7925,6 +8039,18 @@ export const PlaylistEditingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {PlaylistComplexEditInDto} playlistComplexEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async complexPlaylistEdit(playlistComplexEditInDto: PlaylistComplexEditInDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.complexPlaylistEdit(playlistComplexEditInDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PlaylistEditingApi.complexPlaylistEdit']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8052,6 +8178,15 @@ export const PlaylistEditingApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {PlaylistComplexEditInDto} playlistComplexEditInDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        complexPlaylistEdit(playlistComplexEditInDto: PlaylistComplexEditInDto, options?: any): AxiosPromise<void> {
+            return localVarFp.complexPlaylistEdit(playlistComplexEditInDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8150,6 +8285,17 @@ export class PlaylistEditingApi extends BaseAPI {
      */
     public addVariantToPlaylist(addVariantToPlaylistInDto: AddVariantToPlaylistInDto, options?: RawAxiosRequestConfig) {
         return PlaylistEditingApiFp(this.configuration).addVariantToPlaylist(addVariantToPlaylistInDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PlaylistComplexEditInDto} playlistComplexEditInDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlaylistEditingApi
+     */
+    public complexPlaylistEdit(playlistComplexEditInDto: PlaylistComplexEditInDto, options?: RawAxiosRequestConfig) {
+        return PlaylistEditingApiFp(this.configuration).complexPlaylistEdit(playlistComplexEditInDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9827,6 +9973,43 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBasicPackDataByPackGuid: async (packGuid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'packGuid' is not null or undefined
+            assertParamExists('getBasicPackDataByPackGuid', 'packGuid', packGuid)
+            const localVarPath = `/one/basic-by-pack-guid/{packGuid}`
+                .replace(`{${"packGuid"}}`, encodeURIComponent(String(packGuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} searchKey 
          * @param {number} [page] 
          * @param {*} [options] Override http request option.
@@ -10124,7 +10307,7 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         getSongDataByGuid: async (guid: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'guid' is not null or undefined
             assertParamExists('getSongDataByGuid', 'guid', guid)
-            const localVarPath = `/songDataByGuid`;
+            const localVarPath = `/one/songDataByGuid`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10270,7 +10453,7 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
         getVariantDataByAlias: async (alias: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'alias' is not null or undefined
             assertParamExists('getVariantDataByAlias', 'alias', alias)
-            const localVarPath = `/variantdatabyalias`;
+            const localVarPath = `/one/variantdatabyalias`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10426,6 +10609,18 @@ export const SongGettingApiAxiosParamCreator = function (configuration?: Configu
 export const SongGettingApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SongGettingApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBasicPackDataByPackGuid(packGuid: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BasicVariantPackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBasicPackDataByPackGuid(packGuid, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SongGettingApi.getBasicPackDataByPackGuid']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @param {string} searchKey 
@@ -10627,6 +10822,15 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {string} packGuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBasicPackDataByPackGuid(packGuid: string, options?: any): AxiosPromise<BasicVariantPackDto> {
+            return localVarFp.getBasicPackDataByPackGuid(packGuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} searchKey 
          * @param {number} [page] 
          * @param {*} [options] Override http request option.
@@ -10776,6 +10980,17 @@ export const SongGettingApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class SongGettingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} packGuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SongGettingApi
+     */
+    public getBasicPackDataByPackGuid(packGuid: string, options?: RawAxiosRequestConfig) {
+        return SongGettingApiFp(this.configuration).getBasicPackDataByPackGuid(packGuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} searchKey 
