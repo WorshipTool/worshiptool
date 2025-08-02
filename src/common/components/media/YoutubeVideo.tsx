@@ -73,44 +73,4 @@ export default function YoutubeVideo({ url, ...props }: Props) {
 			)}
 		</div>
 	)
-
-	// const [url, setUrl] = useState<string | null>(null)
-	// const { getEmbedUrl, getId } = useYoutube()
-	// useEffect(() => {
-	// 	const id = getId(src)
-	// 	if (id === null) {
-	// 		console.log('Invalid youtube url.')
-	// 		return
-	// 	}
-	// 	const emurl = getEmbedUrl(id)
-	// 	setUrl(emurl)
-	// }, [src])
-
-	// // Create a 16:9 ratio container
-	// // maximum width: 560px
-
-	// const theme = useTheme()
-	// return url ? (
-	// 	<iframe
-	// 		style={{
-	// 			width: width,
-	// 			aspectRatio: 16 / 9,
-	// 			borderRadius: 10,
-	// 		}}
-	// 		src={url}
-	// 		title="YouTube video player"
-	// 		frameBorder="0"
-	// 		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-	// 		allowFullScreen
-	// 	></iframe>
-	// ) : (
-	// 	<Box
-	// 		sx={{
-	// 			width: width,
-	// 			aspectRatio: (16 / 9) * 0.987, // video is actually higher
-	// 		}}
-	// 	>
-	// 		<Skeleton width={'100%'} height={'100%'} variant="rectangular" />
-	// 	</Box>
-	// )
 }

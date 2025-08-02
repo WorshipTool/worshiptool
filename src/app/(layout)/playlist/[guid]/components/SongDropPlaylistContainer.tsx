@@ -16,13 +16,13 @@ type SongDropPlaylistContainerProps = {
 export default function SongDropPlaylistContainer(
 	props: SongDropPlaylistContainerProps
 ) {
-	const { addItem } = useInnerPlaylist()
+	const { addItemWithGuid } = useInnerPlaylist()
 
 	const onDrop = useCallback(
 		(song: DragSongDto, e: React.DragEvent<HTMLDivElement>) => {
-			addItem(song.packGuid)
+			addItemWithGuid(song.packGuid)
 		},
-		[addItem]
+		[addItemWithGuid]
 	)
 
 	return (
