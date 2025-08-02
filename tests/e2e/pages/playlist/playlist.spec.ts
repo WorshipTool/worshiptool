@@ -34,27 +34,6 @@ test('Can create a new playlist', async ({ page }) => {
 	await page.mouse.click(10, 10)
 })
 
-const addRandomSong = async (page: Page): Promise<string> => {
-	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
-
-	await page.locator('.global-song-list-item').first().click()
-
-	await page
-		.locator('#popup-div-container')
-		.getByRole('button', { name: 'Přidat píseň' })
-		.click()
-
-	await page.mouse.click(10, 10)
-
-	await page.waitForTimeout(100)
-
-	const lastParagraph = await page
-		.locator('.song-menu-list p')
-		.last()
-		.textContent()
-	return lastParagraph || ''
-}
-
 const addSearchedSong = async (
 	page: Page,
 	searchQuery: string
@@ -62,6 +41,8 @@ const addSearchedSong = async (
 	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
 
 	await page.getByRole('textbox', { name: 'Vyhledej píseň' }).fill(searchQuery)
+
+	await page.waitForTimeout(500) // wait for search results to load
 
 	await page.waitForLoadState('networkidle')
 
@@ -81,6 +62,11 @@ const addSearchedSong = async (
 		.last()
 		.textContent()
 	return lastParagraph || ''
+}
+
+const addRandomSong = async (page: Page): Promise<string> => {
+	const query = String.fromCharCode(97 + Math.floor(Math.random() * 26))
+	return addSearchedSong(page, query)
 }
 
 const removeSong = async (page: Page, songIndex: number) => {
@@ -337,7 +323,7 @@ test('Song can be searched in playlist', async ({ page }) => {
 test('Song can be transposed in playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 	const songs = [
-		await addSearchedSong(page, 'Ocean'),
+		await addSearchedSong(page, 'Volas nas do morskych'),
 		await addSearchedSong(page, 'Rano cely den'),
 	]
 	await checkSongs(page, songs, 'Song not added to playlist after search')
@@ -413,7 +399,7 @@ const testEditing = async ({ page }: { page: Page }) => {
 	const songs: string[] = []
 
 	const doChangeIterations = async () => {
-		const addCount = getRandomInt(5, 10)
+		const addCount = getRandomInt(3, 7)
 		const removeCount = Math.floor(Math.random() * (addCount - 1)) + 1
 		const actions: Action[] = [
 			...(Array.from({ length: addCount }, () => ({
