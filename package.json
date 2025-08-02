@@ -8,10 +8,10 @@
 		"start": "next start -p 5500 -H test-chvalotce.cz",
 		"lint": "next lint",
 		"generate-api": "bash ./src/api/generate_api.sh",
+		"check-types": "tsc --noEmit",
 		"test": "npm run test:jest && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests",
-		"check-types": "tsc --noEmit"
+		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests"
 	},
 	"dependencies": {
 		"@emotion/cache": "^11.13.5",
