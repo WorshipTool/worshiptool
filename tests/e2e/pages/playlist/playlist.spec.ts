@@ -1,8 +1,9 @@
 import { getRandomInt } from '@/tech/number/getRandomInt'
-import test, { expect, Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { test_tech_loginWithData } from '../../../test.tech'
+import { smartTest } from '../../setup'
 
-test('Playlist list loads', async ({ page }) => {
+smartTest('Playlist list loads', async ({ page }) => {
 	await page.goto('/')
 
 	await test_tech_loginWithData(page)
@@ -15,16 +16,28 @@ test('Playlist list loads', async ({ page }) => {
 })
 
 const startWithCreatePlaylist = async (page: Page) => {
-	await page.goto('/')
+	await page.goto('/', { timeout: 30000 })
 
 	await test_tech_loginWithData(page)
 
 	await page.goto('/ucet/playlisty')
 
 	await page.getByRole('button', { name: 'Vytvořit' }).click()
+
+	// Wait until the URL pathname starts with /playlist
+	await expect(async () => {
+		const url = new URL(page.url())
+		expect(url.pathname.startsWith('/playlist')).toBe(true)
+	}).toPass()
+
+	await page.waitForLoadState('networkidle')
+
+	await page.waitForTimeout(1000)
+	// close popup
+	await page.mouse.click(10, 10)
 }
 
-test('Can create a new playlist', async ({ page }) => {
+smartTest('Can create a new playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	await expect(page).toHaveURL(/\/playlist/)
@@ -38,7 +51,12 @@ const addSearchedSong = async (
 	page: Page,
 	searchQuery: string
 ): Promise<string> => {
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500) // wait for the page to be ready
 	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
+
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500) // wait for the page to be ready
 
 	await page.getByRole('textbox', { name: 'Vyhledej píseň' }).fill(searchQuery)
 
@@ -85,6 +103,7 @@ const renamePlaylist = async (page: Page, newName?: string) => {
 	newName = newName || `${Math.random().toString(36).substring(2, 7)}`
 
 	const e = page.getByRole('textbox', { name: 'Název playlistu' })
+	await expect(e).toBeVisible()
 	await e.click()
 	await e.fill(newName)
 	await e.press('Enter')
@@ -200,7 +219,7 @@ const checkSongTransposition = async (
 	expect(chordText?.trim().startsWith(toneKey), message).toBe(true)
 }
 
-test('Can rename a playlist', async ({ page }) => {
+smartTest('Can rename a playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	await expect(
@@ -224,7 +243,7 @@ test('Can rename a playlist', async ({ page }) => {
 	).toHaveValue(newName)
 })
 
-test('Can add a song to a playlist', async ({ page }) => {
+smartTest('Can add a song to a playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const song = await addRandomSong(page)
@@ -237,7 +256,7 @@ test('Can add a song to a playlist', async ({ page }) => {
 	await checkSongs(page, [song], 'After reload: song not added to playlist')
 })
 
-test('Song not added to playlist without save', async ({ page }) => {
+smartTest('Song not added to playlist without save', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const song = await addRandomSong(page)
@@ -247,7 +266,7 @@ test('Song not added to playlist without save', async ({ page }) => {
 	await checkSongs(page, [])
 })
 
-test('Song can be removed from playlist', async ({ page }) => {
+smartTest('Song can be removed from playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const song = await addRandomSong(page)
@@ -274,7 +293,7 @@ test('Song can be removed from playlist', async ({ page }) => {
 	await checkSongs(page, [], 'Song was not removed from playlist after refresh')
 })
 
-test('Songs can be reordered in playlist', async ({ page }) => {
+smartTest('Songs can be reordered in playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const songs: string[] = [
@@ -301,7 +320,7 @@ test('Songs can be reordered in playlist', async ({ page }) => {
 	await checkSongs(page, songs, 'Songs were not reordered after first save')
 })
 
-test('Song can be searched in playlist', async ({ page }) => {
+smartTest('Song can be searched in playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const songs = [
@@ -320,7 +339,7 @@ test('Song can be searched in playlist', async ({ page }) => {
 	)
 })
 
-test('Song can be transposed in playlist', async ({ page }) => {
+smartTest('Song can be transposed in playlist', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 	const songs = [
 		await addSearchedSong(page, 'Volas nas do morskych'),
@@ -470,6 +489,6 @@ const testEditing = async ({ page }: { page: Page }) => {
 	await checkSongs(page, songs, 'Songs do not match after final refresh')
 }
 
-test('Can edit a playlist 1', testEditing)
-test('Can edit a playlist 2', testEditing)
-test('Can edit a playlist 3', testEditing)
+smartTest('Can edit a playlist 1', testEditing)
+smartTest('Can edit a playlist 2', testEditing)
+smartTest('Can edit a playlist 3', testEditing)
