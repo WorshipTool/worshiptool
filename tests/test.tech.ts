@@ -24,6 +24,8 @@ export const test_tech_loginWithData = async (
 	const loginResponse = await loginResponsePromise
 	const responseData: JwtResult = await loginResponse.json()
 
+	await page.waitForLoadState('networkidle')
+
 	return loginResultDTOToUser(responseData)
 }
 

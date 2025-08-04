@@ -1,6 +1,7 @@
-import test, { expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { smartTest } from '../setup'
 
-test('Contain title', async ({ page }) => {
+smartTest('Contain title', async ({ page }) => {
 	await page.goto('/o-nas')
 
 	// page contains: Nějaký nápad
@@ -13,7 +14,7 @@ test('Contain title', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'chválami' })).toBeVisible()
 })
 
-test('Contain PoweredBy', async ({ page }) => {
+smartTest('Contain PoweredBy', async ({ page }) => {
 	await page.goto('/o-nas')
 
 	// page contains: Nějaký nápad

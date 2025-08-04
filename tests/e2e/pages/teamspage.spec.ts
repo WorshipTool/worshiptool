@@ -1,6 +1,7 @@
-import test, { expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { smartTest } from '../setup'
 
-test('Contain title', async ({ page }) => {
+smartTest('Contain title', async ({ page }) => {
 	await page.goto('/sub/tymy')
 
 	await expect(

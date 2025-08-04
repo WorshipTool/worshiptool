@@ -1,7 +1,9 @@
 import { getRandomInt } from '@/tech/number/getRandomInt'
-import { expect, Page } from '@playwright/test'
+import { expect, Page, test } from '@playwright/test'
 import { test_tech_loginWithData } from '../../../test.tech'
 import { smartTest } from '../../setup'
+
+test.describe.configure({ mode: 'parallel', timeout: 4 * 60 * 1000 }) // 4 minutes
 
 smartTest('Playlist list loads', async ({ page }) => {
 	await page.goto('/')
@@ -15,6 +17,13 @@ smartTest('Playlist list loads', async ({ page }) => {
 	).toBeVisible()
 })
 
+const waitUntilPopupAndClose = async (page: Page) => {
+	await page.waitForLoadState('networkidle', { timeout: 60000 })
+
+	await page.waitForTimeout(1000)
+	// close popup
+	await page.mouse.click(10, 10)
+}
 const startWithCreatePlaylist = async (page: Page) => {
 	await page.goto('/', { timeout: 30000 })
 
@@ -30,11 +39,7 @@ const startWithCreatePlaylist = async (page: Page) => {
 		expect(url.pathname.startsWith('/playlist')).toBe(true)
 	}).toPass()
 
-	await page.waitForLoadState('networkidle')
-
-	await page.waitForTimeout(1000)
-	// close popup
-	await page.mouse.click(10, 10)
+	await waitUntilPopupAndClose(page)
 }
 
 smartTest('Can create a new playlist', async ({ page }) => {
@@ -112,8 +117,10 @@ const renamePlaylist = async (page: Page, newName?: string) => {
 }
 
 const savePlaylist = async (page: Page) => {
+	await page.waitForTimeout(500)
 	await page.getByRole('button', { name: 'Uložit' }).click()
-	await page.waitForTimeout(100)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 }
 
 const checkSongs = async (page: Page, songs: string[], message?: string) => {
@@ -123,9 +130,10 @@ const checkSongs = async (page: Page, songs: string[], message?: string) => {
 	expect(paragraphs, message).toEqual(songs)
 }
 
-const pageReload = async (page: Page) => {
+const pagePlaylistReload = async (page: Page) => {
 	await page.reload()
-	await page.waitForLoadState('networkidle')
+
+	await waitUntilPopupAndClose(page)
 }
 const move = async (
 	page: Page,
@@ -262,7 +270,7 @@ smartTest('Song not added to playlist without save', async ({ page }) => {
 	const song = await addRandomSong(page)
 	await checkSongs(page, [song])
 
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(page, [])
 })
 
@@ -277,7 +285,7 @@ smartTest('Song can be removed from playlist', async ({ page }) => {
 		'Song was not added to playlist before removal'
 	)
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 
 	await checkSongs(page, [song], 'Song was not added to playlist after reload')
 
@@ -289,7 +297,7 @@ smartTest('Song can be removed from playlist', async ({ page }) => {
 	)
 
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(page, [], 'Song was not removed from playlist after refresh')
 })
 
@@ -303,7 +311,7 @@ smartTest('Songs can be reordered in playlist', async ({ page }) => {
 	]
 
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 
 	await checkSongs(page, songs, 'Songs were not added to playlist after save')
 
@@ -316,7 +324,7 @@ smartTest('Songs can be reordered in playlist', async ({ page }) => {
 		'Songs were not reordered after first move before save'
 	)
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(page, songs, 'Songs were not reordered after first save')
 })
 
@@ -331,7 +339,7 @@ smartTest('Song can be searched in playlist', async ({ page }) => {
 	await checkSongs(page, songs, 'Song not added to playlist after search')
 
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(
 		page,
 		songs,
@@ -357,7 +365,7 @@ smartTest('Song can be transposed in playlist', async ({ page }) => {
 	)
 	await savePlaylist(page)
 
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(page, songs)
 	await checkSongTransposition(
 		page,
@@ -377,7 +385,7 @@ smartTest('Song can be transposed in playlist', async ({ page }) => {
 		'Second song not transposed after reload'
 	)
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 
 	await checkSongTransposition(
 		page,

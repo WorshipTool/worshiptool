@@ -1,8 +1,9 @@
 import { getRandomString } from '@/tech/string/random.string.tech'
-import test, { expect, Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { test_tech_loginWithData } from '../../test.tech'
+import { smartTest } from '../setup'
 
-test('Transposition exists and works', async ({ page }) => {
+smartTest('Transposition exists and works', async ({ page }) => {
 	await page.goto('/pisen/a6d46/mou-cestu-v-rukou-mas')
 	await page.getByText('TRANSPOZICE').click()
 	const c1 = await page
@@ -39,7 +40,7 @@ test('Transposition exists and works', async ({ page }) => {
 	await expect(c3).toBeVisible()
 })
 
-test('Print button exists and works', async ({ page }) => {
+smartTest('Print button exists and works', async ({ page }) => {
 	await page.goto('/pisen/a6d46/mou-cestu-v-rukou-mas')
 
 	const page2Promise = page.waitForEvent('popup')
@@ -53,7 +54,7 @@ test('Print button exists and works', async ({ page }) => {
 	await expect(page2).toHaveURL(/\/pisen\/a6d46\/mou-cestu-v-rukou-mas\/tisk/)
 })
 
-test('Contains source', async ({ page }) => {
+smartTest('Contains source', async ({ page }) => {
 	await page.goto('/pisen/a6d46/mou-cestu-v-rukou-mas')
 
 	await expect(
@@ -63,7 +64,7 @@ test('Contains source', async ({ page }) => {
 
 // User logged
 
-test('Edit song is enabled only for user', async ({ page }) => {
+smartTest('Edit song is enabled only for user', async ({ page }) => {
 	await page.goto('/pisen/26515/52k6a')
 
 	const userButtons = [
@@ -102,7 +103,7 @@ const songEdit = async (page: Page, newTitle: string, newContent: string) => {
 	await page.waitForTimeout(10000) // wait for save to finish
 }
 
-test('Edit song saves changes', async ({ page }) => {
+smartTest('Edit song saves changes', async ({ page }) => {
 	await page.goto('/pisen/26515/52k6a')
 	await test_tech_loginWithData(page)
 
@@ -118,7 +119,7 @@ test('Edit song saves changes', async ({ page }) => {
 	await expect(page).not.toHaveURL(/\/pisen\/26515\/52k6a/)
 })
 
-test('Creating clone', async ({ page }) => {
+smartTest('Creating clone', async ({ page }) => {
 	await page.goto('/pisen/26515/52k6a')
 
 	await test_tech_loginWithData(page)

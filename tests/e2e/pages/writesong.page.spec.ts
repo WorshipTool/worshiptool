@@ -1,8 +1,9 @@
 import { getRandomString } from '@/tech/string/random.string.tech'
-import test, { expect } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { test_tech_loginWithData } from '../../test.tech'
+import { smartTest } from '../setup'
 
-test('Link, routing', async ({ page }) => {
+smartTest('Link, routing', async ({ page }) => {
 	await page.goto('/')
 
 	await page.waitForLoadState('networkidle')
@@ -26,7 +27,7 @@ test('Link, routing', async ({ page }) => {
 	).toBeVisible()
 })
 
-test('Create new song, validity', async ({ page }) => {
+smartTest('Create new song, validity', async ({ page }) => {
 	await page.goto('/')
 	await page.waitForLoadState('networkidle')
 

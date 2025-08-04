@@ -1,7 +1,8 @@
-import test, { expect } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { test_tech_loginWithData } from '../../../test.tech'
+import { smartTest } from '../../setup'
 
-test('Team is visible', async ({ page }) => {
+smartTest('Team is visible', async ({ page }) => {
 	await page.goto('/')
 
 	await test_tech_loginWithData(page)
