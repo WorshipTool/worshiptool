@@ -115,12 +115,45 @@ const renamePlaylist = async (page: Page, newName?: string) => {
 
 	return newName
 }
+const checkNoErrors = async (page: Page) => {
+	// Check for errors in console and network
+	const consoleErrors: string[] = []
+	page.on('console', (msg) => {
+		if (msg.type() === 'error') {
+			consoleErrors.push(msg.text())
+		}
+	})
 
+	const failedRequests: string[] = []
+	page.on('requestfailed', (request) => {
+		failedRequests.push(
+			`${request.method()} ${request.url()} - ${request.failure()?.errorText}`
+		)
+	})
+
+	// Wait a short time to allow errors to be captured
+	await page.waitForTimeout(300)
+
+	// Assert no console errors
+	expect(consoleErrors, `Console errors: ${consoleErrors.join('\n')}`).toEqual(
+		[]
+	)
+
+	// Assert no failed network requests
+	expect(
+		failedRequests,
+		`Network errors: ${failedRequests.join('\n')}`
+	).toEqual([])
+}
 const savePlaylist = async (page: Page) => {
 	await page.waitForTimeout(500)
 	await page.getByRole('button', { name: 'Uložit' }).click()
+
+	await checkNoErrors(page)
+
 	await page.waitForTimeout(500)
 	await page.waitForLoadState('networkidle')
+	await expect(page.getByRole('button', { name: 'Uloženo' })).toBeVisible()
 }
 
 const checkSongs = async (page: Page, songs: string[], message?: string) => {
