@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test'
-import { test_tech_loginWithData } from '../test.tech'
+import { test_tech_loginOnLoginPage } from '../test.tech'
 
 test('Login redirection preserves original page after authentication', async ({ page }) => {
 	// Step 1: Visit a protected song page while unauthenticated
@@ -9,18 +9,8 @@ test('Login redirection preserves original page after authentication', async ({ 
 	// Step 2: Should be redirected to login page with previousPage parameter
 	await expect(page).toHaveURL(/\/prihlaseni\?previousPage=%2Fpisen%2Fa6d46%2Fmou-cestu-v-rukou-mas/)
 
-	// Step 3: Login using test credentials
-	await page.getByRole('textbox', { name: 'Zadejte e-mail' }).fill('test@test.cz')
-	await page.getByRole('textbox', { name: 'Zadejte heslo' }).fill('test')
-	
-	const loginResponsePromise = page.waitForResponse(
-		(resp) => resp.url().includes('/auth/login') && resp.status() === 201
-	)
-	
-	await page.getByRole('button', { name: 'Přihlásit se' }).click()
-	
-	// Wait for login to complete
-	await loginResponsePromise
+	// Step 3: Login using test helper function
+	await test_tech_loginOnLoginPage(page)
 
 	// Step 4: Should be redirected back to the original song page
 	await expect(page).toHaveURL(songUrl)
@@ -37,18 +27,8 @@ test('Login redirection works for different song pages', async ({ page }) => {
 	// Should be redirected to login page with correct previousPage parameter
 	await expect(page).toHaveURL(/\/prihlaseni\?previousPage=%2Fpisen%2F26515%2F52k6a/)
 
-	// Login using test credentials
-	await page.getByRole('textbox', { name: 'Zadejte e-mail' }).fill('test@test.cz')
-	await page.getByRole('textbox', { name: 'Zadejte heslo' }).fill('test')
-	
-	const loginResponsePromise = page.waitForResponse(
-		(resp) => resp.url().includes('/auth/login') && resp.status() === 201
-	)
-	
-	await page.getByRole('button', { name: 'Přihlásit se' }).click()
-	
-	// Wait for login to complete
-	await loginResponsePromise
+	// Login using test helper function
+	await test_tech_loginOnLoginPage(page)
 
 	// Should be redirected back to the original song page
 	await expect(page).toHaveURL(songUrl)
@@ -64,18 +44,8 @@ test('Login redirection from home page goes to home after login', async ({ page 
 	// Should be on login page without previousPage parameter
 	await expect(page).toHaveURL('/prihlaseni')
 	
-	// Login using test credentials
-	await page.getByRole('textbox', { name: 'Zadejte e-mail' }).fill('test@test.cz')
-	await page.getByRole('textbox', { name: 'Zadejte heslo' }).fill('test')
-	
-	const loginResponsePromise = page.waitForResponse(
-		(resp) => resp.url().includes('/auth/login') && resp.status() === 201
-	)
-	
-	await page.getByRole('button', { name: 'Přihlásit se' }).click()
-	
-	// Wait for login to complete
-	await loginResponsePromise
+	// Login using test helper function
+	await test_tech_loginOnLoginPage(page)
 
 	// Should be redirected to home page (no specific previousPage)
 	await expect(page).toHaveURL('/')
