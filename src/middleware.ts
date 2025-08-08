@@ -165,8 +165,10 @@ const checkAuthentication = async (
 		}
 	} catch (e) {
 		console.log('token expired, going to login', e)
+		const loginUrl = new URL('/prihlaseni', request.url)
+		loginUrl.searchParams.set('previousPage', request.nextUrl.pathname)
 		const response: NextResponse = await setResponse(
-			NextResponse.redirect(new URL('/prihlaseni', request.url)),
+			NextResponse.redirect(loginUrl),
 			'/prihlaseni'
 		)
 		removeAuthCookie(response)

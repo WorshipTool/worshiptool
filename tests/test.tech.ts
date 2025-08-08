@@ -27,6 +27,8 @@ export const test_tech_loginWithData = async (
 	return loginResultDTOToUser(responseData)
 }
 
+
+
 export const getTestBaseUrlHostname = () => {
 	return FRONTEND_URL.replace(/^https?:\/\//, '')
 }
