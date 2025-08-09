@@ -2,7 +2,7 @@ import { expect } from '@playwright/test'
 import { test_tech_loginWithData } from '../test.tech'
 import { smartTest } from './setup'
 
-smartTest('Toolbar Přihlašení', async ({ page }) => {
+smartTest('Toolbar Přihlašení', 'smoke', async ({ page }) => {
 	await page.goto('/')
 
 	await expect(page.getByRole('button', { name: 'Přihlásit se' })).toBeVisible()
@@ -12,7 +12,7 @@ smartTest('Toolbar Přihlašení', async ({ page }) => {
 	await expect(page.getByRole('button', { name: 'Účet' })).toBeVisible()
 })
 
-smartTest('Toolbar Buttons', async ({ page }) => {
+smartTest('Toolbar Buttons', 'smoke', async ({ page }) => {
 	await page.goto('/')
 
 	await test_tech_loginWithData(page)
