@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
 import fs from 'fs'
 
 import dotenv from 'dotenv'
@@ -48,13 +48,6 @@ export default defineConfig({
 		video: 'retain-on-failure',
 	},
 	reporter: [['html', { open: 'never' }], ['github']],
-	projects: [
-		{ name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-		// full běh může přidat i mobil apod.:
-		// ...(suite === 'full'
-		// 	? [{ name: 'mobile', use: { ...devices['Pixel 7'] } }]
-		// 	: []),
-	],
 	retries: 0,
 	workers: '75%',
 	timeout: 120 * 1000, // 60 seconds
