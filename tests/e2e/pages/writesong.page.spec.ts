@@ -6,7 +6,7 @@ import { smartTest } from '../setup'
 smartTest('Link, routing', 'smoke', async ({ page }) => {
 	await page.goto('/')
 
-	await page.waitForLoadState('networkidle')
+	await page.waitForLoadState()
 	await test_tech_loginWithData(page)
 
 	await page.getByRole('button', { name: 'Přidat novou píseň' }).click()

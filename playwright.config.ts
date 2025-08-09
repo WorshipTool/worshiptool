@@ -47,6 +47,7 @@ export default defineConfig({
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 	},
+	//TODO: add more browser testing on full mode
 	reporter: [['html', { open: 'never' }], ['github']],
 	retries: 0,
 	workers: '75%',
