@@ -28,6 +28,7 @@ import NotValidWarning from '../../../../vytvorit/napsat/components/NotValidWarn
 import AddToPlaylistButton from './components/AddToPlaylistButton/AddToPlaylistButton'
 import EditButton from './components/EditButton'
 import PrintVariantButton from './components/PrintButton'
+import PresentationVariantButton from './components/PresentationButton'
 import SongsOptionsButton from './components/SongsOptionsButton'
 import TransposePanel from './TransposePanel'
 
@@ -165,13 +166,20 @@ export default function TopPanel(props: TopPanelProps) {
 							)}
 
 							{isSmall && (
-								<PrintVariantButton
-									params={{
-										...parseVariantAlias(props.variant.packAlias),
-										hideChords: props.hideChords,
-										key: props.sheet?.getKeyNote() || undefined,
-									}}
-								/>
+								<>
+									<PresentationVariantButton
+										params={{
+											...parseVariantAlias(props.variant.packAlias),
+										}}
+									/>
+									<PrintVariantButton
+										params={{
+											...parseVariantAlias(props.variant.packAlias),
+											hideChords: props.hideChords,
+											key: props.sheet?.getKeyNote() || undefined,
+										}}
+									/>
+								</>
 							)}
 
 							<SongsOptionsButton
@@ -202,13 +210,20 @@ export default function TopPanel(props: TopPanelProps) {
 						)}
 						{isLoggedIn() && <AddToPlaylistButton variant={props.variant} />}
 						{!isSmall && (
-							<PrintVariantButton
-								params={{
-									...parseVariantAlias(props.variant.packAlias),
-									hideChords: props.hideChords,
-									key: props.sheet?.getKeyNote() || undefined,
-								}}
-							/>
+							<>
+								<PresentationVariantButton
+									params={{
+										...parseVariantAlias(props.variant.packAlias),
+									}}
+								/>
+								<PrintVariantButton
+									params={{
+										...parseVariantAlias(props.variant.packAlias),
+										hideChords: props.hideChords,
+										key: props.sheet?.getKeyNote() || undefined,
+									}}
+								/>
+							</>
 						)}
 					</>
 				)}

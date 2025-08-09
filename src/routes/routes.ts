@@ -8,6 +8,7 @@ export const routesPaths = {
 	variant: '/pisen/[hex]/[alias]',
 	variantPublish: '/pisen/[hex]/[alias]/zverejnit',
 	variantPrint: '/pisen/[hex]/[alias]/tisk',
+	variantPresentation: '/pisen/[hex]/[alias]/prezentace',
 	variantPreviewImage: '/pisen/[hex]/[alias]/preview-image',
 	playlist: '/playlist/[guid]',
 	playlistPrint: '/playlist/[guid]/tisk',
@@ -54,8 +55,8 @@ export const routesPaths = {
 } as const
 
 // DONT REMOVE
-const testTypes: Record<string, Route['pathname']> = routesPaths
-if (!testTypes) console.log('This checks routes types', testTypes)
+// const testTypes: Record<string, Route['pathname']> = routesPaths
+// if (!testTypes) console.log('This checks routes types', testTypes)
 
 // examples of searchParams, only, string and numbers allowed
 export const routesSearchParams = {
