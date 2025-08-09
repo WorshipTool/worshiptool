@@ -83,10 +83,10 @@ export default function Error({ error, reset }: ErrorPageProps) {
 								/>
 							</Box>
 							<Box>
-								<Typography variant="h4" gutterBottom sx={{ fontWeight: 600, color: '#2d3748' }}>
+								<Typography variant="h4" sx={{ fontWeight: 600, color: '#2d3748', mb: 2 }}>
 									Přístup zakázán
 								</Typography>
-								<Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
+								<Typography variant="normal" color="text.secondary" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
 									K zobrazení tohoto obsahu nemáte dostatečná oprávnění.
 									<br />
 									Kontaktujte administrátora pro více informací.
@@ -120,10 +120,10 @@ export default function Error({ error, reset }: ErrorPageProps) {
 								/>
 							</Box>
 							<Box>
-								<Typography variant="h4" gutterBottom sx={{ fontWeight: 600, color: '#2d3748' }}>
+								<Typography variant="h4" sx={{ fontWeight: 600, color: '#2d3748', mb: 2 }}>
 									Něco se pokazilo
 								</Typography>
-								<Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
+								<Typography variant="normal" color="text.secondary" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
 									Nastala neočekávaná chyba při načítání stránky.
 									<br />
 									Zkuste to prosím znovu nebo se vraťte na hlavní stránku.

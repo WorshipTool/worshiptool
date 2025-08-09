@@ -78,11 +78,11 @@ export default function NotFoundPage() {
 					<Box>
 						<Typography 
 							variant="h2" 
-							gutterBottom 
 							sx={{ 
 								fontWeight: 700, 
 								color: '#2d3748',
 								fontSize: { xs: '2.5rem', md: '3.5rem' },
+								mb: 2,
 								animation: 'slideInUp 0.6s ease-out 0.5s both',
 								'@keyframes slideInUp': {
 									'0%': {
@@ -101,7 +101,6 @@ export default function NotFoundPage() {
 						
 						<Typography 
 							variant="h4" 
-							gutterBottom 
 							sx={{ 
 								fontWeight: 600, 
 								color: '#4a5568',
@@ -123,7 +122,7 @@ export default function NotFoundPage() {
 						</Typography>
 
 						<Typography 
-							variant="body1" 
+							variant="normal" 
 							color="text.secondary" 
 							sx={{ 
 								fontSize: '1.2rem', 

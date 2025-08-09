@@ -75,7 +75,7 @@ export default function NotFound() {
 					</Box>
 
 					<Box>
-						<Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: '#2d3748', mb: 2 }}>
+						<Typography variant="h5" sx={{ fontWeight: 600, color: '#2d3748', mb: 2 }}>
 							Píseň nebyla nalezena
 						</Typography>
 						<Typography variant="normal" color="text.secondary" sx={{ fontSize: '1rem', lineHeight: 1.6 }}>
