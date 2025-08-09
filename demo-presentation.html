@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Presentation Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .presentation-container {
+            text-align: center;
+            max-width: 80%;
+            padding: 2rem;
+        }
+        .song-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        .section-name {
+            font-size: 2rem;
+            color: #ff4444;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+        .lyrics {
+            font-size: 1.8rem;
+            line-height: 2;
+            white-space: pre-line;
+            color: white;
+        }
+        .chord {
+            color: #FCF300;
+            font-weight: bold;
+        }
+        .controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.7);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        .control-btn:disabled {
+            opacity: 0.3;
+        }
+        .section-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .instructions {
+            position: absolute;
+            bottom: 4rem;
+            left: 2rem;
+            color: #666;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="song-title">AMAZING GRACE</div>
+        <div class="section-name">VERSE 1</div>
+        <div class="lyrics">
+Amazing grace, how sweet the sound
+That saved a wretch like me
+I once was lost, but now am found
+Was blind, but now I see
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn" disabled>‹</button>
+        <button class="control-btn">›</button>
+        <button class="control-btn">⛶</button>
+    </div>
+    
+    <button class="back-button">
+        ← Demo: Song Presentation Mode
+    </button>
+    
+    <div class="section-indicator">1 / 3</div>
+    
+    <div class="instructions">
+        Use arrow keys, space, or click arrows to navigate<br>
+        Up/Down arrows for fullscreen toggle
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const sections = [
+            {
+                name: "VERSE 1",
+                lyrics: `Amazing grace, how sweet the sound
+That saved a wretch like me
+I once was lost, but now am found
+Was blind, but now I see`
+            },
+            {
+                name: "VERSE 2",
+                lyrics: `'Twas grace that taught my heart to fear
+And grace my fears relieved
+How precious did that grace appear
+The hour I first believed`
+            },
+            {
+                name: "CHORUS",
+                lyrics: `Amazing grace, how sweet the sound
+That saved a wretch like me
+I once was lost, but now am found
+Was blind, but now I see`
+            }
+        ];
+
+        function updateSection() {
+            document.querySelector('.section-name').textContent = sections[currentSection].name;
+            document.querySelector('.lyrics').textContent = sections[currentSection].lyrics;
+            document.querySelector('.section-indicator').textContent = `${currentSection + 1} / ${sections.length}`;
+            
+            document.querySelector('.control-btn').disabled = currentSection === 0;
+            document.querySelector('.control-btn:nth-child(2)').disabled = currentSection === sections.length - 1;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+                if (currentSection > 0) {
+                    currentSection--;
+                    updateSection();
+                }
+            } else if (e.code === 'ArrowRight' || e.code === 'Space' || e.code === 'KeyD') {
+                if (currentSection < sections.length - 1) {
+                    currentSection++;
+                    updateSection();
+                }
+            } else if (e.code === 'ArrowUp') {
+                document.body.requestFullscreen();
+            } else if (e.code === 'ArrowDown') {
+                document.exitFullscreen();
+            }
+        });
+
+        document.querySelector('.control-btn:nth-child(2)').addEventListener('click', () => {
+            if (currentSection < sections.length - 1) {
+                currentSection++;
+                updateSection();
+            }
+        });
+
+        document.querySelector('.control-btn').addEventListener('click', () => {
+            if (currentSection > 0) {
+                currentSection--;
+                updateSection();
+            }
+        });
+
+        updateSection();
+    </script>
+</body>
+</html>
