@@ -8,10 +8,14 @@ smartTest('Team is in tools', async ({ page }) => {
 	await test_tech_loginWithData(page)
 
 	await page.getByRole('button', { name: 'Nástroje' }).click()
+	await expect(
+		page.getByRole('link', { name: 'Zkouska Zkouska' })
+	).toBeVisible()
 	await page.getByRole('link', { name: 'Zkouska Zkouska' }).click()
 
-	await page.waitForLoadState('networkidle')
-
+	await page.waitForURL(
+		/tymy\/ahtk3wx|http:\/\/tymy\.test-chvalotce\.cz:5500\/ahtk3wx/
+	)
 	const expectedUrls = [
 		'tymy/ahtk3wx',
 		'http://tymy.test-chvalotce.cz:5500/ahtk3wx',

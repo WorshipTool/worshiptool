@@ -1,12 +1,21 @@
-import { defineConfig } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test'
 import fs from 'fs'
 
 import dotenv from 'dotenv'
 dotenv.config()
 
 const isCI = !!process.env.CI
+
+const suite = process.env.E2E_SUITE ?? 'smoke' // smoke|critical|full
 export default defineConfig({
 	testDir: './tests/e2e',
+	grep:
+		suite === 'smoke'
+			? /tests\/e2e\/smoke\/|@smoke/
+			: suite === 'critical'
+			? /tests\/e2e\/(smoke|critical)\/|@critical/
+			: undefined,
+	fullyParallel: true,
 	...(isCI
 		? {}
 		: {
@@ -31,8 +40,16 @@ export default defineConfig({
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 	},
+	reporter: [['html', { open: 'never' }], ['github']],
+	projects: [
+		{ name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+		// full běh může přidat i mobil apod.:
+		// ...(suite === 'full'
+		// 	? [{ name: 'mobile', use: { ...devices['Pixel 7'] } }]
+		// 	: []),
+	],
 	retries: 0,
-	workers: 3,
+	workers: '75%',
 	timeout: 120 * 1000, // 60 seconds
 	outputDir: 'tests/results/',
 })

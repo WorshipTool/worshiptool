@@ -20,9 +20,10 @@ smartTest('Playlist list loads', async ({ page }) => {
 const waitUntilPopupAndClose = async (page: Page) => {
 	await page.waitForLoadState('networkidle', { timeout: 60000 })
 
-	await page.waitForTimeout(1000)
+	await page.waitForTimeout(1500)
 	// close popup
 	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
 }
 const startWithCreatePlaylist = async (page: Page) => {
 	await page.goto('/', { timeout: 30000 })
@@ -57,28 +58,39 @@ const addSearchedSong = async (
 	searchQuery: string
 ): Promise<string> => {
 	await page.waitForLoadState('networkidle')
-	await page.waitForTimeout(500) // wait for the page to be ready
+	await page.waitForTimeout(1000) // wait for the page to be ready
+
+	// Close any existing popups first
+	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
+
 	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
 
 	await page.waitForLoadState('networkidle')
-	await page.waitForTimeout(500) // wait for the page to be ready
+	await page.waitForTimeout(1000) // wait for the page to be ready
 
 	await page.getByRole('textbox', { name: 'Vyhledej píseň' }).fill(searchQuery)
 
-	await page.waitForTimeout(500) // wait for search results to load
+	await page.waitForTimeout(1000) // wait for search results to load
 
 	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500)
 
 	await page.locator('.global-song-list-item').first().click()
+
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 
 	await page
 		.locator('#popup-div-container')
 		.getByRole('button', { name: 'Přidat píseň' })
 		.click()
 
+	await page.waitForTimeout(500)
 	await page.mouse.click(10, 10)
 
-	await page.waitForTimeout(100)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 
 	const lastParagraph = await page
 		.locator('.song-menu-list p')
@@ -93,7 +105,14 @@ const addRandomSong = async (page: Page): Promise<string> => {
 }
 
 const removeSong = async (page: Page, songIndex: number) => {
-	const a = await page
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500)
+
+	// Close any popups first
+	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
+
+	const a = page
 		.getByRole('button', { name: 'Odebrat z playlistu' })
 		.nth(songIndex)
 
@@ -101,7 +120,8 @@ const removeSong = async (page: Page, songIndex: number) => {
 
 	await a.click()
 
-	await page.waitForTimeout(100)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 }
 
 const renamePlaylist = async (page: Page, newName?: string) => {
@@ -146,13 +166,19 @@ const checkNoErrors = async (page: Page) => {
 	).toEqual([])
 }
 const savePlaylist = async (page: Page) => {
-	await page.waitForTimeout(500)
+	await page.waitForTimeout(1000)
+	await page.waitForLoadState('networkidle')
 	await page.getByRole('button', { name: 'Uložit' }).click()
+
+	await page.waitForTimeout(1000)
+	await page.waitForLoadState('networkidle')
+
+	// Wait longer for save to complete before checking errors
+	await page.waitForTimeout(1000)
 
 	await checkNoErrors(page)
 
 	await page.waitForTimeout(500)
-	await page.waitForLoadState('networkidle')
 	await expect(page.getByRole('button', { name: 'Uloženo' })).toBeVisible()
 }
 
@@ -165,6 +191,7 @@ const checkSongs = async (page: Page, songs: string[], message?: string) => {
 
 const pagePlaylistReload = async (page: Page) => {
 	await page.reload()
+	await page.waitForLoadState('networkidle')
 
 	await waitUntilPopupAndClose(page)
 }
@@ -212,6 +239,9 @@ const transposeSong = async (
 	transpose: number
 ) => {
 	for (let i = 0; i < Math.abs(transpose); i++) {
+		await page.waitForLoadState('networkidle')
+		await page.waitForTimeout(500)
+
 		if (transpose > 0) {
 			const button = page
 				.getByRole('button', { name: 'Transpose up' })
@@ -228,7 +258,8 @@ const transposeSong = async (
 			await button.click()
 		}
 
-		await page.waitForTimeout(500)
+		await page.waitForTimeout(1000)
+		await page.waitForLoadState('networkidle')
 	}
 }
 

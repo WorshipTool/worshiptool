@@ -10,8 +10,12 @@
 		"generate-api": "bash ./src/api/generate_api.sh",
 		"check-types": "tsc --noEmit",
 		"test": "npm run test:jest && npm run test:e2e",
-		"test:e2e": "playwright test",
-		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests"
+		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests",
+		"test:e2e": "npm run test:e2e:full",
+		"test:e2e:smoke": "E2E_SUITE=smoke playwright test",
+		"test:e2e:critical": "E2E_SUITE=critical playwright test",
+		"test:e2e:full": "E2E_SUITE=full playwright test",
+		"test:e2e:full:preview": "CI=true npm run test:e2e:full"
 	},
 	"dependencies": {
 		"@emotion/cache": "^11.13.5",
