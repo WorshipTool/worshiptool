@@ -41,5 +41,11 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Run all tests
-        run: npm run test
+      - name: Run smoke tests
+        run: npm run test:e2e:smoke-only
+
+      - name: Run critical tests
+        run: npm run test:e2e:critical-only
+
+      - name: Run full-complex tests
+        run: npm run test:e2e:full-only

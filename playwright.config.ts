@@ -7,6 +7,7 @@ dotenv.config()
 const isCI = !!process.env.CI
 
 const suite = process.env.E2E_SUITE ?? 'smoke' // smoke|critical|full
+
 export default defineConfig({
 	testDir: './tests/e2e',
 	grep:
@@ -29,7 +30,7 @@ export default defineConfig({
 					command:
 						false && fs.existsSync('.next/routes-manifest.json') // just trying
 							? 'npm run start'
-							: 'npm run build && npm run start',
+							: 'echo "Building project..." &&npm run build && npm run start',
 					port: 5500,
 					reuseExistingServer: true,
 					timeout: 120 * 1000, // 2 minutes
