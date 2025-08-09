@@ -12,6 +12,7 @@ smartTest('Link, routing', 'smoke', async ({ page }) => {
 	await page.getByRole('button', { name: 'Přidat novou píseň' }).click()
 	await page.getByRole('link', { name: 'Sepsat ručně' }).click()
 
+	await page.waitForURL(/.*\/vytvorit\/napsat/)
 	await page.waitForLoadState('networkidle')
 	await expect(
 		page.getByRole('textbox', { name: 'Zadejte název písně' })
