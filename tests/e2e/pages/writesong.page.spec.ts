@@ -1,16 +1,18 @@
 import { getRandomString } from '@/tech/string/random.string.tech'
-import test, { expect } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { test_tech_loginWithData } from '../../test.tech'
+import { smartTest } from '../setup'
 
-test('Link, routing', async ({ page }) => {
+smartTest('Link, routing', 'smoke', async ({ page }) => {
 	await page.goto('/')
 
-	await page.waitForLoadState('networkidle')
+	await page.waitForLoadState()
 	await test_tech_loginWithData(page)
 
 	await page.getByRole('button', { name: 'Přidat novou píseň' }).click()
 	await page.getByRole('link', { name: 'Sepsat ručně' }).click()
 
+	await page.waitForURL(/.*\/vytvorit\/napsat/)
 	await page.waitForLoadState('networkidle')
 	await expect(
 		page.getByRole('textbox', { name: 'Zadejte název písně' })
@@ -26,7 +28,7 @@ test('Link, routing', async ({ page }) => {
 	).toBeVisible()
 })
 
-test('Create new song, validity', async ({ page }) => {
+smartTest('Create new song, validity', 'critical', async ({ page }) => {
 	await page.goto('/')
 	await page.waitForLoadState('networkidle')
 
@@ -54,6 +56,7 @@ test('Create new song, validity', async ({ page }) => {
 		.filter({ hasText: 'Vytvořit (neveřejně)' })
 		.click()
 
+	await page.waitForURL(/.*\/vytvorit\/napsat/)
 	await expect(page).toHaveURL(/.*\/vytvorit\/napsat/)
 
 	await expect(page.getByText('Neplatný obsah')).toBeVisible()
