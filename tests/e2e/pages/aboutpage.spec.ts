@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test'
 import { smartTest } from '../setup'
 
-smartTest('Contain title', async ({ page }) => {
+smartTest('Contain title', 'smoke', async ({ page }) => {
 	await page.goto('/o-nas')
 
 	// page contains: Nějaký nápad
@@ -14,7 +14,7 @@ smartTest('Contain title', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'chválami' })).toBeVisible()
 })
 
-smartTest('Contain PoweredBy', async ({ page }) => {
+smartTest('Contain PoweredBy', 'smoke', async ({ page }) => {
 	await page.goto('/o-nas')
 
 	// page contains: Nějaký nápad

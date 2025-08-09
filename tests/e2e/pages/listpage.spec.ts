@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test'
 import { smartTest } from '../setup'
 
-smartTest('Contain title and list', async ({ page }) => {
+smartTest('Contain title and list', 'critical', async ({ page }) => {
 	await page.goto('/seznam')
 
 	await expect(page.getByText('Seznam všech písní')).toBeVisible()

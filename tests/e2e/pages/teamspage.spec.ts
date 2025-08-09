@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test'
 import { smartTest } from '../setup'
 
-smartTest('Contain title', async ({ page }) => {
+smartTest('Contain title', 'smoke', async ({ page }) => {
 	await page.goto('/sub/tymy')
 
 	await expect(

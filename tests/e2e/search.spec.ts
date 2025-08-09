@@ -10,7 +10,7 @@ async function searchWithSearchBar(str: string, page: Page) {
 	await page.getByPlaceholder(/.*Hledej.*/i).fill(str)
 }
 
-smartTest('Vyhledávání podle názvu', async ({ page }) => {
+smartTest('Vyhledávání podle názvu', 'critical', async ({ page }) => {
 	// Otevřeme domovskou stránku
 	await page.goto('/')
 
@@ -39,7 +39,7 @@ smartTest('Vyhledávání podle názvu', async ({ page }) => {
 	await expect(newText).toBeVisible()
 })
 
-smartTest('Vyhledávání podle textu', async ({ page }) => {
+smartTest('Vyhledávání podle textu', 'critical', async ({ page }) => {
 	await page.goto('/')
 
 	await searchWithSearchBar('Jsi darcem zivota', page)
@@ -49,7 +49,7 @@ smartTest('Vyhledávání podle textu', async ({ page }) => {
 	await expect(page).toHaveURL(/\/pisen\/[a-z0-9-]+/)
 })
 
-smartTest('Vyhledávání podle jednoho písmene', async ({ page }) => {
+smartTest('Vyhledávání podle jednoho písmene', 'critical', async ({ page }) => {
 	await page.goto('/')
 
 	await searchWithSearchBar('A', page)
@@ -59,7 +59,7 @@ smartTest('Vyhledávání podle jednoho písmene', async ({ page }) => {
 	await expect(page).toHaveURL(/\/pisen\/[a-z0-9-]+/)
 })
 
-smartTest('Načíst další', async ({ page }) => {
+smartTest('Načíst další', 'critical', async ({ page }) => {
 	await page.goto('/')
 
 	await searchWithSearchBar('Pokoj', page)
@@ -70,7 +70,7 @@ smartTest('Načíst další', async ({ page }) => {
 	await expect(b).toBeVisible()
 })
 
-smartTest('Neobsahuje cizí soukromé písně', async ({ page }) => {
+smartTest('Neobsahuje cizí soukromé písně', 'critical', async ({ page }) => {
 	await page.goto('/')
 
 	const api = new SongSearchingApi()
@@ -112,6 +112,7 @@ smartTest('Neobsahuje cizí soukromé písně', async ({ page }) => {
 
 smartTest(
 	'Při přihlášení obsahuje uživatelovy soukromé písně',
+	'critical',
 	async ({ page }) => {
 		await page.goto('/')
 

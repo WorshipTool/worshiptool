@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import { test_tech_loginWithData } from '../../test.tech'
 import { smartTest } from '../setup'
 
-smartTest('Link, routing', async ({ page }) => {
+smartTest('Link, routing', 'smoke', async ({ page }) => {
 	await page.goto('/')
 
 	await page.waitForLoadState('networkidle')
@@ -27,7 +27,7 @@ smartTest('Link, routing', async ({ page }) => {
 	).toBeVisible()
 })
 
-smartTest('Create new song, validity', async ({ page }) => {
+smartTest('Create new song, validity', 'critical', async ({ page }) => {
 	await page.goto('/')
 	await page.waitForLoadState('networkidle')
 
