@@ -56,6 +56,7 @@ smartTest('Create new song, validity', 'critical', async ({ page }) => {
 		.filter({ hasText: 'Vytvořit (neveřejně)' })
 		.click()
 
+	await page.waitForURL(/.*\/vytvorit\/napsat/)
 	await expect(page).toHaveURL(/.*\/vytvorit\/napsat/)
 
 	await expect(page.getByText('Neplatný obsah')).toBeVisible()

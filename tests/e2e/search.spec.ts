@@ -8,6 +8,8 @@ import { smartTest } from './setup'
 
 async function searchWithSearchBar(str: string, page: Page) {
 	await page.getByPlaceholder(/.*Hledej.*/i).fill(str)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 }
 
 smartTest('Vyhledávání podle názvu', 'critical', async ({ page }) => {
@@ -61,6 +63,7 @@ smartTest('Vyhledávání podle jednoho písmene', 'critical', async ({ page }) 
 
 smartTest('Načíst další', 'critical', async ({ page }) => {
 	await page.goto('/')
+	await page.waitForLoadState()
 
 	await searchWithSearchBar('Pokoj', page)
 

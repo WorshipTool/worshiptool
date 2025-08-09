@@ -18,9 +18,9 @@
 		"test:e2e:smoke-only": "E2E_SUITE=smoke-only playwright test",
 		"test:e2e:critical-only": "E2E_SUITE=critical-only playwright test",
 		"test:e2e:full-only": "E2E_SUITE=full-only playwright test",
-		"test:e2e:smoke:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz CI=true npm run test:e2e:smoke",
-		"test:e2e:critical:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz CI=true npm run test:e2e:critical",
-		"test:e2e:full:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz CI=true npm run test:e2e:full"
+		"test:e2e:smoke:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev CI=true npm run test:e2e:smoke",
+		"test:e2e:critical:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev CI=true npm run test:e2e:critical",
+		"test:e2e:full:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev CI=true npm run test:e2e:full"
 	},
 	"dependencies": {
 		"@emotion/cache": "^11.13.5",
