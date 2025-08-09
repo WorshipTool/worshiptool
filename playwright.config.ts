@@ -12,8 +12,14 @@ export default defineConfig({
 	grep:
 		suite === 'smoke'
 			? /tests\/e2e\/smoke\/|@smoke/
+			: suite === 'smoke-only'
+			? /tests\/e2e\/smoke\/|@smoke/
 			: suite === 'critical'
-			? /tests\/e2e\/(smoke|critical)\/|@critical/
+			? /tests\/e2e\/(smoke|critical)\/|@critical|@smoke/
+			: suite === 'critical-only'
+			? /tests\/e2e\/(critical)\/|@critical/
+			: suite === 'full-only'
+			? /tests\/e2e\/(full)\/|@full/
 			: undefined,
 	fullyParallel: true,
 	...(isCI
