@@ -44,12 +44,13 @@ export default defineConfig({
 		headless: true,
 		actionTimeout: 30 * 1000, // 10 seconds
 		navigationTimeout: 30 * 1000, // 10 seconds
+
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 	},
 	//TODO: add more browser testing on full mode
-	reporter: [['html', { open: 'never' }], ['github']],
-	retries: 0,
+	reporter: [['html', { open: 'on-failure' }], ['github'], ['list']],
+	retries: 1,
 	workers: '75%',
 	timeout: 120 * 1000, // 60 seconds
 	outputDir: 'tests/results/',

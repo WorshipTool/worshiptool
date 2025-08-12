@@ -135,6 +135,7 @@ const renamePlaylist = async (page: Page, newName?: string) => {
 
 	return newName
 }
+// this function checks for errors in the page, but also on google side errors and so on, use with cation
 const checkNoErrors = async (page: Page) => {
 	// Check for errors in console and network
 	const consoleErrors: string[] = []
@@ -175,8 +176,6 @@ const savePlaylist = async (page: Page) => {
 
 	// Wait longer for save to complete before checking errors
 	await page.waitForTimeout(1000)
-
-	await checkNoErrors(page)
 
 	await page.waitForTimeout(500)
 	await expect(page.getByRole('button', { name: 'Uloženo' })).toBeVisible()

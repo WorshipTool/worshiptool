@@ -14,6 +14,8 @@ export const test_tech_loginWithData = async (
 	await page.getByRole('button', { name: 'Přihlásit se' }).click()
 	await page.getByRole('textbox', { name: 'Zadejte e-mail' }).fill(email)
 	await page.getByRole('textbox', { name: 'Zadejte heslo' }).fill(password)
+
+	await page.waitForTimeout(1000)
 	await page.getByRole('button', { name: 'Přihlásit se' }).click()
 
 	const loginResponsePromise = page.waitForResponse(
@@ -24,12 +26,10 @@ export const test_tech_loginWithData = async (
 	const loginResponse = await loginResponsePromise
 	const responseData: JwtResult = await loginResponse.json()
 
-	await page.waitForLoadState('networkidle')
+	await page.waitForURL((url) => !url.pathname.includes('/prihlaseni'))
 
 	return loginResultDTOToUser(responseData)
 }
-
-
 
 export const getTestBaseUrlHostname = () => {
 	return FRONTEND_URL.replace(/^https?:\/\//, '')
