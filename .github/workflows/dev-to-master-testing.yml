@@ -33,6 +33,8 @@ jobs:
   run-tests:
     needs: wait-for-vercel
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.1-jammy
 
     steps:
       - name: Get preview deployment URL
