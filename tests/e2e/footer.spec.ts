@@ -1,6 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { smartTest } from './setup'
 
-test('Footer contains basic info', async ({ page }) => {
+smartTest('Footer contains basic info', 'smoke', async ({ page }) => {
 	await page.goto('/o-nas')
 
 	await expect(

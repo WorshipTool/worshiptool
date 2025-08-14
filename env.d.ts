@@ -13,5 +13,6 @@ declare namespace NodeJS {
 
 		NEXT_PUBLIC_AUTH_COOKIE_NAME?: string
 		NEXT_PUBLIC_USE_SUBDOMAINS?: 'true' | 'false' // Handle by feature-flag
+		TEST_WITH_SLOWDOWN?: 'true' | 'false' | undefined
 	}
 }

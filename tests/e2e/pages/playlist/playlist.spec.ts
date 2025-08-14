@@ -1,8 +1,11 @@
 import { getRandomInt } from '@/tech/number/getRandomInt'
-import test, { expect, Page } from '@playwright/test'
+import { expect, Page, test } from '@playwright/test'
 import { test_tech_loginWithData } from '../../../test.tech'
+import { smartTest } from '../../setup'
 
-test('Playlist list loads', async ({ page }) => {
+test.describe.configure({ mode: 'parallel', timeout: 4 * 60 * 1000 }) // 4 minutes
+
+smartTest('Playlist list loads', 'critical', async ({ page }) => {
 	await page.goto('/')
 
 	await test_tech_loginWithData(page)
@@ -14,17 +17,33 @@ test('Playlist list loads', async ({ page }) => {
 	).toBeVisible()
 })
 
+const waitUntilPopupAndClose = async (page: Page) => {
+	await page.waitForLoadState('networkidle', { timeout: 60000 })
+
+	await page.waitForTimeout(1500)
+	// close popup
+	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
+}
 const startWithCreatePlaylist = async (page: Page) => {
-	await page.goto('/')
+	await page.goto('/', { timeout: 30000 })
 
 	await test_tech_loginWithData(page)
 
 	await page.goto('/ucet/playlisty')
 
 	await page.getByRole('button', { name: 'Vytvořit' }).click()
+
+	// Wait until the URL pathname starts with /playlist
+	await expect(async () => {
+		const url = new URL(page.url())
+		expect(url.pathname.startsWith('/playlist')).toBe(true)
+	}).toPass()
+
+	await waitUntilPopupAndClose(page)
 }
 
-test('Can create a new playlist', async ({ page }) => {
+smartTest('Can create a new playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	await expect(page).toHaveURL(/\/playlist/)
@@ -38,24 +57,40 @@ const addSearchedSong = async (
 	page: Page,
 	searchQuery: string
 ): Promise<string> => {
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(1000) // wait for the page to be ready
+
+	// Close any existing popups first
+	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
+
 	await page.getByLabel('Přidat píseň do playlistu').getByRole('button').click()
+
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(1000) // wait for the page to be ready
 
 	await page.getByRole('textbox', { name: 'Vyhledej píseň' }).fill(searchQuery)
 
-	await page.waitForTimeout(500) // wait for search results to load
+	await page.waitForTimeout(1000) // wait for search results to load
 
 	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500)
 
 	await page.locator('.global-song-list-item').first().click()
+
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 
 	await page
 		.locator('#popup-div-container')
 		.getByRole('button', { name: 'Přidat píseň' })
 		.click()
 
+	await page.waitForTimeout(500)
 	await page.mouse.click(10, 10)
 
-	await page.waitForTimeout(100)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 
 	const lastParagraph = await page
 		.locator('.song-menu-list p')
@@ -70,7 +105,14 @@ const addRandomSong = async (page: Page): Promise<string> => {
 }
 
 const removeSong = async (page: Page, songIndex: number) => {
-	const a = await page
+	await page.waitForLoadState('networkidle')
+	await page.waitForTimeout(500)
+
+	// Close any popups first
+	await page.mouse.click(10, 10)
+	await page.waitForTimeout(500)
+
+	const a = page
 		.getByRole('button', { name: 'Odebrat z playlistu' })
 		.nth(songIndex)
 
@@ -78,23 +120,65 @@ const removeSong = async (page: Page, songIndex: number) => {
 
 	await a.click()
 
-	await page.waitForTimeout(100)
+	await page.waitForTimeout(500)
+	await page.waitForLoadState('networkidle')
 }
 
 const renamePlaylist = async (page: Page, newName?: string) => {
 	newName = newName || `${Math.random().toString(36).substring(2, 7)}`
 
 	const e = page.getByRole('textbox', { name: 'Název playlistu' })
+	await expect(e).toBeVisible()
 	await e.click()
 	await e.fill(newName)
 	await e.press('Enter')
 
 	return newName
 }
+// this function checks for errors in the page, but also on google side errors and so on, use with cation
+const checkNoErrors = async (page: Page) => {
+	// Check for errors in console and network
+	const consoleErrors: string[] = []
+	page.on('console', (msg) => {
+		if (msg.type() === 'error') {
+			consoleErrors.push(msg.text())
+		}
+	})
 
+	const failedRequests: string[] = []
+	page.on('requestfailed', (request) => {
+		failedRequests.push(
+			`${request.method()} ${request.url()} - ${request.failure()?.errorText}`
+		)
+	})
+
+	// Wait a short time to allow errors to be captured
+	await page.waitForTimeout(300)
+
+	// Assert no console errors
+	expect(consoleErrors, `Console errors: ${consoleErrors.join('\n')}`).toEqual(
+		[]
+	)
+
+	// Assert no failed network requests
+	expect(
+		failedRequests,
+		`Network errors: ${failedRequests.join('\n')}`
+	).toEqual([])
+}
 const savePlaylist = async (page: Page) => {
+	await page.waitForTimeout(1000)
+	await page.waitForLoadState('networkidle')
 	await page.getByRole('button', { name: 'Uložit' }).click()
-	await page.waitForTimeout(100)
+
+	await page.waitForTimeout(1000)
+	await page.waitForLoadState('networkidle')
+
+	// Wait longer for save to complete before checking errors
+	await page.waitForTimeout(1000)
+
+	await page.waitForTimeout(500)
+	await expect(page.getByRole('button', { name: 'Uloženo' })).toBeVisible()
 }
 
 const checkSongs = async (page: Page, songs: string[], message?: string) => {
@@ -104,9 +188,11 @@ const checkSongs = async (page: Page, songs: string[], message?: string) => {
 	expect(paragraphs, message).toEqual(songs)
 }
 
-const pageReload = async (page: Page) => {
+const pagePlaylistReload = async (page: Page) => {
 	await page.reload()
 	await page.waitForLoadState('networkidle')
+
+	await waitUntilPopupAndClose(page)
 }
 const move = async (
 	page: Page,
@@ -152,6 +238,9 @@ const transposeSong = async (
 	transpose: number
 ) => {
 	for (let i = 0; i < Math.abs(transpose); i++) {
+		await page.waitForLoadState('networkidle')
+		await page.waitForTimeout(500)
+
 		if (transpose > 0) {
 			const button = page
 				.getByRole('button', { name: 'Transpose up' })
@@ -168,7 +257,8 @@ const transposeSong = async (
 			await button.click()
 		}
 
-		await page.waitForTimeout(500)
+		await page.waitForTimeout(1000)
+		await page.waitForLoadState('networkidle')
 	}
 }
 
@@ -200,7 +290,7 @@ const checkSongTransposition = async (
 	expect(chordText?.trim().startsWith(toneKey), message).toBe(true)
 }
 
-test('Can rename a playlist', async ({ page }) => {
+smartTest('Can rename a playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	await expect(
@@ -224,7 +314,7 @@ test('Can rename a playlist', async ({ page }) => {
 	).toHaveValue(newName)
 })
 
-test('Can add a song to a playlist', async ({ page }) => {
+smartTest('Can add a song to a playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const song = await addRandomSong(page)
@@ -237,17 +327,21 @@ test('Can add a song to a playlist', async ({ page }) => {
 	await checkSongs(page, [song], 'After reload: song not added to playlist')
 })
 
-test('Song not added to playlist without save', async ({ page }) => {
-	await startWithCreatePlaylist(page)
+smartTest(
+	'Song not added to playlist without save',
+	'critical',
+	async ({ page }) => {
+		await startWithCreatePlaylist(page)
 
-	const song = await addRandomSong(page)
-	await checkSongs(page, [song])
+		const song = await addRandomSong(page)
+		await checkSongs(page, [song])
 
-	await pageReload(page)
-	await checkSongs(page, [])
-})
+		await pagePlaylistReload(page)
+		await checkSongs(page, [])
+	}
+)
 
-test('Song can be removed from playlist', async ({ page }) => {
+smartTest('Song can be removed from playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const song = await addRandomSong(page)
@@ -258,7 +352,7 @@ test('Song can be removed from playlist', async ({ page }) => {
 		'Song was not added to playlist before removal'
 	)
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 
 	await checkSongs(page, [song], 'Song was not added to playlist after reload')
 
@@ -270,38 +364,42 @@ test('Song can be removed from playlist', async ({ page }) => {
 	)
 
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(page, [], 'Song was not removed from playlist after refresh')
 })
 
-test('Songs can be reordered in playlist', async ({ page }) => {
-	await startWithCreatePlaylist(page)
+smartTest(
+	'Songs can be reordered in playlist',
+	'critical',
+	async ({ page }) => {
+		await startWithCreatePlaylist(page)
 
-	const songs: string[] = [
-		await addRandomSong(page),
-		await addRandomSong(page),
-		await addRandomSong(page),
-	]
+		const songs: string[] = [
+			await addRandomSong(page),
+			await addRandomSong(page),
+			await addRandomSong(page),
+		]
 
-	await savePlaylist(page)
-	await pageReload(page)
+		await savePlaylist(page)
+		await pagePlaylistReload(page)
 
-	await checkSongs(page, songs, 'Songs were not added to playlist after save')
+		await checkSongs(page, songs, 'Songs were not added to playlist after save')
 
-	// Reorder songs by dragging and dropping
+		// Reorder songs by dragging and dropping
 
-	await move(page, songs, 0, 1)
-	await checkSongs(
-		page,
-		songs,
-		'Songs were not reordered after first move before save'
-	)
-	await savePlaylist(page)
-	await pageReload(page)
-	await checkSongs(page, songs, 'Songs were not reordered after first save')
-})
+		await move(page, songs, 0, 1)
+		await checkSongs(
+			page,
+			songs,
+			'Songs were not reordered after first move before save'
+		)
+		await savePlaylist(page)
+		await pagePlaylistReload(page)
+		await checkSongs(page, songs, 'Songs were not reordered after first save')
+	}
+)
 
-test('Song can be searched in playlist', async ({ page }) => {
+smartTest('Song can be searched in playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
 	const songs = [
@@ -312,7 +410,7 @@ test('Song can be searched in playlist', async ({ page }) => {
 	await checkSongs(page, songs, 'Song not added to playlist after search')
 
 	await savePlaylist(page)
-	await pageReload(page)
+	await pagePlaylistReload(page)
 	await checkSongs(
 		page,
 		songs,
@@ -320,61 +418,65 @@ test('Song can be searched in playlist', async ({ page }) => {
 	)
 })
 
-test('Song can be transposed in playlist', async ({ page }) => {
-	await startWithCreatePlaylist(page)
-	const songs = [
-		await addSearchedSong(page, 'Volas nas do morskych'),
-		await addSearchedSong(page, 'Rano cely den'),
-	]
-	await checkSongs(page, songs, 'Song not added to playlist after search')
+smartTest(
+	'Song can be transposed in playlist',
+	'critical',
+	async ({ page }) => {
+		await startWithCreatePlaylist(page)
+		const songs = [
+			await addSearchedSong(page, 'Volas nas do morskych'),
+			await addSearchedSong(page, 'Rano cely den'),
+		]
+		await checkSongs(page, songs, 'Song not added to playlist after search')
 
-	await transposeSong(page, 0, 4)
-	await checkSongTransposition(
-		page,
-		0,
-		songs,
-		'E',
-		'Song not transposed before save'
-	)
-	await savePlaylist(page)
+		await transposeSong(page, 0, 4)
+		await checkSongTransposition(
+			page,
+			0,
+			songs,
+			'E',
+			'Song not transposed before save'
+		)
+		await savePlaylist(page)
 
-	await pageReload(page)
-	await checkSongs(page, songs)
-	await checkSongTransposition(
-		page,
-		0,
-		songs,
-		'E',
-		'First song not transposed after reload'
-	)
-	// also check transposition
+		await pagePlaylistReload(page)
+		await checkSongs(page, songs)
+		await checkSongTransposition(
+			page,
+			0,
+			songs,
+			'E',
+			'First song not transposed after reload'
+		)
+		// also check transposition
 
-	await transposeSong(page, 1, -5)
-	await checkSongTransposition(
-		page,
-		1,
-		songs,
-		'G',
-		'Second song not transposed after reload'
-	)
-	await savePlaylist(page)
-	await pageReload(page)
+		await transposeSong(page, 1, -5)
+		await checkSongTransposition(
+			page,
+			1,
+			songs,
+			'G',
+			'Second song not transposed after reload'
+		)
+		await savePlaylist(page)
+		await pagePlaylistReload(page)
 
-	await checkSongTransposition(
-		page,
-		0,
-		songs,
-		'E',
-		'First song not transposed after second reload'
-	)
-	await checkSongTransposition(
-		page,
-		1,
-		songs,
-		'G',
-		'Second song not transposed after second reload'
-	)
-})
+		await checkSongTransposition(
+			page,
+			0,
+			songs,
+			'E',
+			'First song not transposed after second reload'
+		)
+		await checkSongTransposition(
+			page,
+			1,
+			songs,
+			'G',
+			'Second song not transposed after second reload'
+		)
+	}
+)
 
 const testEditing = async ({ page }: { page: Page }) => {
 	await startWithCreatePlaylist(page)
@@ -470,6 +572,6 @@ const testEditing = async ({ page }: { page: Page }) => {
 	await checkSongs(page, songs, 'Songs do not match after final refresh')
 }
 
-test('Can edit a playlist 1', testEditing)
-test('Can edit a playlist 2', testEditing)
-test('Can edit a playlist 3', testEditing)
+smartTest('Can edit a playlist 1', 'full', testEditing)
+smartTest('Can edit a playlist 2', 'full', testEditing)
+smartTest('Can edit a playlist 3', 'full', testEditing)

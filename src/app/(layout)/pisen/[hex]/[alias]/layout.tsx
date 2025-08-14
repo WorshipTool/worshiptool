@@ -27,6 +27,7 @@ export const generateMetadata = generateSmartMetadata(
 				},
 			}
 		} catch (e) {
+			console.error('Error generating metadata for variant:', e)
 			notFound()
 		}
 	}

@@ -3,15 +3,24 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev -p 5500 -H test-chvalotce.cz",
+		"dev": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz next dev -p 5500 -H test-chvalotce.cz",
 		"build": "next build",
-		"start": "next start -p 5500 -H test-chvalotce.cz",
+		"start": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz next start -p 5500 -H test-chvalotce.cz",
 		"lint": "next lint",
 		"generate-api": "bash ./src/api/generate_api.sh",
 		"check-types": "tsc --noEmit",
 		"test": "npm run test:jest && npm run test:e2e",
-		"test:e2e": "playwright test",
-		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests"
+		"test:jest": "jest --detectOpenHandles --forceExit --passWithNoTests",
+		"test:e2e": "npm run test:e2e:full",
+		"test:e2e:smoke": "E2E_SUITE=smoke playwright test",
+		"test:e2e:critical": "E2E_SUITE=critical playwright test",
+		"test:e2e:full": "E2E_SUITE=full playwright test",
+		"test:e2e:smoke-only": "E2E_SUITE=smoke-only playwright test",
+		"test:e2e:critical-only": "E2E_SUITE=critical-only playwright test",
+		"test:e2e:full-only": "E2E_SUITE=full-only playwright test",
+		"test:e2e:smoke:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev TEST_WITH_SLOWDOWN=false CI=true npm run test:e2e:smoke",
+		"test:e2e:critical:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev TEST_WITH_SLOWDOWN=false CI=true npm run test:e2e:critical",
+		"test:e2e:full:preview": "NEXT_PUBLIC_FRONTEND_URL=https://preview.chvalotce.cz NEXT_PUBLIC_BACKEND_URL=https://worshiptool-preview.fly.dev TEST_WITH_SLOWDOWN=false CI=true npm run test:e2e:full"
 	},
 	"dependencies": {
 		"@emotion/cache": "^11.13.5",

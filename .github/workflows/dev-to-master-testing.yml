@@ -1,0 +1,74 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  wait-for-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find READY deployment for this commit
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          GIT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          echo "Looking for READY deployment of $GIT_SHA ..."
+          for i in {1..60}; do
+          RES=$(curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" \
+              "https://api.vercel.com/v6/deployments?projectId=$VERCEL_PROJECT_ID&sha=$GIT_SHA&state=READY&limit=1")
+          URL=$(echo "$RES" | jq -r '.deployments[0].url // empty')
+          ID=$(echo  "$RES" | jq -r '.deployments[0].uid // empty')
+          if [ -n "$URL" ] && [ -n "$ID" ]; then
+              echo "PREVIEW_URL=https://$URL" >> $GITHUB_ENV
+              echo "VERCEL_DEPLOYMENT_ID=$ID" >> $GITHUB_ENV
+              echo "✅ READY: https://$URL"
+              exit 0
+          fi
+          echo "…not ready yet, retry in 10s"; sleep 10
+          done
+          echo "❌ Timeout waiting for Vercel deployment"; exit 1
+
+  run-tests:
+    needs: wait-for-vercel
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.1-jammy
+
+    steps:
+      - name: Get preview deployment URL
+        run: |
+          echo "PREVIEW_URL=https://preview.chvalotce.cz" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run jest tests
+        run: npm run test:jest
+
+      - name: Run smoke tests
+        run: npm run test:e2e:smoke-only
+
+      - name: Run critical tests
+        run: npm run test:e2e:critical-only
+
+      - name: Run full-complex tests
+        run: npm run test:e2e:full-only
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-${{ github.run_id }}
+          path: |
+            playwright-report/**
+            temp/tests/results/**
+          if-no-files-found: ignore
+          retention-days: 7

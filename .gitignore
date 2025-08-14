@@ -41,3 +41,5 @@ docs/.obsidian
 
 tests/results
 *.log
+playwright-report
+temp/*
