@@ -8,6 +8,8 @@ jobs:
   wait-for-vercel:
     name: Wait for Vercel
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.46.1-jammy
     steps:
       - name: Wait for all checks to complete
         uses: lewagon/wait-on-check-action@v1.4.0
@@ -37,9 +39,6 @@ jobs:
 
       - name: Run jest tests
         run: npm run test:jest
-
-      - name: Install Playwright
-        run: npx playwright install --with-deps
 
       - name: Run smoke tests
         run: npm run test:e2e:smoke-only
