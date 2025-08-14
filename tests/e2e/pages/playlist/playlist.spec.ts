@@ -341,6 +341,23 @@ smartTest(
 	}
 )
 
+smartTest(
+	'should save playlist without any songs',
+	'critical',
+	async ({ page }) => {
+		await startWithCreatePlaylist(page)
+
+		const song = await addRandomSong(page)
+		await checkSongs(page, [song])
+		await savePlaylist(page)
+		await removeSong(page, 0)
+
+		await savePlaylist(page)
+		await pagePlaylistReload(page)
+		await checkSongs(page, [])
+	}
+)
+
 smartTest('Song can be removed from playlist', 'critical', async ({ page }) => {
 	await startWithCreatePlaylist(page)
 
