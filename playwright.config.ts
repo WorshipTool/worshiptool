@@ -47,11 +47,12 @@ export default defineConfig({
 
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
+		trace: 'retain-on-failure',
 	},
 	//TODO: add more browser testing on full mode
 	reporter: [['html', { open: 'on-failure' }], ['github'], ['list']],
 	retries: 1,
 	workers: '75%',
 	timeout: 120 * 1000, // 60 seconds
-	outputDir: 'tests/results/',
+	outputDir: 'temp/tests/results/',
 })
