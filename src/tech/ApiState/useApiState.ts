@@ -7,7 +7,8 @@ interface UseApiState<T> {
 	apiState: ApiState<T>
 	fetchApiState: (
 		fetchPromise: () => Promise<T>,
-		callback?: (data: T) => void
+		callback?: (data: T) => void,
+		options?: { silent?: boolean }
 	) => Promise<T | null>
 	invalidateApiState: () => void
 }
@@ -44,9 +45,10 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 
 	const fetchApiState = async (
 		fetchPromise: () => Promise<T>,
-		callback?: (data: T) => void
+		callback?: (data: T) => void,
+		options?: { silent?: boolean }
 	) => {
-		dispatchLoadingAction()
+		if (!options?.silent) dispatchLoadingAction()
 		try {
 			const data: T = await fetchPromise()
 			dispatchSuccessAction(data)

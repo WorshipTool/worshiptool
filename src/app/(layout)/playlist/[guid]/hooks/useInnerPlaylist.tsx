@@ -1,11 +1,10 @@
 'use client'
 import { PackGuid } from '@/api/dtos'
-import { PlaylistComplextEditItem } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
+import { buildComplexEditItems } from './buildComplexEditItems'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
-import usePlaylist, {
-	PLAYLIST_CHANGE_EVENT_NAME,
-} from '@/hooks/playlist/usePlaylist'
+import usePlaylist from '@/hooks/playlist/usePlaylist'
+import { dispatchPlaylistChange } from '@/hooks/playlist/usePlaylistChangeSubscription'
 import { EditPlaylistItemData } from '@/hooks/playlist/usePlaylistsGeneral.types'
 import { useStateWithHistory } from '@/hooks/statewithhistory/useStateWithHistory'
 import { useUniqueHookId } from '@/hooks/useUniqueHookId'
@@ -148,29 +147,13 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 		setIsSaving(true)
 
-		// sheetdata or title change only for changed items
-		const changedItems = state.items.filter((i) => {
-			const oldItem = playlist.items.find((j) => j.guid === i.guid)
-			return (
-				oldItem?.pack.title !== i.pack.title ||
-				oldItem?.pack.sheetData !== i.pack.sheetData
-			)
-		})
-		// Use complex edit for everything - items in order with all their changes
-		const complexEditItems: PlaylistComplextEditItem[] = state.items.map(
-			(item) => ({
-				packGuid: item.pack.packGuid,
-				toneKey: item.toneKey,
-				newData: changedItems.some(
-					(changedItem) => changedItem.pack.packGuid === item.pack.packGuid
-				)
-					? {
-							title: item.pack.title,
-							sheetData: item.pack.sheetData,
-					  }
-					: {},
-			})
+		// Only genuinely changed items carry newData; unchanged items omit it so
+		// the backend skips the heavy per-song copy/version path.
+		const complexEditItems = buildComplexEditItems(
+			state.items,
+			playlist.items
 		)
+
 		await editingApi.complexPlaylistEdit({
 			playlistGuid: guid,
 			items: complexEditItems,
@@ -179,15 +162,7 @@ const useProvideInnerPlaylist = (guid: PlaylistGuid) => {
 
 		setIsSaved(true)
 
-		const data = {
-			hookId: uniqueHookId,
-			playlistGuid: guid,
-		}
-		window.dispatchEvent(
-			new CustomEvent(PLAYLIST_CHANGE_EVENT_NAME, {
-				detail: data,
-			})
-		)
+		dispatchPlaylistChange(uniqueHookId, guid)
 
 		setIsSaving(false)
 	}

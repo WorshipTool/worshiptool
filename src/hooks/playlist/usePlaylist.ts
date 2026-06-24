@@ -13,11 +13,15 @@ import PlaylistDto, {
 import useAuth from '../auth/useAuth'
 import usePlaylistsGeneral from './usePlaylistsGeneral'
 
-export const PLAYLIST_CHANGE_EVENT_NAME = 'playlist-change'
-type PlaylistChangeEventData = {
-	hookId: string
-	playlistGuid: PlaylistGuid
-}
+import {
+	dispatchPlaylistChange,
+	usePlaylistChangeSubscription,
+} from './usePlaylistChangeSubscription'
+
+export {
+	PLAYLIST_CHANGE_EVENT_NAME,
+	type PlaylistChangeEventData,
+} from './usePlaylistChangeSubscription'
 
 export default function usePlaylist(
 	guid: PlaylistGuid,
@@ -62,28 +66,19 @@ export default function usePlaylist(
 
 	// Event, connect more same hooks
 	const changeCallback = useCallback(() => {
-		const data: PlaylistChangeEventData = {
-			hookId: uniqueHookId,
-			playlistGuid: guid,
-		}
-		window.dispatchEvent(
-			new CustomEvent(PLAYLIST_CHANGE_EVENT_NAME, {
-				detail: data,
-			})
-		)
+		dispatchPlaylistChange(uniqueHookId, guid)
 	}, [guid, uniqueHookId])
 
-	useEffect(() => {
-		window.addEventListener(PLAYLIST_CHANGE_EVENT_NAME, (e) => {
-			const data = (e as CustomEvent).detail as PlaylistChangeEventData
-			if (data.hookId !== uniqueHookId && data.playlistGuid === guid) {
-				fetchApiState(() => getPlaylistByGuid(guid))
-			}
-		})
-		return () => {
-			window.removeEventListener(PLAYLIST_CHANGE_EVENT_NAME, () => {})
-		}
-	}, [guid, uniqueHookId])
+	const refetchOnChange = useCallback(() => {
+		fetchApiState(() => getPlaylistByGuid(guid), undefined, { silent: true })
+	}, [guid])
+
+	usePlaylistChangeSubscription({
+		guid,
+		uniqueHookId,
+		notFetch,
+		onChange: refetchOnChange,
+	})
 
 	const search = useCallback(
 		async (searchString: string) => {
