@@ -55,13 +55,10 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 			>
 				<Box
 					sx={{
-						padding: 3,
-						backgroundColor: 'grey.200',
-						borderStyle: 'solid',
-						borderWidth: 1,
-						borderColor: 'grey.300',
-						boxShadow: '0px 2px 3px 1px rgba(0, 0, 0, 0.1)',
-						borderRadius: 1,
+						padding: { xs: 2.5, md: 4 },
+						backgroundColor: 'background.paper',
+						boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.08)',
+						borderRadius: 3,
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',

@@ -52,7 +52,8 @@ const SegmentElement = ({
 								<>
 									<Typography
 										sx={{ height: chordHeight, paddingRight: '0.5rem' }}
-										strong={900}
+										strong={700}
+										color="primary.dark"
 										className="chord"
 									>
 										{segment.chord?.toString(signature)}
@@ -133,7 +134,8 @@ const SectionComponent = ({
 					<Typography
 						// fontStyle={'italic'}
 						noWrap
-						strong={section.type === SectionType.CHORUS ? 600 : 400}
+						strong={section.type === SectionType.CHORUS ? 700 : 400}
+						color="text.secondary"
 						sx={{
 							width: '2rem',
 						}}
@@ -220,13 +222,13 @@ const DefaultStyle: SheetStyleComponentType = ({
 								<>
 									<div
 										style={{
-											marginBottom: 2,
+											marginBottom: '0.75rem',
 											// display: 'flex',
 											// justifyContent: 'center',
 										}}
 									>
-										<Typography variant="h5" noWrap>
-											<b>{title}</b>
+										<Typography variant="h4" strong noWrap>
+											{title}
 										</Typography>
 									</div>
 								</>
