@@ -68,8 +68,9 @@ export default function Popup({
 		e.preventDefault()
 	}
 
-	// On esc key press, close the popup
+	// On esc key press, close the popup (only while open)
 	useEffect(() => {
+		if (!open) return
 		const handleEsc = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				onClose?.()
@@ -79,7 +80,7 @@ export default function Popup({
 		return () => {
 			document.removeEventListener('keydown', handleEsc)
 		}
-	}, [onClose])
+	}, [onClose, open])
 
 	useEffect(() => {
 		if (open) {
@@ -121,6 +122,8 @@ export default function Popup({
 					>
 						<form onSubmit={onSubmitHandle} onReset={onResetHandle}>
 							<Box
+								role="dialog"
+								aria-modal="true"
 								sx={{
 									pointerEvents: 'auto',
 									padding: 3,
@@ -164,7 +167,7 @@ export default function Popup({
 												<Typography
 													variant="subtitle1"
 													strong={500}
-													color="grey.600"
+													color="text.secondary"
 												>
 													{props.subtitle}
 												</Typography>
