@@ -1,4 +1,4 @@
-import { theme } from '@/common/constants/theme'
+import { gradient } from '@/common/constants/theme'
 import { Typography } from '@/common/ui/Typography'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, SxProps } from '@mui/material'
@@ -39,6 +39,7 @@ export type ButtonProps<T extends RoutesKeys> = {
 
 	className?: string
 
+	/** @deprecated Buttons no longer uppercase their label (theme default). */
 	disableUppercase?: boolean
 
 	// aliases
@@ -72,10 +73,6 @@ export const Button = memo(
 				? 'contained'
 				: variant
 
-		props.sx = {
-			borderRadius: 2,
-			...props.sx,
-		}
 
 		const ButtonComponent = useCallback(
 			() => (
@@ -107,12 +104,11 @@ export const Button = memo(
 							!props.loading &&
 							variant === 'contained'
 								? {
-										background: `linear-gradient(115deg, ${theme.palette.primary.main} 10%, ${theme.palette.primary.dark})`,
+										background: `linear-gradient(115deg, ${gradient.from} 10%, ${gradient.to})`,
 										color: 'white',
 									}
 								: {}),
 
-							textTransform: props.disableUppercase ? 'none' : undefined,
 							...props.sx,
 						}}
 					>

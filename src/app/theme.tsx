@@ -13,10 +13,12 @@ let muiTheme = createTheme(
 				fontSize: '5rem',
 				fontWeight: 400,
 				lineHeight: 1,
+				letterSpacing: '-0.02em',
 			},
 			h2: {
 				fontSize: '3rem',
 				fontWeight: 300,
+				letterSpacing: '-0.01em',
 			},
 			h3: {
 				fontSize: '2rem',
@@ -30,6 +32,11 @@ let muiTheme = createTheme(
 			},
 			h6: {
 				fontSize: '1.125rem',
+			},
+			button: {
+				textTransform: 'none',
+				fontWeight: 600,
+				letterSpacing: '0.01em',
 			},
 		},
 	},

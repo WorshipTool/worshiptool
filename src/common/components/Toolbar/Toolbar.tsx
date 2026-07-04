@@ -5,6 +5,7 @@ import MiddleNavigationPanel from '@/common/components/Toolbar/components/Middle
 import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
 import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
+import { gradient } from '@/common/constants/theme'
 import { Box, useTheme } from '@/common/ui'
 import { grey } from '@/common/ui/mui/colors'
 import { styled, useMediaQuery } from '@mui/system'
@@ -62,7 +63,7 @@ export function Toolbar() {
 						background:
 							variant === 'dark'
 								? grey[900]
-								: `linear-gradient(70deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+								: `linear-gradient(70deg, ${gradient.from}, ${gradient.to})`,
 						position: 'absolute',
 						left: 0,
 						right: 0,

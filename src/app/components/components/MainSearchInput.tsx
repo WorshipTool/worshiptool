@@ -1,6 +1,7 @@
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { NewsHighlightWrapper } from '@/common/providers/News'
+import { gradient } from '@/common/constants/theme'
 import { Box, IconButton, useTheme } from '@/common/ui'
 import { InputBase } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
@@ -76,7 +77,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 		<div
 			data-testid="main-search-container"
 			style={{
-				background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+				background: `linear-gradient(120deg, ${gradient.from}, ${gradient.to})`,
 				boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
 				width: '100%',
 				borderRadius: '0.6rem',
