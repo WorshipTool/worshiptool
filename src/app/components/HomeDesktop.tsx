@@ -9,7 +9,8 @@ import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { gradient } from '@/common/constants/theme'
 import { Box, Image, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Chip, useMediaQuery } from '@/common/ui/mui'
+import { Groups, LibraryMusic, SwapVert } from '@mui/icons-material'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import useWorshipCzVersion from '@/hooks/worshipcz/useWorshipCzVersion'
@@ -26,6 +27,35 @@ import SearchedSongsList from './components/SearchedSongsList'
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
 
 const ANIMATION_DURATION = 0.2
+
+// Decorative chords gently floating in the empty area of the hero
+const FLOATING_CHORDS = [
+	{ label: 'G', top: '20%', left: '7%', size: '1.7rem', duration: 6, delay: 0 },
+	{
+		label: 'Em',
+		top: '62%',
+		left: '9%',
+		size: '1.35rem',
+		duration: 7,
+		delay: 0.8,
+	},
+	{
+		label: 'D',
+		top: '79%',
+		left: '30%',
+		size: '1.9rem',
+		duration: 6.5,
+		delay: 1.6,
+	},
+	{
+		label: 'C',
+		top: '56%',
+		left: '57%',
+		size: '1.25rem',
+		duration: 7.5,
+		delay: 0.4,
+	},
+]
 
 export default function HomeDesktop() {
 	const theme = useTheme()
@@ -138,6 +168,21 @@ export default function HomeDesktop() {
 		width: 'fit-content',
 		paddingRight: '0.08em',
 	}
+
+	const quickSearches = [
+		tHome('quickSearch.q1'),
+		tHome('quickSearch.q2'),
+		tHome('quickSearch.q3'),
+	]
+
+	const features = [
+		{
+			icon: <LibraryMusic fontSize="small" />,
+			label: tHome('features.chords'),
+		},
+		{ icon: <SwapVert fontSize="small" />, label: tHome('features.transpose') },
+		{ icon: <Groups fontSize="small" />, label: tHome('features.teams') },
+	]
 	return (
 		<>
 			<Box
@@ -174,6 +219,41 @@ export default function HomeDesktop() {
 					}}
 				/>
 			</Box>
+
+			{!isMobile && (
+				<Box
+					sx={{
+						position: 'fixed',
+						inset: 0,
+						zIndex: -1,
+						pointerEvents: 'none',
+						opacity: isTop ? 1 : 0,
+						transition: 'opacity 0.3s ease',
+						'@keyframes floatChord': {
+							'0%': { transform: 'translateY(-10px)' },
+							'100%': { transform: 'translateY(10px)' },
+						},
+					}}
+				>
+					{FLOATING_CHORDS.map((c) => (
+						<Typography
+							key={c.label}
+							sx={{
+								position: 'absolute',
+								top: c.top,
+								left: c.left,
+								fontSize: c.size,
+								fontWeight: 700,
+								color: 'primary.dark',
+								opacity: 0.13,
+								animation: `floatChord ${c.duration}s ease-in-out ${c.delay}s infinite alternate`,
+							}}
+						>
+							{c.label}
+						</Typography>
+					))}
+				</Box>
+			)}
 
 			<Box
 				sx={{
@@ -374,6 +454,86 @@ export default function HomeDesktop() {
 										smartSearch={smartSearch ?? false}
 										onSmartSearchChange={setSmartSearch}
 									/>
+
+									<Box
+										sx={{
+											opacity: isTop && !searchInputValue ? 1 : 0,
+											transition: 'opacity 0.2s ease',
+											pointerEvents:
+												isTop && !searchInputValue ? 'auto' : 'none',
+											display: phoneVersion ? 'none' : 'flex',
+											flexDirection: 'column',
+											gap: 4,
+										}}
+									>
+										<Box
+											sx={{
+												display: 'flex',
+												flexDirection: 'row',
+												alignItems: 'center',
+												gap: 1,
+												flexWrap: 'wrap',
+											}}
+										>
+											<Typography small color="text.secondary">
+												{tHome('hero.tryFor')}
+											</Typography>
+											{quickSearches.map((q) => (
+												<Chip
+													key={q}
+													label={q}
+													size="small"
+													clickable
+													onClick={() => onSearchValueChange(q)}
+													sx={{
+														bgcolor: 'background.paper',
+														boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.06)',
+													}}
+												/>
+											))}
+										</Box>
+
+										{!phoneVersion && (
+											<Box
+												sx={{ display: 'flex', flexDirection: 'row', gap: 2.5 }}
+											>
+												{features.map((f) => (
+													<Box
+														key={f.label}
+														sx={{
+															display: 'flex',
+															alignItems: 'center',
+															gap: 1.25,
+															flex: 1,
+														}}
+													>
+														<Box
+															sx={{
+																width: 38,
+																height: 38,
+																minWidth: 38,
+																borderRadius: 2.5,
+																display: 'flex',
+																alignItems: 'center',
+																justifyContent: 'center',
+																background: `linear-gradient(135deg, ${gradient.from}1f, ${gradient.to}1f)`,
+																color: 'primary.dark',
+															}}
+														>
+															{f.icon}
+														</Box>
+														<Typography
+															small
+															strong={500}
+															color="text.secondary"
+														>
+															{f.label}
+														</Typography>
+													</Box>
+												))}
+											</Box>
+										)}
+									</Box>
 								</Box>
 							</Box>
 

@@ -103,7 +103,18 @@
 			"lead": "Vitaj na...",
 			"title": "Chwalmy",
 			"subtitle": "Na chwalmy.com",
-			"subtitleLower": "na chwalmy.com"
+			"subtitleLower": "na chwalmy.com",
+			"tryFor": "Spróbuj np."
+		},
+		"quickSearch": {
+			"q1": "chwała",
+			"q2": "łaska",
+			"q3": "alleluja"
+		},
+		"features": {
+			"chords": "Teksty z akordami",
+			"transpose": "Transpozycja jednym kliknięciem",
+			"teams": "Playlisty dla twojego zespołu"
 		},
 		"recommended": {
 			"idea": "Jakaś propozycja",

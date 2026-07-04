@@ -103,7 +103,18 @@
 			"lead": "Jsi-li ovce, tak...",
 			"title": "Chval Otce",
 			"subtitle": "Na worship.cz",
-			"subtitleLower": "na worship.cz"
+			"subtitleLower": "na worship.cz",
+			"tryFor": "Zkus třeba"
+		},
+		"quickSearch": {
+			"q1": "chvála",
+			"q2": "milost",
+			"q3": "haleluja"
+		},
+		"features": {
+			"chords": "Texty s akordy",
+			"transpose": "Transpozice jedním klikem",
+			"teams": "Playlisty pro tvůj tým"
 		},
 		"recommended": {
 			"idea": "Nějaký nápad",

@@ -103,7 +103,18 @@
 			"lead": "Welcome to...",
 			"title": "HallelujahHub",
 			"subtitle": "Your worship companion",
-			"subtitleLower": "your worship companion"
+			"subtitleLower": "your worship companion",
+			"tryFor": "Try e.g."
+		},
+		"quickSearch": {
+			"q1": "grace",
+			"q2": "hallelujah",
+			"q3": "praise"
+		},
+		"features": {
+			"chords": "Lyrics with chords",
+			"transpose": "One-click transpose",
+			"teams": "Playlists for your team"
 		},
 		"recommended": {
 			"idea": "Need an idea?",
