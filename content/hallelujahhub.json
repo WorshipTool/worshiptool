@@ -262,6 +262,7 @@
 		}
 	},
 	"playlist": {
+		"cannotEditOnPhone": "Playlists can't be edited on a small device. Please use a computer to edit.",
 		"myPlaylists": "My Playlists",
 		"createNew": "Create New",
 		"create": "Create",
@@ -603,10 +604,13 @@
 		"forbidden": "You don't have sufficient permissions to view this content!",
 		"notFound": "Page not found",
 		"notFoundDescription": "It seems you've wandered into uncharted territories of the application. You can try going back to the main page.",
-		"goHome": "GO HOME",
+		"goHome": "Go home",
 		"serverError": "Something went wrong!",
 		"unauthorized": "Unauthorized access",
-		"tokenExpired": "Token expired"
+		"tokenExpired": "Token expired",
+		"songNotFound": "Song not found",
+		"songNotFoundDescription": "It may have been removed, or the link is invalid. Try searching for it again.",
+		"dataLoadFailed": "Failed to load data. Please try again."
 	},
 	"teams": {
 		"title": "Teams",

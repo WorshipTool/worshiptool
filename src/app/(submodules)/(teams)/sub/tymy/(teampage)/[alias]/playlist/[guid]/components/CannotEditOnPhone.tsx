@@ -3,10 +3,12 @@ import useInnerPlaylist from '@/app/(layout)/playlist/[guid]/hooks/useInnerPlayl
 import { Card, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import { Info } from '@mui/icons-material'
+import { useTranslations } from 'next-intl'
 
 export default function CannotEditOnPhone() {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+	const t = useTranslations('playlist')
 
 	const { canUserEdit } = useInnerPlaylist()
 	const show = isMobile && canUserEdit
@@ -15,8 +17,7 @@ export default function CannotEditOnPhone() {
 		show && (
 			<Card
 				icon={<Info />}
-				subtitle="Playlist nelze na malém zařízení editovat. Pro editaci použij prosím
-                        počítač."
+				subtitle={t('cannotEditOnPhone')}
 				sx={{
 					marginBottom: 2,
 				}}

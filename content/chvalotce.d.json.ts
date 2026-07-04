@@ -265,6 +265,7 @@ declare const messages: {
 		}
 	},
 	"playlist": {
+		"cannotEditOnPhone": "Playlist nelze na malém zařízení upravovat. Pro úpravy prosím použijte počítač.",
 		"myPlaylists": "Moje playlisty",
 		"createNew": "Vytvořit nový",
 		"create": "Vytvořit",
@@ -942,10 +943,13 @@ declare const messages: {
 		"forbidden": "K zobrazení obsahu nemáte dostatečná oprávnění!",
 		"notFound": "Stránka nenalezena",
 		"notFoundDescription": "Zdá se, že jste se dostali do neprozkouraných oblastí aplikace. Můžete zkusit jít zpět na hlavní stránku.",
-		"goHome": "DOMŮ",
+		"goHome": "Domů",
 		"serverError": "Někde nastala chyba!",
 		"unauthorized": "Neautorizovaný přístup",
-		"tokenExpired": "Token vypršel"
+		"tokenExpired": "Token vypršel",
+		"songNotFound": "Píseň nebyla nalezena",
+		"songNotFoundDescription": "Možná byla odstraněna, nebo je odkaz neplatný. Zkuste ji vyhledat znovu.",
+		"dataLoadFailed": "Nepodařilo se načíst data. Zkuste to prosím znovu."
 	},
 	"maintenance": {
 		"workInProgress": "Stránka je momentálně v údržbě.",

@@ -1,6 +1,8 @@
 'use client'
 
-import { Button } from '@/common/ui'
+import { Box, Button, CircularProgress, Typography } from '@/common/ui'
+import ErrorOutline from '@mui/icons-material/ErrorOutline'
+import { useTranslations } from 'next-intl'
 import { useSnackbar } from 'notistack'
 import { ReactNode, useEffect } from 'react'
 import { ApiState } from '../../../tech/ApiState'
@@ -39,6 +41,7 @@ export function SkeletonLoaderCore<T extends unknown[]>({
 }: SkeletonLoaderProps<T>) {
 	const status = getApiStateStatus(data as ApiState[])
 
+	const t = useTranslations('errors')
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
 	useEffect(() => {
@@ -69,9 +72,35 @@ export function SkeletonLoaderCore<T extends unknown[]>({
 			{status === ApiStateStatus.SUCCESS &&
 				render?.(data.map((state) => state.data) as T)}
 			{status === ApiStateStatus.ERROR &&
-				(renderError ? renderError() : <>{JSON.stringify(data)}</>)}
+				(renderError ? (
+					renderError()
+				) : (
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							gap: 1,
+							padding: 4,
+							textAlign: 'center',
+						}}
+					>
+						<ErrorOutline sx={{ fontSize: '2.5rem', color: 'grey.500' }} />
+						<Typography color="grey.700">{t('dataLoadFailed')}</Typography>
+					</Box>
+				))}
 			{status === ApiStateStatus.LOADING &&
-				(renderLoading?.() ?? <div className="text-center">...</div>)}
+				(renderLoading?.() ?? (
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							padding: 4,
+						}}
+					>
+						<CircularProgress />
+					</Box>
+				))}
 			{status === ApiStateStatus.INVALIDATED && <div></div>}
 		</>
 	)

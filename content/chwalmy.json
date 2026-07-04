@@ -262,6 +262,7 @@
 		}
 	},
 	"playlist": {
+		"cannotEditOnPhone": "Playlisty nie można edytować na małym urządzeniu. Do edycji użyj komputera.",
 		"myPlaylists": "Moje playlisty",
 		"createNew": "Utwórz nową",
 		"create": "Utwórz",
@@ -939,10 +940,13 @@
 		"forbidden": "Nie masz wystarczających uprawnień do wyświetlenia zawartości!",
 		"notFound": "Strona nie znaleziona",
 		"notFoundDescription": "Wygląda na to, że dotarłeś do niezbadanych obszarów aplikacji. Możesz spróbować wrócić na stronę główną.",
-		"goHome": "STRONA GŁÓWNA",
+		"goHome": "Strona główna",
 		"serverError": "Gdzieś wystąpił błąd!",
 		"unauthorized": "Nieautoryzowany dostęp",
-		"tokenExpired": "Token wygasł"
+		"tokenExpired": "Token wygasł",
+		"songNotFound": "Piosenka nie została znaleziona",
+		"songNotFoundDescription": "Być może została usunięta lub link jest nieprawidłowy. Spróbuj wyszukać ją ponownie.",
+		"dataLoadFailed": "Nie udało się wczytać danych. Spróbuj ponownie."
 	},
 	"maintenance": {
 		"workInProgress": "Strona jest obecnie w trakcie konserwacji.",
