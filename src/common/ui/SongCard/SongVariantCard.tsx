@@ -22,15 +22,14 @@ import { CustomChip } from '../CustomChip/CustomChip'
 import { CommonLinkProps, Link } from '../Link/Link'
 
 const StyledContainer = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.grey[100],
+	backgroundColor: theme.palette.background.paper,
 
-	borderRadius: '0.5rem',
+	borderRadius: '0.75rem',
+	boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+	transition: 'box-shadow 0.2s ease, transform 0.2s ease',
 	'&:hover': {
-		backgroundColor: theme.palette.grey[200],
-		boxShadow: `0px 0px 10px ${theme.palette.grey[400]}`,
-		'& .songcardgradient': {
-			background: `linear-gradient(0deg, ${theme.palette.grey[200]} 50%, transparent)`,
-		},
+		boxShadow: '0px 12px 28px rgba(0, 0, 0, 0.12)',
+		transform: 'translateY(-2px)',
 	},
 	cursor: 'pointer',
 	outlineWidth: 1.4,

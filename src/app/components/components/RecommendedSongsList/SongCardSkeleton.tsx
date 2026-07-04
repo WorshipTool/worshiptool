@@ -6,8 +6,9 @@ export default function SongCardSkeleton() {
 		<Box
 			sx={{
 				height: 200,
-				backgroundColor: 'grey.200',
-				borderRadius: 2,
+				backgroundColor: 'background.paper',
+				borderRadius: '0.75rem',
+				boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
 				padding: 2,
 			}}
 		>

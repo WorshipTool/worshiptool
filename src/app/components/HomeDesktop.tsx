@@ -220,6 +220,21 @@ export default function HomeDesktop() {
 				/>
 			</Box>
 
+			{/* Soft brand-color glows that give the grey background depth */}
+			<Box
+				sx={{
+					position: 'fixed',
+					inset: 0,
+					zIndex: -2,
+					pointerEvents: 'none',
+					background: `
+						radial-gradient(1000px 700px at 20% 35%, ${gradient.from}14, transparent 70%),
+						radial-gradient(800px 600px at 8% 92%, ${gradient.to}0e, transparent 70%),
+						radial-gradient(700px 500px at 58% 85%, ${gradient.from}0a, transparent 70%)
+					`,
+				}}
+			/>
+
 			{!isMobile && (
 				<Box
 					sx={{
