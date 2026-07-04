@@ -1,16 +1,10 @@
-'use server'
-import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
-import SongRightPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/RightPanel/SongRightPanel'
 import SongAnalyze from '@/app/(layout)/pisen/[hex]/[alias]/components/SongAnalyze'
 import SongContainer from '@/app/(layout)/pisen/[hex]/[alias]/SongContainer'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import ContainerGrid from '@/common/components/ContainerGrid'
 import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { Box } from '@/common/ui'
-import DraggableSong from '@/hooks/dragsong/DraggableSong'
-import { VariantPackAlias } from '@/types/song'
 import {
-	VariantPackGuid,
 	mapExtendedVariantPackApiToDto,
 	mapGetVariantDataApiToSongDto,
 } from '../../../../../api/dtos'
@@ -37,7 +31,8 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 		<Box
 			sx={{
 				display: 'flex',
-				// flexDirection: 'row',
+				justifyContent: 'center',
+				width: '100%',
 				position: 'relative',
 			}}
 		>
@@ -46,39 +41,21 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 
 			<ContainerGrid
 				sx={{
-					marginTop: 2,
-					marginBottom: 2,
-					// paddingX: 6,
-					gap: 2,
+					width: '100%',
+					marginTop: 3,
+					marginBottom: 6,
+					paddingX: { xs: 2, md: 3 },
 					alignItems: 'start',
 				}}
 			>
 				<Box
 					sx={{
-						padding: { xs: 2.5, md: 4 },
-						backgroundColor: 'background.paper',
-						boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.08)',
-						borderRadius: 3,
 						flex: 1,
+						minWidth: 0,
 						display: 'flex',
 						flexDirection: 'column',
-						displayPrint: 'none',
-						position: 'relative',
 					}}
 				>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<DraggableSong
-							key={i}
-							data={{
-								packGuid: variantData?.packGuid || ('' as VariantPackGuid),
-								title: variantData?.title || '',
-								alias: variantData?.packAlias || ('' as VariantPackAlias),
-							}}
-						>
-							<DragCorner index={i} />
-						</DraggableSong>
-					))}
-
 					<SongContainer
 						variant={variantData}
 						song={song}
@@ -87,8 +64,6 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 						}}
 					/>
 				</Box>
-
-				<SongRightPanel pack={variantData} song={song} />
 			</ContainerGrid>
 		</Box>
 	)

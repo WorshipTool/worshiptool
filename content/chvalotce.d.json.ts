@@ -414,8 +414,11 @@ declare const messages: {
 			}
 		},
 		"sources": {
-			"title": "Zdroje:"
-		}
+			"title": "Zdroje"
+		},
+			"media": {
+				"title": "Videa a nahrávky"
+			}
 	},
 	"teamPage": {
 		"overviewTitle": "Přehled",

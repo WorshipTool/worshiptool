@@ -411,8 +411,11 @@
 			}
 		},
 		"sources": {
-			"title": "Źródła:"
-		}
+			"title": "Źródła"
+		},
+			"media": {
+				"title": "Filmy i nagrania"
+			}
 	},
 	"teamPage": {
 		"overviewTitle": "Przegląd",

@@ -97,29 +97,35 @@ export default function UserNotePanel() {
 
 	return (
 		<Box display={'flex'} flexDirection={'column'}>
-			<Box display={'flex'} justifyContent={'end'}>
-				{!hasNote && !adding && !loading && (
-					<IconButton
+			{!hasNote && !adding && !loading && (
+				<Box display={'flex'}>
+					<Button
+						variant="text"
+						color="grey.600"
+						size="small"
+						startIcon={<AddComment />}
 						onClick={() => {
 							setAdding(true)
 						}}
-						tooltip={t('add')}
 					>
-						<AddComment />
-					</IconButton>
-				)}
-			</Box>
+						{t('add')}
+					</Button>
+				</Box>
+			)}
 
 			{(hasNote || adding) && (
 				<Box
 					display={'flex'}
 					sx={{
-						bgcolor: 'grey.300',
+						bgcolor: 'background.paper',
 						borderRadius: 3,
-						padding: 2,
+						borderStyle: 'solid',
+						borderWidth: 1,
+						borderColor: 'grey.200',
+						boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.04)',
+						padding: 2.5,
 					}}
 					flexDirection={'column'}
-					maxWidth={300}
 				>
 					<Box
 						display={'flex'}
@@ -128,7 +134,15 @@ export default function UserNotePanel() {
 						gap={1}
 						alignItems={'center'}
 					>
-						<Typography>{t('title')}</Typography>
+						<Typography
+						small
+						strong={600}
+						uppercase
+						color="text.secondary"
+						sx={{ letterSpacing: '0.06em' }}
+					>
+						{t('title')}
+					</Typography>
 						{
 							<IconButton
 								onClick={() => setAdding(true)}
@@ -155,7 +169,7 @@ export default function UserNotePanel() {
 									value={content}
 									onChange={(e) => setContent(e)}
 									sx={{
-										bgcolor: 'grey.200',
+										bgcolor: 'grey.100',
 										borderRadius: 1,
 										paddingLeft: 1,
 										width: '100%',
