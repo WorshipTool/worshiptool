@@ -7,6 +7,7 @@ import RightSheepPanel from '@/app/components/components/RightSheepPanel/RightSh
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
+import { gradient } from '@/common/constants/theme'
 import { Box, Image, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
@@ -127,6 +128,16 @@ export default function HomeDesktop() {
 	const heroTitle = tHome('hero.title')
 	const heroSubtitle = tHome('hero.subtitle')
 	const heroSubtitleLower = tHome('hero.subtitleLower')
+
+	// Brand-gradient hero title (blue → purple)
+	const heroTitleSx = {
+		background: `linear-gradient(100deg, ${gradient.from} 20%, ${gradient.to})`,
+		backgroundClip: 'text',
+		WebkitBackgroundClip: 'text',
+		color: 'transparent',
+		width: 'fit-content',
+		paddingRight: '0.08em',
+	}
 	return (
 		<>
 			<Box
@@ -270,10 +281,19 @@ export default function HomeDesktop() {
 											>
 												{useWorshipVersion ? (
 													<Box>
-														<Typography variant="h3" strong={200}>
+														<Typography
+															variant="h3"
+															strong={200}
+															color="text.secondary"
+														>
 															{heroLead}
 														</Typography>
-														<Typography variant="h1" strong={900} noWrap>
+														<Typography
+															variant="h1"
+															strong={800}
+															noWrap
+															sx={heroTitleSx}
+														>
 															{heroTitle}
 														</Typography>
 
@@ -295,10 +315,19 @@ export default function HomeDesktop() {
 													</Box>
 												) : (
 													<>
-														<Typography variant="h3" strong={200}>
+														<Typography
+															variant="h3"
+															strong={200}
+															color="text.secondary"
+														>
 															{heroLead}
 														</Typography>
-														<Typography variant="h1" strong={900} noWrap>
+														<Typography
+															variant="h1"
+															strong={800}
+															noWrap
+															sx={heroTitleSx}
+														>
 															{heroTitle}
 														</Typography>
 													</>
@@ -311,10 +340,19 @@ export default function HomeDesktop() {
 													flexDirection: 'column',
 												}}
 											>
-												<Typography variant="h4" strong={200}>
+												<Typography
+													variant="h4"
+													strong={200}
+													color="text.secondary"
+												>
 													{heroLead}
 												</Typography>
-												<Typography variant="h3" strong={900} noWrap>
+												<Typography
+													variant="h3"
+													strong={800}
+													noWrap
+													sx={heroTitleSx}
+												>
 													{heroTitle}
 												</Typography>
 

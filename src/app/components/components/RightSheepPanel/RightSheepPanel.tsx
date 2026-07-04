@@ -44,9 +44,10 @@ export default function RightSheepPanel(props: Props) {
 			) : (
 				<Box
 					sx={{
-						bgcolor: 'grey.100',
-						padding: 2,
-						borderRadius: 2,
+						bgcolor: 'background.paper',
+						padding: 2.5,
+						borderRadius: 3,
+						boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.08)',
 						maxWidth: 300,
 					}}
 				>

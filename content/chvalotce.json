@@ -106,7 +106,7 @@
 			"subtitleLower": "na worship.cz"
 		},
 		"recommended": {
-			"idea": "Nějaký nápad:",
+			"idea": "Nějaký nápad",
 			"error": "Při načítání se vyskytla chyba..."
 		},
 		"allList": {
@@ -120,7 +120,7 @@
 			"label": "Vytvořit"
 		},
 		"search": {
-			"resultsTitle": "Výsledky vyhledávání:",
+			"resultsTitle": "Výsledky vyhledávání",
 			"loadMore": "Načíst další",
 			"noResults": "Nic jsme nenašli..."
 		}

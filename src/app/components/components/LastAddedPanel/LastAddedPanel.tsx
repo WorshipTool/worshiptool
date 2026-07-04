@@ -42,10 +42,10 @@ export default function LastAddedPanel(props: Props) {
 		<Box position={'relative'}>
 			<Box
 				sx={{
-					bgcolor: 'grey.100',
-					borderRadius: 2,
-					padding: 2,
-					boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.2)',
+					bgcolor: 'background.paper',
+					borderRadius: 3,
+					padding: 2.5,
+					boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.08)',
 					display: 'flex',
 					flexDirection: 'column',
 					gap: 1,

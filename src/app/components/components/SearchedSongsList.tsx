@@ -101,7 +101,14 @@ const SearchedSongsList = memo(function S({
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography strong key={'results'}>
+				<Typography
+					small
+					strong={600}
+					uppercase
+					color="text.secondary"
+					sx={{ letterSpacing: '0.06em', marginBottom: 1 }}
+					key={'results'}
+				>
 					{tHome('search.resultsTitle')}
 				</Typography>
 

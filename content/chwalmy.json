@@ -106,7 +106,7 @@
 			"subtitleLower": "na chwalmy.com"
 		},
 		"recommended": {
-			"idea": "Jakaś propozycja:",
+			"idea": "Jakaś propozycja",
 			"error": "Wystąpił błąd podczas ładowania..."
 		},
 		"allList": {
@@ -120,7 +120,7 @@
 			"label": "Utwórz"
 		},
 		"search": {
-			"resultsTitle": "Wyniki wyszukiwania:",
+			"resultsTitle": "Wyniki wyszukiwania",
 			"loadMore": "Załaduj więcej",
 			"noResults": "Niczego nie znaleźliśmy..."
 		}

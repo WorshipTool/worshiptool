@@ -120,7 +120,7 @@
 			"label": "Create"
 		},
 		"search": {
-			"resultsTitle": "Search results:",
+			"resultsTitle": "Search results",
 			"loadMore": "Load more",
 			"noResults": "We didn't find anything..."
 		}

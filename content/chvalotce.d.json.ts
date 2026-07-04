@@ -109,7 +109,7 @@ declare const messages: {
 			"subtitleLower": "na worship.cz"
 		},
 		"recommended": {
-			"idea": "Nějaký nápad:",
+			"idea": "Nějaký nápad",
 			"error": "Při načítání se vyskytla chyba..."
 		},
 		"allList": {
@@ -123,7 +123,7 @@ declare const messages: {
 			"label": "Vytvořit"
 		},
 		"search": {
-			"resultsTitle": "Výsledky vyhledávání:",
+			"resultsTitle": "Výsledky vyhledávání",
 			"loadMore": "Načíst další",
 			"noResults": "Nic jsme nenašli..."
 		}

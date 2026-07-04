@@ -2,7 +2,7 @@ import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { useFlag } from '@/common/providers/FeatureFlags/useFlag'
 import { NewsHighlightWrapper } from '@/common/providers/News'
 import { gradient } from '@/common/constants/theme'
-import { Box, IconButton, useTheme } from '@/common/ui'
+import { Box, IconButton } from '@/common/ui'
 import { InputBase } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { AutoAwesome } from '@mui/icons-material'
@@ -12,11 +12,11 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 const SearchContainer = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.grey[100],
-	padding: '0.5rem',
-	paddingLeft: '0.8rem',
-	paddingRight: '0.8rem',
-	borderRadius: '0.5rem',
+	backgroundColor: '#ffffff',
+	padding: '0.7rem',
+	paddingLeft: '1rem',
+	paddingRight: '1rem',
+	borderRadius: '0.55rem',
 	display: 'flex',
 
 	justifyContent: 'center',
@@ -26,6 +26,7 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 	flex: 1,
 	marginLeft: '0.5em',
 	zIndex: 100,
+	fontSize: '1.05rem',
 }))
 
 type MainSearchInputProps = {
@@ -39,7 +40,6 @@ type MainSearchInputProps = {
 export const MAIN_SEARCH_EVENT_NAME = 'search_event_5jh14'
 
 export default function MainSearchInput(props: MainSearchInputProps) {
-	const theme = useTheme()
 	const t = useTranslations('search')
 	const inputRef = useRef<HTMLInputElement>()
 
@@ -78,9 +78,9 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 			data-testid="main-search-container"
 			style={{
 				background: `linear-gradient(120deg, ${gradient.from}, ${gradient.to})`,
-				boxShadow: `0px 3px 4px ${theme.palette.grey[500]}`,
+				boxShadow: '0px 12px 32px rgba(0, 0, 0, 0.14)',
 				width: '100%',
-				borderRadius: '0.6rem',
+				borderRadius: '0.7rem',
 				padding: props.gradientBorder ? 2 : 0,
 				transform: earlyFocused ? 'scale(107%)' : '',
 				transition: 'all 0.3s ease',
