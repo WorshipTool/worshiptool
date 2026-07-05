@@ -103,10 +103,21 @@
 			"lead": "Vitaj na...",
 			"title": "Chwalmy",
 			"subtitle": "Na chwalmy.com",
-			"subtitleLower": "na chwalmy.com"
+			"subtitleLower": "na chwalmy.com",
+			"tryFor": "Spróbuj np."
+		},
+		"quickSearch": {
+			"q1": "chwała",
+			"q2": "łaska",
+			"q3": "alleluja"
+		},
+		"features": {
+			"chords": "Teksty z akordami",
+			"transpose": "Transpozycja jednym kliknięciem",
+			"teams": "Playlisty dla twojego zespołu"
 		},
 		"recommended": {
-			"idea": "Jakaś propozycja:",
+			"idea": "Jakaś propozycja",
 			"error": "Wystąpił błąd podczas ładowania..."
 		},
 		"allList": {
@@ -120,7 +131,7 @@
 			"label": "Utwórz"
 		},
 		"search": {
-			"resultsTitle": "Wyniki wyszukiwania:",
+			"resultsTitle": "Wyniki wyszukiwania",
 			"loadMore": "Załaduj więcej",
 			"noResults": "Niczego nie znaleźliśmy..."
 		}
@@ -262,6 +273,7 @@
 		}
 	},
 	"playlist": {
+		"cannotEditOnPhone": "Playlisty nie można edytować na małym urządzeniu. Do edycji użyj komputera.",
 		"myPlaylists": "Moje playlisty",
 		"createNew": "Utwórz nową",
 		"create": "Utwórz",
@@ -410,8 +422,11 @@
 			}
 		},
 		"sources": {
-			"title": "Źródła:"
-		}
+			"title": "Źródła"
+		},
+			"media": {
+				"title": "Filmy i nagrania"
+			}
 	},
 	"teamPage": {
 		"overviewTitle": "Przegląd",
@@ -939,10 +954,13 @@
 		"forbidden": "Nie masz wystarczających uprawnień do wyświetlenia zawartości!",
 		"notFound": "Strona nie znaleziona",
 		"notFoundDescription": "Wygląda na to, że dotarłeś do niezbadanych obszarów aplikacji. Możesz spróbować wrócić na stronę główną.",
-		"goHome": "STRONA GŁÓWNA",
+		"goHome": "Strona główna",
 		"serverError": "Gdzieś wystąpił błąd!",
 		"unauthorized": "Nieautoryzowany dostęp",
-		"tokenExpired": "Token wygasł"
+		"tokenExpired": "Token wygasł",
+		"songNotFound": "Piosenka nie została znaleziona",
+		"songNotFoundDescription": "Być może została usunięta lub link jest nieprawidłowy. Spróbuj wyszukać ją ponownie.",
+		"dataLoadFailed": "Nie udało się wczytać danych. Spróbuj ponownie."
 	},
 	"maintenance": {
 		"workInProgress": "Strona jest obecnie w trakcie konserwacji.",

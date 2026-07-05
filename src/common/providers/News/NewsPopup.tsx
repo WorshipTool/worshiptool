@@ -8,7 +8,7 @@
  */
 
 import Popup from '@/common/components/Popup/Popup'
-import { theme } from '@/common/constants/theme'
+import { gradient, theme } from '@/common/constants/theme'
 import { Box, Button, IconButton } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
 import { Typography } from '@/common/ui/Typography'
@@ -133,7 +133,7 @@ export function NewsPopup() {
                     /* barevné bloby */
                     radial-gradient(520px 420px at 15% 25%, ${theme.palette.primary.main}44 0%, transparent 65%),
                     radial-gradient(480px 380px at 85% 20%, ${theme.palette.primary.main}33 0%, transparent 65%),
-                    radial-gradient(520px 420px at 60% 85%, ${theme.palette.primary.dark}22 0%, transparent 70%)
+                    radial-gradient(520px 420px at 60% 85%, ${gradient.to}22 0%, transparent 70%)
           `,
 					zIndex: 0,
 					filter: 'blur(22px)',

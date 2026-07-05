@@ -106,10 +106,21 @@ declare const messages: {
 			"lead": "Jsi-li ovce, tak...",
 			"title": "Chval Otce",
 			"subtitle": "Na worship.cz",
-			"subtitleLower": "na worship.cz"
+			"subtitleLower": "na worship.cz",
+			"tryFor": "Zkus třeba"
+		},
+		"quickSearch": {
+			"q1": "chvála",
+			"q2": "milost",
+			"q3": "haleluja"
+		},
+		"features": {
+			"chords": "Texty s akordy",
+			"transpose": "Transpozice jedním klikem",
+			"teams": "Playlisty pro tvůj tým"
 		},
 		"recommended": {
-			"idea": "Nějaký nápad:",
+			"idea": "Nějaký nápad",
 			"error": "Při načítání se vyskytla chyba..."
 		},
 		"allList": {
@@ -123,7 +134,7 @@ declare const messages: {
 			"label": "Vytvořit"
 		},
 		"search": {
-			"resultsTitle": "Výsledky vyhledávání:",
+			"resultsTitle": "Výsledky vyhledávání",
 			"loadMore": "Načíst další",
 			"noResults": "Nic jsme nenašli..."
 		}
@@ -265,6 +276,7 @@ declare const messages: {
 		}
 	},
 	"playlist": {
+		"cannotEditOnPhone": "Playlist nelze na malém zařízení upravovat. Pro úpravy prosím použijte počítač.",
 		"myPlaylists": "Moje playlisty",
 		"createNew": "Vytvořit nový",
 		"create": "Vytvořit",
@@ -413,8 +425,11 @@ declare const messages: {
 			}
 		},
 		"sources": {
-			"title": "Zdroje:"
-		}
+			"title": "Zdroje"
+		},
+			"media": {
+				"title": "Videa a nahrávky"
+			}
 	},
 	"teamPage": {
 		"overviewTitle": "Přehled",
@@ -942,10 +957,13 @@ declare const messages: {
 		"forbidden": "K zobrazení obsahu nemáte dostatečná oprávnění!",
 		"notFound": "Stránka nenalezena",
 		"notFoundDescription": "Zdá se, že jste se dostali do neprozkouraných oblastí aplikace. Můžete zkusit jít zpět na hlavní stránku.",
-		"goHome": "DOMŮ",
+		"goHome": "Domů",
 		"serverError": "Někde nastala chyba!",
 		"unauthorized": "Neautorizovaný přístup",
-		"tokenExpired": "Token vypršel"
+		"tokenExpired": "Token vypršel",
+		"songNotFound": "Píseň nebyla nalezena",
+		"songNotFoundDescription": "Možná byla odstraněna, nebo je odkaz neplatný. Zkuste ji vyhledat znovu.",
+		"dataLoadFailed": "Nepodařilo se načíst data. Zkuste to prosím znovu."
 	},
 	"maintenance": {
 		"workInProgress": "Stránka je momentálně v údržbě.",

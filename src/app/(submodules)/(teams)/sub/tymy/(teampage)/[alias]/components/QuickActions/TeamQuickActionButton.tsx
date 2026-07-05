@@ -1,6 +1,7 @@
 'use client'
 import TeamCard from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/TeamCard/TeamCard'
 import { useDownSize } from '@/common/hooks/useDownSize'
+import { gradient } from '@/common/constants/theme'
 import { Box, CircularProgress, useTheme } from '@/common/ui'
 import { Clickable } from '@/common/ui/Clickable'
 import { Tooltip } from '@/common/ui/CustomTooltip/Tooltip'
@@ -74,7 +75,7 @@ export default function TeamQuickActionButton({
 									  }
 									: color === 'primary'
 									? {
-											background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+											background: `linear-gradient(45deg, ${gradient.from}, ${gradient.to})`,
 											color: 'white',
 									  }
 									: color === 'secondary'

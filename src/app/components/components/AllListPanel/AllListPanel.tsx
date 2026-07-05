@@ -11,9 +11,12 @@ export default function AllListPanel() {
 			alignItems={'center'}
 			flexWrap={'wrap'}
 			sx={{
-				bgcolor: 'grey.100',
-				borderRadius: 2,
-				// padding: 2,
+				bgcolor: 'background.paper',
+				borderRadius: 3,
+				borderStyle: 'solid',
+				borderWidth: 1,
+				borderColor: 'grey.200',
+				boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.06)',
 				overflow: 'hidden',
 			}}
 		>
@@ -23,6 +26,7 @@ export default function AllListPanel() {
 					flex: 1,
 					display: 'flex',
 					flexDirection: 'column',
+					paddingY: 1.25,
 				}}
 				color="black"
 				to="songsList"

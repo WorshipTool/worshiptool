@@ -17,9 +17,10 @@ export default function RowSongPackCard({ data: s }: Props) {
 					sx={{
 						padding: 1,
 						paddingX: 1.5,
-						bgcolor: 'grey.100',
+						bgcolor: 'background.paper',
 						borderRadius: 2,
-						border: `2px solid ${grey[300]}`,
+						border: `1px solid ${grey[200]}`,
+						boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
 						display: 'flex',
 						justifyContent: 'space-between',
 					}}

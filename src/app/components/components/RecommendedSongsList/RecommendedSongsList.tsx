@@ -38,7 +38,14 @@ export default function RecommendedSongsList({
 				width: '100%',
 			}}
 		>
-			<Typography strong key={'idea'}>
+			<Typography
+				small
+				strong={600}
+				uppercase
+				color="text.secondary"
+				sx={{ letterSpacing: '0.06em', marginBottom: 1 }}
+				key={'idea'}
+			>
 				{tHome('recommended.idea')}
 			</Typography>
 

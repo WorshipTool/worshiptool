@@ -1,9 +1,10 @@
 'use client'
-// 'use server'
 import AdditionalSongInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/AdditionalSongInfoPanel'
 import DeletedInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/components/DeletedInfoPanel'
 import { SONG_OPTIONS_BUTTON_ID } from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
+import DragCorner from '@/app/(layout)/pisen/[hex]/[alias]/components/DragCorner'
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
+import SongRightPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/RightPanel/SongRightPanel'
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
 import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
@@ -11,11 +12,12 @@ import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box, Gap } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
+import DraggableSong from '@/hooks/dragsong/DraggableSong'
 import { useRerender } from '@/hooks/useRerender'
-import { ExtendedVariantPack } from '@/types/song'
+import { ExtendedVariantPack, VariantPackAlias } from '@/types/song'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useEffect, useMemo, useState } from 'react'
-import { SongDto } from '../../../../../api/dtos'
+import { SongDto, VariantPackGuid } from '../../../../../api/dtos'
 
 export type SongPageProps = {
 	variant: ExtendedVariantPack
@@ -103,29 +105,60 @@ export default function SongContainer({
 						hideChords={!showChords}
 					/>
 
-					<>
-						{variant && variant.deleted ? (
+					{variant && variant.deleted ? (
+						<>
+							<Gap value={2} />
+							<DeletedInfoPanel variant={variant} reloadSong={reload} />
+						</>
+					) : (
+						currentSheet && (
 							<>
-								<Gap value={2} />
-								<DeletedInfoPanel variant={variant} reloadSong={reload} />
-							</>
-						) : (
-							currentSheet && (
+								<Gap value={1.5} />
 								<Box
 									display={'flex'}
 									flexDirection={'row'}
 									flexWrap={'wrap'}
-									justifyContent={'space-between'}
+									alignItems={'flex-start'}
+									justifyContent={'center'}
+									gap={3}
 								>
-									<Box flex={1}>
-										<Gap value={0.5} />
-										{currentSheet.getKeyChord() && (
-											<HideChordsButton
-												hiddenValue={!showChords}
-												onChange={(value) => setShowChords(!value)}
-											/>
+									{/* SONG SHEET — the “paper” */}
+									<Box
+										sx={{
+											flex: 1,
+											minWidth: 0,
+											maxWidth: { md: 800 },
+											position: 'relative',
+											padding: { xs: 2.5, sm: 3.5, md: 5 },
+											backgroundColor: 'background.paper',
+											boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.08)',
+											borderRadius: 3,
+											displayPrint: 'none',
+										}}
+									>
+										{Array.from({ length: 4 }).map((_, i) => (
+											<DraggableSong
+												key={i}
+												data={{
+													packGuid:
+														variant?.packGuid || ('' as VariantPackGuid),
+													title: variant?.title || '',
+													alias:
+														variant?.packAlias || ('' as VariantPackAlias),
+												}}
+											>
+												<DragCorner index={i} />
+											</DraggableSong>
+										))}
+
+										{currentSheet.getKeyChord() && !inEditMode && (
+											<Box display={'flex'} justifyContent={'flex-end'}>
+												<HideChordsButton
+													hiddenValue={!showChords}
+													onChange={(value) => setShowChords(!value)}
+												/>
+											</Box>
 										)}
-										<Gap value={0.5} />
 										<SheetDisplay
 											sheet={currentSheet}
 											title={editedTitle}
@@ -138,41 +171,33 @@ export default function SongContainer({
 											}}
 										/>
 									</Box>
+
+									{/* SIDEBAR — note, videos, sources… */}
 									{!inEditMode && (
-										<Box>
-											{user && (
-												<>
-													<Gap />
-													<Box
-														sx={{
-															position: 'sticky',
-															top: 80,
-															// bottom: 160,
-															display: 'flex',
-															flexDirection: 'column',
-															alignItems: 'flex-end',
-														}}
-													>
-														<UserNotePanel />
-													</Box>
-												</>
-											)}
+										<Box
+											sx={{
+												width: { xs: '100%', md: 320 },
+												flexShrink: 0,
+												display: 'flex',
+												flexDirection: 'column',
+												gap: 2,
+												position: { md: 'sticky' },
+												top: { md: 88 },
+												displayPrint: 'none',
+											}}
+										>
+											{user && <UserNotePanel />}
+											<AdditionalSongInfoPanel
+												song={song as SongDto}
+												variant={variant}
+												showMedia={props.flags.showMedia}
+											/>
+											<SongRightPanel pack={variant} song={song as SongDto} />
 										</Box>
 									)}
 								</Box>
-							)
-						)}
-					</>
-
-					{!inEditMode && variant && !variant.deleted && (
-						<>
-							<Gap value={2} />
-							<AdditionalSongInfoPanel
-								song={song as SongDto}
-								variant={variant}
-								showMedia={props.flags.showMedia}
-							/>
-						</>
+							</>
+						)
 					)}
 				</Box>
 			</SmartPortalMenuProvider>
