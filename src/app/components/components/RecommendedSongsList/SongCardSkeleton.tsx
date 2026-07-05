@@ -8,7 +8,10 @@ export default function SongCardSkeleton() {
 				height: 200,
 				backgroundColor: 'background.paper',
 				borderRadius: '0.75rem',
-				boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+				borderStyle: 'solid',
+				borderWidth: 1,
+				borderColor: 'grey.200',
+				boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.04)',
 				padding: 2,
 			}}
 		>

@@ -220,18 +220,41 @@ export default function HomeDesktop() {
 				/>
 			</Box>
 
-			{/* Soft brand-color glows that give the grey background depth */}
+			{/* Subtle texture that makes the grey background feel like paper:
+			    one faint glow behind the hero, a dot grid fading away from it,
+			    and a fine grain over everything */}
 			<Box
 				sx={{
 					position: 'fixed',
 					inset: 0,
 					zIndex: -2,
 					pointerEvents: 'none',
-					background: `
-						radial-gradient(1000px 700px at 20% 35%, ${gradient.from}14, transparent 70%),
-						radial-gradient(800px 600px at 8% 92%, ${gradient.to}0e, transparent 70%),
-						radial-gradient(700px 500px at 58% 85%, ${gradient.from}0a, transparent 70%)
-					`,
+					background: `radial-gradient(900px 620px at 24% 38%, ${gradient.from}0a, transparent 70%)`,
+				}}
+			/>
+			<Box
+				sx={{
+					position: 'fixed',
+					inset: 0,
+					zIndex: -2,
+					pointerEvents: 'none',
+					backgroundImage:
+						'radial-gradient(circle, rgba(71, 85, 105, 0.13) 1px, transparent 1.5px)',
+					backgroundSize: '22px 22px',
+					maskImage:
+						'radial-gradient(1100px 750px at 30% 42%, transparent 25%, black 80%)',
+					WebkitMaskImage:
+						'radial-gradient(1100px 750px at 30% 42%, transparent 25%, black 80%)',
+				}}
+			/>
+			<Box
+				sx={{
+					position: 'fixed',
+					inset: 0,
+					zIndex: -2,
+					pointerEvents: 'none',
+					opacity: 0.55,
+					backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.07'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
 				}}
 			/>
 
@@ -502,7 +525,10 @@ export default function HomeDesktop() {
 													onClick={() => onSearchValueChange(q)}
 													sx={{
 														bgcolor: 'background.paper',
-														boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.06)',
+														borderStyle: 'solid',
+														borderWidth: 1,
+														borderColor: 'grey.200',
+														boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.05)',
 													}}
 												/>
 											))}

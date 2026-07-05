@@ -13,7 +13,10 @@ export default function AllListPanel() {
 			sx={{
 				bgcolor: 'background.paper',
 				borderRadius: 3,
-				boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.08)',
+				borderStyle: 'solid',
+				borderWidth: 1,
+				borderColor: 'grey.200',
+				boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.06)',
 				overflow: 'hidden',
 			}}
 		>

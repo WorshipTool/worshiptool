@@ -47,7 +47,10 @@ export default function RightSheepPanel(props: Props) {
 						bgcolor: 'background.paper',
 						padding: 2.5,
 						borderRadius: 3,
-						boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.08)',
+						borderStyle: 'solid',
+						borderWidth: 1,
+						borderColor: 'grey.200',
+						boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.06)',
 						maxWidth: 300,
 					}}
 				>

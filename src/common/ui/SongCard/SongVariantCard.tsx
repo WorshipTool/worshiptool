@@ -25,11 +25,14 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
 
 	borderRadius: '0.75rem',
-	boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
-	transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+	border: `1px solid ${theme.palette.grey[200]}`,
+	boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.04)',
+	transition:
+		'box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
 	'&:hover': {
-		boxShadow: '0px 12px 28px rgba(0, 0, 0, 0.12)',
+		boxShadow: '0px 14px 30px rgba(0, 0, 0, 0.10)',
 		transform: 'translateY(-2px)',
+		borderColor: theme.palette.grey[300],
 	},
 	cursor: 'pointer',
 	outlineWidth: 1.4,
