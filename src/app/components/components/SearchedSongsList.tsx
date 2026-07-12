@@ -10,6 +10,7 @@ import useSongSearch from '../../../hooks/song/useSongSearch'
 import usePagination from '../../../hooks/usePagination'
 
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import SmartSongListCards from '@/common/components/songLists/SongListCards/SmartSongListCards'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
@@ -82,6 +83,12 @@ const SearchedSongsList = memo(function S({
 	useChangeDelayer(
 		searchString,
 		(value) => {
+			if (value.trim().length > 0) {
+				Analytics.track('SEARCH', {
+					query: value,
+					smartSearch: Boolean(useSmartSearch),
+				})
+			}
 			loadPage(0, true).finally(() => {
 				setEnableLoadNext(true)
 			})

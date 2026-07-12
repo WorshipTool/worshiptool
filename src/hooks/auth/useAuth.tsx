@@ -7,6 +7,7 @@ import {
 	useGoogleOAuthReady,
 } from '@/app/components/LazyGoogleOAuthProvider'
 import { getApiClass } from '@/api/tech-and-hooks/api-classes'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { AUTH_COOKIE_NAME } from '@/hooks/auth/auth.constants'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { routesPaths } from '@/routes'
@@ -171,10 +172,11 @@ export function useProvideAuth() {
 			.login(body)
 			.then((result) => {
 				_innerLogin(loginResultDTOToUser(result))
+				Analytics.track('LOGIN', { method: 'password' })
 				if (after) after(result)
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 				if (after) after(err.response)
 			})
 			.finally(() => {
@@ -198,6 +200,7 @@ export function useProvideAuth() {
 		} finally {
 			if (user) {
 				setUser(undefined)
+				Analytics.track('LOGOUT', {})
 				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 			}
 			setLoading(false)
@@ -212,10 +215,11 @@ export function useProvideAuth() {
 		authApi
 			.signup(body)
 			.then((result) => {
+				Analytics.track('SIGNUP', { method: 'password' })
 				if (after) after(true)
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 				if (after) after(false)
 			})
 			.finally(() => {
@@ -242,10 +246,11 @@ export function useProvideAuth() {
 			.loginWithGoogle(data)
 			.then((result) => {
 				_innerLogin(loginResultDTOToUser(result))
+				Analytics.track('LOGIN', { method: 'google' })
 				if (after) after(result)
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 				if (after) after(err.response)
 			})
 			.finally(() => {

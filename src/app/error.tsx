@@ -3,6 +3,7 @@
 import { ErrorPageProps } from '@/common/types'
 import { Box, Button, Typography } from '@/common/ui'
 import { LockPerson } from '@mui/icons-material'
+import * as Sentry from '@sentry/nextjs'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo } from 'react'
 
@@ -17,7 +18,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
 
 	useEffect(() => {
 		console.error('Error page error:', error)
-		//TODO: send report to admin
+		Sentry.captureException(error, { tags: { errorBoundary: 'page' } })
 	}, [error])
 
 	return (

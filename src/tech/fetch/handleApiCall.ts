@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import { AxiosResponse } from 'axios'
 
 export const networkErrorEvent = 'networkErrorEvent'
@@ -23,25 +24,37 @@ export const handleApiCall = <T>(
 		.catch((err) => {
 			if (typeof window === 'undefined') throw err
 
-			if (err.message == 'Network Error') {
-				window?.dispatchEvent(new CustomEvent(networkErrorEvent))
-			} else if (err.response.status === 502) {
+			const status: number | undefined = err?.response?.status
+			const isNetworkError = err?.message === 'Network Error'
+
+			if (isNetworkError || status === 502) {
 				window?.dispatchEvent(new CustomEvent(networkErrorEvent))
 			}
-			if (err.response.status) {
-				switch (err.response.status) {
-					case 401:
-						if (options?.ignoreUnauthorizedError) break
-						window?.dispatchEvent(new CustomEvent(unauthorizedEvent))
-						break
-					case 403:
-						window?.dispatchEvent(new CustomEvent(norequiredPermissionEvent))
-						break
-					case 503:
-						window?.dispatchEvent(new CustomEvent(serviceUnavailableEvent))
-						break
-				}
+			switch (status) {
+				case 401:
+					if (options?.ignoreUnauthorizedError) break
+					window?.dispatchEvent(new CustomEvent(unauthorizedEvent))
+					break
+				case 403:
+					window?.dispatchEvent(new CustomEvent(norequiredPermissionEvent))
+					break
+				case 503:
+					window?.dispatchEvent(new CustomEvent(serviceUnavailableEvent))
+					break
 			}
+
+			// Server failures (5xx) are unexpected — report them.
+			// Client errors (4xx) and offline network errors are not.
+			if (status && status >= 500) {
+				Sentry.captureException(err, {
+					tags: { apiErrorStatus: status },
+					extra: {
+						url: err?.config?.url,
+						method: err?.config?.method,
+					},
+				})
+			}
+
 			throw err
 		})
 }

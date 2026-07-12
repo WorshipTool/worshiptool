@@ -56,7 +56,7 @@ export const useApiState = <T>(props?: UseApiStateProps<T>): UseApiState<T> => {
 
 			return data
 		} catch (err) {
-			console.log(err)
+			console.error(err)
 
 			dispatchErrorAction(err as ApiError | string)
 

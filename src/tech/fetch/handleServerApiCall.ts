@@ -1,4 +1,5 @@
 import { HandleApiCallOptions } from '@/tech/fetch/handleApiCall'
+import * as Sentry from '@sentry/nextjs'
 import { AxiosResponse } from 'axios'
 
 // Handle function for all API calls
@@ -12,7 +13,21 @@ export const handleServerApiCall = async <T>(
 		const res = await request
 
 		return res.data
-	} catch (err) {
+	} catch (err: any) {
+		const status: number | undefined = err?.response?.status
+
+		// On the server, both 5xx responses and network failures
+		// (backend unreachable) are unexpected — report them.
+		if (!status || status >= 500) {
+			Sentry.captureException(err, {
+				tags: { apiErrorStatus: status ?? 'network' },
+				extra: {
+					url: err?.config?.url,
+					method: err?.config?.method,
+				},
+			})
+		}
+
 		throw err
 	}
 }
