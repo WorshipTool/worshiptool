@@ -1,58 +1,36 @@
-name: Development Deploy, E2E Tests
+name: Dev E2E Tests
 
 env:
-  DOCKER_IMAGE_NAME: worshiptool
+  DEV_URL: https://dev.chvalotce.cz
 
 on:
   push:
     branches: [develop, dev]
+  workflow_dispatch:
 
 jobs:
-  upload-to-docker:
+  wait-for-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.DEVELOPMENT_SSH_KEY }}
-          known_hosts: ${{ secrets.DEVELOPMENT_SSH_KNOWN_HOSTS }}
-
-      - name: Copy .env from remote server
-        run: scp -o StrictHostKeyChecking=no "${{ secrets.DEVELOPMENT_SERVER_USERNAME }}@${{ secrets.DEVELOPMENT_SERVER_URL }}:/root/worshiptool/dev/frontend/.env" ./.env
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build
-        run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/${{env.DOCKER_IMAGE_NAME}}:dev .
-
-      - name: Log Images
-        run: docker images
-
-      - name: Push
-        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/${{env.DOCKER_IMAGE_NAME}}:dev
-
-  deploy-to-development-server:
-    needs: upload-to-docker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.DEVELOPMENT_SSH_KEY }}
-          known_hosts: ${{ secrets.DEVELOPMENT_SSH_KNOWN_HOSTS }}
-
-      - name: Redeploy application
+      # Dev is deployed by Creator (outside GitHub Actions), so we poll
+      # /api/build-id until a new build hash appears before testing.
+      - name: Wait for new build on dev
         run: |
-          ssh -o ServerAliveInterval=1000 "${{ secrets.DEVELOPMENT_SERVER_USERNAME }}@${{ secrets.DEVELOPMENT_SERVER_URL }}" \
-          "cd /root/worshiptool/dev && docker compose up -d --pull always frontend-dev"
+          initial=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
+          echo "Initial build hash: ${initial:-<unavailable>}"
+          for i in $(seq 1 30); do
+            sleep 20
+            current=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
+            echo "Check $i: ${current:-<unavailable>}"
+            if [ -n "$current" ] && [ "$current" != "$initial" ]; then
+              echo "New build is live."
+              exit 0
+            fi
+          done
+          echo "::warning::No new build appeared within 10 minutes, testing the currently deployed version."
 
   run-smoke-tests:
-    needs: deploy-to-development-server
+    needs: wait-for-deploy
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.51.1-jammy
