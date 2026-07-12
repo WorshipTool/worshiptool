@@ -4,6 +4,13 @@ export const AnalyticsTrackEventNames: Record<AnalyticsEventNameType, string> =
 	{
 		VISIT_SONG: 'VISIT_SONG',
 		SMART_SEARCH_TOGGLE: 'SMART_SEARCH_TOGGLE',
+		SEARCH: 'SEARCH',
+		LOGIN: 'LOGIN',
+		SIGNUP: 'SIGNUP',
+		LOGOUT: 'LOGOUT',
+		CREATE_PLAYLIST: 'CREATE_PLAYLIST',
+		ADD_SONG_TO_PLAYLIST: 'ADD_SONG_TO_PLAYLIST',
+		REMOVE_SONG_FROM_PLAYLIST: 'REMOVE_SONG_FROM_PLAYLIST',
 	}
 
 export type AnalyticsTrackData = {
@@ -15,6 +22,30 @@ export type AnalyticsTrackData = {
 	}
 	SMART_SEARCH_TOGGLE: {
 		enabled: boolean
+	}
+	SEARCH: {
+		query: string
+		smartSearch: boolean
+	}
+	LOGIN: {
+		method: 'password' | 'google'
+	}
+	SIGNUP: {
+		method: 'password'
+	}
+	LOGOUT: {
+		reason: 'user' | 'session_expired'
+	}
+	CREATE_PLAYLIST: {
+		source: 'personal' | 'team'
+	}
+	ADD_SONG_TO_PLAYLIST: {
+		packGuid: VariantPackGuid
+		playlistGuid: string
+	}
+	REMOVE_SONG_FROM_PLAYLIST: {
+		packGuid: VariantPackGuid
+		playlistGuid: string
 	}
 }
 

@@ -19,6 +19,14 @@ services:
                 NEXT_PUBLIC_PREVIEW_MODE: ${NEXT_PUBLIC_PREVIEW_MODE:-false}
                 NEXT_PUBLIC_PREVIEW_PR_NUMBER: ${NEXT_PUBLIC_PREVIEW_PR_NUMBER:-}
                 NEXT_PUBLIC_PREVIEW_PR_TITLE: ${NEXT_PUBLIC_PREVIEW_PR_TITLE:-}
+
+                # Sentry (baked in at build time; empty = disabled)
+                NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+                NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-}
+                # Source maps upload (optional, CI only)
+                SENTRY_ORG: ${SENTRY_ORG:-}
+                SENTRY_PROJECT: ${SENTRY_PROJECT:-}
+                SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
         container_name: wt-frontend
         restart: unless-stopped
         ports:

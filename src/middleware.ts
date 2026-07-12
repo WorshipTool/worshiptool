@@ -19,7 +19,9 @@ import { NextResponse } from 'next/server'
 
 export const config = {
 	// Exclude everything with dot in the path
-	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets).*)'],
+	matcher: [
+		'/((?!api|monitoring|_next/static|_next/image|favicon.ico|assets).*)',
+	],
 }
 
 const excludedPaths = ['/_next', '/static', '/manifest', '/public']

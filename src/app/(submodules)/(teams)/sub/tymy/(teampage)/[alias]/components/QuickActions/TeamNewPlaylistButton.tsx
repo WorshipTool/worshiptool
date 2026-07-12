@@ -1,6 +1,7 @@
 'use client'
 import { PostCreatePlaylistResult } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import TeamQuickActionButton from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/[alias]/components/QuickActions/TeamQuickActionButton'
 import useInnerTeam from '@/app/(submodules)/(teams)/sub/tymy/(teampage)/hooks/useInnerTeam'
 import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
@@ -29,6 +30,8 @@ export default function TeamNewPlaylistButton() {
 					teamGuid: guid,
 					playlistGuid: p,
 				})
+
+				Analytics.track('CREATE_PLAYLIST', { source: 'team' })
 
 				return {
 					guid: p,

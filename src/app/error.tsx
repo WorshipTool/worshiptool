@@ -3,12 +3,13 @@
 import { ErrorPageProps } from '@/common/types'
 import { Box, Button, Typography } from '@/common/ui'
 import { LockPerson } from '@mui/icons-material'
+import * as Sentry from '@sentry/nextjs'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo } from 'react'
 
 type ErrorType = 'forbidden' | 'default'
 
-export default function Error({ error, reset }: ErrorPageProps) {
+export default function Error({ error, reset, skipReport }: ErrorPageProps) {
 	const t = useTranslations('errors')
 	const tCommon = useTranslations('common')
 	const errorType: ErrorType = useMemo(() => {
@@ -17,8 +18,10 @@ export default function Error({ error, reset }: ErrorPageProps) {
 
 	useEffect(() => {
 		console.error('Error page error:', error)
-		//TODO: send report to admin
-	}, [error])
+		if (!skipReport) {
+			Sentry.captureException(error, { tags: { errorBoundary: 'page' } })
+		}
+	}, [error, skipReport])
 
 	return (
 		<Box

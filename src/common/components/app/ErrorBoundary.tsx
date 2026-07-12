@@ -1,5 +1,6 @@
 'use client'
 import ErrorPage from '@/app/error'
+import * as Sentry from '@sentry/nextjs'
 import React from 'react'
 
 interface ErrorBoundaryState {
@@ -30,6 +31,10 @@ class ErrorBoundary extends React.Component<
 
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
 		console.error('[ErrorBoundary] Caught unhandled error:', error, errorInfo)
+		Sentry.captureException(error, {
+			tags: { errorBoundary: 'app' },
+			extra: { componentStack: errorInfo.componentStack },
+		})
 	}
 
 	handleReset = () => {
@@ -39,7 +44,11 @@ class ErrorBoundary extends React.Component<
 	render() {
 		if (this.state.hasError && this.state.error) {
 			return (
-				<ErrorPage error={this.state.error} reset={this.handleReset} />
+				<ErrorPage
+					error={this.state.error}
+					reset={this.handleReset}
+					skipReport
+				/>
 			)
 		}
 		return this.props.children

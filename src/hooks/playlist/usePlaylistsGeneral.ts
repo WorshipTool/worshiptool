@@ -1,5 +1,6 @@
 import { PackGuid, VariantPackGuid } from '@/api/dtos'
 import { useApi } from '@/api/tech-and-hooks/useApi'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { Chord } from '@pepavlin/sheet-api'
 import { useCallback } from 'react'
 import {
@@ -25,10 +26,15 @@ export default function usePlaylistsGeneral() {
 		packGuid: VariantPackGuid,
 		playlist: PlaylistGuid
 	) => {
-		return await playlistEditingApi.addVariantToPlaylist({
+		const result = await playlistEditingApi.addVariantToPlaylist({
 			playlist,
 			packGuid,
 		})
+		Analytics.track('ADD_SONG_TO_PLAYLIST', {
+			packGuid,
+			playlistGuid: playlist,
+		})
+		return result
 	}
 
 	const addPacksToPlaylist = async (
@@ -50,10 +56,15 @@ export default function usePlaylistsGeneral() {
 		packGuid: VariantPackGuid,
 		playlist: PlaylistGuid
 	) => {
-		return await playlistEditingApi.removeVariantFromPlaylistDelete(
+		const result = await playlistEditingApi.removeVariantFromPlaylistDelete(
 			packGuid,
 			playlist
 		)
+		Analytics.track('REMOVE_SONG_FROM_PLAYLIST', {
+			packGuid,
+			playlistGuid: playlist,
+		})
+		return result
 	}
 
 	const isVariantInPlaylist = async (
@@ -68,7 +79,9 @@ export default function usePlaylistsGeneral() {
 	}
 
 	const createPlaylist = async (): Promise<PlaylistGuid> => {
-		return await playlistEditingApi.createPlaylist()
+		const guid = await playlistEditingApi.createPlaylist()
+		Analytics.track('CREATE_PLAYLIST', { source: 'personal' })
+		return guid
 	}
 
 	const deletePlaylist = async (guid: PlaylistGuid) => {

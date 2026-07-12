@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import bundleAnalyzer from '@next/bundle-analyzer'
+import { withSentryConfig } from '@sentry/nextjs'
 import createNextIntlPlugin from 'next-intl/plugin'
 import nextRoutes from 'nextjs-routes/config'
 
@@ -142,6 +143,7 @@ export default (phase, { defaultConfig }) => {
 			// Babel class helpers to native classes and stripping dead polyfills.
 			transpilePackages: ['react-transition-group', 'notistack'],
 			experimental: {
+				instrumentationHook: true,
 				serverComponentsExternalPackages: ['@react-pdf/renderer'],
 				optimizePackageImports: [
 					'@mui/icons-material',
@@ -166,5 +168,22 @@ export default (phase, { defaultConfig }) => {
 			},
 		})
 	)
-	return withBundleAnalyzer(nextConfig)
+	return withSentryConfig(withBundleAnalyzer(nextConfig), {
+		org: process.env.SENTRY_ORG,
+		project: process.env.SENTRY_PROJECT,
+		authToken: process.env.SENTRY_AUTH_TOKEN,
+		silent: true,
+		telemetry: false,
+		widenClientFileUpload: true,
+		tunnelRoute: '/monitoring',
+		webpack: {
+			treeshake: {
+				removeDebugLogging: true,
+				removeTracing: true,
+			},
+		},
+		sourcemaps: {
+			disable: !process.env.SENTRY_AUTH_TOKEN,
+		},
+	})
 }
