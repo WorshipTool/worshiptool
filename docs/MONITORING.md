@@ -37,11 +37,14 @@ v `sentry.*.config.ts`.
 - **API chyby** — `handleApiCall` (client) hlásí odpovědi 5xx,
   `handleServerApiCall` (server) hlásí 5xx i síťové chyby směrem na backend.
   Očekávané klientské chyby (401/403/404) se nehlásí.
-- **Server chyby** — `logServerError()` posílá do Sentry a zároveň forwarduje
-  na backend logger (`POST /error`).
+- **Server chyby** — `logServerError()` posílá do Sentry.
 - **React Server Components** — na Next 14 přes build-time wrapping
   komponent (`withSentryConfig`); export `onRequestError`
   v `src/instrumentation.ts` se aktivuje až po upgradu na Next 15.
+
+Browserové eventy jdou přes first-party tunel `/monitoring`
+(`tunnelRoute` v `next.config.mjs`), takže je neblokují ad-blockery.
+Cesta je vyjmutá z middleware matcheru v `src/middleware.ts`.
 
 Session replay v Sentry je vypnutý — nahrávání session řeší Statsig/Hotjar.
 

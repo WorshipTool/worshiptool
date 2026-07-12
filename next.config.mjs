@@ -175,6 +175,7 @@ export default (phase, { defaultConfig }) => {
 		silent: true,
 		telemetry: false,
 		widenClientFileUpload: true,
+		tunnelRoute: '/monitoring',
 		webpack: {
 			treeshake: {
 				removeDebugLogging: true,
