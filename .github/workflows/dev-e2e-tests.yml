@@ -1,0 +1,123 @@
+name: Dev E2E Tests
+
+env:
+  DEV_URL: https://dev.chvalotce.cz
+
+on:
+  push:
+    branches: [develop, dev]
+  workflow_dispatch:
+
+jobs:
+  wait-for-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Dev is deployed by Creator (outside GitHub Actions), so we poll
+      # /api/build-id until a new build hash appears before testing.
+      - name: Wait for new build on dev
+        run: |
+          initial=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
+          echo "Initial build hash: ${initial:-<unavailable>}"
+          for i in $(seq 1 30); do
+            sleep 20
+            current=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
+            echo "Check $i: ${current:-<unavailable>}"
+            if [ -n "$current" ] && [ "$current" != "$initial" ]; then
+              echo "New build is live."
+              exit 0
+            fi
+          done
+          echo "::warning::No new build appeared within 10 minutes, testing the currently deployed version."
+
+  run-smoke-tests:
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.1-jammy
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run jest tests
+        run: npm run test:jest
+
+      - name: Run smoke tests
+        run: npm run test:e2e:smoke-only
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-smoke-${{ github.run_id }}
+          path: |
+            playwright-report/**
+            temp/tests/results/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+  run-critical-tests:
+    needs: run-smoke-tests
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.1-jammy
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run critical tests
+        run: npm run test:e2e:critical-only
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-critical-${{ github.run_id }}
+          path: |
+            playwright-report/**
+            temp/tests/results/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+  run-full-tests:
+    needs: run-critical-tests
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.51.1-jammy
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Vytvoř .env ze secretu
+        run: echo "${{ secrets.TEST_ENVS }}" > .env
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run full tests
+        run: npm run test:e2e:full-only
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-full-${{ github.run_id }}
+          path: |
+            playwright-report/**
+            temp/tests/results/**
+          if-no-files-found: ignore
+          retention-days: 7
