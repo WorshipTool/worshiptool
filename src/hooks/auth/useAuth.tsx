@@ -191,7 +191,9 @@ export function useProvideAuth() {
 		setUser(user)
 		_setCookie(user)
 	}
-	const logout = async () => {
+	const logout = async (options?: {
+		reason?: 'user' | 'session_expired'
+	}) => {
 		try {
 			setLoading(false)
 			if (checkIfCookieExists()) await authApi.logout()
@@ -200,7 +202,7 @@ export function useProvideAuth() {
 		} finally {
 			if (user) {
 				setUser(undefined)
-				Analytics.track('LOGOUT', {})
+				Analytics.track('LOGOUT', { reason: options?.reason ?? 'user' })
 				// enqueueSnackbar('Byl jsi odhlášen. Zase někdy!')
 			}
 			setLoading(false)

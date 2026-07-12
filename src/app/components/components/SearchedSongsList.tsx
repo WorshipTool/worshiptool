@@ -27,6 +27,7 @@ const SearchedSongsList = memo(function S({
 	useSmartSearch,
 }: SearchedSongsListProps) {
 	const loadNextLevelRef = useRef(null)
+	const lastTrackedSearchRef = useRef('')
 	const tHome = useTranslations('home')
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -83,7 +84,11 @@ const SearchedSongsList = memo(function S({
 	useChangeDelayer(
 		searchString,
 		(value) => {
-			if (value.trim().length > 0) {
+			if (
+				value.trim().length > 0 &&
+				value !== lastTrackedSearchRef.current
+			) {
+				lastTrackedSearchRef.current = value
 				Analytics.track('SEARCH', {
 					query: value,
 					smartSearch: Boolean(useSmartSearch),

@@ -20,7 +20,7 @@ export const handleServerApiCall = async <T>(
 		// (backend unreachable) are unexpected — report them.
 		if (!status || status >= 500) {
 			Sentry.captureException(err, {
-				tags: { apiErrorStatus: status ?? 'network' },
+				tags: { apiErrorStatus: status ? String(status) : 'network' },
 				extra: {
 					url: err?.config?.url,
 					method: err?.config?.method,

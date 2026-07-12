@@ -17,4 +17,6 @@ export type MetadataProps<T extends RoutesKeys> = {
 export type ErrorPageProps = {
 	error: Error & { digest?: number }
 	reset: () => void
+	/** Skip Sentry reporting (when the caller already reported the error) */
+	skipReport?: boolean
 }

@@ -9,7 +9,7 @@ import { useEffect, useMemo } from 'react'
 
 type ErrorType = 'forbidden' | 'default'
 
-export default function Error({ error, reset }: ErrorPageProps) {
+export default function Error({ error, reset, skipReport }: ErrorPageProps) {
 	const t = useTranslations('errors')
 	const tCommon = useTranslations('common')
 	const errorType: ErrorType = useMemo(() => {
@@ -18,8 +18,10 @@ export default function Error({ error, reset }: ErrorPageProps) {
 
 	useEffect(() => {
 		console.error('Error page error:', error)
-		Sentry.captureException(error, { tags: { errorBoundary: 'page' } })
-	}, [error])
+		if (!skipReport) {
+			Sentry.captureException(error, { tags: { errorBoundary: 'page' } })
+		}
+	}, [error, skipReport])
 
 	return (
 		<Box

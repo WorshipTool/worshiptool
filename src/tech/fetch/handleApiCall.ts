@@ -47,7 +47,7 @@ export const handleApiCall = <T>(
 			// Client errors (4xx) and offline network errors are not.
 			if (status && status >= 500) {
 				Sentry.captureException(err, {
-					tags: { apiErrorStatus: status },
+					tags: { apiErrorStatus: String(status) },
 					extra: {
 						url: err?.config?.url,
 						method: err?.config?.method,

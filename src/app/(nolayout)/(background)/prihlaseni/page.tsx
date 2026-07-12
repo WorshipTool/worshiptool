@@ -43,7 +43,7 @@ function Login() {
 
 	useEffect(() => {
 		if (!checkIfCookieExists()) {
-			logout()
+			logout({ reason: 'session_expired' })
 		}
 	}, [])
 

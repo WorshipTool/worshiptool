@@ -177,8 +177,17 @@ export default (phase, { defaultConfig }) => {
 		authToken: process.env.SENTRY_AUTH_TOKEN,
 		silent: true,
 		telemetry: false,
-		disableLogger: true,
 		widenClientFileUpload: true,
+		// Error tracking only — tree-shake tracing and debug code from the
+		// SDK to keep the client bundle small. When enabling performance
+		// tracing, remove `removeTracing` and set tracesSampleRate in the
+		// sentry.*.config.ts files.
+		webpack: {
+			treeshake: {
+				removeDebugLogging: true,
+				removeTracing: true,
+			},
+		},
 		sourcemaps: {
 			disable: !process.env.SENTRY_AUTH_TOKEN,
 		},

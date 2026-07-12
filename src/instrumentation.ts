@@ -10,5 +10,6 @@ export async function register() {
 	}
 }
 
-// Captures errors from nested React Server Components
+// Next 15+ hook for RSC errors. On Next 14 it is never invoked — RSC
+// errors are still captured via Sentry's build-time component wrapping.
 export const onRequestError = Sentry.captureRequestError

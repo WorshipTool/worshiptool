@@ -17,6 +17,15 @@ Inicializace: `sentry.client.config.ts`, `sentry.server.config.ts`,
 `sentry.edge.config.ts` (root) + `src/instrumentation.ts`. Build obaluje
 `withSentryConfig` v `next.config.mjs`.
 
+Pozor: `NEXT_PUBLIC_SENTRY_DSN` se do klientského bundlu zapéká **při
+buildu**. DSN nastavená až za runtime zapne jen serverovou část.
+
+Performance tracing je vypnutý a příslušný kód SDK se při buildu
+tree-shakuje (`webpack.treeshake.removeTracing` v `next.config.mjs`), aby
+Sentry nezvětšovalo klientský bundle víc, než je nutné. Pro zapnutí
+tracingu odstraň `removeTracing` a nastav `tracesSampleRate`
+v `sentry.*.config.ts`.
+
 ### Co se hlásí
 
 - **Error boundaries** — `src/app/error.tsx`, `src/app/global-error.tsx`
@@ -27,7 +36,9 @@ Inicializace: `sentry.client.config.ts`, `sentry.server.config.ts`,
   Očekávané klientské chyby (401/403/404) se nehlásí.
 - **Server chyby** — `logServerError()` posílá do Sentry a zároveň forwarduje
   na backend logger (`POST /error`).
-- **React Server Components** — `onRequestError` v `src/instrumentation.ts`.
+- **React Server Components** — na Next 14 přes build-time wrapping
+  komponent (`withSentryConfig`); export `onRequestError`
+  v `src/instrumentation.ts` se aktivuje až po upgradu na Next 15.
 
 Session replay v Sentry je vypnutý — nahrávání session řeší Statsig/Hotjar.
 
@@ -48,11 +59,21 @@ v `analytics.types.ts` — název i payload jsou pak typově kontrolované.
 | Event | Kde se posílá |
 | --- | --- |
 | `VISIT_SONG` | zobrazení písně (`SongAnalyze.tsx`) |
-| `SEARCH` | vyhledávání po debounce (`SearchedSongsList.tsx`) |
+| `SEARCH` | vyhledávání po debounce, deduplikované proti poslednímu dotazu (`SearchedSongsList.tsx`) |
 | `SMART_SEARCH_TOGGLE` | přepnutí smart search (`MainSearchInput.tsx`) |
-| `LOGIN` / `SIGNUP` / `LOGOUT` | auth flow (`useAuth.tsx`), `method` rozlišuje heslo/Google |
-| `CREATE_PLAYLIST` | založení playlistu (`usePlaylistsGeneral.ts`) |
+| `LOGIN` / `SIGNUP` / `LOGOUT` | auth flow (`useAuth.tsx`), `method` rozlišuje heslo/Google; `LOGOUT.reason` rozlišuje odhlášení uživatelem vs. expiraci session |
+| `CREATE_PLAYLIST` | osobní playlist (`usePlaylistsGeneral.ts`, `source: 'personal'`) i týmový (`TeamNewPlaylistButton`, `UsersTeamPlaylistsAddButton`, `source: 'team'`) |
 | `ADD_SONG_TO_PLAYLIST` / `REMOVE_SONG_FROM_PLAYLIST` | práce s playlistem (`usePlaylistsGeneral.ts`) |
+
+Poznámky k interpretaci dat:
+
+- Registrace heslem automaticky přihlásí — po `SIGNUP` vždy následuje
+  `LOGIN {method: 'password'}`. Google účty `SIGNUP` neposílají (první
+  přihlášení je rovnou `LOGIN {method: 'google'}`).
+- Hromadné přidání N písní do playlistu pošle N eventů
+  `ADD_SONG_TO_PLAYLIST` (jeden na píseň).
+- V development režimu se Mixpanel neinicializuje, lokální vývoj tedy
+  data neznečišťuje. E2E testy proti preview prostředí ale eventy posílají.
 
 Identifikace uživatele (identify + people.set) probíhá
 v `MixPanelAnalytics.tsx` po přihlášení.

@@ -44,7 +44,7 @@ export default function ErrorHandlerProvider(props: ErrorHandlerProviderProps) {
 	}, [enqueueSnackbar])
 
 	const ue = useCallback(() => {
-		logout()
+		logout({ reason: 'session_expired' })
 		navigate('login', {
 			previousPage: window.location.pathname,
 			message: 'Je třeba se znovu přihlásit.',

@@ -80,7 +80,7 @@ export default function usePlaylistsGeneral() {
 
 	const createPlaylist = async (): Promise<PlaylistGuid> => {
 		const guid = await playlistEditingApi.createPlaylist()
-		Analytics.track('CREATE_PLAYLIST', {})
+		Analytics.track('CREATE_PLAYLIST', { source: 'personal' })
 		return guid
 	}
 

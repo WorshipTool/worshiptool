@@ -33,8 +33,12 @@ export type AnalyticsTrackData = {
 	SIGNUP: {
 		method: 'password'
 	}
-	LOGOUT: {}
-	CREATE_PLAYLIST: {}
+	LOGOUT: {
+		reason: 'user' | 'session_expired'
+	}
+	CREATE_PLAYLIST: {
+		source: 'personal' | 'team'
+	}
 	ADD_SONG_TO_PLAYLIST: {
 		packGuid: VariantPackGuid
 		playlistGuid: string

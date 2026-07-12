@@ -44,7 +44,11 @@ class ErrorBoundary extends React.Component<
 	render() {
 		if (this.state.hasError && this.state.error) {
 			return (
-				<ErrorPage error={this.state.error} reset={this.handleReset} />
+				<ErrorPage
+					error={this.state.error}
+					reset={this.handleReset}
+					skipReport
+				/>
 			)
 		}
 		return this.props.children
