@@ -43,8 +43,6 @@ export const handleApiCall = <T>(
 					break
 			}
 
-			// Server failures (5xx) are unexpected — report them.
-			// Client errors (4xx) and offline network errors are not.
 			if (status && status >= 500) {
 				Sentry.captureException(err, {
 					tags: { apiErrorStatus: String(status) },

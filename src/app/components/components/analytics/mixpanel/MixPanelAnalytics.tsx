@@ -11,7 +11,6 @@ export default function MixPanelAnalytics() {
 	const mixpanelRef = useRef<MixpanelType | null>(null)
 
 	useEffect(() => {
-		// Local development events would pollute production analytics
 		if (isDevelopment) return
 
 		import('mixpanel-browser').then((mod) => {

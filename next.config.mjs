@@ -143,7 +143,6 @@ export default (phase, { defaultConfig }) => {
 			// Babel class helpers to native classes and stripping dead polyfills.
 			transpilePackages: ['react-transition-group', 'notistack'],
 			experimental: {
-				// Required for src/instrumentation.ts (Sentry init) on Next 14
 				instrumentationHook: true,
 				serverComponentsExternalPackages: ['@react-pdf/renderer'],
 				optimizePackageImports: [
@@ -169,8 +168,6 @@ export default (phase, { defaultConfig }) => {
 			},
 		})
 	)
-	// Sentry: instruments the build. Source maps are uploaded only when
-	// SENTRY_AUTH_TOKEN (+ SENTRY_ORG, SENTRY_PROJECT) is provided.
 	return withSentryConfig(withBundleAnalyzer(nextConfig), {
 		org: process.env.SENTRY_ORG,
 		project: process.env.SENTRY_PROJECT,
@@ -178,10 +175,6 @@ export default (phase, { defaultConfig }) => {
 		silent: true,
 		telemetry: false,
 		widenClientFileUpload: true,
-		// Error tracking only — tree-shake tracing and debug code from the
-		// SDK to keep the client bundle small. When enabling performance
-		// tracing, remove `removeTracing` and set tracesSampleRate in the
-		// sentry.*.config.ts files.
 		webpack: {
 			treeshake: {
 				removeDebugLogging: true,

@@ -17,8 +17,11 @@ Inicializace: `sentry.client.config.ts`, `sentry.server.config.ts`,
 `sentry.edge.config.ts` (root) + `src/instrumentation.ts`. Build obaluje
 `withSentryConfig` v `next.config.mjs`.
 
-Pozor: `NEXT_PUBLIC_SENTRY_DSN` se do klientského bundlu zapéká **při
-buildu**. DSN nastavená až za runtime zapne jen serverovou část.
+Pozor: `NEXT_PUBLIC_SENTRY_DSN` se do bundlu zapéká **při buildu**. Proto
+se předává jako build argument: v `Dockerfile` (`ARG NEXT_PUBLIC_SENTRY_DSN`)
+a v `docker-compose.yml` v sekci `build.args`. Při deployi přes CI je
+potřeba ji předat jako `--build-arg` (stejně jako ostatní `NEXT_PUBLIC_*`).
+DSN nastavená až za runtime nic nezapne.
 
 Performance tracing je vypnutý a příslušný kód SDK se při buildu
 tree-shakuje (`webpack.treeshake.removeTracing` v `next.config.mjs`), aby
