@@ -3,7 +3,15 @@
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, Clickable, Divider, Image, Typography, useTheme } from '@/common/ui'
+import {
+	Box,
+	Button,
+	Clickable,
+	Divider,
+	Image,
+	Typography,
+	useTheme,
+} from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { alpha } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -15,15 +23,17 @@ import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { getAssetUrl } from '@/tech/paths.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
+	AutoAwesomeRounded,
 	HomeRounded,
 	LoginRounded,
 	MusicNoteRounded,
 	PersonOutlineRounded,
 	QueueMusicRounded,
+	ScheduleRounded,
 	SearchRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { Fragment, useState } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 import { BasicVariantPack } from '../../../api/dtos'
 
 export default SmartPage(DemoMobilePage, [
@@ -40,6 +50,19 @@ const BOTTOM_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 84px)'
 
 type DemoVariant = 1 | 2 | 3
 
+/**
+ * Three internally consistent design systems, all sharing the same page
+ * anatomy (header → search → sections → CTA → tab bar). The rule everywhere:
+ * saturated color is reserved for the two focus elements (search, CTA) and
+ * the active tab; content sections stay calm and uniform.
+ *
+ * 1 — cards on grey: grey canvas, every section is the same white card,
+ *     search pops via gradient border + shadow
+ * 2 — gradient hero: search lives inside the brand header, sections are
+ *     identical grey panels on white
+ * 3 — blue system: white canvas, one accent (primary), tonal panels and
+ *     icon-badged section headers, M3-style tab pills
+ */
 function DemoMobilePage() {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
@@ -57,6 +80,19 @@ function DemoMobilePage() {
 	const lastAdded = useLastAddedSongs()
 
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
+	const primaryTint = alpha(theme.palette.primary.main, 0.06)
+
+	// Section content panels — identical within each variant
+	const panelBg =
+		variant === 1
+			? 'background.paper'
+			: variant === 2
+			? 'grey.100'
+			: primaryTint
+	const panelShadow = variant === 1 ? 1 : 0
+	const rowsHaveDividers = variant === 1
+	const rowBg = variant === 1 ? 'transparent' : 'background.paper'
+	const tileBg = variant === 1 ? 'grey.100' : 'background.paper'
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -65,9 +101,11 @@ function DemoMobilePage() {
 		}
 	}
 
-	const searchField = (
+	const searchInner = (
 		<>
-			<SearchRounded sx={{ color: 'grey.600' }} />
+			<SearchRounded
+				sx={{ color: variant === 3 ? 'primary.main' : 'grey.600' }}
+			/>
 			<TextField
 				value={query}
 				onChange={setQuery}
@@ -106,16 +144,131 @@ function DemoMobilePage() {
 		/>
 	)
 
-	const carouselTile = (s: BasicVariantPack, tileBg: string) => (
+	const heroTexts = (leadColor?: string) => (
+		<Box>
+			<Typography small color={leadColor} sx={leadColor ? {} : { opacity: 0.85 }}>
+				{tHome('hero.lead')}
+			</Typography>
+			<Typography variant="h3" strong={800}>
+				{tHome('hero.title')}
+			</Typography>
+		</Box>
+	)
+
+	const browseAction = (
+		<Clickable>
+			<Link to="songsList" params={{ s: undefined }}>
+				<Typography small strong uppercase color="primary.main">
+					{tHome('allList.browse')}
+				</Typography>
+			</Link>
+		</Clickable>
+	)
+
+	const sectionBadge = (icon: ReactNode) => (
+		<Box
+			sx={{
+				width: 28,
+				height: 28,
+				borderRadius: 1.5,
+				bgcolor: alpha(theme.palette.primary.main, 0.12),
+				color: 'primary.main',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}
+		>
+			{icon}
+		</Box>
+	)
+
+	// Shared section anatomy: header (title + optional action) + content panel
+	const Section = ({
+		title,
+		icon,
+		action,
+		children,
+	}: {
+		title: string
+		icon: ReactNode
+		action?: ReactNode
+		children: ReactNode
+	}) => {
+		const header = (
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					gap: 1,
+				}}
+			>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					{variant === 3 && sectionBadge(icon)}
+					<Typography variant="h6" strong>
+						{title}
+					</Typography>
+				</Box>
+				{action}
+			</Box>
+		)
+
+		if (variant === 3) {
+			return (
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 1,
+						paddingX: 2.5,
+					}}
+				>
+					{header}
+					<Box
+						sx={{
+							bgcolor: panelBg,
+							borderRadius: 3,
+							padding: 1.5,
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 1,
+						}}
+					>
+						{children}
+					</Box>
+				</Box>
+			)
+		}
+
+		return (
+			<Box sx={{ paddingX: 2.5 }}>
+				<Box
+					sx={{
+						bgcolor: panelBg,
+						borderRadius: 3,
+						boxShadow: panelShadow,
+						padding: 2,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 1.5,
+					}}
+				>
+					{header}
+					{children}
+				</Box>
+			</Box>
+		)
+	}
+
+	const carouselTile = (s: BasicVariantPack) => (
 		<Clickable key={s.packGuid}>
 			<Link to="variant" params={parseVariantAlias(s.packAlias)}>
 				<Box
 					sx={{
-						width: 168,
+						width: 156,
 						bgcolor: tileBg,
-						borderRadius: 3,
-						padding: 2,
-						boxShadow: 1,
+						borderRadius: 2,
+						padding: 1.5,
 						scrollSnapAlign: 'start',
 						display: 'flex',
 						flexDirection: 'column',
@@ -124,9 +277,9 @@ function DemoMobilePage() {
 				>
 					<Box
 						sx={{
-							width: 36,
-							height: 36,
-							borderRadius: 2,
+							width: 32,
+							height: 32,
+							borderRadius: 1.5,
 							bgcolor: alpha(theme.palette.primary.main, 0.12),
 							color: 'primary.main',
 							display: 'flex',
@@ -149,24 +302,19 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const carouselSkeletons = Array.from({ length: 4 }).map((_, i) => (
-		<Skeleton
-			key={i}
-			variant="rounded"
-			sx={{
-				minWidth: 168,
-				height: 120,
-				borderRadius: 3,
-				bgcolor: 'grey.200',
-			}}
-		/>
-	))
-
 	const listSkeletons = Array.from({ length: 4 }).map((_, i) => (
 		<Skeleton
 			key={i}
 			variant="rounded"
-			sx={{ height: 64, borderRadius: 2, bgcolor: 'grey.200' }}
+			sx={{ height: 60, borderRadius: 2, bgcolor: 'grey.200' }}
+		/>
+	))
+
+	const carouselSkeletons = Array.from({ length: 3 }).map((_, i) => (
+		<Skeleton
+			key={i}
+			variant="rounded"
+			sx={{ minWidth: 156, height: 112, borderRadius: 2, bgcolor: 'grey.200' }}
 		/>
 	))
 
@@ -179,7 +327,7 @@ function DemoMobilePage() {
 				minWidth: '100%',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				minHeight: '100dvh',
-				bgcolor: variant === 2 ? 'grey.200' : 'grey.300',
+				bgcolor: 'grey.300',
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -190,89 +338,75 @@ function DemoMobilePage() {
 					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
-					bgcolor:
-						variant === 1 ? 'grey.100' : variant === 2 ? 'background.paper' : 'background.paper',
+					bgcolor: variant === 1 ? 'grey.100' : 'background.paper',
 					display: 'flex',
 					flexDirection: 'column',
 					boxShadow: 3,
 				}}
 			>
-				{/* ===================== HEADER ===================== */}
-				{variant === 1 && (
-					<>
+				{/* ===================== HEADER + SEARCH ===================== */}
+				{variant === 2 ? (
+					<Box
+						sx={{
+							background: gradient,
+							color: 'common.white',
+							paddingX: 2.5,
+							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
+							paddingBottom: 3.5,
+							borderRadius: '0 0 28px 28px',
+							position: 'relative',
+							overflow: 'hidden',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2.5,
+						}}
+					>
 						<Box
 							sx={{
-								background: gradient,
-								color: 'common.white',
-								paddingX: 2.5,
-								paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-								paddingBottom: 8,
-								position: 'relative',
-								overflow: 'hidden',
+								position: 'absolute',
+								right: 16,
+								top: 'calc(env(safe-area-inset-top) + 52px)',
+								pointerEvents: 'none',
+								opacity: 0.95,
 							}}
 						>
-							<Box
-								sx={{
-									position: 'absolute',
-									right: 12,
-									bottom: -6,
-									transform: 'rotate(-8deg)',
-									pointerEvents: 'none',
-									opacity: 0.9,
-								}}
-							>
-								{sheep(76)}
-							</Box>
-							<Box
-								sx={{
-									display: 'flex',
-									justifyContent: 'space-between',
-									alignItems: 'start',
-								}}
-							>
-								<Box>
-									<Typography small sx={{ opacity: 0.85 }}>
-										{tHome('hero.lead')}
-									</Typography>
-									<Typography variant="h4" strong={800}>
-										{tHome('hero.title')}
-									</Typography>
-								</Box>
-								{loginLink('common.white')}
-							</Box>
+							{sheep(72)}
 						</Box>
-
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'start',
+							}}
+						>
+							{heroTexts()}
+							{loginLink('common.white')}
+						</Box>
 						<Box
 							component="form"
 							onSubmit={submitSearch}
 							sx={{
-								marginTop: -3.5,
-								marginX: 2.5,
-								position: 'relative',
-								zIndex: 1,
 								display: 'flex',
 								alignItems: 'center',
 								gap: 1,
 								bgcolor: 'background.paper',
-								borderRadius: 3,
+								borderRadius: 10,
 								paddingX: 2,
 								paddingY: 1.5,
 								boxShadow: 2,
 							}}
 						>
-							{searchField}
+							{searchInner}
 						</Box>
-					</>
-				)}
-
-				{variant === 2 && (
+					</Box>
+				) : (
 					<Box
 						sx={{
 							paddingX: 2.5,
 							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
 							display: 'flex',
 							flexDirection: 'column',
-							gap: 2,
+							gap: 2.5,
 						}}
 					>
 						<Box
@@ -282,276 +416,203 @@ function DemoMobilePage() {
 								alignItems: 'end',
 							}}
 						>
-							<Box>
-								<Typography small color="grey.700">
-									{tHome('hero.lead')}
-								</Typography>
-								<Typography variant="h3" strong={800}>
-									{tHome('hero.title')}
-								</Typography>
-							</Box>
+							{heroTexts('grey.700')}
 							{loginLink('primary.main')}
 						</Box>
 
-						<Box
-							component="form"
-							onSubmit={submitSearch}
-							sx={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 1,
-								bgcolor: 'grey.100',
-								borderRadius: 10,
-								paddingX: 2,
-								paddingY: 1.25,
-							}}
-						>
-							{searchField}
-						</Box>
+						{variant === 1 ? (
+							// gradient border + shadow make the search the strongest element
+							<Box
+								sx={{
+									background: gradient,
+									padding: '2px',
+									borderRadius: 10,
+									boxShadow: 3,
+								}}
+							>
+								<Box
+									component="form"
+									onSubmit={submitSearch}
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+										gap: 1,
+										bgcolor: 'background.paper',
+										borderRadius: 10,
+										paddingX: 2,
+										paddingY: 1.5,
+									}}
+								>
+									{searchInner}
+								</Box>
+							</Box>
+						) : (
+							// tonal filled field — the only saturated icon on the page
+							<Box
+								component="form"
+								onSubmit={submitSearch}
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: 1,
+									bgcolor: alpha(theme.palette.primary.main, 0.08),
+									borderRadius: 10,
+									paddingX: 2,
+									paddingY: 1.5,
+								}}
+							>
+								{searchInner}
+							</Box>
+						)}
 					</Box>
 				)}
 
-				{variant === 3 && (
-					<Box
-						sx={{
-							bgcolor: 'primary.main',
-							color: 'common.white',
-							paddingX: 2.5,
-							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-							paddingBottom: 3,
-							borderRadius: '0 0 28px 28px',
-							position: 'relative',
-							overflow: 'hidden',
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 2,
-						}}
-					>
-						<Box
-							sx={{
-								position: 'absolute',
-								right: 10,
-								top: 'calc(env(safe-area-inset-top) + 10px)',
-								pointerEvents: 'none',
-							}}
-						>
-							{sheep(64)}
-						</Box>
-						<Box>
-							<Typography small sx={{ opacity: 0.85 }}>
-								{tHome('hero.lead')}
-							</Typography>
-							<Typography variant="h4" strong={800}>
-								{tHome('hero.title')}
-							</Typography>
-						</Box>
-						<Box
-							component="form"
-							onSubmit={submitSearch}
-							sx={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 1,
-								bgcolor: 'background.paper',
-								borderRadius: 10,
-								paddingX: 2,
-								paddingY: 1.25,
-							}}
-						>
-							{searchField}
-						</Box>
-					</Box>
-				)}
-
-				{/* ===================== CONTENT ===================== */}
+				{/* ===================== SECTIONS ===================== */}
 				<Box
 					sx={{
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 3,
-						paddingTop: 3,
+						gap: 2.5,
+						paddingTop: 2.5,
 						paddingBottom: BOTTOM_NAV_CLEARANCE,
 					}}
 				>
-					{/* --- Recommended songs --- */}
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 1,
-							paddingX: 2.5,
-						}}
+					<Section
+						title={tHome('recommended.idea')}
+						icon={<AutoAwesomeRounded sx={{ fontSize: 18 }} />}
 					>
-						<Typography variant="h6" strong>
-							{tHome('recommended.idea')}
-						</Typography>
-
-						{variant === 2 ? (
-							<Box
-								sx={{
-									bgcolor: 'grey.100',
-									borderRadius: 3,
-									overflow: 'hidden',
-									display: 'flex',
-									flexDirection: 'column',
-								}}
-							>
-								{recommended.isLoading
-									? listSkeletons
-									: recommended.data.slice(0, 4).map((v, i, arr) => (
-											<Fragment key={v.packGuid}>
-												<SongVariantCard
-													data={v}
-													dense
-													sx={{ bgcolor: 'transparent', borderRadius: 0 }}
-												/>
-												{i < arr.length - 1 && (
-													<Divider sx={{ marginX: 2 }} />
-												)}
-											</Fragment>
-									  ))}
-							</Box>
-						) : (
-							<Box
-								sx={{
-									...(variant === 3 && {
-										bgcolor: alpha(theme.palette.primary.main, 0.07),
-										borderRadius: 3,
-										padding: 1.5,
-									}),
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 1,
-								}}
-							>
-								{recommended.isLoading
-									? listSkeletons
-									: recommended.data.slice(0, 4).map((v) => (
+						<Box sx={{ display: 'flex', flexDirection: 'column', gap: rowsHaveDividers ? 0 : 1 }}>
+							{recommended.isLoading
+								? listSkeletons
+								: recommended.data.slice(0, 4).map((s, i, arr) => (
+										<Fragment key={s.packGuid}>
 											<SongVariantCard
-												key={v.packGuid}
-												data={v}
+												data={s}
 												dense
 												sx={{
-													bgcolor: 'background.paper',
-													boxShadow: 1,
+													bgcolor: rowBg,
+													borderRadius: rowsHaveDividers ? 0 : 2,
 												}}
 											/>
-									  ))}
-							</Box>
-						)}
-					</Box>
+											{rowsHaveDividers && i < arr.length - 1 && (
+												<Divider sx={{ marginX: 1 }} />
+											)}
+										</Fragment>
+								  ))}
+						</Box>
+					</Section>
 
-					{/* --- Last added (horizontal carousel) --- */}
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 1,
-							// full-bleed grey band separates the section from the white page
-							...(variant === 2 && {
-								bgcolor: 'grey.100',
-								paddingY: 2,
-							}),
-						}}
+					<Section
+						title={tHome('lastAdded.title')}
+						icon={<ScheduleRounded sx={{ fontSize: 18 }} />}
+						action={browseAction}
 					>
-						<Typography variant="h6" strong sx={{ paddingX: 2.5 }}>
-							{tHome('lastAdded.title')}
-						</Typography>
-
 						<Box
 							sx={{
-								...(variant === 3 && {
-									bgcolor: alpha(theme.palette.secondary.main, 0.14),
-									borderRadius: 3,
-									marginX: 2.5,
-									paddingX: 1.5,
-								}),
+								display: 'flex',
+								gap: 1,
+								overflowX: 'auto',
+								// bleed the scroll area to the panel edges
+								marginX: variant === 3 ? -1.5 : -2,
+								paddingX: variant === 3 ? 1.5 : 2,
+								scrollSnapType: 'x mandatory',
+								'&::-webkit-scrollbar': { display: 'none' },
 							}}
 						>
+							{lastAdded.isLoading
+								? carouselSkeletons
+								: lastAdded.data.slice(0, 8).map((s) => carouselTile(s))}
+						</Box>
+					</Section>
+
+					{/* ===================== CTA ===================== */}
+					{variant === 3 ? (
+						<Box sx={{ paddingX: 2.5 }}>
 							<Box
 								sx={{
+									bgcolor: panelBg,
+									borderRadius: 3,
+									padding: 2.5,
 									display: 'flex',
+									flexDirection: 'column',
 									gap: 1.5,
-									overflowX: 'auto',
-									paddingX: variant === 3 ? 0 : 2.5,
-									paddingY: variant === 3 ? 1.5 : 1,
-									scrollSnapType: 'x mandatory',
-									'&::-webkit-scrollbar': { display: 'none' },
+									position: 'relative',
 								}}
 							>
-								{lastAdded.isLoading
-									? carouselSkeletons
-									: lastAdded.data
-											.slice(0, 8)
-											.map((s) => carouselTile(s, 'background.paper'))}
-							</Box>
-						</Box>
-					</Box>
-
-					{/* --- CTA: browse all songs --- */}
-					{
-						<Box
-							sx={{
-								marginX: 2.5,
-								...(variant === 1
-									? {
-											bgcolor: 'background.paper',
-											boxShadow: 1,
-									  }
-									: {
-											background: gradient,
-											color: 'common.white',
-									  }),
-								borderRadius: 3,
-								padding: 2.5,
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 1.5,
-							}}
-						>
-							<Box>
-								<Typography variant="h6" strong>
-									{tSuggestions('noIdea')}
-								</Typography>
-								<Typography
-									small
-									color={variant === 1 ? 'grey.700' : undefined}
-									sx={variant === 1 ? {} : { opacity: 0.9 }}
+								<Box
+									sx={{
+										position: 'absolute',
+										top: -34,
+										right: 12,
+										pointerEvents: 'none',
+									}}
 								>
-									{tSuggestions('chooseSuggestion')}
-								</Typography>
+									{sheep(56)}
+								</Box>
+								<Box>
+									<Typography variant="h6" strong>
+										{tSuggestions('noIdea')}
+									</Typography>
+									<Typography small color="grey.700">
+										{tSuggestions('chooseSuggestion')}
+									</Typography>
+								</Box>
+								<Button
+									to="songsList"
+									toParams={{ s: undefined }}
+									size="large"
+									startIcon={<QueueMusicRounded />}
+								>
+									{tHome('allList.title')}
+								</Button>
 							</Box>
-							<Clickable>
-								<Link to="songsList" params={{ s: undefined }}>
-									<Box
-										sx={{
-											...(variant === 1
-												? {
-														background: gradient,
-														color: 'common.white',
-												  }
-												: {
-														bgcolor: 'background.paper',
-														color: 'primary.main',
-												  }),
-											borderRadius: 2,
-											paddingY: 1.5,
-											display: 'flex',
-											alignItems: 'center',
-											justifyContent: 'center',
-											gap: 1,
-										}}
-									>
-										<QueueMusicRounded fontSize="small" />
-										<Typography small strong uppercase>
-											{tHome('allList.title')}
-										</Typography>
-									</Box>
-								</Link>
-							</Clickable>
 						</Box>
-					}
+					) : (
+						<Box sx={{ paddingX: 2.5 }}>
+							<Box
+								sx={{
+									background: gradient,
+									color: 'common.white',
+									borderRadius: 3,
+									padding: 2.5,
+									display: 'flex',
+									flexDirection: 'column',
+									gap: 1.5,
+								}}
+							>
+								<Box>
+									<Typography variant="h6" strong>
+										{tSuggestions('noIdea')}
+									</Typography>
+									<Typography small sx={{ opacity: 0.9 }}>
+										{tSuggestions('chooseSuggestion')}
+									</Typography>
+								</Box>
+								<Clickable>
+									<Link to="songsList" params={{ s: undefined }}>
+										<Box
+											sx={{
+												bgcolor: 'background.paper',
+												color: 'primary.main',
+												borderRadius: 2,
+												paddingY: 1.5,
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+												gap: 1,
+											}}
+										>
+											<QueueMusicRounded fontSize="small" />
+											<Typography small strong uppercase>
+												{tHome('allList.title')}
+											</Typography>
+										</Box>
+									</Link>
+								</Clickable>
+							</Box>
+						</Box>
+					)}
 				</Box>
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
