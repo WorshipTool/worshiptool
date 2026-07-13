@@ -47,17 +47,17 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
 type DemoVariant = 1 | 2 | 3 | 4
-type SectionStyle = 'band' | 'gap' | 'tint' | 'strip'
+type HeaderStyle = 'white' | 'lightgrey' | 'dark' | 'elevated'
 
 /**
- * One base design (square gradient header, docked search in the thumb
- * zone, translucent tab bar, no CTA card). Sections are always full-bleed
- * — four takes on separating them by background:
+ * One base design (square header, alternating full-bleed band sections,
+ * docked gradient search, translucent tab bar). The header color is the
+ * experiment — no brand blue up top, it stays in the search and accents:
  *
- * 1 — band: alternating grey/white background bands (baseline)
- * 2 — gap: white bands separated by thick grey spacer strips
- * 3 — tint: the recommended band gets a soft brand tint, the rest white
- * 4 — strip: iOS plain-table style — grey label strips over white content
+ * 1 — white: flat white header, dark text
+ * 2 — lightgrey: grey.100 header, band order flipped so surfaces alternate
+ * 3 — dark: grey.900 header with white text
+ * 4 — elevated: white header lifted with a soft shadow (classic app bar)
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -78,11 +78,16 @@ function DemoMobilePage() {
 
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
 
-	const sectionStyle: SectionStyle = (
-		['band', 'gap', 'tint', 'strip'] as const
+	const headerStyle: HeaderStyle = (
+		['white', 'lightgrey', 'dark', 'elevated'] as const
 	)[variant - 1]
+	const darkHeader = headerStyle === 'dark'
 
-	const canvasBg = sectionStyle === 'gap' ? 'grey.200' : 'background.paper'
+	// lightgrey header flips the band order so adjacent surfaces alternate
+	const recommendedSurface: 'white' | 'grey' =
+		headerStyle === 'lightgrey' ? 'white' : 'grey'
+	const lastAddedSurface: 'white' | 'grey' =
+		headerStyle === 'lightgrey' ? 'grey' : 'white'
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -134,8 +139,12 @@ function DemoMobilePage() {
 						width: 42,
 						height: 42,
 						borderRadius: 10,
-						bgcolor: alpha(theme.palette.common.white, 0.22),
-						color: 'common.white',
+						bgcolor: darkHeader
+							? alpha(theme.palette.common.white, 0.16)
+							: headerStyle === 'lightgrey'
+							? 'background.paper'
+							: 'grey.100',
+						color: darkHeader ? 'common.white' : 'primary.main',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -174,7 +183,7 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// Section wrapper — full-bleed surfaces, the separation is the experiment
+	// full-bleed band section
 	const Section = ({
 		title,
 		action,
@@ -183,60 +192,23 @@ function DemoMobilePage() {
 	}: {
 		title: string
 		action?: ReactNode
-		/** which full-bleed background this section gets */
-		surface: 'white' | 'grey' | 'tint'
+		surface: 'white' | 'grey'
 		children: ReactNode
-	}) => {
-		const surfaceBg =
-			surface === 'grey'
-				? 'grey.100'
-				: surface === 'tint'
-				? alpha(theme.palette.primary.main, 0.06)
-				: 'background.paper'
-
-		if (sectionStyle === 'strip') {
-			return (
-				<Box>
-					<Box
-						sx={{
-							bgcolor: 'grey.100',
-							paddingY: 1,
-							paddingX: 3,
-						}}
-					>
-						{sectionLabel(title, action)}
-					</Box>
-					<Box
-						sx={{
-							paddingX: 2.5,
-							paddingY: 2,
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 1.5,
-						}}
-					>
-						{children}
-					</Box>
-				</Box>
-			)
-		}
-
-		return (
-			<Box
-				sx={{
-					bgcolor: sectionStyle === 'gap' ? 'background.paper' : surfaceBg,
-					paddingY: 2.5,
-					paddingX: 2.5,
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 1.5,
-				}}
-			>
-				{sectionLabel(title, action)}
-				{children}
-			</Box>
-		)
-	}
+	}) => (
+		<Box
+			sx={{
+				bgcolor: surface === 'grey' ? 'grey.100' : 'background.paper',
+				paddingY: 2.5,
+				paddingX: 2.5,
+				display: 'flex',
+				flexDirection: 'column',
+				gap: 1.5,
+			}}
+		>
+			{sectionLabel(title, action)}
+			{children}
+		</Box>
+	)
 
 	const carouselTile = (s: BasicVariantPack, bg: string) => (
 		<Clickable key={s.packGuid}>
@@ -363,7 +335,7 @@ function DemoMobilePage() {
 					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
-					bgcolor: canvasBg,
+					bgcolor: 'background.paper',
 					display: 'flex',
 					flexDirection: 'column',
 					boxShadow: 3,
@@ -374,16 +346,34 @@ function DemoMobilePage() {
 					sx={{
 						paddingX: 2.5,
 						paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-						paddingBottom: 3.5,
+						paddingBottom: 3,
 						display: 'flex',
 						justifyContent: 'space-between',
 						alignItems: 'end',
-						background: gradient,
-						color: 'common.white',
+						...(headerStyle === 'white' && {
+							bgcolor: 'background.paper',
+						}),
+						...(headerStyle === 'lightgrey' && {
+							bgcolor: 'grey.100',
+						}),
+						...(headerStyle === 'dark' && {
+							bgcolor: 'grey.900',
+							color: 'common.white',
+						}),
+						...(headerStyle === 'elevated' && {
+							bgcolor: 'background.paper',
+							boxShadow: 2,
+							position: 'relative',
+							zIndex: 1,
+						}),
 					}}
 				>
 					<Box>
-						<Typography small sx={{ opacity: 0.85 }}>
+						<Typography
+							small
+							color={darkHeader ? undefined : 'grey.700'}
+							sx={darkHeader ? { opacity: 0.8 } : {}}
+						>
 							{tHome('hero.lead')}
 						</Typography>
 						<Typography variant="h3" strong={800}>
@@ -399,21 +389,12 @@ function DemoMobilePage() {
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
-						// gap style: the grey canvas shows through as spacer strips
-						gap: sectionStyle === 'gap' ? 1.5 : 0,
-						paddingTop: sectionStyle === 'gap' ? 1.5 : 0,
 						paddingBottom: DOCKED_SEARCH_CLEARANCE,
 					}}
 				>
 					<Section
 						title={tHome('recommended.idea')}
-						surface={
-							sectionStyle === 'band'
-								? 'grey'
-								: sectionStyle === 'tint'
-								? 'tint'
-								: 'white'
-						}
+						surface={recommendedSurface}
 					>
 						{recommendedRows}
 					</Section>
@@ -421,9 +402,11 @@ function DemoMobilePage() {
 					<Section
 						title={tHome('lastAdded.title')}
 						action={browseAction}
-						surface="white"
+						surface={lastAddedSurface}
 					>
-						{lastAddedCarousel('grey.100')}
+						{lastAddedCarousel(
+							lastAddedSurface === 'white' ? 'grey.100' : 'background.paper'
+						)}
 					</Section>
 				</Box>
 
