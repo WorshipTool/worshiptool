@@ -79,8 +79,9 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
+	// docked search (2) won the design review — it is the default
 	const variant: DemoVariant =
-		parsed >= 2 && parsed <= 5 ? (parsed as DemoVariant) : 1
+		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 2
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
