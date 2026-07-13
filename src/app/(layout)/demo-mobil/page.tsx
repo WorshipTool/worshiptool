@@ -47,7 +47,7 @@ export default SmartPage(DemoMobilePage, [
 const PAGE_MAX_WIDTH = 480
 const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const TAB_BAR_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 84px)'
-const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 156px)'
+const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
 type DemoVariant = 1 | 2 | 3 | 4
 
@@ -593,12 +593,12 @@ function DemoMobilePage() {
 					<Box
 						sx={{
 							position: 'fixed',
-							bottom: 'calc(env(safe-area-inset-bottom) + 72px)',
+							bottom: 'calc(env(safe-area-inset-bottom) + 82px)',
 							left: '50%',
 							transform: 'translateX(-50%)',
 							width: '100%',
 							maxWidth: PAGE_MAX_WIDTH,
-							paddingX: 2,
+							paddingX: 2.5,
 							zIndex: 10,
 						}}
 					>
