@@ -48,7 +48,7 @@ const PAGE_MAX_WIDTH = 480
 const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const BOTTOM_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 84px)'
 
-type DemoVariant = 1 | 2 | 3
+type DemoVariant = 1 | 2 | 3 | 4 | 5
 
 /**
  * Three internally consistent design systems, all sharing the same page
@@ -62,6 +62,10 @@ type DemoVariant = 1 | 2 | 3
  *     identical grey panels on white
  * 3 — blue system: white canvas, one accent (primary), tonal panels and
  *     icon-badged section headers, M3-style tab pills
+ *
+ * Thumb-reach experiments (no last-added section, search within thumb zone):
+ * 4 — centered search: hero pushes the search to mid-screen
+ * 5 — docked search: search floats just above the bottom tab bar
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -74,7 +78,11 @@ function DemoMobilePage() {
 	const [query, setQuery] = useState('')
 
 	const { v } = useSmartParams('demoMobile')
-	const variant: DemoVariant = Number(v) === 2 ? 2 : Number(v) === 3 ? 3 : 1
+	const parsed = Number(v)
+	const variant: DemoVariant =
+		parsed === 2 || parsed === 3 || parsed === 4 || parsed === 5
+			? (parsed as DemoVariant)
+			: 1
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -86,13 +94,14 @@ function DemoMobilePage() {
 	const panelBg =
 		variant === 1
 			? 'background.paper'
-			: variant === 2
-			? 'grey.100'
-			: primaryTint
+			: variant === 3
+			? primaryTint
+			: 'grey.100'
 	const panelShadow = variant === 1 ? 1 : 0
 	const rowsHaveDividers = variant === 1
 	const rowBg = variant === 1 ? 'transparent' : 'background.paper'
 	const tileBg = variant === 1 ? 'grey.100' : 'background.paper'
+	const showLastAdded = variant <= 3
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -112,6 +121,53 @@ function DemoMobilePage() {
 				placeholder={tSearch('searchByTitleOrText')}
 			/>
 		</>
+	)
+
+	// gradient border + shadow make the search the strongest element
+	const gradientSearchForm = (
+		<Box
+			sx={{
+				background: gradient,
+				padding: '2px',
+				borderRadius: 10,
+				boxShadow: 3,
+			}}
+		>
+			<Box
+				component="form"
+				onSubmit={submitSearch}
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: 1,
+					bgcolor: 'background.paper',
+					borderRadius: 10,
+					paddingX: 2,
+					paddingY: 1.5,
+				}}
+			>
+				{searchInner}
+			</Box>
+		</Box>
+	)
+
+	// tonal filled field — the only saturated icon on the page
+	const tonalSearchForm = (
+		<Box
+			component="form"
+			onSubmit={submitSearch}
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: 1,
+				bgcolor: alpha(theme.palette.primary.main, 0.08),
+				borderRadius: 10,
+				paddingX: 2,
+				paddingY: 1.5,
+			}}
+		>
+			{searchInner}
+		</Box>
 	)
 
 	const loginLink = (textColor: string) => (
@@ -400,6 +456,43 @@ function DemoMobilePage() {
 							{searchInner}
 						</Box>
 					</Box>
+				) : variant === 4 ? (
+					// hero fills the upper half so the search lands mid-screen,
+					// inside comfortable thumb reach
+					<Box
+						sx={{
+							paddingX: 2.5,
+							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
+							height: '52dvh',
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'space-between',
+							gap: 2.5,
+						}}
+					>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'end',
+							}}
+						>
+							{heroTexts('grey.700')}
+							{loginLink('primary.main')}
+						</Box>
+						<Box
+							sx={{
+								flex: 1,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								pointerEvents: 'none',
+							}}
+						>
+							{sheep(128)}
+						</Box>
+						{gradientSearchForm}
+					</Box>
 				) : (
 					<Box
 						sx={{
@@ -421,50 +514,8 @@ function DemoMobilePage() {
 							{loginLink('primary.main')}
 						</Box>
 
-						{variant === 1 ? (
-							// gradient border + shadow make the search the strongest element
-							<Box
-								sx={{
-									background: gradient,
-									padding: '2px',
-									borderRadius: 10,
-									boxShadow: 3,
-								}}
-							>
-								<Box
-									component="form"
-									onSubmit={submitSearch}
-									sx={{
-										display: 'flex',
-										alignItems: 'center',
-										gap: 1,
-										bgcolor: 'background.paper',
-										borderRadius: 10,
-										paddingX: 2,
-										paddingY: 1.5,
-									}}
-								>
-									{searchInner}
-								</Box>
-							</Box>
-						) : (
-							// tonal filled field — the only saturated icon on the page
-							<Box
-								component="form"
-								onSubmit={submitSearch}
-								sx={{
-									display: 'flex',
-									alignItems: 'center',
-									gap: 1,
-									bgcolor: alpha(theme.palette.primary.main, 0.08),
-									borderRadius: 10,
-									paddingX: 2,
-									paddingY: 1.5,
-								}}
-							>
-								{searchInner}
-							</Box>
-						)}
+						{variant === 1 && gradientSearchForm}
+						{variant === 3 && tonalSearchForm}
 					</Box>
 				)}
 
@@ -476,7 +527,11 @@ function DemoMobilePage() {
 						flexDirection: 'column',
 						gap: 2.5,
 						paddingTop: 2.5,
-						paddingBottom: BOTTOM_NAV_CLEARANCE,
+						// v5 also needs room for the docked search bar
+						paddingBottom:
+							variant === 5
+								? 'calc(env(safe-area-inset-bottom) + 156px)'
+								: BOTTOM_NAV_CLEARANCE,
 					}}
 				>
 					<Section
@@ -486,7 +541,7 @@ function DemoMobilePage() {
 						<Box sx={{ display: 'flex', flexDirection: 'column', gap: rowsHaveDividers ? 0 : 1 }}>
 							{recommended.isLoading
 								? listSkeletons
-								: recommended.data.slice(0, 4).map((s, i, arr) => (
+								: recommended.data.slice(0, showLastAdded ? 4 : 6).map((s, i, arr) => (
 										<Fragment key={s.packGuid}>
 											<SongVariantCard
 												data={s}
@@ -504,6 +559,7 @@ function DemoMobilePage() {
 						</Box>
 					</Section>
 
+					{showLastAdded && (
 					<Section
 						title={tHome('lastAdded.title')}
 						icon={<ScheduleRounded sx={{ fontSize: 18 }} />}
@@ -535,6 +591,7 @@ function DemoMobilePage() {
 								: lastAdded.data.slice(0, 8).map((s) => carouselTile(s))}
 						</Box>
 					</Section>
+					)}
 
 					{/* ===================== CTA ===================== */}
 					{variant === 3 ? (
@@ -624,6 +681,24 @@ function DemoMobilePage() {
 						</Box>
 					)}
 				</Box>
+
+				{/* ===== Docked search — floats above the tab bar (thumb zone) ===== */}
+				{variant === 5 && (
+					<Box
+						sx={{
+							position: 'fixed',
+							bottom: 'calc(env(safe-area-inset-bottom) + 72px)',
+							left: '50%',
+							transform: 'translateX(-50%)',
+							width: '100%',
+							maxWidth: PAGE_MAX_WIDTH,
+							paddingX: 2,
+							zIndex: 10,
+						}}
+					>
+						{gradientSearchForm}
+					</Box>
+				)}
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
 				<Box
