@@ -24,10 +24,14 @@ import { getAssetUrl } from '@/tech/paths.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
 	AutoAwesomeRounded,
+	HomeOutlined,
 	HomeRounded,
+	LibraryMusicOutlined,
+	LibraryMusicRounded,
 	LoginRounded,
 	MusicNoteRounded,
 	PersonOutlineRounded,
+	PersonRounded,
 	QueueMusicRounded,
 	ScheduleRounded,
 	SearchRounded,
@@ -172,21 +176,24 @@ function DemoMobilePage() {
 		</Box>
 	)
 
+	// circular icon button reads more native than an uppercase text link
 	const loginLink = (
-		<Clickable>
+		<Clickable tooltip={tNav('login')}>
 			<Link to="login" params={{ previousPage: '', message: '' }}>
 				<Box
+					aria-label={tNav('login')}
 					sx={{
+						width: 42,
+						height: 42,
+						borderRadius: 10,
+						bgcolor: blueSystem || googleMinimal ? 'grey.100' : 'background.paper',
+						boxShadow: blueSystem || googleMinimal ? 0 : 1,
+						color: 'primary.main',
 						display: 'flex',
 						alignItems: 'center',
-						gap: 0.5,
-						color: 'primary.main',
-						paddingY: 0.5,
+						justifyContent: 'center',
 					}}
 				>
-					<Typography small strong uppercase>
-						{tNav('login')}
-					</Typography>
 					<LoginRounded fontSize="small" />
 				</Box>
 			</Link>
@@ -249,8 +256,8 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// Shared section anatomy: panel with header (badge in v4 + title +
-	// optional action) and content — identical geometry in every variant
+	// Shared section anatomy: iOS-style grouped list — small uppercase
+	// label ABOVE the card (h6 + badge in the blue system), then the panel
 	const Section = ({
 		title,
 		icon,
@@ -262,7 +269,37 @@ function DemoMobilePage() {
 		action?: ReactNode
 		children: ReactNode
 	}) => (
-		<Box sx={{ paddingX: 2.5 }}>
+		<Box
+			sx={{
+				paddingX: 2.5,
+				display: 'flex',
+				flexDirection: 'column',
+				gap: 1,
+			}}
+		>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					gap: 1,
+					paddingX: 0.5,
+				}}
+			>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+					{blueSystem && sectionBadge(icon)}
+					{blueSystem ? (
+						<Typography variant="h6" strong>
+							{title}
+						</Typography>
+					) : (
+						<Typography small strong uppercase color="grey.700">
+							{title.replace(/:$/, '')}
+						</Typography>
+					)}
+				</Box>
+				{action}
+			</Box>
 			<Box
 				sx={{
 					bgcolor: panelBg,
@@ -274,22 +311,6 @@ function DemoMobilePage() {
 					gap: 2,
 				}}
 			>
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						gap: 1,
-					}}
-				>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-						{blueSystem && sectionBadge(icon)}
-						<Typography variant="h6" strong>
-							{title}
-						</Typography>
-					</Box>
-					{action}
-				</Box>
 				{children}
 			</Box>
 		</Box>
@@ -686,7 +707,9 @@ function DemoMobilePage() {
 						transform: 'translateX(-50%)',
 						width: '100%',
 						maxWidth: PAGE_MAX_WIDTH,
-						bgcolor: 'background.paper',
+						// translucent + blur like native bars
+						bgcolor: alpha(theme.palette.background.paper, 0.85),
+						backdropFilter: 'blur(12px)',
 						borderTop: '1px solid',
 						borderColor: 'grey.300',
 						display: 'flex',
@@ -696,7 +719,8 @@ function DemoMobilePage() {
 				>
 					<Link to="demoMobile" params={{ v }} style={{ flex: 1 }}>
 						<TabItem
-							icon={<HomeRounded />}
+							icon={<HomeOutlined />}
+							activeIcon={<HomeRounded />}
 							label={tNav('home')}
 							active
 							pill={blueSystem}
@@ -704,7 +728,8 @@ function DemoMobilePage() {
 					</Link>
 					<Link to="songsList" params={{ s: undefined }} style={{ flex: 1 }}>
 						<TabItem
-							icon={<QueueMusicRounded />}
+							icon={<LibraryMusicOutlined />}
+							activeIcon={<LibraryMusicRounded />}
 							label={tNav('songs')}
 							pill={blueSystem}
 						/>
@@ -712,6 +737,7 @@ function DemoMobilePage() {
 					<Link to="account" params={{}} style={{ flex: 1 }}>
 						<TabItem
 							icon={<PersonOutlineRounded />}
+							activeIcon={<PersonRounded />}
 							label={tNav('account')}
 							pill={blueSystem}
 						/>
@@ -724,13 +750,15 @@ function DemoMobilePage() {
 
 type TabItemProps = {
 	icon: JSX.Element
+	/** filled counterpart shown when the tab is selected (native pattern) */
+	activeIcon?: JSX.Element
 	label: string
 	active?: boolean
 	/** Material-3-like tonal pill behind the active icon */
 	pill?: boolean
 }
 
-function TabItem({ icon, label, active, pill }: TabItemProps) {
+function TabItem({ icon, activeIcon, label, active, pill }: TabItemProps) {
 	const theme = useTheme()
 	return (
 		<Box
@@ -757,7 +785,7 @@ function TabItem({ icon, label, active, pill }: TabItemProps) {
 					}),
 				}}
 			>
-				{icon}
+				{active ? activeIcon ?? icon : icon}
 			</Box>
 			<Typography small strong={active ? 700 : 400}>
 				{label}
