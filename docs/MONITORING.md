@@ -17,11 +17,13 @@ Inicializace: `sentry.client.config.ts`, `sentry.server.config.ts`,
 `sentry.edge.config.ts` (root) + `src/instrumentation.ts`. Build obaluje
 `withSentryConfig` v `next.config.mjs`.
 
-Pozor: `NEXT_PUBLIC_SENTRY_DSN` se do bundlu zapéká **při buildu**. Proto
-se předává jako build argument: v `Dockerfile` (`ARG NEXT_PUBLIC_SENTRY_DSN`)
-a v `docker-compose.yml` v sekci `build.args`. Při deployi přes CI je
-potřeba ji předat jako `--build-arg` (stejně jako ostatní `NEXT_PUBLIC_*`).
-DSN nastavená až za runtime nic nezapne.
+Pozor: `NEXT_PUBLIC_SENTRY_DSN` se do bundlu zapéká **při buildu** — DSN
+nastavená až za runtime nic nezapne. Produkční CI
+(`production-deployment.yml`) nepředává žádné build argumenty: kopíruje
+`.env` soubory z deploy serveru (`/root/worshiptool/<web>/frontend/.env`)
+do build kontextu a Dockerfile na ně spadne zpátky. Sentry proměnné tedy
+patří do těchto souborů. Build argumenty v `Dockerfile` /
+`docker-compose.yml` slouží pro lokální a manuální buildy.
 
 Performance tracing je vypnutý a příslušný kód SDK se při buildu
 tree-shakuje (`webpack.treeshake.removeTracing` v `next.config.mjs`), aby
@@ -79,7 +81,8 @@ Poznámky k interpretaci dat:
 - Hromadné přidání N písní do playlistu pošle N eventů
   `ADD_SONG_TO_PLAYLIST` (jeden na píseň).
 - V development režimu se Mixpanel neinicializuje, lokální vývoj tedy
-  data neznečišťuje. E2E testy proti preview prostředí ale eventy posílají.
+  data neznečišťuje. E2E testy běžící proti nasazenému dev prostředí
+  (dev.chvalotce.cz) ale eventy posílají.
 
 Identifikace uživatele (identify + people.set) probíhá
 v `MixPanelAnalytics.tsx` po přihlášení.
