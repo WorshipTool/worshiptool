@@ -5,10 +5,8 @@ import useRecommendedSongs from '@/app/components/components/RecommendedSongsLis
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import {
 	Box,
-	Button,
 	Clickable,
 	Divider,
-	Image,
 	Typography,
 	useTheme,
 } from '@/common/ui'
@@ -20,10 +18,8 @@ import { TextField } from '@/common/ui/TextField'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
-import { getAssetUrl } from '@/tech/paths.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
-	AutoAwesomeRounded,
 	HomeOutlined,
 	HomeRounded,
 	LibraryMusicOutlined,
@@ -32,8 +28,6 @@ import {
 	MusicNoteRounded,
 	PersonOutlineRounded,
 	PersonRounded,
-	QueueMusicRounded,
-	ScheduleRounded,
 	SearchRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
@@ -50,63 +44,42 @@ export default SmartPage(DemoMobilePage, [
 
 const PAGE_MAX_WIDTH = 480
 const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
-const TAB_BAR_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 84px)'
 const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
-type DemoVariant = 1 | 2 | 3 | 4 | 5
+type DemoVariant = 1 | 2 | 3
 
 /**
- * Variants — all share the "cards" language, they differ in where the
- * search lives and in the accent system:
+ * One base design (docked search in the thumb zone, iOS grouped sections,
+ * translucent tab bar, no CTA card) with three header treatments:
  *
- * 1 — search top (baseline): grey canvas, white section cards, gradient
- *     border makes the search the strongest element
- * 2 — search docked at the very bottom above the tab bar (thumb zone),
- *     otherwise identical to 1
- * 3 — search mid-screen: hero fills the upper half, trimmed content
- *     below (no last-added), otherwise the style of 1
- * 4 — polished blue system: white canvas, neutral grey panels, blue used
- *     only as accent (badges, actions, button, tab pill); search docked
- *     bottom with a solid blue border
- * 5 — Google-style minimal: an almost empty white page with just the
- *     brand, the search and one quiet action in the middle
+ * 1 — gradient header: brand gradient band with rounded bottom, white text
+ * 2 — tonal header: soft primary tint band, dark text
+ * 3 — sheet split: white header, content rides on a grey rounded sheet
  */
 function DemoMobilePage() {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
 	const tNav = useTranslations('navigation')
 	const tSearch = useTranslations('search')
-	const tSuggestions = useTranslations('suggestions')
 
 	const navigate = useSmartNavigate()
 	const [query, setQuery] = useState('')
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	// docked search (2) won the design review — it is the default
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 2
+		parsed >= 1 && parsed <= 3 ? (parsed as DemoVariant) : 1
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
 
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
 
-	const blueSystem = variant === 4
-	const googleMinimal = variant === 5
-	const searchDocked = variant === 2 || variant === 4
-	const searchCentered = variant === 3
-	const showLastAdded = !searchCentered && !googleMinimal
+	const gradientHeader = variant === 1
+	const tonalHeader = variant === 2
+	const sheetSplit = variant === 3
 
-	// One card language per variant: v1–v3 white cards on grey canvas,
-	// v4 neutral grey panels on white canvas with blue accents only
-	const canvasBg =
-		blueSystem || googleMinimal ? 'background.paper' : 'grey.100'
-	const panelBg = blueSystem ? 'grey.100' : 'background.paper'
-	const panelShadow = blueSystem ? 0 : 1
-	const rowsHaveDividers = !blueSystem
-	const rowBg = blueSystem ? 'background.paper' : 'transparent'
-	const tileBg = blueSystem ? 'background.paper' : 'grey.100'
+	const canvasBg = sheetSplit ? 'background.paper' : 'grey.100'
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -115,41 +88,8 @@ function DemoMobilePage() {
 		}
 	}
 
-	const searchInner = (
-		<>
-			<SearchRounded
-				sx={{ color: blueSystem ? 'primary.main' : 'grey.600' }}
-			/>
-			<TextField
-				value={query}
-				onChange={setQuery}
-				placeholder={tSearch('searchByTitleOrText')}
-			/>
-		</>
-	)
-
-	// v1–v3: gradient border + shadow make the search the strongest element
-	// v4: solid blue border keeps the single-accent system
-	const searchForm = blueSystem ? (
-		<Box
-			component="form"
-			onSubmit={submitSearch}
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: 1,
-				bgcolor: 'background.paper',
-				border: '2px solid',
-				borderColor: 'primary.main',
-				borderRadius: 10,
-				paddingX: 2,
-				paddingY: 1.5,
-				boxShadow: 3,
-			}}
-		>
-			{searchInner}
-		</Box>
-	) : (
+	// gradient border + shadow keep the search the strongest element
+	const searchForm = (
 		<Box
 			sx={{
 				background: gradient,
@@ -171,13 +111,18 @@ function DemoMobilePage() {
 					paddingY: 1.5,
 				}}
 			>
-				{searchInner}
+				<SearchRounded sx={{ color: 'grey.600' }} />
+				<TextField
+					value={query}
+					onChange={setQuery}
+					placeholder={tSearch('searchByTitleOrText')}
+				/>
 			</Box>
 		</Box>
 	)
 
 	// circular icon button reads more native than an uppercase text link
-	const loginLink = (
+	const loginButton = (
 		<Clickable tooltip={tNav('login')}>
 			<Link to="login" params={{ previousPage: '', message: '' }}>
 				<Box
@@ -186,9 +131,11 @@ function DemoMobilePage() {
 						width: 42,
 						height: 42,
 						borderRadius: 10,
-						bgcolor: blueSystem || googleMinimal ? 'grey.100' : 'background.paper',
-						boxShadow: blueSystem || googleMinimal ? 0 : 1,
-						color: 'primary.main',
+						bgcolor: gradientHeader
+							? alpha(theme.palette.common.white, 0.22)
+							: 'background.paper',
+						boxShadow: gradientHeader ? 0 : 1,
+						color: gradientHeader ? 'common.white' : 'primary.main',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -200,32 +147,18 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const sheep = (size: number) => (
-		<Image
-			src={getAssetUrl('/sheeps/ovce3.svg')}
-			alt={tSuggestions('sheep')}
-			width={size}
-			height={size}
-		/>
-	)
-
-	const headerRow = (
-		<Box
-			sx={{
-				display: 'flex',
-				justifyContent: 'space-between',
-				alignItems: 'end',
-			}}
-		>
-			<Box>
-				<Typography small color="grey.700">
-					{tHome('hero.lead')}
-				</Typography>
-				<Typography variant="h3" strong={800}>
-					{tHome('hero.title')}
-				</Typography>
-			</Box>
-			{loginLink}
+	const heroTexts = (
+		<Box>
+			<Typography
+				small
+				color={gradientHeader ? undefined : 'grey.700'}
+				sx={gradientHeader ? { opacity: 0.85 } : {}}
+			>
+				{tHome('hero.lead')}
+			</Typography>
+			<Typography variant="h3" strong={800}>
+				{tHome('hero.title')}
+			</Typography>
 		</Box>
 	)
 
@@ -239,33 +172,13 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const sectionBadge = (icon: ReactNode) => (
-		<Box
-			sx={{
-				width: 32,
-				height: 32,
-				borderRadius: 2,
-				bgcolor: alpha(theme.palette.primary.main, 0.1),
-				color: 'primary.main',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-			}}
-		>
-			{icon}
-		</Box>
-	)
-
-	// Shared section anatomy: iOS-style grouped list — small uppercase
-	// label ABOVE the card (h6 + badge in the blue system), then the panel
+	// iOS grouped-list section: small uppercase label above a white card
 	const Section = ({
 		title,
-		icon,
 		action,
 		children,
 	}: {
 		title: string
-		icon: ReactNode
 		action?: ReactNode
 		children: ReactNode
 	}) => (
@@ -286,25 +199,16 @@ function DemoMobilePage() {
 					paddingX: 0.5,
 				}}
 			>
-				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-					{blueSystem && sectionBadge(icon)}
-					{blueSystem ? (
-						<Typography variant="h6" strong>
-							{title}
-						</Typography>
-					) : (
-						<Typography small strong uppercase color="grey.700">
-							{title.replace(/:$/, '')}
-						</Typography>
-					)}
-				</Box>
+				<Typography small strong uppercase color="grey.700">
+					{title.replace(/:$/, '')}
+				</Typography>
 				{action}
 			</Box>
 			<Box
 				sx={{
-					bgcolor: panelBg,
+					bgcolor: 'background.paper',
 					borderRadius: 3,
-					boxShadow: panelShadow,
+					boxShadow: 1,
 					padding: 2,
 					display: 'flex',
 					flexDirection: 'column',
@@ -322,7 +226,7 @@ function DemoMobilePage() {
 				<Box
 					sx={{
 						width: 164,
-						bgcolor: tileBg,
+						bgcolor: 'grey.100',
 						borderRadius: 2,
 						padding: 2,
 						scrollSnapAlign: 'start',
@@ -359,7 +263,7 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const listSkeletons = Array.from({ length: 4 }).map((_, i) => (
+	const listSkeletons = Array.from({ length: 5 }).map((_, i) => (
 		<Skeleton
 			key={i}
 			variant="rounded"
@@ -374,6 +278,64 @@ function DemoMobilePage() {
 			sx={{ minWidth: 164, height: 128, borderRadius: 2, bgcolor: 'grey.200' }}
 		/>
 	))
+
+	const sections = (
+		<Box
+			sx={{
+				flex: 1,
+				display: 'flex',
+				flexDirection: 'column',
+				gap: 2.5,
+				paddingTop: 2.5,
+				paddingBottom: DOCKED_SEARCH_CLEARANCE,
+			}}
+		>
+			<Section title={tHome('recommended.idea')}>
+				<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+					{recommended.isLoading
+						? listSkeletons
+						: recommended.data.slice(0, 5).map((s, i, arr) => (
+								<Fragment key={s.packGuid}>
+									<SongVariantCard
+										data={s}
+										dense
+										sx={{ bgcolor: 'transparent', borderRadius: 0 }}
+									/>
+									{i < arr.length - 1 && <Divider sx={{ marginX: 1 }} />}
+								</Fragment>
+						  ))}
+				</Box>
+			</Section>
+
+			<Section title={tHome('lastAdded.title')} action={browseAction}>
+				<Box
+					sx={{
+						display: 'flex',
+						gap: 1.5,
+						overflowX: 'auto',
+						// bleed the scroll area to the panel edges, then restore
+						// the inset inside it so tiles align with the header text
+						marginX: -2,
+						paddingLeft: 2,
+						paddingY: 0.5,
+						scrollSnapType: 'x mandatory',
+						scrollPaddingLeft: theme.spacing(2),
+						'&::-webkit-scrollbar': { display: 'none' },
+						// keeps the right inset visible at the end of the scroll
+						// (trailing padding collapses in overflow containers)
+						'&::after': {
+							content: '""',
+							flex: '0 0 1px',
+						},
+					}}
+				>
+					{lastAdded.isLoading
+						? carouselSkeletons
+						: lastAdded.data.slice(0, 8).map((s) => carouselTile(s))}
+				</Box>
+			</Section>
+		</Box>
+	)
 
 	return (
 		<Box
@@ -401,302 +363,67 @@ function DemoMobilePage() {
 					boxShadow: 3,
 				}}
 			>
-				{/* ===================== HEADER (+ top/centered search) ===================== */}
-				{googleMinimal ? (
-					// Google-style: an almost empty page — brand + search in the
-					// middle, one quiet action, nothing else
+				{/* ===================== HEADER ===================== */}
+				<Box
+					sx={{
+						paddingX: 2.5,
+						paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
+						paddingBottom: gradientHeader || tonalHeader ? 3.5 : 1,
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'end',
+						...(gradientHeader && {
+							background: gradient,
+							color: 'common.white',
+							borderRadius: '0 0 28px 28px',
+						}),
+						...(tonalHeader && {
+							bgcolor: alpha(theme.palette.primary.main, 0.09),
+							borderRadius: '0 0 28px 28px',
+						}),
+					}}
+				>
+					{heroTexts}
+					{loginButton}
+				</Box>
+
+				{/* ===================== CONTENT ===================== */}
+				{sheetSplit ? (
+					// content rides on a grey rounded sheet over the white canvas
 					<Box
 						sx={{
 							flex: 1,
+							marginTop: 2,
+							bgcolor: 'grey.100',
+							borderRadius: '28px 28px 0 0',
 							display: 'flex',
 							flexDirection: 'column',
-							paddingX: 4,
-							paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
-							paddingBottom: TAB_BAR_CLEARANCE,
 						}}
 					>
-						<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-							{loginLink}
-						</Box>
-						<Box sx={{ flex: 0.85 }} />
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-								gap: 3,
-							}}
-						>
-							{sheep(96)}
-							<Box sx={{ textAlign: 'center' }}>
-								<Typography small color="grey.700">
-									{tHome('hero.lead')}
-								</Typography>
-								<Typography variant="h3" strong={800}>
-									{tHome('hero.title')}
-								</Typography>
-							</Box>
-							<Box sx={{ width: '100%' }}>{searchForm}</Box>
-							<Clickable>
-								<Link to="songsList" params={{ s: undefined }}>
-									<Box
-										sx={{
-											display: 'flex',
-											alignItems: 'center',
-											gap: 1,
-											bgcolor: 'grey.100',
-											borderRadius: 10,
-											paddingX: 2.5,
-											paddingY: 1,
-										}}
-									>
-										<QueueMusicRounded
-											fontSize="small"
-											sx={{ color: 'grey.700' }}
-										/>
-										<Typography small strong>
-											{tHome('allList.title')}
-										</Typography>
-									</Box>
-								</Link>
-							</Clickable>
-						</Box>
-						<Box sx={{ flex: 1.15 }} />
-					</Box>
-				) : searchCentered ? (
-					// hero fills the upper half so the search lands mid-screen,
-					// inside comfortable thumb reach
-					<Box
-						sx={{
-							paddingX: 2.5,
-							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-							height: '52dvh',
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'space-between',
-							gap: 2.5,
-						}}
-					>
-						{headerRow}
-						<Box
-							sx={{
-								flex: 1,
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								pointerEvents: 'none',
-							}}
-						>
-							{sheep(120)}
-						</Box>
-						{searchForm}
+						{sections}
 					</Box>
 				) : (
-					<Box
-						sx={{
-							paddingX: 2.5,
-							paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 2.5,
-						}}
-					>
-						{headerRow}
-						{!searchDocked && searchForm}
-					</Box>
-				)}
-
-				{/* ===================== SECTIONS ===================== */}
-				{!googleMinimal && (
-				<Box
-					sx={{
-						flex: 1,
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 2.5,
-						paddingTop: 2.5,
-						paddingBottom: searchDocked
-							? DOCKED_SEARCH_CLEARANCE
-							: TAB_BAR_CLEARANCE,
-					}}
-				>
-					<Section
-						title={tHome('recommended.idea')}
-						icon={<AutoAwesomeRounded sx={{ fontSize: 18 }} />}
-					>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: rowsHaveDividers ? 0 : 1,
-							}}
-						>
-							{recommended.isLoading
-								? listSkeletons
-								: recommended.data
-										.slice(0, showLastAdded ? 4 : 6)
-										.map((s, i, arr) => (
-											<Fragment key={s.packGuid}>
-												<SongVariantCard
-													data={s}
-													dense
-													sx={{
-														bgcolor: rowBg,
-														borderRadius: rowsHaveDividers ? 0 : 2,
-													}}
-												/>
-												{rowsHaveDividers && i < arr.length - 1 && (
-													<Divider sx={{ marginX: 1 }} />
-												)}
-											</Fragment>
-										))}
-						</Box>
-					</Section>
-
-					{showLastAdded && (
-						<Section
-							title={tHome('lastAdded.title')}
-							icon={<ScheduleRounded sx={{ fontSize: 18 }} />}
-							action={browseAction}
-						>
-							<Box
-								sx={{
-									display: 'flex',
-									gap: 1.5,
-									overflowX: 'auto',
-									// bleed the scroll area to the panel edges, then restore
-									// the inset inside it so tiles align with the header text
-									marginX: -2,
-									paddingLeft: 2,
-									paddingY: 0.5,
-									scrollSnapType: 'x mandatory',
-									scrollPaddingLeft: theme.spacing(2),
-									'&::-webkit-scrollbar': { display: 'none' },
-									// keeps the right inset visible at the end of the scroll
-									// (trailing padding collapses in overflow containers)
-									'&::after': {
-										content: '""',
-										flex: '0 0 1px',
-									},
-								}}
-							>
-								{lastAdded.isLoading
-									? carouselSkeletons
-									: lastAdded.data.slice(0, 8).map((s) => carouselTile(s))}
-							</Box>
-						</Section>
-					)}
-
-					{/* ===================== CTA ===================== */}
-					{blueSystem ? (
-						<Box sx={{ paddingX: 2.5 }}>
-							<Box
-								sx={{
-									bgcolor: panelBg,
-									borderRadius: 3,
-									padding: 2,
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 1.5,
-									position: 'relative',
-								}}
-							>
-								<Box
-									sx={{
-										position: 'absolute',
-										top: -34,
-										right: 16,
-										pointerEvents: 'none',
-									}}
-								>
-									{sheep(56)}
-								</Box>
-								<Box>
-									<Typography variant="h6" strong>
-										{tSuggestions('noIdea')}
-									</Typography>
-									<Typography small color="grey.700">
-										{tSuggestions('chooseSuggestion')}
-									</Typography>
-								</Box>
-								<Button
-									to="songsList"
-									toParams={{ s: undefined }}
-									size="large"
-									startIcon={<QueueMusicRounded />}
-								>
-									{tHome('allList.title')}
-								</Button>
-							</Box>
-						</Box>
-					) : (
-						<Box sx={{ paddingX: 2.5 }}>
-							<Box
-								sx={{
-									background: gradient,
-									color: 'common.white',
-									borderRadius: 3,
-									padding: 2.5,
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 1.5,
-								}}
-							>
-								<Box>
-									<Typography variant="h6" strong>
-										{tSuggestions('noIdea')}
-									</Typography>
-									<Typography small sx={{ opacity: 0.9 }}>
-										{tSuggestions('chooseSuggestion')}
-									</Typography>
-								</Box>
-								<Clickable>
-									<Link to="songsList" params={{ s: undefined }}>
-										<Box
-											sx={{
-												bgcolor: 'background.paper',
-												color: 'primary.main',
-												borderRadius: 2,
-												paddingY: 1.5,
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												gap: 1,
-											}}
-										>
-											<QueueMusicRounded fontSize="small" />
-											<Typography small strong uppercase>
-												{tHome('allList.title')}
-											</Typography>
-										</Box>
-									</Link>
-								</Clickable>
-							</Box>
-						</Box>
-					)}
-				</Box>
+					sections
 				)}
 
 				{/* ===== Docked search — floats above the tab bar (thumb zone) ===== */}
-				{searchDocked && (
-					<Box
-						sx={{
-							position: 'fixed',
-							bottom: 'calc(env(safe-area-inset-bottom) + 82px)',
-							left: '50%',
-							transform: 'translateX(-50%)',
-							width: '100%',
-							maxWidth: PAGE_MAX_WIDTH,
-							paddingX: 4,
-							// no global border-box in this app — keep the padding
-							// inside the 100% width instead of overflowing it
-							boxSizing: 'border-box',
-							zIndex: 10,
-						}}
-					>
-						{searchForm}
-					</Box>
-				)}
+				<Box
+					sx={{
+						position: 'fixed',
+						bottom: 'calc(env(safe-area-inset-bottom) + 82px)',
+						left: '50%',
+						transform: 'translateX(-50%)',
+						width: '100%',
+						maxWidth: PAGE_MAX_WIDTH,
+						paddingX: 4,
+						// no global border-box in this app — keep the padding
+						// inside the 100% width instead of overflowing it
+						boxSizing: 'border-box',
+						zIndex: 10,
+					}}
+				>
+					{searchForm}
+				</Box>
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
 				<Box
@@ -723,7 +450,6 @@ function DemoMobilePage() {
 							activeIcon={<HomeRounded />}
 							label={tNav('home')}
 							active
-							pill={blueSystem}
 						/>
 					</Link>
 					<Link to="songsList" params={{ s: undefined }} style={{ flex: 1 }}>
@@ -731,7 +457,6 @@ function DemoMobilePage() {
 							icon={<LibraryMusicOutlined />}
 							activeIcon={<LibraryMusicRounded />}
 							label={tNav('songs')}
-							pill={blueSystem}
 						/>
 					</Link>
 					<Link to="account" params={{}} style={{ flex: 1 }}>
@@ -739,7 +464,6 @@ function DemoMobilePage() {
 							icon={<PersonOutlineRounded />}
 							activeIcon={<PersonRounded />}
 							label={tNav('account')}
-							pill={blueSystem}
 						/>
 					</Link>
 				</Box>
@@ -754,12 +478,9 @@ type TabItemProps = {
 	activeIcon?: JSX.Element
 	label: string
 	active?: boolean
-	/** Material-3-like tonal pill behind the active icon */
-	pill?: boolean
 }
 
-function TabItem({ icon, activeIcon, label, active, pill }: TabItemProps) {
-	const theme = useTheme()
+function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 	return (
 		<Box
 			sx={{
@@ -771,22 +492,7 @@ function TabItem({ icon, activeIcon, label, active, pill }: TabItemProps) {
 				color: active ? 'primary.main' : 'grey.700',
 			}}
 		>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					...(pill && {
-						paddingX: 2,
-						borderRadius: 10,
-						bgcolor: active
-							? alpha(theme.palette.primary.main, 0.12)
-							: 'transparent',
-					}),
-				}}
-			>
-				{active ? activeIcon ?? icon : icon}
-			</Box>
+			{active ? activeIcon ?? icon : icon}
 			<Typography small strong={active ? 700 : 400}>
 				{label}
 			</Typography>
