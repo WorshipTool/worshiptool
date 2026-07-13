@@ -28,6 +28,7 @@ export const routesPaths = {
 	songsList: '/seznam',
 	test: '/test',
 	testComponents: '/storybook',
+	demoMobile: '/demo-mobil',
 	subdomain: '/sub/[subdomain]',
 	about: '/o-nas',
 	contact: '/kontakt',
@@ -93,5 +94,8 @@ export const routesSearchParams = {
 	},
 	songsList: {
 		s: 0 as number | undefined,
+	},
+	demoMobile: {
+		v: 0 as number | undefined,
 	},
 }
