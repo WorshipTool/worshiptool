@@ -1,6 +1,7 @@
 import AppLayout from '@/common/components/app/AppLayout/AppLayout'
 import { getCloudConfig } from '@/common/providers/FeatureFlags/cloud-config/cloud-config.tech'
 import LoadingRoutesProvider from './components/LoadingRoutesProvider'
+import SnowWrapper from './SnowWrapper'
 
 type AppContainerProps = {
 	children: React.ReactNode
@@ -13,8 +14,11 @@ export async function AppContainer(props: AppContainerProps) {
 		true
 	)
 	return (
-		<LoadingRoutesProvider show={showLoadingScreen}>
-			<AppLayout>{props.children}</AppLayout>
-		</LoadingRoutesProvider>
+		<>
+			<SnowWrapper />
+			<LoadingRoutesProvider show={showLoadingScreen}>
+				<AppLayout>{props.children}</AppLayout>
+			</LoadingRoutesProvider>
+		</>
 	)
 }

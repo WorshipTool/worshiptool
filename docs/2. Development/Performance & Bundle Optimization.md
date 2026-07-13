@@ -13,7 +13,7 @@ Next.js `optimizePackageImports` ensures proper tree-shaking of barrel exports f
 **Configured libraries:**
 - `@mui/icons-material`, `@mui/material`, `@mui/lab`, `@mui/x-charts`, `@mui/x-date-pickers`
 - `framer-motion`
-- `notistack`, `dayjs`
+- `notistack`, `dayjs`, `react-snowfall`
 - `@statsig/*` packages
 - `@react-oauth/google`
 - `mixpanel-browser`, `socket.io-client`, `jwt-decode`, `crypto-js`
@@ -42,7 +42,11 @@ Heavy dialog components are loaded via `next/dynamic` only when they need to be 
 - **`PreviewModeDialog`** - loaded in `ImplementIdeaProvider.tsx`
 - **`NewsPopup`** - loaded in `AppClientProviders.tsx`
 
-### 4. Dynamically Imported Heavy Libraries
+### 4. Lazy-Loaded Snow Animation
+
+The `Snow` component (which imports `framer-motion` + `react-snowfall`) is lazy-loaded via `next/dynamic` in `SnowWrapper.tsx`. It also skips rendering on mobile devices. The effect is seasonal and currently turned off via the `SNOW_ENABLED` flag in `SnowWrapper.tsx`; while off, the lazy chunk is never requested.
+
+### 5. Dynamically Imported Heavy Libraries
 
 Several heavy libraries are loaded via dynamic `import()` to keep them out of the initial page bundle:
 
@@ -51,13 +55,13 @@ Several heavy libraries are loaded via dynamic `import()` to keep them out of th
 - **Google OAuth** (`@react-oauth/google`) - loaded via `next/dynamic` wrapper (`LazyGoogleOAuthProvider.tsx`) with `ssr: false`, deferring the Google GSI script (~91 KiB) from initial page load.
 - **Analytics component** - The root `Analytics` component in `layout.tsx` is lazy-loaded with `next/dynamic` and `ssr: false`.
 
-### 5. Route-Level Providers
+### 6. Route-Level Providers
 
 Providers that are only needed by specific routes are placed at the component level instead of wrapping the entire app:
 
 - **`LocalizationProvider`** (MUI DatePicker + DayJS adapter) - moved from `AppClientProviders.tsx` (global) to `TeamEventPopup.tsx` (only component using DatePicker). This prevents `@mui/x-date-pickers` and `dayjs/locale/cs` from loading on every page.
 
-### 6. Removed Unused Dependencies
+### 7. Removed Unused Dependencies
 
 The following packages were removed because they had no imports in the codebase:
 
@@ -66,9 +70,8 @@ The following packages were removed because they had no imports in the codebase:
 - `@stripe/react-stripe-js`
 - `@stripe/stripe-js`
 - `react-device-detect` (replaced with lightweight UA detection in `src/tech/device.tech.ts`)
-- `react-snowfall` (removed together with the `Snow` landing-page animation)
 
-### 7. Legacy JavaScript Elimination
+### 8. Legacy JavaScript Elimination
 
 Lighthouse flagged ~29 KiB of unnecessary polyfills shipped to modern browsers. Two changes address this:
 
@@ -88,7 +91,7 @@ notistack ships pre-compiled ESM with inline Babel class helpers (`_createClass`
   - The empty polyfill replacement file exists and contains no executable code
   - `next.config.mjs` correctly aliases the polyfill and includes packages in `transpilePackages`
 
-### 8. Bundle Analyzer
+### 9. Bundle Analyzer
 
 `@next/bundle-analyzer` is installed for ongoing monitoring. Use:
 
