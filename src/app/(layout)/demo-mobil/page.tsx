@@ -46,15 +46,18 @@ const PAGE_MAX_WIDTH = 480
 const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
-type DemoVariant = 1 | 2 | 3
+type DemoVariant = 1 | 2 | 3 | 4
+type SectionStyle = 'card' | 'band' | 'outline' | 'plain'
 
 /**
- * One base design (docked search in the thumb zone, iOS grouped sections,
- * translucent tab bar, no CTA card) with three header treatments:
+ * One base design (gradient header, docked search in the thumb zone,
+ * translucent tab bar, no CTA card) with four section-separation styles:
  *
- * 1 — gradient header: brand gradient band with rounded bottom, white text
- * 2 — tonal header: soft primary tint band, dark text
- * 3 — sheet split: white header, content rides on a grey rounded sheet
+ * 1 — card: white cards with a soft shadow on a grey canvas (baseline)
+ * 2 — band: full-bleed alternating background bands, edge-to-edge rows
+ * 3 — outline: flat white cards with a hairline border, no shadow
+ * 4 — plain: white canvas, sections separated by whitespace + full-width
+ *     hairline dividers only
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -68,18 +71,24 @@ function DemoMobilePage() {
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 3 ? (parsed as DemoVariant) : 1
+		parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 1
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
 
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
 
-	const gradientHeader = variant === 1
-	const tonalHeader = variant === 2
-	const sheetSplit = variant === 3
+	const sectionStyle: SectionStyle = (
+		['card', 'band', 'outline', 'plain'] as const
+	)[variant - 1]
 
-	const canvasBg = sheetSplit ? 'background.paper' : 'grey.100'
+	const canvasBg =
+		sectionStyle === 'card' || sectionStyle === 'outline'
+			? 'grey.100'
+			: 'background.paper'
+	// tiles must contrast with the surface they sit on
+	const tileBg = (sectionBg: 'white' | 'grey') =>
+		sectionBg === 'white' ? 'grey.100' : 'background.paper'
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -131,11 +140,8 @@ function DemoMobilePage() {
 						width: 42,
 						height: 42,
 						borderRadius: 10,
-						bgcolor: gradientHeader
-							? alpha(theme.palette.common.white, 0.22)
-							: 'background.paper',
-						boxShadow: gradientHeader ? 0 : 1,
-						color: gradientHeader ? 'common.white' : 'primary.main',
+						bgcolor: alpha(theme.palette.common.white, 0.22),
+						color: 'common.white',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -147,18 +153,20 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const heroTexts = (
-		<Box>
-			<Typography
-				small
-				color={gradientHeader ? undefined : 'grey.700'}
-				sx={gradientHeader ? { opacity: 0.85 } : {}}
-			>
-				{tHome('hero.lead')}
+	const sectionLabel = (title: string, action?: ReactNode) => (
+		<Box
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				gap: 1,
+				paddingX: 0.5,
+			}}
+		>
+			<Typography small strong uppercase color="grey.700">
+				{title.replace(/:$/, '')}
 			</Typography>
-			<Typography variant="h3" strong={800}>
-				{tHome('hero.title')}
-			</Typography>
+			{action}
 		</Box>
 	)
 
@@ -172,61 +180,89 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// iOS grouped-list section: small uppercase label above a white card
+	// Section wrapper — the separation style is the experiment here
 	const Section = ({
 		title,
 		action,
+		bandBg,
 		children,
 	}: {
 		title: string
 		action?: ReactNode
+		/** band style only: which full-bleed background this section gets */
+		bandBg?: 'white' | 'grey'
 		children: ReactNode
-	}) => (
-		<Box
-			sx={{
-				paddingX: 2.5,
-				display: 'flex',
-				flexDirection: 'column',
-				gap: 1,
-			}}
-		>
+	}) => {
+		if (sectionStyle === 'band') {
+			return (
+				<Box
+					sx={{
+						bgcolor: bandBg === 'grey' ? 'grey.100' : 'background.paper',
+						paddingY: 2.5,
+						paddingX: 2.5,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 1.5,
+					}}
+				>
+					{sectionLabel(title, action)}
+					{children}
+				</Box>
+			)
+		}
+
+		if (sectionStyle === 'plain') {
+			return (
+				<Box
+					sx={{
+						paddingX: 2.5,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 1.5,
+					}}
+				>
+					{sectionLabel(title, action)}
+					{children}
+				</Box>
+			)
+		}
+
+		return (
 			<Box
 				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					gap: 1,
-					paddingX: 0.5,
-				}}
-			>
-				<Typography small strong uppercase color="grey.700">
-					{title.replace(/:$/, '')}
-				</Typography>
-				{action}
-			</Box>
-			<Box
-				sx={{
-					bgcolor: 'background.paper',
-					borderRadius: 3,
-					boxShadow: 1,
-					padding: 2,
+					paddingX: 2.5,
 					display: 'flex',
 					flexDirection: 'column',
-					gap: 2,
+					gap: 1,
 				}}
 			>
-				{children}
+				{sectionLabel(title, action)}
+				<Box
+					sx={{
+						bgcolor: 'background.paper',
+						borderRadius: 3,
+						...(sectionStyle === 'card'
+							? { boxShadow: 1 }
+							: { border: '1px solid', borderColor: 'grey.300' }),
+						padding: 2,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 2,
+					}}
+				>
+					{children}
+				</Box>
 			</Box>
-		</Box>
-	)
+		)
+	}
 
-	const carouselTile = (s: BasicVariantPack) => (
+	const carouselTile = (s: BasicVariantPack, bg: string) => (
 		<Clickable key={s.packGuid}>
 			<Link to="variant" params={parseVariantAlias(s.packAlias)}>
 				<Box
 					sx={{
 						width: 164,
-						bgcolor: 'grey.100',
+						bgcolor: bg,
 						borderRadius: 2,
 						padding: 2,
 						scrollSnapAlign: 'start',
@@ -279,61 +315,49 @@ function DemoMobilePage() {
 		/>
 	))
 
-	const sections = (
+	// carousel bleeds to the section edge; the inset depends on the wrapper
+	const carouselBleed = sectionStyle === 'band' || sectionStyle === 'plain' ? 2.5 : 2
+
+	const recommendedRows = (
+		<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+			{recommended.isLoading
+				? listSkeletons
+				: recommended.data.slice(0, 5).map((s, i, arr) => (
+						<Fragment key={s.packGuid}>
+							<SongVariantCard
+								data={s}
+								dense
+								sx={{ bgcolor: 'transparent', borderRadius: 0 }}
+							/>
+							{i < arr.length - 1 && <Divider sx={{ marginX: 1 }} />}
+						</Fragment>
+				  ))}
+		</Box>
+	)
+
+	const lastAddedCarousel = (tilesBg: string) => (
 		<Box
 			sx={{
-				flex: 1,
 				display: 'flex',
-				flexDirection: 'column',
-				gap: 2.5,
-				paddingTop: 2.5,
-				paddingBottom: DOCKED_SEARCH_CLEARANCE,
+				gap: 1.5,
+				overflowX: 'auto',
+				marginX: -carouselBleed,
+				paddingLeft: carouselBleed,
+				paddingY: 0.5,
+				scrollSnapType: 'x mandatory',
+				scrollPaddingLeft: theme.spacing(carouselBleed),
+				'&::-webkit-scrollbar': { display: 'none' },
+				// keeps the right inset visible at the end of the scroll
+				// (trailing padding collapses in overflow containers)
+				'&::after': {
+					content: '""',
+					flex: '0 0 1px',
+				},
 			}}
 		>
-			<Section title={tHome('recommended.idea')}>
-				<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-					{recommended.isLoading
-						? listSkeletons
-						: recommended.data.slice(0, 5).map((s, i, arr) => (
-								<Fragment key={s.packGuid}>
-									<SongVariantCard
-										data={s}
-										dense
-										sx={{ bgcolor: 'transparent', borderRadius: 0 }}
-									/>
-									{i < arr.length - 1 && <Divider sx={{ marginX: 1 }} />}
-								</Fragment>
-						  ))}
-				</Box>
-			</Section>
-
-			<Section title={tHome('lastAdded.title')} action={browseAction}>
-				<Box
-					sx={{
-						display: 'flex',
-						gap: 1.5,
-						overflowX: 'auto',
-						// bleed the scroll area to the panel edges, then restore
-						// the inset inside it so tiles align with the header text
-						marginX: -2,
-						paddingLeft: 2,
-						paddingY: 0.5,
-						scrollSnapType: 'x mandatory',
-						scrollPaddingLeft: theme.spacing(2),
-						'&::-webkit-scrollbar': { display: 'none' },
-						// keeps the right inset visible at the end of the scroll
-						// (trailing padding collapses in overflow containers)
-						'&::after': {
-							content: '""',
-							flex: '0 0 1px',
-						},
-					}}
-				>
-					{lastAdded.isLoading
-						? carouselSkeletons
-						: lastAdded.data.slice(0, 8).map((s) => carouselTile(s))}
-				</Box>
-			</Section>
+			{lastAdded.isLoading
+				? carouselSkeletons
+				: lastAdded.data.slice(0, 8).map((s) => carouselTile(s, tilesBg))}
 		</Box>
 	)
 
@@ -368,43 +392,58 @@ function DemoMobilePage() {
 					sx={{
 						paddingX: 2.5,
 						paddingTop: 'calc(env(safe-area-inset-top) + 20px)',
-						paddingBottom: gradientHeader || tonalHeader ? 3.5 : 1,
+						paddingBottom: 3.5,
 						display: 'flex',
 						justifyContent: 'space-between',
 						alignItems: 'end',
-						...(gradientHeader && {
-							background: gradient,
-							color: 'common.white',
-							borderRadius: '0 0 28px 28px',
-						}),
-						...(tonalHeader && {
-							bgcolor: alpha(theme.palette.primary.main, 0.09),
-							borderRadius: '0 0 28px 28px',
-						}),
+						background: gradient,
+						color: 'common.white',
+						borderRadius: sectionStyle === 'band' ? 0 : '0 0 28px 28px',
 					}}
 				>
-					{heroTexts}
+					<Box>
+						<Typography small sx={{ opacity: 0.85 }}>
+							{tHome('hero.lead')}
+						</Typography>
+						<Typography variant="h3" strong={800}>
+							{tHome('hero.title')}
+						</Typography>
+					</Box>
 					{loginButton}
 				</Box>
 
-				{/* ===================== CONTENT ===================== */}
-				{sheetSplit ? (
-					// content rides on a grey rounded sheet over the white canvas
-					<Box
-						sx={{
-							flex: 1,
-							marginTop: 2,
-							bgcolor: 'grey.100',
-							borderRadius: '28px 28px 0 0',
-							display: 'flex',
-							flexDirection: 'column',
-						}}
+				{/* ===================== SECTIONS ===================== */}
+				<Box
+					sx={{
+						flex: 1,
+						display: 'flex',
+						flexDirection: 'column',
+						gap:
+							sectionStyle === 'band' ? 0 : sectionStyle === 'plain' ? 3 : 2.5,
+						paddingTop: sectionStyle === 'band' ? 0 : 2.5,
+						paddingBottom: DOCKED_SEARCH_CLEARANCE,
+					}}
+				>
+					<Section title={tHome('recommended.idea')} bandBg="grey">
+						{recommendedRows}
+					</Section>
+
+					{sectionStyle === 'plain' && <Divider />}
+
+					<Section
+						title={tHome('lastAdded.title')}
+						action={browseAction}
+						bandBg="white"
 					>
-						{sections}
-					</Box>
-				) : (
-					sections
-				)}
+						{lastAddedCarousel(
+							sectionStyle === 'card' || sectionStyle === 'outline'
+								? 'grey.100'
+								: sectionStyle === 'band'
+								? tileBg('white')
+								: tileBg('white')
+						)}
+					</Section>
+				</Box>
 
 				{/* ===== Docked search — floats above the tab bar (thumb zone) ===== */}
 				<Box
