@@ -64,7 +64,6 @@
 		"react-dom": "^18",
 		"react-hotjar": "^6.3.1",
 		"react-masonry": "^1.0.7",
-		"react-snowfall": "^2.1.0",
 		"sharp": "^0.33.3",
 		"sheet-api": "^0.0.3",
 		"socket.io-client": "^4.8.1",

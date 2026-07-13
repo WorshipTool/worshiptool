@@ -154,7 +154,6 @@ export default (phase, { defaultConfig }) => {
 					'framer-motion',
 					'notistack',
 					'dayjs',
-					'react-snowfall',
 					'@statsig/js-client',
 					'@statsig/react-bindings',
 					'@statsig/session-replay',
