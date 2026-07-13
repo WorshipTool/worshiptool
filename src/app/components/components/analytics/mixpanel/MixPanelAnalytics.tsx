@@ -1,6 +1,7 @@
 'use client'
 import useAuth from '@/hooks/auth/useAuth'
 import { ROLES } from '@/interfaces/user'
+import { isDevelopment } from '@/tech/development.tech'
 import { useEffect, useRef } from 'react'
 
 type MixpanelType = typeof import('mixpanel-browser').default
@@ -10,6 +11,8 @@ export default function MixPanelAnalytics() {
 	const mixpanelRef = useRef<MixpanelType | null>(null)
 
 	useEffect(() => {
+		if (isDevelopment) return
+
 		import('mixpanel-browser').then((mod) => {
 			const mixpanel = mod.default
 			mixpanel.init('24badb161d131f1852a9a1e527030e04')

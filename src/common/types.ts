@@ -17,4 +17,5 @@ export type MetadataProps<T extends RoutesKeys> = {
 export type ErrorPageProps = {
 	error: Error & { digest?: number }
 	reset: () => void
+	skipReport?: boolean
 }

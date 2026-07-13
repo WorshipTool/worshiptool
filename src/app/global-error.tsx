@@ -1,5 +1,8 @@
 'use client'
 
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
 /**
  * global-error.tsx — safety net for errors in the root layout itself.
  * This component replaces the entire document (including <html>/<body>),
@@ -12,6 +15,11 @@ export default function GlobalError({
 	error: Error & { digest?: string }
 	reset: () => void
 }) {
+	useEffect(() => {
+		console.error('[GlobalError] Caught unhandled error:', error)
+		Sentry.captureException(error, { tags: { errorBoundary: 'global' } })
+	}, [error])
+
 	return (
 		<html lang="en">
 			<body

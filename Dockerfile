@@ -37,6 +37,11 @@ ARG NEXT_PUBLIC_PREVIEW_BASE_URL
 ARG NEXT_PUBLIC_PREVIEW_MODE
 ARG NEXT_PUBLIC_PREVIEW_PR_NUMBER
 ARG NEXT_PUBLIC_PREVIEW_PR_TITLE
+ARG NEXT_PUBLIC_SENTRY_DSN
+ARG NEXT_PUBLIC_SENTRY_ENVIRONMENT
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -61,6 +66,11 @@ RUN \
   if [ -z "${NEXT_PUBLIC_PREVIEW_MODE}" ]; then unset NEXT_PUBLIC_PREVIEW_MODE; fi; \
   if [ -z "${NEXT_PUBLIC_PREVIEW_PR_NUMBER}" ]; then unset NEXT_PUBLIC_PREVIEW_PR_NUMBER; fi; \
   if [ -z "${NEXT_PUBLIC_PREVIEW_PR_TITLE}" ]; then unset NEXT_PUBLIC_PREVIEW_PR_TITLE; fi; \
+  if [ -z "${NEXT_PUBLIC_SENTRY_DSN}" ]; then unset NEXT_PUBLIC_SENTRY_DSN; fi; \
+  if [ -z "${NEXT_PUBLIC_SENTRY_ENVIRONMENT}" ]; then unset NEXT_PUBLIC_SENTRY_ENVIRONMENT; fi; \
+  if [ -z "${SENTRY_ORG}" ]; then unset SENTRY_ORG; fi; \
+  if [ -z "${SENTRY_PROJECT}" ]; then unset SENTRY_PROJECT; fi; \
+  if [ -z "${SENTRY_AUTH_TOKEN}" ]; then unset SENTRY_AUTH_TOKEN; fi; \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \

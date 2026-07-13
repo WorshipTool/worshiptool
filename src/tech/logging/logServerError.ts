@@ -1,21 +1,13 @@
 'use server'
 
-import { useServerApi } from '@/api/tech-and-hooks/useServerApi'
+import * as Sentry from '@sentry/nextjs'
 
 /**
- * This function works similarily to console.error, but it can also send errors to messenger
+ * This function works similarily to console.error, but it also reports
+ * the error to Sentry.
  */
 export async function logServerError(title: string, description: string) {
-	const { loggerApi } = await useServerApi()
-
 	console.error(title + ':', description)
 
-	try {
-		loggerApi.error({
-			title: title,
-			content: description,
-		})
-	} catch (e) {
-		console.log('Error sending error to backend logger', e)
-	}
+	Sentry.captureMessage(`${title}: ${description}`, 'error')
 }

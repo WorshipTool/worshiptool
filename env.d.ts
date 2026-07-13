@@ -18,5 +18,11 @@ declare namespace NodeJS {
 		CONTENT_VERSION: string
 		NEXT_PUBLIC_STRIPE_SUPPORT_URL: string
 		NEXT_PUBLIC_IMPLEMENT_IDEA_URL: string
+
+		NEXT_PUBLIC_SENTRY_DSN?: string
+		NEXT_PUBLIC_SENTRY_ENVIRONMENT?: string
+		SENTRY_ORG?: string
+		SENTRY_PROJECT?: string
+		SENTRY_AUTH_TOKEN?: string
 	}
 }
