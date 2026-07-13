@@ -47,17 +47,17 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
 type DemoVariant = 1 | 2 | 3 | 4
-type SectionStyle = 'card' | 'band' | 'outline' | 'plain'
+type SectionStyle = 'band' | 'gap' | 'tint' | 'strip'
 
 /**
- * One base design (gradient header, docked search in the thumb zone,
- * translucent tab bar, no CTA card) with four section-separation styles:
+ * One base design (square gradient header, docked search in the thumb
+ * zone, translucent tab bar, no CTA card). Sections are always full-bleed
+ * — four takes on separating them by background:
  *
- * 1 — card: white cards with a soft shadow on a grey canvas (baseline)
- * 2 — band: full-bleed alternating background bands, edge-to-edge rows
- * 3 — outline: flat white cards with a hairline border, no shadow
- * 4 — plain: white canvas, sections separated by whitespace + full-width
- *     hairline dividers only
+ * 1 — band: alternating grey/white background bands (baseline)
+ * 2 — gap: white bands separated by thick grey spacer strips
+ * 3 — tint: the recommended band gets a soft brand tint, the rest white
+ * 4 — strip: iOS plain-table style — grey label strips over white content
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -79,16 +79,10 @@ function DemoMobilePage() {
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
 
 	const sectionStyle: SectionStyle = (
-		['card', 'band', 'outline', 'plain'] as const
+		['band', 'gap', 'tint', 'strip'] as const
 	)[variant - 1]
 
-	const canvasBg =
-		sectionStyle === 'card' || sectionStyle === 'outline'
-			? 'grey.100'
-			: 'background.paper'
-	// tiles must contrast with the surface they sit on
-	const tileBg = (sectionBg: 'white' | 'grey') =>
-		sectionBg === 'white' ? 'grey.100' : 'background.paper'
+	const canvasBg = sectionStyle === 'gap' ? 'grey.200' : 'background.paper'
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -180,49 +174,49 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// Section wrapper — the separation style is the experiment here
+	// Section wrapper — full-bleed surfaces, the separation is the experiment
 	const Section = ({
 		title,
 		action,
-		bandBg,
+		surface,
 		children,
 	}: {
 		title: string
 		action?: ReactNode
-		/** band style only: which full-bleed background this section gets */
-		bandBg?: 'white' | 'grey'
+		/** which full-bleed background this section gets */
+		surface: 'white' | 'grey' | 'tint'
 		children: ReactNode
 	}) => {
-		if (sectionStyle === 'band') {
-			return (
-				<Box
-					sx={{
-						bgcolor: bandBg === 'grey' ? 'grey.100' : 'background.paper',
-						paddingY: 2.5,
-						paddingX: 2.5,
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 1.5,
-					}}
-				>
-					{sectionLabel(title, action)}
-					{children}
-				</Box>
-			)
-		}
+		const surfaceBg =
+			surface === 'grey'
+				? 'grey.100'
+				: surface === 'tint'
+				? alpha(theme.palette.primary.main, 0.06)
+				: 'background.paper'
 
-		if (sectionStyle === 'plain') {
+		if (sectionStyle === 'strip') {
 			return (
-				<Box
-					sx={{
-						paddingX: 2.5,
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 1.5,
-					}}
-				>
-					{sectionLabel(title, action)}
-					{children}
+				<Box>
+					<Box
+						sx={{
+							bgcolor: 'grey.100',
+							paddingY: 1,
+							paddingX: 3,
+						}}
+					>
+						{sectionLabel(title, action)}
+					</Box>
+					<Box
+						sx={{
+							paddingX: 2.5,
+							paddingY: 2,
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 1.5,
+						}}
+					>
+						{children}
+					</Box>
 				</Box>
 			)
 		}
@@ -230,28 +224,16 @@ function DemoMobilePage() {
 		return (
 			<Box
 				sx={{
+					bgcolor: sectionStyle === 'gap' ? 'background.paper' : surfaceBg,
+					paddingY: 2.5,
 					paddingX: 2.5,
 					display: 'flex',
 					flexDirection: 'column',
-					gap: 1,
+					gap: 1.5,
 				}}
 			>
 				{sectionLabel(title, action)}
-				<Box
-					sx={{
-						bgcolor: 'background.paper',
-						borderRadius: 3,
-						...(sectionStyle === 'card'
-							? { boxShadow: 1 }
-							: { border: '1px solid', borderColor: 'grey.300' }),
-						padding: 2,
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 2,
-					}}
-				>
-					{children}
-				</Box>
+				{children}
 			</Box>
 		)
 	}
@@ -315,8 +297,8 @@ function DemoMobilePage() {
 		/>
 	))
 
-	// carousel bleeds to the section edge; the inset depends on the wrapper
-	const carouselBleed = sectionStyle === 'band' || sectionStyle === 'plain' ? 2.5 : 2
+	// carousel bleeds to the section edge; the inset matches its padding
+	const carouselBleed = 2.5
 
 	const recommendedRows = (
 		<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -398,7 +380,6 @@ function DemoMobilePage() {
 						alignItems: 'end',
 						background: gradient,
 						color: 'common.white',
-						borderRadius: sectionStyle === 'band' ? 0 : '0 0 28px 28px',
 					}}
 				>
 					<Box>
@@ -418,30 +399,31 @@ function DemoMobilePage() {
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
-						gap:
-							sectionStyle === 'band' ? 0 : sectionStyle === 'plain' ? 3 : 2.5,
-						paddingTop: sectionStyle === 'band' ? 0 : 2.5,
+						// gap style: the grey canvas shows through as spacer strips
+						gap: sectionStyle === 'gap' ? 1.5 : 0,
+						paddingTop: sectionStyle === 'gap' ? 1.5 : 0,
 						paddingBottom: DOCKED_SEARCH_CLEARANCE,
 					}}
 				>
-					<Section title={tHome('recommended.idea')} bandBg="grey">
+					<Section
+						title={tHome('recommended.idea')}
+						surface={
+							sectionStyle === 'band'
+								? 'grey'
+								: sectionStyle === 'tint'
+								? 'tint'
+								: 'white'
+						}
+					>
 						{recommendedRows}
 					</Section>
-
-					{sectionStyle === 'plain' && <Divider />}
 
 					<Section
 						title={tHome('lastAdded.title')}
 						action={browseAction}
-						bandBg="white"
+						surface="white"
 					>
-						{lastAddedCarousel(
-							sectionStyle === 'card' || sectionStyle === 'outline'
-								? 'grey.100'
-								: sectionStyle === 'band'
-								? tileBg('white')
-								: tileBg('white')
-						)}
+						{lastAddedCarousel('grey.100')}
 					</Section>
 				</Box>
 
