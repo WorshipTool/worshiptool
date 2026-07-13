@@ -1001,5 +1001,13 @@
 		"merged": "Merged",
 		"filterActive": "Active & open PRs",
 		"noActiveOrOpenPr": "No active tasks or open PRs"
+	},
+	"demo": {
+		"songOfDay": "Song of the day",
+		"moreIdeas": "More ideas",
+		"assistantGreeting": "Hi! What song are you looking for today?",
+		"tryChips": "Try one of these",
+		"goodDay": "Hello",
+		"browseAll": "All songs"
 	}
 }

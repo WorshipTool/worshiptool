@@ -1001,5 +1001,13 @@
 		"merged": "Sloučeno",
 		"filterActive": "Aktivní & otevřené PR",
 		"noActiveOrOpenPr": "Žádné aktivní úlohy ani otevřené PR"
+	},
+	"demo": {
+		"songOfDay": "Píseň dne",
+		"moreIdeas": "Další nápady",
+		"assistantGreeting": "Ahoj! Jakou píseň dneska hledáš?",
+		"tryChips": "Zkus třeba",
+		"goodDay": "Dobrý den",
+		"browseAll": "Všechny písně"
 	}
 }

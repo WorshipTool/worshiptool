@@ -1001,5 +1001,13 @@
 		"merged": "Połączone",
 		"filterActive": "Aktywne i otwarte PR",
 		"noActiveOrOpenPr": "Brak aktywnych zadań ani otwartych PR"
+	},
+	"demo": {
+		"songOfDay": "Pieśń dnia",
+		"moreIdeas": "Więcej propozycji",
+		"assistantGreeting": "Cześć! Jakiej pieśni dziś szukasz?",
+		"tryChips": "Spróbuj np.",
+		"goodDay": "Dzień dobry",
+		"browseAll": "Wszystkie pieśni"
 	}
 }
