@@ -200,6 +200,7 @@ export default function HomeDesktop() {
 					<Box
 						sx={{
 							position: 'sticky',
+							// 56px = Toolbar height (TopBar in Toolbar.tsx)
 							top: theme.spacing(7),
 							zIndex: 2,
 						}}
@@ -226,9 +227,10 @@ export default function HomeDesktop() {
 							<SearchedSongsList
 								searchString={searchString}
 								useSmartSearch={smartSearch ?? false}
+								dense
 							/>
 						)}
-						<RecommendedSongsList />
+						<RecommendedSongsList dense />
 						<Box
 							sx={{
 								paddingTop: 14,

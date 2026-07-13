@@ -62,6 +62,8 @@ type SongCardIconData = (
 type SongCardProps = {
 	data: BasicVariantPack
 	flexibleHeight?: boolean
+	/** Compact list-row look: single preview line, tighter padding (mobile lists) */
+	dense?: boolean
 	properties?: SongCardProperty[]
 	toLinkProps?: ToLinkProps
 	selected?: boolean
@@ -75,6 +77,7 @@ type SongCardProps = {
 export const SongVariantCard = memo(function S({
 	data,
 	flexibleHeight: flexibleHeght = true,
+	dense = false,
 	...props
 }: SongCardProps) {
 	const t = useTranslations('common')
@@ -111,7 +114,10 @@ export const SongVariantCard = memo(function S({
 	// Title and sheet data to display
 	const title = data.title
 	const sheet = new Sheet(data.sheetData)
-	const dataLines = sheet.getSections()[0]?.text?.split('\n').slice(0, 4)
+	const dataLines = sheet
+		.getSections()[0]
+		?.text?.split('\n')
+		.slice(0, dense ? 1 : 4)
 
 	const linkProps = useMemo(() => {
 		if (props.toLinkProps) {
@@ -238,7 +244,7 @@ export const SongVariantCard = memo(function S({
 					sx={{
 						outlineColor: showPrivate ? theme.palette.grey[300] : 'transparent',
 
-						height: flexibleHeght ? 'auto' : '11rem',
+						height: flexibleHeght || dense ? 'auto' : '11rem',
 						overflowY: 'hidden',
 
 						...(selected && {
@@ -256,7 +262,7 @@ export const SongVariantCard = memo(function S({
 					<Box
 						sx={{
 							position: 'relative',
-							padding: '1rem',
+							padding: dense ? '0.6rem 1rem' : '1rem',
 							...(selected && {
 								borderColor: 'primary.main',
 								borderWidth: 2,
@@ -266,7 +272,7 @@ export const SongVariantCard = memo(function S({
 									bgcolor: alpha(theme.palette.primary.main, 0.2),
 								},
 							}),
-							height: 'calc(100% - 2rem)',
+							height: dense ? 'auto' : 'calc(100% - 2rem)',
 							display: 'flex',
 							flexDirection: 'column',
 							overflow: 'hidden',
@@ -275,6 +281,7 @@ export const SongVariantCard = memo(function S({
 						<Box display={'flex'} flexDirection={'row'} gap={1}>
 							<Typography
 								strong
+								noWrap={dense}
 								sx={{
 									flex: 1,
 									...(!data.ggValidated &&
@@ -341,6 +348,8 @@ export const SongVariantCard = memo(function S({
 										>
 											<Typography
 												key={'SearchItemText' + index}
+												small={dense}
+												noWrap={dense}
 												sx={{
 													flex: 1,
 												}}

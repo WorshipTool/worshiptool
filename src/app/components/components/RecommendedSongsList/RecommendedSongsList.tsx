@@ -18,10 +18,12 @@ const GridContainer = styled(Grid)(({ theme }) => ({
 
 type RecommendedSongsListProps = {
 	listType?: SongListCardsProps['variant']
+	dense?: boolean
 }
 
 export default function RecommendedSongsList({
 	listType = 'row',
+	dense,
 }: RecommendedSongsListProps) {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
@@ -39,7 +41,7 @@ export default function RecommendedSongsList({
 				width: '100%',
 			}}
 		>
-			<Typography strong key={'idea'}>
+			<Typography strong variant={dense ? 'h6' : 'normal'} key={'idea'}>
 				{tHome('recommended.idea')}
 			</Typography>
 
@@ -71,6 +73,7 @@ export default function RecommendedSongsList({
 				<SongListCards
 					data={data.slice(0, 4)}
 					variant={listType}
+					dense={dense}
 					// properties={['SHOW_ADDED_BY_LOADER']}
 				/>
 			</GridContainer>

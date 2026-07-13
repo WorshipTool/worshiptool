@@ -15,7 +15,12 @@ const SongCardStory = () => {
 		public: false,
 	} as BasicVariantPack
 
-	return <SongVariantCard data={data} />
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+			<SongVariantCard data={data} />
+			<SongVariantCard data={data} dense />
+		</div>
+	)
 }
 
 createStory(SongVariantCard, SongCardStory)
