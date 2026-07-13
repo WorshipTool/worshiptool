@@ -18,7 +18,7 @@ jobs:
         run: |
           initial=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
           echo "Initial build hash: ${initial:-<unavailable>}"
-          for i in $(seq 1 30); do
+          for i in $(seq 1 60); do
             sleep 20
             current=$(curl -sf "$DEV_URL/api/build-id" | jq -r '.hash // empty' || true)
             echo "Check $i: ${current:-<unavailable>}"
@@ -27,7 +27,7 @@ jobs:
               exit 0
             fi
           done
-          echo "::warning::No new build appeared within 10 minutes, testing the currently deployed version."
+          echo "::warning::No new build appeared within 20 minutes, testing the currently deployed version."
 
   run-smoke-tests:
     needs: wait-for-deploy
