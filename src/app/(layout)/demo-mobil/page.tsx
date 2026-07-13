@@ -49,7 +49,7 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const TAB_BAR_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 84px)'
 const DOCKED_SEARCH_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
-type DemoVariant = 1 | 2 | 3 | 4
+type DemoVariant = 1 | 2 | 3 | 4 | 5
 
 /**
  * Variants — all share the "cards" language, they differ in where the
@@ -64,6 +64,8 @@ type DemoVariant = 1 | 2 | 3 | 4
  * 4 — polished blue system: white canvas, neutral grey panels, blue used
  *     only as accent (badges, actions, button, tab pill); search docked
  *     bottom with a solid blue border
+ * 5 — Google-style minimal: an almost empty white page with just the
+ *     brand, the search and one quiet action in the middle
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -78,7 +80,7 @@ function DemoMobilePage() {
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
 	const variant: DemoVariant =
-		parsed === 2 || parsed === 3 || parsed === 4 ? (parsed as DemoVariant) : 1
+		parsed >= 2 && parsed <= 5 ? (parsed as DemoVariant) : 1
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -86,13 +88,15 @@ function DemoMobilePage() {
 	const gradient = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
 
 	const blueSystem = variant === 4
+	const googleMinimal = variant === 5
 	const searchDocked = variant === 2 || variant === 4
 	const searchCentered = variant === 3
-	const showLastAdded = !searchCentered
+	const showLastAdded = !searchCentered && !googleMinimal
 
 	// One card language per variant: v1–v3 white cards on grey canvas,
 	// v4 neutral grey panels on white canvas with blue accents only
-	const canvasBg = blueSystem ? 'background.paper' : 'grey.100'
+	const canvasBg =
+		blueSystem || googleMinimal ? 'background.paper' : 'grey.100'
 	const panelBg = blueSystem ? 'grey.100' : 'background.paper'
 	const panelShadow = blueSystem ? 0 : 1
 	const rowsHaveDividers = !blueSystem
@@ -376,7 +380,68 @@ function DemoMobilePage() {
 				}}
 			>
 				{/* ===================== HEADER (+ top/centered search) ===================== */}
-				{searchCentered ? (
+				{googleMinimal ? (
+					// Google-style: an almost empty page — brand + search in the
+					// middle, one quiet action, nothing else
+					<Box
+						sx={{
+							flex: 1,
+							display: 'flex',
+							flexDirection: 'column',
+							paddingX: 4,
+							paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+							paddingBottom: TAB_BAR_CLEARANCE,
+						}}
+					>
+						<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+							{loginLink}
+						</Box>
+						<Box sx={{ flex: 0.85 }} />
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								gap: 3,
+							}}
+						>
+							{sheep(96)}
+							<Box sx={{ textAlign: 'center' }}>
+								<Typography small color="grey.700">
+									{tHome('hero.lead')}
+								</Typography>
+								<Typography variant="h3" strong={800}>
+									{tHome('hero.title')}
+								</Typography>
+							</Box>
+							<Box sx={{ width: '100%' }}>{searchForm}</Box>
+							<Clickable>
+								<Link to="songsList" params={{ s: undefined }}>
+									<Box
+										sx={{
+											display: 'flex',
+											alignItems: 'center',
+											gap: 1,
+											bgcolor: 'grey.100',
+											borderRadius: 10,
+											paddingX: 2.5,
+											paddingY: 1,
+										}}
+									>
+										<QueueMusicRounded
+											fontSize="small"
+											sx={{ color: 'grey.700' }}
+										/>
+										<Typography small strong>
+											{tHome('allList.title')}
+										</Typography>
+									</Box>
+								</Link>
+							</Clickable>
+						</Box>
+						<Box sx={{ flex: 1.15 }} />
+					</Box>
+				) : searchCentered ? (
 					// hero fills the upper half so the search lands mid-screen,
 					// inside comfortable thumb reach
 					<Box
@@ -420,6 +485,7 @@ function DemoMobilePage() {
 				)}
 
 				{/* ===================== SECTIONS ===================== */}
+				{!googleMinimal && (
 				<Box
 					sx={{
 						flex: 1,
@@ -587,6 +653,7 @@ function DemoMobilePage() {
 						</Box>
 					)}
 				</Box>
+				)}
 
 				{/* ===== Docked search — floats above the tab bar (thumb zone) ===== */}
 				{searchDocked && (
@@ -598,7 +665,10 @@ function DemoMobilePage() {
 							transform: 'translateX(-50%)',
 							width: '100%',
 							maxWidth: PAGE_MAX_WIDTH,
-							paddingX: 2.5,
+							paddingX: 4,
+							// no global border-box in this app — keep the padding
+							// inside the 100% width instead of overflowing it
+							boxSizing: 'border-box',
 							zIndex: 10,
 						}}
 					>
