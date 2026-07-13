@@ -3,7 +3,7 @@
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, Button, Clickable, Divider, Image, Typography, useTheme } from '@/common/ui'
+import { Box, Clickable, Divider, Image, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { alpha } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -115,7 +115,7 @@ function DemoMobilePage() {
 						bgcolor: tileBg,
 						borderRadius: 3,
 						padding: 2,
-						boxShadow: variant === 2 ? 0 : 1,
+						boxShadow: 1,
 						scrollSnapAlign: 'start',
 						display: 'flex',
 						flexDirection: 'column',
@@ -443,7 +443,18 @@ function DemoMobilePage() {
 					</Box>
 
 					{/* --- Last added (horizontal carousel) --- */}
-					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 1,
+							// full-bleed grey band separates the section from the white page
+							...(variant === 2 && {
+								bgcolor: 'grey.100',
+								paddingY: 2,
+							}),
+						}}
+					>
 						<Typography variant="h6" strong sx={{ paddingX: 2.5 }}>
 							{tHome('lastAdded.title')}
 						</Typography>
@@ -473,44 +484,13 @@ function DemoMobilePage() {
 									? carouselSkeletons
 									: lastAdded.data
 											.slice(0, 8)
-											.map((s) =>
-												carouselTile(
-													s,
-													variant === 2 ? 'grey.100' : 'background.paper'
-												)
-											)}
+											.map((s) => carouselTile(s, 'background.paper'))}
 							</Box>
 						</Box>
 					</Box>
 
 					{/* --- CTA: browse all songs --- */}
-					{variant === 2 ? (
-						<Box
-							sx={{
-								marginX: 2.5,
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 1.5,
-							}}
-						>
-							<Box>
-								<Typography variant="h6" strong>
-									{tSuggestions('noIdea')}
-								</Typography>
-								<Typography small color="grey.700">
-									{tSuggestions('chooseSuggestion')}
-								</Typography>
-							</Box>
-							<Button
-								to="songsList"
-								toParams={{ s: undefined }}
-								size="large"
-								startIcon={<QueueMusicRounded />}
-							>
-								{tHome('allList.title')}
-							</Button>
-						</Box>
-					) : (
+					{
 						<Box
 							sx={{
 								marginX: 2.5,
@@ -537,7 +517,7 @@ function DemoMobilePage() {
 								<Typography
 									small
 									color={variant === 1 ? 'grey.700' : undefined}
-									sx={variant === 3 ? { opacity: 0.9 } : {}}
+									sx={variant === 1 ? {} : { opacity: 0.9 }}
 								>
 									{tSuggestions('chooseSuggestion')}
 								</Typography>
@@ -571,7 +551,7 @@ function DemoMobilePage() {
 								</Link>
 							</Clickable>
 						</Box>
-					)}
+					}
 				</Box>
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
