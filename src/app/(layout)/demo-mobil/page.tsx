@@ -250,7 +250,7 @@ function DemoMobilePage() {
 						padding: 2,
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 1.5,
+						gap: 2,
 					}}
 				>
 					{header}
@@ -265,26 +265,27 @@ function DemoMobilePage() {
 			<Link to="variant" params={parseVariantAlias(s.packAlias)}>
 				<Box
 					sx={{
-						width: 156,
+						width: 164,
 						bgcolor: tileBg,
 						borderRadius: 2,
-						padding: 1.5,
+						padding: 2,
 						scrollSnapAlign: 'start',
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 1,
+						gap: 0.75,
 					}}
 				>
 					<Box
 						sx={{
-							width: 32,
-							height: 32,
+							width: 36,
+							height: 36,
 							borderRadius: 1.5,
 							bgcolor: alpha(theme.palette.primary.main, 0.12),
 							color: 'primary.main',
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'center',
+							marginBottom: 0.75,
 						}}
 					>
 						<MusicNoteRounded fontSize="small" />
@@ -314,7 +315,7 @@ function DemoMobilePage() {
 		<Skeleton
 			key={i}
 			variant="rounded"
-			sx={{ minWidth: 156, height: 112, borderRadius: 2, bgcolor: 'grey.200' }}
+			sx={{ minWidth: 164, height: 128, borderRadius: 2, bgcolor: 'grey.200' }}
 		/>
 	))
 
@@ -511,13 +512,22 @@ function DemoMobilePage() {
 						<Box
 							sx={{
 								display: 'flex',
-								gap: 1,
+								gap: 1.5,
 								overflowX: 'auto',
-								// bleed the scroll area to the panel edges
+								// bleed the scroll area to the panel edges, then restore
+								// the inset inside it so tiles align with the header text
 								marginX: variant === 3 ? -1.5 : -2,
-								paddingX: variant === 3 ? 1.5 : 2,
+								paddingLeft: variant === 3 ? 1.5 : 2,
+								paddingY: 0.5,
 								scrollSnapType: 'x mandatory',
+								scrollPaddingLeft: theme.spacing(2),
 								'&::-webkit-scrollbar': { display: 'none' },
+								// keeps the right inset visible at the end of the scroll
+								// (trailing padding collapses in overflow containers)
+								'&::after': {
+									content: '""',
+									flex: '0 0 1px',
+								},
 							}}
 						>
 							{lastAdded.isLoading
