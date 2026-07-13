@@ -33,6 +33,7 @@ type MainSearchInputProps = {
 	onChange: (value: string) => void
 	smartSearch?: boolean
 	onSmartSearchChange?: (value: boolean) => void
+	autoFocus?: boolean
 }
 
 export const MAIN_SEARCH_EVENT_NAME = 'search_event_5jh14'
@@ -91,7 +92,7 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 				<SearchInput
 					placeholder={t('searchByTitleOrText')}
 					onChange={(e) => props.onChange(e.target.value)}
-					autoFocus
+					autoFocus={props.autoFocus ?? true}
 					value={props.value}
 					inputRef={inputRef}
 					inputProps={{ 'data-testid': 'main-search-input' }}

@@ -29,7 +29,6 @@ const ANIMATION_DURATION = 0.2
 export default function HomeDesktop() {
 	const theme = useTheme()
 	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
-	const isMobile = phoneVersion
 	const tHome = useTranslations('home')
 
 	const scrollPointRef = useRef(null)
@@ -122,7 +121,9 @@ export default function HomeDesktop() {
 	const paddingX = 32
 	const gapString = `calc(max(${paddingX}px, (100vw - ${containerMaxWidth}px) / 2) )`
 
-	const shapeSizeString = `calc(max(50vw, 50vh) * 1.35)`
+	const shapeSizeString = phoneVersion
+		? `calc(max(70vw, 40vh))`
+		: `calc(max(50vw, 50vh) * 1.35)`
 	const heroLead = tHome('hero.lead')
 	const heroTitle = tHome('hero.title')
 	const heroSubtitle = tHome('hero.subtitle')
@@ -132,11 +133,11 @@ export default function HomeDesktop() {
 			<Box
 				sx={{
 					position: 'fixed',
-					top: isTop ? '38vh' : '-100%',
+					top: isTop ? (phoneVersion ? '20vh' : '38vh') : '-100%',
 					right: isTop ? 0 : '-100%',
 					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
 					zIndex: -1,
-					opacity: isMobile ? 0 : 1,
+					pointerEvents: 'none',
 					transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
 					width: shapeSizeString,
 					height: shapeSizeString,
@@ -147,7 +148,7 @@ export default function HomeDesktop() {
 					alt={tHome('backgroundShape')}
 					fill
 					priority
-					sizes="(max-width: 700px) 0px, calc(max(50vw, 50vh) * 1.35)"
+					sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
 					style={{
 						filter: 'brightness(1)',
 					}}
@@ -157,93 +158,148 @@ export default function HomeDesktop() {
 					alt={tHome('backgroundShape')}
 					fill
 					priority
-					sizes="(max-width: 700px) 0px, calc(max(50vw, 50vh) * 1.35)"
+					sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
 					style={{
 						filter: 'brightness(1.1)',
 					}}
 				/>
 			</Box>
 
-			<Box
-				sx={{
-					flex: 1,
-					justifyContent: 'center',
-					alignItems: 'start',
-					display: 'flex',
-					flexDirection: 'column',
-					position: 'relative',
-				}}
-			>
-				<motion.div
-					style={{
-						position: 'fixed',
+			{phoneVersion ? (
+				<Box
+					sx={{
+						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
-						zIndex: phoneVersion ? 1 : 10,
-						alignItems: 'center',
-						pointerEvents: 'none',
-					}}
-					initial={{
-						top: !phoneVersion
-							? isTop
-								? `32%`
-								: 'calc(-7rem + 22px)'
-							: isTop
-							? '64px'
-							: 'calc( 64px - 64px)',
-
-						left: !phoneVersion ? paddingX : theme.spacing(1),
-						right: !phoneVersion ? paddingX : theme.spacing(1),
-					}}
-					animate={{
-						// position: phoneVersion ? 'sticky' : 'fixed',
-						top: !phoneVersion
-							? isTop
-								? `32%`
-								: 'calc(-7rem + 22px - 24px)'
-							: isTop
-							? '64px'
-							: 'calc( 64px - 64px)',
-
-						left: !phoneVersion
-							? isTop
-								? paddingX
-								: `calc( ${paddingX}px + ${gapString} )`
-							: theme.spacing(1),
-						right: !phoneVersion ? paddingX : theme.spacing(1),
-					}}
-					transition={{
-						type: 'keyframes',
-						duration: ANIMATION_DURATION,
+						position: 'relative',
+						paddingX: 2,
+						paddingTop: 2,
 					}}
 				>
-					<ContainerGrid>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							paddingBottom: 2,
+						}}
+					>
+						<Typography variant="h4" strong={200}>
+							{heroLead}
+						</Typography>
+						<Typography variant="h3" strong={900} noWrap>
+							{heroTitle}
+						</Typography>
+
+						{useWorshipVersion && (
+							<Typography variant="h4" strong={200} noWrap>
+								{heroSubtitleLower}
+							</Typography>
+						)}
+					</Box>
+
+					<Box
+						sx={{
+							position: 'sticky',
+							top: theme.spacing(7),
+							zIndex: 2,
+						}}
+					>
+						<MainSearchInput
+							gradientBorder={isTop}
+							autoFocus={false}
+							value={searchInputValue}
+							onChange={onSearchValueChange}
+							smartSearch={smartSearch ?? false}
+							onSmartSearchChange={setSmartSearch}
+						/>
+					</Box>
+
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							paddingTop: 3,
+						}}
+					>
+						{searchString && (
+							<SearchedSongsList
+								searchString={searchString}
+								useSmartSearch={smartSearch ?? false}
+							/>
+						)}
+						<RecommendedSongsList />
 						<Box
 							sx={{
-								display: 'flex',
-								justifyContent: ' space-between',
-								width: '100%',
-								gap: gapString,
+								paddingTop: 14,
+								paddingBottom: 4,
 							}}
 						>
+							<RightSheepPanel mobileVersion />
+						</Box>
+					</Box>
+				</Box>
+			) : (
+				<Box
+					sx={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'start',
+						display: 'flex',
+						flexDirection: 'column',
+						position: 'relative',
+					}}
+				>
+					<motion.div
+						style={{
+							position: 'fixed',
+							display: 'flex',
+							flexDirection: 'column',
+							zIndex: 10,
+							alignItems: 'center',
+							pointerEvents: 'none',
+						}}
+						initial={{
+							top: isTop ? `32%` : 'calc(-7rem + 22px)',
+							left: paddingX,
+							right: paddingX,
+						}}
+						animate={{
+							top: isTop ? `32%` : 'calc(-7rem + 22px - 24px)',
+							left: isTop ? paddingX : `calc( ${paddingX}px + ${gapString} )`,
+							right: paddingX,
+						}}
+						transition={{
+							type: 'keyframes',
+							duration: ANIMATION_DURATION,
+						}}
+					>
+						<ContainerGrid>
 							<Box
-								flex={1}
 								sx={{
 									display: 'flex',
-									justifyContent: 'center',
+									justifyContent: ' space-between',
+									width: '100%',
+									gap: gapString,
 								}}
 							>
 								<Box
-									maxWidth={isMobile ? '100vw' : `min(550px, 50vw)`}
 									flex={1}
 									sx={{
 										display: 'flex',
-										flexDirection: 'column',
-										gap: isMobile ? 1 : 3,
+										justifyContent: 'center',
 									}}
 								>
-									<AnimatePresence>
-										{!phoneVersion ? (
+									<Box
+										maxWidth={`min(550px, 50vw)`}
+										flex={1}
+										sx={{
+											display: 'flex',
+											flexDirection: 'column',
+											gap: 3,
+										}}
+									>
+										<AnimatePresence>
 											<motion.div
 												initial={{
 													height: '7rem',
@@ -304,42 +360,18 @@ export default function HomeDesktop() {
 													</>
 												)}
 											</motion.div>
-										) : (
-											<Box
-												sx={{
-													display: 'flex',
-													flexDirection: 'column',
-												}}
-											>
-												<Typography variant="h4" strong={200}>
-													{heroLead}
-												</Typography>
-												<Typography variant="h3" strong={900} noWrap>
-													{heroTitle}
-												</Typography>
+										</AnimatePresence>
 
-												{useWorshipVersion && (
-													<>
-														<Typography variant="h4" strong={200} noWrap>
-															{heroSubtitleLower}
-														</Typography>
-													</>
-												)}
-											</Box>
-										)}
-									</AnimatePresence>
-
-									<MainSearchInput
-										gradientBorder={isTop && !phoneVersion}
-										value={searchInputValue}
-										onChange={onSearchValueChange}
-										smartSearch={smartSearch ?? false}
-										onSmartSearchChange={setSmartSearch}
-									/>
+										<MainSearchInput
+											gradientBorder={isTop}
+											value={searchInputValue}
+											onChange={onSearchValueChange}
+											smartSearch={smartSearch ?? false}
+											onSmartSearchChange={setSmartSearch}
+										/>
+									</Box>
 								</Box>
-							</Box>
 
-							{!isMobile && (
 								<Box
 									sx={{
 										maxWidth: isTop ? 500 : 0,
@@ -354,52 +386,41 @@ export default function HomeDesktop() {
 										pointerEvents: 'auto',
 									}}
 								>
-									<RightSheepPanel mobileVersion={isMobile} />
+									<RightSheepPanel mobileVersion={false} />
 								</Box>
-							)}
-						</Box>
-					</ContainerGrid>
-				</motion.div>
-				<Box sx={{ height: 65 }}></Box>
-				<div ref={scrollPointRef}></div>
-				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
-				<div
-					style={{
-						left: 0,
-						right: 0,
-						position: 'absolute',
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						padding: 0,
-						top: !phoneVersion ? 'calc(100% - 275px)' : '155px',
-						// TODO: fix height jumping on one column preview
-						transform:
-							isTop || phoneVersion
+							</Box>
+						</ContainerGrid>
+					</motion.div>
+					<Box sx={{ height: 65 }}></Box>
+					<div ref={scrollPointRef}></div>
+					<Box sx={{ height: '100vh' }}></Box>
+					<div
+						style={{
+							left: 0,
+							right: 0,
+							position: 'absolute',
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							padding: 0,
+							top: 'calc(100% - 275px)',
+							// TODO: fix height jumping on one column preview
+							transform: isTop
 								? 'translateY(0)'
 								: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
-						transition: `all ${ANIMATION_DURATION}s ease`,
-					}}
-				>
-					{searchString && (
-						<SearchedSongsList
-							searchString={searchString}
-							useSmartSearch={smartSearch ?? false}
-						/>
-					)}
-					<RecommendedSongsList />
-					{isMobile && (
-						<Box
-							sx={{
-								paddingTop: 16,
-								paddingBottom: 4,
-							}}
-						>
-							<RightSheepPanel mobileVersion={isMobile} />
-						</Box>
-					)}
-				</div>
-			</Box>
+							transition: `all ${ANIMATION_DURATION}s ease`,
+						}}
+					>
+						{searchString && (
+							<SearchedSongsList
+								searchString={searchString}
+								useSmartSearch={smartSearch ?? false}
+							/>
+						)}
+						<RecommendedSongsList />
+					</div>
+				</Box>
+			)}
 
 			{!phoneVersion ? (
 				<FloatingAddButton extended={!isTop} />

@@ -34,6 +34,7 @@ export default function RecommendedSongsList({
 
 	return (
 		<ContainerGrid
+			direction="column"
 			sx={{
 				width: '100%',
 			}}
