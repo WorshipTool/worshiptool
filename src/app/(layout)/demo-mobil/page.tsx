@@ -1,9 +1,7 @@
 'use client'
 
-import AllListPanel from '@/app/components/components/AllListPanel/AllListPanel'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
-import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import RowSongPackCard from '@/common/components/song/RowSongPackCard'
@@ -38,38 +36,47 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 
-type DemoVariant = 1 | 2 | 3 | 4 | 5
+type DemoVariant = 1 | 2 | 3 | 4
 
 /**
- * The agreed mobile layout (greeting header, picks + recent sections,
- * docked search, tab bar) but built from the REAL desktop components so it
- * feels like the same app. Variants differ in which desktop components /
- * densities are used:
+ * The D1 layout (desktop song cards + recent pills + desktop search), made
+ * less flat purely with GREY hierarchy — no new colors. Variants tune the
+ * shades/depth so surfaces read apart:
  *
- * 1 — dense song cards (SongVariantCard dense) + recent pills, desktop search
- * 2 — full song cards (SongVariantCard) + recent pills, desktop search
- * 3 — the actual RecommendedSongsList + AllListPanel + recent pills
- * 4 — song cards for both picks and recent (uniform), grey elevated search
- * 5 — dense cards + recent pills, desktop search with the gradient border
+ * 1 — bordered: white page, white cards with a hairline border, grey pills
+ * 2 — elevated: white page, white cards lifted by a soft shadow, grey pills
+ * 3 — grouped: light-grey canvas, white cards for both sections (iOS-like)
+ * 4 — banded: white page, bordered cards, recent on a full-width grey band
  */
 function DemoMobilePage() {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
 	const tNav = useTranslations('navigation')
-	const tSearch = useTranslations('search')
 
 	const [query, setQuery] = useState('')
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
-
 	const rec = recommended.data
 	const last = lastAdded.data
 	const loading = recommended.isLoading || lastAdded.isLoading
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	const variant: DemoVariant = parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 1
+	const variant: DemoVariant = parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 2
+
+	// grey palette per variant — the only thing that changes
+	const greyCanvas = variant === 3
+	const pageBg = greyCanvas ? 'grey.100' : 'background.paper'
+
+	// recent shows white cards on a grey surface in the grouped/banded looks
+	const recentWhiteCards = variant === 3 || variant === 4
+
+	// white song card that lifts off the surface via border and/or shadow
+	const cardSx =
+		variant === 1 || variant === 4
+			? { bgcolor: 'background.paper', border: '1px solid', borderColor: 'grey.200', boxShadow: 'none' as const }
+			: { bgcolor: 'background.paper', boxShadow: 1 }
 
 	// ---- header ------------------------------------------------------
 
@@ -96,7 +103,7 @@ function DemoMobilePage() {
 				<Link to="login" params={{ previousPage: '', message: '' }}>
 					<Box
 						aria-label={tNav('login')}
-						sx={{ width: 42, height: 42, borderRadius: 10, bgcolor: 'grey.100', color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+						sx={{ width: 42, height: 42, borderRadius: 10, bgcolor: greyCanvas ? 'background.paper' : 'grey.100', color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: greyCanvas ? 1 : 0 }}
 					>
 						<LoginRounded fontSize="small" />
 					</Box>
@@ -124,99 +131,54 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const cardSkeletons = (n: number, h: number) =>
+	const skeletons = (n: number, h: number) =>
 		Array.from({ length: n }).map((_, i) => (
-			<Skeleton key={i} variant="rounded" sx={{ height: h, borderRadius: 2, bgcolor: 'grey.200' }} />
+			<Skeleton key={i} variant="rounded" sx={{ height: h, borderRadius: 2, bgcolor: greyCanvas ? 'grey.200' : 'grey.100' }} />
 		))
 
-	// ---- picks section (desktop song cards) --------------------------
+	// ---- picks: dense white song cards -------------------------------
 
-	const picksCards = (dense: boolean) => (
+	const picks = (
 		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('recommended.idea'), browseAction)}
 			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 				{loading
-					? cardSkeletons(4, dense ? 56 : 120)
-					: rec.slice(0, dense ? 5 : 4).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense={dense} sx={{ boxShadow: 1 }} />
-					  ))}
+					? skeletons(4, 56)
+					: rec.slice(0, 5).map((s) => <SongVariantCard key={s.packGuid} data={s} dense sx={cardSx} />)}
 			</Box>
 		</Box>
 	)
 
-	// the actual desktop RecommendedSongsList component
-	const picksComponent = (
-		<Box sx={{ paddingX: 1 }}>
-			<RecommendedSongsList listType="list" dense />
-		</Box>
-	)
+	// ---- recent: grey pills (or white cards in the grouped variant) --
 
-	// ---- recent section ----------------------------------------------
-
-	// desktop RowSongPackCard pills
-	const recentPills = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{label(tHome('lastAdded.title'))}
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-				{loading ? cardSkeletons(4, 48) : last.slice(0, 5).map((s) => <RowSongPackCard key={s.packGuid} data={s} />)}
-			</Box>
-		</Box>
-	)
-
-	// desktop song cards for recent too (uniform look)
-	const recentCards = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{label(tHome('lastAdded.title'))}
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+	const recent = (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: 1.5,
+				// banded variant puts recent on a full-width grey strip
+				...(variant === 4 && { bgcolor: 'grey.100', paddingY: 2.5 }),
+			}}
+		>
+			<Box sx={{ paddingX: 2.5 }}>{label(tHome('lastAdded.title'))}</Box>
+			<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
 				{loading
-					? cardSkeletons(4, 56)
-					: last.slice(0, 5).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense properties={['SHOW_PUBLISHED_DATE']} sx={{ boxShadow: 1 }} />
-					  ))}
+					? skeletons(4, 48)
+					: recentWhiteCards
+					? last.slice(0, 5).map((s) => (
+							<SongVariantCard key={s.packGuid} data={s} dense properties={['SHOW_PUBLISHED_DATE']} sx={cardSx} />
+					  ))
+					: last.slice(0, 5).map((s) => <RowSongPackCard key={s.packGuid} data={s} />)}
 			</Box>
 		</Box>
 	)
 
 	// ---- search: the real desktop MainSearchInput --------------------
 
-	const desktopSearch = (gradientBorder: boolean) => (
-		<MainSearchInput gradientBorder={gradientBorder} value={query} onChange={setQuery} autoFocus={false} />
+	const search = (
+		<MainSearchInput gradientBorder={false} value={query} onChange={setQuery} autoFocus={false} />
 	)
-
-	// ---- compose body + search per variant ---------------------------
-
-	const body =
-		variant === 1 ? (
-			<>
-				{picksCards(true)}
-				{recentPills}
-			</>
-		) : variant === 2 ? (
-			<>
-				{picksCards(false)}
-				{recentPills}
-			</>
-		) : variant === 3 ? (
-			<>
-				{picksComponent}
-				{recentPills}
-				<Box sx={{ paddingX: 2.5 }}>
-					<AllListPanel />
-				</Box>
-			</>
-		) : variant === 4 ? (
-			<>
-				{picksCards(true)}
-				{recentCards}
-			</>
-		) : (
-			<>
-				{picksCards(true)}
-				{recentPills}
-			</>
-		)
-
-	const search = desktopSearch(variant === 5)
 
 	return (
 		<Box
@@ -236,7 +198,7 @@ function DemoMobilePage() {
 					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
-					bgcolor: 'background.paper',
+					bgcolor: pageBg,
 					display: 'flex',
 					flexDirection: 'column',
 					boxShadow: 3,
@@ -245,7 +207,8 @@ function DemoMobilePage() {
 			>
 				{header}
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: CONTENT_CLEARANCE }}>
-					{body}
+					{picks}
+					{recent}
 				</Box>
 
 				{/* ===== SEARCH: floating above the tab bar (thumb zone) ===== */}
@@ -284,7 +247,7 @@ function DemoMobilePage() {
 						zIndex: 10,
 					}}
 				>
-					<Link to="demoMobile" params={{ v: undefined }} style={{ flex: 1 }}>
+					<Link to="demoMobile" params={{ v }} style={{ flex: 1 }}>
 						<TabItem icon={<HomeOutlined />} activeIcon={<HomeRounded />} label={tNav('home')} active />
 					</Link>
 					<Link to="songsList" params={{ s: undefined }} style={{ flex: 1 }}>
