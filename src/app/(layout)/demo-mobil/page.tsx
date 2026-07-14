@@ -71,8 +71,9 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
+	// connected square search bar (3) is the picked default
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 1
+		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 3
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
