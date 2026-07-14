@@ -43,8 +43,6 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 
 // bottom layout metrics (kept in sync so nothing hides / crowds)
 const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
-const FLOAT_SEARCH_BOTTOM = 'calc(env(safe-area-inset-bottom) + 88px)'
-const FLOAT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 188px)'
 const CONNECTED_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 148px)'
 
 type DemoVariant = 1 | 2 | 3 | 4 | 5
@@ -71,9 +69,9 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	// connected square search bar (3) is the picked default
+	// soft-square connected search (2) is the closest to the picked look
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 3
+		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 2
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -112,8 +110,9 @@ function DemoMobilePage() {
 	const last = lastAdded.data
 	const loading = recommended.isLoading || lastAdded.isLoading
 
-	const isConnected = variant === 3
-	const contentClearance = isConnected ? CONNECTED_CLEARANCE : FLOAT_CLEARANCE
+	// all variants use the connected square search bar; they differ only in
+	// the field's corner sharpness / fill / accent
+	const contentClearance = CONNECTED_CLEARANCE
 
 	// ---- header ------------------------------------------------------
 
@@ -267,112 +266,70 @@ function DemoMobilePage() {
 
 	// ---- search treatments -------------------------------------------
 
-	const fieldInner = (
-		<>
-			<SearchRounded sx={{ color: 'grey.600' }} />
-			<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
-		</>
+	const textInput = (
+		<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
 	)
+	const plainIcon = <SearchRounded sx={{ color: 'grey.600' }} />
 
-	// 1 — gradient-border pill
-	const gradientPill = (
-		<Box sx={{ background: gradient, padding: '2px', borderRadius: 10, boxShadow: 3 }}>
-			<Box
-				component="form"
-				onSubmit={submitSearch}
-				sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'background.paper', borderRadius: 10, paddingX: 2, paddingY: 1.5 }}
-			>
-				{fieldInner}
+	// Square connected search field — five tunings of the "hranatý" look.
+	// radius is in theme units (1 ≈ 4px), so 0.75→3px is nearly sharp.
+	const squareField = () => {
+		// 1 — sharp: almost square corners, soft grey fill
+		if (variant === 1) {
+			return (
+				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 0.75, paddingX: 2, paddingY: 1.5 }}>
+					{plainIcon}
+					{textInput}
+				</Box>
+			)
+		}
+		// 2 — soft square: gently rounded rectangle (the picked S3 look)
+		if (variant === 2) {
+			return (
+				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 2.5, paddingX: 2, paddingY: 1.5 }}>
+					{plainIcon}
+					{textInput}
+				</Box>
+			)
+		}
+		// 3 — outlined: white field with a thin border, square-ish
+		if (variant === 3) {
+			return (
+				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'background.paper', border: '1px solid', borderColor: 'grey.300', borderRadius: 1.25, paddingX: 2, paddingY: 1.5 }}>
+					{plainIcon}
+					{textInput}
+				</Box>
+			)
+		}
+		// 4 — accent icon: square field with a gradient icon tile on the left
+		if (variant === 4) {
+			return (
+				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1.25, bgcolor: 'grey.100', borderRadius: 1.5, paddingLeft: 1, paddingRight: 2, paddingY: 1 }}>
+					<Box sx={{ width: 36, height: 36, borderRadius: 1.25, background: gradient, color: 'common.white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+						<SearchRounded fontSize="small" />
+					</Box>
+					{textInput}
+				</Box>
+			)
+		}
+		// 5 — with submit: square field + square gradient submit button
+		return (
+			<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+				<Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 1.5, paddingX: 2, paddingY: 1.5 }}>
+					{plainIcon}
+					{textInput}
+				</Box>
+				<Box
+					role="button"
+					aria-label={tSearch('searchByTitleOrText')}
+					onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
+					sx={{ width: 48, height: 48, borderRadius: 1.5, background: gradient, color: 'common.white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: 2 }}
+				>
+					<ArrowForwardRounded />
+				</Box>
 			</Box>
-		</Box>
-	)
-
-	// 2 — soft filled pill
-	const filledPill = (
-		<Box
-			component="form"
-			onSubmit={submitSearch}
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: 1,
-				bgcolor: 'grey.100',
-				borderRadius: 10,
-				paddingX: 2,
-				paddingY: 1.75,
-				boxShadow: 2,
-			}}
-		>
-			{fieldInner}
-		</Box>
-	)
-
-	// 4 — filled field + circular gradient submit
-	const composeBar = (
-		<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-			<Box
-				sx={{
-					flex: 1,
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1,
-					bgcolor: 'background.paper',
-					border: '1px solid',
-					borderColor: 'grey.300',
-					borderRadius: 10,
-					paddingX: 2,
-					paddingY: 1.5,
-					boxShadow: 2,
-				}}
-			>
-				{fieldInner}
-			</Box>
-			<Box
-				role="button"
-				aria-label={tSearch('searchByTitleOrText')}
-				onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
-				sx={{
-					width: 48,
-					height: 48,
-					borderRadius: 10,
-					background: gradient,
-					color: 'common.white',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					flexShrink: 0,
-					boxShadow: 3,
-				}}
-			>
-				<ArrowForwardRounded />
-			</Box>
-		</Box>
-	)
-
-	// 5 — outlined white pill
-	const outlinedPill = (
-		<Box
-			component="form"
-			onSubmit={submitSearch}
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: 1,
-				bgcolor: 'background.paper',
-				border: '1.5px solid',
-				borderColor: 'primary.main',
-				borderRadius: 10,
-				paddingX: 2,
-				paddingY: 1.5,
-				boxShadow: 1,
-			}}
-		>
-			{fieldInner}
-		</Box>
-	)
-
-	const floatingSearch =
-		variant === 1 ? gradientPill : variant === 2 ? filledPill : variant === 4 ? composeBar : outlinedPill
+		)
+	}
 
 	return (
 		<Box
@@ -407,54 +364,27 @@ function DemoMobilePage() {
 					{recentSection}
 				</Box>
 
-				{/* ===== SEARCH: floating pill above the tab bar (thumb zone) ===== */}
-				{!isConnected && (
-					<Box
-						sx={{
-							position: 'fixed',
-							bottom: FLOAT_SEARCH_BOTTOM,
-							left: '50%',
-							transform: 'translateX(-50%)',
-							width: '100%',
-							maxWidth: PAGE_MAX_WIDTH,
-							paddingX: 4,
-							boxSizing: 'border-box',
-							zIndex: 10,
-						}}
-					>
-						{floatingSearch}
-					</Box>
-				)}
-
-				{/* ===== SEARCH: full-width bar connected to the tab bar ===== */}
-				{isConnected && (
-					<Box
-						sx={{
-							position: 'fixed',
-							bottom: TAB_BAR,
-							left: '50%',
-							transform: 'translateX(-50%)',
-							width: '100%',
-							maxWidth: PAGE_MAX_WIDTH,
-							bgcolor: alpha(theme.palette.background.paper, 0.85),
-							backdropFilter: 'blur(12px)',
-							borderTop: '1px solid',
-							borderColor: 'grey.200',
-							paddingX: 2.5,
-							paddingY: 1.25,
-							boxSizing: 'border-box',
-							zIndex: 10,
-						}}
-					>
-						<Box
-							component="form"
-							onSubmit={submitSearch}
-							sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 3, paddingX: 2, paddingY: 1.25 }}
-						>
-							{fieldInner}
-						</Box>
-					</Box>
-				)}
+				{/* ===== SEARCH: full-width square bar connected to the tab bar ===== */}
+				<Box
+					sx={{
+						position: 'fixed',
+						bottom: TAB_BAR,
+						left: '50%',
+						transform: 'translateX(-50%)',
+						width: '100%',
+						maxWidth: PAGE_MAX_WIDTH,
+						bgcolor: alpha(theme.palette.background.paper, 0.85),
+						backdropFilter: 'blur(12px)',
+						borderTop: '1px solid',
+						borderColor: 'grey.200',
+						paddingX: 2.5,
+						paddingY: 1.25,
+						boxSizing: 'border-box',
+						zIndex: 10,
+					}}
+				>
+					{squareField()}
+				</Box>
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
 				<Box
