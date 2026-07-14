@@ -4,7 +4,7 @@ import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/ho
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, Clickable, Divider, Typography, useTheme } from '@/common/ui'
+import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { alpha } from '@/common/ui/mui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -13,7 +13,6 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
-	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
 	LibraryMusicOutlined,
@@ -23,7 +22,7 @@ import {
 	PersonRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { Fragment, ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 export default SmartPage(DemoMobilePage, [
 	'hideToolbar',
@@ -42,13 +41,13 @@ type DemoVariant = 1 | 2 | 3 | 4
 
 /**
  * Grey canvas + white cards for the picks (the liked G3 look). The recent
- * section is kept deliberately QUIET so it recedes below the picks —
- * variants only change how subtle it is:
+ * section stays QUIET; these variants refine the two liked directions —
+ * the airy list and the chips:
  *
- * 1 — quiet rows: transparent rows with hairline dividers
- * 2 — airy list: spaced rows, muted, no dividers or chevrons
- * 3 — chips: small bordered title chips that wrap
- * 4 — flat cards: white cards but flat (no lift) so they sit quietly
+ * 1 — airy list with date: spaced muted rows, title + date
+ * 2 — airy list, titles only: even cleaner, no dates
+ * 3 — chips outlined: small bordered title chips that wrap
+ * 4 — chips filled: soft grey filled chips, no border
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -148,14 +147,24 @@ function DemoMobilePage() {
 			))
 		}
 
-		// 3 — subtle bordered title chips
-		if (variant === 3) {
+		// 3 & 4 — title chips (3 outlined, 4 soft filled)
+		if (variant === 3 || variant === 4) {
+			const filled = variant === 4
 			return (
 				<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
 					{last.slice(0, 6).map((s) => (
 						<Clickable key={s.packGuid}>
 							<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-								<Box sx={{ border: '1px solid', borderColor: 'grey.300', borderRadius: 10, paddingX: 1.75, paddingY: 0.75 }}>
+								<Box
+									sx={{
+										borderRadius: 10,
+										paddingX: 1.75,
+										paddingY: 0.75,
+										...(filled
+											? { bgcolor: 'grey.200' }
+											: { border: '1px solid', borderColor: 'grey.300' }),
+									}}
+								>
 									<Typography small color="grey.700" noWrap>
 										{s.title}
 									</Typography>
@@ -167,38 +176,25 @@ function DemoMobilePage() {
 			)
 		}
 
-		// 4 — flat white cards (no lift) so they sit quietly under the picks
-		if (variant === 4) {
-			return (
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-					{last.slice(0, 5).map((s) => (
-						<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper' }} />
-					))}
-				</Box>
-			)
-		}
-
-		// 1 & 2 — quiet transparent rows (1 with dividers, 2 airy)
-		const airy = variant === 2
+		// 1 & 2 — airy transparent rows (1 shows the date, 2 titles only)
+		const withDate = variant === 1
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: airy ? 0.5 : 0 }}>
-				{last.slice(0, 5).map((s, i, arr) => (
-					<Fragment key={s.packGuid}>
-						<Clickable>
-							<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-								<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: airy ? 1 : 1.25 }}>
-									<Typography color="grey.800" noWrap sx={{ flex: 1 }}>
-										{s.title}
-									</Typography>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+				{last.slice(0, 5).map((s) => (
+					<Clickable key={s.packGuid}>
+						<Link to="variant" params={parseVariantAlias(s.packAlias)}>
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
+								<Typography color="grey.800" noWrap sx={{ flex: 1 }}>
+									{s.title}
+								</Typography>
+								{withDate && (
 									<Typography small color="grey.500" noWrap>
 										{dateOf(s.publishedAt)}
 									</Typography>
-									{!airy && <ChevronRightRounded sx={{ color: 'grey.400' }} />}
-								</Box>
-							</Link>
-						</Clickable>
-						{!airy && i < arr.length - 1 && <Divider />}
-					</Fragment>
+								)}
+							</Box>
+						</Link>
+					</Clickable>
 				))}
 			</Box>
 		)
