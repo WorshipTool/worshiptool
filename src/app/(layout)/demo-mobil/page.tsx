@@ -13,6 +13,7 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
+	ArrowForwardRounded,
 	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
@@ -39,19 +40,25 @@ export default SmartPage(DemoMobilePage, [
 
 const PAGE_MAX_WIDTH = 480
 const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
-const DOCKED_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 
-type DemoVariant = 1 | 2 | 3 | 4
+// bottom layout metrics (kept in sync so nothing hides / crowds)
+const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
+const FLOAT_SEARCH_BOTTOM = 'calc(env(safe-area-inset-bottom) + 88px)'
+const FLOAT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 188px)'
+const CONNECTED_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 148px)'
+
+type DemoVariant = 1 | 2 | 3 | 4 | 5
 
 /**
- * One fixed recipe: docked search at the bottom, a CLEAN recommended list
- * ("Nějaký nápad") and a COLORFUL "Poslední přidané" section. The variants
- * differ only in how colorful the last-added section is:
+ * The picked C2 recipe (clean two-line picks + colorful recent rows),
+ * cleaned up with consistent spacing. The variants only change the SEARCH
+ * bar treatment:
  *
- * 1 — carousel: horizontal square gradient cover tiles
- * 2 — thumb rows: colorful thumbnail rows (two-line clean recommended)
- * 3 — grid: colorful two-column gradient tiles
- * 4 — wide cards: horizontal wide gradient cards with title + first line
+ * 1 — gradient pill: floating rounded pill with brand gradient border
+ * 2 — filled pill: floating soft grey pill (subtle)
+ * 3 — connected bar: full-width field attached directly above the tab bar
+ * 4 — compose: floating field + circular gradient submit button
+ * 5 — outlined pill: floating white pill with a thin primary border
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -64,9 +71,8 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	// colorful thumbnail rows (2) is the picked default
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 2
+		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 1
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -74,7 +80,6 @@ function DemoMobilePage() {
 	const p = theme.palette
 	const gradient = `linear-gradient(135deg, ${p.primary.main}, ${p.primary.dark})`
 
-	// deterministic "cover art" gradients derived from palette tokens
 	const artGradients = [
 		`linear-gradient(135deg, ${p.primary.main}, ${p.primary.dark})`,
 		`linear-gradient(135deg, ${p.info.main}, ${p.primary.main})`,
@@ -106,30 +111,10 @@ function DemoMobilePage() {
 	const last = lastAdded.data
 	const loading = recommended.isLoading || lastAdded.isLoading
 
-	const twoLineRecommended = variant === 2
+	const isConnected = variant === 3
+	const contentClearance = isConnected ? CONNECTED_CLEARANCE : FLOAT_CLEARANCE
 
-	// ---- shared bits -------------------------------------------------
-
-	const searchPill = (
-		<Box sx={{ background: gradient, padding: '2px', borderRadius: 10, boxShadow: 3 }}>
-			<Box
-				component="form"
-				onSubmit={submitSearch}
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1,
-					bgcolor: 'background.paper',
-					borderRadius: 10,
-					paddingX: 2,
-					paddingY: 1.5,
-				}}
-			>
-				<SearchRounded sx={{ color: 'grey.600' }} />
-				<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
-			</Box>
-		</Box>
-	)
+	// ---- header ------------------------------------------------------
 
 	const header = (
 		<Box
@@ -137,6 +122,7 @@ function DemoMobilePage() {
 				paddingX: 2.5,
 				// clear the device status bar (time/battery) + breathing room
 				paddingTop: 'calc(env(safe-area-inset-top) + 32px)',
+				paddingBottom: 0.5,
 				display: 'flex',
 				justifyContent: 'space-between',
 				alignItems: 'end',
@@ -191,11 +177,11 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const artThumb = (i: number, size: number) => (
+	const artThumb = (i: number) => (
 		<Box
 			sx={{
-				width: size,
-				height: size,
+				width: 46,
+				height: 46,
 				borderRadius: 2,
 				background: artFor(i),
 				color: 'common.white',
@@ -209,30 +195,29 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- CLEAN recommended list (white, no color) --------------------
+	// ---- body sections (consistent geometry) -------------------------
 
-	const cleanRecommended = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+	// clean two-line picks — no color, hairline dividers
+	const recommendedSection = (
+		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('recommended.idea'), browseAction)}
 			<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 				{loading
 					? Array.from({ length: 5 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: twoLineRecommended ? 52 : 40, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
+							<Skeleton key={i} variant="rounded" sx={{ height: 52, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
 					  ))
 					: rec.slice(0, 5).map((s, i, arr) => (
 							<Fragment key={s.packGuid}>
 								<Clickable>
 									<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-										<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: twoLineRecommended ? 1.25 : 1.5 }}>
+										<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1.25 }}>
 											<Box sx={{ minWidth: 0, flex: 1 }}>
 												<Typography strong noWrap>
 													{s.title}
 												</Typography>
-												{twoLineRecommended && (
-													<Typography small color="grey.700" noWrap>
-														{firstLine(s.sheetData)}
-													</Typography>
-												)}
+												<Typography small color="grey.700" noWrap>
+													{firstLine(s.sheetData)}
+												</Typography>
 											</Box>
 											<ChevronRightRounded sx={{ color: 'grey.400' }} />
 										</Box>
@@ -245,76 +230,21 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- COLORFUL last-added section (four treatments) ---------------
-
-	const lastLabel = (
-		<Box sx={{ paddingX: 2.5 }}>{label(tHome('lastAdded.title'))}</Box>
-	)
-
-	// (1) horizontal square cover tiles
-	const lastCarousel = (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{lastLabel}
-			<Box
-				sx={{
-					display: 'flex',
-					gap: 1.5,
-					overflowX: 'auto',
-					paddingX: 2.5,
-					paddingBottom: 0.5,
-					scrollSnapType: 'x mandatory',
-					'&::-webkit-scrollbar': { display: 'none' },
-				}}
-			>
-				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ minWidth: 128, height: 160, borderRadius: 3, bgcolor: 'grey.200' }} />
-					  ))
-					: last.slice(0, 8).map((s, i) => (
-							<Clickable key={s.packGuid}>
-								<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-									<Box sx={{ width: 128, display: 'flex', flexDirection: 'column', gap: 1 }}>
-										<Box
-											sx={{
-												width: 128,
-												height: 128,
-												borderRadius: 3,
-												background: artFor(i),
-												color: 'common.white',
-												display: 'flex',
-												alignItems: 'flex-end',
-												padding: 1.25,
-												boxShadow: 1,
-											}}
-										>
-											<MusicNoteRounded />
-										</Box>
-										<Typography strong noWrap sx={{ paddingX: 0.5 }}>
-											{s.title}
-										</Typography>
-									</Box>
-								</Link>
-							</Clickable>
-					  ))}
-			</Box>
-		</Box>
-	)
-
-	// (2) colorful thumbnail rows
-	const lastThumbRows = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+	// colorful recent — thumbnail rows, same row rhythm as above
+	const recentSection = (
+		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('lastAdded.title'))}
 			<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
+					? Array.from({ length: 5 }).map((_, i) => (
+							<Skeleton key={i} variant="rounded" sx={{ height: 58, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
 					  ))
 					: last.slice(0, 5).map((s, i, arr) => (
 							<Fragment key={s.packGuid}>
 								<Clickable>
 									<Link to="variant" params={parseVariantAlias(s.packAlias)}>
 										<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
-											{artThumb(i, 44)}
+											{artThumb(i)}
 											<Typography strong noWrap sx={{ flex: 1 }}>
 												{s.title}
 											</Typography>
@@ -334,102 +264,114 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// (3) colorful two-column gradient tiles
-	const lastGrid = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{label(tHome('lastAdded.title'))}
-			<Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 110, borderRadius: 3, bgcolor: 'grey.200' }} />
-					  ))
-					: last.slice(0, 6).map((s, i) => (
-							<Clickable key={s.packGuid}>
-								<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-									<Box
-										sx={{
-											height: 110,
-											borderRadius: 3,
-											background: artFor(i),
-											color: 'common.white',
-											padding: 1.5,
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'space-between',
-											boxShadow: 1,
-										}}
-									>
-										<MusicNoteRounded fontSize="small" />
-										<Typography strong noWrap>
-											{s.title}
-										</Typography>
-									</Box>
-								</Link>
-							</Clickable>
-					  ))}
+	// ---- search treatments -------------------------------------------
+
+	const fieldInner = (
+		<>
+			<SearchRounded sx={{ color: 'grey.600' }} />
+			<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
+		</>
+	)
+
+	// 1 — gradient-border pill
+	const gradientPill = (
+		<Box sx={{ background: gradient, padding: '2px', borderRadius: 10, boxShadow: 3 }}>
+			<Box
+				component="form"
+				onSubmit={submitSearch}
+				sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'background.paper', borderRadius: 10, paddingX: 2, paddingY: 1.5 }}
+			>
+				{fieldInner}
 			</Box>
 		</Box>
 	)
 
-	// (4) horizontal wide gradient cards
-	const lastWideCards = (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{lastLabel}
+	// 2 — soft filled pill
+	const filledPill = (
+		<Box
+			component="form"
+			onSubmit={submitSearch}
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: 1,
+				bgcolor: 'grey.100',
+				borderRadius: 10,
+				paddingX: 2,
+				paddingY: 1.75,
+				boxShadow: 2,
+			}}
+		>
+			{fieldInner}
+		</Box>
+	)
+
+	// 4 — filled field + circular gradient submit
+	const composeBar = (
+		<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 			<Box
 				sx={{
+					flex: 1,
 					display: 'flex',
-					gap: 1.5,
-					overflowX: 'auto',
-					paddingX: 2.5,
-					paddingBottom: 0.5,
-					scrollSnapType: 'x mandatory',
-					'&::-webkit-scrollbar': { display: 'none' },
+					alignItems: 'center',
+					gap: 1,
+					bgcolor: 'background.paper',
+					border: '1px solid',
+					borderColor: 'grey.300',
+					borderRadius: 10,
+					paddingX: 2,
+					paddingY: 1.5,
+					boxShadow: 2,
 				}}
 			>
-				{loading
-					? Array.from({ length: 3 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ minWidth: 260, height: 104, borderRadius: 3, bgcolor: 'grey.200' }} />
-					  ))
-					: last.slice(0, 8).map((s, i) => (
-							<Clickable key={s.packGuid}>
-								<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-									<Box
-										sx={{
-											width: 260,
-											height: 104,
-											borderRadius: 3,
-											background: artFor(i),
-											color: 'common.white',
-											padding: 2,
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'space-between',
-											boxShadow: 1,
-											scrollSnapAlign: 'start',
-										}}
-									>
-										<Typography strong noWrap>
-											{s.title}
-										</Typography>
-										<Typography small noWrap sx={{ opacity: 0.9 }}>
-											{firstLine(s.sheetData)}
-										</Typography>
-									</Box>
-								</Link>
-							</Clickable>
-					  ))}
+				{fieldInner}
+			</Box>
+			<Box
+				role="button"
+				aria-label={tSearch('searchByTitleOrText')}
+				onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
+				sx={{
+					width: 48,
+					height: 48,
+					borderRadius: 10,
+					background: gradient,
+					color: 'common.white',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					flexShrink: 0,
+					boxShadow: 3,
+				}}
+			>
+				<ArrowForwardRounded />
 			</Box>
 		</Box>
 	)
 
-	const lastSection =
-		variant === 1
-			? lastCarousel
-			: variant === 2
-			? lastThumbRows
-			: variant === 3
-			? lastGrid
-			: lastWideCards
+	// 5 — outlined white pill
+	const outlinedPill = (
+		<Box
+			component="form"
+			onSubmit={submitSearch}
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: 1,
+				bgcolor: 'background.paper',
+				border: '1.5px solid',
+				borderColor: 'primary.main',
+				borderRadius: 10,
+				paddingX: 2,
+				paddingY: 1.5,
+				boxShadow: 1,
+			}}
+		>
+			{fieldInner}
+		</Box>
+	)
+
+	const floatingSearch =
+		variant === 1 ? gradientPill : variant === 2 ? filledPill : variant === 4 ? composeBar : outlinedPill
 
 	return (
 		<Box
@@ -459,13 +401,59 @@ function DemoMobilePage() {
 				}}
 			>
 				{header}
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: DOCKED_CLEARANCE }}>
-					{cleanRecommended}
-					{lastSection}
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: contentClearance }}>
+					{recommendedSection}
+					{recentSection}
 				</Box>
 
-				{/* ===== Docked search — floats above the tab bar (thumb zone) ===== */}
-				<DockedSearch>{searchPill}</DockedSearch>
+				{/* ===== SEARCH: floating pill above the tab bar (thumb zone) ===== */}
+				{!isConnected && (
+					<Box
+						sx={{
+							position: 'fixed',
+							bottom: FLOAT_SEARCH_BOTTOM,
+							left: '50%',
+							transform: 'translateX(-50%)',
+							width: '100%',
+							maxWidth: PAGE_MAX_WIDTH,
+							paddingX: 4,
+							boxSizing: 'border-box',
+							zIndex: 10,
+						}}
+					>
+						{floatingSearch}
+					</Box>
+				)}
+
+				{/* ===== SEARCH: full-width bar connected to the tab bar ===== */}
+				{isConnected && (
+					<Box
+						sx={{
+							position: 'fixed',
+							bottom: TAB_BAR,
+							left: '50%',
+							transform: 'translateX(-50%)',
+							width: '100%',
+							maxWidth: PAGE_MAX_WIDTH,
+							bgcolor: alpha(theme.palette.background.paper, 0.85),
+							backdropFilter: 'blur(12px)',
+							borderTop: '1px solid',
+							borderColor: 'grey.200',
+							paddingX: 2.5,
+							paddingY: 1.25,
+							boxSizing: 'border-box',
+							zIndex: 10,
+						}}
+					>
+						<Box
+							component="form"
+							onSubmit={submitSearch}
+							sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 3, paddingX: 2, paddingY: 1.25 }}
+						>
+							{fieldInner}
+						</Box>
+					</Box>
+				)}
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
 				<Box
@@ -496,27 +484,6 @@ function DemoMobilePage() {
 					</Link>
 				</Box>
 			</Box>
-		</Box>
-	)
-}
-
-/** Fixed pill floating above the tab bar (thumb zone). */
-function DockedSearch({ children }: { children: ReactNode }) {
-	return (
-		<Box
-			sx={{
-				position: 'fixed',
-				bottom: 'calc(env(safe-area-inset-bottom) + 82px)',
-				left: '50%',
-				transform: 'translateX(-50%)',
-				width: '100%',
-				maxWidth: PAGE_MAX_WIDTH,
-				paddingX: 4,
-				boxSizing: 'border-box',
-				zIndex: 10,
-			}}
-		>
-			{children}
 		</Box>
 	)
 }
