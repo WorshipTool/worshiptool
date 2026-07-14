@@ -1,6 +1,5 @@
 'use client'
 
-import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Clickable, Divider, Typography, useTheme } from '@/common/ui'
@@ -10,7 +9,6 @@ import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { TextField } from '@/common/ui/TextField'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
-import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
 	ChevronRightRounded,
@@ -19,7 +17,6 @@ import {
 	LibraryMusicOutlined,
 	LibraryMusicRounded,
 	LoginRounded,
-	MusicNoteRounded,
 	PersonOutlineRounded,
 	PersonRounded,
 	SearchRounded,
@@ -27,7 +24,6 @@ import {
 import { Sheet } from '@pepavlin/sheet-api'
 import { useTranslations } from 'next-intl'
 import { Fragment, ReactNode, useState } from 'react'
-import { BasicVariantPack } from '../../../api/dtos'
 
 export default SmartPage(DemoMobilePage, [
 	'hideToolbar',
@@ -73,19 +69,6 @@ function DemoMobilePage() {
 		parsed >= 1 && parsed <= 5 ? (parsed as DemoVariant) : 2
 
 	const recommended = useRecommendedSongs()
-	const lastAdded = useLastAddedSongs()
-
-	const p = theme.palette
-	const gradient = `linear-gradient(135deg, ${p.primary.main}, ${p.primary.dark})`
-
-	const artGradients = [
-		`linear-gradient(135deg, ${p.primary.main}, ${p.primary.dark})`,
-		`linear-gradient(135deg, ${p.info.main}, ${p.primary.main})`,
-		`linear-gradient(135deg, ${p.success.main}, ${p.info.main})`,
-		`linear-gradient(135deg, ${p.secondary.main}, ${p.warning.main})`,
-		`linear-gradient(135deg, ${p.primary.dark}, ${p.error.main})`,
-	]
-	const artFor = (i: number) => artGradients[i % artGradients.length]
 
 	const submitSearch = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -106,8 +89,7 @@ function DemoMobilePage() {
 	}
 
 	const rec = recommended.data
-	const last = lastAdded.data
-	const loading = recommended.isLoading || lastAdded.isLoading
+	const loading = recommended.isLoading
 
 	// all variants use the connected square search bar; they differ only in
 	// the field's corner sharpness / fill / accent
@@ -176,23 +158,6 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const artThumb = (i: number) => (
-		<Box
-			sx={{
-				width: 46,
-				height: 46,
-				borderRadius: 2,
-				background: artFor(i),
-				color: 'common.white',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				flexShrink: 0,
-			}}
-		>
-			<MusicNoteRounded fontSize="small" />
-		</Box>
-	)
 
 	// ---- body sections (consistent geometry) -------------------------
 
@@ -218,40 +183,6 @@ function DemoMobilePage() {
 													{firstLine(s.sheetData)}
 												</Typography>
 											</Box>
-											<ChevronRightRounded sx={{ color: 'grey.400' }} />
-										</Box>
-									</Link>
-								</Clickable>
-								{i < arr.length - 1 && <Divider />}
-							</Fragment>
-					  ))}
-			</Box>
-		</Box>
-	)
-
-	// colorful recent — thumbnail rows, same row rhythm as above
-	const recentSection = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{label(tHome('lastAdded.title'))}
-			<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-				{loading
-					? Array.from({ length: 5 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 58, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
-					  ))
-					: last.slice(0, 5).map((s, i, arr) => (
-							<Fragment key={s.packGuid}>
-								<Clickable>
-									<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-										<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
-											{artThumb(i)}
-											<Typography strong noWrap sx={{ flex: 1 }}>
-												{s.title}
-											</Typography>
-											{s.publishedAt && (
-												<Typography small color="grey.500" noWrap>
-													{getSmartDateAgoString(s.publishedAt)}
-												</Typography>
-											)}
 											<ChevronRightRounded sx={{ color: 'grey.400' }} />
 										</Box>
 									</Link>
@@ -339,7 +270,6 @@ function DemoMobilePage() {
 				{header}
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: contentClearance }}>
 					{recommendedSection}
-					{recentSection}
 				</Box>
 
 				{/* ===== SEARCH: grey elevated field above the tab bar ===== */}
