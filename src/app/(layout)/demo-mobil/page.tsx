@@ -13,7 +13,6 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
-	ArrowForwardRounded,
 	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
@@ -48,15 +47,15 @@ const CONNECTED_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 148px)'
 type DemoVariant = 1 | 2 | 3 | 4 | 5
 
 /**
- * The picked C2 recipe (clean two-line picks + colorful recent rows),
- * cleaned up with consistent spacing. The variants only change the SEARCH
- * bar treatment:
+ * The picked recipe (clean two-line picks + colorful recent rows) with a
+ * grey square search field, no button. The variants only tune the field's
+ * DROP SHADOW / elevation so it pops and pulls attention:
  *
- * 1 — gradient pill: floating rounded pill with brand gradient border
- * 2 — filled pill: floating soft grey pill (subtle)
- * 3 — connected bar: full-width field attached directly above the tab bar
- * 4 — compose: floating field + circular gradient submit button
- * 5 — outlined pill: floating white pill with a thin primary border
+ * 1 — soft: subtle lift
+ * 2 — medium: clearly elevated (default)
+ * 3 — strong: prominent float
+ * 4 — brand glow: primary-tinted shadow
+ * 5 — floating: detached grey field over a transparent bar
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -271,65 +270,44 @@ function DemoMobilePage() {
 	)
 	const plainIcon = <SearchRounded sx={{ color: 'grey.600' }} />
 
-	// Square connected search field — five tunings of the "hranatý" look.
-	// radius is in theme units (1 ≈ 4px), so 0.75→3px is nearly sharp.
-	const squareField = () => {
-		// 1 — sharp: almost square corners, soft grey fill
-		if (variant === 1) {
-			return (
-				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 0.75, paddingX: 2, paddingY: 1.5 }}>
-					{plainIcon}
-					{textInput}
-				</Box>
-			)
-		}
-		// 2 — soft square: gently rounded rectangle (the picked S3 look)
-		if (variant === 2) {
-			return (
-				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 2.5, paddingX: 2, paddingY: 1.5 }}>
-					{plainIcon}
-					{textInput}
-				</Box>
-			)
-		}
-		// 3 — outlined: white field with a thin border, square-ish
-		if (variant === 3) {
-			return (
-				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'background.paper', border: '1px solid', borderColor: 'grey.300', borderRadius: 1.25, paddingX: 2, paddingY: 1.5 }}>
-					{plainIcon}
-					{textInput}
-				</Box>
-			)
-		}
-		// 4 — accent icon: square field with a gradient icon tile on the left
-		if (variant === 4) {
-			return (
-				<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1.25, bgcolor: 'grey.100', borderRadius: 1.5, paddingLeft: 1, paddingRight: 2, paddingY: 1 }}>
-					<Box sx={{ width: 36, height: 36, borderRadius: 1.25, background: gradient, color: 'common.white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-						<SearchRounded fontSize="small" />
-					</Box>
-					{textInput}
-				</Box>
-			)
-		}
-		// 5 — with submit: square field + square gradient submit button
-		return (
-			<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-				<Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', borderRadius: 1.5, paddingX: 2, paddingY: 1.5 }}>
-					{plainIcon}
-					{textInput}
-				</Box>
-				<Box
-					role="button"
-					aria-label={tSearch('searchByTitleOrText')}
-					onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
-					sx={{ width: 48, height: 48, borderRadius: 1.5, background: gradient, color: 'common.white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: 2 }}
-				>
-					<ArrowForwardRounded />
-				</Box>
-			</Box>
-		)
-	}
+	// Grey square search field, no button — the variants tune the DROP
+	// SHADOW / elevation so the field pops and pulls attention.
+	const shadow = {
+		// 1 — soft: subtle lift
+		1: '0px 2px 6px rgba(0,0,0,0.10)',
+		// 2 — medium: clearly elevated (default)
+		2: '0px 4px 14px rgba(0,0,0,0.15)',
+		// 3 — strong: prominent float
+		3: '0px 8px 22px rgba(0,0,0,0.20)',
+		// 4 — brand glow: primary-tinted shadow draws the eye
+		4: `0px 6px 18px ${alpha(theme.palette.primary.main, 0.4)}`,
+		// 5 — floating: detached grey field over a transparent bar (see wrapper)
+		5: '0px 10px 26px rgba(0,0,0,0.22)',
+	}[variant]
+
+	// variant 5 detaches the field: the wrapper below goes transparent so
+	// the grey field floats above the tab bar as its own elevated element
+	const floatingField = variant === 5
+
+	const squareField = () => (
+		<Box
+			component="form"
+			onSubmit={submitSearch}
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: 1,
+				bgcolor: 'grey.100',
+				borderRadius: 2.5,
+				paddingX: 2,
+				paddingY: 1.75,
+				boxShadow: shadow,
+			}}
+		>
+			{plainIcon}
+			{textInput}
+		</Box>
+	)
 
 	return (
 		<Box
@@ -364,7 +342,7 @@ function DemoMobilePage() {
 					{recentSection}
 				</Box>
 
-				{/* ===== SEARCH: full-width square bar connected to the tab bar ===== */}
+				{/* ===== SEARCH: grey elevated field above the tab bar ===== */}
 				<Box
 					sx={{
 						position: 'fixed',
@@ -373,12 +351,18 @@ function DemoMobilePage() {
 						transform: 'translateX(-50%)',
 						width: '100%',
 						maxWidth: PAGE_MAX_WIDTH,
-						bgcolor: alpha(theme.palette.background.paper, 0.85),
-						backdropFilter: 'blur(12px)',
-						borderTop: '1px solid',
-						borderColor: 'grey.200',
-						paddingX: 2.5,
-						paddingY: 1.25,
+						// floating variant: transparent so the field detaches;
+						// others: a connected blurred bar joined to the tab bar
+						...(floatingField
+							? { paddingX: 2.5, paddingBottom: 1.5 }
+							: {
+									bgcolor: alpha(theme.palette.background.paper, 0.85),
+									backdropFilter: 'blur(12px)',
+									borderTop: '1px solid',
+									borderColor: 'grey.200',
+									paddingX: 2.5,
+									paddingY: 1.25,
+							  }),
 						boxSizing: 'border-box',
 						zIndex: 10,
 					}}
