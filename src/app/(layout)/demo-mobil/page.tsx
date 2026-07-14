@@ -13,6 +13,7 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
+	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
 	LibraryMusicOutlined,
@@ -37,17 +38,16 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 
-type DemoVariant = 1 | 2 | 3 | 4
+type DemoVariant = 1 | 2 | 3
 
 /**
  * Grey canvas + white cards for the picks (the liked G3 look). The recent
- * section stays QUIET; these variants refine the two liked directions —
- * the airy list and the chips:
+ * section stays a QUIET airy list (chips were dropped — they read like
+ * filter tags). Variants only fine-tune the list row:
  *
- * 1 — airy list with date: spaced muted rows, title + date
- * 2 — airy list, titles only: even cleaner, no dates
- * 3 — chips outlined: small bordered title chips that wrap
- * 4 — chips filled: soft grey filled chips, no border
+ * 1 — titles only: the quietest, just names
+ * 2 — title + date: a muted date on the right
+ * 3 — title + date + chevron: same, with a tap affordance
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -64,7 +64,7 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	const variant: DemoVariant = parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 1
+	const variant: DemoVariant = parsed >= 1 && parsed <= 3 ? (parsed as DemoVariant) : 2
 
 	// ---- header ------------------------------------------------------
 
@@ -147,37 +147,9 @@ function DemoMobilePage() {
 			))
 		}
 
-		// 3 & 4 — title chips (3 outlined, 4 soft filled)
-		if (variant === 3 || variant === 4) {
-			const filled = variant === 4
-			return (
-				<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-					{last.slice(0, 6).map((s) => (
-						<Clickable key={s.packGuid}>
-							<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-								<Box
-									sx={{
-										borderRadius: 10,
-										paddingX: 1.75,
-										paddingY: 0.75,
-										...(filled
-											? { bgcolor: 'grey.200' }
-											: { border: '1px solid', borderColor: 'grey.300' }),
-									}}
-								>
-									<Typography small color="grey.700" noWrap>
-										{s.title}
-									</Typography>
-								</Box>
-							</Link>
-						</Clickable>
-					))}
-				</Box>
-			)
-		}
-
-		// 1 & 2 — airy transparent rows (1 shows the date, 2 titles only)
-		const withDate = variant === 1
+		// airy transparent rows — 1 titles only, 2 + date, 3 + date + chevron
+		const withDate = variant !== 1
+		const withChevron = variant === 3
 		return (
 			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
 				{last.slice(0, 5).map((s) => (
@@ -192,6 +164,7 @@ function DemoMobilePage() {
 										{dateOf(s.publishedAt)}
 									</Typography>
 								)}
+								{withChevron && <ChevronRightRounded sx={{ color: 'grey.400' }} />}
 							</Box>
 						</Link>
 					</Clickable>
