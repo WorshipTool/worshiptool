@@ -64,8 +64,9 @@ function DemoMobilePage() {
 
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
+	// colorful thumbnail rows (2) is the picked default
 	const variant: DemoVariant =
-		parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 1
+		parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 2
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -131,7 +132,16 @@ function DemoMobilePage() {
 	)
 
 	const header = (
-		<Box sx={{ paddingX: 2.5, paddingTop: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+		<Box
+			sx={{
+				paddingX: 2.5,
+				// clear the device status bar (time/battery) + breathing room
+				paddingTop: 'calc(env(safe-area-inset-top) + 32px)',
+				display: 'flex',
+				justifyContent: 'space-between',
+				alignItems: 'end',
+			}}
+		>
 			<Box>
 				<Typography small color="grey.700">
 					{tHome('hero.lead')}
