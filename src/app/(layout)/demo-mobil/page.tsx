@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useTranslations } from 'next-intl'
-import { ReactNode, useState } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 import { BasicVariantPack } from '../../../api/dtos'
 
 export default SmartPage(DemoMobilePage, [
@@ -47,14 +47,15 @@ const DOCKED_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 172px)'
 type DemoVariant = 1 | 2 | 3 | 4 | 5
 
 /**
- * Five structurally different landing concepts (not recolors), all inside
- * the same native shell (bottom tab bar):
+ * Five native list/chat/index landings, all built ONLY from real data
+ * (recommended songs, recently added, search, browse-all) — no invented
+ * curation features. All share the bottom tab-bar shell.
  *
- * 1 — shelves: Spotify-style greeting + horizontal shelves of square art
- * 2 — grid: colorful mood-tile grid (big rounded cards)
- * 3 — editorial: a "song of the day" hero + compact idea list
- * 4 — chat: conversational assistant with suggestion chips + compose bar
- * 5 — index: utilitarian sticky-search list, dense and fast
+ * 1 — rich rows: two-line library rows with cover thumbnails, docked search
+ * 2 — chat chips: assistant greeting + tappable song suggestion chips
+ * 3 — chat list: assistant greeting + a song list inside a wide bubble
+ * 4 — dense index: text-only sectioned list, sticky search on top
+ * 5 — compact index: one-line thumbnail rows in sections, docked search
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -166,14 +167,25 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const greeting = (
-		<Box>
-			<Typography small color="grey.700">
-				{tHome('hero.lead')}
-			</Typography>
-			<Typography variant="h3" strong={800}>
-				{tHome('hero.title')}
-			</Typography>
+	const header = (
+		<Box
+			sx={{
+				paddingX: 2.5,
+				paddingTop: 3,
+				display: 'flex',
+				justifyContent: 'space-between',
+				alignItems: 'end',
+			}}
+		>
+			<Box>
+				<Typography small color="grey.700">
+					{tHome('hero.lead')}
+				</Typography>
+				<Typography variant="h3" strong={800}>
+					{tHome('hero.title')}
+				</Typography>
+			</Box>
+			{loginCircle}
 		</Box>
 	)
 
@@ -204,233 +216,157 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// ---- variant 1: Spotify-style shelves ----------------------------
+	const thumb = (i: number, size = 44) => (
+		<Box
+			sx={{
+				width: size,
+				height: size,
+				borderRadius: 2,
+				background: artFor(i),
+				color: 'common.white',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				flexShrink: 0,
+			}}
+		>
+			<MusicNoteRounded fontSize="small" />
+		</Box>
+	)
 
-	const shelfTile = (s: BasicVariantPack, i: number) => (
-		<Clickable key={s.packGuid}>
+	// one song row; subtitle optional, thumbnail optional
+	const songRow = (
+		s: BasicVariantPack,
+		i: number,
+		opts: { subtitle?: string; trailing?: ReactNode; showThumb?: boolean } = {}
+	) => (
+		<Clickable>
 			<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-				<Box sx={{ width: 132, display: 'flex', flexDirection: 'column', gap: 1 }}>
-					<Box
-						sx={{
-							width: 132,
-							height: 132,
-							borderRadius: 3,
-							background: artFor(i),
-							color: 'common.white',
-							display: 'flex',
-							alignItems: 'flex-end',
-							padding: 1.25,
-							boxShadow: 1,
-						}}
-					>
-						<MusicNoteRounded />
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1.25 }}>
+					{opts.showThumb && thumb(i)}
+					<Box sx={{ minWidth: 0, flex: 1 }}>
+						<Typography strong noWrap>
+							{s.title}
+						</Typography>
+						{opts.subtitle && (
+							<Typography small color="grey.700" noWrap>
+								{opts.subtitle}
+							</Typography>
+						)}
 					</Box>
-					<Typography strong noWrap sx={{ paddingX: 0.5 }}>
-						{s.title}
-					</Typography>
+					{opts.trailing}
+					<ChevronRightRounded sx={{ color: 'grey.400' }} />
 				</Box>
 			</Link>
 		</Clickable>
 	)
 
-	const shelf = (title: string, songs: BasicVariantPack[], offset = 0) => (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			<Box sx={{ paddingX: 2.5 }}>{label(title, browseAction)}</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					gap: 1.5,
-					overflowX: 'auto',
-					paddingX: 2.5,
-					paddingBottom: 0.5,
-					scrollSnapType: 'x mandatory',
-					'&::-webkit-scrollbar': { display: 'none' },
-				}}
-			>
+	const rowSkeletons = (n: number, h: number) =>
+		Array.from({ length: n }).map((_, i) => (
+			<Skeleton
+				key={i}
+				variant="rounded"
+				sx={{ height: h, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }}
+			/>
+		))
+
+	// a labelled list of song rows (dividers between)
+	const listSection = (
+		title: string,
+		songs: BasicVariantPack[],
+		opts: {
+			action?: ReactNode
+			offset?: number
+			showThumb?: boolean
+			subtitle?: (s: BasicVariantPack) => string
+			trailing?: (s: BasicVariantPack) => ReactNode
+			skeletonHeight?: number
+			count?: number
+		} = {}
+	) => (
+		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+			{label(title, opts.action)}
+			<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton
-								key={i}
-								variant="rounded"
-								sx={{ minWidth: 132, height: 164, borderRadius: 3, bgcolor: 'grey.200' }}
-							/>
-					  ))
-					: songs.slice(0, 8).map((s, i) => shelfTile(s, i + offset))}
+					? rowSkeletons(opts.count ?? 4, opts.skeletonHeight ?? 56)
+					: songs.slice(0, opts.count ?? 5).map((s, i, arr) => (
+							<Fragment key={s.packGuid}>
+								{songRow(s, i + (opts.offset ?? 0), {
+									showThumb: opts.showThumb,
+									subtitle: opts.subtitle?.(s),
+									trailing: opts.trailing?.(s),
+								})}
+								{i < arr.length - 1 && <Divider />}
+							</Fragment>
+					  ))}
 			</Box>
 		</Box>
 	)
 
-	const shelvesVariant = (
+	const dateChip = (s: BasicVariantPack) =>
+		s.publishedAt ? (
+			<Typography small color="grey.500" noWrap>
+				{getSmartDateAgoString(s.publishedAt)}
+			</Typography>
+		) : null
+
+	// ---- variant 1: rich two-line rows -------------------------------
+
+	const richVariant = (
 		<>
-			<Box sx={{ paddingX: 2.5, paddingTop: 3, paddingBottom: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-				<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-					{greeting}
-					{loginCircle}
-				</Box>
-				{searchPill}
-			</Box>
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingBottom: TAB_CLEARANCE }}>
-				{shelf(tHome('recommended.idea'), rec)}
-				{shelf(tHome('lastAdded.title'), last, 2)}
-			</Box>
-		</>
-	)
-
-	// ---- variant 2: colorful mood grid -------------------------------
-
-	const gridTile = (s: BasicVariantPack, i: number) => (
-		<Clickable key={s.packGuid}>
-			<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-				<Box
-					sx={{
-						height: 150,
-						borderRadius: 3,
-						background: artFor(i),
-						color: 'common.white',
-						padding: 1.75,
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'space-between',
-						boxShadow: 1,
-					}}
-				>
-					<Box
-						sx={{
-							width: 34,
-							height: 34,
-							borderRadius: 2,
-							bgcolor: alpha(theme.palette.common.white, 0.25),
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}
-					>
-						<MusicNoteRounded fontSize="small" />
-					</Box>
-					<Typography strong>{s.title}</Typography>
-				</Box>
-			</Link>
-		</Clickable>
-	)
-
-	const gridVariant = (
-		<>
-			<Box sx={{ paddingX: 2.5, paddingTop: 3, paddingBottom: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-				<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-					{greeting}
-					{loginCircle}
-				</Box>
-				{searchPill}
-			</Box>
-			<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5, paddingBottom: TAB_CLEARANCE }}>
-				{label(tHome('recommended.idea'))}
-				<Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-					{loading
-						? Array.from({ length: 6 }).map((_, i) => (
-								<Skeleton key={i} variant="rounded" sx={{ height: 150, borderRadius: 3, bgcolor: 'grey.200' }} />
-						  ))
-						: rec.slice(0, 6).map((s, i) => gridTile(s, i))}
-				</Box>
-			</Box>
-		</>
-	)
-
-	// ---- variant 3: editorial "song of the day" ----------------------
-
-	const feature = rec[0]
-	const editorialVariant = (
-		<>
-			<Box sx={{ paddingX: 2.5, paddingTop: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-				{greeting}
-				{loginCircle}
-			</Box>
+			{header}
 			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: DOCKED_CLEARANCE }}>
-				<Box sx={{ paddingX: 2.5 }}>
-					{loading || !feature ? (
-						<Skeleton variant="rounded" sx={{ height: 220, borderRadius: 4, bgcolor: 'grey.200' }} />
-					) : (
-						<Clickable>
-							<Link to="variant" params={parseVariantAlias(feature.packAlias)}>
-								<Box
-									sx={{
-										height: 220,
-										borderRadius: 4,
-										background: gradient,
-										color: 'common.white',
-										padding: 3,
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'space-between',
-										boxShadow: 3,
-									}}
-								>
-									<Typography small strong uppercase sx={{ opacity: 0.85 }}>
-										{tDemo('songOfDay')}
-									</Typography>
-									<Box>
-										<Typography variant="h4" strong={800}>
-											{feature.title}
-										</Typography>
-										<Typography sx={{ opacity: 0.9 }} noWrap>
-											{firstLine(feature.sheetData)}
-										</Typography>
-									</Box>
-								</Box>
-							</Link>
-						</Clickable>
-					)}
-				</Box>
-
-				<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
-					{label(tDemo('moreIdeas'), browseAction)}
-					<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-						{loading
-							? Array.from({ length: 4 }).map((_, i) => (
-									<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200', mb: 1 }} />
-							  ))
-							: rec.slice(1, 6).map((s, i, arr) => (
-									<Box key={s.packGuid}>
-										<Clickable>
-											<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-												<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1.25 }}>
-													<Box
-														sx={{
-															width: 44,
-															height: 44,
-															borderRadius: 2,
-															background: artFor(i + 1),
-															color: 'common.white',
-															display: 'flex',
-															alignItems: 'center',
-															justifyContent: 'center',
-															flexShrink: 0,
-														}}
-													>
-														<MusicNoteRounded fontSize="small" />
-													</Box>
-													<Box sx={{ minWidth: 0, flex: 1 }}>
-														<Typography strong noWrap>
-															{s.title}
-														</Typography>
-														<Typography small color="grey.700" noWrap>
-															{firstLine(s.sheetData)}
-														</Typography>
-													</Box>
-													<ChevronRightRounded sx={{ color: 'grey.500' }} />
-												</Box>
-											</Link>
-										</Clickable>
-										{i < arr.length - 1 && <Divider />}
-									</Box>
-							  ))}
-					</Box>
-				</Box>
+				{listSection(tHome('recommended.idea'), rec, {
+					action: browseAction,
+					showThumb: true,
+					subtitle: (s) => firstLine(s.sheetData),
+				})}
+				{listSection(tHome('lastAdded.title'), last, {
+					offset: 2,
+					showThumb: true,
+					subtitle: (s) => firstLine(s.sheetData),
+				})}
 			</Box>
 			<DockedSearch>{searchPill}</DockedSearch>
 		</>
 	)
 
-	// ---- variant 4: chat assistant -----------------------------------
+	// ---- variant 2 & 3: chat -----------------------------------------
+
+	const bubble = (children: ReactNode) => (
+		<Box
+			sx={{
+				alignSelf: 'flex-start',
+				maxWidth: '88%',
+				bgcolor: 'grey.100',
+				borderRadius: '4px 18px 18px 18px',
+				paddingX: 2,
+				paddingY: 1.25,
+			}}
+		>
+			{children}
+		</Box>
+	)
+
+	const assistantRow = (children: ReactNode) => (
+		<Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1 }}>
+			<Box
+				sx={{
+					width: 36,
+					height: 36,
+					borderRadius: 10,
+					bgcolor: 'grey.100',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					flexShrink: 0,
+				}}
+			>
+				<Image src={getAssetUrl('/sheeps/ovce3.svg')} alt="" width={26} height={26} />
+			</Box>
+			{children}
+		</Box>
+	)
 
 	const chatChip = (s: BasicVariantPack) => (
 		<Clickable key={s.packGuid}>
@@ -453,46 +389,54 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	const bubble = (children: ReactNode) => (
-		<Box
-			sx={{
-				alignSelf: 'flex-start',
-				maxWidth: '85%',
-				bgcolor: 'grey.100',
-				borderRadius: '4px 18px 18px 18px',
-				paddingX: 2,
-				paddingY: 1.25,
-			}}
-		>
-			{children}
-		</Box>
+	const composeBar = (
+		<DockedSearch>
+			<Box component="form" onSubmit={submitSearch} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+				<Box
+					sx={{
+						flex: 1,
+						display: 'flex',
+						alignItems: 'center',
+						gap: 1,
+						bgcolor: 'background.paper',
+						border: '1px solid',
+						borderColor: 'grey.300',
+						borderRadius: 10,
+						paddingX: 2,
+						paddingY: 1.5,
+						boxShadow: 2,
+					}}
+				>
+					{searchField}
+				</Box>
+				<Box
+					role="button"
+					aria-label={tSearch('searchByTitleOrText')}
+					onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
+					sx={{
+						width: 48,
+						height: 48,
+						borderRadius: 10,
+						background: gradient,
+						color: 'common.white',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						flexShrink: 0,
+						boxShadow: 3,
+					}}
+				>
+					<ArrowForwardRounded />
+				</Box>
+			</Box>
+		</DockedSearch>
 	)
 
-	const chatVariant = (
+	const chatChipsVariant = (
 		<>
-			<Box sx={{ paddingX: 2.5, paddingTop: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-				{greeting}
-				{loginCircle}
-			</Box>
+			{header}
 			<Box sx={{ paddingX: 2.5, paddingTop: 3, display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: DOCKED_CLEARANCE }}>
-				<Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1 }}>
-					<Box
-						sx={{
-							width: 36,
-							height: 36,
-							borderRadius: 10,
-							bgcolor: 'grey.100',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							flexShrink: 0,
-						}}
-					>
-						<Image src={getAssetUrl('/sheeps/ovce3.svg')} alt="" width={26} height={26} />
-					</Box>
-					{bubble(<Typography>{tDemo('assistantGreeting')}</Typography>)}
-				</Box>
-
+				{assistantRow(bubble(<Typography>{tDemo('assistantGreeting')}</Typography>))}
 				{bubble(
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 						<Typography small color="grey.700">
@@ -507,7 +451,6 @@ function DemoMobilePage() {
 						</Box>
 					</Box>
 				)}
-
 				{bubble(
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 						<Typography small color="grey.700">
@@ -519,66 +462,56 @@ function DemoMobilePage() {
 					</Box>
 				)}
 			</Box>
-
-			<DockedSearch>
-				<Box
-					component="form"
-					onSubmit={submitSearch}
-					sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-				>
-					<Box
-						sx={{
-							flex: 1,
-							display: 'flex',
-							alignItems: 'center',
-							gap: 1,
-							bgcolor: 'background.paper',
-							border: '1px solid',
-							borderColor: 'grey.300',
-							borderRadius: 10,
-							paddingX: 2,
-							paddingY: 1.5,
-							boxShadow: 2,
-						}}
-					>
-						{searchField}
-					</Box>
-					<Box
-						role="button"
-						aria-label={tSearch('searchByTitleOrText')}
-						onClick={() => query.trim() && navigate('home', { hledat: query.trim() })}
-						sx={{
-							width: 48,
-							height: 48,
-							borderRadius: 10,
-							background: gradient,
-							color: 'common.white',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							flexShrink: 0,
-							boxShadow: 3,
-						}}
-					>
-						<ArrowForwardRounded />
-					</Box>
-				</Box>
-			</DockedSearch>
+			{composeBar}
 		</>
 	)
 
-	// ---- variant 5: utilitarian index --------------------------------
+	const chatListVariant = (
+		<>
+			{header}
+			<Box sx={{ paddingX: 2.5, paddingTop: 3, display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: DOCKED_CLEARANCE }}>
+				{assistantRow(bubble(<Typography>{tDemo('assistantGreeting')}</Typography>))}
+				<Box
+					sx={{
+						alignSelf: 'flex-start',
+						width: '92%',
+						bgcolor: 'grey.100',
+						borderRadius: '4px 18px 18px 18px',
+						padding: 1,
+					}}
+				>
+					<Typography small color="grey.700" sx={{ paddingX: 1.5, paddingTop: 0.5 }}>
+						{tDemo('tryChips')}
+					</Typography>
+					<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+						{loading
+							? rowSkeletons(4, 48)
+							: rec.slice(0, 4).map((s, i, arr) => (
+									<Fragment key={s.packGuid}>
+										<Clickable>
+											<Link to="variant" params={parseVariantAlias(s.packAlias)}>
+												<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, padding: 1.5 }}>
+													{thumb(i, 40)}
+													<Typography strong noWrap sx={{ flex: 1 }}>
+														{s.title}
+													</Typography>
+													<ChevronRightRounded sx={{ color: 'grey.400' }} />
+												</Box>
+											</Link>
+										</Clickable>
+										{i < arr.length - 1 && <Divider sx={{ marginX: 1.5 }} />}
+									</Fragment>
+							  ))}
+					</Box>
+				</Box>
+			</Box>
+			{composeBar}
+		</>
+	)
 
-	const indexList = (() => {
-		const seen = new Set<string>()
-		return [...rec, ...last].filter((s) => {
-			if (seen.has(s.packGuid)) return false
-			seen.add(s.packGuid)
-			return true
-		})
-	})()
+	// ---- variant 4: dense text index, sticky search ------------------
 
-	const indexVariant = (
+	const stickyDenseVariant = (
 		<>
 			<Box
 				sx={{
@@ -597,7 +530,14 @@ function DemoMobilePage() {
 				}}
 			>
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-					{greeting}
+					<Box>
+						<Typography small color="grey.700">
+							{tHome('hero.lead')}
+						</Typography>
+						<Typography variant="h3" strong={800}>
+							{tHome('hero.title')}
+						</Typography>
+					</Box>
 					{loginCircle}
 				</Box>
 				<Box
@@ -616,34 +556,43 @@ function DemoMobilePage() {
 					{searchField}
 				</Box>
 			</Box>
-
-			<Box sx={{ paddingTop: 1.5, paddingBottom: TAB_CLEARANCE }}>
-				<Box sx={{ paddingX: 2.5, paddingBottom: 0.5 }}>{label(tDemo('browseAll'))}</Box>
-				{loading
-					? Array.from({ length: 8 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 44, borderRadius: 1, bgcolor: 'grey.200', mx: 2.5, mb: 1 }} />
-					  ))
-					: indexList.slice(0, 14).map((s, i, arr) => (
-							<Box key={s.packGuid} sx={{ paddingX: 2.5 }}>
-								<Clickable>
-									<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-										<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1.25 }}>
-											<Typography strong sx={{ flex: 1 }} noWrap>
-												{s.title}
-											</Typography>
-											{s.publishedAt && (
-												<Typography small color="grey.500" noWrap>
-													{getSmartDateAgoString(s.publishedAt)}
-												</Typography>
-											)}
-											<ChevronRightRounded sx={{ color: 'grey.400' }} />
-										</Box>
-									</Link>
-								</Clickable>
-								{i < arr.length - 1 && <Divider />}
-							</Box>
-					  ))}
+			<Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column', gap: 2.5, paddingBottom: TAB_CLEARANCE }}>
+				{listSection(tHome('recommended.idea'), rec, {
+					action: browseAction,
+					count: 5,
+					skeletonHeight: 44,
+				})}
+				{listSection(tHome('lastAdded.title'), last, {
+					offset: 2,
+					count: 5,
+					skeletonHeight: 44,
+					trailing: dateChip,
+				})}
 			</Box>
+		</>
+	)
+
+	// ---- variant 5: compact thumbnail index, docked search -----------
+
+	const compactVariant = (
+		<>
+			{header}
+			<Box sx={{ paddingTop: 2.5, display: 'flex', flexDirection: 'column', gap: 2.5, paddingBottom: DOCKED_CLEARANCE }}>
+				{listSection(tHome('recommended.idea'), rec, {
+					action: browseAction,
+					showThumb: true,
+					count: 5,
+					skeletonHeight: 48,
+				})}
+				{listSection(tHome('lastAdded.title'), last, {
+					offset: 2,
+					showThumb: true,
+					count: 5,
+					skeletonHeight: 48,
+					trailing: dateChip,
+				})}
+			</Box>
+			<DockedSearch>{searchPill}</DockedSearch>
 		</>
 	)
 
@@ -651,14 +600,14 @@ function DemoMobilePage() {
 
 	const body =
 		variant === 1
-			? shelvesVariant
+			? richVariant
 			: variant === 2
-			? gridVariant
+			? chatChipsVariant
 			: variant === 3
-			? editorialVariant
+			? chatListVariant
 			: variant === 4
-			? chatVariant
-			: indexVariant
+			? stickyDenseVariant
+			: compactVariant
 
 	return (
 		<Box
