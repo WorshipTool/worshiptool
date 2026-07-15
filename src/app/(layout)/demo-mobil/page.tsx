@@ -14,7 +14,6 @@ import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
-	ArrowForwardRounded,
 	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
@@ -45,14 +44,14 @@ type DemoVariant = 1 | 2 | 3 | 4
 
 /**
  * Grey canvas + white cards for the picks; the recent section is the quiet
- * airy list (subtle M1 look). The SEARCH is a white, mostly-squared field
- * with a short placeholder and a SMALL blue submit button so it stands out
- * without crowding the text — variants only tune that button:
+ * airy list (subtle M1 look). The SEARCH has NO button — instead a primary
+ * gradient border (same look as the desktop MainSearchInput) draws the eye,
+ * with the full placeholder. Variants tune the border + inner field:
  *
- * 1 — small squared blue button + arrow (default, matches the angular field)
- * 2 — small squared blue button + search icon
- * 3 — small circular blue button + arrow
- * 4 — sharp (barely-rounded) field + squared button
+ * 1 — thin gradient border, white inner field (default)
+ * 2 — thicker gradient border, white inner field
+ * 3 — thin gradient border, subtle grey inner field (matches desktop)
+ * 4 — thin gradient border, white inner field, primary-tinted search icon
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -185,11 +184,11 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- search: white, angular field + a SMALL blue submit button ---
+	// ---- search: no button, primary gradient border draws the eye ----
 
-	const roundButton = variant === 3 // 3 = circle button, others squared
-	const fieldRadius = variant === 4 ? 1 : 1.5 // 4 = sharper corners
-	const buttonIcon = variant === 2 ? <SearchRounded sx={{ fontSize: 18 }} /> : <ArrowForwardRounded sx={{ fontSize: 18 }} />
+	const borderThickness = variant === 2 ? '3px' : '2px'
+	const innerBg = variant === 3 ? 'grey.50' : 'background.paper'
+	const iconColor = variant === 4 ? 'primary.main' : 'grey.500'
 
 	const search = (
 		<Box
@@ -199,44 +198,28 @@ function DemoMobilePage() {
 				submit()
 			}}
 			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: 1,
-				bgcolor: 'background.paper',
-				border: '1px solid',
-				borderColor: 'grey.200',
-				borderRadius: fieldRadius,
+				background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+				borderRadius: 2,
+				padding: borderThickness,
 				boxShadow: 2,
-				paddingLeft: 1.75,
-				paddingRight: 0.75,
-				paddingY: 0.75,
-				minWidth: 0,
 			}}
 		>
-			<SearchRounded sx={{ color: 'grey.500', fontSize: 20 }} />
-			<Box sx={{ flex: 1, minWidth: 0 }}>
-				<TextField value={query} onChange={setQuery} placeholder={tSearch('searchSongs')} />
-			</Box>
 			<Box
-				role="button"
-				aria-label={tSearch('searchSongs')}
-				onClick={submit}
 				sx={{
-					width: 32,
-					height: 32,
-					flexShrink: 0,
-					borderRadius: roundButton ? 10 : 1,
-					bgcolor: 'primary.main',
-					color: 'common.white',
 					display: 'flex',
 					alignItems: 'center',
-					justifyContent: 'center',
-					cursor: 'pointer',
-					transition: 'background-color 0.15s',
-					'&:hover': { bgcolor: 'primary.dark' },
+					gap: 1,
+					bgcolor: innerBg,
+					borderRadius: 1.75,
+					paddingX: 1.75,
+					paddingY: 1.25,
+					minWidth: 0,
 				}}
 			>
-				{buttonIcon}
+				<SearchRounded sx={{ color: iconColor, fontSize: 20 }} />
+				<Box sx={{ flex: 1, minWidth: 0 }}>
+					<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
+				</Box>
 			</Box>
 		</Box>
 	)
