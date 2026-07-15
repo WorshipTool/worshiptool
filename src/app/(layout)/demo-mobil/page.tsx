@@ -42,12 +42,12 @@ type DemoVariant = 1 | 2 | 3
 
 /**
  * Grey canvas + white cards for the picks (the liked G3 look). The recent
- * section stays a QUIET airy list (chips were dropped — they read like
- * filter tags). Variants only fine-tune the list row:
+ * section is the L3 airy list (title + date + chevron). Variants only turn
+ * DOWN its prominence so it recedes further under the picks:
  *
- * 1 — titles only: the quietest, just names
- * 2 — title + date: a muted date on the right
- * 3 — title + date + chevron: same, with a tap affordance
+ * 1 — subtle: dark-grey titles
+ * 2 — muted: smaller, grey titles (default)
+ * 3 — faint: small thin light-grey titles, barely there
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -147,24 +147,23 @@ function DemoMobilePage() {
 			))
 		}
 
-		// airy transparent rows — 1 titles only, 2 + date, 3 + date + chevron
-		const withDate = variant !== 1
-		const withChevron = variant === 3
+		// airy list (title + date + chevron), dialled DOWN by mute level
+		const titleColor = variant === 1 ? 'grey.700' : variant === 2 ? 'grey.600' : 'grey.500'
+		const titleSmall = variant >= 2
+		const titleThin = variant === 3
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: variant === 1 ? 0.5 : 0.25 }}>
 				{last.slice(0, 5).map((s) => (
 					<Clickable key={s.packGuid}>
 						<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
-								<Typography color="grey.800" noWrap sx={{ flex: 1 }}>
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: variant === 1 ? 1 : 0.75 }}>
+								<Typography small={titleSmall} thin={titleThin} color={titleColor} noWrap sx={{ flex: 1 }}>
 									{s.title}
 								</Typography>
-								{withDate && (
-									<Typography small color="grey.500" noWrap>
-										{dateOf(s.publishedAt)}
-									</Typography>
-								)}
-								{withChevron && <ChevronRightRounded sx={{ color: 'grey.400' }} />}
+								<Typography small color="grey.400" noWrap>
+									{dateOf(s.publishedAt)}
+								</Typography>
+								<ChevronRightRounded fontSize="small" sx={{ color: 'grey.300' }} />
 							</Box>
 						</Link>
 					</Clickable>
