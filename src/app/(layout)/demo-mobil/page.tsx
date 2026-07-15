@@ -46,14 +46,14 @@ type DemoVariant = 1 | 2 | 3 | 4
  * Grey canvas + white cards for the picks; the recent section is the quiet
  * airy list (subtle M1 look). The SEARCH is buttonless with a primary
  * gradient border (desktop MainSearchInput look). The top of the page is a
- * soft WHITE → grey wash that reaches down INTO the (intact) picks section and
- * fades out behind the cards — no hard line dividing the section. Variants
- * tune how deep the white reaches and how gentle the fade is:
+ * WHITE region that reaches down INTO the (intact) picks section, softened so
+ * it doesn't cut the section with a hard line — WITHOUT a background gradient.
+ * Variants use different non-gradient softening techniques:
  *
- * 1 — fades out behind the first card (default)
- * 2 — reaches deeper, fades behind the second card
- * 3 — shorter, whiter — ends higher, just into the first card
- * 4 — very soft, long wash over the whole top
+ * 1 — blurred white panel, edge feathers behind the first card (default)
+ * 2 — blurred white panel, deeper — feathers behind the second card
+ * 3 — solid white sheet with rounded bottom + soft shadow (sheet look)
+ * 4 — solid white block, straight edge hidden behind the first card
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -222,15 +222,39 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- white → grey wash: reaches into the picks section, no hard line
+	// ---- white top reaching into the picks section — no gradient -----
 
-	const heroWhite = theme.palette.common.white
-	const heroGrey = theme.palette.grey[100]
-	// how deep the white reaches (px) + where the fade begins/ends (%)
-	const bgHeight = variant === 2 ? 360 : variant === 3 ? 220 : variant === 4 ? 400 : 280
-	const solidStop = variant === 4 ? 25 : variant === 3 ? 55 : variant === 2 ? 45 : 50
-	const greyStop = variant === 3 ? 92 : variant === 4 ? 100 : variant === 2 ? 85 : 80
-	const heroBg = `linear-gradient(to bottom, ${heroWhite} 0%, ${heroWhite} ${solidStop}%, ${heroGrey} ${greyStop}%)`
+	// non-gradient ways to soften where the white meets the grey canvas:
+	//   blur  = a blurred white panel whose bottom edge feathers into grey
+	//   sheet = a solid white sheet with rounded bottom + soft shadow
+	//   solid = a solid white block whose straight edge hides behind a card
+	const bgMode: 'blur' | 'sheet' | 'solid' = variant === 3 ? 'sheet' : variant === 4 ? 'solid' : 'blur'
+	const bgHeight = variant === 2 ? 360 : variant === 4 ? 185 : variant === 3 ? 300 : 260
+	const BG_BLEED = 48 // pushes the blurred panel's top/side feather off-screen
+
+	const backgroundLayer = (
+		<Box
+			sx={{
+				position: 'absolute',
+				top: bgMode === 'blur' ? `-${BG_BLEED}px` : 0,
+				left: bgMode === 'blur' ? `-${BG_BLEED}px` : 0,
+				right: bgMode === 'blur' ? `-${BG_BLEED}px` : 0,
+				height:
+					bgMode === 'blur'
+						? `calc(env(safe-area-inset-top) + ${bgHeight}px + ${BG_BLEED}px)`
+						: `calc(env(safe-area-inset-top) + ${bgHeight}px)`,
+				bgcolor: 'background.paper',
+				...(bgMode === 'blur' && { filter: 'blur(22px)' }),
+				...(bgMode === 'sheet' && {
+					borderBottomLeftRadius: 4,
+					borderBottomRightRadius: 4,
+					boxShadow: '0 8px 20px rgba(0,0,0,0.07)',
+				}),
+				zIndex: 0,
+				pointerEvents: 'none',
+			}}
+		/>
+	)
 
 	return (
 		<Box
@@ -256,21 +280,11 @@ function DemoMobilePage() {
 					flexDirection: 'column',
 					boxShadow: 3,
 					position: 'relative',
+					overflow: 'hidden', // clip the blurred panel's off-screen bleed
 				}}
 			>
-				{/* white → grey wash behind the top; fades out inside the picks section */}
-				<Box
-					sx={{
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						right: 0,
-						height: `calc(env(safe-area-inset-top) + ${bgHeight}px)`,
-						background: heroBg,
-						zIndex: 0,
-						pointerEvents: 'none',
-					}}
-				/>
+				{/* white top behind the header + into the picks section (no gradient) */}
+				{backgroundLayer}
 				<Box sx={{ position: 'relative', zIndex: 1 }}>
 					{header}
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
