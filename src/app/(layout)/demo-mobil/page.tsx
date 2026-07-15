@@ -1,7 +1,6 @@
 'use client'
 
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
-import MainSearchInput from '@/app/components/components/MainSearchInput'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
@@ -9,10 +8,13 @@ import { alpha } from '@/common/ui/mui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
+import { TextField } from '@/common/ui/TextField'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useSmartParams } from '@/routes/useSmartParams'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
+	ArrowForwardRounded,
 	ChevronRightRounded,
 	HomeOutlined,
 	HomeRounded,
@@ -21,6 +23,7 @@ import {
 	LoginRounded,
 	PersonOutlineRounded,
 	PersonRounded,
+	SearchRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useState } from 'react'
@@ -38,21 +41,23 @@ const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
 const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 
-type DemoVariant = 1 | 2 | 3
+type DemoVariant = 1 | 2 | 3 | 4
 
 /**
- * Grey canvas + white cards for the picks (the liked G3 look). The recent
- * section is the L3 airy list (title + date + chevron). Variants only turn
- * DOWN its prominence so it recedes further under the picks:
+ * Grey canvas + white cards for the picks; the recent section is the quiet
+ * airy list (subtle M1 look). The SEARCH now has a blue submit button built
+ * into the field so it stands out — variants tune that button:
  *
- * 1 — subtle: dark-grey titles
- * 2 — muted: smaller, grey titles (default)
- * 3 — faint: small thin light-grey titles, barely there
+ * 1 — blue square button, grey elevated field (default)
+ * 2 — blue square button, white bordered field
+ * 3 — blue rounded "D" cap on a pill field
+ * 4 — blue button with a "HLEDAT" label
  */
 function DemoMobilePage() {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
 	const tNav = useTranslations('navigation')
+	const tSearch = useTranslations('search')
 
 	const [query, setQuery] = useState('')
 
@@ -62,9 +67,12 @@ function DemoMobilePage() {
 	const last = lastAdded.data
 	const loading = recommended.isLoading || lastAdded.isLoading
 
+	const navigate = useSmartNavigate()
 	const { v } = useSmartParams('demoMobile')
 	const parsed = Number(v)
-	const variant: DemoVariant = parsed >= 1 && parsed <= 3 ? (parsed as DemoVariant) : 2
+	const variant: DemoVariant = parsed >= 1 && parsed <= 4 ? (parsed as DemoVariant) : 1
+
+	const submit = () => query.trim() && navigate('home', { hledat: query.trim() })
 
 	// ---- header ------------------------------------------------------
 
@@ -147,17 +155,14 @@ function DemoMobilePage() {
 			))
 		}
 
-		// airy list (title + date + chevron), dialled DOWN by mute level
-		const titleColor = variant === 1 ? 'grey.700' : variant === 2 ? 'grey.600' : 'grey.500'
-		const titleSmall = variant >= 2
-		const titleThin = variant === 3
+		// quiet airy list (M1): dark-grey titles + muted date + faint chevron
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: variant === 1 ? 0.5 : 0.25 }}>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
 				{last.slice(0, 5).map((s) => (
 					<Clickable key={s.packGuid}>
 						<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: variant === 1 ? 1 : 0.75 }}>
-								<Typography small={titleSmall} thin={titleThin} color={titleColor} noWrap sx={{ flex: 1 }}>
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
+								<Typography color="grey.700" noWrap sx={{ flex: 1 }}>
 									{s.title}
 								</Typography>
 								<Typography small color="grey.400" noWrap>
@@ -179,10 +184,59 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- search ------------------------------------------------------
+	// ---- search: field with a blue submit button built in ------------
+
+	const pill = variant === 3
+	const withLabel = variant === 4
+	const outlined = variant === 2
 
 	const search = (
-		<MainSearchInput gradientBorder={false} value={query} onChange={setQuery} autoFocus={false} />
+		<Box
+			component="form"
+			onSubmit={(e) => {
+				e.preventDefault()
+				submit()
+			}}
+			sx={{
+				display: 'flex',
+				alignItems: 'stretch',
+				bgcolor: outlined ? 'background.paper' : 'grey.100',
+				...(outlined && { border: '1px solid', borderColor: 'grey.300' }),
+				borderRadius: pill ? 10 : 2.5,
+				overflow: 'hidden',
+				boxShadow: 2,
+			}}
+		>
+			<Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1, paddingLeft: 2, paddingY: 1.5, minWidth: 0 }}>
+				<SearchRounded sx={{ color: 'grey.600' }} />
+				<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
+			</Box>
+			<Box
+				role="button"
+				aria-label={tSearch('searchByTitleOrText')}
+				onClick={submit}
+				sx={{
+					bgcolor: 'primary.main',
+					color: 'common.white',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					gap: 0.75,
+					paddingX: withLabel ? 2.25 : 2.5,
+					cursor: 'pointer',
+					flexShrink: 0,
+					transition: 'background-color 0.15s',
+					'&:hover': { bgcolor: 'primary.dark' },
+				}}
+			>
+				<ArrowForwardRounded fontSize="small" />
+				{withLabel && (
+					<Typography small strong uppercase color="common.white">
+						{tNav('search')}
+					</Typography>
+				)}
+			</Box>
+		</Box>
 	)
 
 	return (
