@@ -140,7 +140,7 @@ function DemoMobilePage() {
 							<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
 					  ))
 					: rec.slice(0, 5).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1 }} />
+							<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
 					  ))}
 			</Box>
 		</Box>
