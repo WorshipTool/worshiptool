@@ -1,7 +1,9 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
+import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import React, { useEffect, useMemo } from 'react'
 
 // type of dict or null for every option
@@ -22,6 +24,8 @@ export type SmartPageOptions = Nullable<{
 	middleWidth: boolean
 	topPadding: boolean
 	containLayout: boolean
+	/** App page: hide the top bar on mobile and show the bottom tab bar instead */
+	mobileTabBar: boolean
 }>
 
 const MIDDLE_WIDTH = 900
@@ -48,6 +52,7 @@ export const SmartPageInnerProvider = ({
 			middleWidth: false,
 			topPadding: false,
 			containLayout: false,
+			mobileTabBar: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -55,6 +60,8 @@ export const SmartPageInnerProvider = ({
 
 	const toolbar = useToolbar()
 	const footer = useFooter()
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
 
 	useEffect(() => {
 		if (options.transparentToolbar !== null)
@@ -74,7 +81,15 @@ export const SmartPageInnerProvider = ({
 
 		if (options.hideFooter !== null) footer.setShow(!options.hideFooter)
 	}, [options])
-	const theme = useTheme()
+
+	// App pages replace the top bar with the bottom tab bar on phones. Kept in a
+	// separate effect (runs after the options one) so it wins the setHidden race,
+	// and restored on leave so other pages get their top bar back.
+	useEffect(() => {
+		if (!options.mobileTabBar) return
+		toolbar.setHidden(phoneVersion)
+		return () => toolbar.setHidden(false)
+	}, [options.mobileTabBar, phoneVersion])
 
 	return (
 		<Box
@@ -105,9 +120,19 @@ export const SmartPageInnerProvider = ({
 							contain: 'layout',
 					  }
 					: {}),
+
+				// clear the fixed bottom tab bar on phones
+				...(options.mobileTabBar
+					? {
+							[theme.breakpoints.down(700)]: {
+								paddingBottom: 'calc(env(safe-area-inset-bottom) + 72px)',
+							},
+					  }
+					: {}),
 			}}
 		>
 			{children}
+			{options.mobileTabBar && <MobileAppTabBar />}
 		</Box>
 	)
 }

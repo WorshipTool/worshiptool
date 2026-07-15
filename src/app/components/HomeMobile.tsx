@@ -3,8 +3,8 @@
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
+import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
-import { alpha } from '@/common/ui/mui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
@@ -16,17 +16,7 @@ import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SearchKey } from '@/types/song/search.types'
-import {
-	ChevronRightRounded,
-	HomeOutlined,
-	HomeRounded,
-	LibraryMusicOutlined,
-	LibraryMusicRounded,
-	LoginRounded,
-	PersonOutlineRounded,
-	PersonRounded,
-	SearchRounded,
-} from '@mui/icons-material'
+import { ChevronRightRounded, LoginRounded, PersonRounded, SearchRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -301,53 +291,8 @@ export default function HomeMobile({
 				</Box>
 
 				{/* ===================== BOTTOM TAB BAR ===================== */}
-				<Box
-					sx={{
-						position: 'fixed',
-						bottom: 0,
-						left: '50%',
-						transform: 'translateX(-50%)',
-						width: '100%',
-						maxWidth: PAGE_MAX_WIDTH,
-						background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-						display: 'flex',
-						paddingBottom: 'env(safe-area-inset-bottom)',
-						zIndex: 10,
-					}}
-				>
-					<Link to="home" params={{ hledat: undefined }} style={{ flex: 1 }}>
-						<TabItem icon={<HomeOutlined />} activeIcon={<HomeRounded />} label={tNav('home')} active />
-					</Link>
-					<Link to="songsList" params={{ s: undefined }} style={{ flex: 1 }}>
-						<TabItem icon={<LibraryMusicOutlined />} activeIcon={<LibraryMusicRounded />} label={tNav('songs')} />
-					</Link>
-					<Link to={loggedIn ? 'account' : 'login'} params={loggedIn ? {} : { previousPage: '', message: '' }} style={{ flex: 1 }}>
-						<TabItem icon={<PersonOutlineRounded />} activeIcon={<PersonRounded />} label={tNav('account')} />
-					</Link>
-				</Box>
+				<MobileAppTabBar />
 			</Box>
-		</Box>
-	)
-}
-
-type TabItemProps = {
-	icon: JSX.Element
-	activeIcon?: JSX.Element
-	label: string
-	active?: boolean
-}
-
-// Tab item for the blue (primary-gradient) bottom bar: white icon/label,
-// dimmed when inactive.
-function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
-	const theme = useTheme()
-	const color = active ? theme.palette.common.white : alpha(theme.palette.common.white, 0.72)
-	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.25, paddingY: 1, color }}>
-			{active ? activeIcon ?? icon : icon}
-			<Typography small strong={active ? 700 : 400}>
-				{label}
-			</Typography>
 		</Box>
 	)
 }
