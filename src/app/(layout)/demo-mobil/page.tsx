@@ -45,14 +45,15 @@ type DemoVariant = 1 | 2 | 3 | 4
 /**
  * Grey canvas + white cards for the picks; the recent section is the quiet
  * airy list (subtle M1 look). The SEARCH is buttonless with a primary
- * gradient border (desktop MainSearchInput look). A WHITE hero zone wraps the
- * header + the "some idea" label and ends just past it, so the white cards
- * below read as floating on the grey canvas. Variants tune that white zone:
+ * gradient border (desktop MainSearchInput look). The top of the page is a
+ * soft WHITE → grey wash that reaches down INTO the (intact) picks section and
+ * fades out behind the cards — no hard line dividing the section. Variants
+ * tune how deep the white reaches and how gentle the fade is:
  *
- * 1 — straight edge, ends just past the label (default)
- * 2 — rounded bottom corners (sheet look)
- * 3 — extends further down, toward the first card
- * 4 — straight edge with a soft drop shadow under the white zone
+ * 1 — fades out behind the first card (default)
+ * 2 — reaches deeper, fades behind the second card
+ * 3 — shorter, whiter — ends higher, just into the first card
+ * 4 — very soft, long wash over the whole top
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -128,19 +129,20 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// ---- picks: label lives in the white hero, cards float on grey ---
+	// ---- picks: one section (label + cards) as before ----------------
 
-	const picksLabel = <Box sx={{ paddingX: 2.5 }}>{label(tHome('recommended.idea'), browseAction)}</Box>
-
-	const picksCards = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
-			{loading
-				? Array.from({ length: 4 }).map((_, i) => (
-						<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
-				  ))
-				: rec.slice(0, 5).map((s) => (
-						<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1 }} />
-				  ))}
+	const picks = (
+		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+			{label(tHome('recommended.idea'), browseAction)}
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+				{loading
+					? Array.from({ length: 4 }).map((_, i) => (
+							<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
+					  ))
+					: rec.slice(0, 5).map((s) => (
+							<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1 }} />
+					  ))}
+			</Box>
 		</Box>
 	)
 
@@ -220,27 +222,15 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- white hero zone: wraps the header + label, ends past it ------
+	// ---- white → grey wash: reaches into the picks section, no hard line
 
-	const heroRounded = variant === 2 // rounded bottom corners (sheet look)
-	const heroPadBottom = variant === 3 ? 3 : 1.5 // 3 = white extends further down
-	const heroShadow = variant === 4 // soft drop shadow under the white zone
-
-	const hero = (
-		<Box
-			sx={{
-				bgcolor: 'background.paper',
-				paddingBottom: heroPadBottom,
-				...(heroRounded && { borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }),
-				...(heroShadow && { boxShadow: '0 6px 14px rgba(0,0,0,0.06)' }),
-				position: 'relative',
-				zIndex: 1,
-			}}
-		>
-			{header}
-			<Box sx={{ paddingTop: 1 }}>{picksLabel}</Box>
-		</Box>
-	)
+	const heroWhite = theme.palette.common.white
+	const heroGrey = theme.palette.grey[100]
+	// how deep the white reaches (px) + where the fade begins/ends (%)
+	const bgHeight = variant === 2 ? 360 : variant === 3 ? 220 : variant === 4 ? 400 : 280
+	const solidStop = variant === 4 ? 25 : variant === 3 ? 55 : variant === 2 ? 45 : 50
+	const greyStop = variant === 3 ? 92 : variant === 4 ? 100 : variant === 2 ? 85 : 80
+	const heroBg = `linear-gradient(to bottom, ${heroWhite} 0%, ${heroWhite} ${solidStop}%, ${heroGrey} ${greyStop}%)`
 
 	return (
 		<Box
@@ -268,10 +258,25 @@ function DemoMobilePage() {
 					position: 'relative',
 				}}
 			>
-				{hero}
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 1.5, paddingBottom: CONTENT_CLEARANCE }}>
-					{picksCards}
-					{recent}
+				{/* white → grey wash behind the top; fades out inside the picks section */}
+				<Box
+					sx={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						height: `calc(env(safe-area-inset-top) + ${bgHeight}px)`,
+						background: heroBg,
+						zIndex: 0,
+						pointerEvents: 'none',
+					}}
+				/>
+				<Box sx={{ position: 'relative', zIndex: 1 }}>
+					{header}
+					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
+						{picks}
+						{recent}
+					</Box>
 				</Box>
 
 				{/* ===== SEARCH: floating above the tab bar (thumb zone) ===== */}
