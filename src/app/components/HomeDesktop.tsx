@@ -20,6 +20,7 @@ import ContainerGrid, {
 	containerMaxWidth,
 } from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
+import HomeMobile from './HomeMobile'
 import SearchedSongsList from './components/SearchedSongsList'
 
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
@@ -90,6 +91,12 @@ export default function HomeDesktop() {
 	const footer = useFooter()
 
 	useEffect(() => {
+		// mobile home runs its own shell (bottom tab bar + docked search), so the
+		// top toolbar is hidden here and restored when leaving the mobile home
+		if (phoneVersion) {
+			toolbar.setHidden(true)
+			return () => toolbar.setHidden(false)
+		}
 		toolbar.setTransparent(isTop)
 		toolbar.setHideMiddleNavigation(!isTop)
 		toolbar.setShowTitle(!isTop)
@@ -127,120 +134,52 @@ export default function HomeDesktop() {
 	const heroLead = tHome('hero.lead')
 	const heroTitle = tHome('hero.title')
 	const heroSubtitle = tHome('hero.subtitle')
-	const heroSubtitleLower = tHome('hero.subtitleLower')
 	return (
 		<>
-			<Box
-				sx={{
-					position: 'fixed',
-					top: isTop ? (phoneVersion ? '20vh' : '38vh') : '-100%',
-					right: isTop ? 0 : '-100%',
-					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
-					zIndex: -1,
-					pointerEvents: 'none',
-					transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
-					width: shapeSizeString,
-					height: shapeSizeString,
-				}}
-			>
-				<Image
-					src={getAssetUrl('/gradient-shapes/shape1.svg')}
-					alt={tHome('backgroundShape')}
-					fill
-					priority
-					sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
-					style={{
-						filter: 'brightness(1)',
-					}}
-				/>
-				<Image
-					src={getAssetUrl('/gradient-shapes/shape2.svg')}
-					alt={tHome('backgroundShape')}
-					fill
-					priority
-					sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
-					style={{
-						filter: 'brightness(1.1)',
-					}}
-				/>
-			</Box>
-
-			{phoneVersion ? (
+			{!phoneVersion && (
 				<Box
 					sx={{
-						flex: 1,
-						display: 'flex',
-						flexDirection: 'column',
-						position: 'relative',
-						paddingX: 2,
-						paddingTop: 2,
+						position: 'fixed',
+						top: isTop ? '38vh' : '-100%',
+						right: isTop ? 0 : '-100%',
+						transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
+						zIndex: -1,
+						pointerEvents: 'none',
+						transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
+						width: shapeSizeString,
+						height: shapeSizeString,
 					}}
 				>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							paddingBottom: 2,
+					<Image
+						src={getAssetUrl('/gradient-shapes/shape1.svg')}
+						alt={tHome('backgroundShape')}
+						fill
+						priority
+						sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
+						style={{
+							filter: 'brightness(1)',
 						}}
-					>
-						<Typography variant="h4" strong={200}>
-							{heroLead}
-						</Typography>
-						<Typography variant="h3" strong={900} noWrap>
-							{heroTitle}
-						</Typography>
-
-						{useWorshipVersion && (
-							<Typography variant="h4" strong={200} noWrap>
-								{heroSubtitleLower}
-							</Typography>
-						)}
-					</Box>
-
-					<Box
-						sx={{
-							position: 'sticky',
-							// 56px = Toolbar height (TopBar in Toolbar.tsx)
-							top: theme.spacing(7),
-							zIndex: 2,
+					/>
+					<Image
+						src={getAssetUrl('/gradient-shapes/shape2.svg')}
+						alt={tHome('backgroundShape')}
+						fill
+						priority
+						sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
+						style={{
+							filter: 'brightness(1.1)',
 						}}
-					>
-						<MainSearchInput
-							gradientBorder={isTop}
-							autoFocus={false}
-							value={searchInputValue}
-							onChange={onSearchValueChange}
-							smartSearch={smartSearch ?? false}
-							onSmartSearchChange={setSmartSearch}
-						/>
-					</Box>
-
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							paddingTop: 3,
-						}}
-					>
-						{searchString && (
-							<SearchedSongsList
-								searchString={searchString}
-								useSmartSearch={smartSearch ?? false}
-								dense
-							/>
-						)}
-						<RecommendedSongsList dense />
-						<Box
-							sx={{
-								paddingTop: 14,
-								paddingBottom: 4,
-							}}
-						>
-							<RightSheepPanel mobileVersion />
-						</Box>
-					</Box>
+					/>
 				</Box>
+			)}
+
+			{phoneVersion ? (
+				<HomeMobile
+					searchInputValue={searchInputValue}
+					onSearchValueChange={onSearchValueChange}
+					searchString={searchString}
+					smartSearch={smartSearch ?? false}
+				/>
 			) : (
 				<Box
 					sx={{
