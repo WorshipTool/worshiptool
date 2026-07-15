@@ -44,14 +44,15 @@ type DemoVariant = 1 | 2 | 3 | 4
 
 /**
  * Grey canvas + white cards for the picks; the recent section is the quiet
- * airy list (subtle M1 look). The SEARCH has NO button — instead a primary
- * gradient border (same look as the desktop MainSearchInput) draws the eye,
- * with the full placeholder. Variants tune the border + inner field:
+ * airy list (subtle M1 look). The SEARCH is buttonless with a primary
+ * gradient border (desktop MainSearchInput look). A WHITE hero zone wraps the
+ * header + the "some idea" label and ends just past it, so the white cards
+ * below read as floating on the grey canvas. Variants tune that white zone:
  *
- * 1 — thin gradient border, white inner field (default)
- * 2 — thicker gradient border, white inner field
- * 3 — thin gradient border, subtle grey inner field (matches desktop)
- * 4 — thin gradient border, white inner field, primary-tinted search icon
+ * 1 — straight edge, ends just past the label (default)
+ * 2 — rounded bottom corners (sheet look)
+ * 3 — extends further down, toward the first card
+ * 4 — straight edge with a soft drop shadow under the white zone
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -99,7 +100,7 @@ function DemoMobilePage() {
 				<Link to="login" params={{ previousPage: '', message: '' }}>
 					<Box
 						aria-label={tNav('login')}
-						sx={{ width: 42, height: 42, borderRadius: 10, bgcolor: 'background.paper', color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 1 }}
+						sx={{ width: 42, height: 42, borderRadius: 10, bgcolor: 'grey.100', color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 					>
 						<LoginRounded fontSize="small" />
 					</Box>
@@ -127,20 +128,19 @@ function DemoMobilePage() {
 		</Clickable>
 	)
 
-	// ---- picks: white cards on the grey canvas -----------------------
+	// ---- picks: label lives in the white hero, cards float on grey ---
 
-	const picks = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			{label(tHome('recommended.idea'), browseAction)}
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
-					  ))
-					: rec.slice(0, 5).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1 }} />
-					  ))}
-			</Box>
+	const picksLabel = <Box sx={{ paddingX: 2.5 }}>{label(tHome('recommended.idea'), browseAction)}</Box>
+
+	const picksCards = (
+		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+			{loading
+				? Array.from({ length: 4 }).map((_, i) => (
+						<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
+				  ))
+				: rec.slice(0, 5).map((s) => (
+						<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1 }} />
+				  ))}
 		</Box>
 	)
 
@@ -186,10 +186,6 @@ function DemoMobilePage() {
 
 	// ---- search: no button, primary gradient border draws the eye ----
 
-	const borderThickness = variant === 2 ? '3px' : '2px'
-	const innerBg = variant === 3 ? 'grey.50' : 'background.paper'
-	const iconColor = variant === 4 ? 'primary.main' : 'grey.500'
-
 	const search = (
 		<Box
 			component="form"
@@ -200,7 +196,7 @@ function DemoMobilePage() {
 			sx={{
 				background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
 				borderRadius: 2,
-				padding: borderThickness,
+				padding: '2px',
 				boxShadow: 2,
 			}}
 		>
@@ -209,18 +205,40 @@ function DemoMobilePage() {
 					display: 'flex',
 					alignItems: 'center',
 					gap: 1,
-					bgcolor: innerBg,
+					bgcolor: 'background.paper',
 					borderRadius: 1.75,
 					paddingX: 1.75,
 					paddingY: 1.25,
 					minWidth: 0,
 				}}
 			>
-				<SearchRounded sx={{ color: iconColor, fontSize: 20 }} />
+				<SearchRounded sx={{ color: 'grey.500', fontSize: 20 }} />
 				<Box sx={{ flex: 1, minWidth: 0 }}>
 					<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
 				</Box>
 			</Box>
+		</Box>
+	)
+
+	// ---- white hero zone: wraps the header + label, ends past it ------
+
+	const heroRounded = variant === 2 // rounded bottom corners (sheet look)
+	const heroPadBottom = variant === 3 ? 3 : 1.5 // 3 = white extends further down
+	const heroShadow = variant === 4 // soft drop shadow under the white zone
+
+	const hero = (
+		<Box
+			sx={{
+				bgcolor: 'background.paper',
+				paddingBottom: heroPadBottom,
+				...(heroRounded && { borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }),
+				...(heroShadow && { boxShadow: '0 6px 14px rgba(0,0,0,0.06)' }),
+				position: 'relative',
+				zIndex: 1,
+			}}
+		>
+			{header}
+			<Box sx={{ paddingTop: 1 }}>{picksLabel}</Box>
 		</Box>
 	)
 
@@ -250,9 +268,9 @@ function DemoMobilePage() {
 					position: 'relative',
 				}}
 			>
-				{header}
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2.5, paddingBottom: CONTENT_CLEARANCE }}>
-					{picks}
+				{hero}
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 1.5, paddingBottom: CONTENT_CLEARANCE }}>
+					{picksCards}
 					{recent}
 				</Box>
 
