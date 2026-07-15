@@ -16,6 +16,10 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 const PAGE_MAX_WIDTH = 480
+/** Width below which the mobile tab bar shows (and the top bar hides). */
+export const MOBILE_NAV_BREAKPOINT = 700
+/** Bottom clearance pages need so their content isn't hidden by the fixed bar. */
+export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 72px)'
 
 type ActiveTab = 'home' | 'songs' | 'account' | null
 
@@ -53,7 +57,7 @@ export default function MobileAppTabBar() {
 				display: 'flex',
 				paddingBottom: 'env(safe-area-inset-bottom)',
 				zIndex: 10,
-				[theme.breakpoints.up(700)]: { display: 'none' },
+				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
 			<Link to="home" params={{ hledat: undefined }} style={{ flex: 1 }}>

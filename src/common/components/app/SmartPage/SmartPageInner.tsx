@@ -1,6 +1,9 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
-import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+import MobileAppTabBar, {
+	MOBILE_NAV_BREAKPOINT,
+	MOBILE_NAV_CLEARANCE,
+} from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
@@ -61,7 +64,7 @@ export const SmartPageInnerProvider = ({
 	const toolbar = useToolbar()
 	const footer = useFooter()
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	useEffect(() => {
 		if (options.transparentToolbar !== null)
@@ -124,8 +127,8 @@ export const SmartPageInnerProvider = ({
 				// clear the fixed bottom tab bar on phones
 				...(options.mobileTabBar
 					? {
-							[theme.breakpoints.down(700)]: {
-								paddingBottom: 'calc(env(safe-area-inset-bottom) + 72px)',
+							[theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: {
+								paddingBottom: MOBILE_NAV_CLEARANCE,
 							},
 					  }
 					: {}),

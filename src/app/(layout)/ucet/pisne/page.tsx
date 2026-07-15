@@ -17,7 +17,7 @@ import { useMemo, useState } from 'react'
 import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
 import { useApi } from '../../../../api/tech-and-hooks/useApi'
 
-export default SmartPage(MySongsList, ['middleWidth'])
+export default SmartPage(MySongsList, ['middleWidth', 'mobileTabBar'])
 
 function MySongsList() {
 	const { songGettingApi } = useApi()

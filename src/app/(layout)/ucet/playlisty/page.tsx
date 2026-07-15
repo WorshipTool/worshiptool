@@ -14,7 +14,7 @@ import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useMemo, useState } from 'react'
 
-export default SmartPage(Playlists, ['middleWidth'])
+export default SmartPage(Playlists, ['middleWidth', 'mobileTabBar'])
 
 function Playlists() {
 	const { playlists: allPlaylists, loading } = useUsersPlaylists()
