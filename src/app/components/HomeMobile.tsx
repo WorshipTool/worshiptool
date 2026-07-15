@@ -9,6 +9,10 @@ import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
 import { TextField } from '@/common/ui/TextField'
 import useAuth from '@/hooks/auth/useAuth'
+import { useUrlState } from '@/hooks/urlstate/useUrlState'
+import useSongSearch from '@/hooks/song/useSongSearch'
+import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
+import { SearchKey } from '@/types/song/search.types'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import {
@@ -23,7 +27,8 @@ import {
 	SearchRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import MainSearchInput from './components/MainSearchInput'
 import SearchedSongsList from './components/SearchedSongsList'
 
 const PAGE_MAX_WIDTH = 480
@@ -69,6 +74,14 @@ export default function HomeMobile({
 
 	const loggedIn = isLoggedIn()
 	const searching = searchInputValue.trim().length > 0
+
+	// temporary variant switches (remove once a look is chosen):
+	//   ?sf= search field   1 = white gradient-border (default) · 2 = house MainSearchInput
+	//   ?sr= search results 1 = shared list (default) · 2 = white cards · 3 = quiet list
+	const [sfParam] = useUrlState('sf')
+	const [srParam] = useUrlState('sr')
+	const sf = Number(sfParam) === 2 ? 2 : 1
+	const sr = Number(srParam) === 2 ? 2 : Number(srParam) === 3 ? 3 : 1
 
 	// ---- header ------------------------------------------------------
 
@@ -190,14 +203,18 @@ export default function HomeMobile({
 	const results = (
 		<Box sx={{ paddingX: 2.5 }}>
 			{searchString ? (
-				<SearchedSongsList searchString={searchString} useSmartSearch={smartSearch} dense />
+				sr === 1 ? (
+					<SearchedSongsList searchString={searchString} useSmartSearch={smartSearch} dense />
+				) : (
+					<MobileSearchResults searchString={searchString} smartSearch={smartSearch} variant={sr === 2 ? 'cards' : 'list'} />
+				)
 			) : null}
 		</Box>
 	)
 
 	// ---- docked search: buttonless field with a primary gradient border
 
-	const search = (
+	const handmadeSearch = (
 		<Box
 			component="form"
 			onSubmit={(e) => {
@@ -230,6 +247,15 @@ export default function HomeMobile({
 			</Box>
 		</Box>
 	)
+
+	const search =
+		sf === 2 ? (
+			<Box sx={{ boxShadow: 2, borderRadius: '0.6rem' }}>
+				<MainSearchInput gradientBorder value={searchInputValue} onChange={onSearchValueChange} autoFocus={false} smartSearch={smartSearch} />
+			</Box>
+		) : (
+			handmadeSearch
+		)
 
 	const heroBg = `linear-gradient(to bottom, ${theme.palette.common.white} 0%, ${theme.palette.common.white} ${WASH_SOLID_STOP}%, ${theme.palette.grey[100]} ${WASH_GREY_STOP}%)`
 
@@ -350,6 +376,86 @@ function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 			<Typography small strong={active ? 700 : 400}>
 				{label}
 			</Typography>
+		</Box>
+	)
+}
+
+/**
+ * Variant renderer for the search results so we can compare looks:
+ *  - 'cards' — white floating cards, matching the recommended picks
+ *  - 'list'  — a quiet title-only list with dividers
+ * (variant 'shared' keeps the existing SearchedSongsList; handled by the caller)
+ */
+function MobileSearchResults({
+	searchString,
+	smartSearch,
+	variant,
+}: {
+	searchString: string
+	smartSearch: boolean
+	variant: 'cards' | 'list'
+}) {
+	const tHome = useTranslations('home')
+	const searchSongs = useSongSearch()
+	const [songs, setSongs] = useState<SearchSongDto[]>([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		let active = true
+		setLoading(true)
+		searchSongs(searchString as SearchKey, { page: 0, useSmartSearch: smartSearch })
+			.then((data) => {
+				if (!active) return
+				setSongs(data)
+				setLoading(false)
+			})
+			.catch(() => {
+				if (!active) return
+				setSongs([])
+				setLoading(false)
+			})
+		return () => {
+			active = false
+		}
+	}, [searchString, smartSearch, searchSongs])
+
+	const packs = songs.flatMap((s) => s.found)
+
+	return (
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<Typography small strong uppercase color="grey.700" sx={{ paddingX: 0.5 }}>
+				{tHome('search.resultsTitle').replace(/:$/, '')}
+			</Typography>
+			{loading ? (
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+					{Array.from({ length: 4 }).map((_, i) => (
+						<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
+					))}
+				</Box>
+			) : packs.length === 0 ? (
+				<Typography color="grey.600">{tHome('search.noResults')}</Typography>
+			) : variant === 'cards' ? (
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+					{packs.map((p) => (
+						<SongVariantCard key={p.packGuid} data={p} dense sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
+					))}
+				</Box>
+			) : (
+				<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+					{packs.map((p) => (
+						<Clickable key={p.packGuid}>
+							<Link to="variant" params={parseVariantAlias(p.packAlias)}>
+								<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1.25, borderBottom: '1px solid', borderColor: 'grey.200' }}>
+									<Typography strong noWrap sx={{ flex: 1 }}>
+										{p.title}
+									</Typography>
+									<ChevronRightRounded fontSize="small" sx={{ color: 'grey.300' }} />
+								</Box>
+							</Link>
+						</Clickable>
+					))}
+				</Box>
+			)}
 		</Box>
 	)
 }
