@@ -78,13 +78,16 @@ export default function HomeMobile({
 	// temporary variant switches (remove once a look is chosen):
 	//   ?sf= search field   1 = white gradient-border (default) · 2 = house MainSearchInput
 	//   ?sr= search results 2 = white cards (default) · 1 = shared list · 3 = quiet list
-	//   ?cl= card lines     1 = single preview line (default) · 2 = two lines
+	//   ?cl= card lines     2 = two preview lines (default) · 1 = single line
+	//   ?tb= tab bar        1 = white blur (default) · 2 = blue primary gradient
 	const [sfParam] = useUrlState('sf')
 	const [srParam] = useUrlState('sr')
 	const [clParam] = useUrlState('cl')
+	const [tbParam] = useUrlState('tb')
 	const sf = Number(sfParam) === 2 ? 2 : 1
 	const sr = Number(srParam) === 1 ? 1 : Number(srParam) === 3 ? 3 : 2
-	const previewLines = Number(clParam) === 2 ? 2 : 1
+	const previewLines = Number(clParam) === 1 ? 1 : 2
+	const blueTab = Number(tbParam) === 2
 
 	// ---- header ------------------------------------------------------
 
@@ -341,23 +344,22 @@ export default function HomeMobile({
 						transform: 'translateX(-50%)',
 						width: '100%',
 						maxWidth: PAGE_MAX_WIDTH,
-						bgcolor: alpha(theme.palette.background.paper, 0.85),
-						backdropFilter: 'blur(12px)',
-						borderTop: '1px solid',
-						borderColor: 'grey.300',
+						...(blueTab
+							? { background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})` }
+							: { bgcolor: alpha(theme.palette.background.paper, 0.85), backdropFilter: 'blur(12px)', borderTop: '1px solid', borderColor: 'grey.300' }),
 						display: 'flex',
 						paddingBottom: 'env(safe-area-inset-bottom)',
 						zIndex: 10,
 					}}
 				>
 					<Link to="home" params={{ hledat: undefined }} style={{ flex: 1 }}>
-						<TabItem icon={<HomeOutlined />} activeIcon={<HomeRounded />} label={tNav('home')} active />
+						<TabItem icon={<HomeOutlined />} activeIcon={<HomeRounded />} label={tNav('home')} active blue={blueTab} />
 					</Link>
 					<Link to="songsList" params={{ s: undefined }} style={{ flex: 1 }}>
-						<TabItem icon={<LibraryMusicOutlined />} activeIcon={<LibraryMusicRounded />} label={tNav('songs')} />
+						<TabItem icon={<LibraryMusicOutlined />} activeIcon={<LibraryMusicRounded />} label={tNav('songs')} blue={blueTab} />
 					</Link>
 					<Link to={loggedIn ? 'account' : 'login'} params={loggedIn ? {} : { previousPage: '', message: '' }} style={{ flex: 1 }}>
-						<TabItem icon={<PersonOutlineRounded />} activeIcon={<PersonRounded />} label={tNav('account')} />
+						<TabItem icon={<PersonOutlineRounded />} activeIcon={<PersonRounded />} label={tNav('account')} blue={blueTab} />
 					</Link>
 				</Box>
 			</Box>
@@ -370,11 +372,20 @@ type TabItemProps = {
 	activeIcon?: JSX.Element
 	label: string
 	active?: boolean
+	blue?: boolean
 }
 
-function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
+function TabItem({ icon, activeIcon, label, active, blue }: TabItemProps) {
+	const theme = useTheme()
+	const color = blue
+		? active
+			? theme.palette.common.white
+			: alpha(theme.palette.common.white, 0.72)
+		: active
+		? theme.palette.primary.main
+		: theme.palette.grey[700]
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.25, paddingY: 1, color: active ? 'primary.main' : 'grey.700' }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.25, paddingY: 1, color }}>
 			{active ? activeIcon ?? icon : icon}
 			<Typography small strong={active ? 700 : 400}>
 				{label}
