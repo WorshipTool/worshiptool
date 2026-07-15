@@ -45,13 +45,14 @@ type DemoVariant = 1 | 2 | 3 | 4
 
 /**
  * Grey canvas + white cards for the picks; the recent section is the quiet
- * airy list (subtle M1 look). The SEARCH now has a blue submit button built
- * into the field so it stands out — variants tune that button:
+ * airy list (subtle M1 look). The SEARCH is a white, mostly-squared field
+ * with a short placeholder and a SMALL blue submit button so it stands out
+ * without crowding the text — variants only tune that button:
  *
- * 1 — blue square button, grey elevated field (default)
- * 2 — blue square button, white bordered field
- * 3 — blue rounded "D" cap on a pill field
- * 4 — blue button with a "HLEDAT" label
+ * 1 — small squared blue button + arrow (default, matches the angular field)
+ * 2 — small squared blue button + search icon
+ * 3 — small circular blue button + arrow
+ * 4 — sharp (barely-rounded) field + squared button
  */
 function DemoMobilePage() {
 	const theme = useTheme()
@@ -184,11 +185,11 @@ function DemoMobilePage() {
 		</Box>
 	)
 
-	// ---- search: field with a blue submit button built in ------------
+	// ---- search: white, angular field + a SMALL blue submit button ---
 
-	const pill = variant === 3
-	const withLabel = variant === 4
-	const outlined = variant === 2
+	const roundButton = variant === 3 // 3 = circle button, others squared
+	const fieldRadius = variant === 4 ? 1 : 1.5 // 4 = sharper corners
+	const buttonIcon = variant === 2 ? <SearchRounded sx={{ fontSize: 18 }} /> : <ArrowForwardRounded sx={{ fontSize: 18 }} />
 
 	const search = (
 		<Box
@@ -199,42 +200,43 @@ function DemoMobilePage() {
 			}}
 			sx={{
 				display: 'flex',
-				alignItems: 'stretch',
-				bgcolor: outlined ? 'background.paper' : 'grey.100',
-				...(outlined && { border: '1px solid', borderColor: 'grey.300' }),
-				borderRadius: pill ? 10 : 2.5,
-				overflow: 'hidden',
+				alignItems: 'center',
+				gap: 1,
+				bgcolor: 'background.paper',
+				border: '1px solid',
+				borderColor: 'grey.200',
+				borderRadius: fieldRadius,
 				boxShadow: 2,
+				paddingLeft: 1.75,
+				paddingRight: 0.75,
+				paddingY: 0.75,
+				minWidth: 0,
 			}}
 		>
-			<Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1, paddingLeft: 2, paddingY: 1.5, minWidth: 0 }}>
-				<SearchRounded sx={{ color: 'grey.600' }} />
-				<TextField value={query} onChange={setQuery} placeholder={tSearch('searchByTitleOrText')} />
+			<SearchRounded sx={{ color: 'grey.500', fontSize: 20 }} />
+			<Box sx={{ flex: 1, minWidth: 0 }}>
+				<TextField value={query} onChange={setQuery} placeholder={tSearch('searchSongs')} />
 			</Box>
 			<Box
 				role="button"
-				aria-label={tSearch('searchByTitleOrText')}
+				aria-label={tSearch('searchSongs')}
 				onClick={submit}
 				sx={{
+					width: 32,
+					height: 32,
+					flexShrink: 0,
+					borderRadius: roundButton ? 10 : 1,
 					bgcolor: 'primary.main',
 					color: 'common.white',
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'center',
-					gap: 0.75,
-					paddingX: withLabel ? 2.25 : 2.5,
 					cursor: 'pointer',
-					flexShrink: 0,
 					transition: 'background-color 0.15s',
 					'&:hover': { bgcolor: 'primary.dark' },
 				}}
 			>
-				<ArrowForwardRounded fontSize="small" />
-				{withLabel && (
-					<Typography small strong uppercase color="common.white">
-						{tNav('search')}
-					</Typography>
-				)}
+				{buttonIcon}
 			</Box>
 		</Box>
 	)
