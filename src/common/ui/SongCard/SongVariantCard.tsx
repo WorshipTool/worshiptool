@@ -64,6 +64,8 @@ type SongCardProps = {
 	flexibleHeight?: boolean
 	/** Compact list-row look: single preview line, tighter padding (mobile lists) */
 	dense?: boolean
+	/** Override how many lyric preview lines to show (defaults: dense=1, else 4) */
+	previewLines?: number
 	properties?: SongCardProperty[]
 	toLinkProps?: ToLinkProps
 	selected?: boolean
@@ -114,10 +116,11 @@ export const SongVariantCard = memo(function S({
 	// Title and sheet data to display
 	const title = data.title
 	const sheet = new Sheet(data.sheetData)
+	const previewLineCount = props.previewLines ?? (dense ? 1 : 4)
 	const dataLines = sheet
 		.getSections()[0]
 		?.text?.split('\n')
-		.slice(0, dense ? 1 : 4)
+		.slice(0, previewLineCount)
 
 	const linkProps = useMemo(() => {
 		if (props.toLinkProps) {

@@ -77,11 +77,14 @@ export default function HomeMobile({
 
 	// temporary variant switches (remove once a look is chosen):
 	//   ?sf= search field   1 = white gradient-border (default) · 2 = house MainSearchInput
-	//   ?sr= search results 1 = shared list (default) · 2 = white cards · 3 = quiet list
+	//   ?sr= search results 2 = white cards (default) · 1 = shared list · 3 = quiet list
+	//   ?cl= card lines     1 = single preview line (default) · 2 = two lines
 	const [sfParam] = useUrlState('sf')
 	const [srParam] = useUrlState('sr')
+	const [clParam] = useUrlState('cl')
 	const sf = Number(sfParam) === 2 ? 2 : 1
-	const sr = Number(srParam) === 2 ? 2 : Number(srParam) === 3 ? 3 : 1
+	const sr = Number(srParam) === 1 ? 1 : Number(srParam) === 3 ? 3 : 2
+	const previewLines = Number(clParam) === 2 ? 2 : 1
 
 	// ---- header ------------------------------------------------------
 
@@ -157,7 +160,7 @@ export default function HomeMobile({
 							<Skeleton key={i} variant="rounded" sx={{ height: 56, borderRadius: 2, bgcolor: 'grey.200' }} />
 					  ))
 					: rec.slice(0, 5).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
+							<SongVariantCard key={s.packGuid} data={s} dense previewLines={previewLines} sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
 					  ))}
 			</Box>
 		</Box>
@@ -206,7 +209,7 @@ export default function HomeMobile({
 				sr === 1 ? (
 					<SearchedSongsList searchString={searchString} useSmartSearch={smartSearch} dense />
 				) : (
-					<MobileSearchResults searchString={searchString} smartSearch={smartSearch} variant={sr === 2 ? 'cards' : 'list'} />
+					<MobileSearchResults searchString={searchString} smartSearch={smartSearch} variant={sr === 2 ? 'cards' : 'list'} previewLines={previewLines} />
 				)
 			) : null}
 		</Box>
@@ -390,10 +393,12 @@ function MobileSearchResults({
 	searchString,
 	smartSearch,
 	variant,
+	previewLines,
 }: {
 	searchString: string
 	smartSearch: boolean
 	variant: 'cards' | 'list'
+	previewLines: number
 }) {
 	const tHome = useTranslations('home')
 	const searchSongs = useSongSearch()
@@ -437,7 +442,7 @@ function MobileSearchResults({
 			) : variant === 'cards' ? (
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 					{packs.map((p) => (
-						<SongVariantCard key={p.packGuid} data={p} dense sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
+						<SongVariantCard key={p.packGuid} data={p} dense previewLines={previewLines} sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
 					))}
 				</Box>
 			) : (
