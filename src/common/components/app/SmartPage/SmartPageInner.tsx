@@ -1,12 +1,12 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import MobileAppTabBar, {
+	HIDE_TOPBAR_ON_MOBILE_CSS,
 	MOBILE_NAV_BREAKPOINT,
 	MOBILE_NAV_CLEARANCE,
 } from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
 import React, { useEffect, useMemo } from 'react'
 
 // type of dict or null for every option
@@ -64,7 +64,6 @@ export const SmartPageInnerProvider = ({
 	const toolbar = useToolbar()
 	const footer = useFooter()
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	useEffect(() => {
 		if (options.transparentToolbar !== null)
@@ -85,14 +84,8 @@ export const SmartPageInnerProvider = ({
 		if (options.hideFooter !== null) footer.setShow(!options.hideFooter)
 	}, [options])
 
-	// App pages replace the top bar with the bottom tab bar on phones. Kept in a
-	// separate effect (runs after the options one) so it wins the setHidden race,
-	// and restored on leave so other pages get their top bar back.
-	useEffect(() => {
-		if (!options.mobileTabBar) return
-		toolbar.setHidden(phoneVersion)
-		return () => toolbar.setHidden(false)
-	}, [options.mobileTabBar, phoneVersion])
+	// App pages replace the top bar with the bottom tab bar on phones — hidden
+	// via server-rendered CSS (not a post-hydration effect) so it never flashes.
 
 	return (
 		<Box
@@ -135,7 +128,12 @@ export const SmartPageInnerProvider = ({
 			}}
 		>
 			{children}
-			{options.mobileTabBar && <MobileAppTabBar />}
+			{options.mobileTabBar && (
+				<>
+					<style>{HIDE_TOPBAR_ON_MOBILE_CSS}</style>
+					<MobileAppTabBar />
+				</>
+			)}
 		</Box>
 	)
 }

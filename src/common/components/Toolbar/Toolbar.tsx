@@ -51,6 +51,7 @@ export function Toolbar() {
 				}}
 			></TopBar>
 			<TopBar
+				className="wt-topbar-fixed"
 				displayPrint={'none'}
 				position={'fixed'}
 				sx={{
