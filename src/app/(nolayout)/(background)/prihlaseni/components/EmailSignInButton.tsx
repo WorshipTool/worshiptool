@@ -9,10 +9,9 @@ type EmailSignInButtonProps = {
 }
 
 /**
- * "Continue with e-mail" button styled to match Google's `gsi-material-button`
- * (white, 1px #747775 border, no rest shadow, Roboto 14px/500 with 0.25px
- * letter-spacing, near-black text, 40px tall, 300px wide, with the GIS hover
- * shadow) so the two sign-in options read as a matching pair.
+ * "Continue with e-mail" button styled to sit next to the Google sign-in
+ * button: white, light hairline border, regular-weight softened label, 40px
+ * tall, 300px wide, flat at rest with a subtle hover shadow.
  */
 export default function EmailSignInButton({ onClick }: EmailSignInButtonProps) {
 	const t = useTranslations('auth.login')
@@ -33,26 +32,26 @@ export default function EmailSignInButton({ onClick }: EmailSignInButtonProps) {
 					gap: 1.25,
 					paddingX: 1.5,
 					bgcolor: 'background.paper',
-					color: 'grey.900',
+					color: 'grey.800',
 					border: '1px solid',
-					borderColor: 'grey.600',
+					borderColor: 'grey.300',
 					borderRadius: 1,
 					boxShadow: 'none',
 					fontFamily: 'inherit',
 					fontSize: '0.875rem',
-					fontWeight: 500,
+					fontWeight: 400,
 					letterSpacing: '0.25px',
 					whiteSpace: 'nowrap',
 					cursor: 'pointer',
 					transition: 'box-shadow 0.218s ease, background-color 0.218s ease',
 					'&:hover': {
 						boxShadow:
-							'0 1px 2px 0 rgba(60,64,67,0.30), 0 1px 3px 1px rgba(60,64,67,0.15)',
+							'0 1px 2px 0 rgba(60,64,67,0.20), 0 1px 3px 1px rgba(60,64,67,0.10)',
 					},
 					'&:active': { bgcolor: 'grey.100' },
 				}}
 			>
-				<MailOutlineRounded sx={{ fontSize: 18, color: 'grey.700' }} />
+				<MailOutlineRounded sx={{ fontSize: 18, color: 'grey.600' }} />
 				{t('continueWithEmail')}
 			</Box>
 		</Box>
