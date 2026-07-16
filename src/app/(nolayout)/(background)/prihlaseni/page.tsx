@@ -1,11 +1,13 @@
 'use client'
 
 import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
+import LoginMobile from '@/app/(nolayout)/(background)/prihlaseni/components/LoginMobile'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
-import { Box } from '@/common/ui'
+import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
+import { useMediaQuery } from '@/common/ui/mui'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
@@ -25,6 +27,8 @@ export default SmartPage(Login, {
 function Login() {
 	const t = useTranslations('auth.login')
 	const tCommon = useTranslations('common')
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
@@ -110,6 +114,26 @@ function Login() {
 
 	const resetPassword = async () => {
 		navigate('resetPassword', {})
+	}
+
+	if (phoneVersion) {
+		return (
+			<LoginMobile
+				email={email}
+				password={password}
+				onEmailChange={setEmail}
+				onPasswordChange={setPassword}
+				isEmailOk={isEmailOk}
+				isPasswordOk={isPasswordOk}
+				inProgress={inProgress}
+				errorMessage={errorMessage}
+				message={params.message}
+				previousPage={params.previousPage}
+				onSubmit={onLoginClick}
+				onForgotPassword={resetPassword}
+				onGoogleLogin={afterGoogleLogin}
+			/>
+		)
 	}
 
 	return (
@@ -256,135 +280,6 @@ function Login() {
 				</Box>
 			</StandaloneCard>
 			<Gap value={5} />
-			{/* <Box
-				flex={1}
-				display={'flex'}
-				justifyContent={'center'}
-				flexDirection={'column'}
-				alignItems={'center'}
-				paddingTop={5}
-			>
-				{params.message && (
-					<StyledContainer
-						style={{
-							marginBottom: theme.spacing(2),
-						}}
-					>
-						<Box
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								gap: theme.spacing(1),
-								padding: '30px',
-							}}
-						>
-							<Info fontSize="large" color="info" />
-							<Typography>{params.message}</Typography>
-						</Box>
-					</StyledContainer>
-				)}
-				<StyledContainer>
-					<Box
-						sx={{
-							padding: '30px',
-						}}
-					>
-						<Box display={'flex'} flexDirection={'column'}>
-							<Typography variant={'h5'} strong={'bold'} flex={1}>
-								Která jsi ovce?
-							</Typography>
-						</Box>
-						<Gap />
-						{errorMessage != '' && (
-							<>
-								<Typography variant="subtitle2" color={'red'}>
-									{errorMessage}
-								</Typography>
-								<Gap />
-							</>
-						)}
-
-						<form
-							onSubmit={(e) => {
-								e.preventDefault()
-								onLoginClick()
-							}}
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-							}}
-						>
-							<Typography variant="subtitle2">Email</Typography>
-							<TextField
-								size="small"
-								value={email}
-								onChange={onEmailChange}
-								error={!isEmailOk}
-								helperText={emailMessage}
-								disabled={inProgress}
-								type="email"
-							/>
-							<Gap />
-							<Typography variant="subtitle2">Heslo</Typography>
-							<TextField
-								size="small"
-								fullWidth
-								value={password}
-								onChange={onPasswordChange}
-								error={!isPasswordOk}
-								helperText={passwordMessage}
-								disabled={inProgress}
-								type="password"
-							/>
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								alignItems={'center'}
-								justifyContent={'start'}
-							>
-								<Button
-									size={'small'}
-									variant="text"
-									color="grey.600"
-									onClick={resetPassword}
-								>
-									{t('forgotPassword')}
-								</Button>
-							</Box>
-							<Gap />
-							<Box>
-								<Button type="submit" loading={inProgress} variant="contained">
-									{t('loginButton')}
-								</Button>
-							</Box>
-						</form>
-
-						<Box
-							display={'flex'}
-							flexDirection={'row'}
-							alignItems={'center'}
-							justifyContent={'end'}
-						>
-							<Typography variant={'subtitle2'}>Nemáte ještě účet?</Typography>
-							<Button size={'small'} variant="text" to="signup">
-								Vytvořte si ho
-							</Button>
-						</Box>
-						<Gap value={2} />
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'end',
-							}}
-						>
-							<GoogleLoginButton afterLogin={afterGoogleLogin} />
-						</Box>
-					</Box>
-				</StyledContainer>
-			</Box> */}
 		</Box>
 	)
 }
