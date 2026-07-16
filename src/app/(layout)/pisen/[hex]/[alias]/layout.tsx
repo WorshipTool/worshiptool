@@ -1,4 +1,5 @@
 'use server'
+import { HIDE_TOPBAR_ON_MOBILE_CSS } from '@/common/components/MobileAppTabBar/nav.constants'
 import { getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
 import { generateSmartMetadata } from '@/tech/metadata/metadata'
 import { Sheet } from '@pepavlin/sheet-api'
@@ -34,5 +35,13 @@ export const generateMetadata = generateSmartMetadata(
 )
 
 export default async function layout(props: LayoutProps<'variant'>) {
-	return <>{props.children}</>
+	// Hide the top bar on phones from the first paint — this layout renders
+	// immediately and wraps the loading fallback, so the bar never flashes in
+	// while the song data is fetched on the server.
+	return (
+		<>
+			<style>{HIDE_TOPBAR_ON_MOBILE_CSS}</style>
+			{props.children}
+		</>
+	)
 }

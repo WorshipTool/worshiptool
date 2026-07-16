@@ -19,7 +19,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid, {
 	containerMaxWidth,
 } from '../../common/components/ContainerGrid'
-import { HIDE_TOPBAR_ON_MOBILE_CSS } from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+import { HIDE_TOPBAR_ON_MOBILE_CSS } from '@/common/components/MobileAppTabBar/nav.constants'
 import FloatingAddButton from './components/FloatingAddButton'
 import HomeMobile from './HomeMobile'
 import SearchedSongsList from './components/SearchedSongsList'

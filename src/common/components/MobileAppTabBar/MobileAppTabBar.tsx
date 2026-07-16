@@ -14,17 +14,9 @@ import {
 } from '@mui/icons-material'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { MOBILE_NAV_BREAKPOINT } from './nav.constants'
 
 const PAGE_MAX_WIDTH = 480
-/** Width below which the mobile tab bar shows (and the top bar hides). */
-export const MOBILE_NAV_BREAKPOINT = 700
-/** Bottom clearance pages need so their content isn't hidden by the fixed bar. */
-export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 72px)'
-/**
- * CSS (server-rendered, so no post-hydration flash) that hides the fixed top
- * bar on phones — used by app pages that show the bottom tab bar instead.
- */
-export const HIDE_TOPBAR_ON_MOBILE_CSS = `@media (max-width:${MOBILE_NAV_BREAKPOINT - 0.05}px){.wt-topbar-fixed{display:none!important}}`
 
 type ActiveTab = 'home' | 'songs' | 'account' | null
 

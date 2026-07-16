@@ -1,10 +1,11 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
-import MobileAppTabBar, {
+import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+import {
 	HIDE_TOPBAR_ON_MOBILE_CSS,
 	MOBILE_NAV_BREAKPOINT,
 	MOBILE_NAV_CLEARANCE,
-} from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+} from '@/common/components/MobileAppTabBar/nav.constants'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
 import React, { useEffect, useMemo } from 'react'
