@@ -5,7 +5,7 @@ import CreateNewPlaylistButton from '@/app/(layout)/ucet/playlisty/components/Cr
 import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
-import { Box, Typography, useTheme } from '@/common/ui'
+import { Box, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Chip } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -38,8 +38,6 @@ export default function PlaylistyMobile({
 	sortType,
 	onSortChange,
 }: PlaylistyMobileProps) {
-	const theme = useTheme()
-
 	const card = (p: PlaylistData) => (
 		<Link key={p.guid} to="playlist" params={{ guid: p.guid }}>
 			<Box
@@ -56,22 +54,6 @@ export default function PlaylistyMobile({
 					'&:active': { bgcolor: 'grey.100' },
 				}}
 			>
-				<Box
-					sx={{
-						width: 48,
-						height: 48,
-						flexShrink: 0,
-						borderRadius: 1.5,
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						color: 'common.white',
-						background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-					}}
-				>
-					<QueueMusicRounded />
-				</Box>
-
 				<Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
 					<Typography strong noWrap>
 						{p.title || 'Bez názvu'}
