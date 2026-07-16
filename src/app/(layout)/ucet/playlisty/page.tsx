@@ -4,10 +4,12 @@ import PlaylistItemRow from '@/app/(layout)/ucet/playlisty/components/PlaylistIt
 import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
+import PlaylistyMobile from '@/app/(layout)/ucet/playlisty/PlaylistyMobile'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
-import { Box, LinearProgress } from '@/common/ui'
+import { Box, LinearProgress, useTheme } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
+import { useMediaQuery } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
@@ -19,6 +21,8 @@ export default SmartPage(Playlists, ['middleWidth'])
 function Playlists() {
 	const { playlists: allPlaylists, loading } = useUsersPlaylists()
 	const [sortType, setSortType] = useUrlState('sortKey', 'updatedAt')
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
 
 	const playlists = useMemo(() => {
 		const arr =
@@ -61,6 +65,17 @@ function Playlists() {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistGuid | null>(
 		null
 	)
+
+	if (phoneVersion) {
+		return (
+			<PlaylistyMobile
+				playlists={playlists}
+				loading={loading}
+				sortType={sortType as PlaylistOrderOptions}
+				onSortChange={setSortType}
+			/>
+		)
+	}
 
 	return (
 		<Box>
