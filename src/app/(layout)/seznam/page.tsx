@@ -12,7 +12,7 @@ import { Gap } from '../../../common/ui/Gap/Gap'
 import { useSmartUrlState } from '../../../hooks/urlstate/useUrlState'
 import { useTranslations } from 'next-intl'
 
-export default SmartPage(List, { mobileTabBar: true })
+export default SmartPage(List)
 function List() {
 	const t = useTranslations('songsList')
 	const [page, setPage] = useSmartUrlState('songsList', 's', {

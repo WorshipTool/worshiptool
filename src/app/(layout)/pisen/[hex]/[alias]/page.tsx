@@ -21,7 +21,7 @@ type SongRoutePageProps = {
 	params: SmartParams<'variant'>
 }
 
-export default SmartPage(SongRoutePage, ['mobileTabBar'])
+export default SmartPage(SongRoutePage)
 
 async function SongRoutePage({ params }: SongRoutePageProps) {
 	const alias = getVariantAliasFromParams(params.hex, params.alias)

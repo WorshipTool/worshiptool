@@ -4,11 +4,16 @@ import LeftWebTitle from '@/common/components/Toolbar/components/LeftWebTItle'
 import MiddleNavigationPanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/MiddleNavigationPanel'
 import NavigationMobilePanel from '@/common/components/Toolbar/components/MiddleNavigationPanel/NavigationMobilePanel'
 import RightAccountPanel from '@/common/components/Toolbar/components/RightAccountPanel/RightAccountPanel'
+import {
+	isMobileTabBarRoute,
+	MOBILE_NAV_BREAKPOINT,
+} from '@/common/components/MobileAppTabBar/nav.constants'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
 import { grey } from '@/common/ui/mui/colors'
 import { styled, useMediaQuery } from '@mui/system'
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 
 const TopBar = styled(Box)(({ theme }) => ({
@@ -28,6 +33,15 @@ export function Toolbar() {
 	const theme = useTheme()
 
 	const { transparent, variant, whiteVersion, hidden } = useToolbar()
+
+	// On app-shell routes the bottom tab bar replaces the top bar on phones.
+	// The top bar hides itself here (a persistent element, styled via the head)
+	// so it never flashes in during streaming or client-side navigation — unlike
+	// a post-hydration setHidden effect or a per-page <style> in the body.
+	const hideOnMobile = isMobileTabBarRoute(usePathname())
+	const hideOnMobileSx = hideOnMobile
+		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } }
+		: {}
 
 	const white = useMemo(() => {
 		return whiteVersion || !transparent
@@ -51,11 +65,11 @@ export function Toolbar() {
 				}}
 			></TopBar>
 			<TopBar
-				className="wt-topbar-fixed"
 				displayPrint={'none'}
 				position={'fixed'}
 				sx={{
 					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+					...hideOnMobileSx,
 				}}
 			>
 				<motion.div

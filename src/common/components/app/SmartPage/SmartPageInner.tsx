@@ -1,11 +1,5 @@
 'use client'
 import { useFooter } from '@/common/components/Footer/hooks/useFooter'
-import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
-import {
-	HIDE_TOPBAR_ON_MOBILE_CSS,
-	MOBILE_NAV_BREAKPOINT,
-	MOBILE_NAV_CLEARANCE,
-} from '@/common/components/MobileAppTabBar/nav.constants'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { Box, useTheme } from '@/common/ui'
 import React, { useEffect, useMemo } from 'react'
@@ -28,8 +22,6 @@ export type SmartPageOptions = Nullable<{
 	middleWidth: boolean
 	topPadding: boolean
 	containLayout: boolean
-	/** App page: hide the top bar on mobile and show the bottom tab bar instead */
-	mobileTabBar: boolean
 }>
 
 const MIDDLE_WIDTH = 900
@@ -56,7 +48,6 @@ export const SmartPageInnerProvider = ({
 			middleWidth: false,
 			topPadding: false,
 			containLayout: false,
-			mobileTabBar: false,
 			...pageOptions,
 		}),
 		[pageOptions]
@@ -84,9 +75,6 @@ export const SmartPageInnerProvider = ({
 
 		if (options.hideFooter !== null) footer.setShow(!options.hideFooter)
 	}, [options])
-
-	// App pages replace the top bar with the bottom tab bar on phones — hidden
-	// via server-rendered CSS (not a post-hydration effect) so it never flashes.
 
 	return (
 		<Box
@@ -117,24 +105,9 @@ export const SmartPageInnerProvider = ({
 							contain: 'layout',
 					  }
 					: {}),
-
-				// clear the fixed bottom tab bar on phones
-				...(options.mobileTabBar
-					? {
-							[theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: {
-								paddingBottom: MOBILE_NAV_CLEARANCE,
-							},
-					  }
-					: {}),
 			}}
 		>
 			{children}
-			{options.mobileTabBar && (
-				<>
-					<style>{HIDE_TOPBAR_ON_MOBILE_CSS}</style>
-					<MobileAppTabBar />
-				</>
-			)}
 		</Box>
 	)
 }

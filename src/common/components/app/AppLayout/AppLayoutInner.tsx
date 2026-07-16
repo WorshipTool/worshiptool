@@ -1,5 +1,6 @@
 'use client'
 import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
+import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { Toolbar } from '@/common/components/Toolbar'
 import { Box } from '@/common/ui'
 import React from 'react'
@@ -25,6 +26,7 @@ export default function Inner({ children }: AppContainerProps) {
 			</Box>
 			<Box flex={1} />
 			<Footer />
+			<MobileAppTabBar />
 		</Box>
 	)
 }

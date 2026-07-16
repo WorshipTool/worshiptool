@@ -9,7 +9,7 @@ import { useSmartNavigate } from '../../../routes/useSmartNavigate'
 import BasicInfo from './components/BasicInfo'
 import TabsPanel from './components/TabsPanel'
 
-export default SmartPage(Account, { mobileTabBar: true })
+export default SmartPage(Account)
 function Account() {
 	const { isLoggedIn } = useAuth()
 

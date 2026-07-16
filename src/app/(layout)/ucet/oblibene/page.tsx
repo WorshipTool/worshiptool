@@ -16,7 +16,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 
-export default SmartPage(page, ['middleWidth', 'topPadding', 'mobileTabBar'])
+export default SmartPage(page, ['middleWidth', 'topPadding'])
 
 export type FavouriteItem = {
 	data: PlaylistItemDto

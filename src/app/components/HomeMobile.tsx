@@ -3,7 +3,6 @@
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
-import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -290,8 +289,6 @@ export default function HomeMobile({
 					{search}
 				</Box>
 
-				{/* ===================== BOTTOM TAB BAR ===================== */}
-				<MobileAppTabBar />
 			</Box>
 		</Box>
 	)

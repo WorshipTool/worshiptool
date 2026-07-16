@@ -19,7 +19,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import ContainerGrid, {
 	containerMaxWidth,
 } from '../../common/components/ContainerGrid'
-import { HIDE_TOPBAR_ON_MOBILE_CSS } from '@/common/components/MobileAppTabBar/nav.constants'
 import FloatingAddButton from './components/FloatingAddButton'
 import HomeMobile from './HomeMobile'
 import SearchedSongsList from './components/SearchedSongsList'
@@ -137,8 +136,6 @@ export default function HomeDesktop() {
 	const heroSubtitle = tHome('hero.subtitle')
 	return (
 		<>
-			{/* hide the top bar on phones from first paint (no flash) — home shows the tab bar */}
-			<style>{HIDE_TOPBAR_ON_MOBILE_CSS}</style>
 			{!phoneVersion && (
 				<Box
 					sx={{
