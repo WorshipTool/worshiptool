@@ -198,9 +198,17 @@ export default function SeznamMobile({
 						page={page}
 						onChange={(_, p) => goToPage(p)}
 						color="primary"
-						size="small"
 						siblingCount={0}
 						boundaryCount={1}
+						sx={{
+							// finger-sized touch targets (44px) while staying compact
+							'& .MuiPaginationItem-root': {
+								minWidth: 44,
+								height: 44,
+								margin: '0 2px',
+								fontSize: '1rem',
+							},
+						}}
 					/>
 				</Box>
 			)}
