@@ -15,7 +15,10 @@ const PER_PAGE = 12
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 96px)'
+// the paginator is docked just above the global tab bar and always visible;
+// the list clears both so the last card isn't hidden behind them
+const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 64px)'
+const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 148px)'
 const PREVIEW_LINES = 2
 
 const CARD_SX = {
@@ -119,7 +122,6 @@ export default function SeznamMobile({
 						paddingBottom: CONTENT_CLEARANCE,
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 2.5,
 					}}
 				>
 					<Box
@@ -167,21 +169,41 @@ export default function SeznamMobile({
 							</Box>
 						)}
 					</Box>
-
-					{pagesCount > 1 && (
-						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-							<Pagination
-								count={pagesCount}
-								page={page}
-								onChange={(_, p) => goToPage(p)}
-								color="primary"
-								siblingCount={0}
-								boundaryCount={1}
-							/>
-						</Box>
-					)}
 				</Box>
 			</Box>
+
+			{/* paginator docked just above the tab bar — always visible */}
+			{pagesCount > 1 && (
+				<Box
+					sx={{
+						position: 'fixed',
+						bottom: TAB_BAR_OFFSET,
+						left: '50%',
+						transform: 'translateX(-50%)',
+						width: '100%',
+						maxWidth: PAGE_MAX_WIDTH,
+						zIndex: 10,
+						boxSizing: 'border-box',
+						display: 'flex',
+						justifyContent: 'center',
+						paddingY: 0.75,
+						bgcolor: 'grey.100',
+						borderTop: '1px solid',
+						borderColor: 'grey.300',
+						boxShadow: '0 -2px 8px rgba(0,0,0,0.06)',
+					}}
+				>
+					<Pagination
+						count={pagesCount}
+						page={page}
+						onChange={(_, p) => goToPage(p)}
+						color="primary"
+						size="small"
+						siblingCount={0}
+						boundaryCount={1}
+					/>
+				</Box>
+			)}
 		</Box>
 	)
 }
