@@ -1,10 +1,11 @@
 'use client'
 import AllSongItem from '@/app/(layout)/seznam/AllSongItem'
+import SeznamMobile from '@/app/(layout)/seznam/SeznamMobile'
 import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { useDownSize } from '@/common/hooks/useDownSize'
-import { Box, CircularProgress, Typography } from '@/common/ui'
-import { Container } from '@/common/ui/mui'
+import { Box, CircularProgress, Typography, useTheme } from '@/common/ui'
+import { Container, useMediaQuery } from '@/common/ui/mui'
 import { Grid } from '@/common/ui/mui/Grid'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { useApi } from '../../../api/tech-and-hooks/useApi'
@@ -15,6 +16,8 @@ import { useTranslations } from 'next-intl'
 export default SmartPage(List)
 function List() {
 	const t = useTranslations('songsList')
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
 	const [page, setPage] = useSmartUrlState('songsList', 's', {
 		parse: (v) => parseInt(v),
 		stringify: (v) => (v as number).toString(),
@@ -33,6 +36,10 @@ function List() {
 		const r = await songGettingApi.getList(page, countPerPage + 1)
 
 		return r.slice(0, countPerPage)
+	}
+
+	if (phoneVersion) {
+		return <SeznamMobile />
 	}
 
 	return (
