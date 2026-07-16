@@ -8,14 +8,13 @@ import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
 import { TextField } from '@/common/ui/TextField'
-import useAuth from '@/hooks/auth/useAuth'
 import useSongSearch from '@/hooks/song/useSongSearch'
 import usePagination from '@/hooks/usePagination'
 import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SearchKey } from '@/types/song/search.types'
-import { ChevronRightRounded, LoginRounded, PersonRounded, SearchRounded } from '@mui/icons-material'
+import { ChevronRightRounded, SearchRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -53,9 +52,7 @@ export default function HomeMobile({
 }: HomeMobileProps) {
 	const theme = useTheme()
 	const tHome = useTranslations('home')
-	const tNav = useTranslations('navigation')
 	const tSearch = useTranslations('search')
-	const { isLoggedIn } = useAuth()
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -63,19 +60,10 @@ export default function HomeMobile({
 	const last = lastAdded.data
 	const loading = recommended.isLoading || lastAdded.isLoading
 
-	const loggedIn = isLoggedIn()
 	const searching = searchInputValue.trim().length > 0
 
 	// ---- header ------------------------------------------------------
-
-	const accountButton = (
-		<Box
-			aria-label={loggedIn ? tNav('account') : tNav('login')}
-			sx={{ width: 42, height: 42, borderRadius: 10, bgcolor: 'grey.100', color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-		>
-			{loggedIn ? <PersonRounded fontSize="small" /> : <LoginRounded fontSize="small" />}
-		</Box>
-	)
+	// Just the greeting — account/login lives in the bottom tab bar, nothing top-right.
 
 	const header = (
 		<Box
@@ -83,30 +71,14 @@ export default function HomeMobile({
 				paddingX: 2.5,
 				paddingTop: 'calc(env(safe-area-inset-top) + 32px)',
 				paddingBottom: 0.5,
-				display: 'flex',
-				justifyContent: 'space-between',
-				alignItems: 'end',
 			}}
 		>
-			<Box>
-				<Typography small color="grey.700">
-					{tHome('hero.lead')}
-				</Typography>
-				<Typography variant="h3" strong={800}>
-					{tHome('hero.title')}
-				</Typography>
-			</Box>
-			<Clickable tooltip={loggedIn ? tNav('account') : tNav('login')}>
-				{loggedIn ? (
-					<Link to="account" params={{}}>
-						{accountButton}
-					</Link>
-				) : (
-					<Link to="login" params={{ previousPage: '', message: '' }}>
-						{accountButton}
-					</Link>
-				)}
-			</Clickable>
+			<Typography small color="grey.700">
+				{tHome('hero.lead')}
+			</Typography>
+			<Typography variant="h3" strong={800}>
+				{tHome('hero.title')}
+			</Typography>
 		</Box>
 	)
 
