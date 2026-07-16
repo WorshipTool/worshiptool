@@ -20,7 +20,9 @@ import { useTranslations } from 'next-intl'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 const PAGE_MAX_WIDTH = 480
-const TOOLBAR_SPACER = '56px' // sticky TopBar spacer height (Toolbar.tsx)
+// On app-shell routes the top bar's sticky spacer shrinks to the safe-area
+// inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top.
+const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards

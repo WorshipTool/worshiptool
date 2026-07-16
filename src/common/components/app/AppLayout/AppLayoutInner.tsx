@@ -32,11 +32,13 @@ export default function Inner({ children }: AppContainerProps) {
 				{children}
 				<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 			</Box>
+			{/* tab bar (with its in-flow bottom spacer) before the flex fill, so a
+			    short page doesn't get extra empty scroll below the fold */}
+			<MobileAppTabBar />
 			<Box flex={1} />
 			<Box sx={appRoute ? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } } : undefined}>
 				<Footer />
 			</Box>
-			<MobileAppTabBar />
 		</Box>
 	)
 }

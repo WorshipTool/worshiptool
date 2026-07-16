@@ -38,9 +38,14 @@ export function Toolbar() {
 	// The top bar hides itself here (a persistent element, styled via the head)
 	// so it never flashes in during streaming or client-side navigation — unlike
 	// a post-hydration setHidden effect or a per-page <style> in the body.
+	// The visible bar is hidden and its layout spacer shrinks to just the safe
+	// area (no leftover 56px gap at the top of app pages).
 	const hideOnMobile = isMobileTabBarRoute(usePathname())
-	const hideOnMobileSx = hideOnMobile
+	const barHideSx = hideOnMobile
 		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } }
+		: {}
+	const spacerShrinkSx = hideOnMobile
+		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { height: 'env(safe-area-inset-top)' } }
 		: {}
 
 	const white = useMemo(() => {
@@ -62,6 +67,7 @@ export function Toolbar() {
 				zIndex={0}
 				sx={{
 					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+					...spacerShrinkSx,
 				}}
 			></TopBar>
 			<TopBar
@@ -69,7 +75,7 @@ export function Toolbar() {
 				position={'fixed'}
 				sx={{
 					transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
-					...hideOnMobileSx,
+					...barHideSx,
 				}}
 			>
 				<motion.div
