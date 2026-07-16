@@ -3,15 +3,15 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos/song/song.map'
 import { GetListSongData } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
-import { Box, Typography } from '@/common/ui'
+import { Box, CircularProgress, Typography } from '@/common/ui'
+import { Pagination } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
-import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const PAGE_MAX_WIDTH = 480
-const PER_PAGE = 20
+const PER_PAGE = 12
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
@@ -24,72 +24,56 @@ const CARD_SX = {
 	'&:hover': { bgcolor: 'background.paper' },
 }
 
+type SeznamMobileProps = {
+	/** 1-indexed page, kept in the URL by the parent (shared with desktop) */
+	page: number
+	onPageChange: (page: number) => void
+	count: number
+}
+
 /**
  * Native-feeling mobile songs list: white song cards floating on the grey
- * canvas (matching the home screen) with infinite scroll instead of the
- * desktop paginated grid. The desktop grid stays in page.tsx; this component
- * owns the phone view.
+ * canvas (matching the home screen), but paginated — there are thousands of
+ * songs, so paging beats an endless scroll. The desktop grid stays in
+ * page.tsx; this component owns the phone view.
  */
-export default function SeznamMobile() {
+export default function SeznamMobile({
+	page,
+	onPageChange,
+	count,
+}: SeznamMobileProps) {
 	const t = useTranslations('songsList')
 	const { songGettingApi } = useApi()
 
 	const [items, setItems] = useState<GetListSongData[]>([])
-	const [initialLoading, setInitialLoading] = useState(true)
-	const [hasMore, setHasMore] = useState(true)
+	const [loading, setLoading] = useState(true)
 
-	const loadingRef = useRef(false)
-	const hasMoreRef = useRef(true)
-	const loadedPagesRef = useRef(0)
-	const seenRef = useRef<Set<string>>(new Set())
-	const sentinelRef = useRef<HTMLDivElement>(null)
-
-	const loadMore = useCallback(async () => {
-		if (loadingRef.current || !hasMoreRef.current) return
-		loadingRef.current = true
-		try {
-			// getList is 1-indexed; each call returns the next server page
-			const nextPage = loadedPagesRef.current + 1
-			const data = await songGettingApi.getList(nextPage, PER_PAGE)
-			loadedPagesRef.current = nextPage
-			if (data.length < PER_PAGE) {
-				hasMoreRef.current = false
-				setHasMore(false)
-			}
-			// the backend overlaps one item at each page boundary, so drop packs
-			// we've already shown to avoid duplicate cards
-			const fresh = data.filter((s) => {
-				const guid = String(s.main.packGuid)
-				if (seenRef.current.has(guid)) return false
-				seenRef.current.add(guid)
-				return true
-			})
-			if (fresh.length) setItems((prev) => prev.concat(fresh))
-		} catch {
-			// keep whatever is already loaded; a later scroll can retry
-		} finally {
-			setInitialLoading(false)
-			loadingRef.current = false
-		}
-	}, [songGettingApi])
+	const pagesCount = Math.max(1, Math.ceil(count / PER_PAGE))
 
 	useEffect(() => {
-		loadMore()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		let active = true
+		setLoading(true)
+		songGettingApi
+			.getList(page, PER_PAGE)
+			.then((data) => {
+				if (active) setItems(data)
+			})
+			.catch(() => {
+				if (active) setItems([])
+			})
+			.finally(() => {
+				if (active) setLoading(false)
+			})
+		return () => {
+			active = false
+		}
+	}, [page, songGettingApi])
 
-	useIsInViewport(sentinelRef, '400px', (intersecting) => {
-		if (intersecting && !initialLoading) loadMore()
-	})
-
-	const cards = useMemo(
-		() =>
-			items.map((s) => ({
-				key: String(s.main.packGuid),
-				pack: mapBasicVariantPackApiToDto(s.main),
-			})),
-		[items]
-	)
+	const goToPage = (p: number) => {
+		onPageChange(p)
+		if (typeof window !== 'undefined')
+			window.scrollTo({ top: 0, behavior: 'smooth' })
+	}
 
 	return (
 		<Box
@@ -135,38 +119,67 @@ export default function SeznamMobile() {
 						paddingBottom: CONTENT_CLEARANCE,
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 1,
+						gap: 2.5,
 					}}
 				>
-					{initialLoading
-						? Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton
-									key={i}
-									variant="rounded"
-									sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }}
-								/>
-						  ))
-						: cards.map((c) => (
-								<SongVariantCard
-									key={c.key}
-									data={c.pack}
-									dense
-									previewLines={PREVIEW_LINES}
-									sx={CARD_SX}
-								/>
-						  ))}
+					<Box
+						sx={{
+							position: 'relative',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 1,
+							minHeight: 320,
+						}}
+					>
+						{loading && items.length === 0
+							? Array.from({ length: PER_PAGE }).map((_, i) => (
+									<Skeleton
+										key={i}
+										variant="rounded"
+										sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }}
+									/>
+							  ))
+							: items.map((s, i) => (
+									<SongVariantCard
+										key={`${String(s.main.packGuid)}-${i}`}
+										data={mapBasicVariantPackApiToDto(s.main)}
+										dense
+										previewLines={PREVIEW_LINES}
+										sx={CARD_SX}
+									/>
+							  ))}
 
-					{!initialLoading &&
-						hasMore &&
-						Array.from({ length: 3 }).map((_, i) => (
-							<Skeleton
-								key={`more-${i}`}
-								variant="rounded"
-								sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }}
+						{loading && items.length > 0 && (
+							<Box
+								sx={{
+									position: 'absolute',
+									inset: 0,
+									display: 'flex',
+									alignItems: 'flex-start',
+									justifyContent: 'center',
+									paddingTop: 6,
+									bgcolor: 'grey.100',
+									opacity: 0.6,
+									borderRadius: 2,
+								}}
+							>
+								<CircularProgress />
+							</Box>
+						)}
+					</Box>
+
+					{pagesCount > 1 && (
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<Pagination
+								count={pagesCount}
+								page={page}
+								onChange={(_, p) => goToPage(p)}
+								color="primary"
+								siblingCount={0}
+								boundaryCount={1}
 							/>
-						))}
-
-					<Box ref={sentinelRef} sx={{ height: 1 }} />
+						</Box>
+					)}
 				</Box>
 			</Box>
 		</Box>

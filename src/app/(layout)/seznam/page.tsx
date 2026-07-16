@@ -39,7 +39,13 @@ function List() {
 	}
 
 	if (phoneVersion) {
-		return <SeznamMobile />
+		return (
+			<SeznamMobile
+				page={page ?? 1}
+				onPageChange={setPage}
+				count={count ?? 0}
+			/>
+		)
 	}
 
 	return (
