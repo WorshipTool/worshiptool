@@ -1,11 +1,11 @@
 'use client'
 
+import EmailSignInButton from '@/app/(nolayout)/(background)/prihlaseni/components/EmailSignInButton'
 import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
 import SvgIcon from '@/assets/icon.svg'
 import { Box, Typography } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { TextInput } from '@/common/ui/TextInput'
-import { MailOutlineRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 
 type LoginMobileProps = {
@@ -106,16 +106,7 @@ export default function LoginMobile(props: LoginMobileProps) {
 				{/* email/password stays hidden behind a button until chosen, so the
 				    two sign-in options (Google / e-mail) read as equal choices */}
 				{!props.showEmailForm ? (
-					<Button
-						variant="outlined"
-						color="grey.700"
-						size="large"
-						startIcon={<MailOutlineRounded />}
-						onClick={props.onUseEmail}
-						sx={{ width: '100%' }}
-					>
-						{t('continueWithEmail')}
-					</Button>
+					<EmailSignInButton onClick={props.onUseEmail} />
 				) : (
 					<Box
 						component="form"

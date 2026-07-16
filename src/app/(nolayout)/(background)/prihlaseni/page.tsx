@@ -1,5 +1,6 @@
 'use client'
 
+import EmailSignInButton from '@/app/(nolayout)/(background)/prihlaseni/components/EmailSignInButton'
 import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
 import LoginMobile from '@/app/(nolayout)/(background)/prihlaseni/components/LoginMobile'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -11,7 +12,6 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
-import { MailOutlineRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../../api/dtos/dtosAuth'
@@ -202,21 +202,7 @@ function Login() {
 						{/* e-mail/password stays hidden behind a button until chosen, so
 						    Google and e-mail read as two equal sign-in options */}
 						{!showEmailForm ? (
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								justifyContent={'center'}
-							>
-								<Button
-									variant="outlined"
-									color="grey.700"
-									startIcon={<MailOutlineRounded />}
-									onClick={() => setShowEmailForm(true)}
-									sx={{ width: 240 }}
-								>
-									{t('continueWithEmail')}
-								</Button>
-							</Box>
+							<EmailSignInButton onClick={() => setShowEmailForm(true)} />
 						) : (
 							<form
 								onSubmit={(e) => {
