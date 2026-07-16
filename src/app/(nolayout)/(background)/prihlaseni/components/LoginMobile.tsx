@@ -24,11 +24,10 @@ type LoginMobileProps = {
 }
 
 /**
- * Native-feeling mobile login on the app's grey canvas (the shared wool
- * background shows through). The brand mark and welcome sit at the top,
- * full-width inputs and a full-width primary CTA follow, and the sign-up link
- * is docked at the bottom. The desktop card layout stays in page.tsx; this
- * component owns the phone view.
+ * Native-feeling mobile login: a full-screen light sheet, the plain logo mark
+ * and welcome at the top, full-width inputs and a full-width primary CTA, with
+ * the sign-up link docked at the bottom. The desktop card layout stays in
+ * page.tsx; this component owns the phone view.
  */
 export default function LoginMobile(props: LoginMobileProps) {
 	const t = useTranslations('auth.login')
@@ -40,6 +39,7 @@ export default function LoginMobile(props: LoginMobileProps) {
 				width: '100%',
 				boxSizing: 'border-box',
 				minHeight: '100dvh',
+				bgcolor: 'background.paper',
 				display: 'flex',
 				flexDirection: 'column',
 				paddingX: 3,
@@ -87,11 +87,11 @@ export default function LoginMobile(props: LoginMobileProps) {
 						gap: 1.5,
 					}}
 				>
-					<Box sx={{ flex: 1, height: '1px', bgcolor: 'grey.400' }} />
+					<Box sx={{ flex: 1, height: '1px', bgcolor: 'grey.300' }} />
 					<Typography small color="grey.600">
 						{tCommon('or')}
 					</Typography>
-					<Box sx={{ flex: 1, height: '1px', bgcolor: 'grey.400' }} />
+					<Box sx={{ flex: 1, height: '1px', bgcolor: 'grey.300' }} />
 				</Box>
 
 				{props.errorMessage !== '' && (
@@ -117,7 +117,6 @@ export default function LoginMobile(props: LoginMobileProps) {
 						type="email"
 						placeholder={t('enterEmail')}
 						required
-						sx={{ bgcolor: 'background.paper' }}
 					/>
 					<TextInput
 						title={t('password')}
@@ -128,7 +127,6 @@ export default function LoginMobile(props: LoginMobileProps) {
 						type="password"
 						placeholder={t('enterPassword')}
 						required
-						sx={{ bgcolor: 'background.paper' }}
 					/>
 					<Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: -1 }}>
 						<Button
