@@ -5,6 +5,7 @@ import SvgIcon from '@/assets/icon.svg'
 import { Box, Typography } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { TextInput } from '@/common/ui/TextInput'
+import { MailOutlineRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 
 type LoginMobileProps = {
@@ -18,6 +19,8 @@ type LoginMobileProps = {
 	errorMessage: string
 	message?: string
 	previousPage?: string
+	showEmailForm: boolean
+	onUseEmail: () => void
 	onSubmit: () => void
 	onForgotPassword: () => void
 	onGoogleLogin: () => void
@@ -100,55 +103,71 @@ export default function LoginMobile(props: LoginMobileProps) {
 					</Typography>
 				)}
 
-				<Box
-					component="form"
-					onSubmit={(e) => {
-						e.preventDefault()
-						props.onSubmit()
-					}}
-					sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-				>
-					<TextInput
-						title={t('email')}
-						value={props.email}
-						onChange={props.onEmailChange}
-						error={!props.isEmailOk}
-						disabled={props.inProgress}
-						type="email"
-						placeholder={t('enterEmail')}
-						required
-					/>
-					<TextInput
-						title={t('password')}
-						value={props.password}
-						onChange={props.onPasswordChange}
-						error={!props.isPasswordOk}
-						disabled={props.inProgress}
-						type="password"
-						placeholder={t('enterPassword')}
-						required
-					/>
-					<Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: -1 }}>
-						<Button
-							size="small"
-							variant="text"
-							color="grey.600"
-							onClick={props.onForgotPassword}
-						>
-							{t('forgotPassword')}
-						</Button>
-					</Box>
+				{/* email/password stays hidden behind a button until chosen, so the
+				    two sign-in options (Google / e-mail) read as equal choices */}
+				{!props.showEmailForm ? (
 					<Button
-						type="submit"
-						loading={props.inProgress}
-						variant="contained"
-						color="primarygradient"
+						variant="outlined"
+						color="grey.700"
 						size="large"
+						startIcon={<MailOutlineRounded />}
+						onClick={props.onUseEmail}
 						sx={{ width: '100%' }}
 					>
-						{t('loginButton')}
+						{t('continueWithEmail')}
 					</Button>
-				</Box>
+				) : (
+					<Box
+						component="form"
+						onSubmit={(e) => {
+							e.preventDefault()
+							props.onSubmit()
+						}}
+						sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+					>
+						<TextInput
+							title={t('email')}
+							value={props.email}
+							onChange={props.onEmailChange}
+							error={!props.isEmailOk}
+							disabled={props.inProgress}
+							type="email"
+							placeholder={t('enterEmail')}
+							autoFocus
+							required
+						/>
+						<TextInput
+							title={t('password')}
+							value={props.password}
+							onChange={props.onPasswordChange}
+							error={!props.isPasswordOk}
+							disabled={props.inProgress}
+							type="password"
+							placeholder={t('enterPassword')}
+							required
+						/>
+						<Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: -1 }}>
+							<Button
+								size="small"
+								variant="text"
+								color="grey.600"
+								onClick={props.onForgotPassword}
+							>
+								{t('forgotPassword')}
+							</Button>
+						</Box>
+						<Button
+							type="submit"
+							loading={props.inProgress}
+							variant="contained"
+							color="primarygradient"
+							size="large"
+							sx={{ width: '100%' }}
+						>
+							{t('loginButton')}
+						</Button>
+					</Box>
+				)}
 			</Box>
 
 			{/* push the sign-up link to the bottom of the screen */}

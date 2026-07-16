@@ -232,6 +232,7 @@
 			"password": "Password",
 			"enterPassword": "Enter password",
 			"loginButton": "Sign In",
+			"continueWithEmail": "Continue with email",
 			"forgotPassword": "Forgot password?",
 			"noAccount": "Don't have an account yet?",
 			"createAccount": "Create one",

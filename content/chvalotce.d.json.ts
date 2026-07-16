@@ -235,6 +235,7 @@ declare const messages: {
 			"password": "Heslo",
 			"enterPassword": "Zadejte heslo",
 			"loginButton": "Přihlásit se",
+			"continueWithEmail": "Pokračovat e-mailem",
 			"forgotPassword": "Zapomněli jste heslo?",
 			"noAccount": "Nemáte ještě účet?",
 			"createAccount": "Vytvořte si ho",

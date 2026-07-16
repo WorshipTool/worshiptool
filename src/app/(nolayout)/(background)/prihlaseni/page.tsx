@@ -11,6 +11,7 @@ import { useMediaQuery } from '@/common/ui/mui'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
+import { MailOutlineRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { LoginResultDTO } from '../../../../api/dtos/dtosAuth'
@@ -39,6 +40,10 @@ function Login() {
 	const [errorMessage, setErrorMessage] = useState('')
 
 	const [inProgress, setInProgress] = useState(false)
+
+	// keep the e-mail/password fields hidden until the user picks that path,
+	// so Google and e-mail read as two equal sign-in options
+	const [showEmailForm, setShowEmailForm] = useState(false)
 
 	const navigate = useSmartNavigate()
 
@@ -129,6 +134,8 @@ function Login() {
 				errorMessage={errorMessage}
 				message={params.message}
 				previousPage={params.previousPage}
+				showEmailForm={showEmailForm}
+				onUseEmail={() => setShowEmailForm(true)}
 				onSubmit={onLoginClick}
 				onForgotPassword={resetPassword}
 				onGoogleLogin={afterGoogleLogin}
@@ -192,90 +199,111 @@ function Login() {
 								<Gap />
 							</>
 						)}
-						<form
-							onSubmit={(e) => {
-								e.preventDefault()
-								onLoginClick()
-							}}
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-							}}
+						{/* e-mail/password stays hidden behind a button until chosen, so
+						    Google and e-mail read as two equal sign-in options */}
+						{!showEmailForm ? (
+							<Box
+								display={'flex'}
+								flexDirection={'row'}
+								justifyContent={'center'}
+							>
+								<Button
+									variant="outlined"
+									color="grey.700"
+									startIcon={<MailOutlineRounded />}
+									onClick={() => setShowEmailForm(true)}
+									sx={{ width: 240 }}
+								>
+									{t('continueWithEmail')}
+								</Button>
+							</Box>
+						) : (
+							<form
+								onSubmit={(e) => {
+									e.preventDefault()
+									onLoginClick()
+								}}
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+								}}
+							>
+								<TextInput
+									title={t('email')}
+									value={email}
+									onChange={(e) => setEmail(e)}
+									error={!isEmailOk}
+									disabled={inProgress}
+									type="email"
+									placeholder={t('enterEmail')}
+									autoFocus
+									required
+								/>
+								<Gap />
+								<TextInput
+									title={t('password')}
+									value={password}
+									onChange={(e) => setPassword(e)}
+									error={!isPasswordOk}
+									disabled={inProgress}
+									type="password"
+									placeholder={t('enterPassword')}
+									required
+								/>
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									alignItems={'center'}
+									justifyContent={'start'}
+								>
+									<Button
+										size={'small'}
+										variant="text"
+										color="grey.600"
+										onClick={resetPassword}
+									>
+										{t('forgotPassword')}
+									</Button>
+								</Box>
+								<Gap />
+								<Box
+									display={'flex'}
+									flexDirection={'row'}
+									justifyContent={'center'}
+								>
+									<Button
+										type="submit"
+										loading={inProgress}
+										variant="contained"
+										sx={{
+											width: 200,
+										}}
+										color="primarygradient"
+									>
+										{t('loginButton')}
+									</Button>
+								</Box>
+							</form>
+						)}
+						<Gap />
+						<Box
+							display={'flex'}
+							flexDirection={'row'}
+							alignItems={'center'}
+							justifyContent={'center'}
 						>
-							<TextInput
-								title={t('email')}
-								value={email}
-								onChange={(e) => setEmail(e)}
-								error={!isEmailOk}
-								disabled={inProgress}
-								type="email"
-								placeholder={t('enterEmail')}
-								required
-							/>
-							<Gap />
-							<TextInput
-								title={t('password')}
-								value={password}
-								onChange={(e) => setPassword(e)}
-								error={!isPasswordOk}
-								disabled={inProgress}
-								type="password"
-								placeholder={t('enterPassword')}
-								required
-							/>
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								alignItems={'center'}
-								justifyContent={'start'}
+							<Typography size={'0.9rem'}>{t('noAccount')}</Typography>
+							<Button
+								size={'small'}
+								variant="text"
+								to="signup"
+								toParams={{
+									previousPage: params.previousPage,
+								}}
 							>
-								<Button
-									size={'small'}
-									variant="text"
-									color="grey.600"
-									onClick={resetPassword}
-								>
-									{t('forgotPassword')}
-								</Button>
-							</Box>
-							<Gap />
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								justifyContent={'center'}
-							>
-								<Button
-									type="submit"
-									loading={inProgress}
-									variant="contained"
-									sx={{
-										width: 200,
-									}}
-									color="primarygradient"
-								>
-									{t('loginButton')}
-								</Button>
-							</Box>
-							<Gap />
-							<Box
-								display={'flex'}
-								flexDirection={'row'}
-								alignItems={'center'}
-								justifyContent={'center'}
-							>
-								<Typography size={'0.9rem'}>{t('noAccount')}</Typography>
-								<Button
-									size={'small'}
-									variant="text"
-									to="signup"
-									toParams={{
-										previousPage: params.previousPage,
-									}}
-								>
-									{t('createAccount')}
-								</Button>
-							</Box>
-						</form>
+								{t('createAccount')}
+							</Button>
+						</Box>
 					</Box>
 				</Box>
 			</StandaloneCard>
