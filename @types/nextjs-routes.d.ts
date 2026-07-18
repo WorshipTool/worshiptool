@@ -14,6 +14,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/">
     | StaticRoute<"/api/build-id">
     | StaticRoute<"/demo-mobil">
+    | StaticRoute<"/demo-song">
     | StaticRoute<"/kontakt">
     | StaticRoute<"/nahrat">
     | StaticRoute<"/nahrat/hledani">
