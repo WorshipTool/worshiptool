@@ -1,8 +1,10 @@
 'use client'
 
+import { BasicVariantPack } from '@/api/dtos'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
+import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -14,16 +16,82 @@ import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SearchKey } from '@/types/song/search.types'
-import { ChevronRightRounded, SearchRounded } from '@mui/icons-material'
+import {
+	ChevronRightRounded,
+	MusicNoteRounded,
+	SearchRounded,
+} from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 // On app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top.
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-const TAB_BAR = 'calc(env(safe-area-inset-bottom) + 64px)'
+// the docked search is portalled into the tab bar's slot, so content only
+// needs to clear the bar + search stack
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
+
+// ---- S5 grouped-list surface (shared language with the songs list) ----
+const GROUP_CARD_SX = {
+	bgcolor: 'background.paper',
+	borderRadius: 3,
+	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+	overflow: 'hidden',
+}
+// strip the card chrome off SongVariantCard so it reads as a row in the group
+const FLAT_ROW_SX = {
+	bgcolor: 'transparent',
+	borderRadius: 0,
+	outlineColor: 'transparent',
+	'&:hover': { bgcolor: 'grey.50', boxShadow: 'none' },
+	'&:active': { bgcolor: 'grey.100' },
+}
+// divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
+const ICON_DIVIDER_INSET = 8.5
+const TEXT_DIVIDER_INSET = 1.75
+
+function SongLeadingIcon() {
+	return (
+		<Box
+			sx={{
+				width: 40,
+				height: 40,
+				borderRadius: 2,
+				bgcolor: 'grey.100',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}
+		>
+			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.600' }} />
+		</Box>
+	)
+}
+
+/** One white S5 group of song rows (icon + preview + chevron + hairlines). */
+function SongGroup({ songs, previewLines }: { songs: BasicVariantPack[]; previewLines: number }) {
+	return (
+		<Box sx={GROUP_CARD_SX}>
+			{songs.map((s, i) => (
+				<Fragment key={`${String(s.packGuid)}-${i}`}>
+					<SongVariantCard
+						data={s}
+						dense
+						previewLines={previewLines}
+						leadingIcon={<SongLeadingIcon />}
+						trailingIcon={<ChevronRightRounded sx={{ color: 'grey.400' }} />}
+						sx={FLAT_ROW_SX}
+					/>
+					{i < songs.length - 1 && (
+						<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: ICON_DIVIDER_INSET }} />
+					)}
+				</Fragment>
+			))}
+		</Box>
+	)
+}
 
 // the chosen "deep soft" white → grey wash
 const WASH_HEIGHT = 400
@@ -60,6 +128,13 @@ export default function HomeMobile({
 	const loading = recommended.isLoading || lastAdded.isLoading
 
 	const searching = searchInputValue.trim().length > 0
+
+	// the docked search is portalled into the tab bar's slot so it stacks on
+	// top of the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)
+	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
+	useEffect(() => {
+		setTabBarSlot(document.getElementById(ABOVE_TABBAR_SLOT_ID))
+	}, [])
 
 	// ---- header ------------------------------------------------------
 	// Just the greeting — account/login lives in the bottom tab bar, nothing top-right.
@@ -100,53 +175,62 @@ export default function HomeMobile({
 		</Clickable>
 	)
 
-	// ---- picks: white cards floating on the grey canvas --------------
+	// ---- picks: one white S5 group on the grey canvas ----------------
 
 	const picks = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+		<Box sx={{ paddingX: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('recommended.idea'), browseAction)}
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-				{loading
-					? Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={i} variant="rounded" sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }} />
-					  ))
-					: rec.slice(0, 5).map((s) => (
-							<SongVariantCard key={s.packGuid} data={s} dense previewLines={PREVIEW_LINES} sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
-					  ))}
-			</Box>
+			{loading ? (
+				<Skeleton variant="rounded" sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }} />
+			) : (
+				<SongGroup songs={rec.slice(0, 5)} previewLines={PREVIEW_LINES} />
+			)}
 		</Box>
 	)
 
-	// ---- recent: quiet airy list so it recedes -----------------------
+	// ---- recent: quiet text-only S5 group (like the playlists list) ---
 
 	const dateOf = (publishedAt?: Date | null) => (publishedAt ? getSmartDateAgoString(publishedAt) : '')
 
 	const recentInner = loading ? (
-		Array.from({ length: 4 }).map((_, i) => (
-			<Skeleton key={i} variant="rounded" sx={{ height: 32, borderRadius: 1, bgcolor: 'grey.200' }} />
-		))
+		<Skeleton variant="rounded" sx={{ height: 220, borderRadius: 3, bgcolor: 'grey.200' }} />
 	) : (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-			{last.slice(0, 5).map((s) => (
-				<Clickable key={s.packGuid}>
-					<Link to="variant" params={parseVariantAlias(s.packAlias)}>
-						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingY: 1 }}>
-							<Typography color="grey.700" noWrap sx={{ flex: 1 }}>
-								{s.title}
-							</Typography>
-							<Typography small color="grey.400" noWrap>
-								{dateOf(s.publishedAt)}
-							</Typography>
-							<ChevronRightRounded fontSize="small" sx={{ color: 'grey.300' }} />
-						</Box>
-					</Link>
-				</Clickable>
+		<Box sx={GROUP_CARD_SX}>
+			{last.slice(0, 5).map((s, i) => (
+				<Fragment key={s.packGuid}>
+					<Clickable>
+						<Link to="variant" params={parseVariantAlias(s.packAlias)}>
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: 1.5,
+									paddingX: 1.75,
+									paddingY: 1.25,
+									transition: 'background-color 0.15s ease',
+									'&:active': { bgcolor: 'grey.100' },
+								}}
+							>
+								<Typography noWrap sx={{ flex: 1 }}>
+									{s.title}
+								</Typography>
+								<Typography small color="grey.600" noWrap>
+									{dateOf(s.publishedAt)}
+								</Typography>
+								<ChevronRightRounded fontSize="small" sx={{ color: 'grey.400' }} />
+							</Box>
+						</Link>
+					</Clickable>
+					{i < Math.min(last.length, 5) - 1 && (
+						<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: TEXT_DIVIDER_INSET }} />
+					)}
+				</Fragment>
 			))}
 		</Box>
 	)
 
 	const recent = (
-		<Box sx={{ paddingX: 2.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+		<Box sx={{ paddingX: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
 			{label(tHome('lastAdded.title'))}
 			{recentInner}
 		</Box>
@@ -188,7 +272,7 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	const heroBg = `linear-gradient(to bottom, ${theme.palette.common.white} 0%, ${theme.palette.common.white} ${WASH_SOLID_STOP}%, ${theme.palette.grey[100]} ${WASH_GREY_STOP}%)`
+	const heroBg = `linear-gradient(to bottom, ${theme.palette.common.white} 0%, ${theme.palette.common.white} ${WASH_SOLID_STOP}%, ${theme.palette.grey[50]} ${WASH_GREY_STOP}%)`
 
 	return (
 		<Box
@@ -198,7 +282,7 @@ export default function HomeMobile({
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				minHeight: '100dvh',
-				bgcolor: 'grey.100',
+				bgcolor: 'grey.50',
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -208,7 +292,7 @@ export default function HomeMobile({
 					width: '100%',
 					minWidth: 0,
 					minHeight: '100dvh',
-					bgcolor: 'grey.100', // the grey canvas that white cards float on
+					bgcolor: 'grey.50', // the light canvas that white groups sit on
 					display: 'flex',
 					flexDirection: 'column',
 					position: 'relative',
@@ -231,7 +315,7 @@ export default function HomeMobile({
 				<Box sx={{ position: 'relative', zIndex: 1 }}>
 					{header}
 					{searching ? (
-						<Box sx={{ paddingX: 2.5, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
+						<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
 							{searchString ? <MobileSearchResults searchString={searchString} smartSearch={smartSearch} /> : null}
 						</Box>
 					) : (
@@ -242,22 +326,24 @@ export default function HomeMobile({
 					)}
 				</Box>
 
-				{/* ===== SEARCH: docked above the tab bar (thumb zone) ===== */}
-				<Box
-					sx={{
-						position: 'fixed',
-						bottom: TAB_BAR,
-						left: 0,
-						right: 0,
-						paddingX: 2.5,
-						paddingBottom: 1.5,
-						boxSizing: 'border-box',
-						zIndex: 10,
-					}}
-				>
-					{search}
-				</Box>
-
+				{/* ===== SEARCH: portalled into the tab bar's slot so it stacks on
+				    top of the bar via layout (thumb zone, no magic offsets) ===== */}
+				{tabBarSlot &&
+					createPortal(
+						<Box
+							sx={{
+								width: '100%',
+								paddingX: 2,
+								paddingTop: 1,
+								paddingBottom: 1.25,
+								boxSizing: 'border-box',
+								bgcolor: 'grey.50',
+							}}
+						>
+							{search}
+						</Box>,
+						tabBarSlot
+					)}
 			</Box>
 		</Box>
 	)
@@ -312,17 +398,9 @@ function MobileSearchResults({ searchString, smartSearch }: { searchString: stri
 				{tHome('search.resultsTitle').replace(/:$/, '')}
 			</Typography>
 			{packs.length > 0 ? (
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-					{packs.map((p) => (
-						<SongVariantCard key={p.packGuid} data={p} dense previewLines={PREVIEW_LINES} sx={{ bgcolor: 'background.paper', boxShadow: 1, '&:hover': { bgcolor: 'background.paper' } }} />
-					))}
-				</Box>
+				<SongGroup songs={packs} previewLines={PREVIEW_LINES} />
 			) : loading ? (
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<Skeleton key={i} variant="rounded" sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }} />
-					))}
-				</Box>
+				<Skeleton variant="rounded" sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }} />
 			) : (
 				<Typography color="grey.600">{tHome('search.noResults')}</Typography>
 			)}
