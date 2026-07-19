@@ -12,12 +12,24 @@ import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { czechConjugation } from '@/tech/string/string.tech'
 import { ChevronRightRounded, QueueMusicRounded } from '@mui/icons-material'
+import { Fragment } from 'react'
 
 const PAGE_MAX_WIDTH = 480
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 96px)'
+
+// the playlists live in one white "group" surface (iOS-style grouped list);
+// rows are separated by a hairline inset to the text (no leading thumbnail —
+// playlists stay text-only, matching the desktop look)
+const GROUP_CARD_SX = {
+	bgcolor: 'background.paper',
+	borderRadius: 3,
+	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+	overflow: 'hidden',
+}
+const DIVIDER_INSET = 1.75
 
 type PlaylistyMobileProps = {
 	playlists: PlaylistData[]
@@ -38,41 +50,47 @@ export default function PlaylistyMobile({
 	sortType,
 	onSortChange,
 }: PlaylistyMobileProps) {
-	const card = (p: PlaylistData) => (
-		<Link key={p.guid} to="playlist" params={{ guid: p.guid }}>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1.5,
-					bgcolor: 'background.paper',
-					boxShadow: 1,
-					borderRadius: 2,
-					paddingX: 1.75,
-					paddingY: 1.25,
-					transition: 'background-color 0.15s ease',
-					'&:active': { bgcolor: 'grey.100' },
-				}}
-			>
-				<Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-					<Typography strong noWrap>
-						{p.title || 'Bez názvu'}
-					</Typography>
-					<Typography small color="grey.600" noWrap>
-						{p.itemsCount > 0 ? p.itemsCount : 'Žádná'}{' '}
-						{czechConjugation('píseň', 'písně', 'písní', p.itemsCount)}
-						{' · '}
-						{getSmartDateAgoString(new Date(p.updatedAt))}
-					</Typography>
+	const row = (p: PlaylistData, isLast: boolean) => (
+		<Fragment key={p.guid}>
+			<Link to="playlist" params={{ guid: p.guid }}>
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: 1.5,
+						paddingX: 1.75,
+						paddingY: 1.25,
+						transition: 'background-color 0.15s ease',
+						'&:active': { bgcolor: 'grey.100' },
+					}}
+				>
+					<Box
+						sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}
+					>
+						<Typography strong noWrap>
+							{p.title || 'Bez názvu'}
+						</Typography>
+						<Typography small color="grey.600" noWrap>
+							{p.itemsCount > 0 ? p.itemsCount : 'Žádná'}{' '}
+							{czechConjugation('píseň', 'písně', 'písní', p.itemsCount)}
+							{' · '}
+							{getSmartDateAgoString(new Date(p.updatedAt))}
+						</Typography>
+					</Box>
+
+					{p.teamName ? (
+						<Chip label={p.teamName} size="small" color="primary" />
+					) : null}
+
+					<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
 				</Box>
-
-				{p.teamName ? (
-					<Chip label={p.teamName} size="small" color="primary" />
-				) : null}
-
-				<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
-			</Box>
-		</Link>
+			</Link>
+			{!isLast && (
+				<Box
+					sx={{ height: '1px', bgcolor: 'grey.100', marginLeft: DIVIDER_INSET }}
+				/>
+			)}
+		</Fragment>
 	)
 
 	return (
@@ -83,7 +101,7 @@ export default function PlaylistyMobile({
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				minHeight: '100dvh',
-				bgcolor: 'grey.300',
+				bgcolor: 'grey.100',
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -94,7 +112,7 @@ export default function PlaylistyMobile({
 					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
-					bgcolor: 'grey.100',
+					bgcolor: 'grey.50',
 					display: 'flex',
 					flexDirection: 'column',
 					boxShadow: 3,
@@ -152,22 +170,39 @@ export default function PlaylistyMobile({
 
 				<Box
 					sx={{
-						paddingX: 2.5,
+						paddingX: 2,
 						paddingTop: 1,
 						paddingBottom: CONTENT_CLEARANCE,
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 1,
 					}}
 				>
 					{loading ? (
-						Array.from({ length: 6 }).map((_, i) => (
-							<Skeleton
-								key={i}
-								variant="rounded"
-								sx={{ height: 72, borderRadius: 2, bgcolor: 'grey.200' }}
-							/>
-						))
+						<Box sx={GROUP_CARD_SX}>
+							{Array.from({ length: 6 }).map((_, i) => (
+								<Fragment key={i}>
+									<Box sx={{ paddingX: 1.75, paddingY: 1.25 }}>
+										<Skeleton
+											variant="text"
+											sx={{ width: '55%', bgcolor: 'grey.100' }}
+										/>
+										<Skeleton
+											variant="text"
+											sx={{ width: '80%', bgcolor: 'grey.100' }}
+										/>
+									</Box>
+									{i < 5 && (
+										<Box
+											sx={{
+												height: '1px',
+												bgcolor: 'grey.100',
+												marginLeft: DIVIDER_INSET,
+											}}
+										/>
+									)}
+								</Fragment>
+							))}
+						</Box>
 					) : playlists.length === 0 ? (
 						<Box
 							sx={{
@@ -186,7 +221,9 @@ export default function PlaylistyMobile({
 							</Typography>
 						</Box>
 					) : (
-						playlists.map(card)
+						<Box sx={GROUP_CARD_SX}>
+							{playlists.map((p, i) => row(p, i === playlists.length - 1))}
+						</Box>
 					)}
 				</Box>
 			</Box>

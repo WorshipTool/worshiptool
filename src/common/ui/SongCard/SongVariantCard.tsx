@@ -15,7 +15,7 @@ import { Lock, Public, ThumbUpAlt, ThumbUpOffAlt } from '@mui/icons-material'
 import { alpha, styled, useTheme } from '@mui/material'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useTranslations } from 'next-intl'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, ReactNode, useEffect, useMemo, useState } from 'react'
 import { BasicVariantPack } from '../../../api/dtos'
 import useAuth from '../../../hooks/auth/useAuth'
 import { CustomChip } from '../CustomChip/CustomChip'
@@ -74,6 +74,10 @@ type SongCardProps = {
 	onSelect?: (selected: boolean) => void
 	onDeselect?: (selected: boolean) => void
 	icons?: SongCardIconData
+	/** Optional decorative icon rendered in a leading slot (mobile list rows) */
+	leadingIcon?: ReactNode
+	/** Optional icon rendered in a trailing slot, e.g. a disclosure chevron */
+	trailingIcon?: ReactNode
 	sx?: SxProps
 }
 export const SongVariantCard = memo(function S({
@@ -262,10 +266,53 @@ export const SongVariantCard = memo(function S({
 					onMouseEnter={() => setIsOver(true)}
 					onMouseLeave={() => setIsOver(false)}
 				>
+					{props.leadingIcon || props.trailingIcon ? (
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: 1.5,
+								paddingLeft: props.leadingIcon ? '1rem' : 0,
+								paddingRight: props.trailingIcon ? '1rem' : 0,
+							}}
+						>
+							{props.leadingIcon && (
+								<Box sx={{ flexShrink: 0, display: 'flex' }}>
+									{props.leadingIcon}
+								</Box>
+							)}
+							<Box sx={{ flex: 1, minWidth: 0 }}>
+								{renderContent({
+									noLeftPad: !!props.leadingIcon,
+									noRightPad: !!props.trailingIcon,
+								})}
+							</Box>
+							{props.trailingIcon && (
+								<Box sx={{ flexShrink: 0, display: 'flex' }}>
+									{props.trailingIcon}
+								</Box>
+							)}
+						</Box>
+					) : (
+						renderContent()
+					)}
+				</StyledContainer>
+			</Link>
+		</DraggableSong>
+	)
+
+	function renderContent(opts?: { noLeftPad?: boolean; noRightPad?: boolean }) {
+		const py = dense ? '0.6rem' : '1rem'
+		const px = dense ? '1rem' : '1rem'
+		const padding = `${py} ${opts?.noRightPad ? '0' : px} ${py} ${
+			opts?.noLeftPad ? '0' : px
+		}`
+		return (
 					<Box
 						sx={{
 							position: 'relative',
-							padding: dense ? '0.6rem 1rem' : '1rem',
+							padding,
 							...(selected && {
 								borderColor: 'primary.main',
 								borderWidth: 2,
@@ -370,8 +417,6 @@ export const SongVariantCard = memo(function S({
 							/>
 						</Box>
 					</Box>
-				</StyledContainer>
-			</Link>
-		</DraggableSong>
-	)
+		)
+	}
 })
