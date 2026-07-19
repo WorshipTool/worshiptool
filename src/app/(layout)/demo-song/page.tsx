@@ -467,15 +467,10 @@ function V11() {
 				<Typography variant="h4" strong={800} sx={{ marginBottom: 1.5 }}>Advent, advent</Typography>
 				<Lyrics />
 			</Box>
-			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 64px)', left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: MAXW, bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'grey.200', boxShadow: '0 -2px 10px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', paddingX: 1, height: 56, zIndex: 15 }}>
-				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
-					<IconBtn><MusicNoteRounded fontSize="small" sx={{ color: PRIMARY }} /></IconBtn>
-				</Box>
+			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 64px)', left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: MAXW, bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'grey.200', boxShadow: '0 -2px 10px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingX: 2, height: 56, zIndex: 15 }}>
+				<IconBtn><MusicNoteRounded fontSize="small" sx={{ color: PRIMARY }} /></IconBtn>
 				<Transpose />
-				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-					<IconBtn><FavoriteBorderRounded fontSize="small" /></IconBtn>
-					<IconBtn><MoreVertRounded fontSize="small" /></IconBtn>
-				</Box>
+				<IconBtn><MoreVertRounded fontSize="small" /></IconBtn>
 			</Box>
 		</Bleed>
 	)
@@ -489,17 +484,18 @@ function V12() {
 				<Typography variant="h4" strong={800} sx={{ marginBottom: 1.5 }}>Advent, advent</Typography>
 				<Lyrics />
 			</Box>
-			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 76px)', left: '50%', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: MAXW - 32, bgcolor: 'background.paper', borderRadius: 3, boxShadow: '0 6px 24px rgba(0,0,0,0.16)', display: 'flex', alignItems: 'center', paddingX: 1, height: 58, zIndex: 15 }}>
-				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 76px)', left: '50%', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: MAXW - 32, bgcolor: 'background.paper', borderRadius: 3, boxShadow: '0 6px 24px rgba(0,0,0,0.16)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingX: 1, height: 58, zIndex: 15 }}>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
 					<IconBtn><MusicNoteRounded fontSize="small" sx={{ color: PRIMARY }} /></IconBtn>
+					<IconBtn><FavoriteBorderRounded fontSize="small" /></IconBtn>
 				</Box>
-				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: 'grey.100', borderRadius: 5, paddingX: 0.5, height: 42 }}>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25, bgcolor: 'grey.100', borderRadius: 5, paddingX: 0.5, height: 42 }}>
 					<IconBtn><RemoveRounded /></IconBtn>
-					<Typography strong sx={{ minWidth: 64, textAlign: 'center' }}>Tónina D</Typography>
+					<Typography strong sx={{ minWidth: 54, textAlign: 'center' }}>Tónina D</Typography>
 					<IconBtn><AddRounded /></IconBtn>
 				</Box>
-				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-					<IconBtn><FavoriteBorderRounded fontSize="small" /></IconBtn>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					<IconBtn><PlaylistAddRounded fontSize="small" /></IconBtn>
 					<IconBtn><MoreVertRounded fontSize="small" /></IconBtn>
 				</Box>
 			</Box>
