@@ -61,6 +61,9 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 						width: { xs: '100vw', md: 'auto' },
 						minWidth: { xs: '100vw', md: 0 },
 						marginLeft: { xs: 'calc(50% - 50vw)', md: 0 },
+						// no global border-box reset in the app — without this the
+						// padding would push the 100vw surface past the viewport
+						boxSizing: 'border-box',
 						padding: { xs: 2.5, md: 3 },
 						// phone: extra bottom room so the song end clears the
 						// floating control dock stacked above the tab bar
