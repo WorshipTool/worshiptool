@@ -10,8 +10,11 @@ import {
 	AppsOutlined,
 	HomeOutlined,
 	HomeRounded,
+	InfoOutlined,
+	InfoRounded,
 	LibraryMusicOutlined,
 	LibraryMusicRounded,
+	LoginRounded,
 	PersonOutlineRounded,
 	PersonRounded,
 	Search,
@@ -115,40 +118,61 @@ export default function MobileAppTabBar() {
 					/>
 				</Link>
 
-				<Box
-					component="button"
-					type="button"
-					onClick={() => setToolsOpen(true)}
-					sx={{
-						flex: 1,
-						minWidth: 0,
-						border: 'none',
-						background: 'transparent',
-						padding: 0,
-						cursor: 'pointer',
-						font: 'inherit',
-					}}
-				>
-					<TabItem
-						icon={<AppsOutlined />}
-						activeIcon={<Apps />}
-						label={tNav('tools')}
-						active={toolsOpen}
-					/>
-				</Box>
+				{/* logged in: Nástroje + Účet; logged out: O aplikaci + Přihlásit se */}
+				{loggedIn ? (
+						<Box
+							component="button"
+							type="button"
+							onClick={() => setToolsOpen(true)}
+							sx={{
+								flex: 1,
+								minWidth: 0,
+								border: 'none',
+								background: 'transparent',
+								padding: 0,
+								cursor: 'pointer',
+								font: 'inherit',
+							}}
+						>
+							<TabItem
+								icon={<AppsOutlined />}
+								activeIcon={<Apps />}
+								label={tNav('tools')}
+								active={toolsOpen}
+							/>
+						</Box>
+					) : (
+						<Link to="about" params={{}} style={{ flex: 1, minWidth: 0 }}>
+							<TabItem
+								icon={<InfoOutlined />}
+								activeIcon={<InfoRounded />}
+								label={tNav('about')}
+							/>
+						</Link>
+					)}
 
-				<Link
-					to={loggedIn ? 'account' : 'login'}
-					params={loggedIn ? {} : { previousPage: '', message: '' }}
-					style={{ flex: 1, minWidth: 0 }}
-				>
-					<TabItem
-						icon={<PersonOutlineRounded />}
-						activeIcon={<PersonRounded />}
-						label={tNav('account')}
-						active={active === 'account'}
-					/>
-				</Link>
+					{loggedIn ? (
+						<Link to="account" params={{}} style={{ flex: 1, minWidth: 0 }}>
+							<TabItem
+								icon={<PersonOutlineRounded />}
+								activeIcon={<PersonRounded />}
+								label={tNav('account')}
+								active={active === 'account'}
+							/>
+						</Link>
+					) : (
+						<Link
+							to="login"
+							params={{ previousPage: '', message: '' }}
+							style={{ flex: 1, minWidth: 0 }}
+						>
+							<TabItem
+								icon={<LoginRounded />}
+								label={tNav('login')}
+								active={active === 'account'}
+							/>
+						</Link>
+					)}
 				</Box>
 			</Box>
 
