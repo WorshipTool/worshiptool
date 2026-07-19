@@ -12,7 +12,7 @@ import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useI
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
-import { Box, Gap, useTheme } from '@/common/ui'
+import { Box, Gap, Typography, useTheme } from '@/common/ui'
 import { useMediaQuery } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { useRerender } from '@/hooks/useRerender'
@@ -162,9 +162,18 @@ export default function SongContainer({
 											/>
 										)}
 										<Gap value={0.5} />
+										{/* phone: a proper page header instead of the sheet's
+										    small inline title (suppressed below) */}
+										{phoneVersion && !inEditMode && (
+											<Box sx={{ paddingTop: 1, paddingBottom: 2.5 }}>
+												<Typography variant="h4" strong={800}>
+													{editedTitle}
+												</Typography>
+											</Box>
+										)}
 										<SheetDisplay
 											sheet={currentSheet}
-											title={editedTitle}
+											title={phoneVersion && !inEditMode ? '' : editedTitle}
 											hideChords={!showChords}
 											variant={'default'}
 											editMode={inEditMode}

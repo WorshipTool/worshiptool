@@ -77,7 +77,12 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 							md: '0px 2px 3px 1px rgba(0, 0, 0, 0.1)',
 						},
 						borderRadius: { xs: 0, md: 1 },
-						minHeight: { xs: 'calc(100dvh - 96px)', md: 'auto' },
+						// phone: the white surface always fills the whole screen —
+						// short songs must not expose the grey page background below
+						minHeight: {
+							xs: 'calc(100dvh - env(safe-area-inset-top))',
+							md: 'auto',
+						},
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',
