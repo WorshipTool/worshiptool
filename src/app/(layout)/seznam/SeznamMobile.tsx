@@ -16,10 +16,11 @@ const PER_PAGE = 12
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// the paginator sits flush on top of the global tab bar (no gap) and stays
-// visible; it renders BEHIND the bar (lower z-index) so the bar's raised center
-// action passes in front of it. The list clears both.
-const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 66px)'
+// the tab bar is 78px tall; the paginator sits flush on top of it (bottom =
+// bar height) so there's no gap and none of it is hidden under the bar. It
+// renders just behind the bar so the raised center action (which pokes ~5px
+// above the bar) passes in front of the seam. The list clears both.
+const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 78px)'
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
 const PREVIEW_LINES = 1
 // divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
