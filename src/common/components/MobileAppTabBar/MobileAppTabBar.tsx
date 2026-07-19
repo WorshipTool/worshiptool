@@ -1,7 +1,7 @@
 'use client'
 
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
-import MobileToolsSheet from '@/common/components/MobileAppTabBar/MobileToolsSheet'
+import MobileToolsMenu from '@/common/components/MobileAppTabBar/MobileToolsMenu'
 import { Box, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import useAuth from '@/hooks/auth/useAuth'
@@ -93,14 +93,15 @@ export default function MobileAppTabBar() {
 					/>
 				</Link>
 
-				{/* raised main action: search */}
-				<Link
-					to="home"
-					params={{ hledat: '' }}
-					style={{ flex: 1, minWidth: 0 }}
-					onClick={() => window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))}
-				>
-					<CenterSearch label={tNav('search')} />
+				{/* raised main action: search (house Link doesn't forward onClick,
+				    so the search-focus event is dispatched from the child) */}
+				<Link to="home" params={{ hledat: '' }} style={{ flex: 1, minWidth: 0 }}>
+					<CenterSearch
+						label={tNav('search')}
+						onClick={() =>
+							window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
+						}
+					/>
 				</Link>
 
 				<Box
@@ -140,7 +141,7 @@ export default function MobileAppTabBar() {
 			</Box>
 
 			{/* lazy-mounted so its data hooks only run when the sheet is opened */}
-			{toolsOpen && <MobileToolsSheet onClose={() => setToolsOpen(false)} />}
+			{toolsOpen && <MobileToolsMenu onClose={() => setToolsOpen(false)} />}
 		</>
 	)
 }
@@ -154,7 +155,8 @@ type TabItemProps = {
 
 // side tab: blue (brand) when active, grey when not; filled icon + bold label when active
 function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
-	const color = active ? 'primary.main' : 'grey.500'
+	const iconColor = active ? 'primary.main' : 'grey.500'
+	const labelColor = active ? 'primary.main' : 'grey.700'
 	return (
 		<Box
 			sx={{
@@ -163,20 +165,17 @@ function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 				alignItems: 'center',
 				gap: 0.6,
 				minWidth: 0,
-				color,
 			}}
 		>
-			<Box sx={{ display: 'flex', '& svg': { fontSize: 25 } }}>
+			<Box sx={{ color: iconColor, display: 'flex', '& svg': { fontSize: 25 } }}>
 				{active ? activeIcon ?? icon : icon}
 			</Box>
 			<Typography
 				noWrap
-				sx={{
-					fontSize: '0.65rem',
-					lineHeight: 1.2,
-					color: 'inherit',
-					fontWeight: active ? 700 : 500,
-				}}
+				size="0.65rem"
+				strong={active ? 700 : 500}
+				color={labelColor}
+				sx={{ lineHeight: 1.2 }}
 			>
 				{label}
 			</Typography>
@@ -185,9 +184,10 @@ function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 }
 
 // raised circular blue "Hledat" — the bar's primary action
-function CenterSearch({ label }: { label: string }) {
+function CenterSearch({ label, onClick }: { label: string; onClick?: () => void }) {
 	return (
 		<Box
+			onClick={onClick}
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -215,7 +215,10 @@ function CenterSearch({ label }: { label: string }) {
 			</Box>
 			<Typography
 				noWrap
-				sx={{ fontSize: '0.65rem', lineHeight: 1.2, color: 'primary.main', fontWeight: 700 }}
+				size="0.65rem"
+				strong={700}
+				color="primary.main"
+				sx={{ lineHeight: 1.2 }}
 			>
 				{label}
 			</Typography>
