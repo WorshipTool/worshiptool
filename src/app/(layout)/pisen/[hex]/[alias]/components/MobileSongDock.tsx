@@ -145,31 +145,32 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 					boxShadow: '0 6px 24px rgba(0,0,0,0.16)',
 					display: 'flex',
 					alignItems: 'center',
+					// every control is a direct child, so the gaps between all of
+					// them (including around the transpose pill) stay equal on any
+					// device width
 					justifyContent: 'space-between',
-					paddingX: 1,
+					paddingX: 1.5,
 					height: 58,
 				}}
 			>
-				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					{hasChords && (
-						<IconButton
-							tooltip={props.showChords ? tHide('hide') : tHide('show')}
-							onClick={() => props.onToggleChords(!props.showChords)}
-						>
-							{props.showChords ? (
-								<MusicNoteRounded
-									fontSize="small"
-									sx={{ color: 'primary.main' }}
-								/>
-							) : (
-								<MusicOffRounded fontSize="small" sx={{ color: 'grey.500' }} />
-							)}
-						</IconButton>
-					)}
-					{user && (
-						<HeartLikeButton packGuid={props.variant.packGuid} interactable />
-					)}
-				</Box>
+				{hasChords && (
+					<IconButton
+						tooltip={props.showChords ? tHide('hide') : tHide('show')}
+						onClick={() => props.onToggleChords(!props.showChords)}
+					>
+						{props.showChords ? (
+							<MusicNoteRounded
+								fontSize="small"
+								sx={{ color: 'primary.main' }}
+							/>
+						) : (
+							<MusicOffRounded fontSize="small" sx={{ color: 'grey.500' }} />
+						)}
+					</IconButton>
+				)}
+				{user && (
+					<HeartLikeButton packGuid={props.variant.packGuid} interactable />
+				)}
 
 				{hasChords && (
 					<Box
@@ -203,28 +204,26 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 					</Box>
 				)}
 
-				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					{isLoggedIn() && (
-						<IconButton
-							tooltip={tTopPanel('addToPlaylist')}
-							onClick={(e) => setPlaylistAnchor(e.currentTarget)}
-						>
-							<PlaylistAddRounded fontSize="small" sx={{ color: 'grey.700' }} />
-						</IconButton>
-					)}
-					<SongsOptionsButton
-						reloadSong={props.reloadSong}
-						variant={props.variant}
-						sheet={props.sheet}
-						song={props.song}
-						onEditClick={props.onEditClick}
-						isInEditMode={false}
-						saving={props.saving}
-						editedTitle={props.editedTitle}
-						isOwner={props.isOwner}
-						anyChange={props.anyChange}
-					/>
-				</Box>
+				{isLoggedIn() && (
+					<IconButton
+						tooltip={tTopPanel('addToPlaylist')}
+						onClick={(e) => setPlaylistAnchor(e.currentTarget)}
+					>
+						<PlaylistAddRounded fontSize="small" sx={{ color: 'grey.700' }} />
+					</IconButton>
+				)}
+				<SongsOptionsButton
+					reloadSong={props.reloadSong}
+					variant={props.variant}
+					sheet={props.sheet}
+					song={props.song}
+					onEditClick={props.onEditClick}
+					isInEditMode={false}
+					saving={props.saving}
+					editedTitle={props.editedTitle}
+					isOwner={props.isOwner}
+					anyChange={props.anyChange}
+				/>
 			</Box>
 
 			{/* private note popup (desktop shows it as a sticky side panel) */}
