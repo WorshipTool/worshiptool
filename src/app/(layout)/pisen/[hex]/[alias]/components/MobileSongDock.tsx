@@ -3,6 +3,8 @@
 import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
 import EditButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/EditButton'
 import SongsOptionsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
+import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import Popup from '@/common/components/Popup/Popup'
 import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
@@ -14,6 +16,7 @@ import { printDocumentByUrl } from '@/tech/print.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { ExtendedVariantPack } from '@/types/song'
 import {
+	AddComment,
 	AddRounded,
 	FeaturedPlayList,
 	MusicNoteRounded,
@@ -59,6 +62,9 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 	const tHide = useTranslations('songPage.hideChords')
 	const tTopPanel = useTranslations('songPage.topPanel')
 	const tPrint = useTranslations('songPage.print')
+	const tNote = useTranslations('userNote')
+
+	const [noteOpen, setNoteOpen] = useState(false)
 
 	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
 	useEffect(() => {
@@ -185,6 +191,11 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 				)}
 
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					{user && (
+						<IconButton tooltip={tNote('title')} onClick={() => setNoteOpen(true)}>
+							<AddComment fontSize="small" sx={{ color: 'grey.700' }} />
+						</IconButton>
+					)}
 					{isLoggedIn() && <AddToPlaylistButton variant={props.variant} />}
 					<SongsOptionsButton
 						reloadSong={props.reloadSong}
@@ -200,6 +211,13 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 					/>
 				</Box>
 			</Box>
+
+			{/* private note popup (desktop shows it as a sticky side panel) */}
+			{noteOpen && (
+				<Popup open onClose={() => setNoteOpen(false)} width={360}>
+					<UserNotePanel forceOpen />
+				</Popup>
+			)}
 		</>,
 		tabBarSlot
 	)

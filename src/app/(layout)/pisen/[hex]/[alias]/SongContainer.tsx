@@ -174,7 +174,8 @@ export default function SongContainer({
 											}}
 										/>
 									</Box>
-									{!inEditMode && (
+									{/* phone: the note lives in the dock's popup instead */}
+									{!inEditMode && !phoneVersion && (
 										<Box>
 											{user && (
 												<>
