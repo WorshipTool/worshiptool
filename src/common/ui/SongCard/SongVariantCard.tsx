@@ -304,7 +304,7 @@ export const SongVariantCard = memo(function S({
 
 	function renderContent(opts?: { noLeftPad?: boolean; noRightPad?: boolean }) {
 		const py = dense ? '0.6rem' : '1rem'
-		const px = dense ? '1rem' : '1rem'
+		const px = '1rem'
 		const padding = `${py} ${opts?.noRightPad ? '0' : px} ${py} ${
 			opts?.noLeftPad ? '0' : px
 		}`

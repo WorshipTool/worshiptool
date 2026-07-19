@@ -66,7 +66,7 @@ function SongLeadingIcon() {
 				justifyContent: 'center',
 			}}
 		>
-			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.500' }} />
+			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.600' }} />
 		</Box>
 	)
 }
@@ -221,7 +221,7 @@ export default function SeznamMobile({
 											<Box
 												sx={{
 													height: '1px',
-													bgcolor: 'grey.100',
+													bgcolor: 'grey.200',
 													marginLeft: DIVIDER_INSET,
 												}}
 											/>
@@ -243,7 +243,7 @@ export default function SeznamMobile({
 											<Typography
 												small
 												strong={700}
-												color="grey.500"
+												color="grey.700"
 												sx={{ letterSpacing: '0.5px' }}
 											>
 												{group.letter}
@@ -270,7 +270,7 @@ export default function SeznamMobile({
 														<Box
 															sx={{
 																height: '1px',
-																bgcolor: 'grey.100',
+																bgcolor: 'grey.200',
 																marginLeft: DIVIDER_INSET,
 															}}
 														/>

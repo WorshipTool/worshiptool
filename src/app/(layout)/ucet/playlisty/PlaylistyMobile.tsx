@@ -195,7 +195,7 @@ export default function PlaylistyMobile({
 										<Box
 											sx={{
 												height: '1px',
-												bgcolor: 'grey.100',
+												bgcolor: 'grey.200',
 												marginLeft: DIVIDER_INSET,
 											}}
 										/>
