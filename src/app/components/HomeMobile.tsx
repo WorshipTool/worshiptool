@@ -93,11 +93,6 @@ function SongGroup({ songs, previewLines }: { songs: BasicVariantPack[]; preview
 	)
 }
 
-// the chosen "deep soft" white → grey wash
-const WASH_HEIGHT = 400
-const WASH_SOLID_STOP = 25
-const WASH_GREY_STOP = 100
-
 type HomeMobileProps = {
 	searchInputValue: string
 	onSearchValueChange: (value: string) => void
@@ -106,10 +101,10 @@ type HomeMobileProps = {
 }
 
 /**
- * Native-feeling mobile home: a grey canvas with a soft white → grey wash at
- * the top, white "recommended" cards floating on the grey, a quiet "last
- * added" list, a docked search in the thumb zone and a blue bottom tab bar.
- * The desktop layout stays in HomeDesktop; this component owns the phone view.
+ * Native-feeling mobile home: a flat light-grey canvas with white grouped
+ * lists (recommended picks, a quiet "last added"), a docked search in the
+ * thumb zone and the bottom tab bar. The desktop layout stays in HomeDesktop;
+ * this component owns the phone view.
  */
 export default function HomeMobile({
 	searchInputValue,
@@ -272,8 +267,6 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	const heroBg = `linear-gradient(to bottom, ${theme.palette.common.white} 0%, ${theme.palette.common.white} ${WASH_SOLID_STOP}%, ${theme.palette.grey[50]} ${WASH_GREY_STOP}%)`
-
 	return (
 		<Box
 			sx={{
@@ -299,19 +292,6 @@ export default function HomeMobile({
 					overflow: 'hidden',
 				}}
 			>
-				{/* soft white → grey wash behind the top; fades out inside the picks */}
-				<Box
-					sx={{
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						right: 0,
-						height: `calc(env(safe-area-inset-top) + ${WASH_HEIGHT}px)`,
-						background: heroBg,
-						zIndex: 0,
-						pointerEvents: 'none',
-					}}
-				/>
 				<Box sx={{ position: 'relative', zIndex: 1 }}>
 					{header}
 					{searching ? (
