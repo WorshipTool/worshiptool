@@ -16,11 +16,11 @@ const PER_PAGE = 12
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// the paginator floats just above the global tab bar and always visible; it
-// clears the bar's raised center action (which pokes ~18px above the bar), and
-// the list clears both so the last card isn't hidden behind them
-const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 92px)'
-const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
+// the paginator sits flush on top of the global tab bar (no gap) and stays
+// visible; it renders BEHIND the bar (lower z-index) so the bar's raised center
+// action passes in front of it. The list clears both.
+const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 66px)'
+const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
 const PREVIEW_LINES = 1
 // divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
 const DIVIDER_INSET = 8.5
@@ -305,7 +305,7 @@ export default function SeznamMobile({
 				</Box>
 			</Box>
 
-			{/* paginator docked just above the tab bar — always visible */}
+			{/* paginator sits flush on the tab bar — always visible, behind the bar */}
 			{pagesCount > 1 && (
 				<Box
 					sx={{
@@ -315,7 +315,7 @@ export default function SeznamMobile({
 						transform: 'translateX(-50%)',
 						width: '100%',
 						maxWidth: PAGE_MAX_WIDTH,
-						zIndex: 10,
+						zIndex: 9,
 						boxSizing: 'border-box',
 						display: 'flex',
 						justifyContent: 'center',
