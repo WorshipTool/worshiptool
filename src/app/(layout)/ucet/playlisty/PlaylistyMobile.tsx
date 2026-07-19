@@ -14,7 +14,6 @@ import { czechConjugation } from '@/tech/string/string.tech'
 import { ChevronRightRounded, QueueMusicRounded } from '@mui/icons-material'
 import { Fragment } from 'react'
 
-const PAGE_MAX_WIDTH = 480
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
@@ -101,7 +100,7 @@ export default function PlaylistyMobile({
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				minHeight: '100dvh',
-				bgcolor: 'grey.100',
+				bgcolor: 'grey.50',
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -109,13 +108,11 @@ export default function PlaylistyMobile({
 			<Box
 				sx={{
 					width: '100%',
-					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
 					bgcolor: 'grey.50',
 					display: 'flex',
 					flexDirection: 'column',
-					boxShadow: 3,
 				}}
 			>
 				<Box

@@ -27,8 +27,6 @@ import {
 	mobileTabForPath,
 } from './nav.constants'
 
-const PAGE_MAX_WIDTH = 480
-
 /**
  * The app's mobile bottom navigation — a light (white) tab bar with a raised
  * blue "Hledat" main action in the center, flanked by Domů / Písně on the left
@@ -62,10 +60,8 @@ export default function MobileAppTabBar() {
 				sx={{
 					position: 'fixed',
 					bottom: 0,
-					left: '50%',
-					transform: 'translateX(-50%)',
-					width: '100%',
-					maxWidth: PAGE_MAX_WIDTH,
+					left: 0,
+					right: 0,
 					display: 'flex',
 					flexDirection: 'column',
 					zIndex: 10,

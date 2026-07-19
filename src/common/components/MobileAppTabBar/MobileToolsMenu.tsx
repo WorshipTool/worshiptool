@@ -5,8 +5,6 @@ import useToolsMenuItems from '@/common/components/Toolbar/components/RightAccou
 import { Box, useTheme } from '@/common/ui'
 import { alpha, Fade } from '@/common/ui/mui'
 
-const PAGE_MAX_WIDTH = 480
-
 /**
  * Mobile "Nástroje" menu — the phone counterpart of the desktop Apps menu.
  * Rendered as an overlay icon grid anchored just above the tab bar near the
@@ -31,15 +29,13 @@ export default function MobileToolsMenu({ onClose }: { onClose: () => void }) {
 				}}
 			/>
 
-			{/* centered max-width anchor so the card lines up with the bar */}
+			{/* full-width anchor so the card lines up with the bar */}
 			<Box
 				sx={{
 					position: 'fixed',
-					left: '50%',
-					transform: 'translateX(-50%)',
+					left: 0,
+					right: 0,
 					bottom: 0,
-					width: '100%',
-					maxWidth: PAGE_MAX_WIDTH,
 					height: 0,
 					zIndex: 12,
 					pointerEvents: 'none',

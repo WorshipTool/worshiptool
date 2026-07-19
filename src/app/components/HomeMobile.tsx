@@ -18,7 +18,6 @@ import { ChevronRightRounded, SearchRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-const PAGE_MAX_WIDTH = 480
 // On app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top.
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
@@ -199,7 +198,7 @@ export default function HomeMobile({
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				minHeight: '100dvh',
-				bgcolor: 'grey.300',
+				bgcolor: 'grey.100',
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -207,13 +206,11 @@ export default function HomeMobile({
 			<Box
 				sx={{
 					width: '100%',
-					maxWidth: PAGE_MAX_WIDTH,
 					minWidth: 0,
 					minHeight: '100dvh',
 					bgcolor: 'grey.100', // the grey canvas that white cards float on
 					display: 'flex',
 					flexDirection: 'column',
-					boxShadow: 3,
 					position: 'relative',
 					overflow: 'hidden',
 				}}
@@ -250,10 +247,8 @@ export default function HomeMobile({
 					sx={{
 						position: 'fixed',
 						bottom: TAB_BAR,
-						left: '50%',
-						transform: 'translateX(-50%)',
-						width: '100%',
-						maxWidth: PAGE_MAX_WIDTH,
+						left: 0,
+						right: 0,
 						paddingX: 2.5,
 						paddingBottom: 1.5,
 						boxSizing: 'border-box',
