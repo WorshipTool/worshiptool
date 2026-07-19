@@ -58,6 +58,9 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 						// mobile: clean white reading surface that fills the screen;
 						// desktop (md+): the original grey "paper" card, unchanged
 						padding: { xs: 2.5, md: 3 },
+						// phone: extra bottom room so the song end clears the
+						// floating control dock stacked above the tab bar
+						paddingBottom: { xs: 10, md: 3 },
 						backgroundColor: { xs: 'background.paper', md: 'grey.200' },
 						borderStyle: 'solid',
 						borderWidth: { xs: 0, md: 1 },

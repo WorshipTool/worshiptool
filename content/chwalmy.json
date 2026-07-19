@@ -337,6 +337,10 @@
 	},
 	"songPage": {
 		"topPanel": {
+			"presentationItem": {
+				"title": "Prezentacja",
+				"subtitle": "Otwórz jako prezentację"
+			},
 			"cannotEditPublished": "Nie można edytować opublikowanej pieśni.",
 			"updateSuccess": {
 				"withTitle": "Pieśń {title} została edytowana.",
@@ -392,6 +396,7 @@
 		},
 		"transpose": {
 			"title": "Transpozycja",
+			"keyWithNote": "Tonacja {note}",
 			"increase": "Podnieś o półton",
 			"decrease": "Obniż o półton"
 		},

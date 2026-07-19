@@ -337,6 +337,10 @@
 	},
 	"songPage": {
 		"topPanel": {
+			"presentationItem": {
+				"title": "Presentation",
+				"subtitle": "Open as a presentation"
+			},
 			"cannotEditPublished": "Cannot edit a published song.",
 			"updateSuccess": {
 				"withTitle": "Song {title} has been updated.",
@@ -392,6 +396,7 @@
 		},
 		"transpose": {
 			"title": "Transpose",
+			"keyWithNote": "Key {note}",
 			"increase": "Transpose up a semitone",
 			"decrease": "Transpose down a semitone"
 		},

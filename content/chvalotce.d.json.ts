@@ -340,6 +340,10 @@ declare const messages: {
 	},
 	"songPage": {
 		"topPanel": {
+			"presentationItem": {
+				"title": "Prezentace",
+				"subtitle": "Otevřít jako prezentaci"
+			},
 			"cannotEditPublished": "Nelze upravit veřejnou píseň.",
 			"updateSuccess": {
 				"withTitle": "Píseň {title} byla upravena.",
@@ -395,6 +399,7 @@ declare const messages: {
 		},
 		"transpose": {
 			"title": "Transpozice",
+			"keyWithNote": "Tónina {note}",
 			"increase": "Zvýšit o půltón",
 			"decrease": "Snížit o půltón"
 		},

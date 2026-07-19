@@ -4,12 +4,15 @@ import AdditionalSongInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/componen
 import DeletedInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/components/DeletedInfoPanel'
 import { SONG_OPTIONS_BUTTON_ID } from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
+import MobileSongDock from '@/app/(layout)/pisen/[hex]/[alias]/components/MobileSongDock'
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
 import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
+import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
-import { Box, Gap } from '@/common/ui'
+import { Box, Gap, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { useRerender } from '@/hooks/useRerender'
 import { ExtendedVariantPack } from '@/types/song'
@@ -41,6 +44,16 @@ export default function SongContainer({
 	const [showChords, setShowChords] = useState(true)
 
 	const { user } = useAuth()
+
+	// phone: the classic TopPanel is replaced by the floating bottom dock
+	// (except in edit mode, which keeps the TopPanel's save/cancel UI)
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+
+	const isOwner = useMemo(() => {
+		if (!user) return false
+		return variant.createdByGuid === user.guid
+	}, [user, variant])
 
 	const rerender = useRerender()
 
@@ -89,19 +102,38 @@ export default function SongContainer({
 		>
 			<SmartPortalMenuProvider id={SONG_OPTIONS_BUTTON_ID}>
 				<Box display={'flex'} flexDirection={'column'}>
-					<TopPanel
-						transpose={transpose}
-						variant={variant}
-						reloadSong={reload}
-						title={editedTitle}
-						editedTitle={editedTitle}
-						sheet={currentSheet as Sheet}
-						song={song as SongDto}
-						onEditClick={onEditClick}
-						isInEditMode={inEditMode}
-						cancelEditing={cancelEditing}
-						hideChords={!showChords}
-					/>
+					{(!phoneVersion || inEditMode) && (
+						<TopPanel
+							transpose={transpose}
+							variant={variant}
+							reloadSong={reload}
+							title={editedTitle}
+							editedTitle={editedTitle}
+							sheet={currentSheet as Sheet}
+							song={song as SongDto}
+							onEditClick={onEditClick}
+							isInEditMode={inEditMode}
+							cancelEditing={cancelEditing}
+							hideChords={!showChords}
+						/>
+					)}
+
+					{phoneVersion && !inEditMode && !variant.deleted && currentSheet && (
+						<MobileSongDock
+							variant={variant}
+							sheet={currentSheet}
+							song={song as SongDto}
+							showChords={showChords}
+							onToggleChords={setShowChords}
+							transpose={transpose}
+							reloadSong={reload}
+							onEditClick={onEditClick}
+							saving={false}
+							editedTitle={editedTitle}
+							isOwner={isOwner}
+							anyChange={false}
+						/>
+					)}
 
 					<>
 						{variant && variant.deleted ? (
@@ -119,7 +151,7 @@ export default function SongContainer({
 								>
 									<Box flex={1}>
 										<Gap value={0.5} />
-										{currentSheet.getKeyChord() && (
+										{!phoneVersion && currentSheet.getKeyChord() && (
 											<HideChordsButton
 												hiddenValue={!showChords}
 												onChange={(value) => setShowChords(!value)}

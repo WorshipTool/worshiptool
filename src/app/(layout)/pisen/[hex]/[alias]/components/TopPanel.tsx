@@ -135,8 +135,8 @@ export default function TopPanel(props: TopPanelProps) {
 				}}
 			>
 				<SmartPortalMenuItem
-					title={'Prezentace'}
-					subtitle="Otevřít jako prezentaci"
+					title={tSongPage('topPanel.presentationItem.title')}
+					subtitle={tSongPage('topPanel.presentationItem.subtitle')}
 					to="variantCards"
 					toParams={{
 						...parseVariantAlias(props.variant.packAlias),
