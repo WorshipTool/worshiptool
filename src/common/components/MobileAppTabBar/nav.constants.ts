@@ -5,6 +5,14 @@
 /** Width below which the mobile tab bar shows (and the top bar hides). */
 export const MOBILE_NAV_BREAKPOINT = 700
 
+/**
+ * DOM id of the slot the tab bar renders directly above itself. Pages portal
+ * their bottom-docked content (e.g. a paginator) into it so it stacks on top of
+ * the bar via layout — no hard-coded bar height, and it follows automatically
+ * if the bar's height ever changes.
+ */
+export const ABOVE_TABBAR_SLOT_ID = 'mobile-above-tabbar-slot'
+
 /** Bottom clearance pages need so their content isn't hidden by the fixed bar
  * (accounts for the raised center action that pokes above the bar). */
 export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 80px)'

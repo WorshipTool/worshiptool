@@ -3,6 +3,7 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos/song/song.map'
 import { GetListSongData } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
+import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, CircularProgress, Typography } from '@/common/ui'
 import { Pagination } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -10,17 +11,16 @@ import { SongVariantCard } from '@/common/ui/SongCard'
 import { ChevronRightRounded, MusicNoteRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment, useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const PAGE_MAX_WIDTH = 480
 const PER_PAGE = 12
 // on app-shell routes the top bar's sticky spacer shrinks to the safe-area
 // inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// the tab bar is 78px tall; the paginator sits flush on top of it (bottom =
-// bar height) so there's no gap and none of it is hidden under the bar. It
-// renders just behind the bar so the raised center action (which pokes ~5px
-// above the bar) passes in front of the seam. The list clears both.
-const TAB_BAR_OFFSET = 'calc(env(safe-area-inset-bottom) + 78px)'
+// the paginator is portalled into the tab bar's slot so it stacks on top of the
+// bar via layout (no hard-coded bar height); the list just needs enough bottom
+// clearance to sit above the bar + paginator
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
 const PREVIEW_LINES = 1
 // divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
@@ -96,6 +96,13 @@ export default function SeznamMobile({
 
 	const [items, setItems] = useState<GetListSongData[]>([])
 	const [loading, setLoading] = useState(true)
+
+	// the paginator is portalled into the tab bar's slot so it stacks on top of
+	// the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)
+	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
+	useEffect(() => {
+		setTabBarSlot(document.getElementById(ABOVE_TABBAR_SLOT_ID))
+	}, [])
 
 	const pagesCount = Math.max(1, Math.ceil(count / PER_PAGE))
 
@@ -306,46 +313,44 @@ export default function SeznamMobile({
 				</Box>
 			</Box>
 
-			{/* paginator sits flush on the tab bar — always visible, behind the bar */}
-			{pagesCount > 1 && (
-				<Box
-					sx={{
-						position: 'fixed',
-						bottom: TAB_BAR_OFFSET,
-						left: '50%',
-						transform: 'translateX(-50%)',
-						width: '100%',
-						maxWidth: PAGE_MAX_WIDTH,
-						zIndex: 9,
-						boxSizing: 'border-box',
-						display: 'flex',
-						justifyContent: 'center',
-						paddingY: 0.75,
-						bgcolor: 'background.paper',
-						borderTop: '1px solid',
-						borderColor: 'grey.200',
-						boxShadow: '0 -2px 8px rgba(0,0,0,0.06)',
-					}}
-				>
-					<Pagination
-						count={pagesCount}
-						page={page}
-						onChange={(_, p) => goToPage(p)}
-						color="primary"
-						siblingCount={0}
-						boundaryCount={1}
+			{/* paginator — portalled into the tab bar's slot so it stacks on top of
+			    the bar via layout, always visible */}
+			{pagesCount > 1 &&
+				tabBarSlot &&
+				createPortal(
+					<Box
 						sx={{
-							// finger-sized touch targets (44px) while staying compact
-							'& .MuiPaginationItem-root': {
-								minWidth: 44,
-								height: 44,
-								margin: '0 2px',
-								fontSize: '1rem',
-							},
+							width: '100%',
+							boxSizing: 'border-box',
+							display: 'flex',
+							justifyContent: 'center',
+							paddingY: 0.75,
+							bgcolor: 'background.paper',
+							borderTop: '1px solid',
+							borderColor: 'grey.200',
+							boxShadow: '0 -2px 8px rgba(0,0,0,0.06)',
 						}}
-					/>
-				</Box>
-			)}
+					>
+						<Pagination
+							count={pagesCount}
+							page={page}
+							onChange={(_, p) => goToPage(p)}
+							color="primary"
+							siblingCount={0}
+							boundaryCount={1}
+							sx={{
+								// finger-sized touch targets (44px) while staying compact
+								'& .MuiPaginationItem-root': {
+									minWidth: 44,
+									height: 44,
+									margin: '0 2px',
+									fontSize: '1rem',
+								},
+							}}
+						/>
+					</Box>,
+					tabBarSlot
+				)}
 		</Box>
 	)
 }

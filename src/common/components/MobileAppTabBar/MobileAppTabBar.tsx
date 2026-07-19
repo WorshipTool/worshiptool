@@ -20,6 +20,7 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import {
+	ABOVE_TABBAR_SLOT_ID,
 	MOBILE_NAV_BREAKPOINT,
 	MOBILE_NAV_CLEARANCE,
 	isMobileTabBarRoute,
@@ -65,18 +66,32 @@ export default function MobileAppTabBar() {
 					transform: 'translateX(-50%)',
 					width: '100%',
 					maxWidth: PAGE_MAX_WIDTH,
-					bgcolor: 'background.paper',
-					borderTop: '1px solid',
-					borderColor: 'grey.200',
 					display: 'flex',
-					alignItems: 'flex-start',
-					paddingTop: 1.5,
-					paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)',
+					flexDirection: 'column',
 					zIndex: 10,
 					...hideOnDesktop,
 				}}
 			>
-				<Link to="home" params={{ hledat: undefined }} style={{ flex: 1, minWidth: 0 }}>
+				{/* pages portal their bottom-docked content here; it stacks directly
+				    on top of the bar via layout (no hard-coded bar height) */}
+				<Box
+					id={ABOVE_TABBAR_SLOT_ID}
+					sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+				/>
+
+				<Box
+					sx={{
+						bgcolor: 'background.paper',
+						borderTop: '1px solid',
+						borderColor: 'grey.200',
+						display: 'flex',
+						alignItems: 'flex-start',
+						paddingTop: 1.5,
+						paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)',
+						width: '100%',
+					}}
+				>
+					<Link to="home" params={{ hledat: undefined }} style={{ flex: 1, minWidth: 0 }}>
 					<TabItem
 						icon={<HomeOutlined />}
 						activeIcon={<HomeRounded />}
@@ -138,6 +153,7 @@ export default function MobileAppTabBar() {
 						active={active === 'account'}
 					/>
 				</Link>
+				</Box>
 			</Box>
 
 			{/* lazy-mounted so its data hooks only run when the sheet is opened */}
