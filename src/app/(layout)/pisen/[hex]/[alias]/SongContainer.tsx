@@ -3,6 +3,7 @@
 import AdditionalSongInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/AdditionalSongInfoPanel'
 import DeletedInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/components/DeletedInfoPanel'
 import { SONG_OPTIONS_BUTTON_ID } from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
+import AllSongAdminOptions from '@/app/(layout)/pisen/[hex]/[alias]/components/admin/AllSongAdminOptions'
 import HideChordsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/HideChordsButton'
 import MobileSongDock from '@/app/(layout)/pisen/[hex]/[alias]/components/MobileSongDock'
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
@@ -134,6 +135,9 @@ export default function SongContainer({
 							anyChange={false}
 						/>
 					)}
+
+					{/* admin panels normally rendered by TopPanel (hidden on phones) */}
+					{phoneVersion && !inEditMode && <AllSongAdminOptions />}
 
 					<>
 						{variant && variant.deleted ? (
