@@ -459,6 +459,54 @@ function V10() {
 	)
 }
 
+// VARIANT 11 — solid bottom bar, transpose centred, controls on the sides
+function V11() {
+	return (
+		<Bleed bg="background.paper">
+			<Box sx={{ bgcolor: 'background.paper', minHeight: '100dvh', paddingX: 2.5, paddingTop: TOP, paddingBottom: 'calc(env(safe-area-inset-bottom) + 130px)' }}>
+				<Typography variant="h4" strong={800} sx={{ marginBottom: 1.5 }}>Advent, advent</Typography>
+				<Lyrics />
+			</Box>
+			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 64px)', left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: MAXW, bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'grey.200', boxShadow: '0 -2px 10px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', paddingX: 1, height: 56, zIndex: 15 }}>
+				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+					<IconBtn><MusicNoteRounded fontSize="small" sx={{ color: PRIMARY }} /></IconBtn>
+				</Box>
+				<Transpose />
+				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+					<IconBtn><FavoriteBorderRounded fontSize="small" /></IconBtn>
+					<IconBtn><MoreVertRounded fontSize="small" /></IconBtn>
+				</Box>
+			</Box>
+		</Bleed>
+	)
+}
+
+// VARIANT 12 — floating dock, transpose centred with the current key
+function V12() {
+	return (
+		<Bleed bg="background.paper">
+			<Box sx={{ bgcolor: 'background.paper', minHeight: '100dvh', paddingX: 2.5, paddingTop: TOP, paddingBottom: 'calc(env(safe-area-inset-bottom) + 150px)' }}>
+				<Typography variant="h4" strong={800} sx={{ marginBottom: 1.5 }}>Advent, advent</Typography>
+				<Lyrics />
+			</Box>
+			<Box sx={{ position: 'fixed', bottom: 'calc(env(safe-area-inset-bottom) + 76px)', left: '50%', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: MAXW - 32, bgcolor: 'background.paper', borderRadius: 3, boxShadow: '0 6px 24px rgba(0,0,0,0.16)', display: 'flex', alignItems: 'center', paddingX: 1, height: 58, zIndex: 15 }}>
+				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+					<IconBtn><MusicNoteRounded fontSize="small" sx={{ color: PRIMARY }} /></IconBtn>
+				</Box>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: 'grey.100', borderRadius: 5, paddingX: 0.5, height: 42 }}>
+					<IconBtn><RemoveRounded /></IconBtn>
+					<Typography strong sx={{ minWidth: 64, textAlign: 'center' }}>Tónina D</Typography>
+					<IconBtn><AddRounded /></IconBtn>
+				</Box>
+				<Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+					<IconBtn><FavoriteBorderRounded fontSize="small" /></IconBtn>
+					<IconBtn><MoreVertRounded fontSize="small" /></IconBtn>
+				</Box>
+			</Box>
+		</Bleed>
+	)
+}
+
 function DemoSong() {
 	const v = Number(useSearchParams().get('v') || 1)
 	return (
@@ -473,6 +521,8 @@ function DemoSong() {
 			{v === 8 && <V8 />}
 			{v === 9 && <V9 />}
 			{v === 10 && <V10 />}
+			{v === 11 && <V11 />}
+			{v === 12 && <V12 />}
 			<MockTabBar />
 		</>
 	)
