@@ -39,3 +39,14 @@ export function mobileTabForPath(pathname: string | null): MobileTab {
 export function isMobileTabBarRoute(pathname: string | null): boolean {
 	return mobileTabForPath(pathname) !== null
 }
+
+/**
+ * True for app-shell pages whose surface already pads for the bar/dock
+ * itself. The tab bar skips its in-flow spacer there, so short content
+ * doesn't become needlessly scrollable (no grey strip under the page).
+ */
+export function pageOwnsBottomClearance(pathname: string | null): boolean {
+	if (!pathname) return false
+	// song detail: full-screen white reading surface with its own clearance
+	return /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)
+}

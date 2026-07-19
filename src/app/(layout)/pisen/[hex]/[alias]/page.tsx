@@ -67,7 +67,13 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 						padding: { xs: 2.5, md: 3 },
 						// phone: extra bottom room so the song end clears the
 						// floating control dock stacked above the tab bar
-						paddingBottom: { xs: 10, md: 3 },
+						// phone: the surface owns ALL bottom clearance (the tab bar's
+						// spacer is skipped on this route so short songs don't
+						// scroll) — clear the tab bar + floating dock stack
+						paddingBottom: {
+							xs: 'calc(env(safe-area-inset-bottom) + 170px)',
+							md: 3,
+						},
 						backgroundColor: { xs: 'background.paper', md: 'grey.200' },
 						borderStyle: 'solid',
 						borderWidth: { xs: 0, md: 1 },

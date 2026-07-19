@@ -28,6 +28,7 @@ import {
 	MOBILE_NAV_CLEARANCE,
 	isMobileTabBarRoute,
 	mobileTabForPath,
+	pageOwnsBottomClearance,
 } from './nav.constants'
 
 /**
@@ -57,8 +58,11 @@ export default function MobileAppTabBar() {
 
 	return (
 		<>
-			{/* in-flow spacer so content can scroll clear of the fixed bar */}
-			<Box sx={{ height: MOBILE_NAV_CLEARANCE, flexShrink: 0, ...hideOnDesktop }} />
+			{/* in-flow spacer so content can scroll clear of the fixed bar — skipped
+			    on pages whose surface already pads for the bar itself */}
+			{!pageOwnsBottomClearance(pathname) && (
+				<Box sx={{ height: MOBILE_NAV_CLEARANCE, flexShrink: 0, ...hideOnDesktop }} />
+			)}
 			<Box
 				sx={{
 					position: 'fixed',
