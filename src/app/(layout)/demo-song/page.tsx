@@ -134,7 +134,9 @@ function Bleed({ bg, children }: { bg: string; children: ReactNode }) {
 			sx={{
 				width: '100vw',
 				marginLeft: 'calc(50% - 50vw)',
-				marginTop: 'calc(-1 * env(safe-area-inset-top))',
+				// demo route isn't an app-shell route, so reclaim the 56px top-bar
+				// placeholder too (on the real song page this is already handled)
+				marginTop: 'calc(-1 * env(safe-area-inset-top) - 56px)',
 				minHeight: '100dvh',
 				bgcolor: bg,
 				display: 'flex',
@@ -181,7 +183,7 @@ function MockTabBar() {
 	)
 }
 
-const TOP = 'calc(env(safe-area-inset-top) + 8px)'
+const TOP = 'calc(env(safe-area-inset-top) + 16px)'
 const BOTTOM_CLEAR = 'calc(env(safe-area-inset-bottom) + 96px)'
 
 // ======================================================================
