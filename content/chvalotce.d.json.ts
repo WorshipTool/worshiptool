@@ -44,6 +44,7 @@ declare const messages: {
 	"navigation": {
 		"home": "Domů",
 		"songs": "Písně",
+		"tools": "Nástroje",
 		"playlists": "Playlisty",
 		"teams": "Týmy",
 		"about": "O aplikaci",

@@ -5,8 +5,9 @@
 /** Width below which the mobile tab bar shows (and the top bar hides). */
 export const MOBILE_NAV_BREAKPOINT = 700
 
-/** Bottom clearance pages need so their content isn't hidden by the fixed bar. */
-export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 72px)'
+/** Bottom clearance pages need so their content isn't hidden by the fixed bar
+ * (accounts for the raised center action that pokes above the bar). */
+export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 80px)'
 
 export type MobileTab = 'home' | 'songs' | 'account' | null
 
