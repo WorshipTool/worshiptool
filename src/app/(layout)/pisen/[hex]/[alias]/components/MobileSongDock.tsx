@@ -1,14 +1,17 @@
 'use client'
 
+import { PlaylistData } from '@/api/generated'
+import AddToPlaylistMenuItem from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistMenuItem'
 import CreateCopyButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/CreateCopyButton'
 import EditButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/EditButton'
 import SongsOptionsButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
+import SelectPlaylistMenu from '@/common/components/Menu/SelectPlaylistMenu/SelectPlaylistMenu'
 import Popup from '@/common/components/Popup/Popup'
-import AddToPlaylistButton from '@/app/(layout)/pisen/[hex]/[alias]/components/components/AddToPlaylistButton/AddToPlaylistButton'
 import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import SmartPortalMenuItem from '@/common/components/SmartPortalMenuItem/SmartPortalMenuItem'
 import { Box, IconButton, Typography } from '@/common/ui'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import HeartLikeButton from '@/common/ui/SongCard/components/HeartLikeButton'
 import useAuth from '@/hooks/auth/useAuth'
 import { getReplacedUrlWithParams } from '@/routes/tech/transformer.tech'
@@ -21,6 +24,7 @@ import {
 	FeaturedPlayList,
 	MusicNoteRounded,
 	MusicOffRounded,
+	PlaylistAddRounded,
 	Print,
 	RemoveRounded,
 } from '@mui/icons-material'
@@ -65,6 +69,7 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 	const tNote = useTranslations('userNote')
 
 	const [noteOpen, setNoteOpen] = useState(false)
+	const [playlistAnchor, setPlaylistAnchor] = useState<null | HTMLElement>(null)
 
 	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
 	useEffect(() => {
@@ -122,6 +127,14 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 			)}
 			{/* on phones this renders as an options-menu item too */}
 			{isLoggedIn() && <CreateCopyButton packGuid={props.variant.packGuid} />}
+			{/* the private note opens from the menu (its popup is rendered below) */}
+			{user && (
+				<SmartPortalMenuItem
+					title={tNote('title')}
+					icon={<AddComment />}
+					onClick={() => setNoteOpen(true)}
+				/>
+			)}
 
 			<Box
 				sx={{
@@ -191,12 +204,14 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 				)}
 
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					{user && (
-						<IconButton tooltip={tNote('title')} onClick={() => setNoteOpen(true)}>
-							<AddComment fontSize="small" sx={{ color: 'grey.700' }} />
+					{isLoggedIn() && (
+						<IconButton
+							tooltip={tTopPanel('addToPlaylist')}
+							onClick={(e) => setPlaylistAnchor(e.currentTarget)}
+						>
+							<PlaylistAddRounded fontSize="small" sx={{ color: 'grey.700' }} />
 						</IconButton>
 					)}
-					{isLoggedIn() && <AddToPlaylistButton variant={props.variant} />}
 					<SongsOptionsButton
 						reloadSong={props.reloadSong}
 						variant={props.variant}
@@ -218,6 +233,21 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 					<UserNotePanel forceOpen />
 				</Popup>
 			)}
+
+			{/* playlist picker anchored to the dock's playlist button */}
+			<SelectPlaylistMenu
+				open={Boolean(playlistAnchor)}
+				onClose={() => setPlaylistAnchor(null)}
+				anchor={playlistAnchor}
+				itemComponent={(playlist: PlaylistData) => (
+					<AddToPlaylistMenuItem
+						key={playlist.guid}
+						variant={props.variant}
+						guid={playlist.guid as PlaylistGuid}
+						title={playlist.title}
+					/>
+				)}
+			/>
 		</>,
 		tabBarSlot
 	)

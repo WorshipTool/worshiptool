@@ -340,6 +340,7 @@ declare const messages: {
 	},
 	"songPage": {
 		"topPanel": {
+			"addToPlaylist": "Přidat do playlistu",
 			"presentationItem": {
 				"title": "Prezentace",
 				"subtitle": "Otevřít jako prezentaci"

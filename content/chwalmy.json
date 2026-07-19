@@ -337,6 +337,7 @@
 	},
 	"songPage": {
 		"topPanel": {
+			"addToPlaylist": "Dodaj do playlisty",
 			"presentationItem": {
 				"title": "Prezentacja",
 				"subtitle": "Otwórz jako prezentację"
