@@ -1,19 +1,17 @@
 'use client'
 
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
-import { Box, Button, Typography, useTheme } from '@/common/ui'
+import { Box, IconButton, Typography, useTheme } from '@/common/ui'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
-import { ChevronLeftRounded } from '@mui/icons-material'
+import { ArrowBackRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 
-// Height of the collapsed bar's content row (safe-area is added on top of this).
+// height of the compact bar's content row (safe-area is added on top of this)
 const BAR_ROW = 52
-// Full-bleed helpers, mirroring the other mobile surfaces (SeznamMobile etc.):
-// on app-shell routes the top bar's sticky spacer shrinks to the safe-area
-// inset, so reclaim exactly that to let the grey canvas reach the very top.
+// full-bleed helpers, mirroring the other mobile surfaces (SeznamMobile etc.)
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 // clearance so the last rows clear the bottom tab bar + its raised center action
 const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
@@ -40,14 +38,17 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 }
 
 /**
- * Native-feeling mobile screen shell with a collapsing iOS-style large-title
- * header. At rest the title is large on the grey canvas; as the content scrolls
- * up, the title slides under a slim sticky bar that fades in a centered compact
- * title + hairline (Apple / Material "large → small" pattern).
+ * Native-feeling mobile screen shell with a collapsing large-title header. At
+ * rest the title is large on the grey canvas with the back/action controls
+ * floating above it; as the content scrolls up, the compact bar *continuously*
+ * fades in (background, hairline and a centered compact title tied to the scroll
+ * position — not a snap) while the large title slides away underneath.
  *
- * Renders only on phones (< MOBILE_NAV_BREAKPOINT); hidden on desktop via CSS so
- * the desktop layout is untouched. Owns the full-bleed grey surface so the
- * sticky bar sticks across the whole page scroll.
+ * The bar is `position: fixed` (the app's global overflow-x guard on <html>
+ * breaks position:sticky) — reliable, same as the bottom tab bar. The scroll
+ * animation is driven imperatively via refs so the page body never re-renders.
+ *
+ * Renders only on phones (< MOBILE_NAV_BREAKPOINT); hidden on desktop via CSS.
  */
 export default function MobileAppHeader<T extends RoutesKeys>({
 	title,
@@ -63,32 +64,39 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const navigate = useSmartNavigate()
 
 	const barRef = useRef<HTMLDivElement>(null)
-	const sentinelRef = useRef<HTMLDivElement>(null)
-	const [collapsed, setCollapsed] = useState(false)
+	const compactTitleRef = useRef<HTMLDivElement>(null)
+	const largeRef = useRef<HTMLDivElement>(null)
 
-	// Collapse once the large title has scrolled under the bar. The trigger line
-	// is the *measured* bar height (incl. safe-area), so it stays accurate on any
-	// device without hard-coding the notch inset.
+	// Continuously map scroll position → collapse progress (0…1) over the height
+	// of the large title block, and paint the bar imperatively (no re-render, so
+	// a long list underneath never re-renders while scrolling).
 	useEffect(() => {
-		const sentinel = sentinelRef.current
-		const bar = barRef.current
-		if (!sentinel || !bar) return
-
-		let observer: IntersectionObserver | null = null
-		const attach = () => {
-			observer?.disconnect()
-			const h = Math.round(bar.getBoundingClientRect().height)
-			observer = new IntersectionObserver(
-				([entry]) => setCollapsed(!entry.isIntersecting),
-				{ rootMargin: `-${h}px 0px 0px 0px`, threshold: 0 }
-			)
-			observer.observe(sentinel)
+		let raf = 0
+		const paint = () => {
+			raf = 0
+			const distance = Math.max(1, (largeRef.current?.offsetHeight ?? 64) - 4)
+			const p = Math.min(1, Math.max(0, window.scrollY / distance))
+			const bar = barRef.current
+			if (bar) {
+				bar.style.backgroundColor = `rgba(255, 255, 255, ${p})`
+				bar.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
+				bar.style.boxShadow =
+					p > 0.01 ? `0 2px 8px rgba(0, 0, 0, ${0.05 * p})` : 'none'
+			}
+			const ct = compactTitleRef.current
+			if (ct) {
+				ct.style.opacity = String(p)
+				ct.style.transform = `translateY(${(1 - p) * 8}px)`
+			}
 		}
-		attach()
-		window.addEventListener('resize', attach)
+		const onScroll = () => {
+			if (!raf) raf = requestAnimationFrame(paint)
+		}
+		window.addEventListener('scroll', onScroll, { passive: true })
+		paint()
 		return () => {
-			observer?.disconnect()
-			window.removeEventListener('resize', attach)
+			window.removeEventListener('scroll', onScroll)
+			if (raf) cancelAnimationFrame(raf)
 		}
 	}, [])
 
@@ -105,26 +113,6 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		else navigate(backTo, (backParams ?? {}) as SmartAllParams<T>)
 	}
 
-	const backControl = backTo ? (
-		<Button
-			variant="text"
-			color="primary"
-			onClick={goUp}
-			alt={tCommon('back')}
-			disableUppercase
-			sx={{ minWidth: 44, minHeight: 44, paddingX: 0.5 }}
-		>
-			<ChevronLeftRounded sx={{ fontSize: 28 }} />
-			{!collapsed && (
-				<Box component="span" sx={{ marginLeft: -0.25, fontWeight: 400 }}>
-					{tCommon('back')}
-				</Box>
-			)}
-		</Button>
-	) : (
-		<Box sx={{ minWidth: 44 }} />
-	)
-
 	return (
 		<Box
 			sx={{
@@ -137,10 +125,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* slim bar fixed to the viewport top — transparent at rest, fills in
-			    once collapsed. Fixed (not sticky) because the app's global
-			    overflow-x guard on <html> breaks position:sticky here, whereas
-			    fixed is reliable (same as the bottom tab bar). */}
+			{/* compact bar fixed to the viewport top — its background/hairline and
+			    centered title fade in continuously with scroll (see effect above) */}
 			<Box
 				ref={barRef}
 				sx={{
@@ -151,25 +137,34 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					zIndex: HEADER_Z,
 					display: 'flex',
 					alignItems: 'center',
-					gap: 1,
-					paddingX: 1,
+					gap: 0.5,
+					paddingX: 0.5,
 					paddingTop: `calc(${TOOLBAR_SPACER} + 4px)`,
 					minHeight: BAR_ROW,
-					bgcolor: collapsed ? 'background.paper' : 'transparent',
-					borderBottom: '1px solid',
-					borderColor: collapsed ? 'grey.200' : 'transparent',
-					boxShadow: collapsed ? '0 1px 6px rgba(0,0,0,0.06)' : 'none',
-					transition:
-						'background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+					backgroundColor: 'transparent',
+					borderBottom: '1px solid transparent',
 				}}
 			>
-				{backControl}
-				<Box sx={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+				{backTo ? (
+					<IconButton onClick={goUp} alt={tCommon('back')} color="grey.800">
+						<ArrowBackRounded />
+					</IconButton>
+				) : (
+					<Box sx={{ minWidth: 44 }} />
+				)}
+				<Box
+					ref={compactTitleRef}
+					sx={{
+						flex: 1,
+						minWidth: 0,
+						textAlign: 'center',
+						opacity: 0,
+						paddingX: 0.5,
+					}}
+				>
 					<Typography
 						strong={600}
 						sx={{
-							opacity: collapsed ? 1 : 0,
-							transition: 'opacity 0.2s ease',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							textOverflow: 'ellipsis',
@@ -179,13 +174,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					</Typography>
 				</Box>
 				<Box
-					sx={{
-						minWidth: 44,
-						display: 'flex',
-						justifyContent: 'flex-end',
-					}}
+					sx={{ minWidth: 44, display: 'flex', justifyContent: 'flex-end' }}
 				>
-					{collapsed ? action : null}
+					{action}
 				</Box>
 			</Box>
 
@@ -193,32 +184,17 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			    starts just below it */}
 			<Box sx={{ height: `calc(${TOOLBAR_SPACER} + 56px)` }} />
 
-			{/* large title row — scrolls away under the bar */}
-			<Box
-				sx={{
-					paddingX: 2.5,
-					paddingBottom: 1.5,
-					display: 'flex',
-					alignItems: 'flex-end',
-					justifyContent: 'space-between',
-					gap: 1,
-				}}
-			>
-				<Box sx={{ minWidth: 0 }}>
-					<Typography variant="h4" strong={800} sx={{ lineHeight: 1.15 }}>
-						{title}
+			{/* large title — floats under the controls and scrolls away */}
+			<Box ref={largeRef} sx={{ paddingX: 2.5, paddingBottom: 1.5 }}>
+				<Typography variant="h4" strong={800} sx={{ lineHeight: 1.15 }}>
+					{title}
+				</Typography>
+				{subtitle && (
+					<Typography small strong={500} color="grey.600">
+						{subtitle}
 					</Typography>
-					{subtitle && (
-						<Typography small strong={500} color="grey.600">
-							{subtitle}
-						</Typography>
-					)}
-				</Box>
-				{action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
+				)}
 			</Box>
-
-			{/* trigger line for the collapse observer */}
-			<Box ref={sentinelRef} sx={{ height: '1px' }} />
 
 			{/* page body */}
 			<Box
