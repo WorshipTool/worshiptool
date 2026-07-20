@@ -12,41 +12,48 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useEffect, useRef } from 'react'
 
-// height of the compact bar's content row (safe-area is added on top of this)
-const BAR_ROW = 52
-// on app-shell routes the top bar's sticky spacer shrinks to the safe-area
-// inset; reclaim exactly that so the grey canvas reaches the very top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
+// how far you scroll before the title finishes shrinking to its compact size
+const SHRINK_DISTANCE = 64
+const TITLE_MAX = 1.85 // rem
+const TITLE_MIN = 1.2 // rem
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
-	/** The page title — shown large at rest, small & centered once collapsed. */
+	/** The page title — large at rest, shrinks to a compact bar on scroll. */
 	title: string
-	/** Optional secondary line under the title (e.g. an already-formatted count). */
-	subtitle?: string
 	/**
-	 * Hierarchical parent route. When set, an Up (back) control appears and is
-	 * history-aware: it uses in-app history when we arrived from within the app,
-	 * otherwise it navigates to this parent (so deep-links don't leave the app).
-	 * Omit on tab-root pages (Domů / Písně / Účet) to hide the back control.
+	 * Generic secondary line under the title. A string gets the default muted
+	 * style; pass any node (count, status, chip, meta …) to fully control it.
+	 */
+	subtitle?: ReactNode
+	/**
+	 * Hierarchical parent route. When set, an Up (back) control appears inline to
+	 * the left of the title and is history-aware (in-app history if present, else
+	 * navigate to this parent). Omit on tab-root pages (Domů / Písně / Účet).
 	 */
 	backTo?: T
 	backParams?: SmartAllParams<T>
-	/** Trailing action(s): an IconButton, a Button pill, … Page-specific. */
-	action?: ReactNode
+	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
+	actions?: ReactNode[]
+	/** Optional control strip (segment / chips) pinned under the header. */
+	controlPanel?: ReactNode
+	/** Optional floating action button (primary action), bottom-right. */
+	fab?: ReactNode
 	/** The page body (the scrolling content below the header). */
 	children?: ReactNode
 }
 
 /**
  * Native-feeling mobile screen shell with a collapsing large-title header, built
- * as a proper app shell: the surface fills the viewport (minus the bottom tab
- * bar) and does NOT scroll itself — only the middle content region scrolls, so
- * the scrollbar is confined to the content, not running the full height behind
- * the header and tab bar. The compact bar continuously fades in as the content
- * scrolls (background, hairline, centered title tied to scroll position), and
- * the large title scrolls away underneath. Painting is imperative (refs) so the
+ * as a proper app shell: the header (and an optional control strip) stay pinned
+ * at the top and the tab bar at the bottom — only the middle content scrolls, so
+ * the scrollbar is confined to the content, not the full viewport height.
+ *
+ * At rest the header is a single row — back arrow, large title (+ subtitle) and
+ * up to two action icons. As the content scrolls the title smoothly shrinks to a
+ * compact bar (Material large → small), painted imperatively via refs so the
  * page body never re-renders while scrolling.
  *
  * Renders only on phones (< MOBILE_NAV_BREAKPOINT); hidden on desktop via CSS.
@@ -56,7 +63,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	subtitle,
 	backTo,
 	backParams,
-	action,
+	actions,
+	controlPanel,
+	fab,
 	children,
 }: MobileAppHeaderProps<T>) {
 	const theme = useTheme()
@@ -64,33 +73,31 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const router = useRouter()
 	const navigate = useSmartNavigate()
 
-	const barRef = useRef<HTMLDivElement>(null)
-	const compactTitleRef = useRef<HTMLDivElement>(null)
-	const largeRef = useRef<HTMLDivElement>(null)
 	const scrollRef = useRef<HTMLDivElement>(null)
+	const headerRef = useRef<HTMLDivElement>(null)
+	const titleRef = useRef<HTMLDivElement>(null)
+	const subtitleRef = useRef<HTMLDivElement>(null)
 
-	// Continuously map the content scroller's position → collapse progress (0…1)
-	// over the height of the large title block, and paint the bar imperatively
-	// (no re-render, so a long list underneath never re-renders while scrolling).
+	// Continuously shrink the title (and fade the subtitle) as the content
+	// scrolls — imperative so the list underneath never re-renders while scrolling.
 	useEffect(() => {
 		const scroller = scrollRef.current
 		if (!scroller) return
 		let raf = 0
 		const paint = () => {
 			raf = 0
-			const distance = Math.max(1, (largeRef.current?.offsetHeight ?? 64) - 4)
-			const p = Math.min(1, Math.max(0, scroller.scrollTop / distance))
-			const bar = barRef.current
-			if (bar) {
-				bar.style.backgroundColor = `rgba(255, 255, 255, ${p})`
-				bar.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
-				bar.style.boxShadow =
-					p > 0.01 ? `0 2px 8px rgba(0, 0, 0, ${0.05 * p})` : 'none'
+			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
+			if (titleRef.current) {
+				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
 			}
-			const ct = compactTitleRef.current
-			if (ct) {
-				ct.style.opacity = String(p)
-				ct.style.transform = `translateY(${(1 - p) * 8}px)`
+			if (subtitleRef.current) {
+				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
+				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
+			}
+			if (headerRef.current) {
+				headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
+				headerRef.current.style.boxShadow =
+					p > 0.9 ? `0 2px 8px rgba(0, 0, 0, 0.05)` : 'none'
 			}
 		}
 		const onScroll = () => {
@@ -117,11 +124,14 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		else navigate(backTo, (backParams ?? {}) as SmartAllParams<T>)
 	}
 
+	const shownActions = actions?.slice(0, 2) ?? []
+
 	return (
 		<Box
 			sx={{
-				// full-bleed app-shell surface that fills the viewport down to the
-				// tab bar; it doesn't scroll — only the inner content region does
+				// full-bleed app-shell surface that fills the viewport down to the tab
+				// bar; header + panel stay pinned, only the content region scrolls
+				position: 'relative',
 				width: '100vw',
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
@@ -133,60 +143,91 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* compact bar (fixed height) — its background/hairline and centered
-			    title fade in continuously with scroll (see effect above) */}
+			{/* header — one row: back, title (+ subtitle), up to 2 actions. The title
+			    shrinks on scroll (see effect above). */}
 			<Box
-				ref={barRef}
+				ref={headerRef}
 				sx={{
 					flexShrink: 0,
 					zIndex: HEADER_Z,
 					display: 'flex',
 					alignItems: 'center',
 					gap: 0.5,
-					paddingX: 0.5,
-					paddingTop: `calc(${TOOLBAR_SPACER} + 4px)`,
-					minHeight: BAR_ROW,
-					backgroundColor: 'transparent',
+					paddingX: 1.5,
+					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
+					paddingBottom: 1,
+					bgcolor: 'grey.50',
 					borderBottom: '1px solid transparent',
 				}}
 			>
-				{backTo ? (
-					<IconButton onClick={goUp} alt={tCommon('back')} color="grey.800">
+				{backTo && (
+					<IconButton
+						onClick={goUp}
+						alt={tCommon('back')}
+						color="grey.800"
+						sx={{ marginLeft: -0.5, flexShrink: 0 }}
+					>
 						<ArrowBackRounded />
 					</IconButton>
-				) : (
-					<Box sx={{ minWidth: 44 }} />
 				)}
-				<Box
-					ref={compactTitleRef}
-					sx={{
-						flex: 1,
-						minWidth: 0,
-						textAlign: 'center',
-						opacity: 0,
-						paddingX: 0.5,
-					}}
-				>
-					<Typography
-						strong={600}
+				<Box sx={{ flex: 1, minWidth: 0, paddingLeft: backTo ? 0 : 0.5 }}>
+					<Box
+						ref={titleRef}
 						sx={{
+							fontSize: `${TITLE_MAX}rem`,
+							fontWeight: 800,
+							letterSpacing: '-0.4px',
+							lineHeight: 1.15,
+							color: 'grey.900',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							textOverflow: 'ellipsis',
 						}}
 					>
 						{title}
-					</Typography>
+					</Box>
+					{subtitle && (
+						<Box
+							ref={subtitleRef}
+							sx={{ overflow: 'hidden', marginTop: 0.25 }}
+						>
+							{typeof subtitle === 'string' ? (
+								<Typography small strong={500} color="grey.600">
+									{subtitle}
+								</Typography>
+							) : (
+								subtitle
+							)}
+						</Box>
+					)}
 				</Box>
-				<Box
-					sx={{ minWidth: 44, display: 'flex', justifyContent: 'flex-end' }}
-				>
-					{action}
-				</Box>
+				{shownActions.length > 0 && (
+					<Box sx={{ display: 'flex', gap: 0.25, flexShrink: 0 }}>
+						{shownActions.map((a, i) => (
+							<Box key={i} sx={{ display: 'flex' }}>
+								{a}
+							</Box>
+						))}
+					</Box>
+				)}
 			</Box>
 
-			{/* the ONLY scroller — scrollbar is confined between the header and the
-			    tab bar, not the full viewport height */}
+			{/* optional control strip — pinned right under the header */}
+			{controlPanel && (
+				<Box
+					sx={{
+						flexShrink: 0,
+						zIndex: HEADER_Z - 1,
+						bgcolor: 'grey.50',
+						paddingX: 2,
+						paddingBottom: 1,
+					}}
+				>
+					{controlPanel}
+				</Box>
+			)}
+
+			{/* the ONLY scroller — scrollbar confined between header and tab bar */}
 			<Box
 				ref={scrollRef}
 				sx={{
@@ -194,24 +235,27 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					minHeight: 0,
 					overflowY: 'auto',
 					overflowX: 'hidden',
-					paddingBottom: 2,
+					paddingX: 2,
+					paddingTop: 0.5,
+					paddingBottom: fab ? 11 : 2,
 				}}
 			>
-				{/* large title — scrolls away under the bar */}
-				<Box ref={largeRef} sx={{ paddingX: 2.5, paddingBottom: 1.5 }}>
-					<Typography variant="h4" strong={800} sx={{ lineHeight: 1.15 }}>
-						{title}
-					</Typography>
-					{subtitle && (
-						<Typography small strong={500} color="grey.600">
-							{subtitle}
-						</Typography>
-					)}
-				</Box>
-
-				{/* page body */}
-				<Box sx={{ paddingX: 2 }}>{children}</Box>
+				{children}
 			</Box>
+
+			{/* optional floating action button */}
+			{fab && (
+				<Box
+					sx={{
+						position: 'absolute',
+						right: 16,
+						bottom: 16,
+						zIndex: HEADER_Z,
+					}}
+				>
+					{fab}
+				</Box>
+			)}
 		</Box>
 	)
 }

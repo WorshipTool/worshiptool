@@ -1,15 +1,23 @@
 'use client'
 
 import { PlaylistData } from '@/api/generated'
-import CreateNewPlaylistButton from '@/app/(layout)/ucet/playlisty/components/CreateNewPlaylistButton'
-import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import { MobileAppHeader, MobileFab } from '@/common/components/MobileAppHeader'
 import { Box, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Chip } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
+import useCurrentPlaylist from '@/hooks/playlist/useCurrentPlaylist'
+import usePlaylistsGeneral from '@/hooks/playlist/usePlaylistsGeneral'
+import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
+import { useSmartNavigate } from '@/routes/useSmartNavigate'
+import { useApiState } from '@/tech/ApiState'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { czechConjugation } from '@/tech/string/string.tech'
-import { ChevronRightRounded, QueueMusicRounded } from '@mui/icons-material'
+import {
+	AddRounded,
+	ChevronRightRounded,
+	QueueMusicRounded,
+} from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment } from 'react'
 
@@ -41,6 +49,22 @@ export default function PlaylistyMobile({
 }: PlaylistyMobileProps) {
 	const tNav = useTranslations('navigation.toolsMenu')
 	const t = useTranslations('account.playlists')
+	const tPlaylist = useTranslations('playlist')
+
+	const { turnOn } = useCurrentPlaylist()
+	const { createPlaylist: createWithoutName } = usePlaylistsGeneral()
+	const navigate = useSmartNavigate()
+	const { fetchApiState, apiState } = useApiState<PlaylistGuid>()
+
+	const createPlaylist = () => {
+		fetchApiState(
+			async () => await createWithoutName(),
+			(result) => {
+				navigate('playlist', { guid: result })
+				turnOn(result)
+			}
+		)
+	}
 
 	const row = (p: PlaylistData, isLast: boolean) => (
 		<Fragment key={p.guid}>
@@ -100,7 +124,15 @@ export default function PlaylistyMobile({
 			title={tNav('playlists')}
 			subtitle={subtitle}
 			backTo="account"
-			action={<CreateNewPlaylistButton />}
+			fab={
+				<MobileFab
+					onClick={createPlaylist}
+					loading={apiState.loading}
+					alt={tPlaylist('createNewPlaylist')}
+				>
+					<AddRounded />
+				</MobileFab>
+			}
 		>
 			{loading ? (
 				<Box sx={GROUP_CARD_SX}>

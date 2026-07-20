@@ -1,14 +1,19 @@
 'use client'
 
-import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import {
+	MobileAppHeader,
+	MobileFab,
+} from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, IconButton, Typography } from '@/common/ui'
 import {
+	AddRounded,
 	ChevronRightRounded,
+	MoreVertRounded,
 	MusicNoteRounded,
 	SearchRounded,
 } from '@mui/icons-material'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
 export default SmartPage(DemoHeader, ['fullWidth', 'hideFooter', 'hideToolbar'])
 
@@ -55,17 +60,67 @@ function LeadingIcon() {
 	)
 }
 
-/** TEMPORARY demo page to preview the MobileAppHeader shell. Delete before finalizing. */
+/** Demo segmented control for the header's controlPanel slot. */
+function SortSegment() {
+	const options = ['Naposledy', 'Podle názvu', 'Veřejné']
+	const [active, setActive] = useState(0)
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				gap: 0.5,
+				bgcolor: 'grey.200',
+				borderRadius: 2.5,
+				padding: 0.5,
+			}}
+		>
+			{options.map((o, i) => (
+				<Box
+					key={o}
+					onClick={() => setActive(i)}
+					sx={{
+						flex: 1,
+						textAlign: 'center',
+						paddingY: 0.75,
+						borderRadius: 2,
+						cursor: 'pointer',
+						bgcolor: active === i ? 'background.paper' : 'transparent',
+						boxShadow: active === i ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
+					}}
+				>
+					<Typography
+						small
+						strong={600}
+						color={active === i ? 'grey.900' : 'grey.600'}
+					>
+						{o}
+					</Typography>
+				</Box>
+			))}
+		</Box>
+	)
+}
+
+/** TEMPORARY demo page to preview the MobileAppHeader template. Delete before finalizing. */
 function DemoHeader() {
 	return (
 		<MobileAppHeader
 			title="Moje písně"
 			subtitle="8 písní"
 			backTo="account"
-			action={
-				<IconButton color="grey.700" alt="Hledat">
+			actions={[
+				<IconButton key="search" color="grey.800" alt="Hledat">
 					<SearchRounded />
-				</IconButton>
+				</IconButton>,
+				<IconButton key="more" color="grey.800" alt="Více">
+					<MoreVertRounded />
+				</IconButton>,
+			]}
+			controlPanel={<SortSegment />}
+			fab={
+				<MobileFab to="addMenu" alt="Přidat">
+					<AddRounded />
+				</MobileFab>
 			}
 		>
 			<Box sx={GROUP_CARD_SX}>
@@ -107,9 +162,7 @@ function DemoHeader() {
 							<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
 						</Box>
 						{i < SONGS.length - 1 && (
-							<Box
-								sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: 8.5 }}
-							/>
+							<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: 8.5 }} />
 						)}
 					</Fragment>
 				))}

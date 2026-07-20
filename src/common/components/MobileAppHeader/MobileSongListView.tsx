@@ -59,10 +59,12 @@ function Divider() {
 
 type MobileSongListViewProps<T extends RoutesKeys> = {
 	title: string
-	subtitle?: string
+	subtitle?: ReactNode
 	backTo?: T
 	backParams?: SmartAllParams<T>
-	action?: ReactNode
+	actions?: ReactNode[]
+	controlPanel?: ReactNode
+	fab?: ReactNode
 	items: BasicVariantPack[]
 	loading?: boolean
 	emptyText?: string
@@ -79,7 +81,9 @@ export default function MobileSongListView<T extends RoutesKeys>({
 	subtitle,
 	backTo,
 	backParams,
-	action,
+	actions,
+	controlPanel,
+	fab,
 	items,
 	loading,
 	emptyText,
@@ -90,7 +94,9 @@ export default function MobileSongListView<T extends RoutesKeys>({
 			subtitle={subtitle}
 			backTo={backTo}
 			backParams={backParams}
-			action={action}
+			actions={actions}
+			controlPanel={controlPanel}
+			fab={fab}
 		>
 			{loading ? (
 				<Box sx={GROUP_CARD_SX}>

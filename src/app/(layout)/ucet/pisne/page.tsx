@@ -7,7 +7,10 @@ import MySongListOrderSelect, {
 import MySongsFilterPanel, {
 	MySongFilterOption,
 } from '@/app/(layout)/ucet/pisne/components/MySongsFilterPanel'
-import { MobileSongListView } from '@/common/components/MobileAppHeader'
+import {
+	MobileFab,
+	MobileSongListView,
+} from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
 import { Box, LinearProgress, useTheme } from '@/common/ui'
@@ -16,6 +19,7 @@ import { Typography } from '@/common/ui/Typography'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
+import { AddRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
@@ -26,6 +30,7 @@ export default SmartPage(MySongsList, ['middleWidth'])
 function MySongsList() {
 	const { songGettingApi } = useApi()
 	const t = useTranslations('account.songs')
+	const tCommon = useTranslations('common')
 	const theme = useTheme()
 	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
@@ -93,7 +98,11 @@ function MySongsList() {
 					loading ? undefined : t('totalSongs', { count: variants.length.toString() })
 				}
 				backTo="account"
-				action={<CreateNewMySongButton />}
+				fab={
+					<MobileFab to="addMenu" alt={tCommon('add')}>
+						<AddRounded />
+					</MobileFab>
+				}
 				items={variants}
 				loading={loading}
 				emptyText={t('empty')}
