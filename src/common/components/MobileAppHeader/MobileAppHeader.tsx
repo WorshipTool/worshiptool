@@ -262,12 +262,14 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				)}
 			</Box>
 
-			{/* optional panel pinned above the bottom tab bar (e.g. pagination) */}
+			{/* optional panel pinned above the bottom tab bar (e.g. pagination).
+			    Must stay BELOW the tab bar so its raised center action (the
+			    "Hledat" button that pokes up over the bar) renders in front. */}
 			{bottomPanel && (
 				<Box
 					sx={{
 						flexShrink: 0,
-						zIndex: HEADER_Z,
+						zIndex: 1,
 						bgcolor: 'background.paper',
 						borderTop: '1px solid',
 						borderColor: 'grey.200',
