@@ -806,6 +806,11 @@
 				"dateAdded": "Daty dodania",
 				"title": "Tytułu"
 			}
+		},
+		"songs": {
+			"title": "Moje pieśni",
+			"totalSongs": "Łącznie {count} pieśni",
+			"empty": "Nie masz jeszcze własnych pieśni."
 		}
 	},
 	"upload": {

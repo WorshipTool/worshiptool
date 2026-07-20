@@ -7,12 +7,16 @@ import MySongListOrderSelect, {
 import MySongsFilterPanel, {
 	MySongFilterOption,
 } from '@/app/(layout)/ucet/pisne/components/MySongsFilterPanel'
+import { MobileSongListView } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
-import { Box, LinearProgress } from '@/common/ui'
+import { Box, LinearProgress, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
+import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
+import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { mapBasicVariantPackApiToDto } from '../../../../api/dtos'
 import { useApi } from '../../../../api/tech-and-hooks/useApi'
@@ -21,6 +25,9 @@ export default SmartPage(MySongsList, ['middleWidth'])
 
 function MySongsList() {
 	const { songGettingApi } = useApi()
+	const t = useTranslations('account.songs')
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	const [sortOption, setSortOption] = useUrlState<MySongsOrderOptions>(
 		'sortKey',
@@ -77,6 +84,22 @@ function MySongsList() {
 
 		return [...arr]
 	}, [filteredVariants, sortOption])
+
+	if (phoneVersion) {
+		return (
+			<MobileSongListView
+				title={t('title')}
+				subtitle={
+					loading ? undefined : t('totalSongs', { count: variants.length.toString() })
+				}
+				backTo="account"
+				action={<CreateNewMySongButton />}
+				items={variants}
+				loading={loading}
+				emptyText={t('empty')}
+			/>
+		)
+	}
 
 	try {
 		return (

@@ -865,6 +865,11 @@
 				"dateAdded": "Date added",
 				"title": "Title"
 			}
+		},
+		"songs": {
+			"title": "My songs",
+			"totalSongs": "Total {count} songs",
+			"empty": "You don't have any songs yet."
 		}
 	},
 	"transpose": {

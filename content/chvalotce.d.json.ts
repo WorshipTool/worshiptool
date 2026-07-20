@@ -809,6 +809,11 @@ declare const messages: {
 				"dateAdded": "Data přidání",
 				"title": "Názvu"
 			}
+		},
+		"songs": {
+			"title": "Moje písně",
+			"totalSongs": "Celkem {count} písní",
+			"empty": "Zatím nemáš žádné vlastní písně."
 		}
 	},
 	"upload": {
