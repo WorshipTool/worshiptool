@@ -1,6 +1,9 @@
 'use client'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import { routesPaths } from '@/routes'
 import { useTranslations } from 'next-intl'
 import { useEffect } from 'react'
@@ -16,6 +19,10 @@ function Account() {
 	const navigate = useSmartNavigate()
 
 	const t = useTranslations('auth.login')
+	const tNav = useTranslations('navigation')
+
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	useEffect(() => {
 		if (!isLoggedIn()) {
@@ -26,30 +33,18 @@ function Account() {
 		}
 	}, [isLoggedIn()])
 
-	const theme = useTheme()
+	// phones get the native app shell (Účet is a tab-root, so no back arrow)
+	if (phoneVersion) {
+		return (
+			<MobileAppHeader title={tNav('account')}>
+				<BasicInfo />
+			</MobileAppHeader>
+		)
+	}
 
 	return (
-		<>
-			<Box
-				sx={{
-					[theme.breakpoints.down('md')]: {
-						display: 'none',
-					},
-					padding: 8,
-				}}
-			>
-				<TabsPanel />
-			</Box>
-
-			<Box
-				sx={{
-					[theme.breakpoints.up('md')]: {
-						display: 'none',
-					},
-				}}
-			>
-				<BasicInfo />
-			</Box>
-		</>
+		<Box sx={{ padding: 8 }}>
+			<TabsPanel />
+		</Box>
 	)
 }
