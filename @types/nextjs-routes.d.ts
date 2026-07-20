@@ -13,6 +13,7 @@ declare module "nextjs-routes" {
   export type Route =
     | StaticRoute<"/">
     | StaticRoute<"/api/build-id">
+    | StaticRoute<"/demo-header">
     | StaticRoute<"/demo-mobil">
     | StaticRoute<"/demo-song">
     | StaticRoute<"/kontakt">
