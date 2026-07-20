@@ -65,7 +65,6 @@ type MobileSongListViewProps<T extends RoutesKeys> = {
 	backParams?: SmartAllParams<T>
 	actions?: ReactNode[]
 	controlPanel?: ReactNode
-	fab?: ReactNode
 	items: BasicVariantPack[]
 	loading?: boolean
 	emptyText?: string
@@ -87,7 +86,6 @@ export default function MobileSongListView<T extends RoutesKeys>({
 	backParams,
 	actions,
 	controlPanel,
-	fab,
 	items,
 	loading,
 	emptyText,
@@ -110,7 +108,6 @@ export default function MobileSongListView<T extends RoutesKeys>({
 				count={pageCount}
 				page={Math.min(page, pageCount)}
 				onChange={(_, p) => setPage(p)}
-				color="primary"
 				siblingCount={0}
 				boundaryCount={1}
 				sx={{
@@ -132,7 +129,6 @@ export default function MobileSongListView<T extends RoutesKeys>({
 			backParams={backParams}
 			actions={actions}
 			controlPanel={controlPanel}
-			fab={fab}
 			bottomPanel={paginator}
 			scrollResetKey={page}
 		>

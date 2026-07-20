@@ -1,3 +1,3 @@
 export { default as MobileAppHeader } from './MobileAppHeader'
 export { default as MobileSongListView } from './MobileSongListView'
-export { default as MobileFab } from './MobileFab'
+export { default as MobileHeaderPill } from './MobileHeaderPill'

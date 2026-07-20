@@ -1,7 +1,10 @@
 'use client'
 
 import { PlaylistData } from '@/api/generated'
-import { MobileAppHeader, MobileFab } from '@/common/components/MobileAppHeader'
+import {
+	MobileAppHeader,
+	MobileHeaderPill,
+} from '@/common/components/MobileAppHeader'
 import { Box, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Chip } from '@/common/ui/mui'
@@ -124,15 +127,17 @@ export default function PlaylistyMobile({
 			title={tNav('playlists')}
 			subtitle={subtitle}
 			backTo="account"
-			fab={
-				<MobileFab
+			actions={[
+				<MobileHeaderPill
+					key="new"
 					onClick={createPlaylist}
 					loading={apiState.loading}
+					icon={<AddRounded />}
 					alt={tPlaylist('createNewPlaylist')}
 				>
-					<AddRounded />
-				</MobileFab>
-			}
+					{tPlaylist('create')}
+				</MobileHeaderPill>,
+			]}
 		>
 			{loading ? (
 				<Box sx={GROUP_CARD_SX}>

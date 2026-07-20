@@ -2,7 +2,7 @@
 
 import {
 	MobileAppHeader,
-	MobileFab,
+	MobileHeaderPill,
 } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, IconButton, Typography } from '@/common/ui'
@@ -10,7 +10,6 @@ import { Pagination } from '@/common/ui/mui'
 import {
 	AddRounded,
 	ChevronRightRounded,
-	MoreVertRounded,
 	MusicNoteRounded,
 	SearchRounded,
 } from '@mui/icons-material'
@@ -114,22 +113,16 @@ function DemoHeader() {
 				<IconButton key="search" color="grey.800" alt="Hledat">
 					<SearchRounded />
 				</IconButton>,
-				<IconButton key="more" color="grey.800" alt="Více">
-					<MoreVertRounded />
-				</IconButton>,
+				<MobileHeaderPill key="add" to="addMenu" icon={<AddRounded />} alt="Přidat">
+					Přidat
+				</MobileHeaderPill>,
 			]}
 			controlPanel={<SortSegment />}
-			fab={
-				<MobileFab to="addMenu" alt="Přidat">
-					<AddRounded />
-				</MobileFab>
-			}
 			bottomPanel={
 				<Pagination
 					count={8}
 					page={page}
 					onChange={(_, p) => setPage(p)}
-					color="primary"
 					siblingCount={0}
 					boundaryCount={1}
 					sx={{

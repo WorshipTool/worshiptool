@@ -8,7 +8,7 @@ import MySongsFilterPanel, {
 	MySongFilterOption,
 } from '@/app/(layout)/ucet/pisne/components/MySongsFilterPanel'
 import {
-	MobileFab,
+	MobileHeaderPill,
 	MobileSongListView,
 } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
@@ -98,11 +98,16 @@ function MySongsList() {
 					loading ? undefined : t('totalSongs', { count: variants.length.toString() })
 				}
 				backTo="account"
-				fab={
-					<MobileFab to="addMenu" alt={tCommon('add')}>
-						<AddRounded />
-					</MobileFab>
-				}
+				actions={[
+					<MobileHeaderPill
+						key="add"
+						to="addMenu"
+						icon={<AddRounded />}
+						alt={tCommon('add')}
+					>
+						{tCommon('add')}
+					</MobileHeaderPill>,
+				]}
 				items={variants}
 				loading={loading}
 				emptyText={t('empty')}
