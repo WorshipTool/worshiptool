@@ -67,14 +67,7 @@ function Playlists() {
 	)
 
 	if (phoneVersion) {
-		return (
-			<PlaylistyMobile
-				playlists={playlists}
-				loading={loading}
-				sortType={sortType as PlaylistOrderOptions}
-				onSortChange={setSortType}
-			/>
-		)
+		return <PlaylistyMobile playlists={playlists} loading={loading} />
 	}
 
 	return (
