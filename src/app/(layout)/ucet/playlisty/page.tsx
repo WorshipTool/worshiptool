@@ -5,6 +5,7 @@ import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
 import PlaylistyMobile from '@/app/(layout)/ucet/playlisty/PlaylistyMobile'
+import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
 import { Box, LinearProgress, useTheme } from '@/common/ui'
@@ -22,7 +23,7 @@ function Playlists() {
 	const { playlists: allPlaylists, loading } = useUsersPlaylists()
 	const [sortType, setSortType] = useUrlState('sortKey', 'updatedAt')
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	const playlists = useMemo(() => {
 		const arr =

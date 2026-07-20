@@ -811,6 +811,10 @@
 			"title": "Moje pieśni",
 			"totalSongs": "Łącznie {count} pieśni",
 			"empty": "Nie masz jeszcze własnych pieśni."
+		},
+		"playlists": {
+			"untitled": "Bez nazwy",
+			"empty": "Nie masz jeszcze żadnej playlisty. Utwórz pierwszą przyciskiem powyżej."
 		}
 	},
 	"upload": {

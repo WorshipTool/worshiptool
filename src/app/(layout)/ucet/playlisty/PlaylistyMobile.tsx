@@ -40,6 +40,7 @@ export default function PlaylistyMobile({
 	loading,
 }: PlaylistyMobileProps) {
 	const tNav = useTranslations('navigation.toolsMenu')
+	const t = useTranslations('account.playlists')
 
 	const row = (p: PlaylistData, isLast: boolean) => (
 		<Fragment key={p.guid}>
@@ -59,10 +60,10 @@ export default function PlaylistyMobile({
 						sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}
 					>
 						<Typography strong noWrap>
-							{p.title || 'Bez názvu'}
+							{p.title || t('untitled')}
 						</Typography>
 						<Typography small color="grey.600" noWrap>
-							{p.itemsCount > 0 ? p.itemsCount : 'Žádná'}{' '}
+							{p.itemsCount}{' '}
 							{czechConjugation('píseň', 'písně', 'písní', p.itemsCount)}
 							{' · '}
 							{getSmartDateAgoString(new Date(p.updatedAt))}
@@ -78,7 +79,7 @@ export default function PlaylistyMobile({
 			</Link>
 			{!isLast && (
 				<Box
-					sx={{ height: '1px', bgcolor: 'grey.100', marginLeft: DIVIDER_INSET }}
+					sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: DIVIDER_INSET }}
 				/>
 			)}
 		</Fragment>
@@ -140,9 +141,7 @@ export default function PlaylistyMobile({
 					}}
 				>
 					<QueueMusicRounded sx={{ fontSize: 48, color: 'grey.400' }} />
-					<Typography color="grey.600">
-						Zatím nemáš žádný playlist. Vytvoř si první tlačítkem nahoře.
-					</Typography>
+					<Typography color="grey.600">{t('empty')}</Typography>
 				</Box>
 			) : (
 				<Box sx={GROUP_CARD_SX}>

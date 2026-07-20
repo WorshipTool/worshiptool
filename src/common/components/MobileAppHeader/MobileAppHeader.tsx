@@ -1,7 +1,7 @@
 'use client'
 
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
-import { Box, Typography, useTheme } from '@/common/ui'
+import { Box, Button, Typography, useTheme } from '@/common/ui'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { ChevronLeftRounded } from '@mui/icons-material'
@@ -106,27 +106,21 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	}
 
 	const backControl = backTo ? (
-		<Box
-			role="button"
-			aria-label={tCommon('back')}
+		<Button
+			variant="text"
+			color="primary"
 			onClick={goUp}
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				minWidth: 44,
-				minHeight: 44,
-				cursor: 'pointer',
-				color: 'primary.main',
-				userSelect: 'none',
-			}}
+			alt={tCommon('back')}
+			disableUppercase
+			sx={{ minWidth: 44, minHeight: 44, paddingX: 0.5 }}
 		>
-			<ChevronLeftRounded sx={{ fontSize: 30 }} />
+			<ChevronLeftRounded sx={{ fontSize: 28 }} />
 			{!collapsed && (
-				<Typography color="primary.main" sx={{ marginLeft: -0.5 }}>
+				<Box component="span" sx={{ marginLeft: -0.25, fontWeight: 400 }}>
 					{tCommon('back')}
-				</Typography>
+				</Box>
 			)}
-		</Box>
+		</Button>
 	) : (
 		<Box sx={{ minWidth: 44 }} />
 	)
@@ -143,12 +137,17 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* slim sticky bar — transparent at rest, fills in once collapsed */}
+			{/* slim bar fixed to the viewport top — transparent at rest, fills in
+			    once collapsed. Fixed (not sticky) because the app's global
+			    overflow-x guard on <html> breaks position:sticky here, whereas
+			    fixed is reliable (same as the bottom tab bar). */}
 			<Box
 				ref={barRef}
 				sx={{
-					position: 'sticky',
+					position: 'fixed',
 					top: 0,
+					left: 0,
+					right: 0,
 					zIndex: HEADER_Z,
 					display: 'flex',
 					alignItems: 'center',
@@ -190,6 +189,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				</Box>
 			</Box>
 
+			{/* in-flow spacer reserving the fixed bar's height so the large title
+			    starts just below it */}
+			<Box sx={{ height: `calc(${TOOLBAR_SPACER} + 56px)` }} />
+
 			{/* large title row — scrolls away under the bar */}
 			<Box
 				sx={{
@@ -215,7 +218,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			</Box>
 
 			{/* trigger line for the collapse observer */}
-			<Box ref={sentinelRef} sx={{ height: 1 }} />
+			<Box ref={sentinelRef} sx={{ height: '1px' }} />
 
 			{/* page body */}
 			<Box

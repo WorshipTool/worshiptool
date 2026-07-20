@@ -814,6 +814,10 @@ declare const messages: {
 			"title": "Moje písně",
 			"totalSongs": "Celkem {count} písní",
 			"empty": "Zatím nemáš žádné vlastní písně."
+		},
+		"playlists": {
+			"untitled": "Bez názvu",
+			"empty": "Zatím nemáš žádný playlist. Vytvoř si první tlačítkem nahoře."
 		}
 	},
 	"upload": {

@@ -870,6 +870,10 @@
 			"title": "My songs",
 			"totalSongs": "Total {count} songs",
 			"empty": "You don't have any songs yet."
+		},
+		"playlists": {
+			"untitled": "Untitled",
+			"empty": "You don't have any playlists yet. Create your first with the button above."
 		}
 	},
 	"transpose": {
