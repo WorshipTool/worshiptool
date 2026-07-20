@@ -1,6 +1,9 @@
 'use client'
 
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
+import {
+	MOBILE_NAV_BREAKPOINT,
+	MOBILE_NAV_CLEARANCE,
+} from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, IconButton, Typography, useTheme } from '@/common/ui'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
@@ -11,10 +14,9 @@ import { ReactNode, useEffect, useRef } from 'react'
 
 // height of the compact bar's content row (safe-area is added on top of this)
 const BAR_ROW = 52
-// full-bleed helpers, mirroring the other mobile surfaces (SeznamMobile etc.)
+// on app-shell routes the top bar's sticky spacer shrinks to the safe-area
+// inset; reclaim exactly that so the grey canvas reaches the very top
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// clearance so the last rows clear the bottom tab bar + its raised center action
-const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
 
@@ -38,15 +40,14 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 }
 
 /**
- * Native-feeling mobile screen shell with a collapsing large-title header. At
- * rest the title is large on the grey canvas with the back/action controls
- * floating above it; as the content scrolls up, the compact bar *continuously*
- * fades in (background, hairline and a centered compact title tied to the scroll
- * position — not a snap) while the large title slides away underneath.
- *
- * The bar is `position: fixed` (the app's global overflow-x guard on <html>
- * breaks position:sticky) — reliable, same as the bottom tab bar. The scroll
- * animation is driven imperatively via refs so the page body never re-renders.
+ * Native-feeling mobile screen shell with a collapsing large-title header, built
+ * as a proper app shell: the surface fills the viewport (minus the bottom tab
+ * bar) and does NOT scroll itself — only the middle content region scrolls, so
+ * the scrollbar is confined to the content, not running the full height behind
+ * the header and tab bar. The compact bar continuously fades in as the content
+ * scrolls (background, hairline, centered title tied to scroll position), and
+ * the large title scrolls away underneath. Painting is imperative (refs) so the
+ * page body never re-renders while scrolling.
  *
  * Renders only on phones (< MOBILE_NAV_BREAKPOINT); hidden on desktop via CSS.
  */
@@ -66,16 +67,19 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const barRef = useRef<HTMLDivElement>(null)
 	const compactTitleRef = useRef<HTMLDivElement>(null)
 	const largeRef = useRef<HTMLDivElement>(null)
+	const scrollRef = useRef<HTMLDivElement>(null)
 
-	// Continuously map scroll position → collapse progress (0…1) over the height
-	// of the large title block, and paint the bar imperatively (no re-render, so
-	// a long list underneath never re-renders while scrolling).
+	// Continuously map the content scroller's position → collapse progress (0…1)
+	// over the height of the large title block, and paint the bar imperatively
+	// (no re-render, so a long list underneath never re-renders while scrolling).
 	useEffect(() => {
+		const scroller = scrollRef.current
+		if (!scroller) return
 		let raf = 0
 		const paint = () => {
 			raf = 0
 			const distance = Math.max(1, (largeRef.current?.offsetHeight ?? 64) - 4)
-			const p = Math.min(1, Math.max(0, window.scrollY / distance))
+			const p = Math.min(1, Math.max(0, scroller.scrollTop / distance))
 			const bar = barRef.current
 			if (bar) {
 				bar.style.backgroundColor = `rgba(255, 255, 255, ${p})`
@@ -92,10 +96,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		const onScroll = () => {
 			if (!raf) raf = requestAnimationFrame(paint)
 		}
-		window.addEventListener('scroll', onScroll, { passive: true })
+		scroller.addEventListener('scroll', onScroll, { passive: true })
 		paint()
 		return () => {
-			window.removeEventListener('scroll', onScroll)
+			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
 	}, [])
@@ -116,24 +120,25 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	return (
 		<Box
 			sx={{
-				// full-bleed grey canvas; hidden on desktop so desktop stays untouched
+				// full-bleed app-shell surface that fills the viewport down to the
+				// tab bar; it doesn't scroll — only the inner content region does
 				width: '100vw',
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
-				minHeight: '100dvh',
+				height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
 				bgcolor: 'grey.50',
+				display: 'flex',
+				flexDirection: 'column',
+				overflow: 'hidden',
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* compact bar fixed to the viewport top — its background/hairline and
-			    centered title fade in continuously with scroll (see effect above) */}
+			{/* compact bar (fixed height) — its background/hairline and centered
+			    title fade in continuously with scroll (see effect above) */}
 			<Box
 				ref={barRef}
 				sx={{
-					position: 'fixed',
-					top: 0,
-					left: 0,
-					right: 0,
+					flexShrink: 0,
 					zIndex: HEADER_Z,
 					display: 'flex',
 					alignItems: 'center',
@@ -180,31 +185,32 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				</Box>
 			</Box>
 
-			{/* in-flow spacer reserving the fixed bar's height so the large title
-			    starts just below it */}
-			<Box sx={{ height: `calc(${TOOLBAR_SPACER} + 56px)` }} />
-
-			{/* large title — floats under the controls and scrolls away */}
-			<Box ref={largeRef} sx={{ paddingX: 2.5, paddingBottom: 1.5 }}>
-				<Typography variant="h4" strong={800} sx={{ lineHeight: 1.15 }}>
-					{title}
-				</Typography>
-				{subtitle && (
-					<Typography small strong={500} color="grey.600">
-						{subtitle}
-					</Typography>
-				)}
-			</Box>
-
-			{/* page body */}
+			{/* the ONLY scroller — scrollbar is confined between the header and the
+			    tab bar, not the full viewport height */}
 			<Box
+				ref={scrollRef}
 				sx={{
-					paddingX: 2,
-					paddingTop: 1,
-					paddingBottom: CONTENT_CLEARANCE,
+					flex: 1,
+					minHeight: 0,
+					overflowY: 'auto',
+					overflowX: 'hidden',
+					paddingBottom: 2,
 				}}
 			>
-				{children}
+				{/* large title — scrolls away under the bar */}
+				<Box ref={largeRef} sx={{ paddingX: 2.5, paddingBottom: 1.5 }}>
+					<Typography variant="h4" strong={800} sx={{ lineHeight: 1.15 }}>
+						{title}
+					</Typography>
+					{subtitle && (
+						<Typography small strong={500} color="grey.600">
+							{subtitle}
+						</Typography>
+					)}
+				</Box>
+
+				{/* page body */}
+				<Box sx={{ paddingX: 2 }}>{children}</Box>
 			</Box>
 		</Box>
 	)
