@@ -31,7 +31,7 @@ export default function MobileFab<T extends RoutesKeys>({
 }: MobileFabProps<T>) {
 	return (
 		<Button
-			color="primarygradient"
+			color="primary"
 			onClick={onClick}
 			to={to}
 			toParams={toParams}
@@ -42,9 +42,9 @@ export default function MobileFab<T extends RoutesKeys>({
 				minWidth: 56,
 				width: 56,
 				height: 56,
-				borderRadius: '18px',
+				borderRadius: '50%',
 				padding: 0,
-				boxShadow: '0 6px 16px rgba(0,133,255,0.4)',
+				boxShadow: '0 6px 16px rgba(0,133,255,0.45)',
 			}}
 		>
 			{children}

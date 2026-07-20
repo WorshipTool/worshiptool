@@ -6,6 +6,7 @@ import {
 } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { Box, IconButton, Typography } from '@/common/ui'
+import { Pagination } from '@/common/ui/mui'
 import {
 	AddRounded,
 	ChevronRightRounded,
@@ -103,10 +104,11 @@ function SortSegment() {
 
 /** TEMPORARY demo page to preview the MobileAppHeader template. Delete before finalizing. */
 function DemoHeader() {
+	const [page, setPage] = useState(1)
 	return (
 		<MobileAppHeader
 			title="Moje písně"
-			subtitle="8 písní"
+			subtitle="48 písní"
 			backTo="account"
 			actions={[
 				<IconButton key="search" color="grey.800" alt="Hledat">
@@ -122,6 +124,25 @@ function DemoHeader() {
 					<AddRounded />
 				</MobileFab>
 			}
+			bottomPanel={
+				<Pagination
+					count={8}
+					page={page}
+					onChange={(_, p) => setPage(p)}
+					color="primary"
+					siblingCount={0}
+					boundaryCount={1}
+					sx={{
+						'& .MuiPaginationItem-root': {
+							minWidth: 44,
+							height: 44,
+							margin: '0 2px',
+							fontSize: '1rem',
+						},
+					}}
+				/>
+			}
+			scrollResetKey={page}
 		>
 			<Box sx={GROUP_CARD_SX}>
 				{SONGS.map((s, i) => (

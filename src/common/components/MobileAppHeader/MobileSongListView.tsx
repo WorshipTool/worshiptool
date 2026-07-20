@@ -3,11 +3,12 @@
 import { BasicVariantPack } from '@/api/dtos'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { Box, Typography } from '@/common/ui'
+import { Pagination } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
 import { RoutesKeys, SmartAllParams } from '@/routes/routes.types'
 import { ChevronRightRounded, MusicNoteRounded } from '@mui/icons-material'
-import { ReactNode, Fragment } from 'react'
+import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react'
 
 // one white "group" surface holding the song rows (iOS-style grouped list),
 // matching the songs list / home screens
@@ -68,6 +69,9 @@ type MobileSongListViewProps<T extends RoutesKeys> = {
 	items: BasicVariantPack[]
 	loading?: boolean
 	emptyText?: string
+	/** When set, the list is paginated client-side and a paginator is pinned
+	 * above the tab bar (there can be thousands of songs). */
+	perPage?: number
 }
 
 /**
@@ -87,7 +91,39 @@ export default function MobileSongListView<T extends RoutesKeys>({
 	items,
 	loading,
 	emptyText,
+	perPage,
 }: MobileSongListViewProps<T>) {
+	const [page, setPage] = useState(1)
+	const pageCount = perPage ? Math.max(1, Math.ceil(items.length / perPage)) : 1
+	useEffect(() => {
+		setPage((p) => Math.min(p, pageCount))
+	}, [pageCount])
+
+	const pageItems = useMemo(
+		() => (perPage ? items.slice((page - 1) * perPage, page * perPage) : items),
+		[items, perPage, page]
+	)
+
+	const paginator =
+		perPage && pageCount > 1 ? (
+			<Pagination
+				count={pageCount}
+				page={Math.min(page, pageCount)}
+				onChange={(_, p) => setPage(p)}
+				color="primary"
+				siblingCount={0}
+				boundaryCount={1}
+				sx={{
+					'& .MuiPaginationItem-root': {
+						minWidth: 44,
+						height: 44,
+						margin: '0 2px',
+						fontSize: '1rem',
+					},
+				}}
+			/>
+		) : undefined
+
 	return (
 		<MobileAppHeader
 			title={title}
@@ -97,6 +133,8 @@ export default function MobileSongListView<T extends RoutesKeys>({
 			actions={actions}
 			controlPanel={controlPanel}
 			fab={fab}
+			bottomPanel={paginator}
+			scrollResetKey={page}
 		>
 			{loading ? (
 				<Box sx={GROUP_CARD_SX}>
@@ -153,7 +191,7 @@ export default function MobileSongListView<T extends RoutesKeys>({
 				</Box>
 			) : (
 				<Box sx={GROUP_CARD_SX}>
-					{items.map((v, i) => (
+					{pageItems.map((v, i) => (
 						<Fragment key={`${String(v.packGuid)}-${i}`}>
 							<SongVariantCard
 								data={v}
@@ -165,7 +203,7 @@ export default function MobileSongListView<T extends RoutesKeys>({
 								}
 								sx={FLAT_ROW_SX}
 							/>
-							{i < items.length - 1 && <Divider />}
+							{i < pageItems.length - 1 && <Divider />}
 						</Fragment>
 					))}
 				</Box>

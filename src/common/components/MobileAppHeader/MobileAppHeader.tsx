@@ -39,17 +39,21 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	actions?: ReactNode[]
 	/** Optional control strip (segment / chips) pinned under the header. */
 	controlPanel?: ReactNode
+	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
+	bottomPanel?: ReactNode
 	/** Optional floating action button (primary action), bottom-right. */
 	fab?: ReactNode
+	/** When this value changes, the content scrolls back to the top (e.g. on page change). */
+	scrollResetKey?: string | number
 	/** The page body (the scrolling content below the header). */
 	children?: ReactNode
 }
 
 /**
  * Native-feeling mobile screen shell with a collapsing large-title header, built
- * as a proper app shell: the header (and an optional control strip) stay pinned
- * at the top and the tab bar at the bottom — only the middle content scrolls, so
- * the scrollbar is confined to the content, not the full viewport height.
+ * as a proper app shell: the header (+ optional control strip) stay pinned at the
+ * top, an optional panel + the tab bar stay at the bottom — only the middle
+ * content scrolls, so the scrollbar is confined to the content.
  *
  * At rest the header is a single row — back arrow, large title (+ subtitle) and
  * up to two action icons. As the content scrolls the title smoothly shrinks to a
@@ -65,7 +69,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	backParams,
 	actions,
 	controlPanel,
+	bottomPanel,
 	fab,
+	scrollResetKey,
 	children,
 }: MobileAppHeaderProps<T>) {
 	const theme = useTheme()
@@ -111,6 +117,11 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		}
 	}, [])
 
+	// scroll back to the top when the reset key changes (e.g. paginator page change)
+	useEffect(() => {
+		scrollRef.current?.scrollTo({ top: 0 })
+	}, [scrollResetKey])
+
 	const goUp = () => {
 		if (!backTo) return
 		const idx = (
@@ -130,7 +141,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		<Box
 			sx={{
 				// full-bleed app-shell surface that fills the viewport down to the tab
-				// bar; header + panel stay pinned, only the content region scrolls
+				// bar; header + panels stay pinned, only the content region scrolls
 				position: 'relative',
 				width: '100vw',
 				marginLeft: 'calc(50% - 50vw)',
@@ -227,33 +238,46 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				</Box>
 			)}
 
-			{/* the ONLY scroller — scrollbar confined between header and tab bar */}
-			<Box
-				ref={scrollRef}
-				sx={{
-					flex: 1,
-					minHeight: 0,
-					overflowY: 'auto',
-					overflowX: 'hidden',
-					paddingX: 2,
-					paddingTop: 0.5,
-					paddingBottom: fab ? 11 : 2,
-				}}
-			>
-				{children}
-			</Box>
-
-			{/* optional floating action button */}
-			{fab && (
+			{/* scroll area — the only scroller; the FAB is anchored to its bottom so
+			    it floats above the optional bottom panel */}
+			<Box sx={{ position: 'relative', flex: 1, minHeight: 0 }}>
 				<Box
+					ref={scrollRef}
 					sx={{
 						position: 'absolute',
-						right: 16,
-						bottom: 16,
-						zIndex: HEADER_Z,
+						inset: 0,
+						overflowY: 'auto',
+						overflowX: 'hidden',
+						paddingX: 2,
+						paddingTop: 0.5,
+						paddingBottom: 2,
 					}}
 				>
-					{fab}
+					{children}
+				</Box>
+				{fab && (
+					<Box sx={{ position: 'absolute', right: 16, bottom: 16, zIndex: HEADER_Z }}>
+						{fab}
+					</Box>
+				)}
+			</Box>
+
+			{/* optional panel pinned above the bottom tab bar (e.g. pagination) */}
+			{bottomPanel && (
+				<Box
+					sx={{
+						flexShrink: 0,
+						zIndex: HEADER_Z,
+						bgcolor: 'background.paper',
+						borderTop: '1px solid',
+						borderColor: 'grey.200',
+						boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
+						display: 'flex',
+						justifyContent: 'center',
+						paddingY: 0.5,
+					}}
+				>
+					{bottomPanel}
 				</Box>
 			)}
 		</Box>

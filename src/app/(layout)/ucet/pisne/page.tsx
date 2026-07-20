@@ -106,6 +106,7 @@ function MySongsList() {
 				items={variants}
 				loading={loading}
 				emptyText={t('empty')}
+				perPage={12}
 			/>
 		)
 	}
