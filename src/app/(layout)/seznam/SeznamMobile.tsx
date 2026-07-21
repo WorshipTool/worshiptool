@@ -124,8 +124,10 @@ export default function SeznamMobile({
 		let active = true
 		setLoading(true)
 		setError(false)
+		// `page` is 1-indexed for the UI/paginator, but the backend list is
+		// 0-indexed (see Pager, which fetches `page - 1`) — so page 1 → offset 0.
 		songGettingApi
-			.getList(page, PER_PAGE)
+			.getList(page - 1, PER_PAGE)
 			.then((data) => {
 				if (active) setItems(data)
 			})
