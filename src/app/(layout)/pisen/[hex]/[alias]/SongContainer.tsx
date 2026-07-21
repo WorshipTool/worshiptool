@@ -126,10 +126,19 @@ export default function SongContainer({
 					<MobileAppHeader
 						title={editedTitle}
 						backTo="songsList"
-						surface="background.paper"
-						contentPadded={false}
+						surface="grey.50"
 					>
-						<Box sx={{ paddingX: 2.5 }}>
+						{/* the song sheet lives in a white card floating on the grey app
+						    canvas (matching the rest of the app) — so short songs read as
+						    an intentional card, not a big empty white void */}
+						<Box
+							sx={{
+								bgcolor: 'background.paper',
+								borderRadius: 3,
+								boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+								padding: 2.5,
+							}}
+						>
 							<SheetDisplay
 								sheet={currentSheet}
 								title={''}
