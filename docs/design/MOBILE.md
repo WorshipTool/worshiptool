@@ -56,6 +56,12 @@ hidden on tab-roots), `actions` (≤ 2 icons, right of the title), `controlPanel
    exactly one place (the tab bar's search); a page's own create action → the
    header (a "+ Add" pill), **not** a FAB. Contextual controls → `controlPanel`
    at the top. Content navigation (pagination) → a quiet `bottomPanel`.
+7. **Never a blank screen.** A data-backed screen always renders one of four
+   states — **loading** (skeletons), **empty** (icon + message), **error**
+   (icon + message + a "Zkusit znovu" retry), or the **content**. A page that
+   shows only its header while data is missing is a bug: the user can't tell
+   loading from broken. Match the states shown by `MobileSongListView` /
+   `SeznamMobile`.
 
 ## Applied (the standard)
 

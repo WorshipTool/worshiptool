@@ -3,24 +3,21 @@
 import { mapBasicVariantPackApiToDto } from '@/api/dtos/song/song.map'
 import { GetListSongData } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
-import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
-import { Box, CircularProgress, Typography } from '@/common/ui'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import { Box, Button, Typography } from '@/common/ui'
 import { Pagination } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { SongVariantCard } from '@/common/ui/SongCard'
-import { ChevronRightRounded, MusicNoteRounded } from '@mui/icons-material'
+import {
+	ChevronRightRounded,
+	CloudOffRounded,
+	MusicNoteRounded,
+	RefreshRounded,
+} from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 const PER_PAGE = 12
-// on app-shell routes the top bar's sticky spacer shrinks to the safe-area
-// inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top
-const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// the paginator is portalled into the tab bar's slot so it stacks on top of the
-// bar via layout (no hard-coded bar height); the list just needs enough bottom
-// clearance to sit above the bar + paginator
-const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 150px)'
 const PREVIEW_LINES = 1
 // divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
 const DIVIDER_INSET = 8.5
@@ -32,7 +29,7 @@ const GROUP_CARD_SX = {
 	borderRadius: 3,
 	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
 	overflow: 'hidden',
-}
+} as const
 
 // strip the card chrome off SongVariantCard so it reads as a row inside the group
 const FLAT_ROW_SX = {
@@ -41,14 +38,14 @@ const FLAT_ROW_SX = {
 	outlineColor: 'transparent',
 	'&:hover': { bgcolor: 'grey.50', boxShadow: 'none' },
 	'&:active': { bgcolor: 'grey.100' },
-}
+} as const
 
 // small alphabetical section label above each letter's group card
 const LETTER_HEADER_SX = {
 	paddingLeft: 0.5,
 	paddingTop: 0.5,
 	paddingBottom: 0.5,
-}
+} as const
 
 // first letter of a song title, upper-cased for the section header
 const firstLetter = (title: string) =>
@@ -65,10 +62,17 @@ function SongLeadingIcon() {
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
+				flexShrink: 0,
 			}}
 		>
 			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.600' }} />
 		</Box>
+	)
+}
+
+function Divider() {
+	return (
+		<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: DIVIDER_INSET }} />
 	)
 }
 
@@ -80,10 +84,11 @@ type SeznamMobileProps = {
 }
 
 /**
- * Native-feeling mobile songs list: white song cards floating on the grey
- * canvas (matching the home screen), but paginated — there are thousands of
- * songs, so paging beats an endless scroll. The desktop grid stays in
- * page.tsx; this component owns the phone view.
+ * Native-feeling mobile songs list, built on the shared MobileAppHeader
+ * app-shell (collapsing title, only the content scrolls, paginator pinned in a
+ * quiet bottom panel — see docs/design/MOBILE.md). The songs of the current
+ * page are grouped by first letter; there are thousands of songs, so paging
+ * beats an endless scroll. The desktop grid stays in page.tsx.
  */
 export default function SeznamMobile({
 	page,
@@ -91,17 +96,13 @@ export default function SeznamMobile({
 	count,
 }: SeznamMobileProps) {
 	const t = useTranslations('songsList')
+	const tCommon = useTranslations('common')
 	const { songGettingApi } = useApi()
 
 	const [items, setItems] = useState<GetListSongData[]>([])
 	const [loading, setLoading] = useState(true)
-
-	// the paginator is portalled into the tab bar's slot so it stacks on top of
-	// the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)
-	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
-	useEffect(() => {
-		setTabBarSlot(document.getElementById(ABOVE_TABBAR_SLOT_ID))
-	}, [])
+	const [error, setError] = useState(false)
+	const [reloadKey, setReloadKey] = useState(0)
 
 	const pagesCount = Math.max(1, Math.ceil(count / PER_PAGE))
 
@@ -122,13 +123,17 @@ export default function SeznamMobile({
 	useEffect(() => {
 		let active = true
 		setLoading(true)
+		setError(false)
 		songGettingApi
 			.getList(page, PER_PAGE)
 			.then((data) => {
 				if (active) setItems(data)
 			})
 			.catch(() => {
-				if (active) setItems([])
+				if (active) {
+					setItems([])
+					setError(true)
+				}
 			})
 			.finally(() => {
 				if (active) setLoading(false)
@@ -136,218 +141,145 @@ export default function SeznamMobile({
 		return () => {
 			active = false
 		}
-	}, [page, songGettingApi])
+	}, [page, songGettingApi, reloadKey])
 
-	const goToPage = (p: number) => {
-		onPageChange(p)
-		if (typeof window !== 'undefined')
-			window.scrollTo({ top: 0, behavior: 'smooth' })
-	}
+	const paginator =
+		!error && pagesCount > 1 ? (
+			<Pagination
+				count={pagesCount}
+				page={Math.min(page, pagesCount)}
+				onChange={(_, p) => onPageChange(p)}
+				siblingCount={0}
+				boundaryCount={1}
+				sx={{
+					// finger-sized touch targets (44px) while staying compact
+					'& .MuiPaginationItem-root': {
+						minWidth: 44,
+						height: 44,
+						margin: '0 2px',
+						fontSize: '1rem',
+					},
+				}}
+			/>
+		) : undefined
 
 	return (
-		<Box
-			sx={{
-				// full-bleed: escape the SmartPage padded wrapper and the toolbar spacer
-				width: '100vw',
-				marginLeft: 'calc(50% - 50vw)',
-				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
-				minHeight: '100dvh',
-				bgcolor: 'grey.50',
-				display: 'flex',
-				justifyContent: 'center',
-			}}
+		<MobileAppHeader
+			title={t('title')}
+			bottomPanel={paginator}
+			scrollResetKey={page}
 		>
-			<Box
-				sx={{
-					width: '100%',
-					minWidth: 0,
-					minHeight: '100dvh',
-					bgcolor: 'grey.50',
-					display: 'flex',
-					flexDirection: 'column',
-				}}
-			>
-				<Box
-					sx={{
-						paddingX: 2.5,
-						paddingTop: 'calc(env(safe-area-inset-top) + 24px)',
-						paddingBottom: 1.5,
-					}}
-				>
-					<Typography variant="h4" strong={800}>
-						{t('title')}
-					</Typography>
+			{loading ? (
+				<Box sx={GROUP_CARD_SX}>
+					{Array.from({ length: PER_PAGE }).map((_, i) => (
+						<Fragment key={i}>
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: 1.5,
+									paddingX: 1.75,
+									paddingY: 1.25,
+								}}
+							>
+								<Skeleton
+									variant="rounded"
+									sx={{
+										width: 40,
+										height: 40,
+										borderRadius: 2,
+										bgcolor: 'grey.100',
+										flexShrink: 0,
+									}}
+								/>
+								<Box sx={{ flex: 1 }}>
+									<Skeleton
+										variant="text"
+										sx={{ width: '55%', bgcolor: 'grey.100' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ width: '80%', bgcolor: 'grey.100' }}
+									/>
+								</Box>
+							</Box>
+							{i < PER_PAGE - 1 && <Divider />}
+						</Fragment>
+					))}
 				</Box>
-
+			) : error ? (
 				<Box
 					sx={{
-						paddingX: 2,
-						paddingTop: 1,
-						paddingBottom: CONTENT_CLEARANCE,
 						display: 'flex',
 						flexDirection: 'column',
+						alignItems: 'center',
+						textAlign: 'center',
+						gap: 2,
+						paddingTop: 8,
+						paddingX: 3,
 					}}
 				>
-					<Box sx={{ position: 'relative', minHeight: 320 }}>
-						{loading && items.length === 0 ? (
+					<CloudOffRounded sx={{ fontSize: 48, color: 'grey.400' }} />
+					<Typography color="grey.600">{t('error')}</Typography>
+					<Button
+						variant="outlined"
+						onClick={() => setReloadKey((k) => k + 1)}
+						startIcon={<RefreshRounded />}
+						disableUppercase
+					>
+						{tCommon('tryAgain')}
+					</Button>
+				</Box>
+			) : items.length === 0 ? (
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						textAlign: 'center',
+						gap: 1,
+						paddingTop: 8,
+						paddingX: 3,
+					}}
+				>
+					<MusicNoteRounded sx={{ fontSize: 48, color: 'grey.400' }} />
+					<Typography color="grey.600">{t('empty')}</Typography>
+				</Box>
+			) : (
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+					{letterGroups.map((group) => (
+						<Box key={group.letter}>
+							<Box sx={LETTER_HEADER_SX}>
+								<Typography
+									small
+									strong={700}
+									color="grey.700"
+									sx={{ letterSpacing: '0.5px' }}
+								>
+									{group.letter}
+								</Typography>
+							</Box>
 							<Box sx={GROUP_CARD_SX}>
-								{Array.from({ length: PER_PAGE }).map((_, i) => (
-									<Fragment key={i}>
-										<Box
-											sx={{
-												display: 'flex',
-												alignItems: 'center',
-												gap: 1.5,
-												paddingX: 1.75,
-												paddingY: 1.25,
-											}}
-										>
-											<Skeleton
-												variant="rounded"
-												sx={{
-													width: 40,
-													height: 40,
-													borderRadius: 2,
-													bgcolor: 'grey.100',
-													flexShrink: 0,
-												}}
-											/>
-											<Box sx={{ flex: 1 }}>
-												<Skeleton
-													variant="text"
-													sx={{ width: '55%', bgcolor: 'grey.100' }}
-												/>
-												<Skeleton
-													variant="text"
-													sx={{ width: '80%', bgcolor: 'grey.100' }}
-												/>
-											</Box>
-										</Box>
-										{i < PER_PAGE - 1 && (
-											<Box
-												sx={{
-													height: '1px',
-													bgcolor: 'grey.200',
-													marginLeft: DIVIDER_INSET,
-												}}
-											/>
-										)}
+								{group.items.map((s, i) => (
+									<Fragment key={`${String(s.main.packGuid)}-${i}`}>
+										<SongVariantCard
+											data={mapBasicVariantPackApiToDto(s.main)}
+											dense
+											previewLines={PREVIEW_LINES}
+											leadingIcon={<SongLeadingIcon />}
+											trailingIcon={
+												<ChevronRightRounded sx={{ color: 'grey.400' }} />
+											}
+											sx={FLAT_ROW_SX}
+										/>
+										{i < group.items.length - 1 && <Divider />}
 									</Fragment>
 								))}
 							</Box>
-						) : (
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 1.5,
-								}}
-							>
-								{letterGroups.map((group) => (
-									<Box key={group.letter}>
-										<Box sx={LETTER_HEADER_SX}>
-											<Typography
-												small
-												strong={700}
-												color="grey.700"
-												sx={{ letterSpacing: '0.5px' }}
-											>
-												{group.letter}
-											</Typography>
-										</Box>
-										<Box sx={GROUP_CARD_SX}>
-											{group.items.map((s, i) => (
-												<Fragment
-													key={`${String(s.main.packGuid)}-${i}`}
-												>
-													<SongVariantCard
-														data={mapBasicVariantPackApiToDto(s.main)}
-														dense
-														previewLines={PREVIEW_LINES}
-														leadingIcon={<SongLeadingIcon />}
-														trailingIcon={
-															<ChevronRightRounded
-																sx={{ color: 'grey.400' }}
-															/>
-														}
-														sx={FLAT_ROW_SX}
-													/>
-													{i < group.items.length - 1 && (
-														<Box
-															sx={{
-																height: '1px',
-																bgcolor: 'grey.200',
-																marginLeft: DIVIDER_INSET,
-															}}
-														/>
-													)}
-												</Fragment>
-											))}
-										</Box>
-									</Box>
-								))}
-							</Box>
-						)}
-
-						{loading && items.length > 0 && (
-							<Box
-								sx={{
-									position: 'absolute',
-									inset: 0,
-									display: 'flex',
-									alignItems: 'flex-start',
-									justifyContent: 'center',
-									paddingTop: 6,
-									bgcolor: 'grey.50',
-									opacity: 0.6,
-									borderRadius: 3,
-								}}
-							>
-								<CircularProgress />
-							</Box>
-						)}
-					</Box>
+						</Box>
+					))}
 				</Box>
-			</Box>
-
-			{/* paginator — portalled into the tab bar's slot so it stacks on top of
-			    the bar via layout, always visible */}
-			{pagesCount > 1 &&
-				tabBarSlot &&
-				createPortal(
-					<Box
-						sx={{
-							width: '100%',
-							boxSizing: 'border-box',
-							display: 'flex',
-							justifyContent: 'center',
-							paddingY: 0.75,
-							bgcolor: 'background.paper',
-							borderTop: '1px solid',
-							borderColor: 'grey.200',
-							boxShadow: '0 -2px 8px rgba(0,0,0,0.06)',
-						}}
-					>
-						<Pagination
-							count={pagesCount}
-							page={page}
-							onChange={(_, p) => goToPage(p)}
-							color="primary"
-							siblingCount={0}
-							boundaryCount={1}
-							sx={{
-								// finger-sized touch targets (44px) while staying compact
-								'& .MuiPaginationItem-root': {
-									minWidth: 44,
-									height: 44,
-									margin: '0 2px',
-									fontSize: '1rem',
-								},
-							}}
-						/>
-					</Box>,
-					tabBarSlot
-				)}
-		</Box>
+			)}
+		</MobileAppHeader>
 	)
 }

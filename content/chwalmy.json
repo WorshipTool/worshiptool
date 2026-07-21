@@ -846,7 +846,9 @@
 		}
 	},
 	"songsList": {
-		"title": "Lista wszystkich pieśni"
+		"title": "Lista wszystkich pieśni",
+		"empty": "Nie ma jeszcze żadnych pieśni.",
+		"error": "Nie udało się załadować pieśni."
 	},
 	"loadingScreen": {
 		"message": "Ładowanie aplikacji..."

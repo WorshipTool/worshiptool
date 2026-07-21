@@ -592,7 +592,9 @@
 		"cancel": "Cancel"
 	},
 	"songsList": {
-		"title": "List of all songs"
+		"title": "List of all songs",
+		"empty": "There are no songs yet.",
+		"error": "Couldn't load the songs."
 	},
 	"loadingScreen": {
 		"message": "Loading app..."

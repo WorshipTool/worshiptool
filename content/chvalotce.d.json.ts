@@ -849,7 +849,9 @@ declare const messages: {
 		}
 	},
 	"songsList": {
-		"title": "Seznam všech písní"
+		"title": "Seznam všech písní",
+		"empty": "Zatím tu nejsou žádné písně.",
+		"error": "Písně se nepodařilo načíst."
 	},
 	"loadingScreen": {
 		"message": "Načítání aplikace..."
