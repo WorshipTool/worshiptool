@@ -2036,6 +2036,21 @@ function PlaylistUnified() {
 			backTo="account"
 			surface="grey.50"
 			overlay
+			heroIcon={
+				<Box
+					sx={{
+						width: 84,
+						height: 84,
+						borderRadius: 3,
+						bgcolor: 'primary.50',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<QueueMusicRounded sx={{ fontSize: 42, color: 'primary.main' }} />
+				</Box>
+			}
 			actions={[
 				<IconButton key="m" color="grey.700" alt="Více">
 					<MoreHorizRounded />

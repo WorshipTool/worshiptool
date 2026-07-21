@@ -17,6 +17,10 @@ const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 const SHRINK_DISTANCE = 64
 const TITLE_MAX = 1.85 // rem
 const TITLE_MIN = 1.2 // rem
+// hero mode: taller expanded header that collapses to the normal compact bar
+const HERO_SHRINK_DISTANCE = 150
+const HERO_TITLE = 2.0 // rem — the big title in the expanded hero block
+const HERO_MAX = 220 // px — max height of the expanded hero block
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
 
@@ -37,6 +41,13 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	backParams?: SmartAllParams<T>
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
+	/**
+	 * When set, the header becomes a taller "hero": at rest it expands to a large
+	 * centered block — this cover/emblem node above a big title (+ subtitle) — and
+	 * collapses to the normal compact bar (back · title · actions) on scroll. Same
+	 * shared header, just taller; omit for the standard header.
+	 */
+	heroIcon?: ReactNode
 	/** Optional control strip (segment / chips) pinned under the header. */
 	controlPanel?: ReactNode
 	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
@@ -80,6 +91,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	backTo,
 	backParams,
 	actions,
+	heroIcon,
 	controlPanel,
 	bottomPanel,
 	scrollResetKey,
@@ -97,6 +109,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const headerRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
+	const heroRef = useRef<HTMLDivElement>(null)
+	const heroMode = Boolean(heroIcon)
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
@@ -106,13 +120,25 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		let raf = 0
 		const paint = () => {
 			raf = 0
-			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
-			if (titleRef.current) {
-				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
-			}
-			if (subtitleRef.current) {
-				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
-				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
+			const dist = heroMode ? HERO_SHRINK_DISTANCE : SHRINK_DISTANCE
+			const p = Math.min(1, Math.max(0, scroller.scrollTop / dist))
+			if (heroMode) {
+				// collapse the tall hero block away; fade the compact title in
+				if (heroRef.current) {
+					heroRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
+					heroRef.current.style.maxHeight = `${(1 - p) * HERO_MAX}px`
+				}
+				if (titleRef.current) {
+					titleRef.current.style.opacity = String(Math.max(0, (p - 0.45) / 0.55))
+				}
+			} else {
+				if (titleRef.current) {
+					titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
+				}
+				if (subtitleRef.current) {
+					subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
+					subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
+				}
 			}
 			if (headerRef.current) {
 				headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
@@ -129,7 +155,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [])
+	}, [heroMode])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -182,34 +208,34 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* header — one row: back, title (+ subtitle), up to 2 actions. The title
-			    shrinks on scroll (see effect above). */}
+			{/* header — a compact row (back · title · actions). In hero mode a taller
+			    expanded block (cover + big title + subtitle) sits below it. The title
+			    shrinks / the hero collapses on scroll (see effect above). */}
 			<Box
 				ref={headerRef}
 				sx={{
 					flexShrink: 0,
 					zIndex: HEADER_Z,
 					display: 'flex',
-					alignItems: 'center',
-					gap: 0.5,
-					paddingX: 1.5,
+					flexDirection: 'column',
 					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
 					borderBottom: '1px solid transparent',
 				}}
 			>
-				{backTo && (
-					<IconButton
-						onClick={goUp}
-						alt={tCommon('back')}
-						color="grey.800"
-						sx={{ marginLeft: -0.5, flexShrink: 0 }}
-					>
-						<ArrowBackRounded />
-					</IconButton>
-				)}
-				<Box
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
+					{backTo && (
+						<IconButton
+							onClick={goUp}
+							alt={tCommon('back')}
+							color="grey.800"
+							sx={{ marginLeft: -0.5, flexShrink: 0 }}
+						>
+							<ArrowBackRounded />
+						</IconButton>
+					)}
+					<Box
 						sx={{
 							flex: 1,
 							minWidth: 0,
@@ -224,43 +250,85 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 							paddingLeft: backTo ? 0 : 0.5,
 						}}
 					>
-					<Box
-						ref={titleRef}
-						sx={{
-							fontSize: `${TITLE_MAX}rem`,
-							fontWeight: 800,
-							letterSpacing: '-0.4px',
-							lineHeight: 1.15,
-							color: 'grey.900',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis',
-						}}
-					>
-						{title}
-					</Box>
-					{subtitle && (
 						<Box
-							ref={subtitleRef}
-							sx={{ overflow: 'hidden', marginTop: 0.25 }}
+							ref={titleRef}
+							// hero mode: this is the compact title, hidden at rest and faded
+							// in on scroll (the big title lives in the hero block below)
+							style={heroMode ? { opacity: 0 } : undefined}
+							sx={{
+								fontSize: `${heroMode ? TITLE_MIN : TITLE_MAX}rem`,
+								fontWeight: 800,
+								letterSpacing: '-0.4px',
+								lineHeight: 1.15,
+								color: 'grey.900',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+							}}
 						>
-							{typeof subtitle === 'string' ? (
-								<Typography small strong={500} color="grey.600">
-									{subtitle}
-								</Typography>
-							) : (
-								subtitle
-							)}
+							{title}
+						</Box>
+						{subtitle && !heroMode && (
+							<Box ref={subtitleRef} sx={{ overflow: 'hidden', marginTop: 0.25 }}>
+								{typeof subtitle === 'string' ? (
+									<Typography small strong={500} color="grey.600">
+										{subtitle}
+									</Typography>
+								) : (
+									subtitle
+								)}
+							</Box>
+						)}
+					</Box>
+					{shownActions.length > 0 && (
+						<Box sx={{ display: 'flex', gap: 0.25, flexShrink: 0 }}>
+							{shownActions.map((a, i) => (
+								<Box key={i} sx={{ display: 'flex' }}>
+									{a}
+								</Box>
+							))}
 						</Box>
 					)}
 				</Box>
-				{shownActions.length > 0 && (
-					<Box sx={{ display: 'flex', gap: 0.25, flexShrink: 0 }}>
-						{shownActions.map((a, i) => (
-							<Box key={i} sx={{ display: 'flex' }}>
-								{a}
+
+				{/* hero mode: taller expanded block, collapses to the row on scroll */}
+				{heroMode && (
+					<Box
+						ref={heroRef}
+						sx={{
+							overflow: 'hidden',
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							textAlign: 'center',
+							paddingX: 2.5,
+							paddingTop: 0.5,
+						}}
+					>
+						{heroIcon}
+						<Box
+							sx={{
+								fontSize: `${HERO_TITLE}rem`,
+								fontWeight: 800,
+								letterSpacing: '-0.5px',
+								lineHeight: 1.15,
+								color: 'grey.900',
+								marginTop: 1,
+							}}
+						>
+							{title}
+						</Box>
+						{subtitle && (
+							<Box sx={{ marginTop: 0.5 }}>
+								{typeof subtitle === 'string' ? (
+									<Typography small strong={500} color="grey.600">
+										{subtitle}
+									</Typography>
+								) : (
+									subtitle
+								)}
 							</Box>
-						))}
+						)}
 					</Box>
 				)}
 			</Box>
