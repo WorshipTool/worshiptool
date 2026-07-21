@@ -43,6 +43,12 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	bottomPanel?: ReactNode
 	/** When this value changes, the content scrolls back to the top (e.g. on page change). */
 	scrollResetKey?: string | number
+	/** Surface (and header) background — palette path. Defaults to the grey app
+	 * canvas; a white reading surface (song page) passes 'background.paper'. */
+	surface?: string
+	/** When false the scroller has no horizontal padding, so content sits flush
+	 * to the edges and manages its own padding (e.g. the song sheet). */
+	contentPadded?: boolean
 	/** The page body (the scrolling content below the header). */
 	children?: ReactNode
 }
@@ -69,6 +75,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	controlPanel,
 	bottomPanel,
 	scrollResetKey,
+	surface = 'grey.50',
+	contentPadded = true,
 	children,
 }: MobileAppHeaderProps<T>) {
 	const theme = useTheme()
@@ -144,7 +152,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				marginLeft: 'calc(50% - 50vw)',
 				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 				height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
-				bgcolor: 'grey.50',
+				bgcolor: surface,
 				display: 'flex',
 				flexDirection: 'column',
 				overflow: 'hidden',
@@ -164,7 +172,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					paddingX: 1.5,
 					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 1,
-					bgcolor: 'grey.50',
+					bgcolor: surface,
 					borderBottom: '1px solid transparent',
 				}}
 			>
@@ -240,7 +248,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					sx={{
 						flexShrink: 0,
 						zIndex: HEADER_Z - 1,
-						bgcolor: 'grey.50',
+						bgcolor: surface,
 						paddingX: 2,
 						paddingBottom: 1,
 					}}
@@ -257,7 +265,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					minHeight: 0,
 					overflowY: 'auto',
 					overflowX: 'hidden',
-					paddingX: 2,
+					paddingX: contentPadded ? 2 : 0,
 					paddingTop: 0.5,
 					paddingBottom: 2,
 				}}

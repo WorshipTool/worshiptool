@@ -55,26 +55,18 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 			>
 				<Box
 					sx={{
-						// mobile: clean white reading surface that fills the screen,
-						// full-bleed to the viewport edges (escapes the page wrapper
-						// padding); desktop (md+): the original grey "paper" card
-						width: { xs: '100vw', md: 'auto' },
-						minWidth: { xs: '100vw', md: 0 },
-						marginLeft: { xs: 'calc(50% - 50vw)', md: 0 },
+						// phone: the collapsing MobileAppHeader (in SongContainer) owns the
+						// full-bleed white app-shell + scroll, so this wrapper stays neutral;
+						// desktop (md+): the original grey "paper" card
+						width: { xs: 'auto', md: 'auto' },
+						minWidth: { xs: 0, md: 0 },
+						marginLeft: { xs: 0, md: 0 },
 						// no global border-box reset in the app — without this the
-						// padding would push the 100vw surface past the viewport
+						// padding would push the surface past the viewport
 						boxSizing: 'border-box',
-						padding: { xs: 2.5, md: 3 },
-						// phone: extra bottom room so the song end clears the
-						// floating control dock stacked above the tab bar
-						// phone: the surface owns ALL bottom clearance (the tab bar's
-						// spacer is skipped on this route so short songs don't
-						// scroll) — clear the tab bar + floating dock stack
-						paddingBottom: {
-							xs: 'calc(env(safe-area-inset-bottom) + 170px)',
-							md: 3,
-						},
-						backgroundColor: { xs: 'background.paper', md: 'grey.200' },
+						padding: { xs: 0, md: 3 },
+						paddingBottom: { xs: 0, md: 3 },
+						backgroundColor: { xs: 'transparent', md: 'grey.200' },
 						borderStyle: 'solid',
 						borderWidth: { xs: 0, md: 1 },
 						borderColor: 'grey.300',
@@ -83,12 +75,7 @@ async function SongRoutePage({ params }: SongRoutePageProps) {
 							md: '0px 2px 3px 1px rgba(0, 0, 0, 0.1)',
 						},
 						borderRadius: { xs: 0, md: 1 },
-						// phone: the white surface always fills the whole screen —
-						// short songs must not expose the grey page background below
-						minHeight: {
-							xs: 'calc(100dvh - env(safe-area-inset-top))',
-							md: 'auto',
-						},
+						minHeight: { xs: 'auto', md: 'auto' },
 						flex: 1,
 						display: 'flex',
 						flexDirection: 'column',

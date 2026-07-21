@@ -9,6 +9,7 @@ import MobileSongDock from '@/app/(layout)/pisen/[hex]/[alias]/components/Mobile
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
 import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
@@ -91,6 +92,66 @@ export default function SongContainer({
 		setInEditMode(false)
 		setCurrentSheet(sheet)
 		if (title) setEditedTitle(title)
+	}
+
+	// phone (non-edit, non-deleted): the sheet lives inside the shared
+	// collapsing MobileAppHeader (back arrow + song title → slim bar on scroll),
+	// matching the rest of the app. The floating dock stays pinned above the tab
+	// bar. Desktop / edit / deleted keep the classic layout below.
+	const usePhoneShell =
+		phoneVersion && !inEditMode && !variant.deleted && Boolean(currentSheet)
+
+	if (usePhoneShell) {
+		return (
+			<InnerPackProvider
+				variantAlias={variant.packAlias}
+				startData={{ variant, song }}
+			>
+				<SmartPortalMenuProvider id={SONG_OPTIONS_BUTTON_ID}>
+					<MobileSongDock
+						variant={variant}
+						sheet={currentSheet}
+						song={song as SongDto}
+						showChords={showChords}
+						onToggleChords={setShowChords}
+						transpose={transpose}
+						reloadSong={reload}
+						onEditClick={onEditClick}
+						saving={false}
+						editedTitle={editedTitle}
+						isOwner={isOwner}
+						anyChange={false}
+					/>
+					<AllSongAdminOptions />
+					<MobileAppHeader
+						title={editedTitle}
+						backTo="songsList"
+						surface="background.paper"
+						contentPadded={false}
+					>
+						<Box sx={{ paddingX: 2.5 }}>
+							<SheetDisplay
+								sheet={currentSheet}
+								title={''}
+								hideChords={!showChords}
+								variant={'default'}
+								editMode={false}
+								onChange={(sheet, title) => {
+									setCurrentSheet(new Sheet(sheet))
+									setEditedTitle(title)
+								}}
+							/>
+							<Gap value={2} />
+							<AdditionalSongInfoPanel
+								song={song as SongDto}
+								variant={variant}
+								showMedia={props.flags.showMedia}
+							/>
+						</Box>
+					</MobileAppHeader>
+				</SmartPortalMenuProvider>
+			</InnerPackProvider>
+		)
 	}
 
 	return (
