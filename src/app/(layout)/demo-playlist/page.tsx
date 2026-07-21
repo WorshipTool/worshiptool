@@ -31,8 +31,10 @@ import {
 	CloseRounded,
 	VisibilityOffRounded,
 } from '@mui/icons-material'
+import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
+import { Sheet } from '@pepavlin/sheet-api'
 import { useSearchParams } from 'next/navigation'
-import { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode, useMemo } from 'react'
 
 export default SmartPage(DemoPlaylist, ['fullWidth', 'hideFooter', 'hideToolbar'])
 
@@ -1530,9 +1532,288 @@ function SNG4() {
 	)
 }
 
+// ===========================================================================
+// HERO-LED PLAYLIST LOOKS — the big, prominent V5 gradient header paired with
+// the cleaner list treatments. H1–H3.
+
+// the V5 gradient hero, extracted + parameterisable (bigger / centered)
+function GradientHero({ large, center }: { large?: boolean; center?: boolean }) {
+	const cover = large ? 116 : 92
+	return (
+		<Box
+			sx={{
+				background: (t) =>
+					`linear-gradient(160deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
+				paddingTop: 'calc(env(safe-area-inset-top) + 12px)',
+				paddingBottom: 3,
+				paddingX: 2.5,
+				color: 'common.white',
+				borderBottomLeftRadius: 24,
+				borderBottomRightRadius: 24,
+			}}
+		>
+			<Box sx={{ display: 'flex', marginBottom: large ? 1.5 : 2 }}>
+				<ArrowBackRounded sx={{ color: 'common.white' }} />
+			</Box>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: center ? 'center' : 'flex-start',
+					textAlign: center ? 'center' : 'left',
+				}}
+			>
+				<Box
+					sx={{
+						width: cover,
+						height: cover,
+						borderRadius: 3,
+						bgcolor: 'rgba(255,255,255,0.16)',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						marginBottom: 1.5,
+					}}
+				>
+					<QueueMusicRounded sx={{ fontSize: large ? 60 : 48, color: 'common.white' }} />
+				</Box>
+				<Typography sx={{ fontSize: large ? '2.1rem' : '1.7rem', fontWeight: 800, color: 'inherit' }}>
+					Nedělní chvály
+				</Typography>
+				<Typography sx={{ color: 'rgba(255,255,255,0.8)', marginBottom: 2 }}>
+					6 písní · ~24 min
+				</Typography>
+			</Box>
+			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+				<Box
+					sx={{
+						flex: 1,
+						bgcolor: 'common.white',
+						color: 'primary.main',
+						borderRadius: 999,
+						height: 48,
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						gap: 0.5,
+						boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
+					}}
+				>
+					<SlideshowRounded />
+					<Typography strong color="primary.main">
+						Prezentovat
+					</Typography>
+				</Box>
+				{[EditRounded, ShareRounded, MoreHorizRounded].map((Icon, i) => (
+					<Box
+						key={i}
+						sx={{
+							width: 48,
+							height: 48,
+							borderRadius: '50%',
+							bgcolor: 'rgba(255,255,255,0.18)',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Icon sx={{ color: 'common.white' }} />
+					</Box>
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+function HeroScroll({ children }: { children: ReactNode }) {
+	return (
+		<Box
+			sx={{
+				position: 'fixed',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: MOBILE_NAV_CLEARANCE,
+				bgcolor: 'grey.50',
+				overflowY: 'auto',
+			}}
+		>
+			{children}
+		</Box>
+	)
+}
+
+// grouped white list (V5-style: one card, hairline rows)
+function GroupedList() {
+	return (
+		<Box sx={CARD}>
+			{SONGS.map((s, i) => (
+				<Fragment key={i}>
+					<Box sx={ROW_SX}>
+						<Idx i={i} />
+						<Title s={s} />
+						<KeyChip k={s.key} />
+						<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
+					</Box>
+					{i < SONGS.length - 1 && <Divider />}
+				</Fragment>
+			))}
+		</Box>
+	)
+}
+
+// separate rich cards (coloured order tile per song)
+function CardList() {
+	return (
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+			{SONGS.map((s, i) => (
+				<Box key={i} sx={{ ...CARD, display: 'flex', alignItems: 'center', gap: 1.5, padding: 1.5 }}>
+					<Box
+						sx={{
+							width: 46,
+							height: 46,
+							borderRadius: 2.5,
+							bgcolor: 'primary.50',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							flexShrink: 0,
+						}}
+					>
+						<Typography strong={700} color="primary.main" sx={{ fontSize: '1.2rem' }}>
+							{i + 1}
+						</Typography>
+					</Box>
+					<Box sx={{ flex: 1, minWidth: 0 }}>
+						<Typography strong noWrap>
+							{s.t}
+						</Typography>
+						<Typography small color="grey.500" noWrap>
+							{s.a}
+						</Typography>
+					</Box>
+					<KeyChip k={s.key} />
+					<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
+				</Box>
+			))}
+		</Box>
+	)
+}
+
+// H1 — prominent gradient hero + rich separate cards
+function HeroPlA() {
+	return (
+		<HeroScroll>
+			<GradientHero />
+			<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: 4 }}>
+				<CardList />
+			</Box>
+		</HeroScroll>
+	)
+}
+
+// H2 — extra-large centered hero + grouped list
+function HeroPlB() {
+	return (
+		<HeroScroll>
+			<GradientHero large center />
+			<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: 4 }}>
+				<GroupedList />
+			</Box>
+		</HeroScroll>
+	)
+}
+
+// H3 — gradient hero + summary strip + compact dense list
+function HeroPlC() {
+	const stats: [string, string][] = [
+		['6', 'písní'],
+		['~24', 'minut'],
+		['G–E', 'tóniny'],
+	]
+	return (
+		<HeroScroll>
+			<GradientHero />
+			<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: 4 }}>
+				<Box sx={{ display: 'flex', gap: 1, marginBottom: 1.5 }}>
+					{stats.map(([n, l], i) => (
+						<Box key={i} sx={{ ...CARD, flex: 1, textAlign: 'center', paddingY: 1 }}>
+							<Typography strong sx={{ fontSize: '1.05rem' }}>
+								{n}
+							</Typography>
+							<Typography sx={{ fontSize: '0.7rem' }} color="grey.500">
+								{l}
+							</Typography>
+						</Box>
+					))}
+				</Box>
+				<Box sx={CARD}>
+					{SONGS.map((s, i) => (
+						<Fragment key={i}>
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, paddingX: 1.5, paddingY: 0.9 }}>
+								<Typography small strong={600} color="grey.400" sx={{ minWidth: 16, textAlign: 'center' }}>
+									{i + 1}
+								</Typography>
+								<Typography strong noWrap sx={{ flex: 1, minWidth: 0 }}>
+									{s.t}
+								</Typography>
+								<Typography small color="grey.500" noWrap sx={{ maxWidth: 90 }}>
+									{s.a}
+								</Typography>
+								<KeyChip k={s.key} />
+							</Box>
+							{i < SONGS.length - 1 && <Divider inset={5.5} />}
+						</Fragment>
+					))}
+				</Box>
+			</Box>
+		</HeroScroll>
+	)
+}
+
+// ===========================================================================
+// SONG PREVIEW — the REAL shared SheetDisplay (same component desktop uses),
+// dropped onto the white card. This is the target: the song content is shared,
+// we only own the card + shell (header, swipe) around it.
+const SAMPLE_SHEET = `{Sloka 1}
+[A]Hoden je Beránek,
+co byl [G]zabit,
+[D]přijmi slávu,
+čest i [A]chválu.
+{Refrén}
+[E]Svatý, svatý [A]Pán,
+Bůh vše[D]mohoucí,
+[A]který byl a [D]který je,
+jenž při[E]chází.
+{Sloka 2}
+[A]Aleluja, ale[E]luja,
+nebe [D]zpívá,
+[A]zástupy Ti chválu [E]vzdá[A]vají.`
+
+function SongReal() {
+	const sheet = useMemo(() => new Sheet(SAMPLE_SHEET), [])
+	return (
+		<SongShell surface="grey.50">
+			<Box sx={{ ...CARD, padding: 2.5 }}>
+				<SheetDisplay
+					sheet={sheet}
+					title="Hoden je Beránek"
+					hideChords={false}
+					variant="default"
+					editMode={false}
+				/>
+			</Box>
+		</SongShell>
+	)
+}
+
 function DemoPlaylist() {
 	const params = useSearchParams()
 	const f = params.get('f')
+	if (f === 'h1') return <HeroPlA />
+	if (f === 'h2') return <HeroPlB />
+	if (f === 'h3') return <HeroPlC />
+	if (f === 'real') return <SongReal />
 	if (f === 'p1') return <PL1 />
 	if (f === 'p2') return <PL2 />
 	if (f === 'p3') return <PL3 />
