@@ -14,6 +14,15 @@ import {
 	UndoRounded,
 	AddCircleRounded,
 	CheckCircleRounded,
+	PlayArrowRounded,
+	MoreHorizRounded,
+	ShareRounded,
+	EditRounded,
+	SwapVertRounded,
+	QueueMusicRounded,
+	ArrowBackRounded,
+	FormatListBulletedRounded,
+	SlideshowRounded,
 } from '@mui/icons-material'
 import { useSearchParams } from 'next/navigation'
 import { Fragment, ReactNode } from 'react'
@@ -339,10 +348,359 @@ function V4() {
 	)
 }
 
+// ===========================================================================
+// V5 — ALBUM HERO (Spotify / Apple Music album-page layout)
+function V5() {
+	return (
+		<Box
+			sx={{
+				position: 'fixed',
+				inset: 0,
+				bgcolor: 'grey.50',
+				overflowY: 'auto',
+			}}
+		>
+			{/* hero */}
+			<Box
+				sx={{
+					background: (t) =>
+						`linear-gradient(160deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
+					paddingTop: 'calc(env(safe-area-inset-top) + 12px)',
+					paddingBottom: 3,
+					paddingX: 2.5,
+					color: 'common.white',
+					borderBottomLeftRadius: 24,
+					borderBottomRightRadius: 24,
+				}}
+			>
+				<Box sx={{ display: 'flex', marginBottom: 2 }}>
+					<ArrowBackRounded sx={{ color: 'common.white' }} />
+				</Box>
+				<Box
+					sx={{
+						width: 92,
+						height: 92,
+						borderRadius: 3,
+						bgcolor: 'rgba(255,255,255,0.16)',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						marginBottom: 1.5,
+					}}
+				>
+					<QueueMusicRounded sx={{ fontSize: 48, color: 'common.white' }} />
+				</Box>
+				<Typography sx={{ fontSize: '1.7rem', fontWeight: 800, color: 'inherit' }}>
+					Nedělní chvály
+				</Typography>
+				<Typography sx={{ color: 'rgba(255,255,255,0.8)', marginBottom: 2 }}>
+					6 písní · ~24 min
+				</Typography>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					<Box
+						sx={{
+							flex: 1,
+							bgcolor: 'common.white',
+							color: 'primary.main',
+							borderRadius: 999,
+							height: 48,
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							gap: 0.5,
+							boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
+						}}
+					>
+						<SlideshowRounded />
+						<Typography strong color="primary.main">
+							Prezentovat
+						</Typography>
+					</Box>
+					{[EditRounded, ShareRounded, MoreHorizRounded].map((Icon, i) => (
+						<Box
+							key={i}
+							sx={{
+								width: 48,
+								height: 48,
+								borderRadius: '50%',
+								bgcolor: 'rgba(255,255,255,0.18)',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							<Icon sx={{ color: 'common.white' }} />
+						</Box>
+					))}
+				</Box>
+			</Box>
+			{/* track list */}
+			<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: 12 }}>
+				<Box sx={CARD}>
+					{SONGS.map((s, i) => (
+						<Fragment key={i}>
+							<Box sx={ROW_SX}>
+								<Idx i={i} />
+								<Title s={s} />
+								<KeyChip k={s.key} />
+							</Box>
+							{i < SONGS.length - 1 && <Divider />}
+						</Fragment>
+					))}
+				</Box>
+			</Box>
+		</Box>
+	)
+}
+
+// ===========================================================================
+// V6 — SEGMENTED MODES (Písně / Pořadí / Info). Shown: "Pořadí" (reorder).
+function Segment({ items, active }: { items: string[]; active: number }) {
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				gap: 0.5,
+				bgcolor: 'grey.200',
+				borderRadius: 2.5,
+				padding: 0.5,
+			}}
+		>
+			{items.map((o, i) => (
+				<Box
+					key={o}
+					sx={{
+						flex: 1,
+						textAlign: 'center',
+						paddingY: 0.75,
+						borderRadius: 2,
+						bgcolor: active === i ? 'background.paper' : 'transparent',
+						boxShadow: active === i ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
+					}}
+				>
+					<Typography small strong={600} color={active === i ? 'grey.900' : 'grey.600'}>
+						{o}
+					</Typography>
+				</Box>
+			))}
+		</Box>
+	)
+}
+
+function V6() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			backTo="account"
+			surface="grey.50"
+			overlay
+			controlPanel={<Segment items={['Písně', 'Pořadí', 'Info']} active={1} />}
+			actions={[
+				<IconButton key="m" color="grey.700" alt="Více">
+					<MoreHorizRounded />
+				</IconButton>,
+			]}
+		>
+			<Box sx={CARD}>
+				{SONGS.map((s, i) => (
+					<Fragment key={i}>
+						<Box sx={ROW_SX}>
+							<DragIndicatorRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
+							<Idx i={i} />
+							<Title s={s} />
+							<KeyChip k={s.key} />
+						</Box>
+						{i < SONGS.length - 1 && <Divider inset={8.5} />}
+					</Fragment>
+				))}
+			</Box>
+			<Box sx={{ ...ROW_SX, marginTop: 1.5, ...CARD, justifyContent: 'center' }}>
+				<AddRounded sx={{ color: 'primary.main' }} />
+				<Typography strong color="primary.main">
+					Přidat píseň
+				</Typography>
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// ===========================================================================
+// V7 — FLOATING EDIT TOOLBAR (persistent bottom actions, no mode switch)
+function V7() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			subtitle="6 písní"
+			backTo="account"
+			surface="grey.50"
+			overlay
+		>
+			<Box sx={CARD}>
+				{SONGS.map((s, i) => (
+					<Fragment key={i}>
+						<Box sx={ROW_SX}>
+							<Idx i={i} />
+							<Title s={s} />
+							<KeyChip k={s.key} />
+							<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
+						</Box>
+						{i < SONGS.length - 1 && <Divider />}
+					</Fragment>
+				))}
+			</Box>
+			{/* floating action toolbar */}
+			<Box
+				sx={{
+					position: 'fixed',
+					bottom: 'calc(env(safe-area-inset-bottom) + 96px)',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					display: 'flex',
+					gap: 1,
+					bgcolor: 'background.paper',
+					borderRadius: 999,
+					boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
+					paddingX: 1,
+					paddingY: 0.75,
+					zIndex: 20,
+				}}
+			>
+				{[
+					{ icon: <AddRounded />, label: 'Přidat', primary: true },
+					{ icon: <SwapVertRounded />, label: 'Pořadí' },
+					{ icon: <DeleteOutlineRounded />, label: 'Odebrat' },
+				].map((b, i) => (
+					<Box
+						key={i}
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: 0.5,
+							paddingX: 1.5,
+							paddingY: 0.75,
+							borderRadius: 999,
+							bgcolor: b.primary ? 'primary.main' : 'transparent',
+							color: b.primary ? 'common.white' : 'grey.700',
+						}}
+					>
+						{b.icon}
+						<Typography small strong color={b.primary ? 'common.white' : 'grey.700'}>
+							{b.label}
+						</Typography>
+					</Box>
+				))}
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// ===========================================================================
+// V8 — SWIPEABLE SONG DECK (performer / setlist view, one song at a time)
+function V8() {
+	const cur = SONGS[2]
+	return (
+		<Box sx={{ position: 'fixed', inset: 0, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column' }}>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: 1,
+					paddingTop: 'calc(env(safe-area-inset-top) + 12px)',
+					paddingX: 2,
+					paddingBottom: 1,
+				}}
+			>
+				<ArrowBackRounded sx={{ color: 'grey.800' }} />
+				<Box sx={{ flex: 1, textAlign: 'center' }}>
+					<Typography strong noWrap>
+						Nedělní chvály
+					</Typography>
+					<Typography small color="grey.500">
+						3 / 6
+					</Typography>
+				</Box>
+				<FormatListBulletedRounded sx={{ color: 'grey.800' }} />
+			</Box>
+			{/* current song card (with peek of next) */}
+			<Box sx={{ flex: 1, display: 'flex', alignItems: 'stretch', paddingY: 1, position: 'relative', overflow: 'hidden' }}>
+				<Box
+					sx={{
+						flex: 1,
+						marginLeft: 2,
+						marginRight: 1,
+						bgcolor: 'background.paper',
+						borderRadius: 4,
+						boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+						padding: 3,
+						display: 'flex',
+						flexDirection: 'column',
+					}}
+				>
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+						<Typography sx={{ fontSize: '1.5rem', fontWeight: 800, flex: 1 }}>
+							{cur.t}
+						</Typography>
+						<KeyChip k={cur.key} />
+					</Box>
+					{['[A] Hoden je Beránek', 'co byl zabit,', '[D] přijmi slávu,', 'čest i chválu.', '', '[E] Svatý, svatý Pán,', 'Bůh všemohoucí…'].map((l, i) => (
+						<Typography key={i} sx={{ fontSize: '1.05rem', lineHeight: 1.7, color: l.startsWith('[') ? 'grey.900' : 'grey.800' }}>
+							{l || ' '}
+						</Typography>
+					))}
+				</Box>
+				{/* peek of next card */}
+				<Box
+					sx={{
+						width: 14,
+						marginRight: 0,
+						bgcolor: 'background.paper',
+						borderTopLeftRadius: 16,
+						borderBottomLeftRadius: 16,
+						opacity: 0.6,
+						boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+					}}
+				/>
+			</Box>
+			{/* position dots + controls */}
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					gap: 1.5,
+					paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)',
+					paddingTop: 1,
+				}}
+			>
+				<Box sx={{ display: 'flex', gap: 0.75 }}>
+					{SONGS.map((_, i) => (
+						<Box
+							key={i}
+							sx={{
+								width: i === 2 ? 22 : 7,
+								height: 7,
+								borderRadius: 999,
+								bgcolor: i === 2 ? 'primary.main' : 'grey.300',
+							}}
+						/>
+					))}
+				</Box>
+				<Typography small color="grey.500">
+					Přejeď pro další píseň
+				</Typography>
+			</Box>
+		</Box>
+	)
+}
+
 function DemoPlaylist() {
 	const v = Number(useSearchParams().get('v') || 1)
 	if (v === 2) return <V2 />
 	if (v === 3) return <V3 />
 	if (v === 4) return <V4 />
+	if (v === 5) return <V5 />
+	if (v === 6) return <V6 />
+	if (v === 7) return <V7 />
+	if (v === 8) return <V8 />
 	return <V1 />
 }
