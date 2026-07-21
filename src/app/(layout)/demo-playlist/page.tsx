@@ -34,7 +34,7 @@ import {
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { Sheet } from '@pepavlin/sheet-api'
 import { useSearchParams } from 'next/navigation'
-import { Fragment, ReactNode, useMemo } from 'react'
+import { Fragment, ReactNode, useEffect, useMemo, useRef } from 'react'
 
 export default SmartPage(DemoPlaylist, ['fullWidth', 'hideFooter', 'hideToolbar'])
 
@@ -1807,9 +1807,205 @@ function SongReal() {
 	)
 }
 
+// ===========================================================================
+// COLLAPSING HERO (chosen: H2 big centered hero that compacts on scroll).
+// The hero shrinks from a large centered header to a slim gradient bar as the
+// list scrolls (imperative rAF, like MobileAppHeader). `demoPhase` forces a
+// static state so the two ends can be screenshotted without client scroll.
+const HERO_LARGE = 330 // hero height at rest (on top of the safe-area inset)
+const HERO_COMPACT = 54 // slim bar height
+const HERO_DISTANCE = 170 // scroll distance over which it collapses
+
+function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
+	const heroRef = useRef<HTMLDivElement>(null)
+	const expandedRef = useRef<HTMLDivElement>(null)
+	const compactRef = useRef<HTMLDivElement>(null)
+	const scrollRef = useRef<HTMLDivElement>(null)
+	const isCompact = demoPhase === 'compact'
+
+	useEffect(() => {
+		if (demoPhase) return // static demo state comes from SSR, no scroll wiring
+		const scroller = scrollRef.current
+		if (!scroller) return
+		let raf = 0
+		const apply = (p: number) => {
+			if (heroRef.current)
+				heroRef.current.style.height = `calc(env(safe-area-inset-top) + ${
+					HERO_LARGE - (HERO_LARGE - HERO_COMPACT) * p
+				}px)`
+			if (expandedRef.current)
+				expandedRef.current.style.opacity = String(1 - Math.min(1, p * 1.5))
+			if (compactRef.current)
+				compactRef.current.style.opacity = String(Math.max(0, (p - 0.5) / 0.5))
+			if (heroRef.current) {
+				const r = `${(1 - p) * 24}px`
+				heroRef.current.style.borderBottomLeftRadius = r
+				heroRef.current.style.borderBottomRightRadius = r
+			}
+		}
+		const paint = () => {
+			raf = 0
+			apply(Math.min(1, Math.max(0, scroller.scrollTop / HERO_DISTANCE)))
+		}
+		const onScroll = () => {
+			if (!raf) raf = requestAnimationFrame(paint)
+		}
+		scroller.addEventListener('scroll', onScroll, { passive: true })
+		apply(0)
+		return () => scroller.removeEventListener('scroll', onScroll)
+	}, [demoPhase])
+
+	return (
+		<Box
+			sx={{
+				position: 'fixed',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: MOBILE_NAV_CLEARANCE,
+				bgcolor: 'grey.50',
+				display: 'flex',
+				flexDirection: 'column',
+				overflow: 'hidden',
+			}}
+		>
+			<Box
+				ref={heroRef}
+				style={{
+					height: `calc(env(safe-area-inset-top) + ${isCompact ? HERO_COMPACT : HERO_LARGE}px)`,
+					borderBottomLeftRadius: isCompact ? 0 : 24,
+					borderBottomRightRadius: isCompact ? 0 : 24,
+				}}
+				sx={{
+					flexShrink: 0,
+					position: 'relative',
+					overflow: 'hidden',
+					background: (t) =>
+						`linear-gradient(160deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
+				}}
+			>
+				{/* expanded layer — big centered hero */}
+				<Box
+					ref={expandedRef}
+					style={{ opacity: isCompact ? 0 : 1 }}
+					sx={{
+						position: 'absolute',
+						inset: 0,
+						paddingTop: 'calc(env(safe-area-inset-top) + 10px)',
+						paddingX: 2.5,
+						display: 'flex',
+						flexDirection: 'column',
+					}}
+				>
+					<ArrowBackRounded sx={{ color: 'common.white' }} />
+					<Box
+						sx={{
+							flex: 1,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							justifyContent: 'center',
+							textAlign: 'center',
+							gap: 0.5,
+						}}
+					>
+						<Box
+							sx={{
+								width: 88,
+								height: 88,
+								borderRadius: 3,
+								bgcolor: 'rgba(255,255,255,0.16)',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								marginBottom: 0.5,
+							}}
+						>
+							<QueueMusicRounded sx={{ fontSize: 46, color: 'common.white' }} />
+						</Box>
+						<Typography sx={{ fontSize: '1.9rem', fontWeight: 800, color: 'common.white' }}>
+							Nedělní chvály
+						</Typography>
+						<Typography sx={{ color: 'rgba(255,255,255,0.8)' }}>6 písní · ~24 min</Typography>
+					</Box>
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, paddingBottom: 2 }}>
+						<Box
+							sx={{
+								flex: 1,
+								bgcolor: 'common.white',
+								color: 'primary.main',
+								borderRadius: 999,
+								height: 46,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								gap: 0.5,
+								boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
+							}}
+						>
+							<SlideshowRounded />
+							<Typography strong color="primary.main">
+								Prezentovat
+							</Typography>
+						</Box>
+						{[EditRounded, ShareRounded, MoreHorizRounded].map((Icon, i) => (
+							<Box
+								key={i}
+								sx={{
+									width: 46,
+									height: 46,
+									borderRadius: '50%',
+									bgcolor: 'rgba(255,255,255,0.18)',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<Icon sx={{ color: 'common.white' }} />
+							</Box>
+						))}
+					</Box>
+				</Box>
+				{/* compact layer — slim bar (back · title · present) */}
+				<Box
+					ref={compactRef}
+					style={{ opacity: isCompact ? 1 : 0 }}
+					sx={{
+						position: 'absolute',
+						left: 0,
+						right: 0,
+						bottom: 0,
+						height: HERO_COMPACT,
+						display: 'flex',
+						alignItems: 'center',
+						gap: 0.5,
+						paddingX: 1.5,
+					}}
+				>
+					<ArrowBackRounded sx={{ color: 'common.white', flexShrink: 0 }} />
+					<Typography
+						strong
+						noWrap
+						sx={{ flex: 1, minWidth: 0, textAlign: 'center', color: 'common.white', fontSize: '1.1rem' }}
+					>
+						Nedělní chvály
+					</Typography>
+					<SlideshowRounded sx={{ color: 'common.white', flexShrink: 0 }} />
+				</Box>
+			</Box>
+			<Box ref={scrollRef} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingX: 2, paddingTop: 2, paddingBottom: 4 }}>
+				<GroupedList />
+			</Box>
+		</Box>
+	)
+}
+
 function DemoPlaylist() {
 	const params = useSearchParams()
 	const f = params.get('f')
+	if (f === 'col') return <CollapsingHero />
+	if (f === 'col-exp') return <CollapsingHero demoPhase="expanded" />
+	if (f === 'col-cmp') return <CollapsingHero demoPhase="compact" />
 	if (f === 'h1') return <HeroPlA />
 	if (f === 'h2') return <HeroPlB />
 	if (f === 'h3') return <HeroPlC />
