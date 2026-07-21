@@ -158,6 +158,9 @@ export default function SongContainer({
 								showMedia={props.flags.showMedia}
 							/>
 						</Box>
+						{/* clearance so a long song's end scrolls clear of the floating
+						    dock (which hovers ~70px above the tab bar) */}
+						<Box sx={{ height: 76 }} />
 					</MobileAppHeader>
 				</SmartPortalMenuProvider>
 			</InnerPackProvider>
