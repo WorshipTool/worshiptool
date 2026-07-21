@@ -1140,9 +1140,407 @@ function PresentScreen() {
 	)
 }
 
+// ===========================================================================
+// LOOK VARIANTS for the two core screens (the settled behaviour: playlist =
+// simple ordered list → tap → lyrics). These explore how each screen could
+// *look*, keeping that behaviour. Playlist looks = PL1–PL4, song looks = SNG1–4.
+
+// lyrics split into named sections (for the section-labelled song look)
+const SECTIONS: { label: string; lines: string[] }[] = [
+	{
+		label: 'Sloka 1',
+		lines: ['[A] Hoden je Beránek,', 'co byl zabit,', '[D] přijmi slávu,', 'čest i chválu.'],
+	},
+	{
+		label: 'Refrén',
+		lines: [
+			'[E] Svatý, svatý Pán,',
+			'Bůh všemohoucí,',
+			'[A] který byl a který je,',
+			'[D] jenž přichází.',
+		],
+	},
+	{
+		label: 'Sloka 2',
+		lines: ['[A] Aleluja, aleluja,', '[E] nebe zpívá,', 'zástupy Ti chválu vzdávají.'],
+	},
+]
+
+// one lyric line with chord tokens ([A], [D]…) coloured apart from the words
+function ChordLine({
+	line,
+	big,
+	accent,
+	dense,
+}: {
+	line: string
+	big?: boolean
+	accent?: boolean
+	dense?: boolean
+}) {
+	const parts = line.split(/(\[[^\]]+\])/g).filter((p) => p !== '')
+	return (
+		<Box
+			sx={{
+				fontSize: big ? '1.2rem' : dense ? '0.98rem' : '1.05rem',
+				lineHeight: dense ? 1.4 : 1.7,
+			}}
+		>
+			{parts.map((p, i) => (
+				<Box
+					key={i}
+					component="span"
+					sx={{
+						color: p.startsWith('[')
+							? accent
+								? 'primary.main'
+								: 'grey.500'
+							: 'grey.900',
+						fontWeight: p.startsWith('[') ? 700 : 400,
+					}}
+				>
+					{p}
+				</Box>
+			))}
+		</Box>
+	)
+}
+
+function LyricLines({ big, accent, dense }: { big?: boolean; accent?: boolean; dense?: boolean }) {
+	return (
+		<>
+			{LYRICS.map((l, i) =>
+				l ? (
+					<ChordLine key={i} line={l} big={big} accent={accent} dense={dense} />
+				) : (
+					<Box key={i} sx={{ height: dense ? 10 : big ? 18 : 14 }} />
+				),
+			)}
+		</>
+	)
+}
+
+// header actions shared by the playlist looks: present + overflow (kept as
+// icons so the large collapsing title keeps full width)
+function PresentAction() {
+	return [
+		<IconButton key="p" color="primary" alt="Prezentovat">
+			<SlideshowRounded />
+		</IconButton>,
+		<IconButton key="m" color="grey.700" alt="Více">
+			<MoreHorizRounded />
+		</IconButton>,
+	]
+}
+
+// PL1 — CLEAN MINIMAL: white page, airy hairline rows, lots of whitespace
+function PL1() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			subtitle="6 písní · ~24 min"
+			backTo="account"
+			surface="background.paper"
+			overlay
+			actions={PresentAction()}
+		>
+			<Box>
+				{SONGS.map((s, i) => (
+					<Fragment key={i}>
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: 2, paddingY: 1.75, paddingX: 0.5 }}>
+							<Typography strong={600} color="grey.300" sx={{ fontSize: '1.1rem', minWidth: 22 }}>
+								{i + 1}
+							</Typography>
+							<Box sx={{ flex: 1, minWidth: 0 }}>
+								<Typography strong noWrap>
+									{s.t}
+								</Typography>
+								<Typography small color="grey.500" noWrap>
+									{s.a}
+								</Typography>
+							</Box>
+							<KeyChip k={s.key} />
+							<ChevronRightRounded sx={{ color: 'grey.300', flexShrink: 0 }} />
+						</Box>
+						{i < SONGS.length - 1 && (
+							<Box sx={{ height: '1px', bgcolor: 'grey.100', marginLeft: 5 }} />
+						)}
+					</Fragment>
+				))}
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// PL2 — SETLIST / PROGRAM: big ghosted order numbers, reads like a printed set
+function PL2() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			subtitle="Neděle · 6 písní"
+			backTo="account"
+			surface="grey.50"
+			overlay
+			actions={PresentAction()}
+		>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+				{SONGS.map((s, i) => (
+					<Box
+						key={i}
+						sx={{ ...CARD, display: 'flex', alignItems: 'center', gap: 2, paddingX: 2, paddingY: 1.5 }}
+					>
+						<Typography
+							sx={{ fontSize: '2rem', fontWeight: 800, color: 'grey.200', lineHeight: 1, minWidth: 42 }}
+						>
+							{i + 1}
+						</Typography>
+						<Box sx={{ flex: 1, minWidth: 0 }}>
+							<Typography strong noWrap sx={{ fontSize: '1.05rem' }}>
+								{s.t}
+							</Typography>
+							<Typography small color="grey.500" noWrap>
+								{s.a}
+							</Typography>
+						</Box>
+						<KeyChip k={s.key} />
+					</Box>
+				))}
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// PL3 — RICH CARDS: each song a card with a coloured order tile, more weight
+function PL3() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			subtitle="6 písní · ~24 min"
+			backTo="account"
+			surface="grey.50"
+			overlay
+			actions={PresentAction()}
+		>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+				{SONGS.map((s, i) => (
+					<Box key={i} sx={{ ...CARD, display: 'flex', alignItems: 'center', gap: 1.5, padding: 1.5 }}>
+						<Box
+							sx={{
+								width: 46,
+								height: 46,
+								borderRadius: 2.5,
+								bgcolor: 'primary.50',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								flexShrink: 0,
+							}}
+						>
+							<Typography strong={700} color="primary.main" sx={{ fontSize: '1.2rem' }}>
+								{i + 1}
+							</Typography>
+						</Box>
+						<Box sx={{ flex: 1, minWidth: 0 }}>
+							<Typography strong noWrap>
+								{s.t}
+							</Typography>
+							<Typography small color="grey.500" noWrap>
+								{s.a}
+							</Typography>
+						</Box>
+						<KeyChip k={s.key} />
+						<ChevronRightRounded sx={{ color: 'grey.400', flexShrink: 0 }} />
+					</Box>
+				))}
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// PL4 — COMPACT + SUMMARY: stat strip on top, then a dense list (long setlists)
+function PL4() {
+	const stats: [string, string][] = [
+		['6', 'písní'],
+		['~24', 'minut'],
+		['G–E', 'tóniny'],
+	]
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			backTo="account"
+			surface="grey.50"
+			overlay
+			actions={PresentAction()}
+		>
+			<Box sx={{ display: 'flex', gap: 1, marginBottom: 1.5 }}>
+				{stats.map(([n, l], i) => (
+					<Box key={i} sx={{ ...CARD, flex: 1, textAlign: 'center', paddingY: 1 }}>
+						<Typography strong sx={{ fontSize: '1.05rem' }}>
+							{n}
+						</Typography>
+						<Typography sx={{ fontSize: '0.7rem' }} color="grey.500">
+							{l}
+						</Typography>
+					</Box>
+				))}
+			</Box>
+			<Box sx={CARD}>
+				{SONGS.map((s, i) => (
+					<Fragment key={i}>
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, paddingX: 1.5, paddingY: 0.9 }}>
+							<Typography
+								small
+								strong={600}
+								color="grey.400"
+								sx={{ minWidth: 16, textAlign: 'center' }}
+							>
+								{i + 1}
+							</Typography>
+							<Typography strong noWrap sx={{ flex: 1, minWidth: 0 }}>
+								{s.t}
+							</Typography>
+							<Typography small color="grey.500" noWrap sx={{ maxWidth: 90 }}>
+								{s.a}
+							</Typography>
+							<KeyChip k={s.key} />
+						</Box>
+						{i < SONGS.length - 1 && <Divider inset={5.5} />}
+					</Fragment>
+				))}
+			</Box>
+		</MobileAppHeader>
+	)
+}
+
+// shared shell for the song-look variants: back-to-playlist header + "3/6" + dots
+function SongShell({
+	surface = 'grey.50',
+	hint = true,
+	children,
+}: {
+	surface?: string
+	hint?: boolean
+	children: ReactNode
+}) {
+	return (
+		<Box
+			sx={{
+				position: 'fixed',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: MOBILE_NAV_CLEARANCE,
+				bgcolor: surface,
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			<ReaderHead
+				right={
+					<IconButton color="grey.800" alt="Více">
+						<MoreHorizRounded />
+					</IconButton>
+				}
+			/>
+			<Box sx={{ flex: 1, overflowY: 'auto', paddingX: 2 }}>{children}</Box>
+			<ReaderDots hint={hint} />
+		</Box>
+	)
+}
+
+// SNG1 — FULL-BLEED WHITE: edge-to-edge reading page, no card, max reading room
+function SNG1() {
+	return (
+		<SongShell surface="background.paper">
+			<Typography sx={{ fontSize: '1.5rem', fontWeight: 800, marginTop: 1, marginBottom: 2 }}>
+				{SONGS[2].t}
+			</Typography>
+			<LyricLines />
+		</SongShell>
+	)
+}
+
+// SNG2 — LARGE / RELAXED: bigger type, generous spacing, accent chords
+function SNG2() {
+	return (
+		<SongShell surface="grey.50">
+			<Box sx={{ ...CARD, padding: 3 }}>
+				<Typography sx={{ fontSize: '1.7rem', fontWeight: 800, marginBottom: 2.5, textAlign: 'center' }}>
+					{SONGS[2].t}
+				</Typography>
+				<LyricLines big accent />
+			</Box>
+		</SongShell>
+	)
+}
+
+// SNG3 — SECTION-LABELLED: Sloka / Refrén pills, accent chords (musician view)
+function SNG3() {
+	return (
+		<SongShell surface="grey.50">
+			<Box sx={{ ...CARD, padding: 3 }}>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+					<Typography sx={{ fontSize: '1.4rem', fontWeight: 800, flex: 1 }}>{SONGS[2].t}</Typography>
+					<KeyChip k={SONGS[2].key} />
+				</Box>
+				{SECTIONS.map((sec, si) => (
+					<Box key={si} sx={{ marginBottom: 2.5 }}>
+						<Box
+							sx={{
+								display: 'inline-block',
+								bgcolor: 'grey.100',
+								borderRadius: 1.5,
+								paddingX: 1,
+								paddingY: 0.25,
+								marginBottom: 0.75,
+							}}
+						>
+							<Typography
+								sx={{ fontSize: '0.7rem', letterSpacing: '0.6px' }}
+								strong={700}
+								color="grey.500"
+							>
+								{sec.label.toUpperCase()}
+							</Typography>
+						</Box>
+						{sec.lines.map((l, i) => (
+							<ChordLine key={i} line={l} accent />
+						))}
+					</Box>
+				))}
+			</Box>
+		</SongShell>
+	)
+}
+
+// SNG4 — COMPACT: tight line-height, fits a long song with little scrolling
+function SNG4() {
+	return (
+		<SongShell surface="grey.50" hint={false}>
+			<Box sx={{ ...CARD, padding: 2 }}>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 1 }}>
+					<Typography strong sx={{ fontSize: '1.15rem', flex: 1 }}>
+						{SONGS[2].t}
+					</Typography>
+					<KeyChip k={SONGS[2].key} />
+				</Box>
+				<LyricLines dense />
+			</Box>
+		</SongShell>
+	)
+}
+
 function DemoPlaylist() {
 	const params = useSearchParams()
 	const f = params.get('f')
+	if (f === 'p1') return <PL1 />
+	if (f === 'p2') return <PL2 />
+	if (f === 'p3') return <PL3 />
+	if (f === 'p4') return <PL4 />
+	if (f === 's1') return <SNG1 />
+	if (f === 's2') return <SNG2 />
+	if (f === 's3') return <SNG3 />
+	if (f === 's4') return <SNG4 />
 	if (f === 'hero') return <V5 />
 	if (f === 'a') return <ReaderA />
 	if (f === 'amenu') return <ReaderAMenu />
