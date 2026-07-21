@@ -34,6 +34,12 @@ Slots: `title`, `subtitle` (any node), `backTo`/`backParams` (hierarchical Up,
 hidden on tab-roots), `actions` (≤ 2 icons, right of the title), `controlPanel`
 (top strip), `bottomPanel` (above the tab bar), `scrollResetKey`.
 
+**Same header height everywhere.** The header row keeps a fixed minimum height
+(matching the back-arrow / action buttons) so a title-only header (Seznam,
+Účet) collapses to exactly the same height as one with controls (Moje písně,
+Oblíbené). The back arrow appears only when `backTo` is set — tab-roots (Domů /
+Písně=Seznam / Účet) have none by design; you switch to them via the tab bar.
+
 ## Attention & layout rules
 
 1. **Thumb zone = navigation + at most one primary.** The bottom tab bar owns

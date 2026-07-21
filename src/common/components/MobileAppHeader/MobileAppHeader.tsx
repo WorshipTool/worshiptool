@@ -178,7 +178,21 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						<ArrowBackRounded />
 					</IconButton>
 				)}
-				<Box sx={{ flex: 1, minWidth: 0, paddingLeft: backTo ? 0 : 0.5 }}>
+				<Box
+						sx={{
+							flex: 1,
+							minWidth: 0,
+							// keep the header the same height on every page: match the
+							// back-arrow / action buttons (40px) even when the title is the
+							// only thing in the row, so a title-only header (Seznam, Účet)
+							// doesn't collapse shorter than pages that have controls
+							minHeight: 40,
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							paddingLeft: backTo ? 0 : 0.5,
+						}}
+					>
 					<Box
 						ref={titleRef}
 						sx={{
