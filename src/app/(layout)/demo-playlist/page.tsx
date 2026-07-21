@@ -2051,28 +2051,43 @@ function PlaylistUnified() {
 					<QueueMusicRounded sx={{ fontSize: 42, color: 'primary.main' }} />
 				</Box>
 			}
-			actions={[
-				<IconButton key="m" color="grey.700" alt="Více">
-					<MoreHorizRounded />
-				</IconButton>,
-			]}
 			controlPanel={
-				<Box
-					sx={{
-						bgcolor: 'primary.main',
-						borderRadius: 999,
-						height: 44,
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						gap: 0.5,
-						boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
-					}}
-				>
-					<SlideshowRounded sx={{ color: 'common.white' }} />
-					<Typography strong sx={{ color: 'common.white' }}>
-						Prezentovat
-					</Typography>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					<Box
+						sx={{
+							flex: 1,
+							bgcolor: 'primary.main',
+							borderRadius: 999,
+							height: 44,
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							gap: 0.5,
+							boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+						}}
+					>
+						<SlideshowRounded sx={{ color: 'common.white' }} />
+						<Typography strong sx={{ color: 'common.white' }}>
+							Prezentovat
+						</Typography>
+					</Box>
+					{[EditRounded, ShareRounded, MoreHorizRounded].map((Icon, i) => (
+						<Box
+							key={i}
+							sx={{
+								width: 44,
+								height: 44,
+								borderRadius: '50%',
+								bgcolor: 'grey.100',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								flexShrink: 0,
+							}}
+						>
+							<Icon sx={{ color: 'grey.700' }} />
+						</Box>
+					))}
 				</Box>
 			}
 		>
