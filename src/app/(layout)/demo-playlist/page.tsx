@@ -1816,7 +1816,24 @@ const HERO_LARGE = 330 // hero height at rest (on top of the safe-area inset)
 const HERO_COMPACT = 54 // slim bar height
 const HERO_DISTANCE = 170 // scroll distance over which it collapses
 
-function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
+function CollapsingHero({
+	demoPhase,
+	tone = 'gradient',
+}: {
+	demoPhase?: 'expanded' | 'compact'
+	tone?: 'gradient' | 'white' | 'grey'
+}) {
+	const light = tone !== 'gradient'
+	const titleColor = light ? 'grey.900' : 'common.white'
+	const metaColor = light ? 'grey.500' : 'rgba(255,255,255,0.8)'
+	const backColor = light ? 'grey.800' : 'common.white'
+	const coverBg = light ? 'primary.50' : 'rgba(255,255,255,0.16)'
+	const coverIcon = light ? 'primary.main' : 'common.white'
+	const secBg = light ? 'grey.100' : 'rgba(255,255,255,0.18)'
+	const secIcon = light ? 'grey.600' : 'common.white'
+	const presentBg = light ? 'primary.main' : 'common.white'
+	const presentFg = light ? 'common.white' : 'primary.main'
+
 	const heroRef = useRef<HTMLDivElement>(null)
 	const expandedRef = useRef<HTMLDivElement>(null)
 	const compactRef = useRef<HTMLDivElement>(null)
@@ -1880,8 +1897,13 @@ function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
 					flexShrink: 0,
 					position: 'relative',
 					overflow: 'hidden',
-					background: (t) =>
-						`linear-gradient(160deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
+					boxShadow: light ? '0 2px 10px rgba(0,0,0,0.05)' : 'none',
+					...(light
+						? { bgcolor: tone === 'white' ? 'background.paper' : 'grey.100' }
+						: {
+								background: (t) =>
+									`linear-gradient(160deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`,
+						  }),
 				}}
 			>
 				{/* expanded layer — big centered hero */}
@@ -1897,7 +1919,7 @@ function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
 						flexDirection: 'column',
 					}}
 				>
-					<ArrowBackRounded sx={{ color: 'common.white' }} />
+					<ArrowBackRounded sx={{ color: backColor }} />
 					<Box
 						sx={{
 							flex: 1,
@@ -1914,37 +1936,38 @@ function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
 								width: 88,
 								height: 88,
 								borderRadius: 3,
-								bgcolor: 'rgba(255,255,255,0.16)',
+								bgcolor: coverBg,
 								display: 'flex',
 								alignItems: 'center',
 								justifyContent: 'center',
 								marginBottom: 0.5,
 							}}
 						>
-							<QueueMusicRounded sx={{ fontSize: 46, color: 'common.white' }} />
+							<QueueMusicRounded sx={{ fontSize: 46, color: coverIcon }} />
 						</Box>
-						<Typography sx={{ fontSize: '1.9rem', fontWeight: 800, color: 'common.white' }}>
+						<Typography sx={{ fontSize: '1.9rem', fontWeight: 800, color: titleColor }}>
 							Nedělní chvály
 						</Typography>
-						<Typography sx={{ color: 'rgba(255,255,255,0.8)' }}>6 písní · ~24 min</Typography>
+						<Typography sx={{ color: metaColor }}>6 písní · ~24 min</Typography>
 					</Box>
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, paddingBottom: 2 }}>
 						<Box
 							sx={{
 								flex: 1,
-								bgcolor: 'common.white',
-								color: 'primary.main',
+								bgcolor: presentBg,
 								borderRadius: 999,
 								height: 46,
 								display: 'flex',
 								alignItems: 'center',
 								justifyContent: 'center',
 								gap: 0.5,
-								boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
+								boxShadow: light
+									? '0 4px 14px rgba(0,0,0,0.12)'
+									: '0 4px 14px rgba(0,0,0,0.2)',
 							}}
 						>
-							<SlideshowRounded />
-							<Typography strong color="primary.main">
+							<SlideshowRounded sx={{ color: presentFg }} />
+							<Typography strong sx={{ color: presentFg }}>
 								Prezentovat
 							</Typography>
 						</Box>
@@ -1955,13 +1978,13 @@ function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
 									width: 46,
 									height: 46,
 									borderRadius: '50%',
-									bgcolor: 'rgba(255,255,255,0.18)',
+									bgcolor: secBg,
 									display: 'flex',
 									alignItems: 'center',
 									justifyContent: 'center',
 								}}
 							>
-								<Icon sx={{ color: 'common.white' }} />
+								<Icon sx={{ color: secIcon }} />
 							</Box>
 						))}
 					</Box>
@@ -1982,15 +2005,15 @@ function CollapsingHero({ demoPhase }: { demoPhase?: 'expanded' | 'compact' }) {
 						paddingX: 1.5,
 					}}
 				>
-					<ArrowBackRounded sx={{ color: 'common.white', flexShrink: 0 }} />
+					<ArrowBackRounded sx={{ color: backColor, flexShrink: 0 }} />
 					<Typography
 						strong
 						noWrap
-						sx={{ flex: 1, minWidth: 0, textAlign: 'center', color: 'common.white', fontSize: '1.1rem' }}
+						sx={{ flex: 1, minWidth: 0, textAlign: 'center', color: titleColor, fontSize: '1.1rem' }}
 					>
 						Nedělní chvály
 					</Typography>
-					<SlideshowRounded sx={{ color: 'common.white', flexShrink: 0 }} />
+					<SlideshowRounded sx={{ color: light ? 'primary.main' : 'common.white', flexShrink: 0 }} />
 				</Box>
 			</Box>
 			<Box ref={scrollRef} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingX: 2, paddingTop: 2, paddingBottom: 4 }}>
@@ -2006,6 +2029,10 @@ function DemoPlaylist() {
 	if (f === 'col') return <CollapsingHero />
 	if (f === 'col-exp') return <CollapsingHero demoPhase="expanded" />
 	if (f === 'col-cmp') return <CollapsingHero demoPhase="compact" />
+	if (f === 'lw-exp') return <CollapsingHero tone="white" demoPhase="expanded" />
+	if (f === 'lw-cmp') return <CollapsingHero tone="white" demoPhase="compact" />
+	if (f === 'lg-exp') return <CollapsingHero tone="grey" demoPhase="expanded" />
+	if (f === 'lg-cmp') return <CollapsingHero tone="grey" demoPhase="compact" />
 	if (f === 'h1') return <HeroPlA />
 	if (f === 'h2') return <HeroPlB />
 	if (f === 'h3') return <HeroPlC />
