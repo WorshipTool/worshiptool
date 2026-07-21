@@ -163,7 +163,26 @@ export default function SongContainer({
 			}}
 		>
 			<SmartPortalMenuProvider id={SONG_OPTIONS_BUTTON_ID}>
-				<Box display={'flex'} flexDirection={'column'}>
+				<Box
+					display={'flex'}
+					flexDirection={'column'}
+					sx={
+						phoneVersion
+							? {
+									// phone edit / deleted keep the classic layout, but the
+									// page wrapper is now neutral — so restore the full-bleed
+									// white reading surface + bottom clearance here
+									width: '100vw',
+									marginLeft: 'calc(50% - 50vw)',
+									minHeight: 'calc(100dvh - env(safe-area-inset-top))',
+									bgcolor: 'background.paper',
+									paddingX: 2.5,
+									paddingTop: 1,
+									paddingBottom: 'calc(env(safe-area-inset-bottom) + 170px)',
+							  }
+							: undefined
+					}
+				>
 					{(!phoneVersion || inEditMode) && (
 						<TopPanel
 							transpose={transpose}
