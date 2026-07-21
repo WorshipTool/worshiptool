@@ -2023,9 +2023,53 @@ function CollapsingHero({
 	)
 }
 
+// ===========================================================================
+// UNIFIED — the playlist page built on the SAME shared MobileAppHeader every
+// other app screen uses (seznam / píseň / účet), surface "grey.50", collapsing
+// large title. Just configured with playlist props: subtitle = song count,
+// a pinned Prezentovat control, "…" for edit/share, and the ordered list.
+function PlaylistUnified() {
+	return (
+		<MobileAppHeader
+			title="Nedělní chvály"
+			subtitle="6 písní · ~24 min"
+			backTo="account"
+			surface="grey.50"
+			overlay
+			actions={[
+				<IconButton key="m" color="grey.700" alt="Více">
+					<MoreHorizRounded />
+				</IconButton>,
+			]}
+			controlPanel={
+				<Box
+					sx={{
+						bgcolor: 'primary.main',
+						borderRadius: 999,
+						height: 44,
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						gap: 0.5,
+						boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+					}}
+				>
+					<SlideshowRounded sx={{ color: 'common.white' }} />
+					<Typography strong sx={{ color: 'common.white' }}>
+						Prezentovat
+					</Typography>
+				</Box>
+			}
+		>
+			<GroupedList />
+		</MobileAppHeader>
+	)
+}
+
 function DemoPlaylist() {
 	const params = useSearchParams()
 	const f = params.get('f')
+	if (f === 'uni') return <PlaylistUnified />
 	if (f === 'col') return <CollapsingHero />
 	if (f === 'col-exp') return <CollapsingHero demoPhase="expanded" />
 	if (f === 'col-cmp') return <CollapsingHero demoPhase="compact" />
