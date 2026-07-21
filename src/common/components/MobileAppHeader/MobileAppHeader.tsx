@@ -49,6 +49,14 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** When false the scroller has no horizontal padding, so content sits flush
 	 * to the edges and manages its own padding (e.g. the song sheet). */
 	contentPadded?: boolean
+	/**
+	 * Render the shell as a fixed overlay (position: fixed) instead of an in-flow
+	 * block. Use on pages where the header is nested inside other layout (e.g. the
+	 * song page's ContainerGrid) so that nesting can't leak height into the
+	 * document and make the whole window scroll. Tab-root pages that render the
+	 * header directly don't need this.
+	 */
+	overlay?: boolean
 	/** The page body (the scrolling content below the header). */
 	children?: ReactNode
 }
@@ -77,6 +85,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	scrollResetKey,
 	surface = 'grey.50',
 	contentPadded = true,
+	overlay = false,
 	children,
 }: MobileAppHeaderProps<T>) {
 	const theme = useTheme()
@@ -145,13 +154,27 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	return (
 		<Box
 			sx={{
-				// full-bleed app-shell surface that fills the viewport down to the tab
-				// bar; header + panels stay pinned, only the content region scrolls
-				position: 'relative',
-				width: '100vw',
-				marginLeft: 'calc(50% - 50vw)',
-				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
-				height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
+				// app-shell surface that fills the viewport down to the tab bar;
+				// header + panels stay pinned, only the content region scrolls
+				...(overlay
+					? {
+							// fixed overlay: removed from document flow, so no parent
+							// nesting can leak height into the page and scroll the window
+							position: 'fixed',
+							top: 0,
+							left: 0,
+							right: 0,
+							bottom: MOBILE_NAV_CLEARANCE,
+							zIndex: 2,
+						}
+					: {
+							// in-flow full-bleed block (tab-root pages rendered directly)
+							position: 'relative',
+							width: '100vw',
+							marginLeft: 'calc(50% - 50vw)',
+							marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
+							height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
+						}),
 				bgcolor: surface,
 				display: 'flex',
 				flexDirection: 'column',
