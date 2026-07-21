@@ -32,6 +32,7 @@ export function mobileTabForPath(pathname: string | null): MobileTab {
 	// songs list + a song detail page (/pisen/[hex]/[alias]), not its sub-routes
 	if (pathname === '/seznam' || /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)) return 'songs'
 	if (pathname === '/ucet' || pathname.startsWith('/ucet/')) return 'account'
+	if (pathname === '/demo-playlist') return 'account'
 	return null
 }
 

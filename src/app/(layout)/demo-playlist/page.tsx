@@ -2,6 +2,7 @@
 
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Button, IconButton, Typography } from '@/common/ui'
 import {
 	AddRounded,
@@ -355,7 +356,10 @@ function V5() {
 		<Box
 			sx={{
 				position: 'fixed',
-				inset: 0,
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: MOBILE_NAV_CLEARANCE,
 				bgcolor: 'grey.50',
 				overflowY: 'auto',
 			}}
@@ -599,7 +603,7 @@ function V7() {
 function V8() {
 	const cur = SONGS[2]
 	return (
-		<Box sx={{ position: 'fixed', inset: 0, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column' }}>
+		<Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: MOBILE_NAV_CLEARANCE, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column' }}>
 			<Box
 				sx={{
 					display: 'flex',
