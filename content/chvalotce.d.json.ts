@@ -281,6 +281,7 @@ declare const messages: {
 		"share": "Sdílet",
 		"linkCopiedToClipboard": "Odkaz zkopírován do schránky",
 		"presentation": "Prezentace",
+		"songsCount": "{count, plural, one {# píseň} few {# písně} other {# písní}}",
 		"rename": "Přejmenovat",
 		"playlistNamePlaceholder": "Název playlistu",
 		"print": "Tisknout",

@@ -32,6 +32,8 @@ export function mobileTabForPath(pathname: string | null): MobileTab {
 	// songs list + a song detail page (/pisen/[hex]/[alias]), not its sub-routes
 	if (pathname === '/seznam' || /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)) return 'songs'
 	if (pathname === '/ucet' || pathname.startsWith('/ucet/')) return 'account'
+	// playlist detail (/playlist/[guid]), not its sub-routes (prezentace / pdf)
+	if (/^\/playlist\/[^/]+\/?$/.test(pathname)) return 'account'
 	if (pathname === '/demo-playlist') return 'account'
 	return null
 }
@@ -48,6 +50,9 @@ export function isMobileTabBarRoute(pathname: string | null): boolean {
  */
 export function pageOwnsBottomClearance(pathname: string | null): boolean {
 	if (!pathname) return false
-	// song detail: full-screen white reading surface with its own clearance
-	return /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)
+	// song detail + playlist detail: overlay app-shell that owns its own clearance
+	return (
+		/^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname) ||
+		/^\/playlist\/[^/]+\/?$/.test(pathname)
+	)
 }

@@ -278,6 +278,7 @@
 		"share": "Udostępnij",
 		"linkCopiedToClipboard": "Link skopiowany do schowka",
 		"presentation": "Prezentacja",
+		"songsCount": "{count, plural, one {# pieśń} few {# pieśni} many {# pieśni} other {# pieśni}}",
 		"rename": "Zmień nazwę",
 		"playlistNamePlaceholder": "Nazwa playlisty",
 		"print": "Drukuj",

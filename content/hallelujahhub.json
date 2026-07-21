@@ -278,6 +278,7 @@
 		"share": "Share",
 		"linkCopiedToClipboard": "Link copied to clipboard",
 		"presentation": "Presentation",
+		"songsCount": "{count, plural, one {# song} other {# songs}}",
 		"rename": "Rename",
 		"playlistNamePlaceholder": "Playlist name",
 		"print": "Print",
