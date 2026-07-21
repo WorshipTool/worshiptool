@@ -119,6 +119,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	// header (+ control strip) can differ from the content surface (e.g. a white
 	// hero header on the grey app canvas); defaults to the content surface
 	const headerBg = headerSurface ?? surface
+	// when the header has its own colour, give it a persistent bottom divider so
+	// the white header block reads as distinct from the grey content below
+	const headerDivider = Boolean(headerSurface)
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
@@ -149,7 +152,11 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				}
 			}
 			if (headerRef.current) {
-				headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
+				// keep the persistent divider when headerDivider; otherwise fade a
+				// hairline in as the content scrolls under the header
+				if (!headerDivider) {
+					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
+				}
 				headerRef.current.style.boxShadow =
 					p > 0.9 ? `0 2px 8px rgba(0, 0, 0, 0.05)` : 'none'
 			}
@@ -163,7 +170,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [heroMode])
+	}, [heroMode, headerDivider])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -229,7 +236,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 1,
 					bgcolor: headerBg,
-					borderBottom: '1px solid transparent',
+					borderBottom: '1px solid',
+					borderColor: headerDivider ? 'grey.200' : 'transparent',
 				}}
 			>
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
@@ -339,22 +347,13 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						)}
 					</Box>
 				)}
-			</Box>
 
-			{/* optional control strip — pinned right under the header */}
-			{controlPanel && (
-				<Box
-					sx={{
-						flexShrink: 0,
-						zIndex: HEADER_Z - 1,
-						bgcolor: headerBg,
-						paddingX: 2,
-						paddingBottom: 1,
-					}}
-				>
-					{controlPanel}
-				</Box>
-			)}
+				{/* control strip — inside the header block so it shares the header
+				    background (one solid white zone above the bottom divider) */}
+				{controlPanel && (
+					<Box sx={{ paddingX: 2, paddingTop: 1 }}>{controlPanel}</Box>
+				)}
+			</Box>
 
 			{/* the only scroller — scrollbar confined between the header/panels */}
 			<Box
