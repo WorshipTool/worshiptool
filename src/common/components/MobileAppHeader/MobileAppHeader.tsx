@@ -57,6 +57,10 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** Surface (and header) background — palette path. Defaults to the grey app
 	 * canvas; a white reading surface (song page) passes 'background.paper'. */
 	surface?: string
+	/** Header (+ control strip) background — palette path. Defaults to `surface`.
+	 * Give a taller hero header a distinct colour (e.g. 'background.paper') from the
+	 * grey content area below. */
+	headerSurface?: string
 	/** When false the scroller has no horizontal padding, so content sits flush
 	 * to the edges and manages its own padding (e.g. the song sheet). */
 	contentPadded?: boolean
@@ -96,6 +100,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	bottomPanel,
 	scrollResetKey,
 	surface = 'grey.50',
+	headerSurface,
 	contentPadded = true,
 	overlay = false,
 	children,
@@ -111,6 +116,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const subtitleRef = useRef<HTMLDivElement>(null)
 	const heroRef = useRef<HTMLDivElement>(null)
 	const heroMode = Boolean(heroIcon)
+	// header (+ control strip) can differ from the content surface (e.g. a white
+	// hero header on the grey app canvas); defaults to the content surface
+	const headerBg = headerSurface ?? surface
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
@@ -220,7 +228,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					flexDirection: 'column',
 					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 1,
-					bgcolor: surface,
+					bgcolor: headerBg,
 					borderBottom: '1px solid transparent',
 				}}
 			>
@@ -339,7 +347,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					sx={{
 						flexShrink: 0,
 						zIndex: HEADER_Z - 1,
-						bgcolor: surface,
+						bgcolor: headerBg,
 						paddingX: 2,
 						paddingBottom: 1,
 					}}

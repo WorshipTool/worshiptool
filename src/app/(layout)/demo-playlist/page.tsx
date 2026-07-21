@@ -2028,13 +2028,14 @@ function CollapsingHero({
 // other app screen uses (seznam / píseň / účet), surface "grey.50", collapsing
 // large title. Just configured with playlist props: subtitle = song count,
 // a pinned Prezentovat control, "…" for edit/share, and the ordered list.
-function PlaylistUnified() {
+function PlaylistUnified({ headerWhite }: { headerWhite?: boolean }) {
 	return (
 		<MobileAppHeader
 			title="Nedělní chvály"
 			subtitle="6 písní · ~24 min"
 			backTo="account"
 			surface="grey.50"
+			headerSurface={headerWhite ? 'background.paper' : undefined}
 			overlay
 			heroIcon={
 				<Box
@@ -2100,6 +2101,7 @@ function DemoPlaylist() {
 	const params = useSearchParams()
 	const f = params.get('f')
 	if (f === 'uni') return <PlaylistUnified />
+	if (f === 'uni-w') return <PlaylistUnified headerWhite />
 	if (f === 'col') return <CollapsingHero />
 	if (f === 'col-exp') return <CollapsingHero demoPhase="expanded" />
 	if (f === 'col-cmp') return <CollapsingHero demoPhase="compact" />
