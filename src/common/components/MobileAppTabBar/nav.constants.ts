@@ -34,7 +34,6 @@ export function mobileTabForPath(pathname: string | null): MobileTab {
 	if (pathname === '/ucet' || pathname.startsWith('/ucet/')) return 'account'
 	// playlist detail (/playlist/[guid]), not its sub-routes (prezentace / pdf)
 	if (/^\/playlist\/[^/]+\/?$/.test(pathname)) return 'account'
-	if (pathname === '/demo-playlist') return 'account'
 	return null
 }
 
