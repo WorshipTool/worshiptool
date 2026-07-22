@@ -1,6 +1,8 @@
 'use client'
 
 import { BasicVariantPack } from '@/api/dtos/song/song.dto'
+import Menu from '@/common/components/Menu/Menu'
+import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.constants'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, IconButton, Typography } from '@/common/ui'
@@ -17,6 +19,7 @@ import {
 	DeleteOutlineRounded,
 	DragIndicatorRounded,
 	EditRounded,
+	MoreVertRounded,
 	MusicNoteRounded,
 	PrintRounded,
 	QueueMusicRounded,
@@ -61,14 +64,6 @@ function Cover() {
 		</Box>
 	)
 }
-function Circle({ children, onClick, alt }: { children: React.ReactNode; onClick: () => void; alt: string }) {
-	return (
-		<Box sx={{ flexShrink: 0 }}>
-			<IconButton onClick={onClick} alt={alt} color="grey.700">{children}</IconButton>
-		</Box>
-	)
-}
-
 // a reorderable row (edit mode): drag by the handle only, remove button works
 function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: number; onRemove: () => void }) {
 	const tCommon = useTranslations('common')
@@ -114,6 +109,7 @@ export default function PlaylistMobile({
 	const [detailIndex, setDetailIndex] = useState(0)
 	const [editMode, setEditMode] = useState(false)
 	const [addOpen, setAddOpen] = useState(false)
+	const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
 	const addAnchorRef = useRef<HTMLDivElement>(null)
 
 	const headerRef = useRef<HTMLDivElement>(null)
@@ -223,6 +219,27 @@ export default function PlaylistMobile({
 	const addFilter = (pack: BasicVariantPack) =>
 		!(items ?? []).some((i) => i.pack.packGuid === pack.packGuid)
 
+	// secondary actions live in one overflow menu (keeps the header to a single
+	// primary + a single ⋮, consistent with the rest of the mobile shell)
+	const moreItems: MenuItemObjectType[] = [
+		{ title: t('share'), icon: <ShareRounded fontSize="small" />, onClick: onShare },
+		{ title: t('print'), icon: <PrintRounded fontSize="small" />, onClick: onPrint },
+		...(canUserEdit
+			? [{ title: tCommon('edit'), icon: <EditRounded fontSize="small" />, onClick: onToggleEdit }]
+			: []),
+	]
+	// the header's single trailing control: ⋮ menu, or a ✓ to leave edit mode
+	const renderMore = (small?: boolean) =>
+		editMode ? (
+			<IconButton size={small ? 'small' : undefined} color="primary.main" alt={tCommon('save')} onClick={onToggleEdit}>
+				<CheckRounded sx={small ? { fontSize: 21 } : undefined} />
+			</IconButton>
+		) : (
+			<IconButton size={small ? 'small' : undefined} color="grey.700" alt={t('more')} onClick={(e) => setMenuAnchor(e.currentTarget as HTMLElement)}>
+				<MoreVertRounded sx={small ? { fontSize: 21 } : undefined} />
+			</IconButton>
+		)
+
 	const subtitle = (
 		<Typography small color="grey.500" noWrap>
 			<Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>{t('typeLabel')}</Box>
@@ -331,36 +348,22 @@ export default function PlaylistMobile({
 							{subtitle}
 						</Box>
 					</Box>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
 						<Box onClick={onPresent} sx={{ flex: 1, bgcolor: 'primary.main', borderRadius: 999, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}>
 							<SlideshowRounded sx={{ color: 'common.white' }} />
 							<Typography strong sx={{ color: 'common.white' }}>{t('presentation')}</Typography>
 						</Box>
-						<Circle onClick={onShare} alt={t('share')}><ShareRounded /></Circle>
-						<Circle onClick={onPrint} alt={t('print')}><PrintRounded /></Circle>
-						{canUserEdit && (
-							<Box sx={{ flexShrink: 0 }}>
-								<IconButton onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>
-									{editMode ? <CheckRounded /> : <EditRounded />}
-								</IconButton>
-							</Box>
-						)}
+						<Box sx={{ flexShrink: 0 }}>{renderMore()}</Box>
 					</Box>
 				</Box>
-				{/* slim: keeps the same actions as the full header, just compact */}
+				{/* slim: same primary + overflow as the full header, just compact */}
 				<Box ref={slimRef} style={{ opacity: mode === 'detail' ? 1 : 0 }} sx={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: H_SLIM, display: 'flex', alignItems: 'center', gap: 0.25, paddingX: 1 }}>
 					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
 					<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
-					<IconButton size="small" color="grey.700" alt={t('share')} onClick={onShare}><ShareRounded sx={{ fontSize: 21 }} /></IconButton>
-					<IconButton size="small" color="grey.700" alt={t('print')} onClick={onPrint}><PrintRounded sx={{ fontSize: 21 }} /></IconButton>
-					{canUserEdit && (
-						<IconButton size="small" color={editMode ? 'primary.main' : 'grey.700'} alt={editMode ? tCommon('save') : tCommon('edit')} onClick={onToggleEdit}>
-							{editMode ? <CheckRounded sx={{ fontSize: 21 }} /> : <EditRounded sx={{ fontSize: 21 }} />}
-						</IconButton>
-					)}
-					<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer', marginLeft: 0.25 }}>
+					<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
 						<SlideshowRounded sx={{ color: 'common.white', fontSize: 20 }} />
 					</Box>
+					{renderMore(true)}
 				</Box>
 			</Box>
 
@@ -383,6 +386,16 @@ export default function PlaylistMobile({
 					</Box>
 				))}
 			</Box>
+
+			{/* overflow menu: the secondary header actions (share / print / edit) */}
+			<Menu
+				open={Boolean(menuAnchor)}
+				anchor={menuAnchor}
+				onClose={() => setMenuAnchor(null)}
+				items={moreItems}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			/>
 
 			{/* off-screen anchor + shared song picker (reused from desktop) */}
 			<Box ref={addAnchorRef} sx={{ position: 'fixed', bottom: 0, left: '50%' }} />
