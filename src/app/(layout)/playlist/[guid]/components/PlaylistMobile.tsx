@@ -92,7 +92,12 @@ function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: numb
  * header (Prezentovat / share / print / edit) shrinks on scroll. Wired to the
  * same useInnerPlaylist state as desktop; PlaylistPreview keeps desktop intact.
  */
-export default function PlaylistMobile() {
+export default function PlaylistMobile({
+	initialMode = 'list',
+}: {
+	/** Which mode to open in — 'detail' can deep-link straight to the song deck. */
+	initialMode?: 'list' | 'detail'
+} = {}) {
 	const t = useTranslations('playlist')
 	const tCommon = useTranslations('common')
 	const tSongs = useTranslations('songsList')
@@ -102,7 +107,7 @@ export default function PlaylistMobile() {
 	const { items, title, loading, canUserEdit, guid, addItem, removeItem, setItems, save } =
 		useInnerPlaylist()
 
-	const [mode, setMode] = useState<'list' | 'detail'>('list')
+	const [mode, setMode] = useState<'list' | 'detail'>(initialMode)
 	const [detailIndex, setDetailIndex] = useState(0)
 	const [editMode, setEditMode] = useState(false)
 	const [addOpen, setAddOpen] = useState(false)
