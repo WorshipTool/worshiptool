@@ -282,6 +282,8 @@
 		"typeLabel": "Playlist",
 		"tabSongs": "Song list",
 		"tabDetail": "Song detail",
+		"prevSong": "Previous song",
+		"nextSong": "Next song",
 		"rename": "Rename",
 		"playlistNamePlaceholder": "Playlist name",
 		"print": "Print",

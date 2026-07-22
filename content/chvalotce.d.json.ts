@@ -285,6 +285,8 @@ declare const messages: {
 		"typeLabel": "Playlist",
 		"tabSongs": "Seznam písní",
 		"tabDetail": "Detail písní",
+		"prevSong": "Předchozí píseň",
+		"nextSong": "Další píseň",
 		"rename": "Přejmenovat",
 		"playlistNamePlaceholder": "Název playlistu",
 		"print": "Tisknout",

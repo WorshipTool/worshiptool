@@ -282,6 +282,8 @@
 		"typeLabel": "Playlista",
 		"tabSongs": "Lista pieśni",
 		"tabDetail": "Szczegóły pieśni",
+		"prevSong": "Poprzednia pieśń",
+		"nextSong": "Następna pieśń",
 		"rename": "Zmień nazwę",
 		"playlistNamePlaceholder": "Nazwa playlisty",
 		"print": "Drukuj",

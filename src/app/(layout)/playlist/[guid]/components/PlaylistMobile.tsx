@@ -35,6 +35,9 @@ import PlaylistSwipeDeck from './PlaylistSwipeDeck'
 const H_FULL = 210
 const H_SLIM = 54
 const COLLAPSE_DIST = 150
+// space the floating mode switcher occupies at the bottom, so detail-mode
+// content (the swipe deck's arrows + dots) can sit clear above it
+const SWITCHER_CLEARANCE = 74
 
 const CARD = {
 	bgcolor: 'background.paper',
@@ -207,6 +210,7 @@ export default function PlaylistMobile({
 	}
 	const onToggleEdit = async () => {
 		if (editMode) await save()
+		else if (mode === 'detail') setMode('list') // editing only makes sense on the list
 		setEditMode((e) => !e)
 	}
 	const openDetail = (i: number) => {
@@ -343,11 +347,18 @@ export default function PlaylistMobile({
 						)}
 					</Box>
 				</Box>
-				{/* slim */}
-				<Box ref={slimRef} style={{ opacity: mode === 'detail' ? 1 : 0 }} sx={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: H_SLIM, display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
+				{/* slim: keeps the same actions as the full header, just compact */}
+				<Box ref={slimRef} style={{ opacity: mode === 'detail' ? 1 : 0 }} sx={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: H_SLIM, display: 'flex', alignItems: 'center', gap: 0.25, paddingX: 1 }}>
 					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
-					<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.15rem' }}>{title || ''}</Typography>
-					<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
+					<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
+					<IconButton size="small" color="grey.700" alt={t('share')} onClick={onShare}><ShareRounded sx={{ fontSize: 21 }} /></IconButton>
+					<IconButton size="small" color="grey.700" alt={t('print')} onClick={onPrint}><PrintRounded sx={{ fontSize: 21 }} /></IconButton>
+					{canUserEdit && (
+						<IconButton size="small" color={editMode ? 'primary.main' : 'grey.700'} alt={editMode ? tCommon('save') : tCommon('edit')} onClick={onToggleEdit}>
+							{editMode ? <CheckRounded sx={{ fontSize: 21 }} /> : <EditRounded sx={{ fontSize: 21 }} />}
+						</IconButton>
+					)}
+					<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer', marginLeft: 0.25 }}>
 						<SlideshowRounded sx={{ color: 'common.white', fontSize: 20 }} />
 					</Box>
 				</Box>
@@ -359,7 +370,7 @@ export default function PlaylistMobile({
 					{listBody}
 				</Box>
 			) : sorted.length > 0 ? (
-				<PlaylistSwipeDeck items={sorted} startIndex={Math.min(detailIndex, sorted.length - 1)} />
+				<PlaylistSwipeDeck items={sorted} startIndex={Math.min(detailIndex, sorted.length - 1)} bottomInset={SWITCHER_CLEARANCE} />
 			) : (
 				<Box sx={{ flex: 1 }} />
 			)}
