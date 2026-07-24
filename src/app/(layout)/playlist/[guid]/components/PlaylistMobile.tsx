@@ -66,6 +66,20 @@ function Cover() {
 		</Box>
 	)
 }
+// a secondary header action: an outlined (bordered) icon button
+function OutlinedAction({ onClick, alt, active, children }: { onClick: () => void; alt: string; active?: boolean; children: React.ReactNode }) {
+	return (
+		<Box
+			component="button"
+			type="button"
+			onClick={onClick}
+			aria-label={alt}
+			sx={{ width: 40, height: 40, borderRadius: 2, border: '1px solid', borderColor: active ? 'primary.main' : 'grey.300', bgcolor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: active ? 'primary.main' : 'grey.700', cursor: 'pointer', padding: 0, flexShrink: 0, '&:active': { bgcolor: 'grey.100' } }}
+		>
+			{children}
+		</Box>
+	)
+}
 // a reorderable row (edit mode): drag by the handle only, remove button works
 function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: number; onRemove: () => void }) {
 	const tCommon = useTranslations('common')
@@ -182,11 +196,11 @@ export default function PlaylistMobile({
 	const addFilter = (pack: BasicVariantPack) =>
 		!(items ?? []).some((i) => i.pack.packGuid === pack.packGuid)
 
-	// secondary actions live in one overflow menu (keeps the header to a single
-	// primary + a single ⋮, consistent with the rest of the mobile shell)
+	// the collapsed ⋮ overflow holds the secondary actions (the primary Tisknout
+	// keeps its own compact circle)
 	const moreItems: MenuItemObjectType[] = [
+		{ title: t('presentation'), icon: <SlideshowRounded fontSize="small" />, onClick: onPresent },
 		{ title: t('share'), icon: <ShareRounded fontSize="small" />, onClick: onShare },
-		{ title: t('print'), icon: <PrintRounded fontSize="small" />, onClick: onPrint },
 		...(canUserEdit
 			? [{ title: tCommon('edit'), icon: <EditRounded fontSize="small" />, onClick: onToggleEdit }]
 			: []),
@@ -345,31 +359,30 @@ export default function PlaylistMobile({
 					{subtitle}
 				</MorphItem>
 
-				{/* Prezentovat — stays anchored to the RIGHT edge, so collapsing it just
-				    moves it up and shrinks it into the circle (no long sideways travel);
-				    its label fades + collapses over the early window */}
+				{/* Tisknout (primary) — anchored to the RIGHT edge; collapsing it lifts it
+				    up and shrinks the rounded rectangle into the compact circle. Its label
+				    fades + collapses over the early window. */}
 				<MorphItem
-					from={{ width: 204, height: 46 }}
-					to={{ translateY: -126, width: 38, height: 38 }}
-					onClick={onPresent}
-					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: 'primary.main', borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
+					from={{ width: 148, height: 46, borderRadius: 14 }}
+					to={{ translateY: -126, width: 38, height: 38, borderRadius: 19 }}
+					onClick={onPrint}
+					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
 				>
-					<SlideshowRounded sx={{ color: 'common.white', fontSize: 22, flexShrink: 0 }} />
-					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('presentation')}</Typography>
+					<PrintRounded sx={{ color: 'common.white', fontSize: 22, flexShrink: 0 }} />
+					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('print')}</Typography>
 				</MorphItem>
 
-				{/* share / print / edit — the "other" actions as one neatly-spaced flex
-				    group on the LEFT (flush with the back arrow), lifting + fading out
-				    together early so their spacing stays natural, not hand-placed */}
+				{/* secondary actions (Prezentace / Sdílet / Upravit) — outlined icon group
+				    on the LEFT, aligned to the content inset; lift + fade out together early */}
 				<MorphItem
 					to={{ opacity: 0, translateY: -70 }}
 					range={[0, 0.45]}
-					sx={{ top: `${HEADER_TOP}134px)`, left: 8, height: 46, display: 'flex', alignItems: 'center', gap: 0.5, pointerEvents: 'auto' }}
+					sx={{ top: `${HEADER_TOP}137px)`, left: 16, height: 40, display: 'flex', alignItems: 'center', gap: 0.75, pointerEvents: 'auto' }}
 				>
-					<IconButton onClick={onShare} alt={t('share')} color="grey.700"><ShareRounded /></IconButton>
-					<IconButton onClick={onPrint} alt={t('print')} color="grey.700"><PrintRounded /></IconButton>
+					<OutlinedAction onClick={onPresent} alt={t('presentation')}><SlideshowRounded /></OutlinedAction>
+					<OutlinedAction onClick={onShare} alt={t('share')}><ShareRounded /></OutlinedAction>
 					{canUserEdit && (
-						<IconButton onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>{editMode ? <CheckRounded /> : <EditRounded />}</IconButton>
+						<OutlinedAction onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} active={editMode}>{editMode ? <CheckRounded /> : <EditRounded />}</OutlinedAction>
 					)}
 				</MorphItem>
 
