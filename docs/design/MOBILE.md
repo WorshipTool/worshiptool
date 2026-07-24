@@ -88,14 +88,14 @@ Per-page shape:
 | Moje písně | → Účet | count | **+ Přidat** | sort/filter | pagination |
 | Playlisty | → Účet | count | **+ Nový** | sort | – |
 | Písně (Seznam) | – | – | – | – | pagination |
-| Playlist detail | → back | Playlist · count | **Prezentovat** + ⋮ | (mode switch) | – |
+| Playlist detail | → back | Playlist · count | Prezentovat (+ share/print/edit → ⋮ when slim) | (mode switch) | – |
 
-**Header actions cap holds even for custom headers.** The playlist detail
-page has its own collapsing header (not `MobileAppHeader`), but still obeys
-the rule: **one primary + one `⋮`**. Its primary is the blue *Prezentovat*;
-everything secondary (share, print, edit) lives in a single overflow menu
-(`common/components/Menu`), never as a row of inline icons. The collapsed
-(slim / scrolled) header keeps the exact same two controls. In edit mode the
-`⋮` becomes a `✓` to give a clear way out. Don't reintroduce inline
-share/print/edit icons "because there's room" — that's the drift this rule
-exists to stop.
+**Collapsing hero condenses its actions — it doesn't hide them.** The
+playlist detail page has its own collapsing header (not `MobileAppHeader`).
+At rest the tall hero shows the full action row side by side — the blue
+*Prezentovat* primary plus share / print / edit as inline circles. As it
+collapses on scroll (and in Detail mode, which opens already-slim) it
+condenses to the standard app-bar form: **one primary + one `⋮`**, where the
+`⋮` overflow (`common/components/Menu`) holds share / print / edit. So the
+≤2-actions cap applies to the *slim* bar; the expanded hero may show more.
+In edit mode the slim `⋮` becomes a `✓` for a clear way out.

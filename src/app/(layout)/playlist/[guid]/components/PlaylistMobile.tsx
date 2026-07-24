@@ -64,6 +64,14 @@ function Cover() {
 		</Box>
 	)
 }
+function Circle({ children, onClick, alt, color = 'grey.700' }: { children: React.ReactNode; onClick: () => void; alt: string; color?: string }) {
+	return (
+		<Box sx={{ flexShrink: 0 }}>
+			<IconButton onClick={onClick} alt={alt} color={color}>{children}</IconButton>
+		</Box>
+	)
+}
+
 // a reorderable row (edit mode): drag by the handle only, remove button works
 function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: number; onRemove: () => void }) {
 	const tCommon = useTranslations('common')
@@ -348,15 +356,22 @@ export default function PlaylistMobile({
 							{subtitle}
 						</Box>
 					</Box>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+					{/* expanded: all actions side by side; condenses to primary + ⋮ on scroll */}
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 						<Box onClick={onPresent} sx={{ flex: 1, bgcolor: 'primary.main', borderRadius: 999, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}>
 							<SlideshowRounded sx={{ color: 'common.white' }} />
 							<Typography strong sx={{ color: 'common.white' }}>{t('presentation')}</Typography>
 						</Box>
-						<Box sx={{ flexShrink: 0 }}>{renderMore()}</Box>
+						<Circle onClick={onShare} alt={t('share')}><ShareRounded /></Circle>
+						<Circle onClick={onPrint} alt={t('print')}><PrintRounded /></Circle>
+						{canUserEdit && (
+							<Circle onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>
+								{editMode ? <CheckRounded /> : <EditRounded />}
+							</Circle>
+						)}
 					</Box>
 				</Box>
-				{/* slim: same primary + overflow as the full header, just compact */}
+				{/* slim (scrolled / detail): the row condenses to one primary + a ⋮ overflow */}
 				<Box ref={slimRef} style={{ opacity: mode === 'detail' ? 1 : 0 }} sx={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: H_SLIM, display: 'flex', alignItems: 'center', gap: 0.25, paddingX: 1 }}>
 					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
 					<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
