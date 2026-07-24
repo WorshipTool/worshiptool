@@ -3,7 +3,6 @@
 import { Box } from '@/common/ui'
 import {
 	createContext,
-	CSSProperties,
 	ReactNode,
 	RefObject,
 	useContext,
@@ -11,6 +10,9 @@ import {
 	useLayoutEffect,
 	useRef,
 } from 'react'
+
+// useLayoutEffect warns during SSR; this is the standard isomorphic shim
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 /**
  * A reusable scroll-driven **morphing** header. Unlike a cross-fade, elements
@@ -65,6 +67,11 @@ type Registration = {
 	from: MorphSpec
 	to: MorphSpec
 	origin: string
+	/** sub-window of the overall progress this item animates over — e.g. [0, 0.5]
+	 * fades/moves fully by half-scroll then holds. Lets the whole header stage its
+	 * parts (extras out first, morphs throughout, new bits in last) so it reads as
+	 * one coordinated motion rather than every part doing its own thing. */
+	range?: [number, number]
 }
 
 type Ctx = {
@@ -76,9 +83,15 @@ const resolve = (spec: MorphSpec, width: number): MorphStyle =>
 	typeof spec === 'function' ? spec(width) : spec
 
 const lerp = (a: number, b: number, p: number) => a + (b - a) * p
+const clamp01 = (x: number) => Math.min(1, Math.max(0, x))
+// one shared easing for every part, so they accelerate and settle together
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
 // apply the interpolated style (transform for GPU-friendly props, inline for the rest)
-function paintItem(r: Registration, p: number, width: number) {
+function paintItem(r: Registration, rawP: number, width: number) {
+	// remap the global progress into this item's window, then ease it
+	const [r0, r1] = r.range ?? [0, 1]
+	const p = ease(clamp01(r1 > r0 ? (rawP - r0) / (r1 - r0) : rawP))
 	const from = resolve(r.from, width)
 	const to = resolve(r.to, width)
 	const keys = new Set([...Object.keys(from), ...Object.keys(to)]) as Set<keyof MorphStyle>
@@ -135,17 +148,22 @@ export function CollapsingHeader({
 	const rootRef = useRef<HTMLDivElement>(null)
 	const bgRef = useRef<HTMLDivElement>(null)
 	const regs = useRef<Set<Registration>>(new Set())
+	const lastP = useRef(forceCompact ? 1 : 0)
 	const dist = distance ?? expandedHeight - compactHeight
 
 	const ctx = useRef<Ctx>({
 		register: (r) => {
 			regs.current.add(r)
+			// paint the newcomer at the current progress so a late-mounting item
+			// never flashes its unstyled default before the next scroll frame
+			paintItem(r, lastP.current, rootRef.current?.clientWidth ?? 0)
 			return () => regs.current.delete(r)
 		},
 	})
 
 	// paint every registered item + the header background for a given progress
 	const paint = (p: number) => {
+		lastP.current = p
 		const width = rootRef.current?.clientWidth ?? 0
 		// expose progress so inner bits (e.g. a button's label) can react in CSS
 		rootRef.current?.style.setProperty('--collapse-p', String(p))
@@ -157,7 +175,7 @@ export function CollapsingHeader({
 	}
 
 	// initial paint (and re-paint when forceCompact flips) — layout effect avoids a flash
-	useLayoutEffect(() => {
+	useIsoLayoutEffect(() => {
 		paint(forceCompact ? 1 : 0)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [forceCompact, expandedHeight, compactHeight])
@@ -184,7 +202,17 @@ export function CollapsingHeader({
 			if (raf) cancelAnimationFrame(raf)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [forceCompact, dist])
+	}, [forceCompact, dist, expandedHeight, compactHeight])
+
+	// re-apply on width change so width-dependent morphs (right-anchored / full-bleed) stay correct
+	useEffect(() => {
+		const root = rootRef.current
+		if (!root || typeof ResizeObserver === 'undefined') return
+		const ro = new ResizeObserver(() => paint(lastP.current))
+		ro.observe(root)
+		return () => ro.disconnect()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	return (
 		<CollapsingHeaderContext.Provider value={ctx.current}>
@@ -224,6 +252,7 @@ export function MorphItem({
 	from = {},
 	to,
 	origin = 'top left',
+	range,
 	sx,
 	onClick,
 	children,
@@ -231,16 +260,17 @@ export function MorphItem({
 	from?: MorphSpec
 	to: MorphSpec
 	origin?: string
+	/** sub-window of overall progress to animate over, e.g. [0, 0.5]. */
+	range?: [number, number]
 	sx?: any
 	onClick?: () => void
 	children: ReactNode
-	style?: CSSProperties
 }) {
 	const ctx = useContext(CollapsingHeaderContext)
 	const ref = useRef<HTMLDivElement>(null)
-	useLayoutEffect(() => {
+	useIsoLayoutEffect(() => {
 		if (!ctx || !ref.current) return
-		return ctx.register({ el: ref.current, from, to, origin })
+		return ctx.register({ el: ref.current, from, to, origin, range })
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ctx])
 	return (
