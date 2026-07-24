@@ -364,12 +364,13 @@ export default function PlaylistMobile({
 				    fades + collapses over the early window. */}
 				<MorphItem
 					from={{ width: 148, height: 46, borderRadius: 14 }}
-					to={{ translateY: -126, width: 38, height: 38, borderRadius: 19 }}
+					to={{ translateY: -129, width: 44, height: 44, borderRadius: 22 }}
 					onClick={onPrint}
-					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
+					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
 				>
-					<PrintRounded sx={{ color: 'common.white', fontSize: 22, flexShrink: 0 }} />
-					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('print')}</Typography>
+					<PrintRounded sx={{ color: 'common.white', fontSize: 23, flexShrink: 0 }} />
+					{/* label + its left gap both collapse to 0 so the icon centres exactly in the compact circle */}
+					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', marginLeft: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 8px))', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('print')}</Typography>
 				</MorphItem>
 
 				{/* secondary actions (Prezentace / Sdílet / Upravit) — outlined icon group
@@ -387,7 +388,7 @@ export default function PlaylistMobile({
 				</MorphItem>
 
 				{/* ⋮ (or ✓ in edit mode) — compact-only, fades in last, left of the circle */}
-				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} range={[0.5, 1]} sx={{ top: `${HEADER_TOP}8px)`, right: 60, pointerEvents: 'auto' }}>
+				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} range={[0.5, 1]} sx={{ top: `${HEADER_TOP}7px)`, right: 66, pointerEvents: 'auto' }}>
 					{renderMore(true)}
 				</MorphItem>
 			</CollapsingHeader>
