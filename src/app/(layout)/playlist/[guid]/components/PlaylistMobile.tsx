@@ -1,6 +1,7 @@
 'use client'
 
 import { BasicVariantPack } from '@/api/dtos/song/song.dto'
+import { CollapsingHeader, MorphItem } from '@/common/components/CollapsingHeader/CollapsingHeader'
 import Menu from '@/common/components/Menu/Menu'
 import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.constants'
@@ -34,13 +35,11 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import useInnerPlaylist from '../hooks/useInnerPlaylist'
 import PlaylistSwipeDeck from './PlaylistSwipeDeck'
 
-// header sizes (px, on top of the safe-area inset)
+// header sizes (px, on top of the safe-area inset). The header morphs from the
+// tall expanded hero to the compact bar as the list scrolls (see CollapsingHeader).
+const H_FULL = 210
 const H_SLIM = 54
-// How far you scroll before the slim bar is fully opaque. The big hero is part
-// of the scrolling content (it scrolls away natively) and the slim bar just
-// fades in over it — no header-height animation, so there's no feedback loop
-// with the scroll distance and it works even when JS is throttled mid-scroll.
-const SLIM_FADE_DIST = 90
+const HEADER_TOP = 'calc(env(safe-area-inset-top) + '
 // space the floating mode switcher occupies at the bottom, so detail-mode
 // content (the swipe deck's arrows + dots) can sit clear above it
 const SWITCHER_CLEARANCE = 74
@@ -67,14 +66,6 @@ function Cover() {
 		</Box>
 	)
 }
-function Circle({ children, onClick, alt, color = 'grey.700' }: { children: React.ReactNode; onClick: () => void; alt: string; color?: string }) {
-	return (
-		<Box sx={{ flexShrink: 0 }}>
-			<IconButton onClick={onClick} alt={alt} color={color}>{children}</IconButton>
-		</Box>
-	)
-}
-
 // a reorderable row (edit mode): drag by the handle only, remove button works
 function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: number; onRemove: () => void }) {
 	const tCommon = useTranslations('common')
@@ -124,52 +115,9 @@ export default function PlaylistMobile({
 	const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
 	const addAnchorRef = useRef<HTMLDivElement>(null)
 
-	const slimRef = useRef<HTMLDivElement>(null)
-	const heroRef = useRef<HTMLDivElement>(null)
 	const listScrollRef = useRef<HTMLDivElement>(null)
 
 	const sorted = useMemo(() => [...(items ?? [])].sort((a, b) => a.order - b.order), [items])
-
-	// fade the slim bar in as the hero scrolls away (imperative, no re-render).
-	// The hero itself is part of the scrolling content, so it scrolls off
-	// natively — only this cosmetic opacity is JS-driven.
-	useEffect(() => {
-		if (mode !== 'list') return
-		const scroller = listScrollRef.current
-		if (!scroller) return
-		let raf = 0
-		const apply = (p: number) => {
-			if (slimRef.current) {
-				slimRef.current.style.opacity = String(p)
-				// let taps reach the hero underneath until the slim bar is mostly in
-				slimRef.current.style.pointerEvents = p > 0.6 ? 'auto' : 'none'
-				slimRef.current.style.boxShadow = p > 0.95 ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
-			}
-			// fade the hero out as the slim bar comes in, so the two titles never
-			// both show through mid-scroll
-			if (heroRef.current) heroRef.current.style.opacity = String(1 - p)
-		}
-		const paint = () => {
-			raf = 0
-			apply(Math.min(1, Math.max(0, scroller.scrollTop / SLIM_FADE_DIST)))
-		}
-		const onScroll = () => {
-			if (!raf) raf = requestAnimationFrame(paint)
-		}
-		scroller.addEventListener('scroll', onScroll, { passive: true })
-		apply(0)
-		return () => scroller.removeEventListener('scroll', onScroll)
-	}, [mode])
-
-	// detail mode: the slim bar is the whole (shared) header, always shown
-	useEffect(() => {
-		if (mode !== 'detail') return
-		if (slimRef.current) {
-			slimRef.current.style.opacity = '1'
-			slimRef.current.style.pointerEvents = 'auto'
-			slimRef.current.style.boxShadow = 'none'
-		}
-	}, [mode])
 
 	// drag reorder (edit mode) — local order, committed on pointer up
 	const [orderGuids, setOrderGuids] = useState<PlaylistItemGuid[]>([])
@@ -345,79 +293,83 @@ export default function PlaylistMobile({
 
 	return (
 		<Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: MOBILE_NAV_CLEARANCE, bgcolor: 'grey.50', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-			{/* content: in list mode the big hero is the first scrolling item so it
-			    scrolls away natively (no header-height animation → no feedback loop);
-			    detail mode is the swipe deck under the shared slim bar */}
+			{/* content: the list carries a top spacer for the hero area, so the header
+			    can be an overlay that morphs (rather than a flex child that shrinks and
+			    steals the scroll distance) — no feedback loop, no dead space at the end.
+			    Detail is the swipe deck under the compact header. */}
 			{mode === 'list' ? (
 				<Box ref={listScrollRef} sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
-					{/* hero (full header) — the expanded identity + all actions */}
-					<Box ref={heroRef} sx={{ paddingX: 2, paddingTop: 'calc(env(safe-area-inset-top) + 8px)', paddingBottom: 1.5, bgcolor: 'grey.50' }}>
-						<Box sx={{ display: 'flex', alignItems: 'center' }}>
-							<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -1 }}><ArrowBackRounded /></IconButton>
-						</Box>
-						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingBottom: 1.5, paddingTop: 0.5 }}>
-							<Cover />
-							<Box sx={{ minWidth: 0 }}>
-								<Typography noWrap sx={{ fontSize: '1.45rem', fontWeight: 800, letterSpacing: '-0.3px' }}>{title || ''}</Typography>
-								{subtitle}
-							</Box>
-						</Box>
-						{/* expanded: all actions side by side; condenses to the slim bar's primary + ⋮ on scroll */}
-						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-							<Box onClick={onPresent} sx={{ flex: 1, bgcolor: 'primary.main', borderRadius: 999, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}>
-								<SlideshowRounded sx={{ color: 'common.white' }} />
-								<Typography strong sx={{ color: 'common.white' }}>{t('presentation')}</Typography>
-							</Box>
-							<Circle onClick={onShare} alt={t('share')}><ShareRounded /></Circle>
-							<Circle onClick={onPrint} alt={t('print')}><PrintRounded /></Circle>
-							{canUserEdit && (
-								<Circle onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>
-									{editMode ? <CheckRounded /> : <EditRounded />}
-								</Circle>
-							)}
-						</Box>
-					</Box>
-					{/* the list */}
+					<Box aria-hidden style={{ height: `${HEADER_TOP}${H_FULL}px)` }} />
 					<Box sx={{ paddingX: 2, paddingBottom: 12 }}>{listBody}</Box>
 				</Box>
 			) : sorted.length > 0 ? (
-				<Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingTop: `calc(env(safe-area-inset-top) + ${H_SLIM}px)` }}>
+				<Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingTop: `${HEADER_TOP}${H_SLIM}px)` }}>
 					<PlaylistSwipeDeck items={sorted} startIndex={Math.min(detailIndex, sorted.length - 1)} bottomInset={SWITCHER_CLEARANCE} />
 				</Box>
 			) : (
 				<Box sx={{ flex: 1 }} />
 			)}
 
-			{/* slim bar = the shared header. It overlays the top of the content: in
-			    list mode it fades in as the hero scrolls away; in detail mode it's the
-			    whole header, always shown. One primary (Prezentovat) + a ⋮ overflow. */}
-			<Box
-				ref={slimRef}
-				style={{ opacity: mode === 'detail' ? 1 : 0, pointerEvents: mode === 'detail' ? 'auto' : 'none' }}
-				sx={{
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					height: `calc(env(safe-area-inset-top) + ${H_SLIM}px)`,
-					paddingTop: 'env(safe-area-inset-top)',
-					zIndex: 6,
-					bgcolor: 'grey.50',
-					borderBottom: '1px solid',
-					borderColor: 'grey.200',
-					display: 'flex',
-					alignItems: 'center',
-					gap: 0.25,
-					paddingX: 1,
-				}}
-			>
-				<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
-				<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
-				<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
-					<SlideshowRounded sx={{ color: 'common.white', fontSize: 20 }} />
+			{/* the morphing header: the tall hero condenses continuously into the
+			    compact bar — the title shrinks and travels, the Prezentovat pill moves
+			    and shrinks to its circle, and expanded-only bits (cover, subtitle,
+			    share / print / edit) just fade. Detail mode pins it compact. */}
+			<CollapsingHeader scrollRef={listScrollRef} expandedHeight={H_FULL} compactHeight={H_SLIM} forceCompact={mode === 'detail'}>
+				{/* back — present in both states, sits still */}
+				<Box sx={{ position: 'absolute', top: `${HEADER_TOP}8px)`, left: 8, pointerEvents: 'auto' }}>
+					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack}><ArrowBackRounded /></IconButton>
 				</Box>
-				{renderMore(true)}
-			</Box>
+
+				{/* cover — fades out */}
+				<MorphItem to={{ opacity: 0 }} sx={{ top: `${HEADER_TOP}50px)`, left: 16 }}>
+					<Cover />
+				</MorphItem>
+
+				{/* title — shrinks and travels up to the compact bar */}
+				<MorphItem
+					from={{ fontSize: 23 }}
+					to={{ translateX: -40, translateY: -41, fontSize: 17.5 }}
+					sx={{ top: `${HEADER_TOP}58px)`, left: 88, maxWidth: 'calc(100vw - 210px)', fontWeight: 800, letterSpacing: '-0.3px', color: 'grey.900', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+				>
+					{title || ''}
+				</MorphItem>
+
+				{/* subtitle — fades out */}
+				<MorphItem to={{ opacity: 0, translateY: -8 }} sx={{ top: `${HEADER_TOP}92px)`, left: 88 }}>
+					{subtitle}
+				</MorphItem>
+
+				{/* Prezentovat — the pill moves and shrinks into the compact circle; its
+				    label fades and collapses (driven by the --collapse-p CSS variable) */}
+				<MorphItem
+					from={(w) => ({ width: w - 176, height: 46 })}
+					to={(w) => ({ translateX: w - 110, translateY: -126, width: 38, height: 38 })}
+					onClick={onPresent}
+					sx={{ top: `${HEADER_TOP}134px)`, left: 16, bgcolor: 'primary.main', borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
+				>
+					<SlideshowRounded sx={{ color: 'common.white', fontSize: 22, flexShrink: 0 }} />
+					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc(1 - var(--collapse-p, 0))', maxWidth: 'calc((1 - var(--collapse-p, 0)) * 180px)' }}>{t('presentation')}</Typography>
+				</MorphItem>
+
+				{/* share / print / edit — expanded-only, lift up and fade out (so they
+				    retract into the bar rather than lingering over the list) */}
+				<MorphItem to={{ opacity: 0, translateY: -96 }} sx={{ top: `${HEADER_TOP}137px)`, right: 104, pointerEvents: 'auto' }}>
+					<IconButton onClick={onShare} alt={t('share')} color="grey.700"><ShareRounded /></IconButton>
+				</MorphItem>
+				<MorphItem to={{ opacity: 0, translateY: -96 }} sx={{ top: `${HEADER_TOP}137px)`, right: 60, pointerEvents: 'auto' }}>
+					<IconButton onClick={onPrint} alt={t('print')} color="grey.700"><PrintRounded /></IconButton>
+				</MorphItem>
+				{canUserEdit && (
+					<MorphItem to={{ opacity: 0, translateY: -96 }} sx={{ top: `${HEADER_TOP}137px)`, right: 16, pointerEvents: 'auto' }}>
+						<IconButton onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>{editMode ? <CheckRounded /> : <EditRounded />}</IconButton>
+					</MorphItem>
+				)}
+
+				{/* ⋮ (or ✓ in edit mode) — compact-only, fades in */}
+				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} sx={{ top: `${HEADER_TOP}8px)`, right: 4, pointerEvents: 'auto' }}>
+					{renderMore(true)}
+				</MorphItem>
+			</CollapsingHeader>
 
 			{/* floating mode switcher (subtle grey), above the tab bar */}
 			<Box sx={{ position: 'absolute', left: 16, right: 16, bottom: 14, zIndex: 5, display: 'flex', gap: 0.5, bgcolor: 'grey.200', borderRadius: 2.5, padding: 0.5, boxShadow: '0 8px 28px rgba(0,0,0,0.18)' }}>

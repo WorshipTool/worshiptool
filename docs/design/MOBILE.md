@@ -100,12 +100,21 @@ app-bar form: **one primary + one `⋮`**, where the `⋮` overflow
 applies to the *slim* bar; the expanded hero may show more. In edit mode the
 slim `⋮` becomes a `✓` for a clear way out.
 
-**Collapse by scroll-away, not by animating header height.** The hero lives
-*inside* the scrolling list as its first item, so it scrolls off natively;
-the slim bar is a fixed overlay that just fades in over it. Do **not** shrink
-a fixed header's height on scroll: handing that height back to the list
-shrinks the remaining scroll distance, so short/medium lists get stuck
-part-way collapsed (only very long lists have the slack to finish). Scroll-away
-has no such feedback loop, leaves no dead space at the list's end, and still
-condenses even when the main thread is frozen mid-scroll (as iOS does) because
-only the cosmetic fade is JS — the hero scrolls on the compositor.
+**Collapse = a scroll-driven morph over a fixed-overlay header, never a
+height-animating flex header.** The header is built with the reusable
+`common/components/CollapsingHeader` (`CollapsingHeader` + `MorphItem`):
+elements present in both states travel/scale continuously to their target
+(the title shrinks and moves into the bar; the *Prezentovat* pill slides and
+shrinks into its circle, its label collapsing via the `--collapse-p` CSS
+variable), and elements that exist in only one state just fade
+(cover/subtitle/share/print/edit out, `⋮` in). Declare each with `from`/`to`
+style specs; the component interpolates them by scroll progress.
+
+Why an overlay + a top spacer rather than a header that shrinks in the flex
+column: shrinking a real header hands its height back to the scroller, which
+shrinks the remaining scroll distance and makes short/medium lists stick
+part-way collapsed (only very long lists have the slack to finish). Here the
+header is an absolute overlay (the scroller's height never changes → no
+feedback loop) and the room it gives back is a `expandedHeight`-tall spacer at
+the top of the scroll content that scrolls away under the header — so it
+condenses reliably for any list length and leaves no dead space at the end.
