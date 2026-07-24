@@ -314,7 +314,7 @@ export default function PlaylistMobile({
 			    compact bar — the title shrinks and travels, the Prezentovat pill moves
 			    and shrinks to its circle, and expanded-only bits (cover, subtitle,
 			    share / print / edit) just fade. Detail mode pins it compact. */}
-			<CollapsingHeader scrollRef={listScrollRef} expandedHeight={H_FULL} compactHeight={H_SLIM} forceCompact={mode === 'detail'}>
+			<CollapsingHeader scrollRef={listScrollRef} expandedHeight={H_FULL} compactHeight={H_SLIM} forceCompact={mode === 'detail'} snap>
 				{/* back — present in both states, sits still */}
 				<Box sx={{ position: 'absolute', top: `${HEADER_TOP}8px)`, left: 8, pointerEvents: 'auto' }}>
 					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack}><ArrowBackRounded /></IconButton>
@@ -345,33 +345,34 @@ export default function PlaylistMobile({
 					{subtitle}
 				</MorphItem>
 
-				{/* Prezentovat — the pill moves and shrinks into the compact circle (whole
-				    scroll); its label fades + collapses over the early window */}
+				{/* Prezentovat — stays anchored to the RIGHT edge, so collapsing it just
+				    moves it up and shrinks it into the circle (no long sideways travel);
+				    its label fades + collapses over the early window */}
 				<MorphItem
-					from={(w) => ({ width: w - 176, height: 46 })}
-					to={(w) => ({ translateX: w - 110, translateY: -126, width: 38, height: 38 })}
+					from={{ width: 172, height: 46 }}
+					to={{ translateY: -126, width: 38, height: 38 }}
 					onClick={onPresent}
-					sx={{ top: `${HEADER_TOP}134px)`, left: 16, bgcolor: 'primary.main', borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
+					sx={{ top: `${HEADER_TOP}134px)`, right: 8, bgcolor: 'primary.main', borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
 				>
 					<SlideshowRounded sx={{ color: 'common.white', fontSize: 22, flexShrink: 0 }} />
 					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('presentation')}</Typography>
 				</MorphItem>
 
-				{/* share / print / edit — expanded-only, lift and fade out early */}
-				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, right: 104, pointerEvents: 'auto' }}>
+				{/* share / print / edit — the "other" actions, on the LEFT; lift + fade early */}
+				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 16, pointerEvents: 'auto' }}>
 					<IconButton onClick={onShare} alt={t('share')} color="grey.700"><ShareRounded /></IconButton>
 				</MorphItem>
-				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, right: 60, pointerEvents: 'auto' }}>
+				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 60, pointerEvents: 'auto' }}>
 					<IconButton onClick={onPrint} alt={t('print')} color="grey.700"><PrintRounded /></IconButton>
 				</MorphItem>
 				{canUserEdit && (
-					<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, right: 16, pointerEvents: 'auto' }}>
+					<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 104, pointerEvents: 'auto' }}>
 						<IconButton onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>{editMode ? <CheckRounded /> : <EditRounded />}</IconButton>
 					</MorphItem>
 				)}
 
-				{/* ⋮ (or ✓ in edit mode) — compact-only, fades in last */}
-				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} range={[0.5, 1]} sx={{ top: `${HEADER_TOP}8px)`, right: 4, pointerEvents: 'auto' }}>
+				{/* ⋮ (or ✓ in edit mode) — compact-only, fades in last, left of the circle */}
+				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} range={[0.5, 1]} sx={{ top: `${HEADER_TOP}8px)`, right: 52, pointerEvents: 'auto' }}>
 					{renderMore(true)}
 				</MorphItem>
 			</CollapsingHeader>

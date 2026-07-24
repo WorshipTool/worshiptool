@@ -132,6 +132,7 @@ export function CollapsingHeader({
 	distance,
 	surface = 'grey.50',
 	forceCompact = false,
+	snap = false,
 	children,
 }: {
 	scrollRef: RefObject<HTMLElement>
@@ -143,6 +144,10 @@ export function CollapsingHeader({
 	surface?: string
 	/** pin the header in its fully-collapsed state (e.g. a detail sub-view). */
 	forceCompact?: boolean
+	/** when the user stops scrolling mid-morph, glide the scroll to the nearest
+	 * end so the header never rests half-collapsed (the morph still plays while
+	 * dragging — only the resting state snaps). */
+	snap?: boolean
 	children: ReactNode
 }) {
 	const rootRef = useRef<HTMLDivElement>(null)
@@ -188,21 +193,35 @@ export function CollapsingHeader({
 		const scroller = scrollRef.current
 		if (!scroller) return
 		let raf = 0
+		let idle: ReturnType<typeof setTimeout> | undefined
 		const run = () => {
 			raf = 0
 			paint(Math.min(1, Math.max(0, scroller.scrollTop / dist)))
 		}
+		// once scrolling settles inside the morph zone, glide to the nearer end
+		const snapToNearest = () => {
+			const st = scroller.scrollTop
+			if (st <= 0 || st >= dist) return // already at an end (or past, in the list)
+			const reachable = scroller.scrollHeight - scroller.clientHeight >= dist
+			const target = st < dist / 2 || !reachable ? 0 : dist
+			scroller.scrollTo({ top: target, behavior: 'smooth' })
+		}
 		const onScroll = () => {
 			if (!raf) raf = requestAnimationFrame(run)
+			if (snap) {
+				if (idle) clearTimeout(idle)
+				idle = setTimeout(snapToNearest, 130)
+			}
 		}
 		scroller.addEventListener('scroll', onScroll, { passive: true })
 		run()
 		return () => {
+			if (idle) clearTimeout(idle)
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [forceCompact, dist, expandedHeight, compactHeight])
+	}, [forceCompact, dist, expandedHeight, compactHeight, snap])
 
 	// re-apply on width change so width-dependent morphs (right-anchored / full-bleed) stay correct
 	useEffect(() => {
