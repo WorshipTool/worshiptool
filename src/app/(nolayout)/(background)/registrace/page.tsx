@@ -2,9 +2,10 @@
 import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
-import { Box } from '@/common/ui'
+import { Box, useTheme } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
+import { useMediaQuery } from '@/common/ui/mui'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
@@ -13,6 +14,7 @@ import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import useAuth from '../../../../hooks/auth/useAuth'
 import { useSmartNavigate } from '../../../../routes/useSmartNavigate'
+import SignupMobile from './components/SignupMobile'
 
 export default SmartPage(SignUp, {
 	hideFooter: true,
@@ -29,6 +31,13 @@ function SignUp() {
 
 	const [inProgress, setInProgress] = useState(false)
 
+	// keep the e-mail form hidden until chosen, so Google and e-mail read as two
+	// equal sign-up options (mirrors the login screen)
+	const [showEmailForm, setShowEmailForm] = useState(false)
+
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+
 	const navigate = useSmartNavigate()
 
 	const { signup, login } = useAuth()
@@ -38,20 +47,49 @@ function SignUp() {
 	const t = useTranslations('auth.signup')
 	const tCommon = useTranslations('common')
 
+	const goPreviousPage = () => {
+		if (params?.previousPage) {
+			navigate({ url: params.previousPage }, {})
+		} else {
+			navigate('home', { hledat: undefined })
+		}
+	}
+
 	const onSignupClick = () => {
 		setInProgress(true)
 
 		signup({ email, password, firstName, lastName }, async (result) => {
 			if (!result) {
 				setErrorMessage(t('emailExists'))
+				setInProgress(false)
 			} else {
 				await login({ email, password })
-				navigate('home', {
-					hledat: undefined,
-				})
+				goPreviousPage()
+				setInProgress(false)
 			}
-			setInProgress(false)
 		})
+	}
+
+	if (phoneVersion) {
+		return (
+			<SignupMobile
+				firstName={firstName}
+				lastName={lastName}
+				email={email}
+				password={password}
+				onFirstNameChange={setFirstName}
+				onLastNameChange={setLastName}
+				onEmailChange={setEmail}
+				onPasswordChange={setPassword}
+				inProgress={inProgress}
+				errorMessage={errorMessage}
+				previousPage={params.previousPage}
+				showEmailForm={showEmailForm}
+				onUseEmail={() => setShowEmailForm(true)}
+				onSubmit={onSignupClick}
+				onGoogleSignup={goPreviousPage}
+			/>
+		)
 	}
 
 	return (
