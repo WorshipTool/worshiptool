@@ -825,10 +825,13 @@
 	},
 	"upload": {
 		"title": "Nahrát",
+		"addTitle": "Vytvořit píseň",
 		"uploadFile": "Nahrát soubor",
 		"uploadFileSubtitle": "Automaticky převeďte píseň z obrázku",
 		"writeManually": "Sepsat ručně",
+		"writeManuallySubtitle": "Napište text a akordy v editoru",
 		"createTooltip": "Přidat",
+		"create": "Vytvořit",
 		"createPrivately": "Vytvořit (neveřejně)",
 		"uploadSong": "Nahrát píseň",
 		"songTitle": "Název písně",

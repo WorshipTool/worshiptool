@@ -565,10 +565,13 @@
 	},
 	"upload": {
 		"title": "Upload",
+		"addTitle": "Create a song",
 		"uploadFile": "Upload file",
 		"uploadFileSubtitle": "Automatically convert song from image",
 		"writeManually": "Write Manually",
+		"writeManuallySubtitle": "Write the lyrics and chords in the editor",
 		"createTooltip": "Add",
+		"create": "Create",
 		"createPrivately": "Create (privately)",
 		"uploadSong": "Upload song",
 		"songTitle": "Song title",

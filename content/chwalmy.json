@@ -825,10 +825,13 @@
 	},
 	"upload": {
 		"title": "Prześlij",
+		"addTitle": "Utwórz pieśń",
 		"uploadFile": "Prześlij plik",
 		"uploadFileSubtitle": "Automatycznie konwertuj pieśń z obrazu",
 		"writeManually": "Napisz ręcznie",
+		"writeManuallySubtitle": "Wpisz tekst i akordy w edytorze",
 		"createTooltip": "Dodaj",
+		"create": "Utwórz",
 		"createPrivately": "Utwórz (niepublicznie)",
 		"uploadSong": "Prześlij pieśń",
 		"songTitle": "Tytuł pieśni",

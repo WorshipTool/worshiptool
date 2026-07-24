@@ -11,6 +11,10 @@ const Container = styled(Box)(({ theme }) => ({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'center',
+	// wrap on narrow screens (phone editor) so the insert controls never
+	// overflow the viewport; desktop has room and stays a single row
+	flexWrap: 'wrap',
+	rowGap: theme.spacing(1),
 	gap: theme.spacing(1),
 	// color: theme.palette.primary.contrastText,
 }))

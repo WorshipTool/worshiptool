@@ -14,6 +14,7 @@ type MobileHeaderPillProps<T extends RoutesKeys> = {
 	toParams?: CommonLinkProps<T>['params']
 	onClick?: () => void
 	loading?: boolean
+	disabled?: boolean
 	alt?: string
 }
 
@@ -29,6 +30,7 @@ export default function MobileHeaderPill<T extends RoutesKeys>({
 	toParams,
 	onClick,
 	loading,
+	disabled,
 	alt,
 }: MobileHeaderPillProps<T>) {
 	return (
@@ -39,6 +41,7 @@ export default function MobileHeaderPill<T extends RoutesKeys>({
 			toParams={toParams}
 			onClick={onClick}
 			loading={loading}
+			disabled={disabled}
 			alt={alt}
 			startIcon={icon}
 			disableUppercase
