@@ -18,10 +18,10 @@ export default function Error({ error, reset, skipReport }: ErrorPageProps) {
 
 	useEffect(() => {
 		console.error('Error page error:', error)
-		if (!skipReport) {
+		if (!skipReport && errorType !== 'forbidden') {
 			Sentry.captureException(error, { tags: { errorBoundary: 'page' } })
 		}
-	}, [error, skipReport])
+	}, [error, errorType, skipReport])
 
 	return (
 		<Box
