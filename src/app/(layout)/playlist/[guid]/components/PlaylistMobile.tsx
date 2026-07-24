@@ -349,7 +349,7 @@ export default function PlaylistMobile({
 				    moves it up and shrinks it into the circle (no long sideways travel);
 				    its label fades + collapses over the early window */}
 				<MorphItem
-					from={{ width: 172, height: 46 }}
+					from={{ width: 212, height: 46 }}
 					to={{ translateY: -126, width: 38, height: 38 }}
 					onClick={onPresent}
 					sx={{ top: `${HEADER_TOP}134px)`, right: 8, bgcolor: 'primary.main', borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
@@ -358,18 +358,20 @@ export default function PlaylistMobile({
 					<Typography strong sx={{ color: 'common.white', whiteSpace: 'nowrap', overflow: 'hidden', opacity: 'calc((0.45 - var(--collapse-p, 0)) / 0.45)', maxWidth: 'max(0px, calc((0.45 - var(--collapse-p, 0)) / 0.45 * 180px))' }}>{t('presentation')}</Typography>
 				</MorphItem>
 
-				{/* share / print / edit — the "other" actions, on the LEFT; lift + fade early */}
-				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 16, pointerEvents: 'auto' }}>
+				{/* share / print / edit — the "other" actions as one neatly-spaced flex
+				    group on the LEFT (flush with the back arrow), lifting + fading out
+				    together early so their spacing stays natural, not hand-placed */}
+				<MorphItem
+					to={{ opacity: 0, translateY: -70 }}
+					range={[0, 0.45]}
+					sx={{ top: `${HEADER_TOP}134px)`, left: 4, height: 46, display: 'flex', alignItems: 'center', gap: 0.5, pointerEvents: 'auto' }}
+				>
 					<IconButton onClick={onShare} alt={t('share')} color="grey.700"><ShareRounded /></IconButton>
-				</MorphItem>
-				<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 60, pointerEvents: 'auto' }}>
 					<IconButton onClick={onPrint} alt={t('print')} color="grey.700"><PrintRounded /></IconButton>
-				</MorphItem>
-				{canUserEdit && (
-					<MorphItem to={{ opacity: 0, translateY: -70 }} range={[0, 0.45]} sx={{ top: `${HEADER_TOP}137px)`, left: 104, pointerEvents: 'auto' }}>
+					{canUserEdit && (
 						<IconButton onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>{editMode ? <CheckRounded /> : <EditRounded />}</IconButton>
-					</MorphItem>
-				)}
+					)}
+				</MorphItem>
 
 				{/* ⋮ (or ✓ in edit mode) — compact-only, fades in last, left of the circle */}
 				<MorphItem from={{ opacity: 0 }} to={{ opacity: 1 }} range={[0.5, 1]} sx={{ top: `${HEADER_TOP}8px)`, right: 52, pointerEvents: 'auto' }}>
