@@ -93,9 +93,19 @@ Per-page shape:
 **Collapsing hero condenses its actions — it doesn't hide them.** The
 playlist detail page has its own collapsing header (not `MobileAppHeader`).
 At rest the tall hero shows the full action row side by side — the blue
-*Prezentovat* primary plus share / print / edit as inline circles. As it
-collapses on scroll (and in Detail mode, which opens already-slim) it
-condenses to the standard app-bar form: **one primary + one `⋮`**, where the
-`⋮` overflow (`common/components/Menu`) holds share / print / edit. So the
-≤2-actions cap applies to the *slim* bar; the expanded hero may show more.
-In edit mode the slim `⋮` becomes a `✓` for a clear way out.
+*Prezentovat* primary plus share / print / edit as inline circles. On scroll
+(and in Detail mode, which opens already-slim) it condenses to the standard
+app-bar form: **one primary + one `⋮`**, where the `⋮` overflow
+(`common/components/Menu`) holds share / print / edit. So the ≤2-actions cap
+applies to the *slim* bar; the expanded hero may show more. In edit mode the
+slim `⋮` becomes a `✓` for a clear way out.
+
+**Collapse by scroll-away, not by animating header height.** The hero lives
+*inside* the scrolling list as its first item, so it scrolls off natively;
+the slim bar is a fixed overlay that just fades in over it. Do **not** shrink
+a fixed header's height on scroll: handing that height back to the list
+shrinks the remaining scroll distance, so short/medium lists get stuck
+part-way collapsed (only very long lists have the slack to finish). Scroll-away
+has no such feedback loop, leaves no dead space at the list's end, and still
+condenses even when the main thread is frozen mid-scroll (as iOS does) because
+only the cosmetic fade is JS — the hero scrolls on the compositor.

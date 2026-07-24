@@ -34,10 +34,13 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import useInnerPlaylist from '../hooks/useInnerPlaylist'
 import PlaylistSwipeDeck from './PlaylistSwipeDeck'
 
-// collapsing header sizes (px, on top of the safe-area inset)
-const H_FULL = 210
+// header sizes (px, on top of the safe-area inset)
 const H_SLIM = 54
-const COLLAPSE_DIST = 150
+// How far you scroll before the slim bar is fully opaque. The big hero is part
+// of the scrolling content (it scrolls away natively) and the slim bar just
+// fades in over it — no header-height animation, so there's no feedback loop
+// with the scroll distance and it works even when JS is throttled mid-scroll.
+const SLIM_FADE_DIST = 90
 // space the floating mode switcher occupies at the bottom, so detail-mode
 // content (the swipe deck's arrows + dots) can sit clear above it
 const SWITCHER_CLEARANCE = 74
@@ -94,9 +97,10 @@ function EditRow({ item, index, onRemove }: { item: PlaylistItemDto; index: numb
 /**
  * Phone layout for the playlist detail page: a single page with a bottom mode
  * switcher (Seznam písní ↔ Detail písní). Seznam is the ordered list (owners can
- * add / remove / reorder); Detail is the full-song swipe deck. A collapsing
- * header (Prezentovat / share / print / edit) shrinks on scroll. Wired to the
- * same useInnerPlaylist state as desktop; PlaylistPreview keeps desktop intact.
+ * add / remove / reorder); Detail is the full-song swipe deck. The big hero
+ * header scrolls away with the list, condensing into a slim shared bar
+ * (Prezentovat + ⋮). Wired to the same useInnerPlaylist state as desktop;
+ * PlaylistPreview keeps desktop intact.
  */
 export default function PlaylistMobile({
 	initialMode = 'list',
@@ -120,30 +124,34 @@ export default function PlaylistMobile({
 	const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
 	const addAnchorRef = useRef<HTMLDivElement>(null)
 
-	const headerRef = useRef<HTMLDivElement>(null)
-	const fullRef = useRef<HTMLDivElement>(null)
 	const slimRef = useRef<HTMLDivElement>(null)
+	const heroRef = useRef<HTMLDivElement>(null)
 	const listScrollRef = useRef<HTMLDivElement>(null)
 
 	const sorted = useMemo(() => [...(items ?? [])].sort((a, b) => a.order - b.order), [items])
 
-	// collapse the header as the Seznam list scrolls (imperative, no re-render)
+	// fade the slim bar in as the hero scrolls away (imperative, no re-render).
+	// The hero itself is part of the scrolling content, so it scrolls off
+	// natively — only this cosmetic opacity is JS-driven.
 	useEffect(() => {
 		if (mode !== 'list') return
 		const scroller = listScrollRef.current
 		if (!scroller) return
 		let raf = 0
 		const apply = (p: number) => {
-			if (headerRef.current) {
-				headerRef.current.style.height = `calc(env(safe-area-inset-top) + ${H_FULL - (H_FULL - H_SLIM) * p}px)`
-				headerRef.current.style.boxShadow = p > 0.9 ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
+			if (slimRef.current) {
+				slimRef.current.style.opacity = String(p)
+				// let taps reach the hero underneath until the slim bar is mostly in
+				slimRef.current.style.pointerEvents = p > 0.6 ? 'auto' : 'none'
+				slimRef.current.style.boxShadow = p > 0.95 ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
 			}
-			if (fullRef.current) fullRef.current.style.opacity = String(1 - Math.min(1, p * 1.5))
-			if (slimRef.current) slimRef.current.style.opacity = String(Math.max(0, (p - 0.5) / 0.5))
+			// fade the hero out as the slim bar comes in, so the two titles never
+			// both show through mid-scroll
+			if (heroRef.current) heroRef.current.style.opacity = String(1 - p)
 		}
 		const paint = () => {
 			raf = 0
-			apply(Math.min(1, Math.max(0, scroller.scrollTop / COLLAPSE_DIST)))
+			apply(Math.min(1, Math.max(0, scroller.scrollTop / SLIM_FADE_DIST)))
 		}
 		const onScroll = () => {
 			if (!raf) raf = requestAnimationFrame(paint)
@@ -151,17 +159,16 @@ export default function PlaylistMobile({
 		scroller.addEventListener('scroll', onScroll, { passive: true })
 		apply(0)
 		return () => scroller.removeEventListener('scroll', onScroll)
-	}, [mode, sorted.length, editMode])
+	}, [mode])
 
-	// detail mode: force the header to its slim state (more room for the song)
+	// detail mode: the slim bar is the whole (shared) header, always shown
 	useEffect(() => {
 		if (mode !== 'detail') return
-		if (headerRef.current) {
-			headerRef.current.style.height = `calc(env(safe-area-inset-top) + ${H_SLIM}px)`
-			headerRef.current.style.boxShadow = 'none'
+		if (slimRef.current) {
+			slimRef.current.style.opacity = '1'
+			slimRef.current.style.pointerEvents = 'auto'
+			slimRef.current.style.boxShadow = 'none'
 		}
-		if (fullRef.current) fullRef.current.style.opacity = '0'
-		if (slimRef.current) slimRef.current.style.opacity = '1'
 	}, [mode])
 
 	// drag reorder (edit mode) — local order, committed on pointer up
@@ -338,60 +345,79 @@ export default function PlaylistMobile({
 
 	return (
 		<Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: MOBILE_NAV_CLEARANCE, bgcolor: 'grey.50', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-			{/* collapsing header: full layer (identity + actions) ⇆ slim bar */}
-			<Box
-				ref={headerRef}
-				style={{ height: `calc(env(safe-area-inset-top) + ${mode === 'detail' ? H_SLIM : H_FULL}px)` }}
-				sx={{ flexShrink: 0, position: 'relative', overflow: 'hidden', bgcolor: 'grey.50', borderBottom: '1px solid', borderColor: 'grey.200' }}
-			>
-				{/* full */}
-				<Box ref={fullRef} style={{ opacity: mode === 'detail' ? 0 : 1 }} sx={{ position: 'absolute', inset: 0, paddingTop: 'calc(env(safe-area-inset-top) + 8px)', paddingX: 2 }}>
-					<Box sx={{ display: 'flex', alignItems: 'center' }}>
-						<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -1 }}><ArrowBackRounded /></IconButton>
-					</Box>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingBottom: 1.5, paddingTop: 0.5 }}>
-						<Cover />
-						<Box sx={{ minWidth: 0 }}>
-							<Typography noWrap sx={{ fontSize: '1.45rem', fontWeight: 800, letterSpacing: '-0.3px' }}>{title || ''}</Typography>
-							{subtitle}
-						</Box>
-					</Box>
-					{/* expanded: all actions side by side; condenses to primary + ⋮ on scroll */}
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-						<Box onClick={onPresent} sx={{ flex: 1, bgcolor: 'primary.main', borderRadius: 999, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}>
-							<SlideshowRounded sx={{ color: 'common.white' }} />
-							<Typography strong sx={{ color: 'common.white' }}>{t('presentation')}</Typography>
-						</Box>
-						<Circle onClick={onShare} alt={t('share')}><ShareRounded /></Circle>
-						<Circle onClick={onPrint} alt={t('print')}><PrintRounded /></Circle>
-						{canUserEdit && (
-							<Circle onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>
-								{editMode ? <CheckRounded /> : <EditRounded />}
-							</Circle>
-						)}
-					</Box>
-				</Box>
-				{/* slim (scrolled / detail): the row condenses to one primary + a ⋮ overflow */}
-				<Box ref={slimRef} style={{ opacity: mode === 'detail' ? 1 : 0 }} sx={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: H_SLIM, display: 'flex', alignItems: 'center', gap: 0.25, paddingX: 1 }}>
-					<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
-					<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
-					<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
-						<SlideshowRounded sx={{ color: 'common.white', fontSize: 20 }} />
-					</Box>
-					{renderMore(true)}
-				</Box>
-			</Box>
-
-			{/* content: list (scrolls, drives collapse) or the swipe deck */}
+			{/* content: in list mode the big hero is the first scrolling item so it
+			    scrolls away natively (no header-height animation → no feedback loop);
+			    detail mode is the swipe deck under the shared slim bar */}
 			{mode === 'list' ? (
-				<Box ref={listScrollRef} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingX: 2, paddingTop: 2, paddingBottom: 12 }}>
-					{listBody}
+				<Box ref={listScrollRef} sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+					{/* hero (full header) — the expanded identity + all actions */}
+					<Box ref={heroRef} sx={{ paddingX: 2, paddingTop: 'calc(env(safe-area-inset-top) + 8px)', paddingBottom: 1.5, bgcolor: 'grey.50' }}>
+						<Box sx={{ display: 'flex', alignItems: 'center' }}>
+							<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -1 }}><ArrowBackRounded /></IconButton>
+						</Box>
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, paddingBottom: 1.5, paddingTop: 0.5 }}>
+							<Cover />
+							<Box sx={{ minWidth: 0 }}>
+								<Typography noWrap sx={{ fontSize: '1.45rem', fontWeight: 800, letterSpacing: '-0.3px' }}>{title || ''}</Typography>
+								{subtitle}
+							</Box>
+						</Box>
+						{/* expanded: all actions side by side; condenses to the slim bar's primary + ⋮ on scroll */}
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+							<Box onClick={onPresent} sx={{ flex: 1, bgcolor: 'primary.main', borderRadius: 999, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}>
+								<SlideshowRounded sx={{ color: 'common.white' }} />
+								<Typography strong sx={{ color: 'common.white' }}>{t('presentation')}</Typography>
+							</Box>
+							<Circle onClick={onShare} alt={t('share')}><ShareRounded /></Circle>
+							<Circle onClick={onPrint} alt={t('print')}><PrintRounded /></Circle>
+							{canUserEdit && (
+								<Circle onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} color={editMode ? 'primary.main' : 'grey.700'}>
+									{editMode ? <CheckRounded /> : <EditRounded />}
+								</Circle>
+							)}
+						</Box>
+					</Box>
+					{/* the list */}
+					<Box sx={{ paddingX: 2, paddingBottom: 12 }}>{listBody}</Box>
 				</Box>
 			) : sorted.length > 0 ? (
-				<PlaylistSwipeDeck items={sorted} startIndex={Math.min(detailIndex, sorted.length - 1)} bottomInset={SWITCHER_CLEARANCE} />
+				<Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingTop: `calc(env(safe-area-inset-top) + ${H_SLIM}px)` }}>
+					<PlaylistSwipeDeck items={sorted} startIndex={Math.min(detailIndex, sorted.length - 1)} bottomInset={SWITCHER_CLEARANCE} />
+				</Box>
 			) : (
 				<Box sx={{ flex: 1 }} />
 			)}
+
+			{/* slim bar = the shared header. It overlays the top of the content: in
+			    list mode it fades in as the hero scrolls away; in detail mode it's the
+			    whole header, always shown. One primary (Prezentovat) + a ⋮ overflow. */}
+			<Box
+				ref={slimRef}
+				style={{ opacity: mode === 'detail' ? 1 : 0, pointerEvents: mode === 'detail' ? 'auto' : 'none' }}
+				sx={{
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					right: 0,
+					height: `calc(env(safe-area-inset-top) + ${H_SLIM}px)`,
+					paddingTop: 'env(safe-area-inset-top)',
+					zIndex: 6,
+					bgcolor: 'grey.50',
+					borderBottom: '1px solid',
+					borderColor: 'grey.200',
+					display: 'flex',
+					alignItems: 'center',
+					gap: 0.25,
+					paddingX: 1,
+				}}
+			>
+				<IconButton color="grey.800" alt={tCommon('back')} onClick={onBack} sx={{ marginLeft: -0.5 }}><ArrowBackRounded /></IconButton>
+				<Typography strong noWrap sx={{ flex: 1, minWidth: 0, fontSize: '1.1rem' }}>{title || ''}</Typography>
+				<Box onClick={onPresent} sx={{ width: 38, height: 38, borderRadius: '50%', bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
+					<SlideshowRounded sx={{ color: 'common.white', fontSize: 20 }} />
+				</Box>
+				{renderMore(true)}
+			</Box>
 
 			{/* floating mode switcher (subtle grey), above the tab bar */}
 			<Box sx={{ position: 'absolute', left: 16, right: 16, bottom: 14, zIndex: 5, display: 'flex', gap: 0.5, bgcolor: 'grey.200', borderRadius: 2.5, padding: 0.5, boxShadow: '0 8px 28px rgba(0,0,0,0.18)' }}>
