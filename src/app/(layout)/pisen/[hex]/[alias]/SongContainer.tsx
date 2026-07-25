@@ -135,7 +135,6 @@ export default function SongContainer({
 						title={editedTitle}
 						backTo="songsList"
 						surface="grey.50"
-						overlay
 					>
 						{/* the song sheet lives in a white card floating on the grey app
 						    canvas (matching the rest of the app) — so short songs read as

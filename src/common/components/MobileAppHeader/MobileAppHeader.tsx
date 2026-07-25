@@ -49,14 +49,6 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** Persistent hairline under the header. Off by default, in which case a
 	 * hairline fades in as content scrolls beneath the header instead. */
 	divider?: boolean
-	/**
-	 * Render the shell as a fixed overlay (position: fixed) instead of an in-flow
-	 * block. Use on pages where the header is nested inside other layout (e.g. the
-	 * song page's ContainerGrid) so that nesting can't leak height into the
-	 * document and make the whole window scroll. Tab-root pages that render the
-	 * header directly don't need this.
-	 */
-	overlay?: boolean
 	/** The page body (the scrolling content below the header). */
 	children?: ReactNode
 }
@@ -85,7 +77,6 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	scrollResetKey,
 	surface = 'grey.50',
 	divider = false,
-	overlay = false,
 	children,
 }: MobileAppHeaderProps<T>) {
 	const theme = useTheme()
@@ -157,31 +148,22 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	return (
 		<Box
 			sx={{
-				// app-shell surface that fills the viewport down to the tab bar;
-				// header + panels stay pinned, only the content region scrolls
-				...(overlay
-					? {
-							// fixed overlay: removed from document flow, so no parent
-							// nesting can leak height into the page and scroll the window
-							position: 'fixed',
-							top: 0,
-							left: 0,
-							right: 0,
-							bottom: MOBILE_NAV_CLEARANCE,
-							zIndex: 2,
-						}
-					: {
-							// in-flow full-bleed block (tab-root pages rendered directly).
-							// No negative top margin: the Toolbar contributes no spacer on
-							// app-shell routes, so there is nothing to cancel. Cancelling it
-							// meant the shell's position depended on two `env()` values
-							// agreeing exactly — and when they didn't, the whole shell rode
-							// up under the status bar.
-							position: 'relative',
-							width: '100vw',
-							marginLeft: 'calc(50% - 50vw)',
-							height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
-						}),
+				// App-shell surface filling the viewport down to the tab bar: header
+				// and panels stay pinned, only the content region scrolls.
+				//
+				// Always fixed, never in flow. An in-flow shell contributes its height
+				// to the document, so the page itself could also scroll — giving two
+				// stacked scrollers. Dragging anywhere the inner one didn't handle
+				// (the header, or the content once it hit its end) scrolled the
+				// document instead and carried the whole shell, header included, off
+				// the top of the screen. Fixed means there is nothing to scroll but
+				// the content region.
+				position: 'fixed',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: MOBILE_NAV_CLEARANCE,
+				zIndex: 2,
 				bgcolor: surface,
 				display: 'flex',
 				flexDirection: 'column',
