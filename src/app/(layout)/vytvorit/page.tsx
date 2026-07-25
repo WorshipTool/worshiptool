@@ -1,13 +1,14 @@
 'use client'
-import { useIsPhone } from '@/common/hooks/useIsPhone'
+import CreateOptionItem from '@/app/(layout)/vytvorit/components/CreateOptionItem'
+import { CREATE_OPTIONS } from '@/app/(layout)/vytvorit/components/createOptions'
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import FlagProtected from '@/common/providers/FeatureFlags/FlagProtected'
 import { Box } from '@/common/ui'
-import { Edit, UploadFile } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import AddMenuItem from './components/AddMenuItem'
-import CreateMenuMobile from './components/CreateMenuMobile'
+import { Fragment } from 'react'
 
 export default SmartPage(AddMenu)
 
@@ -16,9 +17,37 @@ function AddMenu() {
 
 	const phoneVersion = useIsPhone()
 
-	// phones get the native app shell; desktop keeps the centered card grid below
+	// The options are one responsive component (row on phones, card on desktop),
+	// so only the surrounding shell differs — this is the page's single branch.
+	const options = CREATE_OPTIONS.map((option) => {
+		const item = <CreateOptionItem option={option} />
+		return (
+			<Fragment key={option.to}>
+				{'flag' in option ? (
+					<FlagProtected flag={option.flag}>{item}</FlagProtected>
+				) : (
+					item
+				)}
+			</Fragment>
+		)
+	})
+
 	if (phoneVersion) {
-		return <CreateMenuMobile />
+		return (
+			<MobileAppHeader title={t('addTitle')} backTo="usersSongs">
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 1.5,
+						paddingTop: 1,
+					}}
+				>
+					{options}
+					<ParseAdminOption />
+				</Box>
+			</MobileAppHeader>
+		)
 	}
 
 	return (
@@ -38,27 +67,10 @@ function AddMenu() {
 						flexDirection: 'row',
 						justifyContent: 'center',
 						flexWrap: 'wrap',
-						gap: {
-							xs: 2,
-							sm: 5,
-						},
+						gap: 5,
 					}}
 				>
-					<FlagProtected flag={'enable_file_parser'}>
-						<AddMenuItem
-							title={t('uploadFile')}
-							subtitle={t('uploadFileSubtitle')}
-							icon={<UploadFile fontSize="inherit" />}
-							to="upload"
-						/>
-					</FlagProtected>
-					<AddMenuItem
-						title={t('writeManually')}
-						// subtitle='Použijte editor pro psaní textu písně'
-						icon={<Edit fontSize="inherit" />}
-						iconSize={40}
-						to="writeSong"
-					/>
+					{options}
 				</Box>
 			</Box>
 

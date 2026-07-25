@@ -5,8 +5,7 @@ import { Box, Button, Typography } from '@/common/ui'
 import { alpha } from '@/common/ui/mui'
 import { PhotoCameraRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { useRef } from 'react'
-import UploadFileInput from './UploadFileInput'
+import { useFilePicker } from './useFilePicker'
 
 type UploadMobileProps = {
 	onUpload: (files: File[]) => void
@@ -22,9 +21,7 @@ type UploadMobileProps = {
  */
 export default function UploadMobile({ onUpload }: UploadMobileProps) {
 	const t = useTranslations('upload')
-	const inputRef = useRef<HTMLInputElement>(null)
-
-	const openPicker = () => inputRef.current?.click()
+	const picker = useFilePicker(onUpload)
 
 	return (
 		<MobileAppHeader title={t('uploadFile')} backTo="addMenu">
@@ -66,7 +63,7 @@ export default function UploadMobile({ onUpload }: UploadMobileProps) {
 				<Button
 					variant="contained"
 					color="primary"
-					onClick={openPicker}
+					onClick={picker.open}
 					startIcon={<PhotoCameraRounded />}
 					disableUppercase
 					sx={{
@@ -82,11 +79,11 @@ export default function UploadMobile({ onUpload }: UploadMobileProps) {
 				</Button>
 
 				<Typography small color="grey.500" align="center">
-					{t('supportedFormats')}: png, jpg, jpeg, pdf
+					{t('supportedFormats', { formats: 'png, jpg, jpeg, pdf' })}
 				</Typography>
 			</Box>
 
-			<UploadFileInput inputRef={inputRef} onUpload={onUpload} />
+			{picker.input}
 		</MobileAppHeader>
 	)
 }
