@@ -1,11 +1,11 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import GoogleLoginButton from '@/app/(nolayout)/(background)/prihlaseni/components/GoogleLoginButton'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import LogoTitle from '@/common/components/Toolbar/components/LogoTitle'
-import { Box, useTheme } from '@/common/ui'
+import { Box } from '@/common/ui'
 import { Button } from '@/common/ui/Button'
 import { Gap } from '@/common/ui/Gap'
-import { useMediaQuery } from '@/common/ui/mui'
 import { StandaloneCard } from '@/common/ui/StandaloneCard'
 import { TextInput } from '@/common/ui/TextInput'
 import { Typography } from '@/common/ui/Typography'
@@ -35,8 +35,7 @@ function SignUp() {
 	// equal sign-up options (mirrors the login screen)
 	const [showEmailForm, setShowEmailForm] = useState(false)
 
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const phoneVersion = useIsPhone()
 
 	const navigate = useSmartNavigate()
 

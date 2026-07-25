@@ -1,5 +1,6 @@
 'use client'
 // 'use server'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import AdditionalSongInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/AdditionalSongInfoPanel'
 import DeletedInfoPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/components/DeletedInfoPanel'
 import { SONG_OPTIONS_BUTTON_ID } from '@/app/(layout)/pisen/[hex]/[alias]/components/components/SongsOptionsButton'
@@ -12,11 +13,9 @@ import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useI
 import { useSongEditing } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useSongEditing'
 import { useBlockAppReload } from '@/app/components/appReloadGuard'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
-import { Box, Gap, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box, Gap, Typography } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
 import { useRerender } from '@/hooks/useRerender'
 import { ExtendedVariantPack } from '@/types/song'
@@ -51,8 +50,7 @@ export default function SongContainer({
 
 	// phone: the classic TopPanel is replaced by the floating bottom dock
 	// (except in edit mode, which keeps the TopPanel's save/cancel UI)
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	const isOwner = useMemo(() => {
 		if (!user) return false

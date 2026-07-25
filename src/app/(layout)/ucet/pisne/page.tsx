@@ -1,4 +1,5 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import CreateNewMySongButton from '@/app/(layout)/ucet/pisne/components/CreateNewMySongButton'
 import MySongItem from '@/app/(layout)/ucet/pisne/components/MySongItem'
 import MySongListOrderSelect, {
@@ -13,12 +14,10 @@ import {
 } from '@/common/components/MobileAppHeader'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
-import { Box, LinearProgress, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box, LinearProgress } from '@/common/ui'
 import { Typography } from '@/common/ui/Typography'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import { useApiStateEffect } from '@/tech/ApiState'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { AddRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
@@ -31,8 +30,7 @@ function MySongsList() {
 	const { songGettingApi } = useApi()
 	const t = useTranslations('account.songs')
 	const tCommon = useTranslations('common')
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	const [sortOption, setSortOption] = useUrlState<MySongsOrderOptions>(
 		'sortKey',

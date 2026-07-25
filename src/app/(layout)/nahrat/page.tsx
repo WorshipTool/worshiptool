@@ -1,4 +1,5 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import {
 	AddFileToParseQueueOutDto,
 	ParserApiAxiosParamCreator,
@@ -9,10 +10,8 @@ import { getUrl } from '@/api/urls'
 import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
 import { useBlockAppReload } from '@/app/components/appReloadGuard'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import Popup from '@/common/components/Popup/Popup'
-import { Box, Button, Chip, LinearProgress, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box, Button, Chip, LinearProgress, Typography } from '@/common/ui'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/fetch/handleApiCall'
@@ -63,8 +62,7 @@ function Upload() {
 	const tCommon = useTranslations('common')
 	const { enqueueSnackbar } = useSnackbar()
 
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	const busy = loading || apiStateUploading.loading
 

@@ -1,16 +1,15 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import CreateNewPlaylistButton from '@/app/(layout)/ucet/playlisty/components/CreateNewPlaylistButton'
 import PlaylistItemRow from '@/app/(layout)/ucet/playlisty/components/PlaylistItemRow'
 import PlaylistsOrderSelect, {
 	PlaylistOrderOptions,
 } from '@/app/(layout)/ucet/playlisty/components/PlaylistsOrderSelect'
 import PlaylistyMobile from '@/app/(layout)/ucet/playlisty/PlaylistyMobile'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
-import { Box, LinearProgress, useTheme } from '@/common/ui'
+import { Box, LinearProgress } from '@/common/ui'
 import { Gap } from '@/common/ui/Gap'
-import { useMediaQuery } from '@/common/ui/mui'
 import { Typography } from '@/common/ui/Typography'
 import { useUsersPlaylists } from '@/hooks/playlist/useUsersPlaylists'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
@@ -22,8 +21,7 @@ export default SmartPage(Playlists, ['middleWidth'])
 function Playlists() {
 	const { playlists: allPlaylists, loading } = useUsersPlaylists()
 	const [sortType, setSortType] = useUrlState('sortKey', 'updatedAt')
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	const playlists = useMemo(() => {
 		const arr =

@@ -1,10 +1,9 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import FlagProtected from '@/common/providers/FeatureFlags/FlagProtected'
-import { Box, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box } from '@/common/ui'
 import { Edit, UploadFile } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import AddMenuItem from './components/AddMenuItem'
@@ -15,8 +14,7 @@ export default SmartPage(AddMenu)
 function AddMenu() {
 	const t = useTranslations('upload')
 
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	// phones get the native app shell; desktop keeps the centered card grid below
 	if (phoneVersion) {

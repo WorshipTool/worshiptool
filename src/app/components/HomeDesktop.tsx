@@ -1,5 +1,6 @@
 'use client'
 
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
@@ -8,7 +9,6 @@ import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { Box, Image, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import useWorshipCzVersion from '@/hooks/worshipcz/useWorshipCzVersion'
@@ -29,7 +29,7 @@ const ANIMATION_DURATION = 0.2
 
 export default function HomeDesktop() {
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
+	const phoneVersion = useIsPhone()
 	const tHome = useTranslations('home')
 
 	const scrollPointRef = useRef(null)

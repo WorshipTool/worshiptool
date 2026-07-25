@@ -1,9 +1,8 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
-import { Box, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box } from '@/common/ui'
 import { routesPaths } from '@/routes'
 import { useTranslations } from 'next-intl'
 import { useEffect } from 'react'
@@ -21,8 +20,7 @@ function Account() {
 	const t = useTranslations('auth.login')
 	const tNav = useTranslations('navigation')
 
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	useEffect(() => {
 		if (!isLoggedIn()) {

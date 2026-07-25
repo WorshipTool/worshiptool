@@ -2,6 +2,9 @@
 // (non-'use client') module so both client components and server
 // components/layouts can import them.
 
+import { RoutesKeys, routesPaths } from '@/routes'
+import { urlMatchPatterns } from '@/routes/tech/routes.tech'
+
 /** Width below which the mobile tab bar shows (and the top bar hides). */
 export const MOBILE_NAV_BREAKPOINT = 700
 
@@ -20,27 +23,60 @@ export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 80px)'
 export type MobileTab = 'home' | 'songs' | 'account' | null
 
 /**
- * Which bottom tab an "app" route maps to (null = not an app-shell route).
+ * Which bottom tab each app route maps to.
+ *
  * This is the single source of truth for the whole mobile app shell: the tab
  * bar's active state, whether the tab bar renders, and whether the top bar
  * hides on phones — so the top bar and tab bar always agree. Add app routes
  * here to bring them into the mobile shell.
+ *
+ * Keyed by `routesPaths` keys rather than path strings, so renaming a route in
+ * the routing layer is a compile error here instead of a silently broken shell.
  */
+const TAB_BY_ROUTE: Partial<Record<RoutesKeys, Exclude<MobileTab, null>>> = {
+	home: 'home',
+	// songs list + a song detail page, but not the detail's sub-routes
+	songsList: 'songs',
+	variant: 'songs',
+	// account and everything under it
+	account: 'account',
+	usersSongs: 'account',
+	usersFavourites: 'account',
+	usersPlaylists: 'account',
+	// create-a-song menu + manual editor + file upload, reached from Moje písně
+	addMenu: 'account',
+	writeSong: 'account',
+	upload: 'account',
+	// playlist detail, not its sub-routes (prezentace / pdf)
+	playlist: 'account',
+}
+
+/**
+ * App-shell routes whose surface already pads for the bar/dock itself. The tab
+ * bar skips its in-flow spacer there, so short content doesn't become needlessly
+ * scrollable (no grey strip under the page).
+ */
+const OWNS_BOTTOM_CLEARANCE: RoutesKeys[] = ['variant', 'playlist']
+
+/** Strip a trailing slash so `/seznam/` classifies the same as `/seznam`. */
+function normalise(pathname: string): string {
+	return pathname.length > 1 && pathname.endsWith('/')
+		? pathname.slice(0, -1)
+		: pathname
+}
+
+function matches(pathname: string, key: RoutesKeys): boolean {
+	// `parental: false` requires an equal segment count, so `/pisen/a/b/prezentace`
+	// correctly does not match the `/pisen/[hex]/[alias]` detail route
+	return urlMatchPatterns(pathname, routesPaths[key], false)
+}
+
 export function mobileTabForPath(pathname: string | null): MobileTab {
 	if (!pathname) return null
-	if (pathname === '/') return 'home'
-	// songs list + a song detail page (/pisen/[hex]/[alias]), not its sub-routes
-	if (pathname === '/seznam' || /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)) return 'songs'
-	if (pathname === '/ucet' || pathname.startsWith('/ucet/')) return 'account'
-	// create-a-song menu + manual editor + file upload, reached from Moje písně
-	if (
-		pathname === '/vytvorit' ||
-		pathname === '/vytvorit/napsat' ||
-		pathname === '/nahrat'
-	)
-		return 'account'
-	// playlist detail (/playlist/[guid]), not its sub-routes (prezentace / pdf)
-	if (/^\/playlist\/[^/]+\/?$/.test(pathname)) return 'account'
+	const path = normalise(pathname)
+	for (const [key, tab] of Object.entries(TAB_BY_ROUTE)) {
+		if (matches(path, key as RoutesKeys)) return tab
+	}
 	return null
 }
 
@@ -49,16 +85,9 @@ export function isMobileTabBarRoute(pathname: string | null): boolean {
 	return mobileTabForPath(pathname) !== null
 }
 
-/**
- * True for app-shell pages whose surface already pads for the bar/dock
- * itself. The tab bar skips its in-flow spacer there, so short content
- * doesn't become needlessly scrollable (no grey strip under the page).
- */
+/** See `OWNS_BOTTOM_CLEARANCE`. */
 export function pageOwnsBottomClearance(pathname: string | null): boolean {
 	if (!pathname) return false
-	// song detail + playlist detail: overlay app-shell that owns its own clearance
-	return (
-		/^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname) ||
-		/^\/playlist\/[^/]+\/?$/.test(pathname)
-	)
+	const path = normalise(pathname)
+	return OWNS_BOTTOM_CLEARANCE.some((key) => matches(path, key))
 }

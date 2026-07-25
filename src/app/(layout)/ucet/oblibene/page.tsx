@@ -1,14 +1,13 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import FavouritesListOrderSelect, {
 	FavouritesOrderOptions,
 } from '@/app/(layout)/ucet/oblibene/components/FavouritesListOrderSelect'
 import FavouritesRowItem from '@/app/(layout)/ucet/oblibene/components/FavouritesRowItem'
 import { MobileSongListView } from '@/common/components/MobileAppHeader'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import Pager from '@/common/components/Pager/Pager'
-import { Box, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
+import { Box, Typography } from '@/common/ui'
 import { useFavourites } from '@/hooks/favourites/useFavourites'
 import { useSelection } from '@/hooks/playlist/useSelection'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
@@ -29,8 +28,7 @@ export type FavouriteItem = {
 
 function page() {
 	const t = useTranslations('account.favourites')
-	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 	const { selectionGuid, items: bsItems } = useFavourites()
 
 	const { items: allItems, loading } = useSelection(selectionGuid as PlaylistGuid)

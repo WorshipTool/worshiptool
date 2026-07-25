@@ -19,7 +19,7 @@ import {
 	PersonRounded,
 	Search,
 } from '@mui/icons-material'
-import { usePathname } from 'next/navigation'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import {
@@ -44,7 +44,7 @@ export default function MobileAppTabBar() {
 	const theme = useTheme()
 	const tNav = useTranslations('navigation')
 	const { isLoggedIn } = useAuth()
-	const pathname = usePathname()
+	const pathname = useClientPathname()
 
 	const [toolsOpen, setToolsOpen] = useState(false)
 

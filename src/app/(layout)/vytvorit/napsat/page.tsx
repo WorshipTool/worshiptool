@@ -1,14 +1,14 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import WrittenPreview from '@/app/(layout)/vytvorit/napsat/components/WrittenPreview'
 import { useBlockAppReload } from '@/app/components/appReloadGuard'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
 import { useDownSize } from '@/common/hooks/useDownSize'
 import { Box, Button, Tooltip, useTheme } from '@/common/ui'
-import { styled, useMediaQuery } from '@/common/ui/mui'
+import { styled } from '@/common/ui/mui'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useTranslations } from 'next-intl'
@@ -92,7 +92,7 @@ function Create() {
 	const isSmall = useDownSize('sm')
 
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
+	const phoneVersion = useIsPhone()
 
 	// phones get the native app-shell editor; desktop keeps the side-by-side
 	// editor/preview layout below

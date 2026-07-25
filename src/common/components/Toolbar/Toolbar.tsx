@@ -13,7 +13,7 @@ import { Box, useTheme } from '@/common/ui'
 import { grey } from '@/common/ui/mui/colors'
 import { styled, useMediaQuery } from '@mui/system'
 import { motion } from 'framer-motion'
-import { usePathname } from 'next/navigation'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { useEffect, useMemo, useState } from 'react'
 
 const TopBar = styled(Box)(({ theme }) => ({
@@ -40,7 +40,7 @@ export function Toolbar() {
 	// a post-hydration setHidden effect or a per-page <style> in the body.
 	// The visible bar is hidden and its layout spacer shrinks to just the safe
 	// area (no leftover 56px gap at the top of app pages).
-	const hideOnMobile = isMobileTabBarRoute(usePathname())
+	const hideOnMobile = isMobileTabBarRoute(useClientPathname())
 	const barHideSx = hideOnMobile
 		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } }
 		: {}

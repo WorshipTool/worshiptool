@@ -7,7 +7,7 @@ import {
 } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Toolbar } from '@/common/components/Toolbar'
 import { Box, useTheme } from '@/common/ui'
-import { usePathname } from 'next/navigation'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import React from 'react'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
 import Footer from '../../Footer/Footer'
@@ -21,7 +21,7 @@ export default function Inner({ children }: AppContainerProps) {
 	const hidden = useSmartMatch('playlistCards')
 	const theme = useTheme()
 	// on the app-shell routes the tab bar replaces the marketing footer on phones
-	const appRoute = isMobileTabBarRoute(usePathname())
+	const appRoute = isMobileTabBarRoute(useClientPathname())
 
 	return hidden ? (
 		children
