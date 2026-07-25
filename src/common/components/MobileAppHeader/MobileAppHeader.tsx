@@ -17,10 +17,6 @@ const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 const SHRINK_DISTANCE = 64
 const TITLE_MAX = 1.85 // rem
 const TITLE_MIN = 1.2 // rem
-// hero mode: taller expanded header that collapses to the normal compact bar
-const HERO_SHRINK_DISTANCE = 150
-const HERO_TITLE = 2.0 // rem — the big title in the expanded hero block
-const HERO_MAX = 220 // px — max height of the expanded hero block
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
 
@@ -41,13 +37,6 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	backParams?: SmartAllParams<T>
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
-	/**
-	 * When set, the header becomes a taller "hero": at rest it expands to a large
-	 * centered block — this cover/emblem node above a big title (+ subtitle) — and
-	 * collapses to the normal compact bar (back · title · actions) on scroll. Same
-	 * shared header, just taller; omit for the standard header.
-	 */
-	heroIcon?: ReactNode
 	/** Optional control strip (segment / chips) pinned under the header. */
 	controlPanel?: ReactNode
 	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
@@ -57,13 +46,9 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** Surface (and header) background — palette path. Defaults to the grey app
 	 * canvas; a white reading surface (song page) passes 'background.paper'. */
 	surface?: string
-	/** Header (+ control strip) background — palette path. Defaults to `surface`.
-	 * Give a taller hero header a distinct colour (e.g. 'background.paper') from the
-	 * grey content area below. */
-	headerSurface?: string
-	/** When false the scroller has no horizontal padding, so content sits flush
-	 * to the edges and manages its own padding (e.g. the song sheet). */
-	contentPadded?: boolean
+	/** Persistent hairline under the header. Off by default, in which case a
+	 * hairline fades in as content scrolls beneath the header instead. */
+	divider?: boolean
 	/**
 	 * Render the shell as a fixed overlay (position: fixed) instead of an in-flow
 	 * block. Use on pages where the header is nested inside other layout (e.g. the
@@ -95,13 +80,11 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	backTo,
 	backParams,
 	actions,
-	heroIcon,
 	controlPanel,
 	bottomPanel,
 	scrollResetKey,
 	surface = 'grey.50',
-	headerSurface,
-	contentPadded = true,
+	divider = false,
 	overlay = false,
 	children,
 }: MobileAppHeaderProps<T>) {
@@ -114,14 +97,6 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const headerRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
-	const heroRef = useRef<HTMLDivElement>(null)
-	const heroMode = Boolean(heroIcon)
-	// header (+ control strip) can differ from the content surface (e.g. a white
-	// hero header on the grey app canvas); defaults to the content surface
-	const headerBg = headerSurface ?? surface
-	// when the header has its own colour, give it a persistent bottom divider so
-	// the white header block reads as distinct from the grey content below
-	const headerDivider = Boolean(headerSurface)
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
@@ -131,30 +106,17 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		let raf = 0
 		const paint = () => {
 			raf = 0
-			const dist = heroMode ? HERO_SHRINK_DISTANCE : SHRINK_DISTANCE
-			const p = Math.min(1, Math.max(0, scroller.scrollTop / dist))
-			if (heroMode) {
-				// collapse the tall hero block away; fade the compact title in
-				if (heroRef.current) {
-					heroRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
-					heroRef.current.style.maxHeight = `${(1 - p) * HERO_MAX}px`
-				}
-				if (titleRef.current) {
-					titleRef.current.style.opacity = String(Math.max(0, (p - 0.45) / 0.55))
-				}
-			} else {
-				if (titleRef.current) {
-					titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
-				}
-				if (subtitleRef.current) {
-					subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
-					subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
-				}
+			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
+			if (titleRef.current) {
+				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
+			}
+			if (subtitleRef.current) {
+				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
+				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
 			}
 			if (headerRef.current) {
-				// keep the persistent divider when headerDivider; otherwise fade a
-				// hairline in as the content scrolls under the header
-				if (!headerDivider) {
+				// with no persistent divider, fade a hairline in as content scrolls under
+				if (!divider) {
 					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
 				}
 				headerRef.current.style.boxShadow =
@@ -170,7 +132,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [heroMode, headerDivider])
+	}, [divider])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -223,9 +185,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* header — a compact row (back · title · actions). In hero mode a taller
-			    expanded block (cover + big title + subtitle) sits below it. The title
-			    shrinks / the hero collapses on scroll (see effect above). */}
+			{/* header — a compact row (back · title · actions); the title shrinks on
+			    scroll (see effect above) */}
 			<Box
 				ref={headerRef}
 				sx={{
@@ -235,9 +196,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					flexDirection: 'column',
 					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 1,
-					bgcolor: headerBg,
+					bgcolor: surface,
 					borderBottom: '1px solid',
-					borderColor: headerDivider ? 'grey.200' : 'transparent',
+					borderColor: divider ? 'grey.200' : 'transparent',
 				}}
 			>
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
@@ -268,11 +229,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					>
 						<Box
 							ref={titleRef}
-							// hero mode: this is the compact title, hidden at rest and faded
-							// in on scroll (the big title lives in the hero block below)
-							style={heroMode ? { opacity: 0 } : undefined}
 							sx={{
-								fontSize: `${heroMode ? TITLE_MIN : TITLE_MAX}rem`,
+								fontSize: `${TITLE_MAX}rem`,
 								fontWeight: 800,
 								letterSpacing: '-0.4px',
 								lineHeight: 1.15,
@@ -284,7 +242,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						>
 							{title}
 						</Box>
-						{subtitle && !heroMode && (
+						{subtitle && (
 							<Box ref={subtitleRef} sx={{ overflow: 'hidden', marginTop: 0.25 }}>
 								{typeof subtitle === 'string' ? (
 									<Typography small strong={500} color="grey.600">
@@ -307,47 +265,6 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					)}
 				</Box>
 
-				{/* hero mode: taller expanded block, collapses to the row on scroll */}
-				{heroMode && (
-					<Box
-						ref={heroRef}
-						sx={{
-							overflow: 'hidden',
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							textAlign: 'center',
-							paddingX: 2.5,
-							paddingTop: 0.5,
-						}}
-					>
-						{heroIcon}
-						<Box
-							sx={{
-								fontSize: `${HERO_TITLE}rem`,
-								fontWeight: 800,
-								letterSpacing: '-0.5px',
-								lineHeight: 1.15,
-								color: 'grey.900',
-								marginTop: 1,
-							}}
-						>
-							{title}
-						</Box>
-						{subtitle && (
-							<Box sx={{ marginTop: 0.5 }}>
-								{typeof subtitle === 'string' ? (
-									<Typography small strong={500} color="grey.600">
-										{subtitle}
-									</Typography>
-								) : (
-									subtitle
-								)}
-							</Box>
-						)}
-					</Box>
-				)}
-
 				{/* control strip — inside the header block so it shares the header
 				    background (one solid white zone above the bottom divider) */}
 				{controlPanel && (
@@ -363,7 +280,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					minHeight: 0,
 					overflowY: 'auto',
 					overflowX: 'hidden',
-					paddingX: contentPadded ? 2 : 0,
+					paddingX: 2,
 					paddingTop: 0.5,
 					paddingBottom: 2,
 				}}
