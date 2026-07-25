@@ -194,7 +194,7 @@ function Login() {
 					<Box color={'grey.800'}>
 						{errorMessage != '' && (
 							<>
-								<Typography color={'red'}>{errorMessage}</Typography>
+								<Typography color={'error'}>{errorMessage}</Typography>
 								<Gap />
 							</>
 						)}
