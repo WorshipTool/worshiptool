@@ -1,19 +1,64 @@
 'use client'
 
 import { useSheetEditorTempData } from '@/common/components/SheetEditor/useSheetEditorTempData'
-import { Box, Typography } from '@/common/ui'
+import { Box, Typography, useTheme } from '@/common/ui'
 import { InputBase, styled } from '@/common/ui/mui'
 import { AddRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { ReactNode, useLayoutEffect, useRef, useState } from 'react'
+
+type BlockColors = {
+	chordBg: string
+	chordFg: string
+	sectionBg: string
+	sectionFg: string
+	ring: string
+}
 
 const TitleInput = styled(InputBase)(({ theme }) => ({
 	fontWeight: theme.typography.fontWeightBold,
 	fontSize: '1.15rem',
 }))
 
-// Chord picker vocabulary. Roots use Czech notation (H = B natural); the type
-// suffix is appended to the root to form the chord (e.g. G + m7 → Gm7).
+// Identical text metrics for the transparent <textarea> and the highlight layer
+// below it, so the styled chord blocks line up exactly under the typed text.
+const EDITOR_METRICS = {
+	margin: 0,
+	padding: 0,
+	fontFamily: 'inherit',
+	fontSize: '1rem',
+	lineHeight: 1.9,
+	letterSpacing: 'normal',
+	whiteSpace: 'pre-wrap',
+	overflowWrap: 'break-word',
+	boxSizing: 'border-box',
+} as const
+
+const SheetArea = styled('textarea')(({ theme }) => ({
+	...EDITOR_METRICS,
+	position: 'absolute',
+	inset: 0,
+	width: '100%',
+	height: '100%',
+	resize: 'none',
+	border: 'none',
+	outline: 'none',
+	background: 'transparent',
+	// the text itself is invisible — the highlight layer below shows it
+	color: 'transparent',
+	caretColor: theme.palette.grey[900],
+	'&::placeholder': { color: 'transparent' },
+}))
+
+const Highlight = styled('div')(({ theme }) => ({
+	...EDITOR_METRICS,
+	position: 'absolute',
+	inset: 0,
+	overflow: 'hidden',
+	pointerEvents: 'none',
+	color: theme.palette.grey[900],
+}))
+
 const ROOTS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'H']
 const TYPES: { label: string; suffix: string }[] = [
 	{ label: 'dur', suffix: '' },
@@ -30,15 +75,12 @@ const SECTIONS: { mark: string; labelKey: 'verse' | 'chorus' | 'bridge'; color: 
 	{ mark: 'B', labelKey: 'bridge', color: 'secondary.main' },
 ]
 
-// Split a chord string into its root + type suffix (e.g. "Gm7" → G / m7).
 function parseChord(chord: string): { root: string; suffix: string } {
 	const m = chord.match(/^([A-H](?:#|b)?)(.*)$/)
 	if (!m) return { root: 'C', suffix: '' }
 	return { root: m[1], suffix: m[2] }
 }
 
-// If the caret sits inside a [chord] token on its line, return the token bounds
-// (including brackets) and its inner chord; otherwise null.
 function chordTokenAt(
 	text: string,
 	pos: number
@@ -67,6 +109,58 @@ function chordTokenAt(
 	return { start: open, end: close + 1, chord: text.substring(open + 1, close) }
 }
 
+// Render one [chord] / {section} token as a block. The brackets/braces stay in
+// the text (so the block lines up under the textarea) but are drawn transparent,
+// acting as the block's inner padding — only the chord/section letter shows.
+function renderToken(
+	tok: string,
+	start: number,
+	key: number,
+	colors: BlockColors,
+	active: boolean
+): ReactNode {
+	const isChord = tok[0] === '['
+	const block = isChord
+		? { backgroundColor: colors.chordBg, color: colors.chordFg }
+		: { backgroundColor: colors.sectionBg, color: colors.sectionFg }
+	return (
+		<span
+			key={key}
+			style={{
+				...block,
+				borderRadius: 4,
+				boxShadow: active ? `0 0 0 2px ${colors.ring}` : undefined,
+			}}
+		>
+			<span style={{ color: 'transparent' }}>{tok[0]}</span>
+			{tok.slice(1, -1)}
+			<span style={{ color: 'transparent' }}>{tok[tok.length - 1]}</span>
+		</span>
+	)
+}
+
+function renderHighlight(
+	text: string,
+	colors: BlockColors,
+	editRange: { start: number; end: number } | null
+): ReactNode[] {
+	const out: ReactNode[] = []
+	const re = /(\[[^\]\n]*\]|\{[^}\n]*\})/g
+	let last = 0
+	let m: RegExpExecArray | null
+	let k = 0
+	while ((m = re.exec(text)) !== null) {
+		if (m.index > last) out.push(<span key={k++}>{text.slice(last, m.index)}</span>)
+		const end = m.index + m[0].length
+		const active = !!editRange && editRange.start === m.index && editRange.end === end
+		out.push(renderToken(m[0], m.index, k++, colors, active))
+		last = end
+	}
+	// trailing text (+ a zero-width char so the last line keeps its height)
+	out.push(<span key={k++}>{text.slice(last) + '​'}</span>)
+	return out
+}
+
 type MobileSongEditorProps = {
 	onTitleChange?: (title: string) => void
 	onSheetDataChange?: (sheetData: string) => void
@@ -74,28 +168,37 @@ type MobileSongEditorProps = {
 
 /**
  * Phone song editor with an interactive chord workflow. Lyrics are typed in a
- * full-height text field (chords inline as `[X]`). One bottom row carries the
- * section markers (Sloka / Refrén / Bridge) plus an "+ Akord" button. Tapping an
- * existing chord in the text selects it and opens a chord picker (root + type)
- * that rewrites the chord live — no confirm step. "+ Akord" inserts a chord at
- * the caret and opens the same picker. Desktop keeps the classic SheetEditor.
+ * full-height field where chords render as tappable colour blocks (a transparent
+ * textarea over a highlight layer). One bottom row carries the section markers
+ * (Sloka / Refrén / Bridge) plus an "+ Akord" button. Tapping "+ Akord" drops a
+ * chord at the caret and opens a chord picker (root + type); tapping an existing
+ * chord block selects it and opens the same picker. The picker rewrites the
+ * chord live — no confirm step. Desktop keeps the classic SheetEditor.
  */
 export default function MobileSongEditor(props: MobileSongEditorProps) {
 	const t = useTranslations('songEditor')
+	const theme = useTheme()
 
 	const { title: tempTitle, sheetData: tempSheet } = useSheetEditorTempData(true)
 	const [title, setTitleState] = useState(tempTitle)
 	const [sheetData, setSheetDataState] = useState(tempSheet)
 
 	const sheetRef = useRef<HTMLTextAreaElement | null>(null)
-	// pending caret/selection to apply after a value change (mirrors SheetEditor)
+	const highlightRef = useRef<HTMLDivElement | null>(null)
 	const caretRef = useRef<{ start: number; end: number; focus: boolean } | null>(null)
 
 	const [pickerOpen, setPickerOpen] = useState(false)
-	// bounds of the [chord] token currently being edited
 	const [editRange, setEditRange] = useState<{ start: number; end: number } | null>(null)
 	const [root, setRoot] = useState('C')
 	const [suffix, setSuffix] = useState('')
+
+	const blockColors: BlockColors = {
+		chordBg: theme.palette.primary.main,
+		chordFg: theme.palette.primary.contrastText,
+		sectionBg: theme.palette.grey[300],
+		sectionFg: theme.palette.grey[800],
+		ring: theme.palette.primary.dark,
+	}
 
 	const setTitle = (v: string) => {
 		setTitleState(v)
@@ -106,6 +209,14 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 		props.onSheetDataChange?.(v)
 	}
 
+	// keep the highlight layer scrolled in step with the textarea
+	const syncScroll = () => {
+		if (highlightRef.current && sheetRef.current) {
+			highlightRef.current.scrollTop = sheetRef.current.scrollTop
+			highlightRef.current.scrollLeft = sheetRef.current.scrollLeft
+		}
+	}
+
 	useLayoutEffect(() => {
 		if (caretRef.current && sheetRef.current) {
 			const { start, end, focus } = caretRef.current
@@ -113,9 +224,9 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 			if (focus) sheetRef.current.focus()
 			caretRef.current = null
 		}
+		syncScroll()
 	}, [sheetData])
 
-	// insert a section marker ({S}/{R}/{B}) at the caret
 	const insertSection = (mark: string) => {
 		const ta = sheetRef.current
 		const pos = ta ? ta.selectionStart : sheetData.length
@@ -125,7 +236,6 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 		caretRef.current = { start: c, end: c, focus: true }
 	}
 
-	// replace the token in editRange with the chord built from root+suffix (live)
 	const applyChord = (nextRoot: string, nextSuffix: string, range = editRange) => {
 		if (!range) return
 		const token = `[${nextRoot}${nextSuffix}]`
@@ -142,7 +252,6 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 		applyChord(root, s)
 	}
 
-	// "+ Akord": drop a default chord at the caret and open the picker on it
 	const addChord = () => {
 		const ta = sheetRef.current
 		const pos = ta ? ta.selectionStart : sheetData.length
@@ -155,7 +264,6 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 		ta?.blur()
 	}
 
-	// tapping in the text: if the caret landed on a chord, open the picker on it
 	const onSheetClick = () => {
 		const ta = sheetRef.current
 		if (!ta || ta.selectionStart !== ta.selectionEnd) return
@@ -178,36 +286,35 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 
 	return (
 		<>
-			<Box
-				sx={{
-					minHeight: '100%',
-					display: 'flex',
-					flexDirection: 'column',
-				}}
-			>
+			<Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
 				<TitleInput
 					placeholder={t('titlePlaceholder')}
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 				/>
-				<InputBase
-					inputRef={sheetRef}
-					placeholder={t('contentPlaceholder')}
-					multiline
-					value={sheetData}
-					onChange={(e) => setSheet(e.target.value)}
-					onClick={onSheetClick}
-					sx={{
-						flex: 1,
-						alignItems: 'stretch',
-						marginTop: 1,
-						'& textarea': {
-							height: '100% !important',
-							overflow: 'auto !important',
-							lineHeight: 1.9,
-						},
-					}}
-				/>
+
+				{/* editable field: transparent textarea over a highlight layer that
+				    draws the chords as colour blocks */}
+				<Box sx={{ position: 'relative', flex: 1, minHeight: 0, marginTop: 1 }}>
+					<Highlight ref={highlightRef} aria-hidden>
+						{sheetData === '' ? (
+							<span style={{ color: theme.palette.grey[500] }}>
+								{t('contentPlaceholder')}
+							</span>
+						) : (
+							renderHighlight(sheetData, blockColors, editRange)
+						)}
+					</Highlight>
+					<SheetArea
+						ref={sheetRef}
+						aria-label={t('contentPlaceholder')}
+						value={sheetData}
+						onChange={(e) => setSheet(e.target.value)}
+						onClick={onSheetClick}
+						onScroll={syncScroll}
+						spellCheck={false}
+					/>
+				</Box>
 
 				{/* one bottom row: section markers + add-chord */}
 				<Box
@@ -337,7 +444,6 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 							</Box>
 						</Box>
 
-						{/* root notes */}
 						<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
 							{ROOTS.map((r) => {
 								const active = r === root
@@ -368,7 +474,6 @@ export default function MobileSongEditor(props: MobileSongEditorProps) {
 							})}
 						</Box>
 
-						{/* chord type */}
 						<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
 							{TYPES.map((ty) => {
 								const active = ty.suffix === suffix
