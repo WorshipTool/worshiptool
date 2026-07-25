@@ -3,10 +3,12 @@
 import { BasicVariantPack } from '@/api/dtos/song/song.dto'
 import { CollapsingHeader, MorphItem } from '@/common/components/CollapsingHeader/CollapsingHeader'
 import Menu from '@/common/components/Menu/Menu'
+import Popup from '@/common/components/Popup/Popup'
 import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.constants'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
-import { Box, IconButton, Typography } from '@/common/ui'
+import { Box, Button, IconButton, Typography } from '@/common/ui'
+import { TextField } from '@/common/ui/TextField'
 import { alpha } from '@/common/ui/mui'
 import { PlaylistItemDto, PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { routesPaths } from '@/routes'
@@ -20,6 +22,7 @@ import {
 	ChevronRightRounded,
 	DeleteOutlineRounded,
 	DragIndicatorRounded,
+	DriveFileRenameOutlineRounded,
 	EditRounded,
 	MoreVertRounded,
 	MusicNoteRounded,
@@ -120,7 +123,7 @@ export default function PlaylistMobile({
 	const navigate = useSmartNavigate()
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
-	const { items, title, loading, canUserEdit, guid, addItem, removeItem, setItems, save } =
+	const { items, title, loading, canUserEdit, guid, addItem, removeItem, setItems, save, rename } =
 		useInnerPlaylist()
 
 	const [mode, setMode] = useState<'list' | 'detail'>(initialMode)
@@ -128,6 +131,10 @@ export default function PlaylistMobile({
 	const [editMode, setEditMode] = useState(false)
 	const [addOpen, setAddOpen] = useState(false)
 	const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
+	// renaming: the phone had no way to name a playlist at all, yet "+ Nový" in
+	// Playlisty creates an untitled one and navigates straight here
+	const [renameOpen, setRenameOpen] = useState(false)
+	const [renameValue, setRenameValue] = useState('')
 	const addAnchorRef = useRef<HTMLDivElement>(null)
 
 	const listScrollRef = useRef<HTMLDivElement>(null)
@@ -172,7 +179,13 @@ export default function PlaylistMobile({
 		else navigate('account', {})
 	}
 	const onBack = () => (mode === 'detail' ? setMode('list') : leave())
+
+	// there is nothing to present or print in an empty playlist — desktop disables
+	// both buttons for this, the phone used to let you do it anyway
+	const isEmpty = (items?.length ?? 0) === 0
+
 	const onPresent = async () => {
+		if (isEmpty) return
 		await save()
 		navigate('playlistCards', { guid })
 	}
@@ -200,6 +213,7 @@ export default function PlaylistMobile({
 		}
 	}
 	const onPrint = async () => {
+		if (isEmpty) return
 		await save()
 		printDocumentByUrl(getReplacedUrlWithParams(routesPaths.playlistPdf, { guid }, { returnFormat: 'absolute' }))
 	}
@@ -220,11 +234,25 @@ export default function PlaylistMobile({
 
 	// the collapsed ⋮ overflow holds the secondary actions (the primary Tisknout
 	// keeps its own compact circle)
+	const openRename = () => {
+		setRenameValue(title ?? '')
+		setRenameOpen(true)
+	}
+	const submitRename = () => {
+		rename(renameValue.trim())
+		setRenameOpen(false)
+	}
+
 	const moreItems: MenuItemObjectType[] = [
-		{ title: t('presentation'), icon: <SlideshowRounded fontSize="small" />, onClick: onPresent },
+		...(isEmpty
+			? []
+			: [{ title: t('presentation'), icon: <SlideshowRounded fontSize="small" />, onClick: onPresent }]),
 		{ title: t('share'), icon: <ShareRounded fontSize="small" />, onClick: onShare },
 		...(canUserEdit
-			? [{ title: tCommon('edit'), icon: <EditRounded fontSize="small" />, onClick: onToggleEdit }]
+			? [
+					{ title: t('rename'), icon: <DriveFileRenameOutlineRounded fontSize="small" />, onClick: openRename },
+					{ title: tCommon('edit'), icon: <EditRounded fontSize="small" />, onClick: onToggleEdit },
+				]
 			: []),
 	]
 	// the header's single trailing control: ⋮ menu, or a ✓ to leave edit mode
@@ -388,7 +416,7 @@ export default function PlaylistMobile({
 					from={{ width: 148, height: 46, borderRadius: 14 }}
 					to={{ translateY: -129, width: 44, height: 44, borderRadius: 22 }}
 					onClick={onPrint}
-					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
+					sx={{ top: `${HEADER_TOP}134px)`, right: 16, bgcolor: isEmpty ? 'grey.400' : 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: isEmpty ? 'default' : 'pointer', pointerEvents: 'auto', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.14)' }}
 				>
 					<PrintRounded sx={{ color: 'common.white', fontSize: 23, flexShrink: 0 }} />
 					{/* label + its left gap both collapse to 0 so the icon centres exactly in the compact circle */}
@@ -402,7 +430,9 @@ export default function PlaylistMobile({
 					range={[0, 0.45]}
 					sx={{ top: `${HEADER_TOP}137px)`, left: 16, height: 40, display: 'flex', alignItems: 'center', gap: 0.75, pointerEvents: 'auto' }}
 				>
-					<OutlinedAction onClick={onPresent} alt={t('presentation')}><SlideshowRounded /></OutlinedAction>
+					{!isEmpty && (
+						<OutlinedAction onClick={onPresent} alt={t('presentation')}><SlideshowRounded /></OutlinedAction>
+					)}
 					<OutlinedAction onClick={onShare} alt={t('share')}><ShareRounded /></OutlinedAction>
 					{canUserEdit && (
 						<OutlinedAction onClick={onToggleEdit} alt={editMode ? tCommon('save') : tCommon('edit')} active={editMode}>{editMode ? <CheckRounded /> : <EditRounded />}</OutlinedAction>
@@ -433,6 +463,30 @@ export default function PlaylistMobile({
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			/>
+
+			<Popup
+				open={renameOpen}
+				onClose={() => setRenameOpen(false)}
+				title={t('rename')}
+				onSubmit={submitRename}
+				actions={
+					<>
+						<Button variant="outlined" onClick={() => setRenameOpen(false)}>
+							{tCommon('cancel')}
+						</Button>
+						<Button type="submit" onClick={submitRename}>
+							{tCommon('save')}
+						</Button>
+					</>
+				}
+			>
+				<TextField
+					value={renameValue}
+					onChange={setRenameValue}
+					placeholder={t('playlistNamePlaceholder')}
+					autoFocus
+				/>
+			</Popup>
 
 			{/* off-screen anchor + shared song picker (reused from desktop) */}
 			<Box ref={addAnchorRef} sx={{ position: 'fixed', bottom: 0, left: '50%' }} />
