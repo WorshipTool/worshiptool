@@ -4,9 +4,9 @@ import {
 	MobileAppHeader,
 	MobileHeaderPill,
 } from '@/common/components/MobileAppHeader'
-import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
 import { CheckRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
+import MobileSongEditor from './MobileSongEditor'
 import NotValidWarning from './NotValidWarning'
 
 type WriteSongMobileProps = {
@@ -21,11 +21,13 @@ type WriteSongMobileProps = {
 }
 
 /**
- * Phone version of the manual song editor. Wraps the shared SheetEditor (title +
- * sheet text + insert toolbar) in the mobile app shell: a "Sepsat ručně" header
- * whose single primary action is a "Vytvořit" pill, disabled until the sheet is
- * valid — instead of the desktop's side-by-side editor/preview with a bottom
- * button (which overflowed on phones). The desktop layout stays in page.tsx.
+ * Phone version of the manual song editor. Wraps the interactive
+ * MobileSongEditor (full-height text field + one bottom row of section markers
+ * and an add-chord button + a live chord picker) in the mobile app shell: a
+ * "Sepsat ručně" header whose single primary action is a "Vytvořit" pill,
+ * disabled until the sheet is valid — instead of the desktop's side-by-side
+ * editor/preview with a bottom button (which overflowed on phones). The desktop
+ * layout stays in page.tsx.
  */
 export default function WriteSongMobile(props: WriteSongMobileProps) {
 	const t = useTranslations('upload')
@@ -48,9 +50,7 @@ export default function WriteSongMobile(props: WriteSongMobileProps) {
 				</MobileHeaderPill>,
 			]}
 		>
-			<SheetEditor
-				fill
-				sx={{ minHeight: '100%' }}
+			<MobileSongEditor
 				onTitleChange={props.onTitleChange}
 				onSheetDataChange={props.onSheetDataChange}
 			/>

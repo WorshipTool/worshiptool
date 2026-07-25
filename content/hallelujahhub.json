@@ -939,6 +939,8 @@
 		"markChorus": "Mark chorus",
 		"markBridge": "Mark bridge",
 		"insertChord": "Insert chord",
+		"chord": "Chord",
+		"done": "Done",
 		"titlePlaceholder": "Song title",
 		"contentPlaceholder": "Song content"
 	},

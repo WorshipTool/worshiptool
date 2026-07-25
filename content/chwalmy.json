@@ -949,6 +949,8 @@
 		"markChorus": "Oznacz refren",
 		"markBridge": "Oznacz bridge",
 		"insertChord": "Wstaw akord",
+		"chord": "Akord",
+		"done": "Gotowe",
 		"titlePlaceholder": "Wpisz tytuł pieśni",
 		"contentPlaceholder": "Tutaj jest miejsce na zawartość pieśni"
 	},
