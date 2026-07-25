@@ -32,8 +32,13 @@ export function mobileTabForPath(pathname: string | null): MobileTab {
 	// songs list + a song detail page (/pisen/[hex]/[alias]), not its sub-routes
 	if (pathname === '/seznam' || /^\/pisen\/[^/]+\/[^/]+\/?$/.test(pathname)) return 'songs'
 	if (pathname === '/ucet' || pathname.startsWith('/ucet/')) return 'account'
-	// create-a-song menu + manual editor, reached from Moje písně
-	if (pathname === '/vytvorit' || pathname === '/vytvorit/napsat') return 'account'
+	// create-a-song menu + manual editor + file upload, reached from Moje písně
+	if (
+		pathname === '/vytvorit' ||
+		pathname === '/vytvorit/napsat' ||
+		pathname === '/nahrat'
+	)
+		return 'account'
 	// playlist detail (/playlist/[guid]), not its sub-routes (prezentace / pdf)
 	if (/^\/playlist\/[^/]+\/?$/.test(pathname)) return 'account'
 	return null

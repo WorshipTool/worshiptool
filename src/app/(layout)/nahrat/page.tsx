@@ -8,8 +8,10 @@ import { useApi } from '@/api/tech-and-hooks/useApi'
 import { getUrl } from '@/api/urls'
 import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
+import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import Popup from '@/common/components/Popup/Popup'
-import { Box, Button, Chip, LinearProgress, Typography } from '@/common/ui'
+import { Box, Button, Chip, LinearProgress, Typography, useTheme } from '@/common/ui'
+import { useMediaQuery } from '@/common/ui/mui'
 import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/fetch/handleApiCall'
@@ -19,6 +21,7 @@ import axios from 'axios'
 import { useTranslations } from 'next-intl'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
+import UploadMobile from './components/UploadMobile'
 import UploadPanel from './components/UploadPanel/UploadPanel'
 
 enum ParserStatus {
@@ -51,6 +54,9 @@ function Upload() {
 
 	const t = useTranslations('upload')
 	const tCommon = useTranslations('common')
+
+	const theme = useTheme()
+	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
 	const parseFiles = async (files: File[]) => {
 		if (!user) {
@@ -152,28 +158,32 @@ function Upload() {
 
 	return (
 		<>
-			<Box
-				sx={{
-					width: '100%',
-					height: 500,
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					paddingTop: 5,
-				}}
-			>
+			{phoneVersion ? (
+				<UploadMobile onUpload={parseFiles} />
+			) : (
 				<Box
 					sx={{
 						width: '100%',
-						height: '100%',
+						height: 500,
 						display: 'flex',
-						justifyContent: 'center',
+						flexDirection: 'column',
 						alignItems: 'center',
+						paddingTop: 5,
 					}}
 				>
-					<UploadPanel onUpload={parseFiles} />
+					<Box
+						sx={{
+							width: '100%',
+							height: '100%',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<UploadPanel onUpload={parseFiles} />
+					</Box>
 				</Box>
-			</Box>
+			)}
 
 			<Popup
 				open={open}
