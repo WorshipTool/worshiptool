@@ -4,13 +4,32 @@ import AdminMenu from '@/app/(layout)/sub/admin/components/AdminMenu'
 import { checkFlag } from '@/common/providers/FeatureFlags/flags.tech'
 import { LayoutProps } from '@/common/types'
 import { Box } from '@/common/ui'
+import { useServerPathname } from '@/hooks/pathname/useServerPathname'
+import { ROLES } from '@/interfaces/user'
 import { getServerUser } from '@/tech/auth/getServerUser'
 import { forbidden } from '@/tech/error/error.tech'
+import * as Sentry from '@sentry/nextjs'
 
 export default async function Layout(props: LayoutProps<'admin'>) {
 	const user = getServerUser()
 	const show = await checkFlag('show_admin_page', user)
-	if (!show) forbidden()
+	if (!show) {
+		// Not a bug - the show_admin_page gate is the access control itself,
+		// working as intended. Reported as a warning (not an exception) so it's
+		// visible in Sentry without counting toward the error rate; error.tsx
+		// skips re-reporting this same denial as an exception.
+		const pathname = await useServerPathname()
+		Sentry.captureMessage('Forbidden admin access attempt', {
+			level: 'warning',
+			tags: { area: 'admin', authenticated: String(!!user) },
+			extra: {
+				pathname,
+				userGuid: user?.guid,
+				role: user ? ROLES[user.role] : undefined,
+			},
+		})
+		forbidden()
+	}
 	// throw forbidden exception with status code 403
 
 	return (
