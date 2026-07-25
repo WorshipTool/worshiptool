@@ -32,13 +32,59 @@ pinned. So the scrollbar belongs to the content, never the full height.
 
 Slots: `title`, `subtitle` (any node), `backTo`/`backParams` (hierarchical Up,
 hidden on tab-roots), `actions` (≤ 2 icons, right of the title), `controlPanel`
-(top strip), `bottomPanel` (above the tab bar), `scrollResetKey`.
+(top strip), `bottomPanel` (above the tab bar), `scrollResetKey`, `surface`,
+`divider`, `overlay`.
 
 **Same header height everywhere.** The header row keeps a fixed minimum height
 (matching the back-arrow / action buttons) so a title-only header (Seznam,
 Účet) collapses to exactly the same height as one with controls (Moje písně,
 Oblíbené). The back arrow appears only when `backTo` is set — tab-roots (Domů /
 Písně=Seznam / Účet) have none by design; you switch to them via the tab bar.
+
+## How a screen decides it's a phone
+
+Ask **`useIsPhone()`** (`common/hooks/useIsPhone`) — never spell out
+`useMediaQuery(theme.breakpoints.down(…))` and never write `700` by hand.
+Several pages had drifted to a literal `700` while the shell used the constant,
+so moving the breakpoint would have moved the tab bar but not the page bodies
+inside it.
+
+**Prefer no branch at all.** `useIsPhone()` is a JS media query: it returns
+`false` during SSR and the first hydration render, so a JS branch flashes the
+desktop layout for a frame. When the two layouts hold the *same* content in a
+different arrangement, express it in CSS instead — mobile-first base styles plus
+a `theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)` block (see `CreateOptionItem`,
+which is a row on phones and a card on desktop with no JS branch at all).
+
+Reach for `useIsPhone()` only where the two are genuinely different trees — in
+practice that means choosing the *shell wrapper* (`MobileAppHeader` vs the
+desktop page chrome), which `MobileAppHeader` requires anyway since it hides
+itself above the breakpoint in CSS. Aim for **one branch per page**, around the
+shell, with the content shared beneath it.
+
+## Which routes are in the shell
+
+`MobileAppTabBar/nav.constants.ts` is the single source of truth: it decides the
+active tab, whether the tab bar renders, and whether the top bar hides. It is
+keyed by **`routesPaths` keys**, not path strings, so renaming a route is a
+compile error rather than a silently broken shell. Add a route to `TAB_BY_ROUTE`
+to bring it into the shell. It has tests — keep them passing.
+
+Feed it `useClientPathname()`, not `usePathname()`: only the former re-applies
+subdomain prefixes, and the raw one misclassifies every route on a subdomain.
+
+## Screens that hold unsaved work
+
+A screen keeping user work in local state (a song being written, a playlist
+being reordered, an upload being parsed) must declare it:
+
+```tsx
+useBlockAppReload(sheetData !== '', 'writing a song')
+```
+
+`AppUpdater` reloads the page when a new build ships; without this it would
+silently throw that work away. The update is applied as soon as the last blocker
+clears.
 
 ## Attention & layout rules
 
@@ -76,6 +122,10 @@ Písně=Seznam / Účet) have none by design; you switch to them via the tab bar
 - **Pagination** uses the neutral (standard) MUI colour, pinned in a quiet
   `bottomPanel`.
 - **Sort / filter** live in the `controlPanel` (segment) at the top.
+  ⚠️ **Not wired yet.** `MobileAppHeader` accepts `controlPanel` but no account
+  screen passes one, so the sort/filter columns in the table below describe the
+  intended shape rather than what ships today. The desktop `*OrderSelect`
+  components are already props-driven — pass them as `controlPanel` to close it.
 - **Global search** stays the tab bar's raised centre action — the one loud
   element in the thumb zone.
 
@@ -88,15 +138,15 @@ Per-page shape:
 | Moje písně | → Účet | count | **+ Přidat** | sort/filter | pagination |
 | Playlisty | → Účet | count | **+ Nový** | sort | – |
 | Písně (Seznam) | – | – | – | – | pagination |
-| Playlist detail | → back | Playlist · count | Prezentovat (+ share/print/edit → ⋮ when slim) | (mode switch) | – |
+| Playlist detail | → back | Playlist · count | Tisknout (+ prezentace/share/rename/edit → ⋮) | (mode switch) | – |
 
 **Collapsing hero condenses its actions — it doesn't hide them.** The
 playlist detail page has its own collapsing header (not `MobileAppHeader`).
 At rest the tall hero shows the full action row side by side — the blue
-*Prezentovat* primary plus share / print / edit as inline circles. On scroll
+*Tisknout* primary plus prezentace / share / edit as inline circles. On scroll
 (and in Detail mode, which opens already-slim) it condenses to the standard
 app-bar form: **one primary + one `⋮`**, where the `⋮` overflow
-(`common/components/Menu`) holds share / print / edit. So the ≤2-actions cap
+(`common/components/Menu`) holds prezentace / share / rename / edit. So the ≤2-actions cap
 applies to the *slim* bar; the expanded hero may show more. In edit mode the
 slim `⋮` becomes a `✓` for a clear way out.
 
@@ -104,7 +154,7 @@ slim `⋮` becomes a `✓` for a clear way out.
 height-animating flex header.** The header is built with the reusable
 `common/components/CollapsingHeader` (`CollapsingHeader` + `MorphItem`):
 elements present in both states travel/scale continuously to their target
-(the title shrinks and moves into the bar; the *Prezentovat* pill slides and
+(the title shrinks and moves into the bar; the *Tisknout* pill slides and
 shrinks into its circle, its label collapsing via the `--collapse-p` CSS
 variable), and elements that exist in only one state just fade
 (cover/subtitle/share/print/edit out, `⋮` in). Declare each with `from`/`to`
