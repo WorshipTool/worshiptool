@@ -49,6 +49,8 @@ export default function WriteSongMobile(props: WriteSongMobileProps) {
 			]}
 		>
 			<SheetEditor
+				fill
+				sx={{ minHeight: '100%' }}
 				onTitleChange={props.onTitleChange}
 				onSheetDataChange={props.onSheetDataChange}
 			/>

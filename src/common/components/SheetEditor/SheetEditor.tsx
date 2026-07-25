@@ -22,6 +22,12 @@ interface SheetEditorProps {
 
 	sx?: SxProps
 	useExampleData?: boolean
+	/**
+	 * Stretch the sheet text field to fill available height (with the toolbar
+	 * pinned at the bottom) instead of the default content-height layout. Used by
+	 * the phone editor so the writing area fills the screen; desktop omits it.
+	 */
+	fill?: boolean
 }
 
 export default function SheetEditor(props: SheetEditorProps) {
@@ -123,8 +129,20 @@ export default function SheetEditor(props: SheetEditorProps) {
 				onChange={(e) => {
 					setSheetData(e.target.value)
 				}}
+				sx={
+					props.fill
+						? {
+								flex: 1,
+								alignItems: 'stretch',
+								'& textarea': {
+									height: '100% !important',
+									overflow: 'auto !important',
+								},
+						  }
+						: undefined
+				}
 			/>
-			<Box flex={1} />
+			{!props.fill && <Box flex={1} />}
 			<ToolPanel onNewSection={newSection} onNewChord={newChord} />
 		</Box>
 	)
