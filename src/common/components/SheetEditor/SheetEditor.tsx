@@ -14,6 +14,29 @@ const SheetInput = styled(InputBase)(({}) => ({
 	alignItems: 'start',
 }))
 
+// Common chords offered as one-tap chips in the mobile chord palette (Czech
+// notation: H = B). Ordered roughly by how often they come up in worship songs.
+const COMMON_CHORDS = [
+	'C',
+	'G',
+	'D',
+	'A',
+	'E',
+	'F',
+	'H',
+	'Am',
+	'Em',
+	'Dm',
+	'Hm',
+	'Fm',
+	'Cm',
+	'Gm',
+	'G7',
+	'D7',
+	'A7',
+	'C7',
+]
+
 interface SheetEditorProps {
 	onTitleChange?: (title: string) => void
 	onSheetDataChange?: (sheetData: string) => void
@@ -101,6 +124,23 @@ export default function SheetEditor(props: SheetEditorProps) {
 		}
 	}
 
+	// Insert a ready-made chord (e.g. from the mobile chord palette) at the caret,
+	// leaving the cursor right after it so writing can continue.
+	const insertChord = (chord: string) => {
+		const target = sheetInputRef.current
+		if (!target) return
+
+		const textToInsert = `[${chord}]`
+		const cursorPosition = target.selectionStart
+		const textBefore = sheetData.substring(0, cursorPosition)
+		const textAfter = sheetData.substring(cursorPosition)
+
+		setSheetData(textBefore + textToInsert + textAfter)
+
+		const pos = cursorPosition + textToInsert.length
+		cursorRef.current = { start: pos, end: pos }
+	}
+
 	useLayoutEffect(() => {
 		if (cursorRef.current !== null) {
 			const target = sheetInputRef.current
@@ -143,6 +183,46 @@ export default function SheetEditor(props: SheetEditorProps) {
 				}
 			/>
 			{!props.fill && <Box flex={1} />}
+			{props.fill && (
+				<Box
+					sx={{
+						display: 'flex',
+						gap: 0.75,
+						overflowX: 'auto',
+						paddingY: 1,
+						// clean edge-to-edge strip: no visible scrollbar
+						scrollbarWidth: 'none',
+						'&::-webkit-scrollbar': { display: 'none' },
+					}}
+				>
+					{COMMON_CHORDS.map((chord) => (
+						<Box
+							key={chord}
+							component="button"
+							type="button"
+							onClick={() => insertChord(chord)}
+							sx={{
+								flexShrink: 0,
+								minWidth: 46,
+								height: 40,
+								paddingX: 1.25,
+								borderRadius: 2,
+								border: '1px solid',
+								borderColor: 'grey.300',
+								bgcolor: 'grey.100',
+								color: 'grey.900',
+								fontWeight: 700,
+								fontSize: '0.95rem',
+								cursor: 'pointer',
+								transition: 'background-color 0.12s',
+								'&:active': { bgcolor: 'grey.200' },
+							}}
+						>
+							{chord}
+						</Box>
+					))}
+				</Box>
+			)}
 			<ToolPanel onNewSection={newSection} onNewChord={newChord} />
 		</Box>
 	)
