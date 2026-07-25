@@ -122,7 +122,7 @@
 			"label": "Create"
 		},
 		"search": {
-			"resultsTitle": "Search results:",
+			"resultsTitle": "Search results",
 			"loadMore": "Load more",
 			"noResults": "We didn't find anything..."
 		}
@@ -281,6 +281,7 @@
 		"presentation": "Presentation",
 		"songsCount": "{count, plural, one {# song} other {# songs}}",
 		"typeLabel": "Playlist",
+		"shareTitle": "{title} – Playlist",
 		"tabSongs": "Song list",
 		"tabDetail": "Song detail",
 		"prevSong": "Previous song",
@@ -889,6 +890,7 @@
 		},
 		"playlists": {
 			"untitled": "Untitled",
+			"playlistsCount": "{count, plural, one {# playlist} other {# playlists}}",
 			"empty": "You don't have any playlists yet. Create your first with the button above."
 		}
 	},
@@ -1037,13 +1039,5 @@
 		"merged": "Merged",
 		"filterActive": "Active & open PRs",
 		"noActiveOrOpenPr": "No active tasks or open PRs"
-	},
-	"demo": {
-		"songOfDay": "Song of the day",
-		"moreIdeas": "More ideas",
-		"assistantGreeting": "Hi! What song are you looking for today?",
-		"tryChips": "Try one of these",
-		"goodDay": "Hello",
-		"browseAll": "All songs"
 	}
 }

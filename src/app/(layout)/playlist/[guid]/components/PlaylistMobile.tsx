@@ -7,6 +7,7 @@ import { MenuItemObjectType } from '@/common/components/Menu/MenuItem'
 import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.constants'
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, IconButton, Typography } from '@/common/ui'
+import { alpha } from '@/common/ui/mui'
 import { PlaylistItemDto, PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { routesPaths } from '@/routes'
 import { getReplacedUrlWithParams, getRouteUrlWithParams } from '@/routes/tech/transformer.tech'
@@ -61,7 +62,7 @@ function KeyChip({ k }: { k: string }) {
 }
 function Cover() {
 	return (
-		<Box sx={{ width: 60, height: 60, borderRadius: 2.5, bgcolor: 'primary.50', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+		<Box sx={{ width: 60, height: 60, borderRadius: 2.5, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
 			<QueueMusicRounded sx={{ color: 'primary.main', fontSize: 32 }} />
 		</Box>
 	)
@@ -162,7 +163,12 @@ export default function PlaylistMobile({
 	}, [editMode, orderGuids, sorted, setItems])
 
 	const leave = () => {
-		if (typeof window !== 'undefined' && window.history.length > 1) router.back()
+		// `history.length` counts the whole tab session, including pages from other
+		// sites — going "back" from a shared link would leave the app entirely.
+		// `history.state.idx` is Next's own position within our history instead.
+		const idx =
+			typeof window !== 'undefined' ? window.history.state?.idx ?? 0 : 0
+		if (idx > 0) router.back()
 		else navigate('account', {})
 	}
 	const onBack = () => (mode === 'detail' ? setMode('list') : leave())
@@ -173,9 +179,25 @@ export default function PlaylistMobile({
 	const onShare = async () => {
 		await save()
 		const url = getRouteUrlWithParams('playlist', { guid })
-		if (navigator.share) navigator.share({ title: `${title} - Playlist`, url }).catch(() => {})
-		navigator.clipboard?.writeText(url)
-		enqueueSnackbar(t('linkCopiedToClipboard'), {})
+
+		// Native share sheet when there is one; only fall back to the clipboard
+		// otherwise. Doing both told the user "link copied" behind the share sheet
+		// — and `clipboard.writeText` rejects once the document loses focus to it.
+		if (navigator.share) {
+			try {
+				await navigator.share({ title: t('shareTitle', { title }), url })
+			} catch {
+				// the user dismissed the share sheet — nothing to report
+			}
+			return
+		}
+
+		try {
+			await navigator.clipboard?.writeText(url)
+			enqueueSnackbar(t('linkCopiedToClipboard'), {})
+		} catch {
+			// clipboard blocked (insecure context / permissions) — stay quiet
+		}
 	}
 	const onPrint = async () => {
 		await save()

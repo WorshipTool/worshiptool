@@ -116,7 +116,7 @@ const SearchedSongsList = memo(function S({
 		<ContainerGrid direction="column">
 			<>
 				<Typography strong variant={dense ? 'h6' : 'normal'} key={'results'}>
-					{tHome('search.resultsTitle')}
+					{tHome('search.resultsTitle')}:
 				</Typography>
 
 				{!loading && songs.length > 0 && (

@@ -118,10 +118,13 @@ function paintItem(r: Registration, rawP: number, width: number) {
 		r.el.style.transformOrigin = r.origin
 		r.el.style.transform = `translate(${tx}px, ${ty}px) scale(${sc})`
 	}
-	// a fading element stops intercepting taps once it's mostly gone (and a
-	// fading-in one starts once it's mostly there)
+	// A fading element stops intercepting taps once it's mostly gone. Once it's
+	// back we clear the inline value rather than forcing 'auto', so the element's
+	// own styling decides: forcing it made decorative items (cover art, subtitle)
+	// swallow touch-scroll, and they sit in the header layer with no scrollable
+	// ancestor — so dragging on them scrolled nothing at all.
 	if (keys.has('opacity')) {
-		r.el.style.pointerEvents = val('opacity', 1) > 0.5 ? 'auto' : 'none'
+		r.el.style.pointerEvents = val('opacity', 1) > 0.5 ? '' : 'none'
 	}
 }
 

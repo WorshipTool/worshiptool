@@ -15,7 +15,6 @@ import { PlaylistGuid } from '@/interfaces/playlist/playlist.types'
 import { useSmartNavigate } from '@/routes/useSmartNavigate'
 import { useApiState } from '@/tech/ApiState'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
-import { czechConjugation } from '@/tech/string/string.tech'
 import {
 	AddRounded,
 	ChevronRightRounded,
@@ -90,8 +89,7 @@ export default function PlaylistyMobile({
 							{p.title || t('untitled')}
 						</Typography>
 						<Typography small color="grey.600" noWrap>
-							{p.itemsCount}{' '}
-							{czechConjugation('píseň', 'písně', 'písní', p.itemsCount)}
+							{tPlaylist('songsCount', { count: p.itemsCount })}
 							{' · '}
 							{getSmartDateAgoString(new Date(p.updatedAt))}
 						</Typography>
@@ -114,12 +112,7 @@ export default function PlaylistyMobile({
 
 	const subtitle =
 		!loading && playlists.length > 0
-			? `${playlists.length} ${czechConjugation(
-					'playlist',
-					'playlisty',
-					'playlistů',
-					playlists.length
-			  )}`
+			? t('playlistsCount', { count: playlists.length })
 			: undefined
 
 	return (

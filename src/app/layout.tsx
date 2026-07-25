@@ -58,11 +58,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // theme_color for the browser/OS chrome (matches the manifest) + sensible
-// mobile viewport defaults for the installed app
+// mobile viewport defaults for the installed app.
+// `viewportFit: 'cover'` is what makes `env(safe-area-inset-*)` resolve to the
+// real notch/home-indicator sizes — without it iOS reports 0 for all of them and
+// the app shell's safe-area padding silently does nothing.
 export const viewport: Viewport = {
 	themeColor: '#0085FF',
 	width: 'device-width',
 	initialScale: 1,
+	viewportFit: 'cover',
 }
 
 export default async function RootLayout({

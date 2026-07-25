@@ -50,9 +50,9 @@ export default function HomeDesktop() {
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') {
-				setSearchString(value)
-			}
+			// sync empties too — skipping them left the previous query in the URL, so
+			// clearing the box and typing again briefly showed the old results
+			setSearchString(value)
 		},
 		[]
 	)

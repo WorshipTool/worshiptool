@@ -4,6 +4,8 @@ import { BasicVariantPack } from '@/api/dtos'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
+import { Analytics } from '@/app/components/components/analytics/analytics.tech'
+import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
@@ -18,6 +20,7 @@ import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { SearchKey } from '@/types/song/search.types'
 import {
 	ChevronRightRounded,
+	CloudOffRounded,
 	MusicNoteRounded,
 	SearchRounded,
 } from '@mui/icons-material'
@@ -120,9 +123,30 @@ export default function HomeMobile({
 	const lastAdded = useLastAddedSongs()
 	const rec = recommended.data
 	const last = lastAdded.data
-	const loading = recommended.isLoading || lastAdded.isLoading
-
 	const searching = searchInputValue.trim().length > 0
+
+	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT.
+	// Only MainSearchInput listened for it, and that is desktop-only — so on a
+	// phone the bar's primary action used to do nothing visible. Focus the docked
+	// field both on the event (already on home) and on arrival with an empty
+	// `?hledat=` (navigated in from another tab).
+	const searchInputRef = useRef<HTMLInputElement>(null)
+	const focusSearch = useCallback(() => {
+		searchInputRef.current?.focus()
+	}, [])
+
+	useEffect(() => {
+		window.addEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
+		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
+	}, [focusSearch])
+
+	useEffect(() => {
+		// '' means the param is present but empty (arrived via the search button);
+		// null means it isn't there at all (an ordinary visit to home)
+		if (searchString === '' && searchInputValue === '') focusSearch()
+		// only on mount — later changes are the user typing
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	// the docked search is portalled into the tab bar's slot so it stacks on
 	// top of the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)
@@ -154,7 +178,7 @@ export default function HomeMobile({
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
 			<Typography small strong uppercase color="grey.700">
-				{text.replace(/:$/, '')}
+				{text}
 			</Typography>
 			{action}
 		</Box>
@@ -175,8 +199,10 @@ export default function HomeMobile({
 	const picks = (
 		<Box sx={{ paddingX: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('recommended.idea'), browseAction)}
-			{loading ? (
+			{recommended.isLoading ? (
 				<Skeleton variant="rounded" sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }} />
+			) : recommended.isError ? (
+				<SectionError message={tHome('recommended.error')} />
 			) : (
 				<SongGroup songs={rec.slice(0, 5)} previewLines={PREVIEW_LINES} />
 			)}
@@ -187,8 +213,10 @@ export default function HomeMobile({
 
 	const dateOf = (publishedAt?: Date | null) => (publishedAt ? getSmartDateAgoString(publishedAt) : '')
 
-	const recentInner = loading ? (
+	const recentInner = lastAdded.isLoading ? (
 		<Skeleton variant="rounded" sx={{ height: 220, borderRadius: 3, bgcolor: 'grey.200' }} />
+	) : lastAdded.isError ? (
+		<SectionError message={tHome('recommended.error')} />
 	) : (
 		<Box sx={GROUP_CARD_SX}>
 			{last.slice(0, 5).map((s, i) => (
@@ -261,7 +289,7 @@ export default function HomeMobile({
 			>
 				<SearchRounded sx={{ color: 'grey.500', fontSize: 20 }} />
 				<Box sx={{ flex: 1, minWidth: 0 }}>
-					<TextField value={searchInputValue} onChange={onSearchValueChange} placeholder={tSearch('searchByTitleOrText')} />
+					<TextField inputRef={searchInputRef} value={searchInputValue} onChange={onSearchValueChange} placeholder={tSearch('searchByTitleOrText')} />
 				</Box>
 			</Box>
 		</Box>
@@ -296,7 +324,17 @@ export default function HomeMobile({
 					{header}
 					{searching ? (
 						<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
-							{searchString ? <MobileSearchResults searchString={searchString} smartSearch={smartSearch} /> : null}
+							{searchString ? (
+								<MobileSearchResults searchString={searchString} smartSearch={smartSearch} />
+							) : (
+								// the search box is debounced: for ~300ms after the first
+								// keystroke there is no query yet. The picks are already
+								// hidden by then, so show the results skeleton rather than
+								// leaving an empty canvas.
+								<SearchResultsFrame>
+									<SearchResultsSkeleton />
+								</SearchResultsFrame>
+							)}
 						</Box>
 					) : (
 						<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
@@ -358,9 +396,23 @@ function MobileSearchResults({ searchString, smartSearch }: { searchString: stri
 
 	const { nextPage: loadNext, loadPage, data: songs, nextExists } = usePagination<SearchSongDto>(func)
 
+	// Phone searches were missing from analytics entirely: the desktop list tracks
+	// them (SearchedSongsList) and this one is a separate implementation.
+	const lastTrackedSearchRef = useRef<string | null>(null)
+
 	useEffect(() => {
 		setEnableLoadNext(false)
 		setLoading(true)
+		if (
+			searchString.trim().length > 0 &&
+			searchString !== lastTrackedSearchRef.current
+		) {
+			lastTrackedSearchRef.current = searchString
+			Analytics.track('SEARCH', {
+				query: searchString,
+				smartSearch: Boolean(smartSearch),
+			})
+		}
 		loadPage(0, true).finally(() => setEnableLoadNext(true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchString, smartSearch])
@@ -373,18 +425,61 @@ function MobileSearchResults({ searchString, smartSearch }: { searchString: stri
 	const packs = songs.flatMap((s) => s.found)
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-			<Typography small strong uppercase color="grey.700" sx={{ paddingX: 0.5 }}>
-				{tHome('search.resultsTitle').replace(/:$/, '')}
-			</Typography>
+		<SearchResultsFrame>
 			{packs.length > 0 ? (
 				<SongGroup songs={packs} previewLines={PREVIEW_LINES} />
 			) : loading ? (
-				<Skeleton variant="rounded" sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }} />
+				<SearchResultsSkeleton />
 			) : (
 				<Typography color="grey.600">{tHome('search.noResults')}</Typography>
 			)}
 			<Box ref={loadNextRef} sx={{ height: 1 }} />
+		</SearchResultsFrame>
+	)
+}
+
+/**
+ * A home section whose data failed to load. Home used to render an empty white
+ * card in this case, with nothing telling the user what happened.
+ */
+function SectionError({ message }: { message: string }) {
+	return (
+		<Box
+			sx={{
+				...GROUP_CARD_SX,
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				gap: 1,
+				paddingY: 4,
+				paddingX: 3,
+				textAlign: 'center',
+			}}
+		>
+			<CloudOffRounded sx={{ fontSize: 40, color: 'grey.400' }} />
+			<Typography color="grey.600">{message}</Typography>
 		</Box>
+	)
+}
+
+/** Title + body wrapper shared by the results list and its pre-query skeleton. */
+function SearchResultsFrame({ children }: { children: ReactNode }) {
+	const tHome = useTranslations('home')
+	return (
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<Typography small strong uppercase color="grey.700" sx={{ paddingX: 0.5 }}>
+				{tHome('search.resultsTitle')}
+			</Typography>
+			{children}
+		</Box>
+	)
+}
+
+function SearchResultsSkeleton() {
+	return (
+		<Skeleton
+			variant="rounded"
+			sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }}
+		/>
 	)
 }

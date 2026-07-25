@@ -17,7 +17,6 @@ import {
 import { useTranslations } from 'next-intl'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 
-const PER_PAGE = 12
 const PREVIEW_LINES = 1
 // divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
 const DIVIDER_INSET = 8.5
@@ -81,6 +80,8 @@ type SeznamMobileProps = {
 	page: number
 	onPageChange: (page: number) => void
 	count: number
+	/** Page size, owned by the page so mobile and desktop agree on what `?s=` means */
+	perPage: number
 }
 
 /**
@@ -94,6 +95,7 @@ export default function SeznamMobile({
 	page,
 	onPageChange,
 	count,
+	perPage,
 }: SeznamMobileProps) {
 	const t = useTranslations('songsList')
 	const tCommon = useTranslations('common')
@@ -104,7 +106,7 @@ export default function SeznamMobile({
 	const [error, setError] = useState(false)
 	const [reloadKey, setReloadKey] = useState(0)
 
-	const pagesCount = Math.max(1, Math.ceil(count / PER_PAGE))
+	const pagesCount = Math.max(1, Math.ceil(count / perPage))
 
 	// split the current page's songs into consecutive first-letter sections so
 	// each new starting letter gets a header — kept entirely within the page
@@ -127,7 +129,7 @@ export default function SeznamMobile({
 		// `page` is 1-indexed for the UI/paginator, but the backend list is
 		// 0-indexed (see Pager, which fetches `page - 1`) — so page 1 → offset 0.
 		songGettingApi
-			.getList(page - 1, PER_PAGE)
+			.getList(page - 1, perPage)
 			.then((data) => {
 				if (active) setItems(data)
 			})
@@ -143,7 +145,7 @@ export default function SeznamMobile({
 		return () => {
 			active = false
 		}
-	}, [page, songGettingApi, reloadKey])
+	}, [page, perPage, songGettingApi, reloadKey])
 
 	const paginator =
 		!error && pagesCount > 1 ? (
@@ -173,7 +175,7 @@ export default function SeznamMobile({
 		>
 			{loading ? (
 				<Box sx={GROUP_CARD_SX}>
-					{Array.from({ length: PER_PAGE }).map((_, i) => (
+					{Array.from({ length: perPage }).map((_, i) => (
 						<Fragment key={i}>
 							<Box
 								sx={{
@@ -205,7 +207,7 @@ export default function SeznamMobile({
 									/>
 								</Box>
 							</Box>
-							{i < PER_PAGE - 1 && <Divider />}
+							{i < perPage - 1 && <Divider />}
 						</Fragment>
 					))}
 				</Box>
@@ -249,8 +251,10 @@ export default function SeznamMobile({
 				</Box>
 			) : (
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-					{letterGroups.map((group) => (
-						<Box key={group.letter}>
+					{letterGroups.map((group, groupIndex) => (
+						// groups are consecutive runs, so the same letter can appear twice
+						// (mixed collation, or two untitled songs both mapping to '#')
+						<Box key={`${group.letter}-${groupIndex}`}>
 							<Box sx={LETTER_HEADER_SX}>
 								<Typography
 									small

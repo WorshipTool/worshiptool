@@ -42,7 +42,7 @@ export default function RecommendedSongsList({
 			}}
 		>
 			<Typography strong variant={dense ? 'h6' : 'normal'} key={'idea'}>
-				{tHome('recommended.idea')}
+				{tHome('recommended.idea')}:
 			</Typography>
 
 			{isError && (

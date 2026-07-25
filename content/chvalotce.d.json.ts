@@ -111,7 +111,7 @@ declare const messages: {
 			"subtitleLower": "na worship.cz"
 		},
 		"recommended": {
-			"idea": "Nějaký nápad:",
+			"idea": "Nějaký nápad",
 			"error": "Při načítání se vyskytla chyba..."
 		},
 		"allList": {
@@ -125,7 +125,7 @@ declare const messages: {
 			"label": "Vytvořit"
 		},
 		"search": {
-			"resultsTitle": "Výsledky vyhledávání:",
+			"resultsTitle": "Výsledky vyhledávání",
 			"loadMore": "Načíst další",
 			"noResults": "Nic jsme nenašli..."
 		}
@@ -284,6 +284,7 @@ declare const messages: {
 		"presentation": "Prezentace",
 		"songsCount": "{count, plural, one {# píseň} few {# písně} other {# písní}}",
 		"typeLabel": "Playlist",
+		"shareTitle": "{title} – Playlist",
 		"tabSongs": "Seznam písní",
 		"tabDetail": "Detail písní",
 		"prevSong": "Předchozí píseň",
@@ -824,6 +825,7 @@ declare const messages: {
 		},
 		"playlists": {
 			"untitled": "Bez názvu",
+			"playlistsCount": "{count, plural, one {# playlist} few {# playlisty} other {# playlistů}}",
 			"empty": "Zatím nemáš žádný playlist. Vytvoř si první tlačítkem nahoře."
 		}
 	},
@@ -1040,14 +1042,6 @@ declare const messages: {
 		"merged": "Sloučeno",
 		"filterActive": "Aktivní & otevřené PR",
 		"noActiveOrOpenPr": "Žádné aktivní úlohy ani otevřené PR"
-	},
-	"demo": {
-		"songOfDay": "Píseň dne",
-		"moreIdeas": "Další nápady",
-		"assistantGreeting": "Ahoj! Jakou píseň dneska hledáš?",
-		"tryChips": "Zkus třeba",
-		"goodDay": "Dobrý den",
-		"browseAll": "Všechny písně"
 	}
 };
 export default messages;

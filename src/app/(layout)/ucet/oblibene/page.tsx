@@ -33,7 +33,7 @@ function page() {
 	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 	const { selectionGuid, items: bsItems } = useFavourites()
 
-	const { items: allItems } = useSelection(selectionGuid as PlaylistGuid)
+	const { items: allItems, loading } = useSelection(selectionGuid as PlaylistGuid)
 
 	const [sortOption, setSortOption] = useUrlState<FavouritesOrderOptions>(
 		'sortKey',
@@ -69,9 +69,12 @@ function page() {
 		return (
 			<MobileSongListView
 				title={t('title')}
-				subtitle={t('totalSongs', { count: items.length.toString() })}
+				subtitle={
+					loading ? undefined : t('totalSongs', { count: items.length.toString() })
+				}
 				backTo="account"
 				items={items.map((i) => i.data.pack)}
+				loading={loading}
 				emptyText={t('noFavourites')}
 			/>
 		)

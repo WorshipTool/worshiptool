@@ -31,7 +31,10 @@ function List() {
 
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
-	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
+	// One source of truth for the page size across every width, phones included —
+	// the phone list used to carry its own constant while sharing the same `?s=`
+	// URL key, so the two disagreed about which songs a given page number meant.
+	const countPerPage = phoneVersion ? 12 : isSmall ? 8 : isMiddle ? 16 : 21
 	const getPageData = async (page: number) => {
 		const r = await songGettingApi.getList(page, countPerPage + 1)
 
@@ -44,6 +47,7 @@ function List() {
 				page={page ?? 1}
 				onPageChange={setPage}
 				count={count ?? 0}
+				perPage={countPerPage}
 			/>
 		)
 	}

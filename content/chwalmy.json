@@ -108,7 +108,7 @@
 			"subtitleLower": "na chwalmy.com"
 		},
 		"recommended": {
-			"idea": "Jakaś propozycja:",
+			"idea": "Jakaś propozycja",
 			"error": "Wystąpił błąd podczas ładowania..."
 		},
 		"allList": {
@@ -122,7 +122,7 @@
 			"label": "Utwórz"
 		},
 		"search": {
-			"resultsTitle": "Wyniki wyszukiwania:",
+			"resultsTitle": "Wyniki wyszukiwania",
 			"loadMore": "Załaduj więcej",
 			"noResults": "Niczego nie znaleźliśmy..."
 		}
@@ -281,6 +281,7 @@
 		"presentation": "Prezentacja",
 		"songsCount": "{count, plural, one {# pieśń} few {# pieśni} many {# pieśni} other {# pieśni}}",
 		"typeLabel": "Playlista",
+		"shareTitle": "{title} – Playlista",
 		"tabSongs": "Lista pieśni",
 		"tabDetail": "Szczegóły pieśni",
 		"prevSong": "Poprzednia pieśń",
@@ -821,6 +822,7 @@
 		},
 		"playlists": {
 			"untitled": "Bez nazwy",
+			"playlistsCount": "{count, plural, one {# playlista} few {# playlisty} many {# playlist} other {# playlisty}}",
 			"empty": "Nie masz jeszcze żadnej playlisty. Utwórz pierwszą przyciskiem powyżej."
 		}
 	},
@@ -1037,13 +1039,5 @@
 		"merged": "Połączone",
 		"filterActive": "Aktywne i otwarte PR",
 		"noActiveOrOpenPr": "Brak aktywnych zadań ani otwartych PR"
-	},
-	"demo": {
-		"songOfDay": "Pieśń dnia",
-		"moreIdeas": "Więcej propozycji",
-		"assistantGreeting": "Cześć! Jakiej pieśni dziś szukasz?",
-		"tryChips": "Spróbuj np.",
-		"goodDay": "Dzień dobry",
-		"browseAll": "Wszystkie pieśni"
 	}
 }
