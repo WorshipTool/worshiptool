@@ -6,6 +6,7 @@ import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/ho
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
@@ -28,12 +29,6 @@ import { useTranslations } from 'next-intl'
 import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-// On app-shell routes the top bar's sticky spacer shrinks to the safe-area
-// inset (Toolbar.tsx); reclaim exactly that so the grey canvas reaches the top.
-const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
-// the docked search is portalled into the tab bar's slot, so content only
-// needs to clear the bar + search stack
-const CONTENT_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 176px)'
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
 // ---- S5 grouped-list surface (shared language with the songs list) ----
@@ -155,25 +150,21 @@ export default function HomeMobile({
 		setTabBarSlot(document.getElementById(ABOVE_TABBAR_SLOT_ID))
 	}, [])
 
-	// ---- header ------------------------------------------------------
-	// Just the greeting — account/login lives in the bottom tab bar, nothing top-right.
-
-	const header = (
-		<Box
-			sx={{
-				paddingX: 2.5,
-				paddingTop: 'calc(env(safe-area-inset-top) + 32px)',
-				paddingBottom: 0.5,
-			}}
-		>
-			<Typography small color="grey.700">
-				{tHome('hero.lead')}
-			</Typography>
-			<Typography variant="h3" strong={800}>
-				{tHome('hero.title')}
-			</Typography>
-		</Box>
-	)
+	// The docked search overlays the bottom of the shell's scroller (it lives in
+	// the tab bar's fixed slot, which the shell's height doesn't know about).
+	// Measure it rather than hardcoding a clearance, so the last row stays
+	// reachable however tall the field ends up.
+	const searchDockRef = useRef<HTMLDivElement>(null)
+	const [searchDockHeight, setSearchDockHeight] = useState(0)
+	useEffect(() => {
+		const el = searchDockRef.current
+		if (!el) return
+		const measure = () => setSearchDockHeight(el.offsetHeight)
+		const observer = new ResizeObserver(measure)
+		observer.observe(el)
+		measure()
+		return () => observer.disconnect()
+	}, [tabBarSlot])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -197,7 +188,7 @@ export default function HomeMobile({
 	// ---- picks: one white S5 group on the grey canvas ----------------
 
 	const picks = (
-		<Box sx={{ paddingX: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 			{label(tHome('recommended.idea'), browseAction)}
 			{recommended.isLoading ? (
 				<Skeleton variant="rounded" sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }} />
@@ -253,7 +244,7 @@ export default function HomeMobile({
 	)
 
 	const recent = (
-		<Box sx={{ paddingX: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 			{label(tHome('lastAdded.title'))}
 			{recentInner}
 		</Box>
@@ -296,74 +287,64 @@ export default function HomeMobile({
 	)
 
 	return (
-		<Box
-			sx={{
-				// full-bleed: escape the SmartPage padded wrapper and the toolbar spacer
-				width: '100vw',
-				marginLeft: 'calc(50% - 50vw)',
-				marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
-				minHeight: '100dvh',
-				bgcolor: 'grey.50',
-				display: 'flex',
-				justifyContent: 'center',
-			}}
-		>
-			<Box
-				sx={{
-					width: '100%',
-					minWidth: 0,
-					minHeight: '100dvh',
-					bgcolor: 'grey.50', // the light canvas that white groups sit on
-					display: 'flex',
-					flexDirection: 'column',
-					position: 'relative',
-					overflow: 'hidden',
-				}}
+		<>
+			{/* Home is a tab-root, so no back arrow — otherwise the same shell as
+			    every other screen: large title that shrinks to a slim bar on scroll,
+			    with only the content between it and the tab bar scrolling. */}
+			<MobileAppHeader
+				title={tHome('hero.title')}
+				subtitle={tHome('hero.lead')}
 			>
-				<Box sx={{ position: 'relative', zIndex: 1 }}>
-					{header}
-					{searching ? (
-						<Box sx={{ paddingX: 2, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
-							{searchString ? (
-								<MobileSearchResults searchString={searchString} smartSearch={smartSearch} />
-							) : (
-								// the search box is debounced: for ~300ms after the first
-								// keystroke there is no query yet. The picks are already
-								// hidden by then, so show the results skeleton rather than
-								// leaving an empty canvas.
-								<SearchResultsFrame>
-									<SearchResultsSkeleton />
-								</SearchResultsFrame>
-							)}
-						</Box>
-					) : (
-						<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 2, paddingBottom: CONTENT_CLEARANCE }}>
-							{picks}
-							{recent}
-						</Box>
-					)}
-				</Box>
+				{searching ? (
+					<Box sx={{ paddingTop: 1, paddingBottom: `${searchDockHeight}px` }}>
+						{searchString ? (
+							<MobileSearchResults searchString={searchString} smartSearch={smartSearch} />
+						) : (
+							// the search box is debounced: for ~300ms after the first
+							// keystroke there is no query yet. The picks are already
+							// hidden by then, so show the results skeleton rather than
+							// leaving an empty canvas.
+							<SearchResultsFrame>
+								<SearchResultsSkeleton />
+							</SearchResultsFrame>
+						)}
+					</Box>
+				) : (
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 3,
+							paddingTop: 1,
+							paddingBottom: `${searchDockHeight}px`,
+						}}
+					>
+						{picks}
+						{recent}
+					</Box>
+				)}
+			</MobileAppHeader>
 
-				{/* ===== SEARCH: portalled into the tab bar's slot so it stacks on
-				    top of the bar via layout (thumb zone, no magic offsets) ===== */}
-				{tabBarSlot &&
-					createPortal(
-						<Box
-							sx={{
-								width: '100%',
-								paddingX: 2,
-								paddingTop: 1,
-								paddingBottom: 1.25,
-								boxSizing: 'border-box',
-								bgcolor: 'grey.50',
-							}}
-						>
-							{search}
-						</Box>,
-						tabBarSlot
-					)}
-			</Box>
-		</Box>
+			{/* ===== SEARCH: portalled into the tab bar's slot so it stacks on
+			    top of the bar via layout (thumb zone, no magic offsets) ===== */}
+			{tabBarSlot &&
+				createPortal(
+					<Box
+						ref={searchDockRef}
+						sx={{
+							width: '100%',
+							paddingX: 2,
+							paddingTop: 1,
+							paddingBottom: 1.25,
+							boxSizing: 'border-box',
+							bgcolor: 'grey.50',
+						}}
+					>
+						{search}
+					</Box>,
+					tabBarSlot
+				)}
+		</>
 	)
 }
 
