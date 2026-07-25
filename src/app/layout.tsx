@@ -1,11 +1,12 @@
 import AppProviders from '@/app/components/AppProviders'
+import AppUpdater from '@/app/components/AppUpdater'
 import LazyAdminComponents from '@/app/components/LazyAdminComponents'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
 import { CornerStackProvider } from '@/common/components/CornerStack'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { Roboto } from 'next/font/google'
 import { getMessages } from '../../i18n-config'
@@ -44,10 +45,23 @@ export async function generateMetadata(): Promise<Metadata> {
 			'music',
 		],
 		manifest: '/manifest.webmanifest',
+		appleWebApp: {
+			capable: true,
+			statusBarStyle: 'default',
+			title: messages.config.branding.shortName,
+		},
 		verification: {
 			google: 'yvbr9ieSeuhugyZcK93MS5Mm3DgYMXqK1EUHYXEHEWs',
 		},
 	}
+}
+
+// theme_color for the browser/OS chrome (matches the manifest) + sensible
+// mobile viewport defaults for the installed app
+export const viewport: Viewport = {
+	themeColor: '#0085FF',
+	width: 'device-width',
+	initialScale: 1,
 }
 
 export default async function RootLayout({
@@ -71,6 +85,7 @@ export default async function RootLayout({
 							<DragTemplatesContainer />
 							<LazyAdminComponents />
 							<UnavailableMessage />
+							<AppUpdater />
 						</AppProviders>
 					</NextIntlClientProvider>
 				</AppRouterCacheProvider>

@@ -23,6 +23,7 @@ declare const messages: {
 		"discard": "Zahodit",
 		"open": "Otevřít",
 		"tryAgain": "Zkusit znovu",
+		"updatingVersion": "Aktualizuji na novou verzi…",
 		"or": "Nebo",
 		"backgroundAlt": "Pozadí",
 		"cancelCurrentEdits": "Zrušit aktuální úpravy",
