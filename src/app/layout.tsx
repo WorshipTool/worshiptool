@@ -1,6 +1,7 @@
 import AppProviders from '@/app/components/AppProviders'
 import AppUpdater from '@/app/components/AppUpdater'
 import LazyAdminComponents from '@/app/components/LazyAdminComponents'
+import RegisterServiceWorker from '@/app/components/RegisterServiceWorker'
 import UnavailableMessage from '@/app/components/UnavailableMessage'
 import { DragTemplatesContainer } from '@/common/components/DragTemplate/DragTemplateContainer'
 import PopupProvider from '@/common/components/Popup/PopupProvider'
@@ -86,6 +87,7 @@ export default async function RootLayout({
 							<LazyAdminComponents />
 							<UnavailableMessage />
 							<AppUpdater />
+							<RegisterServiceWorker />
 						</AppProviders>
 					</NextIntlClientProvider>
 				</AppRouterCacheProvider>
