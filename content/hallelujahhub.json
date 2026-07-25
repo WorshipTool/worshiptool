@@ -589,6 +589,7 @@
 		"processing": "Processing files",
 		"processed": "Processed",
 		"errorOccurred": "An error occurred",
+		"loginRequired": "You need to be signed in to upload a file.",
 		"pleaseWait": "Please wait",
 		"withAI": "With AI assistance",
 		"copy": "Copy",

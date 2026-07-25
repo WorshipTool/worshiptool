@@ -7,6 +7,7 @@ import {
 import { useApi } from '@/api/tech-and-hooks/useApi'
 import { getUrl } from '@/api/urls'
 import { fixParserJsonString } from '@/app/(layout)/vytvorit/components/tech'
+import { useBlockAppReload } from '@/app/components/appReloadGuard'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import Popup from '@/common/components/Popup/Popup'
@@ -16,11 +17,11 @@ import useAuth from '@/hooks/auth/useAuth'
 import { useApiState } from '@/tech/ApiState'
 import { handleApiCall } from '@/tech/fetch/handleApiCall'
 import { copyToClipboard } from '@/tech/string/copy.tech'
-import { AutoAwesome, ContentCopy } from '@mui/icons-material'
+import { AutoAwesome, ContentCopy, ErrorOutlineRounded } from '@mui/icons-material'
 import axios from 'axios'
 import { useTranslations } from 'next-intl'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import UploadMobile from './components/UploadMobile'
 import UploadPanel from './components/UploadPanel/UploadPanel'
 
@@ -44,9 +45,15 @@ function Upload() {
 	const [status, setStatus] = useState(ParserStatus.Unknown)
 	const [result, setResult] = useState<ParserSongDataResult | null>(null)
 	const [loading, setLoading] = useState(false)
+	const [failed, setFailed] = useState(false)
 
 	const [open, setOpen] = useState(false)
 	const [files, setFiles] = useState<File[] | null>(null)
+
+	// The live progress stream. Kept in a ref so it can be closed when the popup
+	// is dismissed, when another upload starts, and on unmount — otherwise two
+	// parses write to the same state and whichever finishes last wins.
+	const eventSourceRef = useRef<EventSource | null>(null)
 
 	const { fetchApiState: fetchUploading, apiState: apiStateUploading } =
 		useApiState<AddFileToParseQueueOutDto>()
@@ -54,40 +61,30 @@ function Upload() {
 
 	const t = useTranslations('upload')
 	const tCommon = useTranslations('common')
+	const { enqueueSnackbar } = useSnackbar()
 
 	const theme = useTheme()
 	const phoneVersion = useMediaQuery(theme.breakpoints.down(MOBILE_NAV_BREAKPOINT))
 
-	const parseFiles = async (files: File[]) => {
-		if (!user) {
-			throw new Error('User is not logged in')
-		}
+	const busy = loading || apiStateUploading.loading
 
-		if (!files) {
-			console.log('No files selected')
-			return
-		}
+	// a reload mid-parse loses the job — the result is only delivered over the stream
+	useBlockAppReload(busy, 'parsing an uploaded file')
 
-		reset()
+	const closeStream = useCallback(() => {
+		eventSourceRef.current?.close()
+		eventSourceRef.current = null
+	}, [])
 
-		setFiles(files)
-		setOpen(true)
-
-		setLoading(true)
-
-		// Upload
-		const res = await fetchUploading(async () => parse(files))
-
-		// Get stream progress
-		if (!res) return
-		await streamProgress(res.id)
-	}
+	useEffect(() => closeStream, [closeStream])
 
 	const reset = () => {
+		closeStream()
 		setProgress(0)
 		setStatus(ParserStatus.Unknown)
 		setResult(null)
 		setLoading(false)
+		setFailed(false)
 	}
 
 	const parse = async (files: File[]) => {
@@ -119,10 +116,16 @@ function Upload() {
 		const parse = await a.getJobStatus(jobId)
 		const url = getUrl(parse.url)
 
+		closeStream()
 		const eventSource = new EventSource(url)
+		eventSourceRef.current = eventSource
+
+		/** Ignore events from a stream that has since been superseded or closed. */
+		const isCurrent = () => eventSourceRef.current === eventSource
 
 		// Listener pro průběžné hodnoty (např. procenta)
 		eventSource.addEventListener('progress', (event) => {
+			if (!isCurrent()) return
 			const p: ProgressObject = JSON.parse(fixParserJsonString(event.data))
 			setProgress(p.progress)
 			setStatus(p.status)
@@ -130,24 +133,66 @@ function Upload() {
 
 		// Listener pro finální výsledek
 		eventSource.addEventListener('final', (event) => {
+			if (!isCurrent()) return
 			const result: ParserSongDataResult = JSON.parse(
 				fixParserJsonString(event.data)
 			)
 			setResult(result)
-			eventSource.close()
-
+			closeStream()
 			setLoading(false)
 		})
 
 		// Listener pro případ chyby
 		eventSource.addEventListener('error', (event) => {
+			if (!isCurrent()) return
 			console.error('Stream error:', event)
-			eventSource.close()
+			closeStream()
 			setLoading(false)
+			setFailed(true)
 		})
 	}
 
-	const { enqueueSnackbar } = useSnackbar()
+	const parseFiles = async (files: File[]) => {
+		if (!user) {
+			enqueueSnackbar(t('loginRequired'), { variant: 'error' })
+			return
+		}
+
+		if (!files || files.length === 0) {
+			return
+		}
+
+		// a fast double-tap on the mobile upload button would otherwise start two jobs
+		if (busy) return
+
+		reset()
+
+		setFiles(files)
+		setOpen(true)
+
+		setLoading(true)
+
+		// Upload
+		const res = await fetchUploading(async () => parse(files))
+
+		// Get stream progress
+		if (!res) {
+			setLoading(false)
+			setFailed(true)
+			return
+		}
+		await streamProgress(res.id)
+	}
+
+	const closePopup = () => {
+		closeStream()
+		setLoading(false)
+		setOpen(false)
+	}
+
+	const retry = () => {
+		if (files) parseFiles(files)
+	}
 
 	const copy = (sheet: ParserSongDataResult['sheets'][0]) => {
 		const data = sheet.data
@@ -187,7 +232,7 @@ function Upload() {
 
 			<Popup
 				open={open}
-				onClose={() => setOpen(false)}
+				onClose={closePopup}
 				width={400}
 				title={
 					!result ? (
@@ -200,7 +245,7 @@ function Upload() {
 								? t('processing')
 								: status === ParserStatus.Finished
 								? t('processed')
-								: status === ParserStatus.Failed
+								: failed || status === ParserStatus.Failed
 								? t('errorOccurred')
 								: t('pleaseWait')}
 						</Box>
@@ -232,6 +277,25 @@ function Upload() {
 							}
 						/>
 					</>
+				) : failed || (!result && !busy) ? (
+					// a failed parse used to render nothing — an empty white dialog
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							gap: 1,
+							paddingY: 3,
+						}}
+					>
+						<ErrorOutlineRounded sx={{ fontSize: 48, color: 'grey.400' }} />
+						<Typography color="grey.600">{t('errorOccurred')}</Typography>
+						{files && (
+							<Button variant="outlined" onClick={retry}>
+								{tCommon('tryAgain')}
+							</Button>
+						)}
+					</Box>
 				) : (
 					<Box>
 						<Box

@@ -2,6 +2,7 @@
 import { CreatedType, VariantPackAlias } from '@/api/dtos'
 import { PostCreateVariantOutDto } from '@/api/generated'
 import WrittenPreview from '@/app/(layout)/vytvorit/napsat/components/WrittenPreview'
+import { useBlockAppReload } from '@/app/components/appReloadGuard'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import SheetEditor from '@/common/components/SheetEditor/SheetEditor'
@@ -45,6 +46,9 @@ function Create() {
 
 	const [title, setTitle] = useState('')
 	const [sheetData, setSheetData] = useState('')
+
+	// an auto-update reload here would throw away whatever they've written
+	useBlockAppReload(title !== '' || sheetData !== '', 'writing a song')
 
 	const cursorRef = useRef<{ start: number; end: number } | null>() // Ref pro uchování pozice kurzoru
 

@@ -1,6 +1,10 @@
 'use client'
 
 import { FRONTEND_URL } from '@/api/constants'
+import {
+	isAppReloadBlocked,
+	subscribeAppReloadBlocked,
+} from '@/app/components/appReloadGuard'
 import { deriveBasePath } from '@/tech/url/basePath'
 import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
@@ -12,15 +16,14 @@ import { useCallback, useEffect, useRef } from 'react'
 const INITIAL_HASH = process.env.NEXT_PUBLIC_BUILD_HASH
 const POLL_INTERVAL_MS = 60_000
 
-// Routes with unsaved user input: don't reload on tab refocus here (would lose
-// their work) — only reload once they navigate away.
-const EDIT_ROUTES = ['/vytvorit/napsat']
-
 /**
  * App-wide auto-updater (no service worker). Polls the deployed build hash and,
- * when a newer version is live, reloads at the next *safe* moment so nothing is
- * lost: on route change (always safe — the user is leaving the page), or on tab
- * refocus when not sitting on an editing route. The user chose "safe automatic".
+ * when a newer version is live, reloads at the next *safe* moment.
+ *
+ * Safe means the tab is visible (so the reload isn't a surprise the user comes
+ * back to) and no screen has declared unsaved work through `useBlockAppReload`.
+ * Once an update is pending it is applied as soon as those hold — on a route
+ * change, on tab refocus, or the moment the last blocker clears.
  */
 export default function AppUpdater() {
 	const pathname = usePathname()
@@ -29,8 +32,6 @@ export default function AppUpdater() {
 
 	const pendingRef = useRef(false)
 	const reloadingRef = useRef(false)
-	const pathnameRef = useRef(pathname)
-	pathnameRef.current = pathname
 
 	const reload = useCallback(() => {
 		if (reloadingRef.current) return
@@ -42,6 +43,14 @@ export default function AppUpdater() {
 		// small delay so the toast is visible before the reload
 		setTimeout(() => window.location.reload(), 800)
 	}, [enqueueSnackbar, t])
+
+	/** Apply a pending update, but only when nothing would be lost by it. */
+	const applyIfSafe = useCallback(() => {
+		if (!pendingRef.current) return
+		if (isAppReloadBlocked()) return
+		if (document.visibilityState !== 'visible') return
+		reload()
+	}, [reload])
 
 	// detect a newer deployed build
 	useEffect(() => {
@@ -56,8 +65,7 @@ export default function AppUpdater() {
 				const { hash } = await res.json()
 				if (hash && hash !== INITIAL_HASH) {
 					pendingRef.current = true
-					// apply immediately unless we're on an editing route
-					if (!EDIT_ROUTES.includes(pathnameRef.current)) reload()
+					applyIfSafe()
 				}
 			} catch {
 				// network hiccups are non-critical — retry next interval
@@ -65,13 +73,9 @@ export default function AppUpdater() {
 		}
 
 		const onVisible = () => {
-			if (document.visibilityState === 'visible') {
-				if (pendingRef.current) {
-					if (!EDIT_ROUTES.includes(pathnameRef.current)) reload()
-				} else {
-					check()
-				}
-			}
+			if (document.visibilityState !== 'visible') return
+			if (pendingRef.current) applyIfSafe()
+			else check()
 		}
 
 		const interval = setInterval(check, POLL_INTERVAL_MS)
@@ -84,12 +88,15 @@ export default function AppUpdater() {
 			document.removeEventListener('visibilitychange', onVisible)
 			window.removeEventListener('focus', onVisible)
 		}
-	}, [reload])
+	}, [applyIfSafe])
 
-	// a pending update becomes safe to apply the moment the route changes
+	// a pending update becomes safe the moment the last blocker clears
+	useEffect(() => subscribeAppReloadBlocked(applyIfSafe), [applyIfSafe])
+
+	// …or when the user navigates away from whatever they were doing
 	useEffect(() => {
-		if (pendingRef.current) reload()
-	}, [pathname, reload])
+		applyIfSafe()
+	}, [pathname, applyIfSafe])
 
 	return null
 }

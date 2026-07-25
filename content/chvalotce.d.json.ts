@@ -852,6 +852,7 @@ declare const messages: {
 		"processing": "Zpracovávání souborů",
 		"processed": "Zpracováno",
 		"errorOccurred": "Nastala chyba",
+		"loginRequired": "Pro nahrání souboru se musíte přihlásit.",
 		"pleaseWait": "Počkejte prosím",
 		"withAI": "S pomocí AI",
 		"copy": "Zkopírovat",

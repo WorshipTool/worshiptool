@@ -79,7 +79,7 @@ export default function MobileSongDock(props: MobileSongDockProps) {
 	const hasChords = Boolean(props.sheet?.getKeyChord())
 	const keyNote = props.sheet?.getKeyNote() || null
 
-	const isOwner = Boolean(user && props.variant.createdByGuid === user.guid)
+	const isOwner = props.isOwner
 
 	const onPrintClick = () => {
 		const url = getReplacedUrlWithParams(

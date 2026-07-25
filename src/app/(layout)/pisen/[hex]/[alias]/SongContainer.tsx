@@ -9,6 +9,8 @@ import MobileSongDock from '@/app/(layout)/pisen/[hex]/[alias]/components/Mobile
 import TopPanel from '@/app/(layout)/pisen/[hex]/[alias]/components/TopPanel'
 import UserNotePanel from '@/app/(layout)/pisen/[hex]/[alias]/components/UserNotePanel'
 import { InnerPackProvider } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useInnerPack'
+import { useSongEditing } from '@/app/(layout)/pisen/[hex]/[alias]/hooks/useSongEditing'
+import { useBlockAppReload } from '@/app/components/appReloadGuard'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
@@ -84,9 +86,17 @@ export default function SongContainer({
 
 	const [inEditMode, setInEditMode] = useState(false)
 
-	const onEditClick = async (editable: boolean) => {
-		setInEditMode(editable)
-	}
+	// an auto-update reload while editing would discard the unsaved sheet
+	useBlockAppReload(inEditMode, 'editing a song')
+
+	// One source of truth for edit/save, shared by the desktop TopPanel and the
+	// phone dock — including the "can't edit a published song" guard.
+	const editing = useSongEditing({
+		variant,
+		sheet: currentSheet,
+		editedTitle,
+		setEditMode: setInEditMode,
+	})
 
 	const cancelEditing = () => {
 		setInEditMode(false)
@@ -116,11 +126,11 @@ export default function SongContainer({
 						onToggleChords={setShowChords}
 						transpose={transpose}
 						reloadSong={reload}
-						onEditClick={onEditClick}
-						saving={false}
+						onEditClick={editing.onEditClick}
+						saving={editing.saving}
 						editedTitle={editedTitle}
 						isOwner={isOwner}
-						anyChange={false}
+						anyChange={editing.anyChange}
 					/>
 					<AllSongAdminOptions />
 					<MobileAppHeader
@@ -201,31 +211,13 @@ export default function SongContainer({
 							transpose={transpose}
 							variant={variant}
 							reloadSong={reload}
-							title={editedTitle}
 							editedTitle={editedTitle}
 							sheet={currentSheet as Sheet}
 							song={song as SongDto}
-							onEditClick={onEditClick}
+							editing={editing}
 							isInEditMode={inEditMode}
 							cancelEditing={cancelEditing}
 							hideChords={!showChords}
-						/>
-					)}
-
-					{phoneVersion && !inEditMode && !variant.deleted && currentSheet && (
-						<MobileSongDock
-							variant={variant}
-							sheet={currentSheet}
-							song={song as SongDto}
-							showChords={showChords}
-							onToggleChords={setShowChords}
-							transpose={transpose}
-							reloadSong={reload}
-							onEditClick={onEditClick}
-							saving={false}
-							editedTitle={editedTitle}
-							isOwner={isOwner}
-							anyChange={false}
 						/>
 					)}
 
