@@ -171,11 +171,15 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 							zIndex: 2,
 						}
 					: {
-							// in-flow full-bleed block (tab-root pages rendered directly)
+							// in-flow full-bleed block (tab-root pages rendered directly).
+							// No negative top margin: the Toolbar contributes no spacer on
+							// app-shell routes, so there is nothing to cancel. Cancelling it
+							// meant the shell's position depended on two `env()` values
+							// agreeing exactly — and when they didn't, the whole shell rode
+							// up under the status bar.
 							position: 'relative',
 							width: '100vw',
 							marginLeft: 'calc(50% - 50vw)',
-							marginTop: `calc(-1 * ${TOOLBAR_SPACER})`,
 							height: `calc(100dvh - ${MOBILE_NAV_CLEARANCE})`,
 						}),
 				bgcolor: surface,

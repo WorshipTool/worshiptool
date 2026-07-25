@@ -122,9 +122,13 @@ export default function HomeMobile({
 
 	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT.
 	// Only MainSearchInput listened for it, and that is desktop-only — so on a
-	// phone the bar's primary action used to do nothing visible. Focus the docked
-	// field both on the event (already on home) and on arrival with an empty
-	// `?hledat=` (navigated in from another tab).
+	// phone the bar's primary action used to do nothing visible.
+	//
+	// Deliberately only on the event (i.e. off a real tap, which is also what iOS
+	// requires before it will open the keyboard) and not on mount: the field is
+	// docked at the bottom inside the tab bar's fixed layer, and focusing it
+	// without a gesture makes iOS scroll it into view — which drags the whole
+	// page down and tucks the header under the status bar.
 	const searchInputRef = useRef<HTMLInputElement>(null)
 	const focusSearch = useCallback(() => {
 		searchInputRef.current?.focus()
@@ -134,14 +138,6 @@ export default function HomeMobile({
 		window.addEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
 		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
 	}, [focusSearch])
-
-	useEffect(() => {
-		// '' means the param is present but empty (arrived via the search button);
-		// null means it isn't there at all (an ordinary visit to home)
-		if (searchString === '' && searchInputValue === '') focusSearch()
-		// only on mount — later changes are the user typing
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
 
 	// the docked search is portalled into the tab bar's slot so it stacks on
 	// top of the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)

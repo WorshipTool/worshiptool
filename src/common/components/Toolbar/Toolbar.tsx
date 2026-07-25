@@ -44,8 +44,14 @@ export function Toolbar() {
 	const barHideSx = hideOnMobile
 		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } }
 		: {}
+	// On app-shell routes the phone shell owns the whole viewport, including the
+	// safe area — its header pads itself by `env(safe-area-inset-top)`. So the
+	// spacer must contribute *nothing* here. It used to reserve the safe-area
+	// strip, which every shell screen then cancelled with a negative margin; once
+	// the inset stopped being 0 (viewport-fit=cover) any mismatch between the two
+	// shifted the whole shell up under the status bar.
 	const spacerShrinkSx = hideOnMobile
-		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { height: 'env(safe-area-inset-top)' } }
+		? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { height: 0 } }
 		: {}
 
 	const white = useMemo(() => {
