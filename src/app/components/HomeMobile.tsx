@@ -6,12 +6,12 @@ import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/ho
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
+import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
-import { SongVariantCard } from '@/common/ui/SongCard'
 import { TextField } from '@/common/ui/TextField'
 import useSongSearch from '@/hooks/song/useSongSearch'
 import usePagination from '@/hooks/usePagination'
@@ -31,65 +31,7 @@ import { createPortal } from 'react-dom'
 
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
-// ---- S5 grouped-list surface (shared language with the songs list) ----
-const GROUP_CARD_SX = {
-	bgcolor: 'background.paper',
-	borderRadius: 3,
-	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-	overflow: 'hidden',
-}
-// strip the card chrome off SongVariantCard so it reads as a row in the group
-const FLAT_ROW_SX = {
-	bgcolor: 'transparent',
-	borderRadius: 0,
-	outlineColor: 'transparent',
-	'&:hover': { bgcolor: 'grey.50', boxShadow: 'none' },
-	'&:active': { bgcolor: 'grey.100' },
-}
-// divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
-const ICON_DIVIDER_INSET = 8.5
 const TEXT_DIVIDER_INSET = 1.75
-
-function SongLeadingIcon() {
-	return (
-		<Box
-			sx={{
-				width: 40,
-				height: 40,
-				borderRadius: 2,
-				bgcolor: 'grey.100',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-			}}
-		>
-			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.600' }} />
-		</Box>
-	)
-}
-
-/** One white S5 group of song rows (icon + preview + chevron + hairlines). */
-function SongGroup({ songs, previewLines }: { songs: BasicVariantPack[]; previewLines: number }) {
-	return (
-		<Box sx={GROUP_CARD_SX}>
-			{songs.map((s, i) => (
-				<Fragment key={`${String(s.packGuid)}-${i}`}>
-					<SongVariantCard
-						data={s}
-						dense
-						previewLines={previewLines}
-						leadingIcon={<SongLeadingIcon />}
-						trailingIcon={<ChevronRightRounded sx={{ color: 'grey.400' }} />}
-						sx={FLAT_ROW_SX}
-					/>
-					{i < songs.length - 1 && (
-						<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: ICON_DIVIDER_INSET }} />
-					)}
-				</Fragment>
-			))}
-		</Box>
-	)
-}
 
 type HomeMobileProps = {
 	searchInputValue: string

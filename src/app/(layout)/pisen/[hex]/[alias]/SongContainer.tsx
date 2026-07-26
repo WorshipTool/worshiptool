@@ -16,6 +16,7 @@ import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import SheetDisplay from '@/common/components/SheetDisplay/SheetDisplay'
 import { SmartPortalMenuProvider } from '@/common/components/SmartPortalMenuItem/SmartPortalMenuProvider'
 import { Box, Gap, Typography } from '@/common/ui'
+import { CONTENT_CARD_SX } from '@/common/ui/GroupList'
 import useAuth from '@/hooks/auth/useAuth'
 import { useRerender } from '@/hooks/useRerender'
 import { ExtendedVariantPack } from '@/types/song'
@@ -140,12 +141,7 @@ export default function SongContainer({
 						    canvas (matching the rest of the app) — so short songs read as
 						    an intentional card, not a big empty white void */}
 						<Box
-							sx={{
-								bgcolor: 'background.paper',
-								borderRadius: 3,
-								boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-								padding: 2.5,
-							}}
+							sx={CONTENT_CARD_SX}
 						>
 							<SheetDisplay
 								sheet={currentSheet}

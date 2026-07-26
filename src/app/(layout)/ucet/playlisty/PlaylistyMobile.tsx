@@ -6,6 +6,7 @@ import {
 	MobileHeaderPill,
 } from '@/common/components/MobileAppHeader'
 import { Box, Typography } from '@/common/ui'
+import { GROUP_CARD_SX } from '@/common/ui/GroupList'
 import { Link } from '@/common/ui/Link/Link'
 import { Chip } from '@/common/ui/mui'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -23,15 +24,6 @@ import {
 import { useTranslations } from 'next-intl'
 import { Fragment } from 'react'
 
-// the playlists live in one white "group" surface (iOS-style grouped list);
-// rows are separated by a hairline inset to the text (no leading thumbnail —
-// playlists stay text-only, matching the desktop look)
-const GROUP_CARD_SX = {
-	bgcolor: 'background.paper',
-	borderRadius: 3,
-	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-	overflow: 'hidden',
-}
 const DIVIDER_INSET = 1.75
 
 type PlaylistyMobileProps = {

@@ -19,12 +19,29 @@ import { Fragment, ReactNode } from 'react'
  * the insets had already drifted apart. Everything lives here now.
  */
 
-/** The white grouped surface. Spread it when you need the raw sx. */
-export const GROUP_CARD_SX = {
+/** The raised white surface every mobile card sits on. */
+const CARD_SURFACE = {
 	bgcolor: 'background.paper',
 	borderRadius: 3,
 	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+} as const
+
+/**
+ * A list group: rows are flush to the edges and clip to the radius, so the
+ * surface provides no padding of its own. Spread it when you need the raw sx.
+ */
+export const GROUP_CARD_SX = {
+	...CARD_SURFACE,
 	overflow: 'hidden',
+} as const
+
+/**
+ * The same surface holding one block of content (a song sheet, a deck slide)
+ * rather than rows — so it pads itself instead of clipping.
+ */
+export const CONTENT_CARD_SX = {
+	...CARD_SURFACE,
+	padding: 2.5,
 } as const
 
 /**

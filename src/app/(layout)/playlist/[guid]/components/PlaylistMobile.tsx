@@ -9,6 +9,7 @@ import { MOBILE_NAV_CLEARANCE } from '@/common/components/MobileAppTabBar/nav.co
 import SongSelectPopup from '@/common/components/SongSelectPopup/SongSelectPopup'
 import { Box, Button, IconButton, Typography } from '@/common/ui'
 import { TextField } from '@/common/ui/TextField'
+import { GROUP_CARD_SX as CARD } from '@/common/ui/GroupList'
 import { alpha } from '@/common/ui/mui'
 import { PlaylistItemDto, PlaylistItemGuid } from '@/interfaces/playlist/playlist.types'
 import { routesPaths } from '@/routes'
@@ -48,12 +49,6 @@ const HEADER_TOP = 'calc(env(safe-area-inset-top) + '
 // content (the swipe deck's arrows + dots) can sit clear above it
 const SWITCHER_CLEARANCE = 74
 
-const CARD = {
-	bgcolor: 'background.paper',
-	borderRadius: 3,
-	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-	overflow: 'hidden',
-} as const
 const ROW = { display: 'flex', alignItems: 'center', gap: 1.25, paddingX: 1.5, paddingY: 1.25 } as const
 
 function KeyChip({ k }: { k: string }) {

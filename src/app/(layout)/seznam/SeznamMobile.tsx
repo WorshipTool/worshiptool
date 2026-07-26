@@ -4,41 +4,18 @@ import { mapBasicVariantPackApiToDto } from '@/api/dtos/song/song.map'
 import { GetListSongData } from '@/api/generated'
 import { useApi } from '@/api/tech-and-hooks/useApi'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import {
+	GroupRowsSkeleton,
+	ListStateView,
+	SongGroup,
+} from '@/common/ui/GroupList'
 import { Box, Button, Typography } from '@/common/ui'
 import { Pagination } from '@/common/ui/mui'
-import { Skeleton } from '@/common/ui/mui/Skeleton'
-import { SongVariantCard } from '@/common/ui/SongCard'
-import {
-	ChevronRightRounded,
-	CloudOffRounded,
-	MusicNoteRounded,
-	RefreshRounded,
-} from '@mui/icons-material'
+import { CloudOffRounded, MusicNoteRounded, RefreshRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 
 const PREVIEW_LINES = 1
-// divider starts past the leading icon: row padding (2u) + icon (5u) + gap (1.5u)
-const DIVIDER_INSET = 8.5
-
-// the whole page of songs lives in one white "group" surface (iOS-style
-// grouped list); each row is a flattened SongVariantCard separated by a hairline
-const GROUP_CARD_SX = {
-	bgcolor: 'background.paper',
-	borderRadius: 3,
-	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-	overflow: 'hidden',
-} as const
-
-// strip the card chrome off SongVariantCard so it reads as a row inside the group
-const FLAT_ROW_SX = {
-	bgcolor: 'transparent',
-	borderRadius: 0,
-	outlineColor: 'transparent',
-	'&:hover': { bgcolor: 'grey.50', boxShadow: 'none' },
-	'&:active': { bgcolor: 'grey.100' },
-} as const
-
 // small alphabetical section label above each letter's group card
 const LETTER_HEADER_SX = {
 	paddingLeft: 0.5,
@@ -49,31 +26,6 @@ const LETTER_HEADER_SX = {
 // first letter of a song title, upper-cased for the section header
 const firstLetter = (title: string) =>
 	(title.trim().charAt(0) || '#').toLocaleUpperCase('cs')
-
-function SongLeadingIcon() {
-	return (
-		<Box
-			sx={{
-				width: 40,
-				height: 40,
-				borderRadius: 2,
-				bgcolor: 'grey.100',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				flexShrink: 0,
-			}}
-		>
-			<MusicNoteRounded sx={{ fontSize: 20, color: 'grey.600' }} />
-		</Box>
-	)
-}
-
-function Divider() {
-	return (
-		<Box sx={{ height: '1px', bgcolor: 'grey.200', marginLeft: DIVIDER_INSET }} />
-	)
-}
 
 type SeznamMobileProps = {
 	/** 1-indexed page, kept in the URL by the parent (shared with desktop) */
@@ -174,81 +126,27 @@ export default function SeznamMobile({
 			scrollResetKey={page}
 		>
 			{loading ? (
-				<Box sx={GROUP_CARD_SX}>
-					{Array.from({ length: perPage }).map((_, i) => (
-						<Fragment key={i}>
-							<Box
-								sx={{
-									display: 'flex',
-									alignItems: 'center',
-									gap: 1.5,
-									paddingX: 1.75,
-									paddingY: 1.25,
-								}}
-							>
-								<Skeleton
-									variant="rounded"
-									sx={{
-										width: 40,
-										height: 40,
-										borderRadius: 2,
-										bgcolor: 'grey.100',
-										flexShrink: 0,
-									}}
-								/>
-								<Box sx={{ flex: 1 }}>
-									<Skeleton
-										variant="text"
-										sx={{ width: '55%', bgcolor: 'grey.100' }}
-									/>
-									<Skeleton
-										variant="text"
-										sx={{ width: '80%', bgcolor: 'grey.100' }}
-									/>
-								</Box>
-							</Box>
-							{i < perPage - 1 && <Divider />}
-						</Fragment>
-					))}
-				</Box>
+				<GroupRowsSkeleton rows={perPage} withIcon />
 			) : error ? (
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						textAlign: 'center',
-						gap: 2,
-						paddingTop: 8,
-						paddingX: 3,
-					}}
-				>
-					<CloudOffRounded sx={{ fontSize: 48, color: 'grey.400' }} />
-					<Typography color="grey.600">{t('error')}</Typography>
-					<Button
-						variant="outlined"
-						onClick={() => setReloadKey((k) => k + 1)}
-						startIcon={<RefreshRounded />}
-						disableUppercase
-					>
-						{tCommon('tryAgain')}
-					</Button>
-				</Box>
+				<ListStateView
+					icon={<CloudOffRounded fontSize="inherit" />}
+					message={t('error')}
+					action={
+						<Button
+							variant="outlined"
+							onClick={() => setReloadKey((k) => k + 1)}
+							startIcon={<RefreshRounded />}
+							disableUppercase
+						>
+							{tCommon('tryAgain')}
+						</Button>
+					}
+				/>
 			) : items.length === 0 ? (
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						textAlign: 'center',
-						gap: 1,
-						paddingTop: 8,
-						paddingX: 3,
-					}}
-				>
-					<MusicNoteRounded sx={{ fontSize: 48, color: 'grey.400' }} />
-					<Typography color="grey.600">{t('empty')}</Typography>
-				</Box>
+				<ListStateView
+					icon={<MusicNoteRounded fontSize="inherit" />}
+					message={t('empty')}
+				/>
 			) : (
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 					{letterGroups.map((group, groupIndex) => (
@@ -265,23 +163,10 @@ export default function SeznamMobile({
 									{group.letter}
 								</Typography>
 							</Box>
-							<Box sx={GROUP_CARD_SX}>
-								{group.items.map((s, i) => (
-									<Fragment key={`${String(s.main.packGuid)}-${i}`}>
-										<SongVariantCard
-											data={mapBasicVariantPackApiToDto(s.main)}
-											dense
-											previewLines={PREVIEW_LINES}
-											leadingIcon={<SongLeadingIcon />}
-											trailingIcon={
-												<ChevronRightRounded sx={{ color: 'grey.400' }} />
-											}
-											sx={FLAT_ROW_SX}
-										/>
-										{i < group.items.length - 1 && <Divider />}
-									</Fragment>
-								))}
-							</Box>
+							<SongGroup
+								songs={group.items.map((s) => mapBasicVariantPackApiToDto(s.main))}
+								previewLines={PREVIEW_LINES}
+							/>
 						</Box>
 					))}
 				</Box>

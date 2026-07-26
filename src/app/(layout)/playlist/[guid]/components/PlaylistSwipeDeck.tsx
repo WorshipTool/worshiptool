@@ -5,15 +5,9 @@ import { Box, IconButton, Typography } from '@/common/ui'
 import { PlaylistItemDto } from '@/interfaces/playlist/playlist.types'
 import { Sheet } from '@pepavlin/sheet-api'
 import { ChevronLeftRounded, ChevronRightRounded } from '@mui/icons-material'
+import { CONTENT_CARD_SX as CARD } from '@/common/ui/GroupList'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
-
-const CARD = {
-	bgcolor: 'background.paper',
-	borderRadius: 3,
-	boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-	padding: 2.5,
-} as const
 
 // one song slide: the shared SheetDisplay on a white card, with the playlist
 // item's stored key applied (same rendering as the standalone song page)
