@@ -41,7 +41,28 @@ hidden on tab-roots), `actions` (≤ 2 icons, right of the title), `controlPanel
 Oblíbené). The back arrow appears only when `backTo` is set — tab-roots (Domů /
 Písně=Seznam / Účet) have none by design; you switch to them via the tab bar.
 
-## How a screen decides it's a phone
+## The shell is fixed — never in flow
+
+`MobileAppHeader` is `position: fixed` (top 0 → `MOBILE_NAV_CLEARANCE`), and
+that is not negotiable: **an app-shell screen must never contribute height to
+the document.**
+
+If it does, the page itself becomes scrollable *underneath* the shell and you
+get two stacked scrollers. Anything the inner one doesn't consume — a drag on
+the header, or on the content once it hits its end — falls through to the
+document and carries the whole shell, header included, off the top of the
+screen. This shipped once (the shell had an in-flow mode used by every screen
+except the song page) and is exactly what it looks like on a real device.
+
+So: don't give the shell a height, a `minHeight`, or an in-flow wrapper, and
+don't reintroduce a "reclaim the space above" negative margin — the Toolbar
+deliberately contributes no spacer on these routes. A screen that builds its
+own shell instead of using `MobileAppHeader` (today only the playlist detail)
+must use the same fixed frame.
+
+The invariant to check on any shell route: scrolling the *window* moves it 0px.
+
+
 
 Ask **`useIsPhone()`** (`common/hooks/useIsPhone`) — never spell out
 `useMediaQuery(theme.breakpoints.down(…))` and never write `700` by hand.
