@@ -1,6 +1,5 @@
 'use client'
 
-import { BasicVariantPack } from '@/api/dtos'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
@@ -8,7 +7,6 @@ import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { ABOVE_TABBAR_SLOT_ID } from '@/common/components/MobileAppTabBar/nav.constants'
 import { Box, Clickable, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
@@ -22,12 +20,10 @@ import { SearchKey } from '@/types/song/search.types'
 import {
 	ChevronRightRounded,
 	CloudOffRounded,
-	MusicNoteRounded,
 	SearchRounded,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
@@ -41,10 +37,11 @@ type HomeMobileProps = {
 }
 
 /**
- * Native-feeling mobile home: a flat light-grey canvas with white grouped
- * lists (recommended picks, a quiet "last added"), a docked search in the
- * thumb zone and the bottom tab bar. The desktop layout stays in HomeDesktop;
- * this component owns the phone view.
+ * Native-feeling mobile home. Same flow as the desktop home, in a phone's
+ * clothes: hero (the shell's large title) → search field → results →
+ * recommendations, with the field staying put and the recommendations staying
+ * visible while you search. The desktop layout stays in HomeDesktop; this
+ * component owns the phone view.
  */
 export default function HomeMobile({
 	searchInputValue,
@@ -60,17 +57,15 @@ export default function HomeMobile({
 	const lastAdded = useLastAddedSongs()
 	const rec = recommended.data
 	const last = lastAdded.data
-	const searching = searchInputValue.trim().length > 0
 
-	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT.
-	// Only MainSearchInput listened for it, and that is desktop-only — so on a
-	// phone the bar's primary action used to do nothing visible.
+	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT,
+	// exactly like the desktop toolbar's "Hledat" item does. Only MainSearchInput
+	// listened for it, and that is desktop-only — so on a phone the bar's primary
+	// action used to do nothing visible.
 	//
-	// Deliberately only on the event (i.e. off a real tap, which is also what iOS
-	// requires before it will open the keyboard) and not on mount: the field is
-	// docked at the bottom inside the tab bar's fixed layer, and focusing it
-	// without a gesture makes iOS scroll it into view — which drags the whole
-	// page down and tucks the header under the status bar.
+	// The field is pinned under the header, so it is always on screen: focusing it
+	// cannot make iOS scroll it into view (which is what used to drag the page
+	// down and tuck the header under the status bar).
 	const searchInputRef = useRef<HTMLInputElement>(null)
 	const focusSearch = useCallback(() => {
 		searchInputRef.current?.focus()
@@ -80,29 +75,6 @@ export default function HomeMobile({
 		window.addEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
 		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
 	}, [focusSearch])
-
-	// the docked search is portalled into the tab bar's slot so it stacks on
-	// top of the bar via layout (see nav.constants.ABOVE_TABBAR_SLOT_ID)
-	const [tabBarSlot, setTabBarSlot] = useState<HTMLElement | null>(null)
-	useEffect(() => {
-		setTabBarSlot(document.getElementById(ABOVE_TABBAR_SLOT_ID))
-	}, [])
-
-	// The docked search overlays the bottom of the shell's scroller (it lives in
-	// the tab bar's fixed slot, which the shell's height doesn't know about).
-	// Measure it rather than hardcoding a clearance, so the last row stays
-	// reachable however tall the field ends up.
-	const searchDockRef = useRef<HTMLDivElement>(null)
-	const [searchDockHeight, setSearchDockHeight] = useState(0)
-	useEffect(() => {
-		const el = searchDockRef.current
-		if (!el) return
-		const measure = () => setSearchDockHeight(el.offsetHeight)
-		const observer = new ResizeObserver(measure)
-		observer.observe(el)
-		measure()
-		return () => observer.disconnect()
-	}, [tabBarSlot])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -188,7 +160,8 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- docked search: buttonless field with a primary gradient border
+	// ---- search: buttonless field with a primary gradient border, pinned under
+	// the header the way the desktop one stays pinned under the hero
 
 	const search = (
 		<Box
@@ -225,64 +198,40 @@ export default function HomeMobile({
 	)
 
 	return (
-		<>
-			{/* Home is a tab-root, so no back arrow — otherwise the same shell as
-			    every other screen: large title that shrinks to a slim bar on scroll,
-			    with only the content between it and the tab bar scrolling. */}
-			<MobileAppHeader
-				title={tHome('hero.title')}
-				subtitle={tHome('hero.lead')}
+		// Home is a tab-root, so no back arrow — otherwise the same shell as every
+		// other screen: large title that shrinks to a slim bar on scroll, with only
+		// the content between it and the tab bar scrolling.
+		//
+		// The title/subtitle are the desktop hero and the control panel is its
+		// search input: on desktop that input is fixed and slides up into the
+		// toolbar as you scroll, so it never leaves the screen. Pinning it under
+		// the header is the same behaviour in a phone's clothes.
+		<MobileAppHeader
+			title={tHome('hero.title')}
+			subtitle={tHome('hero.lead')}
+			controlPanel={search}
+		>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 3,
+					paddingTop: 1,
+				}}
 			>
-				{searching ? (
-					<Box sx={{ paddingTop: 1, paddingBottom: `${searchDockHeight}px` }}>
-						{searchString ? (
-							<MobileSearchResults searchString={searchString} smartSearch={smartSearch} />
-						) : (
-							// the search box is debounced: for ~300ms after the first
-							// keystroke there is no query yet. The picks are already
-							// hidden by then, so show the results skeleton rather than
-							// leaving an empty canvas.
-							<SearchResultsFrame>
-								<SearchResultsSkeleton />
-							</SearchResultsFrame>
-						)}
-					</Box>
-				) : (
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 3,
-							paddingTop: 1,
-							paddingBottom: `${searchDockHeight}px`,
-						}}
-					>
-						{picks}
-						{recent}
-					</Box>
+				{/* Results sit above the recommendations rather than replacing them,
+				    as on desktop — so the home screen never blanks out mid-typing and
+				    clearing the field leaves you where you started. */}
+				{searchString && (
+					<MobileSearchResults
+						searchString={searchString}
+						smartSearch={smartSearch}
+					/>
 				)}
-			</MobileAppHeader>
-
-			{/* ===== SEARCH: portalled into the tab bar's slot so it stacks on
-			    top of the bar via layout (thumb zone, no magic offsets) ===== */}
-			{tabBarSlot &&
-				createPortal(
-					<Box
-						ref={searchDockRef}
-						sx={{
-							width: '100%',
-							paddingX: 2,
-							paddingTop: 1,
-							paddingBottom: 1.25,
-							boxSizing: 'border-box',
-							bgcolor: 'grey.50',
-						}}
-					>
-						{search}
-					</Box>,
-					tabBarSlot
-				)}
-		</>
+				{picks}
+				{recent}
+			</Box>
+		</MobileAppHeader>
 	)
 }
 
