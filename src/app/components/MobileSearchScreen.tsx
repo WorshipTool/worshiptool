@@ -18,6 +18,51 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const PREVIEW_LINES = 2
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
+// height the visual viewport must lose before we call it a keyboard rather than
+// a browser chrome nudge
+const KEYBOARD_THRESHOLD = 120
+
+/**
+ * Tracks the visual viewport so a bottom-anchored control can sit on top of the
+ * keyboard. iOS does not shrink the layout viewport when the keyboard opens, so
+ * `position: fixed; bottom: 0` lands *behind* it — the height has to come from
+ * visualViewport instead. Returns null until measured (and on browsers without
+ * the API), where full height is the right fallback.
+ */
+function useVisualViewport() {
+	const [viewport, setViewport] = useState<{
+		height: number
+		offsetTop: number
+		keyboardOpen: boolean
+	} | null>(null)
+
+	useEffect(() => {
+		const vv = window.visualViewport
+		if (!vv) return
+		let raf = 0
+		const measure = () => {
+			raf = 0
+			setViewport({
+				height: vv.height,
+				offsetTop: vv.offsetTop,
+				keyboardOpen: window.innerHeight - vv.height > KEYBOARD_THRESHOLD,
+			})
+		}
+		const schedule = () => {
+			if (!raf) raf = requestAnimationFrame(measure)
+		}
+		vv.addEventListener('resize', schedule)
+		vv.addEventListener('scroll', schedule)
+		measure()
+		return () => {
+			vv.removeEventListener('resize', schedule)
+			vv.removeEventListener('scroll', schedule)
+			if (raf) cancelAnimationFrame(raf)
+		}
+	}, [])
+
+	return viewport
+}
 
 type MobileSearchScreenProps = {
 	/** Raw field value (undebounced), owned by the home page like on desktop. */
@@ -35,13 +80,21 @@ type MobileSearchScreenProps = {
 }
 
 /**
- * Full-screen search, opened from the tab bar's Hledat action.
+ * Full-screen search, opened from the tab bar's raised Hledat action.
  *
  * A phone has no room to keep a search field on screen the way the desktop home
- * does, so searching becomes a mode instead of a permanent strip: the layer
- * covers the whole viewport (tab bar included), the field sits at the top with
- * the keyboard under it, and results fill everything between. Closing it leaves
- * the home screen exactly as it was.
+ * does, so searching is a mode instead of a permanent strip: the layer covers
+ * the whole viewport (tab bar included) and closing it leaves the home screen
+ * exactly as it was.
+ *
+ * The field sits at the *bottom*, directly above the keyboard, which is what
+ * Apple's HIG asks for — "Place search at the bottom if there's room […] it
+ * keeps the search experience easy to reach" — and specifically what a search
+ * tab styled as a separate round button is supposed to do: the keyboard appears
+ * immediately with the field above it. A field at the top would be the other
+ * HIG style (a uniform tab opening a landing page), which does not match the
+ * round button we have in the tab bar. Suggestions and results sit above the
+ * field, in normal order, as in YouTube Music's bottom search.
  *
  * Its own fixed layer rather than a MobileAppHeader: the shell's chrome is a
  * collapsing title over a tab bar, which is the opposite of what this needs.
@@ -60,6 +113,7 @@ export default function MobileSearchScreen({
 	const tCommon = useTranslations('common')
 	const tSearch = useTranslations('search')
 	const tHome = useTranslations('home')
+	const viewport = useVisualViewport()
 
 	return (
 		<Box
@@ -68,7 +122,10 @@ export default function MobileSearchScreen({
 				top: 0,
 				left: 0,
 				right: 0,
-				bottom: 0,
+				// Bound by the visual viewport, not the layout one, so the bottom edge
+				// is the top of the keyboard rather than the top of the screen behind it.
+				height: viewport ? `${viewport.height}px` : '100%',
+				transform: viewport ? `translateY(${viewport.offsetTop}px)` : undefined,
 				zIndex: Z_INDEX.OVERLAY,
 				bgcolor: 'grey.50',
 				display: 'flex',
@@ -76,18 +133,58 @@ export default function MobileSearchScreen({
 				[theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)]: { display: 'none' },
 			}}
 		>
-			{/* field + Zrušit, pinned; the keyboard opens directly beneath it */}
+			{/* results/suggestions scroll above the field, in reading order */}
+			<Box
+				sx={{
+					flex: 1,
+					minHeight: 0,
+					overflowY: 'auto',
+					overflowX: 'hidden',
+					paddingX: 2,
+					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
+					paddingBottom: 1.5,
+				}}
+			>
+				{searchString ? (
+					<SearchResults searchString={searchString} smartSearch={smartSearch} />
+				) : suggestions && suggestions.length > 0 ? (
+					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+						<Typography
+							small
+							strong
+							uppercase
+							color="grey.700"
+							sx={{ paddingX: 0.5 }}
+						>
+							{tHome('recommended.idea')}
+						</Typography>
+						<SongGroup songs={suggestions} previewLines={PREVIEW_LINES} />
+					</Box>
+				) : (
+					<ListStateView
+						icon={<SearchRounded fontSize="inherit" />}
+						message={tSearch('searchSong')}
+					/>
+				)}
+			</Box>
+
+			{/* field + Zrušit, anchored to the bottom edge — i.e. on top of the
+			    keyboard once it opens */}
 			<Box
 				sx={{
 					flexShrink: 0,
 					display: 'flex',
 					alignItems: 'center',
 					gap: 1,
-					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
-					paddingBottom: 1.25,
+					paddingTop: 1.25,
+					// with the keyboard up, the home indicator sits behind it, so the
+					// safe-area inset would only add a dead gap
+					paddingBottom: viewport?.keyboardOpen
+						? 1.25
+						: 'calc(env(safe-area-inset-bottom) + 12px)',
 					paddingX: 2,
 					bgcolor: 'grey.50',
-					borderBottom: '1px solid',
+					borderTop: '1px solid',
 					borderColor: 'grey.200',
 				}}
 			>
@@ -135,40 +232,6 @@ export default function MobileSearchScreen({
 				</Button>
 			</Box>
 
-			{/* the only scroller in the layer */}
-			<Box
-				sx={{
-					flex: 1,
-					minHeight: 0,
-					overflowY: 'auto',
-					overflowX: 'hidden',
-					paddingX: 2,
-					paddingTop: 1.5,
-					paddingBottom: 2,
-				}}
-			>
-				{searchString ? (
-					<SearchResults searchString={searchString} smartSearch={smartSearch} />
-				) : suggestions && suggestions.length > 0 ? (
-					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-						<Typography
-							small
-							strong
-							uppercase
-							color="grey.700"
-							sx={{ paddingX: 0.5 }}
-						>
-							{tHome('recommended.idea')}
-						</Typography>
-						<SongGroup songs={suggestions} previewLines={PREVIEW_LINES} />
-					</Box>
-				) : (
-					<ListStateView
-						icon={<SearchRounded fontSize="inherit" />}
-						message={tSearch('searchSong')}
-					/>
-				)}
-			</Box>
 		</Box>
 	)
 }
