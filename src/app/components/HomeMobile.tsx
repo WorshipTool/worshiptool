@@ -13,6 +13,7 @@ import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
 import { ChevronRightRounded, CloudOffRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
@@ -63,13 +64,21 @@ export default function HomeMobile({
 		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
 	}, [openSearch])
 
-	// A full-screen layer should answer the hardware Back button, so opening it
-	// pushes a history entry and Back closes it. useUrlState edits the query with
-	// replaceState, so typing re-labels this entry instead of stacking more.
-	//
-	// NOTE: with the Cancel button gone this is currently the *only* way out, and
-	// an installed iOS PWA has no browser Back — the search layer needs its own
-	// exit affordance before this ships.
+	// Tapping a tab is the way out of search. Písně and Účet leave this route and
+	// unmount the screen on their own, but Domů navigates to the route we are
+	// already on, so nothing would tear the layer down — the query param dropping
+	// out of the URL is the signal. Typing edits the URL with replaceState, which
+	// does not update this hook, so it cannot fire mid-search.
+	const searchParams = useSearchParams()
+	useEffect(() => {
+		if (searchParams.has('hledat')) return
+		setSearchOpen(false)
+		onSearchValueChange('')
+	}, [searchParams, onSearchValueChange])
+
+	// The Back gesture should close the layer too, so opening it pushes a history
+	// entry. useUrlState edits the query with replaceState, so typing re-labels
+	// that entry instead of stacking more.
 	useEffect(() => {
 		if (!searchOpen) return
 		window.history.pushState({ mobileSearch: true }, '')

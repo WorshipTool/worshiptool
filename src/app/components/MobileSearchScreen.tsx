@@ -4,7 +4,10 @@ import { BasicVariantPack } from '@/api/dtos'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { Z_INDEX } from '@/common/constants/zIndex'
-import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
+import {
+	MOBILE_NAV_BREAKPOINT,
+	MOBILE_NAV_CLEARANCE,
+} from '@/common/components/MobileAppTabBar/nav.constants'
 import { GroupRowsSkeleton, ListStateView, SongGroup } from '@/common/ui/GroupList'
 import { Box, Typography, useTheme } from '@/common/ui'
 import { TextField } from '@/common/ui/TextField'
@@ -129,7 +132,16 @@ export default function MobileSearchScreen({
 				right: 0,
 				// Bound by the visual viewport, not the layout one, so the bottom edge
 				// is the top of the keyboard rather than the top of the screen behind it.
-				height: viewport ? `${viewport.height}px` : '100%',
+				//
+				// The tab bar never moves: with the keyboard down the layer stops above
+				// it, so the tabs stay visible and tappable and are the way out of
+				// search. With the keyboard up the tabs are behind it anyway, so the
+				// layer takes that space and the field sits right on the keyboard.
+				height: viewport
+					? viewport.keyboardOpen
+						? `${viewport.height}px`
+						: `calc(${viewport.height}px - ${MOBILE_NAV_CLEARANCE})`
+					: `calc(100% - ${MOBILE_NAV_CLEARANCE})`,
 				transform: viewport ? `translateY(${viewport.offsetTop}px)` : undefined,
 				zIndex: Z_INDEX.OVERLAY,
 				bgcolor: 'grey.50',
@@ -182,11 +194,10 @@ export default function MobileSearchScreen({
 					alignItems: 'center',
 					gap: 1,
 					paddingTop: 1.25,
-					// with the keyboard up, the home indicator sits behind it, so the
-					// safe-area inset would only add a dead gap
-					paddingBottom: viewport?.keyboardOpen
-						? 1.25
-						: 'calc(env(safe-area-inset-bottom) + 12px)',
+					// no safe-area padding: with the keyboard down the tab bar sits below
+					// and already accounts for it, and with the keyboard up the home
+					// indicator is behind the keyboard
+					paddingBottom: 1.25,
 					paddingX: 2,
 					bgcolor: 'grey.50',
 					borderTop: '1px solid',
