@@ -63,11 +63,15 @@ export default function HomeMobile({
 	// listened for it, and that is desktop-only — so on a phone the bar's primary
 	// action used to do nothing visible.
 	//
-	// The field is pinned under the header, so it is always on screen: focusing it
-	// cannot make iOS scroll it into view (which is what used to drag the page
-	// down and tuck the header under the status bar).
+	// The field scrolls with the content, so reaching it means scrolling back to
+	// the top first — which is precisely what the desktop handler does
+	// (window.scrollTo, then focus). Driving it through the shell's own
+	// scroll-to-top signal keeps the scrolling inside the one scroller, so iOS is
+	// never the one deciding to bring the field into view.
 	const searchInputRef = useRef<HTMLInputElement>(null)
+	const [scrollTopSignal, setScrollTopSignal] = useState(0)
 	const focusSearch = useCallback(() => {
+		setScrollTopSignal((n) => n + 1)
 		searchInputRef.current?.focus()
 	}, [])
 
@@ -202,14 +206,15 @@ export default function HomeMobile({
 		// other screen: large title that shrinks to a slim bar on scroll, with only
 		// the content between it and the tab bar scrolling.
 		//
-		// The title/subtitle are the desktop hero and the control panel is its
-		// search input: on desktop that input is fixed and slides up into the
-		// toolbar as you scroll, so it never leaves the screen. Pinning it under
-		// the header is the same behaviour in a phone's clothes.
+		// The title/subtitle are the desktop hero and the field below them is its
+		// search input — same order, same at-rest look. It stays part of the
+		// content rather than being pinned as chrome: a permanently docked field
+		// costs a phone its scarcest resource (height) even while you are only
+		// browsing. Scrolled away it is one tap on the tab bar's Hledat away.
 		<MobileAppHeader
 			title={tHome('hero.title')}
 			subtitle={tHome('hero.lead')}
-			controlPanel={search}
+			scrollResetKey={scrollTopSignal}
 		>
 			<Box
 				sx={{
@@ -219,6 +224,7 @@ export default function HomeMobile({
 					paddingTop: 1,
 				}}
 			>
+				{search}
 				{/* Results sit above the recommendations rather than replacing them,
 				    as on desktop — so the home screen never blanks out mid-typing and
 				    clearing the field leaves you where you started. */}
