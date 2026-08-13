@@ -4,6 +4,7 @@ import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/ho
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import MobileSearchScreen from '@/app/components/MobileSearchScreen'
+import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
 import { Box, Clickable, Typography } from '@/common/ui'
@@ -69,12 +70,25 @@ export default function HomeMobile({
 	// already on, so nothing would tear the layer down — the query param dropping
 	// out of the URL is the signal. Typing edits the URL with replaceState, which
 	// does not update this hook, so it cannot fire mid-search.
+	//
+	// Guarded on the layer actually being open: clearing the value writes the
+	// (empty) query param back through useUrlState, so running this on a plain
+	// visit to `/` would put ?hledat= in the URL and make the bar light up as if
+	// search were open.
 	const searchParams = useSearchParams()
 	useEffect(() => {
 		if (searchParams.has('hledat')) return
+		if (!searchOpen) return
 		setSearchOpen(false)
 		onSearchValueChange('')
-	}, [searchParams, onSearchValueChange])
+	}, [searchParams, searchOpen, onSearchValueChange])
+
+	// Let the tab bar reflect the layer (it has no other way to know — see
+	// mobileSearchState), and make sure it doesn't stay lit if we unmount.
+	useEffect(() => {
+		setMobileSearchOpen(searchOpen)
+		return () => setMobileSearchOpen(false)
+	}, [searchOpen])
 
 	// The Back gesture should close the layer too, so opening it pushes a history
 	// entry. useUrlState edits the query with replaceState, so typing re-labels

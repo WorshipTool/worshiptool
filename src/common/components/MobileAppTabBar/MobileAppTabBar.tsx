@@ -20,6 +20,7 @@ import {
 	Search,
 } from '@mui/icons-material'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
+import { useMobileSearchOpen } from './mobileSearchState'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import {
@@ -32,9 +33,11 @@ import {
 } from './nav.constants'
 
 /**
- * The app's mobile bottom navigation — a light (white) tab bar with a raised
- * blue "Hledat" main action in the center, flanked by Domů / Písně on the left
- * and Nástroje / Účet on the right. Rendered once, globally, next to the top
+ * The app's mobile bottom navigation — a light (white) tab bar of equally sized
+ * tabs: Domů / Písně / Hledat / Nástroje (or O aplikaci) / Účet (or Přihlásit).
+ * Search is the app's preferred action and is marked by tint, not by size, so
+ * the row stays even and it can still show an active state. Rendered once,
+ * globally, next to the top
  * bar (see AppLayoutInner) and driven by the route: it shows on the app-shell
  * routes (where the top bar hides itself) and renders nothing on marketing
  * pages. Phone-only (CSS-hidden on desktop). Like the top bar, it renders an
@@ -45,6 +48,7 @@ export default function MobileAppTabBar() {
 	const tNav = useTranslations('navigation')
 	const { isLoggedIn } = useAuth()
 	const pathname = useClientPathname()
+	const searchActive = useMobileSearchOpen()
 
 	const [toolsOpen, setToolsOpen] = useState(false)
 
@@ -99,7 +103,7 @@ export default function MobileAppTabBar() {
 						icon={<HomeOutlined />}
 						activeIcon={<HomeRounded />}
 						label={tNav('home')}
-						active={active === 'home'}
+						active={active === 'home' && !searchActive}
 					/>
 				</Link>
 				<Link to="songsList" params={{ s: undefined }} style={{ flex: 1, minWidth: 0 }}>
@@ -111,15 +115,22 @@ export default function MobileAppTabBar() {
 					/>
 				</Link>
 
-				{/* raised main action: search (house Link doesn't forward onClick,
-				    so the search-focus event is dispatched from the child) */}
+				{/* the app's preferred action, emphasised by style rather than size
+				    (house Link doesn't forward onClick, so the search-focus event is
+				    dispatched from a wrapper) */}
 				<Link to="home" params={{ hledat: '' }} style={{ flex: 1, minWidth: 0 }}>
-					<CenterSearch
-						label={tNav('search')}
+					<Box
 						onClick={() =>
 							window.dispatchEvent(new Event(MAIN_SEARCH_EVENT_NAME))
 						}
-					/>
+					>
+						<TabItem
+							icon={<Search />}
+							label={tNav('search')}
+							active={searchActive}
+							emphasized
+						/>
+					</Box>
 				</Link>
 
 				{/* logged in: Nástroje + Účet; logged out: O aplikaci + Přihlásit se */}
@@ -191,12 +202,25 @@ type TabItemProps = {
 	activeIcon?: JSX.Element
 	label: string
 	active?: boolean
+	/**
+	 * Marks the app's preferred action (search). Tinted rather than enlarged:
+	 * every tab keeps the same footprint, so the bar doesn't get squeezed to make
+	 * room for one item, and the emphasised tab can still show an active state —
+	 * which a permanently-highlighted raised button cannot.
+	 */
+	emphasized?: boolean
 }
 
 // side tab: blue (brand) when active, grey when not; filled icon + bold label when active
-function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
-	const iconColor = active ? 'primary.main' : 'grey.500'
-	const labelColor = active ? 'primary.main' : 'grey.700'
+function TabItem({ icon, activeIcon, label, active, emphasized }: TabItemProps) {
+	const iconColor = emphasized
+		? active
+			? 'common.white'
+			: 'primary.main'
+		: active
+			? 'primary.main'
+			: 'grey.500'
+	const labelColor = active || emphasized ? 'primary.main' : 'grey.700'
 	return (
 		<Box
 			sx={{
@@ -207,57 +231,27 @@ function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 				minWidth: 0,
 			}}
 		>
-			<Box sx={{ color: iconColor, display: 'flex', '& svg': { fontSize: 25 } }}>
+			{/* every tab carries the same pill geometry so the row stays even; only
+			    the emphasised one paints it in */}
+			<Box
+				sx={{
+					color: iconColor,
+					display: 'flex',
+					paddingX: 1.5,
+					paddingY: 0.25,
+					borderRadius: 999,
+					bgcolor: emphasized && active ? 'primary.main' : 'transparent',
+					transition: 'background-color 0.15s ease',
+					'& svg': { fontSize: 25 },
+				}}
+			>
 				{active ? activeIcon ?? icon : icon}
 			</Box>
 			<Typography
 				noWrap
 				size="0.65rem"
-				strong={active ? 700 : 500}
+				strong={active || emphasized ? 700 : 500}
 				color={labelColor}
-				sx={{ lineHeight: 1.2 }}
-			>
-				{label}
-			</Typography>
-		</Box>
-	)
-}
-
-// raised circular blue "Hledat" — the bar's primary action
-function CenterSearch({ label, onClick }: { label: string; onClick?: () => void }) {
-	return (
-		<Box
-			onClick={onClick}
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				gap: 0.6,
-				minWidth: 0,
-			}}
-		>
-			<Box
-				sx={{
-					marginTop: '-18px',
-					width: 54,
-					height: 54,
-					borderRadius: 999,
-					bgcolor: 'primary.main',
-					boxShadow: '0 6px 16px rgba(0,0,0,0.22)',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					color: 'common.white',
-					'& svg': { fontSize: 26 },
-				}}
-			>
-				<Search />
-			</Box>
-			<Typography
-				noWrap
-				size="0.65rem"
-				strong={700}
-				color="primary.main"
 				sx={{ lineHeight: 1.2 }}
 			>
 				{label}

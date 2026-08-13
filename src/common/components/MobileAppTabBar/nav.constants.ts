@@ -16,8 +16,9 @@ export const MOBILE_NAV_BREAKPOINT = 700
  */
 export const ABOVE_TABBAR_SLOT_ID = 'mobile-above-tabbar-slot'
 
-/** Bottom clearance pages need so their content isn't hidden by the fixed bar
- * (accounts for the raised center action that pokes above the bar). */
+/** Bottom clearance pages need so their content isn't hidden by the fixed bar.
+ * The bar measures ~71px, so this leaves a little slack for larger text sizes —
+ * overshooting is invisible, undershooting hides content. */
 export const MOBILE_NAV_CLEARANCE = 'calc(env(safe-area-inset-bottom) + 80px)'
 
 export type MobileTab = 'home' | 'songs' | 'account' | null
