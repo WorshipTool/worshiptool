@@ -6,7 +6,7 @@ import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { Z_INDEX } from '@/common/constants/zIndex'
 import { MOBILE_NAV_BREAKPOINT } from '@/common/components/MobileAppTabBar/nav.constants'
 import { GroupRowsSkeleton, ListStateView, SongGroup } from '@/common/ui/GroupList'
-import { Box, Button, Typography, useTheme } from '@/common/ui'
+import { Box, Typography, useTheme } from '@/common/ui'
 import { TextField } from '@/common/ui/TextField'
 import useSongSearch from '@/hooks/song/useSongSearch'
 import usePagination from '@/hooks/usePagination'
@@ -15,6 +15,7 @@ import { SearchKey } from '@/types/song/search.types'
 import { SearchRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const PREVIEW_LINES = 2
 const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
@@ -76,7 +77,6 @@ type MobileSearchScreenProps = {
 	 * they cost nothing here and keep the opening screen from being blank.
 	 */
 	suggestions?: BasicVariantPack[]
-	onClose: () => void
 }
 
 /**
@@ -107,15 +107,20 @@ export default function MobileSearchScreen({
 	searchString,
 	smartSearch,
 	suggestions,
-	onClose,
 }: MobileSearchScreenProps) {
 	const theme = useTheme()
-	const tCommon = useTranslations('common')
 	const tSearch = useTranslations('search')
 	const tHome = useTranslations('home')
 	const viewport = useVisualViewport()
 
-	return (
+	// Rendered into the body: a fixed layer positions against the viewport only
+	// while no ancestor has a transform/filter/containment, and any of those
+	// would silently trap it inside that ancestor's box instead.
+	const [host, setHost] = useState<HTMLElement | null>(null)
+	useEffect(() => setHost(document.body), [])
+	if (!host) return null
+
+	return createPortal(
 		<Box
 			sx={{
 				position: 'fixed',
@@ -168,8 +173,8 @@ export default function MobileSearchScreen({
 				)}
 			</Box>
 
-			{/* field + Zrušit, anchored to the bottom edge — i.e. on top of the
-			    keyboard once it opens */}
+			{/* the field, anchored to the bottom edge — i.e. on top of the keyboard
+			    once it opens */}
 			<Box
 				sx={{
 					flexShrink: 0,
@@ -227,12 +232,9 @@ export default function MobileSearchScreen({
 						</Box>
 					</Box>
 				</Box>
-				<Button variant="text" onClick={onClose} disableUppercase>
-					{tCommon('cancel')}
-				</Button>
 			</Box>
-
-		</Box>
+		</Box>,
+		host
 	)
 }
 

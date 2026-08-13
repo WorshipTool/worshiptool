@@ -7,6 +7,8 @@ import { storyBookComponents } from './createStory'
 
 import { Masonry } from '@/common/ui/Masonry'
 import {} from '@/ui/index.story'
+// screen-level playgrounds live next to their screen rather than in the ui barrel
+import {} from '@/app/components/MobileSearchScreen.story'
 import { Gap } from '../../../common/ui/Gap'
 
 export default function TestComponents() {

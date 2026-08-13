@@ -64,9 +64,12 @@ export default function HomeMobile({
 	}, [openSearch])
 
 	// A full-screen layer should answer the hardware Back button, so opening it
-	// pushes a history entry and Back (or Zrušit, which unwinds through the same
-	// entry) closes it. useUrlState edits the query with replaceState, so typing
-	// re-labels this entry instead of stacking more.
+	// pushes a history entry and Back closes it. useUrlState edits the query with
+	// replaceState, so typing re-labels this entry instead of stacking more.
+	//
+	// NOTE: with the Cancel button gone this is currently the *only* way out, and
+	// an installed iOS PWA has no browser Back — the search layer needs its own
+	// exit affordance before this ships.
 	useEffect(() => {
 		if (!searchOpen) return
 		window.history.pushState({ mobileSearch: true }, '')
@@ -74,11 +77,6 @@ export default function HomeMobile({
 		window.addEventListener('popstate', onPop)
 		return () => window.removeEventListener('popstate', onPop)
 	}, [searchOpen])
-
-	const closeSearch = useCallback(() => {
-		onSearchValueChange('')
-		window.history.back()
-	}, [onSearchValueChange])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -193,7 +191,6 @@ export default function HomeMobile({
 					searchString={searchString}
 					smartSearch={smartSearch}
 					suggestions={rec.slice(0, 5)}
-					onClose={closeSearch}
 				/>
 			)}
 		</>
