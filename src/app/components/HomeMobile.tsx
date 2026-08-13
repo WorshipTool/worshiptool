@@ -1,29 +1,19 @@
 'use client'
 
-import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
-import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
+import MobileSearchScreen from '@/app/components/MobileSearchScreen'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { Box, Clickable, Typography, useTheme } from '@/common/ui'
+import { Box, Clickable, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
-import { TextField } from '@/common/ui/TextField'
-import useSongSearch from '@/hooks/song/useSongSearch'
-import usePagination from '@/hooks/usePagination'
-import { useIsInViewport } from '@/hooks/useIsInViewport'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
-import { SearchKey } from '@/types/song/search.types'
-import {
-	ChevronRightRounded,
-	CloudOffRounded,
-	SearchRounded,
-} from '@mui/icons-material'
+import { ChevronRightRounded, CloudOffRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
@@ -37,10 +27,12 @@ type HomeMobileProps = {
 }
 
 /**
- * Native-feeling mobile home. Same flow as the desktop home, in a phone's
- * clothes: hero (the shell's large title) → search field → results →
- * recommendations, with the field staying put and the recommendations staying
- * visible while you search. The desktop layout stays in HomeDesktop; this
+ * Native-feeling mobile home: a flat light-grey canvas with white grouped lists
+ * (recommended picks, a quiet "last added") under the shell's large title, which
+ * is the desktop hero in a phone's clothes.
+ *
+ * Searching is a mode rather than a strip on this screen — see
+ * MobileSearchScreen for why. The desktop layout stays in HomeDesktop; this
  * component owns the phone view.
  */
 export default function HomeMobile({
@@ -49,36 +41,44 @@ export default function HomeMobile({
 	searchString,
 	smartSearch,
 }: HomeMobileProps) {
-	const theme = useTheme()
 	const tHome = useTranslations('home')
-	const tSearch = useTranslations('search')
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
 	const rec = recommended.data
 	const last = lastAdded.data
 
+	// Open straight into search when the URL already carries a query, so a shared
+	// or reloaded ?hledat= link lands where it says it does.
+	const [searchOpen, setSearchOpen] = useState(() => Boolean(searchString))
+
 	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT,
 	// exactly like the desktop toolbar's "Hledat" item does. Only MainSearchInput
 	// listened for it, and that is desktop-only — so on a phone the bar's primary
 	// action used to do nothing visible.
-	//
-	// The field scrolls with the content, so reaching it means scrolling back to
-	// the top first — which is precisely what the desktop handler does
-	// (window.scrollTo, then focus). Driving it through the shell's own
-	// scroll-to-top signal keeps the scrolling inside the one scroller, so iOS is
-	// never the one deciding to bring the field into view.
-	const searchInputRef = useRef<HTMLInputElement>(null)
-	const [scrollTopSignal, setScrollTopSignal] = useState(0)
-	const focusSearch = useCallback(() => {
-		setScrollTopSignal((n) => n + 1)
-		searchInputRef.current?.focus()
-	}, [])
+	const openSearch = useCallback(() => setSearchOpen(true), [])
 
 	useEffect(() => {
-		window.addEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
-		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, focusSearch)
-	}, [focusSearch])
+		window.addEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
+		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
+	}, [openSearch])
+
+	// A full-screen layer should answer the hardware Back button, so opening it
+	// pushes a history entry and Back (or Zrušit, which unwinds through the same
+	// entry) closes it. useUrlState edits the query with replaceState, so typing
+	// re-labels this entry instead of stacking more.
+	useEffect(() => {
+		if (!searchOpen) return
+		window.history.pushState({ mobileSearch: true }, '')
+		const onPop = () => setSearchOpen(false)
+		window.addEventListener('popstate', onPop)
+		return () => window.removeEventListener('popstate', onPop)
+	}, [searchOpen])
+
+	const closeSearch = useCallback(() => {
+		onSearchValueChange('')
+		window.history.back()
+	}, [onSearchValueChange])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -164,151 +164,39 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- search: buttonless field with a primary gradient border, pinned under
-	// the header the way the desktop one stays pinned under the hero
-
-	const search = (
-		<Box
-			component="form"
-			onSubmit={(e) => {
-				e.preventDefault()
-				;(e.currentTarget.querySelector('input') as HTMLInputElement | null)?.blur()
-			}}
-			sx={{
-				background: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-				borderRadius: 2,
-				padding: '2px',
-				boxShadow: 2,
-			}}
-		>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1,
-					bgcolor: 'background.paper',
-					borderRadius: 1.75,
-					paddingX: 1.75,
-					paddingY: 1.25,
-					minWidth: 0,
-				}}
+	return (
+		<>
+			{/* Home is a tab-root, so no back arrow — otherwise the same shell as
+			    every other screen: large title that shrinks to a slim bar on scroll,
+			    with only the content between it and the tab bar scrolling. */}
+			<MobileAppHeader
+				title={tHome('hero.title')}
+				subtitle={tHome('hero.lead')}
 			>
-				<SearchRounded sx={{ color: 'grey.500', fontSize: 20 }} />
-				<Box sx={{ flex: 1, minWidth: 0 }}>
-					<TextField inputRef={searchInputRef} value={searchInputValue} onChange={onSearchValueChange} placeholder={tSearch('searchByTitleOrText')} />
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 3,
+						paddingTop: 1,
+					}}
+				>
+					{picks}
+					{recent}
 				</Box>
-			</Box>
-		</Box>
-	)
+			</MobileAppHeader>
 
-	return (
-		// Home is a tab-root, so no back arrow — otherwise the same shell as every
-		// other screen: large title that shrinks to a slim bar on scroll, with only
-		// the content between it and the tab bar scrolling.
-		//
-		// The title/subtitle are the desktop hero and the field below them is its
-		// search input — same order, same at-rest look. It stays part of the
-		// content rather than being pinned as chrome: a permanently docked field
-		// costs a phone its scarcest resource (height) even while you are only
-		// browsing. Scrolled away it is one tap on the tab bar's Hledat away.
-		<MobileAppHeader
-			title={tHome('hero.title')}
-			subtitle={tHome('hero.lead')}
-			scrollResetKey={scrollTopSignal}
-		>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 3,
-					paddingTop: 1,
-				}}
-			>
-				{search}
-				{/* Results sit above the recommendations rather than replacing them,
-				    as on desktop — so the home screen never blanks out mid-typing and
-				    clearing the field leaves you where you started. */}
-				{searchString && (
-					<MobileSearchResults
-						searchString={searchString}
-						smartSearch={smartSearch}
-					/>
-				)}
-				{picks}
-				{recent}
-			</Box>
-		</MobileAppHeader>
-	)
-}
-
-/**
- * Search results as white floating cards (matching the recommended picks),
- * paginated with infinite scroll — same data flow as the shared
- * SearchedSongsList, just rendered in the mobile home's card language.
- */
-function MobileSearchResults({ searchString, smartSearch }: { searchString: string; smartSearch: boolean }) {
-	const tHome = useTranslations('home')
-	const searchSongs = useSongSearch()
-	const loadNextRef = useRef<HTMLDivElement>(null)
-	const [loading, setLoading] = useState(true)
-	const [enableLoadNext, setEnableLoadNext] = useState(false)
-
-	const func = useCallback(
-		(page: number, resolve: (a: SearchSongDto[]) => void) => {
-			searchSongs(searchString as SearchKey, { page, useSmartSearch: smartSearch })
-				.then((data) => {
-					setLoading(false)
-					resolve(data)
-				})
-				.catch(() => {
-					setLoading(false)
-					resolve([])
-				})
-		},
-		[searchString, smartSearch, searchSongs]
-	)
-
-	const { nextPage: loadNext, loadPage, data: songs, nextExists } = usePagination<SearchSongDto>(func)
-
-	// Phone searches were missing from analytics entirely: the desktop list tracks
-	// them (SearchedSongsList) and this one is a separate implementation.
-	const lastTrackedSearchRef = useRef<string | null>(null)
-
-	useEffect(() => {
-		setEnableLoadNext(false)
-		setLoading(true)
-		if (
-			searchString.trim().length > 0 &&
-			searchString !== lastTrackedSearchRef.current
-		) {
-			lastTrackedSearchRef.current = searchString
-			Analytics.track('SEARCH', {
-				query: searchString,
-				smartSearch: Boolean(smartSearch),
-			})
-		}
-		loadPage(0, true).finally(() => setEnableLoadNext(true))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchString, smartSearch])
-
-	useIsInViewport(loadNextRef, '200px', (intersecting) => {
-		if (!enableLoadNext || !intersecting) return
-		if (songs.length > 0 && nextExists) loadNext()
-	})
-
-	const packs = songs.flatMap((s) => s.found)
-
-	return (
-		<SearchResultsFrame>
-			{packs.length > 0 ? (
-				<SongGroup songs={packs} previewLines={PREVIEW_LINES} />
-			) : loading ? (
-				<SearchResultsSkeleton />
-			) : (
-				<Typography color="grey.600">{tHome('search.noResults')}</Typography>
+			{searchOpen && (
+				<MobileSearchScreen
+					value={searchInputValue}
+					onValueChange={onSearchValueChange}
+					searchString={searchString}
+					smartSearch={smartSearch}
+					suggestions={rec.slice(0, 5)}
+					onClose={closeSearch}
+				/>
 			)}
-			<Box ref={loadNextRef} sx={{ height: 1 }} />
-		</SearchResultsFrame>
+		</>
 	)
 }
 
@@ -333,27 +221,5 @@ function SectionError({ message }: { message: string }) {
 			<CloudOffRounded sx={{ fontSize: 40, color: 'grey.400' }} />
 			<Typography color="grey.600">{message}</Typography>
 		</Box>
-	)
-}
-
-/** Title + body wrapper shared by the results list and its pre-query skeleton. */
-function SearchResultsFrame({ children }: { children: ReactNode }) {
-	const tHome = useTranslations('home')
-	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-			<Typography small strong uppercase color="grey.700" sx={{ paddingX: 0.5 }}>
-				{tHome('search.resultsTitle')}
-			</Typography>
-			{children}
-		</Box>
-	)
-}
-
-function SearchResultsSkeleton() {
-	return (
-		<Skeleton
-			variant="rounded"
-			sx={{ height: 288, borderRadius: 3, bgcolor: 'grey.200' }}
-		/>
 	)
 }
