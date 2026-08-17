@@ -38,6 +38,9 @@ const SEARCH_OVER_HEADER_Z = 101
 const TITLE_INSET = 2.5
 /** Extra breathing room above the title at rest, so the hero starts lower. */
 const TITLE_TOP_SPACE = 2.5
+/** Gap between the search bar and the first section, so the hero reads as its
+ * own block rather than running straight into the lists. */
+const SECTIONS_TOP_SPACE = 2
 
 type HomeMobileProps = {
 	searchInputValue: string
@@ -288,7 +291,17 @@ export default function HomeMobile({
 				decoration={sheep}
 			>
 				{searchEntry}
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+				{/* margin rather than more padding on the sticky bar: this space is
+				    the hero's, so it scrolls away instead of thickening the band
+				    that stays pinned under the header */}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 3,
+						marginTop: SECTIONS_TOP_SPACE,
+					}}
+				>
 					{picks}
 					{recent}
 				</Box>
