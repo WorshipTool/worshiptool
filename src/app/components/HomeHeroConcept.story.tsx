@@ -4,11 +4,10 @@ import { createStory } from '@/app/(layout)/storybook/createStory'
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
-import { Box, Clickable, Image, Typography, useTheme } from '@/common/ui'
-import { alpha } from '@/common/ui/mui'
+import { Box, Clickable, Image, Typography } from '@/common/ui'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { getAssetUrl } from '@/tech/paths.tech'
-import { ChevronRightRounded } from '@mui/icons-material'
+import { ChevronRightRounded, SearchRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { Fragment, ReactNode } from 'react'
 
@@ -18,23 +17,19 @@ const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
 /**
- * Playground for one change only: an illustrated hero header for the phone home
- * — the app's sheep sitting on a hill, with the title and subtitle beside it.
+ * Playground for the phone home's header: the plain large title with the app's
+ * sheep next to it, and the search field returned underneath.
  *
- * Everything below the header is today's home screen, unchanged: the same
- * sections, the same shared GroupList rows, the same brand blue. The tint is
- * `primary.main` at low alpha, so the header is the existing colour rather than
- * a new one.
+ * The header keeps the canvas background it has today — no tint, no new colour.
+ * Everything below is today's home screen, unchanged.
  *
  * Concept only — it does not touch HomeMobile.
  */
 const HomeHeroConceptStory = () => {
-	const theme = useTheme()
 	const tHome = useTranslations('home')
+	const tSearch = useTranslations('search')
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
-
-	const tint = (opacity: number) => alpha(theme.palette.primary.main, opacity)
 
 	const sectionLabel = (text: string, action?: ReactNode) => (
 		<Box
@@ -70,36 +65,22 @@ const HomeHeroConceptStory = () => {
 				borderColor: 'grey.300',
 			}}
 		>
-			{/* ===== the only new part: an illustrated hero header ===== */}
+			{/* ===== header: the canvas as before, with the sheep added ===== */}
 			<Box
 				sx={{
 					position: 'relative',
-					bgcolor: tint(0.07),
 					paddingTop: 4,
 					paddingX: 2.5,
-					paddingBottom: 3,
+					paddingBottom: 2,
 					overflow: 'hidden',
 				}}
 			>
-				{/* the hill: a wide ellipse cropped by the band's bottom edge */}
-				<Box
-					sx={{
-						position: 'absolute',
-						left: '-15%',
-						right: '-15%',
-						bottom: 0,
-						height: 72,
-						borderRadius: '50% 50% 0 0',
-						bgcolor: tint(0.13),
-						pointerEvents: 'none',
-					}}
-				/>
-				{/* the sheep stands on it, clear of the title column */}
+				{/* the sheep sits to the right of the title column */}
 				<Box
 					sx={{
 						position: 'absolute',
 						right: 12,
-						bottom: 10,
+						bottom: 0,
 						width: 116,
 						height: 116,
 						pointerEvents: 'none',
@@ -114,7 +95,7 @@ const HomeHeroConceptStory = () => {
 					/>
 				</Box>
 
-				<Box sx={{ position: 'relative', maxWidth: '58%', paddingBottom: 5 }}>
+				<Box sx={{ position: 'relative', maxWidth: '58%', paddingBottom: 4 }}>
 					<Typography
 						strong={900}
 						size="2.1rem"
@@ -124,6 +105,29 @@ const HomeHeroConceptStory = () => {
 					</Typography>
 					<Typography small strong={500} color="grey.600" sx={{ marginTop: 0.5 }}>
 						{tHome('hero.lead')}
+					</Typography>
+				</Box>
+			</Box>
+
+			{/* ===== the search field, back under the header ===== */}
+			<Box sx={{ paddingX: 2 }}>
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: 1.5,
+						bgcolor: 'background.paper',
+						border: '1px solid',
+						borderColor: 'grey.300',
+						borderRadius: 2.5,
+						paddingX: 2,
+						paddingY: 1.5,
+						boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+					}}
+				>
+					<SearchRounded sx={{ color: 'grey.500' }} />
+					<Typography color="grey.500" noWrap>
+						{tSearch('searchByTitleOrText')}
 					</Typography>
 				</Box>
 			</Box>
