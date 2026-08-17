@@ -1,5 +1,6 @@
 'use client'
 
+import BrandSheepIcon from '@/assets/icon.svg'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import MobileToolsMenu from '@/common/components/MobileAppTabBar/MobileToolsMenu'
 import { Box, Typography, useTheme } from '@/common/ui'
@@ -8,8 +9,6 @@ import useAuth from '@/hooks/auth/useAuth'
 import {
 	Apps,
 	AppsOutlined,
-	HomeOutlined,
-	HomeRounded,
 	InfoOutlined,
 	InfoRounded,
 	LibraryMusicOutlined,
@@ -32,6 +31,9 @@ import {
 	mobileTabForPath,
 	pageOwnsBottomClearance,
 } from './nav.constants'
+
+/** Icon box size shared by every tab (and by the tab bar's playground story). */
+export const TAB_ICON_SIZE = 25
 
 /**
  * The app's mobile bottom navigation — a light (white) tab bar of equally sized
@@ -99,9 +101,14 @@ export default function MobileAppTabBar() {
 					}}
 				>
 					<Link to="home" params={{ hledat: undefined }} style={{ flex: 1, minWidth: 0 }}>
+					{/* the brand sheep instead of a generic house. It paints with
+					    fill="currentColor", so it tints for the active state like the
+					    Material icons beside it — but it has only one weight, so
+					    active is carried by colour alone (no outlined/filled swap). */}
 					<TabItem
-						icon={<HomeOutlined />}
-						activeIcon={<HomeRounded />}
+						icon={
+							<BrandSheepIcon width={TAB_ICON_SIZE} height={TAB_ICON_SIZE} />
+						}
 						label={tNav('home')}
 						active={active === 'home' && !searchActive}
 					/>
@@ -224,7 +231,7 @@ export function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
 					display: 'flex',
 					paddingX: 1.5,
 					paddingY: 0.25,
-					'& svg': { fontSize: 25 },
+					'& svg': { fontSize: TAB_ICON_SIZE },
 				}}
 			>
 				{active ? activeIcon ?? icon : icon}

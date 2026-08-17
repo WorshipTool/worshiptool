@@ -2,7 +2,10 @@
 
 import BrandSheepIcon from '@/assets/icon.svg'
 import { createStory } from '@/app/(layout)/storybook/createStory'
-import { TabItem } from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+import {
+	TAB_ICON_SIZE,
+	TabItem,
+} from '@/common/components/MobileAppTabBar/MobileAppTabBar'
 import { Box, Typography } from '@/common/ui'
 import {
 	AppsOutlined,
@@ -16,8 +19,6 @@ import { useTranslations } from 'next-intl'
 import { ReactNode } from 'react'
 
 const FRAME_WIDTH = 390
-/** Matches the tab bar's own icon size (`& svg { fontSize: 25 }`). */
-const ICON_SIZE = 25
 
 /**
  * Playground for the bottom tab bar's icons, so alternatives can be compared
@@ -89,8 +90,8 @@ const MobileAppTabBarStory = () => {
 		>
 			{row(<HomeOutlined />, <HomeRounded />, 'Dnes — domeček')}
 			{row(
-				<BrandSheepIcon width={ICON_SIZE} height={ICON_SIZE} />,
-				<BrandSheepIcon width={ICON_SIZE} height={ICON_SIZE} />,
+				<BrandSheepIcon width={TAB_ICON_SIZE} height={TAB_ICON_SIZE} />,
+				<BrandSheepIcon width={TAB_ICON_SIZE} height={TAB_ICON_SIZE} />,
 				'Návrh — ovečka z loga'
 			)}
 		</Box>
