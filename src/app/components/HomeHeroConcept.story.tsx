@@ -15,9 +15,10 @@ import { Fragment, ReactNode } from 'react'
 const FRAME_WIDTH = 390
 /** Sheep size; it peeks out from behind the search field below it. */
 const SHEEP_SIZE = 96
-/** How far the sheep reaches past the header: the search field covers its
- * bottom third, so it reads as sitting behind the field rather than beside it. */
-const SHEEP_TUCK = Math.round(SHEEP_SIZE / 3)
+/** How far the sheep reaches past the header. Its front paws sit at about 30%
+ * of the illustration's height, so the field's top edge lands just under them —
+ * they rest on it rather than being swallowed by it. */
+const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.27)
 const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
