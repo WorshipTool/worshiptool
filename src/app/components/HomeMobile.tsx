@@ -7,12 +7,17 @@ import MobileSearchScreen from '@/app/components/MobileSearchScreen'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { Box, Clickable, Typography } from '@/common/ui'
+import { Box, Clickable, Image, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
+import { getAssetUrl } from '@/tech/paths.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
-import { ChevronRightRounded, CloudOffRounded } from '@mui/icons-material'
+import {
+	ChevronRightRounded,
+	CloudOffRounded,
+	SearchRounded,
+} from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -20,6 +25,13 @@ import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
 const TEXT_DIVIDER_INSET = 1.75
+/** Sheep size in the hero; it peeks out from behind the search entry below it. */
+const SHEEP_SIZE = 96
+/** How far the sheep reaches past the hero. Its front paws sit at about 30% of
+ * the illustration's height, so the field's top edge lands just under them. */
+const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.22)
+/** Extra left inset for the title/slogan, past the app's normal content edge. */
+const TITLE_INSET = 2.5
 
 type HomeMobileProps = {
 	searchInputValue: string
@@ -44,6 +56,7 @@ export default function HomeMobile({
 	smartSearch,
 }: HomeMobileProps) {
 	const tHome = useTranslations('home')
+	const tSearch = useTranslations('search')
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -185,23 +198,88 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	return (
-		<>
-			{/* Home is a tab-root, so no back arrow — otherwise the same shell as
-			    every other screen: large title that shrinks to a slim bar on scroll,
-			    with only the content between it and the tab bar scrolling. */}
-			<MobileAppHeader
-				title={tHome('hero.title')}
-				subtitle={tHome('hero.lead')}
+	// ---- hero: the title beside the sheep, which tucks behind the search entry
+
+	const hero = (
+		<Box sx={{ position: 'relative', paddingX: 0.5, paddingTop: 1 }}>
+			<Box
+				sx={{
+					position: 'absolute',
+					right: 8,
+					bottom: -SHEEP_TUCK,
+					width: SHEEP_SIZE,
+					height: SHEEP_SIZE,
+					pointerEvents: 'none',
+				}}
 			>
+				<Image
+					src={getAssetUrl('/sheeps/ovce3.svg')}
+					alt={tHome('hero.title')}
+					fill
+					sizes={`${SHEEP_SIZE}px`}
+					style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
+				/>
+			</Box>
+			<Box
+				sx={{
+					position: 'relative',
+					maxWidth: '60%',
+					paddingLeft: TITLE_INSET,
+					paddingBottom: 2.5,
+				}}
+			>
+				<Typography
+					strong={900}
+					size="2.1rem"
+					sx={{ lineHeight: 1.1, letterSpacing: '-0.5px' }}
+				>
+					{tHome('hero.title')}
+				</Typography>
+				<Typography small strong={500} color="grey.600" sx={{ marginTop: 0.5 }}>
+					{tHome('hero.lead')}
+				</Typography>
+			</Box>
+		</Box>
+	)
+
+	// Entry point rather than a live field: tapping it opens the same full-screen
+	// search the tab bar's Hledat opens, so there is one search surface and no
+	// input pinned above the keyboard.
+	const searchEntry = (
+		<Box sx={{ position: 'relative', zIndex: 1 }}>
+			<Clickable onClick={openSearch}>
 				<Box
 					sx={{
 						display: 'flex',
-						flexDirection: 'column',
-						gap: 3,
-						paddingTop: 1,
+						alignItems: 'center',
+						gap: 1.5,
+						bgcolor: 'background.paper',
+						border: '1px solid',
+						borderColor: 'grey.300',
+						borderRadius: 2.5,
+						paddingX: 2,
+						paddingY: 1.5,
+						boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
 					}}
 				>
+					<SearchRounded sx={{ color: 'grey.500' }} />
+					<Typography color="grey.500" noWrap>
+						{tSearch('searchByTitleOrText')}
+					</Typography>
+				</Box>
+			</Clickable>
+		</Box>
+	)
+
+	return (
+		<>
+			{/* Home brings its own hero, so the shell renders no header row of its
+			    own — see MobileAppHeader. Everything still scrolls inside the one
+			    scroller between the status bar and the tab bar. */}
+			<MobileAppHeader>
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+					{hero}
+					{searchEntry}
 					{picks}
 					{recent}
 				</Box>

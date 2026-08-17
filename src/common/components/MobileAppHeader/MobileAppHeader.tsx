@@ -21,8 +21,10 @@ const TITLE_MIN = 1.2 // rem
 const HEADER_Z = 100
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
-	/** The page title — large at rest, shrinks to a compact bar on scroll. */
-	title: string
+	/** The page title — large at rest, shrinks to a compact bar on scroll.
+	 * Omit it on a screen that brings its own hero (home): the header row is then
+	 * skipped entirely and the content starts at the top of the shell. */
+	title?: string
 	/**
 	 * Generic secondary line under the title. A string gets the default muted
 	 * style; pass any node (count, status, chip, meta …) to fully control it.
@@ -144,6 +146,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	}
 
 	const shownActions = actions?.slice(0, 2) ?? []
+	// nothing to put in the header row — the screen draws its own top instead
+	const hasHeaderRow = Boolean(
+		title || backTo || shownActions.length > 0 || controlPanel
+	)
 
 	return (
 		<Box
@@ -173,6 +179,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		>
 			{/* header — a compact row (back · title · actions); the title shrinks on
 			    scroll (see effect above) */}
+			{hasHeaderRow && (
 			<Box
 				ref={headerRef}
 				sx={{
@@ -257,6 +264,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					<Box sx={{ paddingX: 2, paddingTop: 1 }}>{controlPanel}</Box>
 				)}
 			</Box>
+			)}
 
 			{/* the only scroller — scrollbar confined between the header/panels */}
 			<Box
@@ -267,7 +275,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					overflowY: 'auto',
 					overflowX: 'hidden',
 					paddingX: 2,
-					paddingTop: 0.5,
+					// with no header row the content owns the status-bar clearance
+					paddingTop: hasHeaderRow ? 0.5 : `calc(${TOOLBAR_SPACER} + 12px)`,
 					paddingBottom: 2,
 				}}
 			>
