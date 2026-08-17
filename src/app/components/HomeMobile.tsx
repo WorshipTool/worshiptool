@@ -200,9 +200,9 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- hero: the slogan beside the sheep, which tucks behind the search entry.
-	// The app name itself stays in the shell header so it survives scrolling and
-	// collapses to the compact bar like every other screen; only these two go.
+	// ---- hero: just the sheep, which tucks behind the search entry below it.
+	// The name and slogan are one block in the shell header, so they hold together
+	// and the shell shrinks the title / fades the slogan on scroll.
 
 	const hero = (
 		<Box
@@ -233,18 +233,6 @@ export default function HomeMobile({
 					sizes={`${SHEEP_SIZE}px`}
 					style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
 				/>
-			</Box>
-			<Box
-				sx={{
-					position: 'relative',
-					maxWidth: '60%',
-					paddingLeft: TITLE_INSET,
-					paddingTop: 0.5,
-				}}
-			>
-				<Typography small strong={500} color="grey.600">
-					{tHome('hero.lead')}
-				</Typography>
 			</Box>
 		</Box>
 	)
@@ -285,6 +273,7 @@ export default function HomeMobile({
 			    the sheep are content and scroll away with it. */}
 			<MobileAppHeader
 				title={tHome('hero.title')}
+				subtitle={tHome('hero.lead')}
 				titleInset={TITLE_INSET}
 				titleTopSpace={TITLE_TOP_SPACE}
 			>

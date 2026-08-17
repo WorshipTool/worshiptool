@@ -106,6 +106,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLDivElement>(null)
+	const titleBlockRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
 
@@ -120,8 +121,13 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
 			if (titleRef.current) {
 				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
-				// the inset belongs to the resting hero, not to the compact bar
-				titleRef.current.style.paddingLeft = `${titleInset * SPACING_UNIT * (1 - p)}px`
+			}
+			if (titleBlockRef.current) {
+				// the inset belongs to the resting hero, not to the compact bar, and
+				// it moves the title and its subtitle together
+				titleBlockRef.current.style.paddingLeft = `${
+					titleInset * SPACING_UNIT * (1 - p)
+				}px`
 			}
 			if (subtitleRef.current) {
 				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
@@ -229,6 +235,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						</IconButton>
 					)}
 					<Box
+						ref={titleBlockRef}
 						sx={{
 							flex: 1,
 							minWidth: 0,
