@@ -208,9 +208,9 @@ export default function HomeMobile({
 		<Box
 			sx={{
 				position: 'relative',
-				// no extra inset here: the slogan's own TITLE_INSET must land on the
-				// same x as the header title, which is inset from the scroller edge
-				paddingTop: 1,
+				// the sheep should read as part of the hero, so nothing separates it
+				// from the header: drop its own top padding and cancel the scroller's
+				marginTop: -0.5,
 				// the sheep is absolutely positioned, so the block needs its own
 				// height for the part that sits above the search entry
 				minHeight: SHEEP_SIZE - SHEEP_TUCK,
