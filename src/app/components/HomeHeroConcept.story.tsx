@@ -20,7 +20,7 @@ const SHEEP_SIZE = 96
  * they rest on it rather than being swallowed by it. */
 const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.22)
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
-const TITLE_INSET = 1.5
+const TITLE_INSET = 2.5
 const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
