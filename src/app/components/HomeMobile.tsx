@@ -25,14 +25,12 @@ import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
 const TEXT_DIVIDER_INSET = 1.75
-/** Sheep size in the hero; it peeks out from behind the search entry below it. */
-const SHEEP_SIZE = 96
-/** How far the sheep hangs below the header block. Covers the gap down to the
- * search entry plus the overlap that puts its front paws on the entry's edge. */
-const SHEEP_DROP = 33
-/** Above the header (100), so the entry covers the sheep hanging into it. The
- * scroller clips it, so it can never ride up over the header itself. */
-const SEARCH_OVER_HEADER_Z = 101
+/** Sheep size in the hero. Sized to the gap between the title and the pinned
+ * search bar, so it starts level with the title and its paws land on the bar. */
+const SHEEP_SIZE = 76
+/** Where the sheep starts inside the header block, so it sits level with the
+ * title and reaches far enough down for the search bar to cover its paws. */
+const SHEEP_TOP = 33
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Extra breathing room above the title at rest, so the hero starts lower. */
@@ -203,16 +201,17 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- the sheep: drawn in the header so it sits level with the title, hanging
-	// low enough for the search entry below to cover its paws. The shell fades it
-	// out as the header collapses, so it never floats over the song list.
+	// ---- the sheep: drawn in the header so it sits level with the title, reaching
+	// low enough for the search bar below it to cover its paws. Both live in the
+	// header block, so the bar simply paints after it. The shell fades the sheep
+	// out as the header collapses.
 
 	const sheep = (
 		<Box
 			sx={{
 				position: 'absolute',
 				right: 16,
-				bottom: -SHEEP_DROP,
+				top: SHEEP_TOP,
 				width: SHEEP_SIZE,
 				height: SHEEP_SIZE,
 			}}
@@ -227,11 +226,12 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// Entry point rather than a live field: tapping it opens the same full-screen
-	// search the tab bar's Hledat opens, so there is one search surface and no
-	// input pinned above the keyboard.
+	// Pinned under the header rather than scrolling with the content, so it stays
+	// reachable down the list. Entry point rather than a live field: tapping it
+	// opens the same full-screen search the tab bar's Hledat opens, so there is
+	// one search surface and no input pinned above the keyboard.
 	const searchEntry = (
-		<Box sx={{ position: 'relative', zIndex: SEARCH_OVER_HEADER_Z }}>
+		<Box sx={{ position: 'relative' }}>
 			<Clickable onClick={openSearch}>
 				<Box
 					sx={{
@@ -267,9 +267,9 @@ export default function HomeMobile({
 				titleInset={TITLE_INSET}
 				titleTopSpace={TITLE_TOP_SPACE}
 				decoration={sheep}
+				controlPanel={searchEntry}
 			>
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-					{searchEntry}
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 1 }}>
 					{picks}
 					{recent}
 				</Box>
