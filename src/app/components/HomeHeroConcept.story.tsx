@@ -18,7 +18,9 @@ const SHEEP_SIZE = 96
 /** How far the sheep reaches past the header. Its front paws sit at about 30%
  * of the illustration's height, so the field's top edge lands just under them —
  * they rest on it rather than being swallowed by it. */
-const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.27)
+const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.22)
+/** Extra left inset for the title/slogan, past the app's normal content edge. */
+const TITLE_INSET = 1.5
 const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
@@ -102,7 +104,16 @@ const HomeHeroConceptStory = () => {
 					/>
 				</Box>
 
-				<Box sx={{ position: 'relative', maxWidth: '60%', paddingBottom: 2.5 }}>
+				{/* the two title lines are deliberately inset past the app's left
+				    padding — they read as a slogan rather than as content */}
+				<Box
+					sx={{
+						position: 'relative',
+						maxWidth: '60%',
+						paddingLeft: TITLE_INSET,
+						paddingBottom: 2.5,
+					}}
+				>
 					<Typography
 						strong={900}
 						size="2.1rem"
