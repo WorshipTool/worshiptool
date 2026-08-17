@@ -13,6 +13,11 @@ import { Fragment, ReactNode } from 'react'
 
 /** Phone width the concept is drawn at, so it reads correctly in the gallery. */
 const FRAME_WIDTH = 390
+/** Sheep size; it peeks out from behind the search field below it. */
+const SHEEP_SIZE = 96
+/** How far the sheep reaches past the header — just enough for the field to
+ * cover the very ends of its hooves, so it reads as resting on top of it. */
+const SHEEP_TUCK = 2
 const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
@@ -65,24 +70,25 @@ const HomeHeroConceptStory = () => {
 				borderColor: 'grey.300',
 			}}
 		>
-			{/* ===== header: the canvas as before, with the sheep added ===== */}
+			{/* ===== header: the canvas as before, with the sheep added =====
+			    No overflow clipping: the sheep deliberately hangs past the bottom
+			    edge so the search field below can cover its feet — the same trick
+			    the desktop RightSheepPanel uses. */}
 			<Box
 				sx={{
 					position: 'relative',
 					paddingTop: 4,
 					paddingX: 2.5,
 					paddingBottom: 2,
-					overflow: 'hidden',
 				}}
 			>
-				{/* the sheep sits to the right of the title column */}
 				<Box
 					sx={{
 						position: 'absolute',
-						right: 12,
-						bottom: 0,
-						width: 116,
-						height: 116,
+						right: 16,
+						bottom: -SHEEP_TUCK,
+						width: SHEEP_SIZE,
+						height: SHEEP_SIZE,
 						pointerEvents: 'none',
 					}}
 				>
@@ -90,12 +96,12 @@ const HomeHeroConceptStory = () => {
 						src={getAssetUrl('/sheeps/ovce3.svg')}
 						alt={tHome('hero.title')}
 						fill
-						sizes="116px"
+						sizes={`${SHEEP_SIZE}px`}
 						style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
 					/>
 				</Box>
 
-				<Box sx={{ position: 'relative', maxWidth: '58%', paddingBottom: 4 }}>
+				<Box sx={{ position: 'relative', maxWidth: '60%', paddingBottom: 2.5 }}>
 					<Typography
 						strong={900}
 						size="2.1rem"
@@ -109,8 +115,8 @@ const HomeHeroConceptStory = () => {
 				</Box>
 			</Box>
 
-			{/* ===== the search field, back under the header ===== */}
-			<Box sx={{ paddingX: 2 }}>
+			{/* ===== the search field — sits on top of the sheep's feet ===== */}
+			<Box sx={{ position: 'relative', zIndex: 1, paddingX: 2 }}>
 				<Box
 					sx={{
 						display: 'flex',
