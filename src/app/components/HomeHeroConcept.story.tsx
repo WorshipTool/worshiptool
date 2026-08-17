@@ -15,9 +15,9 @@ import { Fragment, ReactNode } from 'react'
 const FRAME_WIDTH = 390
 /** Sheep size; it peeks out from behind the search field below it. */
 const SHEEP_SIZE = 96
-/** How far the sheep reaches past the header — just enough for the field to
- * cover the very ends of its hooves, so it reads as resting on top of it. */
-const SHEEP_TUCK = 2
+/** How far the sheep reaches past the header: the search field covers its
+ * bottom third, so it reads as sitting behind the field rather than beside it. */
+const SHEEP_TUCK = Math.round(SHEEP_SIZE / 3)
 const PREVIEW_LINES = 2
 const TEXT_DIVIDER_INSET = 1.75
 
