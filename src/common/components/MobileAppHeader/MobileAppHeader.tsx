@@ -19,6 +19,8 @@ const TITLE_MAX = 1.85 // rem
 const TITLE_MIN = 1.2 // rem
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
+/** MUI spacing unit in px — the paint below works in raw px, not `sx` units. */
+const SPACING_UNIT = 8
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** The page title — large at rest, shrinks to a compact bar on scroll.
@@ -37,6 +39,12 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	 */
 	backTo?: T
 	backParams?: SmartAllParams<T>
+	/**
+	 * Extra left inset (theme spacing units) for the title at rest, easing away as
+	 * it collapses. Lets a hero screen line its title up with the copy below it
+	 * while the compact bar still ends up in the usual corner.
+	 */
+	titleInset?: number
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
 	/** Optional control strip (segment / chips) pinned under the header. */
@@ -71,6 +79,7 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 export default function MobileAppHeader<T extends RoutesKeys>({
 	title,
 	subtitle,
+	titleInset = 0,
 	backTo,
 	backParams,
 	actions,
@@ -102,6 +111,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
 			if (titleRef.current) {
 				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
+				// the inset belongs to the resting hero, not to the compact bar
+				titleRef.current.style.paddingLeft = `${titleInset * SPACING_UNIT * (1 - p)}px`
 			}
 			if (subtitleRef.current) {
 				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
@@ -125,7 +136,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider])
+	}, [divider, titleInset])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {

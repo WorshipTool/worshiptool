@@ -206,7 +206,8 @@ export default function HomeMobile({
 		<Box
 			sx={{
 				position: 'relative',
-				paddingX: 0.5,
+				// no extra inset here: the slogan's own TITLE_INSET must land on the
+				// same x as the header title, which is inset from the scroller edge
 				paddingTop: 1,
 				// the sheep is absolutely positioned, so the block needs its own
 				// height for the part that sits above the search entry
@@ -280,7 +281,7 @@ export default function HomeMobile({
 			{/* The app name lives in the shell header, so it stays put and shrinks
 			    to the compact bar on scroll like every other screen. The slogan and
 			    the sheep are content and scroll away with it. */}
-			<MobileAppHeader title={tHome('hero.title')}>
+			<MobileAppHeader title={tHome('hero.title')} titleInset={TITLE_INSET}>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 					{/* hero and the search entry are one block with no gap between
 					    them, so the sheep's overhang actually reaches the bar and is
