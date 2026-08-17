@@ -10,7 +10,7 @@ import {
 	HomeRounded,
 	LibraryMusicOutlined,
 	LoginRounded,
-	Search,
+	SearchOutlined,
 } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { ReactNode } from 'react'
@@ -69,7 +69,7 @@ const MobileAppTabBarStory = () => {
 						/>
 					</Box>
 					<Box sx={{ flex: 1, minWidth: 0 }}>
-						<TabItem icon={<Search />} label={tNav('search')} emphasized />
+						<TabItem icon={<SearchOutlined />} label={tNav('search')} />
 					</Box>
 					<Box sx={{ flex: 1, minWidth: 0 }}>
 						<TabItem icon={<AppsOutlined />} label={tNav('tools')} />

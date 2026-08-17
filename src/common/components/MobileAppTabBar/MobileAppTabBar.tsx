@@ -18,6 +18,7 @@ import {
 	PersonOutlineRounded,
 	PersonRounded,
 	Search,
+	SearchOutlined,
 } from '@mui/icons-material'
 import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import { useMobileSearchOpen } from './mobileSearchState'
@@ -35,9 +36,8 @@ import {
 /**
  * The app's mobile bottom navigation — a light (white) tab bar of equally sized
  * tabs: Domů / Písně / Hledat / Nástroje (or O aplikaci) / Účet (or Přihlásit).
- * Search is the app's preferred action and is marked by tint, not by size, so
- * the row stays even and it can still show an active state. Rendered once,
- * globally, next to the top
+ * Every tab reads the same — grey at rest, brand blue when it is the current
+ * one, search included. Rendered once, globally, next to the top
  * bar (see AppLayoutInner) and driven by the route: it shows on the app-shell
  * routes (where the top bar hides itself) and renders nothing on marketing
  * pages. Phone-only (CSS-hidden on desktop). Like the top bar, it renders an
@@ -115,9 +115,9 @@ export default function MobileAppTabBar() {
 					/>
 				</Link>
 
-				{/* the app's preferred action, emphasised by style rather than size
-				    (house Link doesn't forward onClick, so the search-focus event is
-				    dispatched from a wrapper) */}
+				{/* search is a tab like any other — grey at rest, brand blue only
+				    while the search layer is open (house Link doesn't forward onClick,
+				    so the focus event is dispatched from a wrapper) */}
 				<Link to="home" params={{ hledat: '' }} style={{ flex: 1, minWidth: 0 }}>
 					<Box
 						onClick={() =>
@@ -125,10 +125,10 @@ export default function MobileAppTabBar() {
 						}
 					>
 						<TabItem
-							icon={<Search />}
+							icon={<SearchOutlined />}
+							activeIcon={<Search />}
 							label={tNav('search')}
 							active={searchActive}
-							emphasized
 						/>
 					</Box>
 				</Link>
@@ -202,25 +202,12 @@ type TabItemProps = {
 	activeIcon?: JSX.Element
 	label: string
 	active?: boolean
-	/**
-	 * Marks the app's preferred action (search). Tinted rather than enlarged:
-	 * every tab keeps the same footprint, so the bar doesn't get squeezed to make
-	 * room for one item, and the emphasised tab can still show an active state —
-	 * which a permanently-highlighted raised button cannot.
-	 */
-	emphasized?: boolean
 }
 
 // side tab: blue (brand) when active, grey when not; filled icon + bold label when active
-export function TabItem({ icon, activeIcon, label, active, emphasized }: TabItemProps) {
-	const iconColor = emphasized
-		? active
-			? 'common.white'
-			: 'primary.main'
-		: active
-			? 'primary.main'
-			: 'grey.500'
-	const labelColor = active || emphasized ? 'primary.main' : 'grey.700'
+export function TabItem({ icon, activeIcon, label, active }: TabItemProps) {
+	const iconColor = active ? 'primary.main' : 'grey.500'
+	const labelColor = active ? 'primary.main' : 'grey.700'
 	return (
 		<Box
 			sx={{
@@ -231,17 +218,12 @@ export function TabItem({ icon, activeIcon, label, active, emphasized }: TabItem
 				minWidth: 0,
 			}}
 		>
-			{/* every tab carries the same pill geometry so the row stays even; only
-			    the emphasised one paints it in */}
 			<Box
 				sx={{
 					color: iconColor,
 					display: 'flex',
 					paddingX: 1.5,
 					paddingY: 0.25,
-					borderRadius: 999,
-					bgcolor: emphasized && active ? 'primary.main' : 'transparent',
-					transition: 'background-color 0.15s ease',
 					'& svg': { fontSize: 25 },
 				}}
 			>
@@ -250,7 +232,7 @@ export function TabItem({ icon, activeIcon, label, active, emphasized }: TabItem
 			<Typography
 				noWrap
 				size="0.65rem"
-				strong={active || emphasized ? 700 : 500}
+				strong={active ? 700 : 500}
 				color={labelColor}
 				sx={{ lineHeight: 1.2 }}
 			>
