@@ -9,8 +9,6 @@ import useAuth from '@/hooks/auth/useAuth'
 import {
 	Apps,
 	AppsOutlined,
-	InfoOutlined,
-	InfoRounded,
 	LibraryMusicOutlined,
 	LibraryMusicRounded,
 	LoginRounded,
@@ -37,7 +35,7 @@ export const TAB_ICON_SIZE = 25
 
 /**
  * The app's mobile bottom navigation — a light (white) tab bar of equally sized
- * tabs: Domů / Písně / Hledat / Nástroje (or O aplikaci) / Účet (or Přihlásit).
+ * tabs: Domů / Písně / Hledat / Nástroje (signed in only) / Účet (or Přihlásit).
  * Every tab reads the same — grey at rest, brand blue when it is the current
  * one, search included. Rendered once, globally, next to the top
  * bar (see AppLayoutInner) and driven by the route: it shows on the app-shell
@@ -140,8 +138,10 @@ export default function MobileAppTabBar() {
 					</Box>
 				</Link>
 
-				{/* logged in: Nástroje + Účet; logged out: O aplikaci + Přihlásit se */}
-				{loggedIn ? (
+				{/* Nástroje opens the signed-in user's own stuff, so there is nothing
+				    behind it while signed out — the bar is four tabs then, rather than
+				    padded out with a marketing link that isn't navigation. */}
+				{loggedIn && (
 						<Box
 							component="button"
 							type="button"
@@ -163,14 +163,6 @@ export default function MobileAppTabBar() {
 								active={toolsOpen}
 							/>
 						</Box>
-					) : (
-						<Link to="about" params={{}} style={{ flex: 1, minWidth: 0 }}>
-							<TabItem
-								icon={<InfoOutlined />}
-								activeIcon={<InfoRounded />}
-								label={tNav('about')}
-							/>
-						</Link>
 					)}
 
 					{loggedIn ? (
