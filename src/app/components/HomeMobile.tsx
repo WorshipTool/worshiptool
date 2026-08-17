@@ -278,8 +278,13 @@ export default function HomeMobile({
 			    scroller between the status bar and the tab bar. */}
 			<MobileAppHeader>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-					{hero}
-					{searchEntry}
+					{/* hero and the search entry are one block with no gap between
+					    them, so the sheep's overhang actually reaches the bar and is
+					    covered by it */}
+					<Box>
+						{hero}
+						{searchEntry}
+					</Box>
 					{picks}
 					{recent}
 				</Box>
