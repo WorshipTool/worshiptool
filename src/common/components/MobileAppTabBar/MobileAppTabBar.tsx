@@ -212,7 +212,7 @@ type TabItemProps = {
 }
 
 // side tab: blue (brand) when active, grey when not; filled icon + bold label when active
-function TabItem({ icon, activeIcon, label, active, emphasized }: TabItemProps) {
+export function TabItem({ icon, activeIcon, label, active, emphasized }: TabItemProps) {
 	const iconColor = emphasized
 		? active
 			? 'common.white'
