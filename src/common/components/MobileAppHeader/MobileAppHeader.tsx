@@ -53,6 +53,12 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	 * compact bar still matches every other screen's.
 	 */
 	titleTopSpace?: number
+	/**
+	 * Illustration drawn inside the header block, level with the title. Position
+	 * it absolutely; it may hang below the header, and it fades out as the header
+	 * collapses so it never floats over the scrolling content.
+	 */
+	decoration?: ReactNode
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
 	/** Optional control strip (segment / chips) pinned under the header. */
@@ -89,6 +95,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	subtitle,
 	titleInset = 0,
 	titleTopSpace = 0,
+	decoration,
 	backTo,
 	backParams,
 	actions,
@@ -106,6 +113,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLDivElement>(null)
+	const decorationRef = useRef<HTMLDivElement>(null)
 	const titleBlockRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
@@ -128,6 +136,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				titleBlockRef.current.style.paddingLeft = `${
 					titleInset * SPACING_UNIT * (1 - p)
 				}px`
+			}
+			if (decorationRef.current) {
+				decorationRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
 			}
 			if (subtitleRef.current) {
 				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
@@ -154,7 +165,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider, titleInset, titleTopSpace])
+	}, [divider, titleInset, titleTopSpace, decoration])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -214,6 +225,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				sx={{
 					flexShrink: 0,
 					zIndex: HEADER_Z,
+					position: 'relative',
 					display: 'flex',
 					flexDirection: 'column',
 					paddingTop: `calc(${TOOLBAR_SPACER} + ${HEADER_TOP_PAD}px)`,
@@ -223,6 +235,15 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					borderColor: divider ? 'grey.200' : 'transparent',
 				}}
 			>
+				{decoration && (
+					<Box
+						ref={decorationRef}
+						sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+					>
+						{decoration}
+					</Box>
+				)}
+
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
 					{backTo && (
 						<IconButton

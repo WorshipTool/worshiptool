@@ -27,9 +27,12 @@ const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 const TEXT_DIVIDER_INSET = 1.75
 /** Sheep size in the hero; it peeks out from behind the search entry below it. */
 const SHEEP_SIZE = 96
-/** How far the sheep reaches past the hero. Its front paws sit at about 30% of
- * the illustration's height, so the field's top edge lands just under them. */
-const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.22)
+/** How far the sheep hangs below the header block. Covers the gap down to the
+ * search entry plus the overlap that puts its front paws on the entry's edge. */
+const SHEEP_DROP = 33
+/** Above the header (100), so the entry covers the sheep hanging into it. The
+ * scroller clips it, so it can never ride up over the header itself. */
+const SEARCH_OVER_HEADER_Z = 101
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Extra breathing room above the title at rest, so the hero starts lower. */
@@ -200,40 +203,27 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- hero: just the sheep, which tucks behind the search entry below it.
-	// The name and slogan are one block in the shell header, so they hold together
-	// and the shell shrinks the title / fades the slogan on scroll.
+	// ---- the sheep: drawn in the header so it sits level with the title, hanging
+	// low enough for the search entry below to cover its paws. The shell fades it
+	// out as the header collapses, so it never floats over the song list.
 
-	const hero = (
+	const sheep = (
 		<Box
 			sx={{
-				position: 'relative',
-				// the sheep should read as part of the hero, so nothing separates it
-				// from the header: drop its own top padding and cancel the scroller's
-				marginTop: -0.5,
-				// the sheep is absolutely positioned, so the block needs its own
-				// height for the part that sits above the search entry
-				minHeight: SHEEP_SIZE - SHEEP_TUCK,
+				position: 'absolute',
+				right: 16,
+				bottom: -SHEEP_DROP,
+				width: SHEEP_SIZE,
+				height: SHEEP_SIZE,
 			}}
 		>
-			<Box
-				sx={{
-					position: 'absolute',
-					right: 8,
-					bottom: -SHEEP_TUCK,
-					width: SHEEP_SIZE,
-					height: SHEEP_SIZE,
-					pointerEvents: 'none',
-				}}
-			>
-				<Image
-					src={getAssetUrl('/sheeps/ovce3.svg')}
-					alt={tHome('hero.title')}
-					fill
-					sizes={`${SHEEP_SIZE}px`}
-					style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
-				/>
-			</Box>
+			<Image
+				src={getAssetUrl('/sheeps/ovce3.svg')}
+				alt={tHome('hero.title')}
+				fill
+				sizes={`${SHEEP_SIZE}px`}
+				style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
+			/>
 		</Box>
 	)
 
@@ -241,7 +231,7 @@ export default function HomeMobile({
 	// search the tab bar's Hledat opens, so there is one search surface and no
 	// input pinned above the keyboard.
 	const searchEntry = (
-		<Box sx={{ position: 'relative', zIndex: 1 }}>
+		<Box sx={{ position: 'relative', zIndex: SEARCH_OVER_HEADER_Z }}>
 			<Clickable onClick={openSearch}>
 				<Box
 					sx={{
@@ -276,15 +266,10 @@ export default function HomeMobile({
 				subtitle={tHome('hero.lead')}
 				titleInset={TITLE_INSET}
 				titleTopSpace={TITLE_TOP_SPACE}
+				decoration={sheep}
 			>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-					{/* hero and the search entry are one block with no gap between
-					    them, so the sheep's overhang actually reaches the bar and is
-					    covered by it */}
-					<Box>
-						{hero}
-						{searchEntry}
-					</Box>
+					{searchEntry}
 					{picks}
 					{recent}
 				</Box>
