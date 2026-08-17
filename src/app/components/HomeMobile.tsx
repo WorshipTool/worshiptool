@@ -198,10 +198,21 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- hero: the title beside the sheep, which tucks behind the search entry
+	// ---- hero: the slogan beside the sheep, which tucks behind the search entry.
+	// The app name itself stays in the shell header so it survives scrolling and
+	// collapses to the compact bar like every other screen; only these two go.
 
 	const hero = (
-		<Box sx={{ position: 'relative', paddingX: 0.5, paddingTop: 1 }}>
+		<Box
+			sx={{
+				position: 'relative',
+				paddingX: 0.5,
+				paddingTop: 1,
+				// the sheep is absolutely positioned, so the block needs its own
+				// height for the part that sits above the search entry
+				minHeight: SHEEP_SIZE - SHEEP_TUCK,
+			}}
+		>
 			<Box
 				sx={{
 					position: 'absolute',
@@ -225,17 +236,10 @@ export default function HomeMobile({
 					position: 'relative',
 					maxWidth: '60%',
 					paddingLeft: TITLE_INSET,
-					paddingBottom: 2.5,
+					paddingTop: 0.5,
 				}}
 			>
-				<Typography
-					strong={900}
-					size="2.1rem"
-					sx={{ lineHeight: 1.1, letterSpacing: '-0.5px' }}
-				>
-					{tHome('hero.title')}
-				</Typography>
-				<Typography small strong={500} color="grey.600" sx={{ marginTop: 0.5 }}>
+				<Typography small strong={500} color="grey.600">
 					{tHome('hero.lead')}
 				</Typography>
 			</Box>
@@ -273,10 +277,10 @@ export default function HomeMobile({
 
 	return (
 		<>
-			{/* Home brings its own hero, so the shell renders no header row of its
-			    own — see MobileAppHeader. Everything still scrolls inside the one
-			    scroller between the status bar and the tab bar. */}
-			<MobileAppHeader>
+			{/* The app name lives in the shell header, so it stays put and shrinks
+			    to the compact bar on scroll like every other screen. The slogan and
+			    the sheep are content and scroll away with it. */}
+			<MobileAppHeader title={tHome('hero.title')}>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 					{/* hero and the search entry are one block with no gap between
 					    them, so the sheep's overhang actually reaches the bar and is
