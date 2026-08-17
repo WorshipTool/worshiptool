@@ -21,6 +21,8 @@ const TITLE_MIN = 1.2 // rem
 const HEADER_Z = 100
 /** MUI spacing unit in px — the paint below works in raw px, not `sx` units. */
 const SPACING_UNIT = 8
+/** Resting top padding of the header block, above the safe-area inset. */
+const HEADER_TOP_PAD = 12
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** The page title — large at rest, shrinks to a compact bar on scroll.
@@ -45,6 +47,12 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	 * while the compact bar still ends up in the usual corner.
 	 */
 	titleInset?: number
+	/**
+	 * Extra space (theme spacing units) above the title at rest, easing away as it
+	 * collapses — so a hero screen can start lower down the screen while its
+	 * compact bar still matches every other screen's.
+	 */
+	titleTopSpace?: number
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
 	/** Optional control strip (segment / chips) pinned under the header. */
@@ -80,6 +88,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	title,
 	subtitle,
 	titleInset = 0,
+	titleTopSpace = 0,
 	backTo,
 	backParams,
 	actions,
@@ -119,6 +128,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
 			}
 			if (headerRef.current) {
+				headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${
+					HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
+				}px)`
 				// with no persistent divider, fade a hairline in as content scrolls under
 				if (!divider) {
 					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
@@ -136,7 +148,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider, titleInset])
+	}, [divider, titleInset, titleTopSpace])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -198,7 +210,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					zIndex: HEADER_Z,
 					display: 'flex',
 					flexDirection: 'column',
-					paddingTop: `calc(${TOOLBAR_SPACER} + 12px)`,
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${HEADER_TOP_PAD}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
 					borderBottom: '1px solid',

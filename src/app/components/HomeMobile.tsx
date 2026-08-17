@@ -32,6 +32,8 @@ const SHEEP_SIZE = 96
 const SHEEP_TUCK = Math.round(SHEEP_SIZE * 0.22)
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
+/** Extra breathing room above the title at rest, so the hero starts lower. */
+const TITLE_TOP_SPACE = 2.5
 
 type HomeMobileProps = {
 	searchInputValue: string
@@ -281,7 +283,11 @@ export default function HomeMobile({
 			{/* The app name lives in the shell header, so it stays put and shrinks
 			    to the compact bar on scroll like every other screen. The slogan and
 			    the sheep are content and scroll away with it. */}
-			<MobileAppHeader title={tHome('hero.title')} titleInset={TITLE_INSET}>
+			<MobileAppHeader
+				title={tHome('hero.title')}
+				titleInset={TITLE_INSET}
+				titleTopSpace={TITLE_TOP_SPACE}
+			>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 					{/* hero and the search entry are one block with no gap between
 					    them, so the sheep's overhang actually reaches the bar and is
