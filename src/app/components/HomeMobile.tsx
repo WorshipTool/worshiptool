@@ -27,10 +27,13 @@ const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 const TEXT_DIVIDER_INSET = 1.75
 /** Sheep size in the hero. Sized to the gap between the title and the pinned
  * search bar, so it starts level with the title and its paws land on the bar. */
-const SHEEP_SIZE = 76
+const SHEEP_SIZE = 94
 /** Where the sheep starts inside the header block, so it sits level with the
  * title and reaches far enough down for the search bar to cover its paws. */
-const SHEEP_TOP = 33
+const SHEEP_TOP = 37
+/** Above the header (100), so the sticky bar covers the sheep hanging into it.
+ * The scroller clips it, so it can never ride up over the top bar. */
+const SEARCH_OVER_HEADER_Z = 101
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Extra breathing room above the title at rest, so the hero starts lower. */
@@ -226,12 +229,28 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// Pinned under the header rather than scrolling with the content, so it stays
-	// reachable down the list. Entry point rather than a live field: tapping it
-	// opens the same full-screen search the tab bar's Hledat opens, so there is
-	// one search surface and no input pinned above the keyboard.
+	// Sticky at the top of the content, so it sits below the top bar rather than
+	// inside it and stays reachable down the list. Raised above the header, whose
+	// sheep hangs into this area; the scroller clips it, so it can never ride up
+	// over the top bar itself.
+	//
+	// Entry point rather than a live field: tapping it opens the same full-screen
+	// search the tab bar's Hledat opens, so there is one search surface and no
+	// input pinned above the keyboard.
 	const searchEntry = (
-		<Box sx={{ position: 'relative' }}>
+		<Box
+			sx={{
+				position: 'sticky',
+				// sticks 4px above the scroller's content edge and pads that back, so
+				// the band's own background covers the scroller's top padding instead
+				// of letting a strip of song text show through above the bar
+				top: '-4px',
+				zIndex: SEARCH_OVER_HEADER_Z,
+				bgcolor: 'grey.50',
+				paddingTop: 0.5,
+				paddingBottom: 1.5,
+			}}
+		>
 			<Clickable onClick={openSearch}>
 				<Box
 					sx={{
@@ -267,9 +286,9 @@ export default function HomeMobile({
 				titleInset={TITLE_INSET}
 				titleTopSpace={TITLE_TOP_SPACE}
 				decoration={sheep}
-				controlPanel={searchEntry}
 			>
-				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, paddingTop: 1 }}>
+				{searchEntry}
+				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 					{picks}
 					{recent}
 				</Box>
