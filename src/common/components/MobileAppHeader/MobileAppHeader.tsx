@@ -23,6 +23,10 @@ const TITLE_MIN = 1.2 // rem
 const HEADER_Z = 100
 /** Resting top padding of the header block, above the safe-area inset. */
 const HEADER_TOP_PAD = 12
+/** The header block's bottom padding in px — mirrors its `paddingBottom: 1`. A
+ * header that is only a control panel uses it on both sides, so the panel sits
+ * evenly between the two edges instead of under a large title's roomier top. */
+const HEADER_BOTTOM_PAD = 8
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** The page title — large at rest, shrinks to a compact bar on scroll.
@@ -43,7 +47,9 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	backParams?: SmartAllParams<T>
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
-	/** Optional control strip (segment / chips) pinned under the title. */
+	/** Optional control strip (segment / chips / a search field) inside the header
+	 * block, under the title. Pass it without a title and the header is only the
+	 * strip — pinned above the scroller, so it cannot be scrolled away. */
 	controlPanel?: ReactNode
 	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
 	bottomPanel?: ReactNode
@@ -151,10 +157,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		else navigate(backTo, (backParams ?? {}) as SmartAllParams<T>)
 	}
 
-	// nothing to put in the header row — the screen draws its own top instead
-	const hasHeaderRow = Boolean(
-		title || backTo || shownActions.length > 0 || controlPanel
-	)
+	const hasTitleRow = Boolean(title || backTo || shownActions.length > 0)
+	// nothing to put in the header block — the screen draws its own top instead
+	const hasHeaderRow = Boolean(hasTitleRow || controlPanel)
 
 	return (
 		<Box
@@ -193,13 +198,16 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					position: 'relative',
 					display: 'flex',
 					flexDirection: 'column',
-					paddingTop: `calc(${TOOLBAR_SPACER} + ${HEADER_TOP_PAD}px)`,
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${
+						hasTitleRow ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
+					}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
 					borderBottom: '1px solid',
 					borderColor: divider ? 'grey.200' : 'transparent',
 				}}
 			>
+				{hasTitleRow && (
 				<Box
 					sx={{
 						display: 'flex',
@@ -270,11 +278,14 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						</Box>
 					)}
 				</Box>
+				)}
 
 				{/* control strip — inside the header block so it shares the header
 				    background (one solid white zone above the bottom divider) */}
 				{controlPanel && (
-					<Box sx={{ paddingX: 2, paddingTop: 1 }}>{controlPanel}</Box>
+					<Box sx={{ paddingX: 2, paddingTop: hasTitleRow ? 1 : 0 }}>
+						{controlPanel}
+					</Box>
 				)}
 			</Box>
 			)}

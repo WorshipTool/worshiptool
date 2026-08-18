@@ -319,28 +319,37 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- the bar: the one thing that stays ----
-
-	const searchBar = searchOpen ? (
-		<MobileSearchField
-			value={searchInputValue}
-			onValueChange={onSearchValueChange}
-			onCancel={closeSearch}
-		/>
-	) : (
-		<MobileSearchEntry onOpen={openSearch} />
-	)
+	// Searching is a mode of this screen, not a layer over it: the hero steps
+	// aside, the bar becomes a live field and the body swaps recommendations for
+	// results. Nothing covers the tab bar, so the tabs stay a way out.
+	//
+	// The field goes in the shell header rather than in the scroller. It has to
+	// stay put while typing, and pinned above the scroller that is structural
+	// rather than something the browser could scroll away as results land.
+	if (searchOpen)
+		return (
+			<MobileAppHeader
+				controlPanel={
+					<MobileSearchField
+						value={searchInputValue}
+						onValueChange={onSearchValueChange}
+						onCancel={closeSearch}
+					/>
+				}
+				// no hero to blend into, so the header reads as a bar from the start
+				divider
+				scrollResetKey="search"
+			>
+				<MobileSearchBody searchString={searchString} smartSearch={smartSearch} />
+			</MobileAppHeader>
+		)
 
 	return (
-		// Searching is a mode of this screen, not a layer over it: the hero steps
-		// aside so the bar is at the top, and the body swaps recommendations for
-		// results. Nothing covers the tab bar, so the tabs stay a way out.
-		//
-		// No shell header: the hero is ordinary content that scrolls away at the
-		// speed of the page, and the bar below it is sticky — so it ends up as the
-		// top bar without anything shrinking or fading on the way.
-		<MobileAppHeader scrollResetKey={searchOpen ? 'search' : 'home'}>
-			{!searchOpen && hero}
+		// No shell header at rest: the hero is ordinary content that scrolls away at
+		// the speed of the page, and the bar below it is sticky — so it ends up as
+		// the top bar without anything shrinking or fading on the way.
+		<MobileAppHeader scrollResetKey="home">
+			{hero}
 
 			<Box
 				ref={searchBandRef}
@@ -359,27 +368,20 @@ export default function HomeMobile({
 					borderColor: 'transparent',
 				}}
 			>
-				{searchBar}
+				<MobileSearchEntry onOpen={openSearch} />
 			</Box>
 
-			{searchOpen ? (
-				<MobileSearchBody
-					searchString={searchString}
-					smartSearch={smartSearch}
-				/>
-			) : (
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 3,
-						marginTop: SECTIONS_TOP_SPACE,
-					}}
-				>
-					{picks}
-					{recent}
-				</Box>
-			)}
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 3,
+					marginTop: SECTIONS_TOP_SPACE,
+				}}
+			>
+				{picks}
+				{recent}
+			</Box>
 		</MobileAppHeader>
 	)
 }
