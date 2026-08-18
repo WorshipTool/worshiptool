@@ -82,9 +82,21 @@ export default function HomeMobile({
 	const rec = recommended.data
 	const last = lastAdded.data
 
-	// Open straight into search when the URL already carries a query, so a shared
-	// or reloaded ?hledat= link lands where it says it does.
-	const [searchOpen, setSearchOpen] = useState(() => Boolean(searchString))
+	// `?hledat=` is how the tab bar's Hledat asks for search: it arrives with the
+	// navigation, by which time the MAIN_SEARCH_EVENT it also fires has gone
+	// unheard — this screen wasn't mounted yet to hear it. Read once, on mount,
+	// before the delayer starts writing the param back on its own.
+	//
+	// An empty one means Hledat was tapped and the keyboard is wanted; one with a
+	// query is a shared or reloaded link, which should show its results rather
+	// than cover them with a keyboard.
+	const [openedByUrl] = useState(() => {
+		if (typeof window === 'undefined') return null
+		const params = new URLSearchParams(window.location.search)
+		if (!params.has('hledat')) return null
+		return { query: params.get('hledat') || '' }
+	})
+	const [searchOpen, setSearchOpen] = useState(() => openedByUrl !== null)
 
 	// The tab bar's Hledat links here and fires MAIN_SEARCH_EVENT, exactly like the
 	// desktop toolbar's "Hledat" item does. Only MainSearchInput listened for it,
@@ -104,6 +116,12 @@ export default function HomeMobile({
 		window.addEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
 		return () => window.removeEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
 	}, [openSearch])
+
+	// …and when the tab bar asked from another tab, the field is focused here
+	// instead, once this screen exists to focus it.
+	useEffect(() => {
+		if (openedByUrl && !openedByUrl.query) searchInputRef.current?.focus()
+	}, [openedByUrl])
 
 	// Tapping a tab is the way out of search. Písně and Účet leave this route and
 	// unmount the screen on their own, but Domů navigates to the route we are
@@ -168,7 +186,6 @@ export default function HomeMobile({
 			if (next === stuck) return
 			stuck = next
 			band.style.borderBottomColor = next ? theme.palette.grey[200] : 'transparent'
-			band.style.boxShadow = next ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
 		}
 		const schedule = () => {
 			if (!raf) raf = requestAnimationFrame(paint)
@@ -393,11 +410,11 @@ export default function HomeMobile({
 					// under the status bar, whose scrim the shell draws above it
 					top: TOOLBAR_SPACER,
 					zIndex: 2,
+					// the canvas colour, so content scrolling under the pinned bar is
+					// hidden rather than showing through its padding. Only as wide as
+					// the content column — bleeding it to the scroller's edges put it
+					// over the scrollbar too.
 					bgcolor: 'grey.50',
-					// bleed to the scroller's edges, so content passes under the whole
-					// band rather than beside it
-					marginX: -2,
-					paddingX: 2,
 					paddingY: 1,
 					borderBottom: '1px solid',
 					borderColor: 'transparent',
