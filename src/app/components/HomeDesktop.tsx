@@ -78,9 +78,16 @@ export default function HomeDesktop() {
 	}, [])
 
 	useEffect(() => {
+		// Desktop only. The phone runs a fixed app shell with its own scroller, so
+		// there is nothing here for the window to scroll — except that with the
+		// keyboard open the layout viewport is taller than the visible one, and
+		// scrolling it drags the whole fixed shell (search field included) out of
+		// view. That fired on every debounced query, which is what made typing
+		// look like it jumped to the first result.
+		if (phoneVersion) return
 		if (searchString === null) return
 		scrollToTop()
-	}, [searchString])
+	}, [searchString, phoneVersion, scrollToTop])
 
 	// Manage toolbar and footer
 	const { isTop } = useScrollHandler({
