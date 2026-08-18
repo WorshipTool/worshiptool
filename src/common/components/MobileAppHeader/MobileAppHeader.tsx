@@ -12,24 +12,17 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useEffect, useRef } from 'react'
 
-const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
+/** Status-bar / notch clearance. Exported so a screen that owns its own top
+ * (one with no header row) can inset itself the same way the header does. */
+export const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 // how far you scroll before the title finishes shrinking to its compact size
 const SHRINK_DISTANCE = 64
 const TITLE_MAX = 1.85 // rem
 const TITLE_MIN = 1.2 // rem
 // sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
 const HEADER_Z = 100
-/** MUI spacing unit in px — the paint below works in raw px, not `sx` units. */
-const SPACING_UNIT = 8
 /** Resting top padding of the header block, above the safe-area inset. */
 const HEADER_TOP_PAD = 12
-/** The header block's bottom padding in px — mirrors its `paddingBottom: 1`.
- * A collapsed `collapseTitle` header eases its top padding down to this, so the
- * control panel left alone in the bar sits evenly between the two edges. */
-const HEADER_BOTTOM_PAD = SPACING_UNIT
-/** Gap between the title block and the control panel — mirrors its `paddingTop:
- * 1`. Eases away with the title, so it doesn't double the bar's top inset. */
-const CONTROL_PANEL_GAP = SPACING_UNIT
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** The page title — large at rest, shrinks to a compact bar on scroll.
@@ -48,36 +41,10 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	 */
 	backTo?: T
 	backParams?: SmartAllParams<T>
-	/**
-	 * Extra left inset (theme spacing units) for the title at rest, easing away as
-	 * it collapses. Lets a hero screen line its title up with the copy below it
-	 * while the compact bar still ends up in the usual corner.
-	 */
-	titleInset?: number
-	/**
-	 * Extra space (theme spacing units) above the title at rest, easing away as it
-	 * collapses — so a hero screen can start lower down the screen while its
-	 * compact bar still matches every other screen's.
-	 */
-	titleTopSpace?: number
-	/**
-	 * Illustration drawn inside the header block, level with the title. Position
-	 * it absolutely; it may hang below the header, and it fades out as the header
-	 * collapses so it never floats over the scrolling content.
-	 */
-	decoration?: ReactNode
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
-	/** Optional control strip (segment / chips / a search field) inside the
-	 * header block, under the title. It stays put while the header collapses. */
+	/** Optional control strip (segment / chips) pinned under the title. */
 	controlPanel?: ReactNode
-	/**
-	 * Let the title scroll away completely instead of shrinking into a compact
-	 * bar. For a screen whose `controlPanel` is the thing worth keeping — home's
-	 * search field takes the collapsed bar's place, the way iOS hands the bar
-	 * over to a search field once the large title is gone.
-	 */
-	collapseTitle?: boolean
 	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
 	bottomPanel?: ReactNode
 	/** When this value changes, the content scrolls back to the top (e.g. on page change). */
@@ -108,14 +75,10 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 export default function MobileAppHeader<T extends RoutesKeys>({
 	title,
 	subtitle,
-	titleInset = 0,
-	titleTopSpace = 0,
-	decoration,
 	backTo,
 	backParams,
 	actions,
 	controlPanel,
-	collapseTitle = false,
 	bottomPanel,
 	scrollResetKey,
 	surface = 'grey.50',
@@ -129,90 +92,32 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLDivElement>(null)
-	const decorationRef = useRef<HTMLDivElement>(null)
-	const titleBlockRef = useRef<HTMLDivElement>(null)
-	const titleRowRef = useRef<HTMLDivElement>(null)
-	const controlPanelRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
-	/** Resting height of the title row, measured so it can be collapsed to 0. */
-	const titleRowHeight = useRef(0)
 
 	const shownActions = actions?.slice(0, 2) ?? []
-	const hasTitleRow = Boolean(title || backTo || shownActions.length > 0)
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
 	useEffect(() => {
 		const scroller = scrollRef.current
 		if (!scroller) return
-		// measure the row at its full size before any collapse is painted onto it
-		if (collapseTitle && titleRowRef.current) {
-			titleRowRef.current.style.height = ''
-			titleRowHeight.current = titleRowRef.current.offsetHeight
-		}
 		let raf = 0
 		const paint = () => {
 			raf = 0
 			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
-			if (titleRef.current && !collapseTitle) {
-				// a title that leaves entirely slides away at full size instead —
-				// shrinking something on its way out just reads as two effects at once
+			if (titleRef.current) {
 				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
-			}
-			if (titleBlockRef.current) {
-				// the inset belongs to the resting hero, not to the compact bar, and
-				// it moves the title and its subtitle together
-				titleBlockRef.current.style.paddingLeft = `${
-					titleInset * SPACING_UNIT * (1 - p)
-				}px`
-			}
-			if (collapseTitle && titleRowRef.current && titleRowHeight.current) {
-				// the whole row leaves rather than shrinking, handing the collapsed
-				// header over to the control panel below it
-				titleRowRef.current.style.height = `${titleRowHeight.current * (1 - p)}px`
-				// gone well before the row is, so the clipped edge is never on show
-				titleRowRef.current.style.opacity = String(Math.max(0, 1 - p * 2))
-			}
-			if (decorationRef.current) {
-				// leaves with the title it belongs to, rather than lingering as a
-				// sliver of illustration clipped by the collapsing header
-				decorationRef.current.style.opacity = String(
-					Math.max(0, 1 - p * (collapseTitle ? 2 : 1.6))
-				)
 			}
 			if (subtitleRef.current) {
 				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
 				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
 			}
-			if (controlPanelRef.current && collapseTitle) {
-				// with no title above it there is no gap to ease away, and the painted
-				// value has to be cleared or it outlives the row it belonged to
-				controlPanelRef.current.style.paddingTop = hasTitleRow
-					? `${CONTROL_PANEL_GAP * (1 - p)}px`
-					: ''
-			}
 			if (headerRef.current) {
-				if (hasTitleRow) {
-					// with the title gone there is nothing left to sit under, so the top
-					// inset eases down to match the bottom one instead of keeping the
-					// large-title header's roomier top
-					const restingTop = HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT
-					const topPad = collapseTitle
-						? restingTop * (1 - p) + HEADER_BOTTOM_PAD * p
-						: HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
-					headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${topPad}px)`
-				} else {
-					// hand the inset back to the stylesheet, which knows the even one to
-					// use for a header that is only its control panel
-					headerRef.current.style.paddingTop = ''
+				// with no persistent divider, fade a hairline in as content scrolls under
+				if (!divider) {
+					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
 				}
-				// with no persistent divider, fade a hairline in as content scrolls
-				// under; with one, hand the colour back to the stylesheet (an alpha
-				// painted before the divider was switched on would outlive it)
-				headerRef.current.style.borderBottomColor = divider
-					? ''
-					: `rgba(0, 0, 0, ${0.08 * p})`
 				headerRef.current.style.boxShadow =
 					p > 0.9 ? `0 2px 8px rgba(0, 0, 0, 0.05)` : 'none'
 			}
@@ -226,7 +131,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider, titleInset, titleTopSpace, decoration, collapseTitle, hasTitleRow])
+	}, [divider])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -246,8 +151,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		else navigate(backTo, (backParams ?? {}) as SmartAllParams<T>)
 	}
 
-	// nothing to put in the header block — the screen draws its own top instead
-	const hasHeaderRow = Boolean(hasTitleRow || controlPanel)
+	// nothing to put in the header row — the screen draws its own top instead
+	const hasHeaderRow = Boolean(
+		title || backTo || shownActions.length > 0 || controlPanel
+	)
 
 	return (
 		<Box
@@ -286,40 +193,19 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					position: 'relative',
 					display: 'flex',
 					flexDirection: 'column',
-					// with no title row the header is only its control panel, so it sits
-					// evenly between its two edges instead of keeping the large title's
-					// roomier top
-					paddingTop: `calc(${TOOLBAR_SPACER} + ${
-						hasTitleRow ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
-					}px)`,
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${HEADER_TOP_PAD}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
 					borderBottom: '1px solid',
 					borderColor: divider ? 'grey.200' : 'transparent',
-					// a decoration is sized to the resting header; clip it so it can't
-					// spill over the content once the header collapses around it
-					...(decoration ? { overflow: 'hidden' } : {}),
 				}}
 			>
-				{decoration && (
-					<Box
-						ref={decorationRef}
-						sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-					>
-						{decoration}
-					</Box>
-				)}
-
-				{hasTitleRow && (
 				<Box
-					ref={titleRowRef}
 					sx={{
 						display: 'flex',
 						alignItems: 'center',
 						gap: 0.5,
 						paddingX: 1.5,
-						// the row's height is animated to 0 when it collapses away
-						...(collapseTitle ? { overflow: 'hidden' } : {}),
 					}}
 				>
 					{backTo && (
@@ -333,7 +219,6 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						</IconButton>
 					)}
 					<Box
-						ref={titleBlockRef}
 						sx={{
 							flex: 1,
 							minWidth: 0,
@@ -385,27 +270,31 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						</Box>
 					)}
 				</Box>
-				)}
 
 				{/* control strip — inside the header block so it shares the header
-				    background (one solid white zone above the bottom divider).
-				    Positioned, so it paints over the decoration: an absolutely
-				    positioned illustration would otherwise win on paint order no
-				    matter where it sits in the DOM. */}
+				    background (one solid white zone above the bottom divider) */}
 				{controlPanel && (
-					<Box
-						ref={controlPanelRef}
-						sx={{
-							position: 'relative',
-							zIndex: 1,
-							paddingX: 2,
-							paddingTop: hasTitleRow ? 1 : 0,
-						}}
-					>
-						{controlPanel}
-					</Box>
+					<Box sx={{ paddingX: 2, paddingTop: 1 }}>{controlPanel}</Box>
 				)}
 			</Box>
+			)}
+
+			{/* Status-bar scrim for a screen with no header row: its content starts at
+			    the very top, so without this it would show through the status bar as
+			    it scrolls past. */}
+			{!hasHeaderRow && (
+				<Box
+					sx={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						height: TOOLBAR_SPACER,
+						bgcolor: surface,
+						zIndex: HEADER_Z,
+						pointerEvents: 'none',
+					}}
+				/>
 			)}
 
 			{/* the only scroller — scrollbar confined between the header/panels */}
@@ -417,8 +306,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					overflowY: 'auto',
 					overflowX: 'hidden',
 					paddingX: 2,
-					// with no header row the content owns the status-bar clearance
-					paddingTop: hasHeaderRow ? 0.5 : `calc(${TOOLBAR_SPACER} + 12px)`,
+					// with no header row the screen owns its own top inset, so it can
+					// stick something (home's search bar) right under the status bar
+					paddingTop: hasHeaderRow ? 0.5 : 0,
 					paddingBottom: 2,
 				}}
 			>

@@ -9,8 +9,11 @@ import MobileSearchBody, {
 } from '@/app/components/MobileSearch'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
-import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { Box, Clickable, Image, Typography } from '@/common/ui'
+import {
+	MobileAppHeader,
+	TOOLBAR_SPACER,
+} from '@/common/components/MobileAppHeader'
+import { Box, Clickable, Image, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
@@ -31,16 +34,18 @@ import {
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
 const TEXT_DIVIDER_INSET = 1.75
-/** Sheep size in the hero. Sized to the gap between the title and the pinned
- * search bar, so it starts level with the title and its paws land on the bar. */
+/** Sheep size in the hero. Sized to the gap between the title and the search
+ * bar, so it starts level with the title and its paws land on the bar. */
 const SHEEP_SIZE = 94
-/** Where the sheep starts inside the header block, so it sits level with the
- * title and reaches far enough down for the search bar to cover its paws. */
-const SHEEP_TOP = 37
+/** Where the sheep starts relative to the title, so it sits level with it and
+ * reaches far enough down for the search bar to cover its paws. */
+const SHEEP_TOP = 5
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
-/** Extra breathing room above the title at rest, so the hero starts lower. */
-const TITLE_TOP_SPACE = 2.5
+/** Hero title size (rem) — the shell's large-title size, since this is one. */
+const TITLE_SIZE = 1.85
+/** Space above the title, below the status bar. */
+const HERO_TOP_PAD = 32
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
@@ -130,6 +135,40 @@ export default function HomeMobile({
 		window.addEventListener('popstate', onPop)
 		return () => window.removeEventListener('popstate', onPop)
 	}, [searchOpen, onSearchValueChange])
+
+	// The bar carries a hairline once it has become the top bar, and none while
+	// it is still part of the hero — a divider mid-page would be meaningless.
+	// Painted straight onto the node, so sticking re-renders nothing.
+	const searchBandRef = useRef<HTMLDivElement>(null)
+	const theme = useTheme()
+	useEffect(() => {
+		const band = searchBandRef.current
+		if (!band) return
+		// env() resolves to pixels in computed style, so the sticky offset is
+		// readable without repeating the safe-area inset here
+		const stickyTop = parseFloat(window.getComputedStyle(band).top) || 0
+		let raf = 0
+		let stuck: boolean | null = null
+		const paint = () => {
+			raf = 0
+			const next = band.getBoundingClientRect().top <= stickyTop + 0.5
+			if (next === stuck) return
+			stuck = next
+			band.style.borderBottomColor = next ? theme.palette.grey[200] : 'transparent'
+			band.style.boxShadow = next ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
+		}
+		const onScroll = () => {
+			if (!raf) raf = requestAnimationFrame(paint)
+		}
+		// the shell owns the scroller, so listen in the capture phase: scroll events
+		// don't bubble, but they are dispatched down through the document first
+		document.addEventListener('scroll', onScroll, true)
+		paint()
+		return () => {
+			document.removeEventListener('scroll', onScroll, true)
+			if (raf) cancelAnimationFrame(raf)
+		}
+	}, [theme, searchOpen])
 
 	// Cancel goes back through that entry rather than around it, so the Back
 	// gesture afterwards isn't a step that appears to do nothing.
@@ -227,34 +266,61 @@ export default function HomeMobile({
 	)
 
 	// ---- the sheep: drawn in the header so it sits level with the title, reaching
-	// low enough for the search bar below it to cover its paws. Both live in the
-	// header block, so the bar simply paints after it. The shell fades the sheep
-	// out as the header collapses.
+	// low enough that the search bar below covers its paws — the bar comes later
+	// in the flow, so it simply paints over it, and scrolling slides the sheep
+	// under it until it is gone.
 
-	const sheep = (
+	// ---- hero: plain content, so it scrolls away like everything else ----
+
+	const hero = (
 		<Box
 			sx={{
-				position: 'absolute',
-				right: 16,
-				top: SHEEP_TOP,
-				width: SHEEP_SIZE,
-				height: SHEEP_SIZE,
+				paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_PAD}px)`,
+				paddingLeft: TITLE_INSET,
 			}}
 		>
-			<Image
-				src={getAssetUrl('/sheeps/ovce3.svg')}
-				alt={tHome('hero.title')}
-				fill
-				sizes={`${SHEEP_SIZE}px`}
-				style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
-			/>
+			<Box sx={{ position: 'relative' }}>
+				<Box
+					sx={{
+						fontSize: `${TITLE_SIZE}rem`,
+						fontWeight: 800,
+						letterSpacing: '-0.4px',
+						lineHeight: 1.15,
+						color: 'grey.900',
+					}}
+				>
+					{tHome('hero.title')}
+				</Box>
+				<Box sx={{ marginTop: 0.25 }}>
+					<Typography small strong={500} color="grey.600">
+						{tHome('hero.lead')}
+					</Typography>
+				</Box>
+
+				<Box
+					sx={{
+						position: 'absolute',
+						// the scroller's own inset already holds it off the screen edge
+						right: 0,
+						top: SHEEP_TOP,
+						width: SHEEP_SIZE,
+						height: SHEEP_SIZE,
+					}}
+				>
+					<Image
+						src={getAssetUrl('/sheeps/ovce3.svg')}
+						alt={tHome('hero.title')}
+						fill
+						sizes={`${SHEEP_SIZE}px`}
+						style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
+					/>
+				</Box>
+			</Box>
 		</Box>
 	)
 
-	// The bar lives inside the header rather than under it, so once the title has
-	// scrolled away it is what the collapsed header is made of — the phone's
-	// version of the desktop toolbar keeping search at the top of the page. It is
-	// also where searching happens: tapping it turns it into a live field.
+	// ---- the bar: the one thing that stays ----
+
 	const searchBar = searchOpen ? (
 		<MobileSearchField
 			value={searchInputValue}
@@ -267,24 +333,35 @@ export default function HomeMobile({
 
 	return (
 		// Searching is a mode of this screen, not a layer over it: the hero steps
-		// aside so the field is at the top, and the body swaps recommendations for
+		// aside so the bar is at the top, and the body swaps recommendations for
 		// results. Nothing covers the tab bar, so the tabs stay a way out.
-		<MobileAppHeader
-			title={searchOpen ? undefined : tHome('hero.title')}
-			subtitle={searchOpen ? undefined : tHome('hero.lead')}
-			titleInset={TITLE_INSET}
-			titleTopSpace={TITLE_TOP_SPACE}
-			// The whole hero — name, slogan and sheep — scrolls away together,
-			// handing the collapsed header over to the search bar.
-			decoration={searchOpen ? undefined : sheep}
-			controlPanel={searchBar}
-			collapseTitle
-			// searching has no hero to blend into, so the header reads as a bar from
-			// the start rather than only once something scrolls under it
-			divider={searchOpen}
-			// entering or leaving search starts its body at the top
-			scrollResetKey={searchOpen ? 'search' : 'home'}
-		>
+		//
+		// No shell header: the hero is ordinary content that scrolls away at the
+		// speed of the page, and the bar below it is sticky — so it ends up as the
+		// top bar without anything shrinking or fading on the way.
+		<MobileAppHeader scrollResetKey={searchOpen ? 'search' : 'home'}>
+			{!searchOpen && hero}
+
+			<Box
+				ref={searchBandRef}
+				sx={{
+					position: 'sticky',
+					// under the status bar, whose scrim the shell draws above it
+					top: TOOLBAR_SPACER,
+					zIndex: 2,
+					bgcolor: 'grey.50',
+					// bleed to the scroller's edges, so content passes under the whole
+					// band rather than beside it
+					marginX: -2,
+					paddingX: 2,
+					paddingY: 1,
+					borderBottom: '1px solid',
+					borderColor: 'transparent',
+				}}
+			>
+				{searchBar}
+			</Box>
+
 			{searchOpen ? (
 				<MobileSearchBody
 					searchString={searchString}
