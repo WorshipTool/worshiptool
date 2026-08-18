@@ -3,7 +3,10 @@
 import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/hooks/useLastAddedSongs'
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
-import MobileSearchScreen from '@/app/components/MobileSearchScreen'
+import MobileSearchBody, {
+	MobileSearchEntry,
+	MobileSearchField,
+} from '@/app/components/MobileSearch'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import { MobileAppHeader } from '@/common/components/MobileAppHeader'
@@ -13,14 +16,17 @@ import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
 import { getAssetUrl } from '@/tech/paths.tech'
 import { parseVariantAlias } from '@/tech/song/variant/variant.utils'
-import {
-	ChevronRightRounded,
-	CloudOffRounded,
-	SearchRounded,
-} from '@mui/icons-material'
+import { ChevronRightRounded, CloudOffRounded } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import {
+	Fragment,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react'
 
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
@@ -51,9 +57,9 @@ type HomeMobileProps = {
  * (recommended picks, a quiet "last added") under the shell's large title, which
  * is the desktop hero in a phone's clothes.
  *
- * Searching is a mode rather than a strip on this screen — see
- * MobileSearchScreen for why. The desktop layout stays in HomeDesktop; this
- * component owns the phone view.
+ * Searching is a mode of this screen rather than a layer over it — see
+ * MobileSearch. The desktop layout stays in HomeDesktop; this component owns
+ * the phone view.
  */
 export default function HomeMobile({
 	searchInputValue,
@@ -62,7 +68,6 @@ export default function HomeMobile({
 	smartSearch,
 }: HomeMobileProps) {
 	const tHome = useTranslations('home')
-	const tSearch = useTranslations('search')
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -86,11 +91,11 @@ export default function HomeMobile({
 
 	// Tapping a tab is the way out of search. Písně and Účet leave this route and
 	// unmount the screen on their own, but Domů navigates to the route we are
-	// already on, so nothing would tear the layer down — the query param dropping
+	// already on, so nothing would take the mode down — the query param dropping
 	// out of the URL is the signal. Typing edits the URL with replaceState, which
 	// does not update this hook, so it cannot fire mid-search.
 	//
-	// Guarded on the layer actually being open: clearing the value writes the
+	// Guarded on search actually being open: clearing the value writes the
 	// (empty) query param back through useUrlState, so running this on a plain
 	// visit to `/` would put ?hledat= in the URL and make the bar light up as if
 	// search were open.
@@ -102,23 +107,40 @@ export default function HomeMobile({
 		onSearchValueChange('')
 	}, [searchParams, searchOpen, onSearchValueChange])
 
-	// Let the tab bar reflect the layer (it has no other way to know — see
+	// Let the tab bar reflect the mode (it has no other way to know — see
 	// mobileSearchState), and make sure it doesn't stay lit if we unmount.
 	useEffect(() => {
 		setMobileSearchOpen(searchOpen)
 		return () => setMobileSearchOpen(false)
 	}, [searchOpen])
 
-	// The Back gesture should close the layer too, so opening it pushes a history
+	// The Back gesture should leave search too, so opening it pushes a history
 	// entry. useUrlState edits the query with replaceState, so typing re-labels
 	// that entry instead of stacking more.
+	const pushedHistoryRef = useRef(false)
 	useEffect(() => {
 		if (!searchOpen) return
 		window.history.pushState({ mobileSearch: true }, '')
-		const onPop = () => setSearchOpen(false)
+		pushedHistoryRef.current = true
+		const onPop = () => {
+			pushedHistoryRef.current = false
+			setSearchOpen(false)
+			onSearchValueChange('')
+		}
 		window.addEventListener('popstate', onPop)
 		return () => window.removeEventListener('popstate', onPop)
-	}, [searchOpen])
+	}, [searchOpen, onSearchValueChange])
+
+	// Cancel goes back through that entry rather than around it, so the Back
+	// gesture afterwards isn't a step that appears to do nothing.
+	const closeSearch = useCallback(() => {
+		if (pushedHistoryRef.current) {
+			window.history.back()
+			return
+		}
+		setSearchOpen(false)
+		onSearchValueChange('')
+	}, [onSearchValueChange])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -229,51 +251,44 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// Lives inside the header rather than under it, so once the title has scrolled
-	// away the search bar is what the collapsed header is made of — the phone's
-	// version of the desktop toolbar keeping search at the top of the page.
-	//
-	// Entry point rather than a live field: tapping it opens the same full-screen
-	// search the tab bar's Hledat opens, so there is one search surface and no
-	// input pinned above the keyboard.
-	const searchEntry = (
-		<Clickable onClick={openSearch}>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1.5,
-					bgcolor: 'background.paper',
-					border: '1px solid',
-					borderColor: 'grey.300',
-					borderRadius: 2.5,
-					paddingX: 2,
-					paddingY: 1.5,
-					boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-				}}
-			>
-				<SearchRounded sx={{ color: 'grey.500' }} />
-				<Typography color="grey.500" noWrap>
-					{tSearch('searchByTitleOrText')}
-				</Typography>
-			</Box>
-		</Clickable>
+	// The bar lives inside the header rather than under it, so once the title has
+	// scrolled away it is what the collapsed header is made of — the phone's
+	// version of the desktop toolbar keeping search at the top of the page. It is
+	// also where searching happens: tapping it turns it into a live field.
+	const searchBar = searchOpen ? (
+		<MobileSearchField
+			value={searchInputValue}
+			onValueChange={onSearchValueChange}
+			onCancel={closeSearch}
+		/>
+	) : (
+		<MobileSearchEntry onOpen={openSearch} />
 	)
 
 	return (
-		<>
-			{/* The whole hero — name, slogan and sheep — lives in the shell header
-			    and scrolls away together, handing the collapsed header over to the
-			    search bar, which is the one thing worth keeping up there. */}
-			<MobileAppHeader
-				title={tHome('hero.title')}
-				subtitle={tHome('hero.lead')}
-				titleInset={TITLE_INSET}
-				titleTopSpace={TITLE_TOP_SPACE}
-				decoration={sheep}
-				controlPanel={searchEntry}
-				collapseTitle
-			>
+		// Searching is a mode of this screen, not a layer over it: the hero steps
+		// aside so the field is at the top, and the body swaps recommendations for
+		// results. Nothing covers the tab bar, so the tabs stay a way out.
+		<MobileAppHeader
+			title={searchOpen ? undefined : tHome('hero.title')}
+			subtitle={searchOpen ? undefined : tHome('hero.lead')}
+			titleInset={TITLE_INSET}
+			titleTopSpace={TITLE_TOP_SPACE}
+			// The whole hero — name, slogan and sheep — scrolls away together,
+			// handing the collapsed header over to the search bar.
+			decoration={searchOpen ? undefined : sheep}
+			controlPanel={searchBar}
+			collapseTitle
+			// entering or leaving search starts its body at the top
+			scrollResetKey={searchOpen ? 'search' : 'home'}
+		>
+			{searchOpen ? (
+				<MobileSearchBody
+					searchString={searchString}
+					smartSearch={smartSearch}
+					suggestions={rec.slice(0, 5)}
+				/>
+			) : (
 				<Box
 					sx={{
 						display: 'flex',
@@ -285,18 +300,8 @@ export default function HomeMobile({
 					{picks}
 					{recent}
 				</Box>
-			</MobileAppHeader>
-
-			{searchOpen && (
-				<MobileSearchScreen
-					value={searchInputValue}
-					onValueChange={onSearchValueChange}
-					searchString={searchString}
-					smartSearch={smartSearch}
-					suggestions={rec.slice(0, 5)}
-				/>
 			)}
-		</>
+		</MobileAppHeader>
 	)
 }
 

@@ -138,6 +138,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	/** Resting height of the title row, measured so it can be collapsed to 0. */
 	const titleRowHeight = useRef(0)
 
+	const shownActions = actions?.slice(0, 2) ?? []
+	const hasTitleRow = Boolean(title || backTo || shownActions.length > 0)
+
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
 	useEffect(() => {
@@ -183,17 +186,27 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
 			}
 			if (controlPanelRef.current && collapseTitle) {
-				controlPanelRef.current.style.paddingTop = `${CONTROL_PANEL_GAP * (1 - p)}px`
+				// with no title above it there is no gap to ease away, and the painted
+				// value has to be cleared or it outlives the row it belonged to
+				controlPanelRef.current.style.paddingTop = hasTitleRow
+					? `${CONTROL_PANEL_GAP * (1 - p)}px`
+					: ''
 			}
 			if (headerRef.current) {
-				// with the title gone there is nothing left to sit under, so the top
-				// inset eases down to match the bottom one instead of keeping the
-				// large-title header's roomier top
-				const restingTop = HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT
-				const topPad = collapseTitle
-					? restingTop * (1 - p) + HEADER_BOTTOM_PAD * p
-					: HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
-				headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${topPad}px)`
+				if (hasTitleRow) {
+					// with the title gone there is nothing left to sit under, so the top
+					// inset eases down to match the bottom one instead of keeping the
+					// large-title header's roomier top
+					const restingTop = HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT
+					const topPad = collapseTitle
+						? restingTop * (1 - p) + HEADER_BOTTOM_PAD * p
+						: HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
+					headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${topPad}px)`
+				} else {
+					// hand the inset back to the stylesheet, which knows the even one to
+					// use for a header that is only its control panel
+					headerRef.current.style.paddingTop = ''
+				}
 				// with no persistent divider, fade a hairline in as content scrolls under
 				if (!divider) {
 					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
@@ -211,7 +224,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider, titleInset, titleTopSpace, decoration, collapseTitle])
+	}, [divider, titleInset, titleTopSpace, decoration, collapseTitle, hasTitleRow])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -231,11 +244,8 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		else navigate(backTo, (backParams ?? {}) as SmartAllParams<T>)
 	}
 
-	const shownActions = actions?.slice(0, 2) ?? []
-	// nothing to put in the header row — the screen draws its own top instead
-	const hasHeaderRow = Boolean(
-		title || backTo || shownActions.length > 0 || controlPanel
-	)
+	// nothing to put in the header block — the screen draws its own top instead
+	const hasHeaderRow = Boolean(hasTitleRow || controlPanel)
 
 	return (
 		<Box
@@ -274,7 +284,12 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					position: 'relative',
 					display: 'flex',
 					flexDirection: 'column',
-					paddingTop: `calc(${TOOLBAR_SPACER} + ${HEADER_TOP_PAD}px)`,
+					// with no title row the header is only its control panel, so it sits
+					// evenly between its two edges instead of keeping the large title's
+					// roomier top
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${
+						hasTitleRow ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
+					}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
 					borderBottom: '1px solid',
@@ -293,6 +308,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					</Box>
 				)}
 
+				{hasTitleRow && (
 				<Box
 					ref={titleRowRef}
 					sx={{
@@ -367,6 +383,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						</Box>
 					)}
 				</Box>
+				)}
 
 				{/* control strip — inside the header block so it shares the header
 				    background (one solid white zone above the bottom divider).
@@ -376,7 +393,12 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				{controlPanel && (
 					<Box
 						ref={controlPanelRef}
-						sx={{ position: 'relative', zIndex: 1, paddingX: 2, paddingTop: 1 }}
+						sx={{
+							position: 'relative',
+							zIndex: 1,
+							paddingX: 2,
+							paddingTop: hasTitleRow ? 1 : 0,
+						}}
 					>
 						{controlPanel}
 					</Box>
