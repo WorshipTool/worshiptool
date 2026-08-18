@@ -1,6 +1,5 @@
 'use client'
 
-import { BasicVariantPack } from '@/api/dtos'
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
 import { Box, Button, Clickable, Typography } from '@/common/ui'
@@ -105,11 +104,6 @@ type BodyProps = {
 	/** Debounced query actually sent to the API; null until the first one lands. */
 	searchString: string | null
 	smartSearch: boolean
-	/**
-	 * Songs to offer before anything is typed. Home has them loaded already, so
-	 * they cost nothing here and keep the opening screen from being blank.
-	 */
-	suggestions?: BasicVariantPack[]
 }
 
 /**
@@ -117,29 +111,21 @@ type BodyProps = {
  * is a mode of the home screen rather than a layer over it, so the header (with
  * the field) stays put and only the body underneath changes.
  *
+ * Empty until something is typed, deliberately: filling it with recommendations
+ * would look exactly like the home screen it replaced, so tapping the bar would
+ * seem to do nothing but grow a Cancel button.
+ *
  * The list bodies are the shared GroupList primitives, so results look identical
  * to every other song list in the app.
  */
 export default function MobileSearchBody({
 	searchString,
 	smartSearch,
-	suggestions,
 }: BodyProps) {
 	const tSearch = useTranslations('search')
-	const tHome = useTranslations('home')
 
 	if (searchString)
 		return <SearchResults searchString={searchString} smartSearch={smartSearch} />
-
-	if (suggestions && suggestions.length > 0)
-		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-				<Typography small strong uppercase color="grey.700" sx={{ paddingX: 0.5 }}>
-					{tHome('recommended.idea')}
-				</Typography>
-				<SongGroup songs={suggestions} previewLines={PREVIEW_LINES} />
-			</Box>
-		)
 
 	return (
 		<ListStateView

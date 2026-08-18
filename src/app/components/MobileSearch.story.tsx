@@ -5,7 +5,6 @@ import MobileSearchBody, {
 	MobileSearchEntry,
 	MobileSearchField,
 } from '@/app/components/MobileSearch'
-import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { Box, Typography } from '@/common/ui'
 import { useState } from 'react'
 
@@ -23,7 +22,6 @@ const FRAME_WIDTH = 390
 const MobileSearchStory = () => {
 	const [open, setOpen] = useState(true)
 	const [value, setValue] = useState('')
-	const recommended = useRecommendedSongs()
 
 	return (
 		<Box
@@ -65,7 +63,6 @@ const MobileSearchStory = () => {
 					<MobileSearchBody
 						searchString={value.trim() ? value : null}
 						smartSearch={false}
-						suggestions={recommended.data.slice(0, 5)}
 					/>
 				)}
 			</Box>

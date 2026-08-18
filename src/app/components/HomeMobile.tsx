@@ -366,7 +366,6 @@ export default function HomeMobile({
 				<MobileSearchBody
 					searchString={searchString}
 					smartSearch={smartSearch}
-					suggestions={rec.slice(0, 5)}
 				/>
 			) : (
 				<Box
