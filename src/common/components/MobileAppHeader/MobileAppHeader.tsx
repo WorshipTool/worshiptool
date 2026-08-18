@@ -19,8 +19,11 @@ export const TOOLBAR_SPACER = 'env(safe-area-inset-top)'
 const SHRINK_DISTANCE = 64
 const TITLE_MAX = 1.85 // rem
 const TITLE_MIN = 1.2 // rem
-// sits above the scrolling content, below the app's overlays/popups (Z_INDEX.OVERLAY = 1300)
-const HEADER_Z = 100
+/** Sits above the scrolling content, below the app's overlays/popups
+ * (Z_INDEX.OVERLAY = 1300). Exported so a screen that covers the status-bar
+ * strip itself (home, whose search bar pins into it) can sit above the scrim
+ * drawn here rather than have it cut a stripe across the top. */
+export const HEADER_Z = 100
 /** Resting top padding of the header block, above the safe-area inset. */
 const HEADER_TOP_PAD = 12
 /** The header block's bottom padding in px — mirrors its `paddingBottom: 1`. A

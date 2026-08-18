@@ -9,6 +9,7 @@ import MobileSearchBody, {
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
 import {
+	HEADER_Z,
 	MobileAppHeader,
 	TOOLBAR_SPACER,
 } from '@/common/components/MobileAppHeader'
@@ -56,6 +57,10 @@ const HERO_BOTTOM_SPACE = 1.5
  * up by the same amount. Otherwise the sheep is cut this far short of the field
  * and the strip shows as an empty grey band under her. */
 const BAND_PAD = 1
+/** The band's top padding: its own breathing room plus the status-bar inset it
+ * covers once pinned. Taken straight back with a negative margin, so the field
+ * still sits at the hero's bottom edge and the pin distance is unchanged. */
+const BAND_TOP_SPACE = `calc(${TOOLBAR_SPACER} + ${BAND_PAD * 8}px)`
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
@@ -94,6 +99,24 @@ export default function HomeMobile({
 }: HomeMobileProps) {
 	const tHome = useTranslations('home')
 	const theme = useTheme()
+
+	// ——— pinned-header colour, variants A–D ———
+	// A tonal ladder from a hint of blue to the full brand colour. MOBILE.md
+	// reserves hero blue for the tab bar's active tab and one primary action per
+	// zone, so the tinted rungs stay inside that rule while the solid one spends
+	// it on the header. color-mix keeps them opaque — a translucent band would let
+	// the content it is meant to mask show through.
+	const blue = theme.palette.primary.main
+	const mix = (pct: number, over: string) =>
+		`color-mix(in srgb, ${blue} ${pct}%, ${over})`
+	const VARIANTS = {
+		A: { bg: blue, border: 'transparent', onColor: true },
+		B: { bg: mix(8, theme.palette.grey[50]), border: mix(30, theme.palette.grey[200]), onColor: false },
+		C: { bg: mix(18, theme.palette.grey[50]), border: mix(45, theme.palette.grey[200]), onColor: false },
+		D: { bg: mix(35, theme.palette.grey[50]), border: mix(60, theme.palette.grey[200]), onColor: false },
+	}
+	const { bg: PINNED_BG, border: PINNED_BORDER, onColor: PINNED_ON_COLOR } =
+		VARIANTS.C
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -391,20 +414,26 @@ export default function HomeMobile({
 			<Box
 				sx={{
 					position: 'sticky',
-					// under the status bar, whose scrim the shell draws above it
-					top: TOOLBAR_SPACER,
-					zIndex: 2,
+					// Sticks at the very top and carries the status-bar inset in its own
+					// padding, so once pinned its background covers the notch strip too —
+					// the shell's scrim behind it would otherwise cut a stripe of the app
+					// canvas across the top of a coloured header. Hence the z-index above
+					// that scrim. The inset cancels out of the pin distance: it is added
+					// here and taken back below, exactly as the hero adds it above.
+					top: 0,
+					zIndex: HEADER_Z + 1,
 					// full width, like a header's: the scroller's inset is added back
 					// inside, so content passes under all of the band
 					marginX: -2,
 					paddingX: 2,
-					paddingY: BAND_PAD,
+					paddingTop: BAND_TOP_SPACE,
+					paddingBottom: BAND_PAD,
 					// The strip above the field belongs to the hero until the bar pins,
 					// so the hero can reach the field and tuck the sheep behind it. Sticky
 					// clamps the band at the top either way, so nothing below it moves.
 					// Searching has no hero to reach anything, so there is nothing to
 					// take back.
-					marginTop: searchOpen ? 0 : `-${BAND_PAD * 8}px`,
+					marginTop: searchOpen ? 0 : `calc(-1 * ${BAND_TOP_SPACE})`,
 					// The band is only a header once it has arrived at the top and content
 					// starts passing under it — that is when it needs to mask what passes,
 					// and to draw the line saying so. Before that it is just the strip the
@@ -416,11 +445,12 @@ export default function HomeMobile({
 					// are simply on. Otherwise a scroll-driven animation turns them on — a
 					// scroll timeline is the browser's own, so this too stays in step
 					// without anything measuring the scroll. The plain values below are
-					// what a browser without one falls back to: solid throughout, the way
-					// it looked before.
-					bgcolor: 'grey.50',
+					// what a browser without one falls back to: the neutral band it had
+					// before, never the pinned colour, which over the hero would be plainly
+					// wrong rather than merely undecorated.
+					bgcolor: searchOpen ? PINNED_BG : 'grey.50',
 					borderBottom: '1px solid',
-					borderColor: searchOpen ? 'grey.200' : 'transparent',
+					borderColor: searchOpen ? PINNED_BORDER : 'transparent',
 					...(searchOpen
 						? {}
 						: {
@@ -431,8 +461,8 @@ export default function HomeMobile({
 											borderBottomColor: 'transparent',
 										},
 										to: {
-											backgroundColor: theme.palette.grey[50],
-											borderBottomColor: theme.palette.grey[200],
+											backgroundColor: PINNED_BG,
+											borderBottomColor: PINNED_BORDER,
 										},
 									},
 									animationName: 'homeBarPinned',
@@ -451,6 +481,7 @@ export default function HomeMobile({
 					onActivate={openSearch}
 					onCancel={closeSearch}
 					inputRef={searchInputRef}
+					onColor={PINNED_ON_COLOR}
 				/>
 			</Box>
 
