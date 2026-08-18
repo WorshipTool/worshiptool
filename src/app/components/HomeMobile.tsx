@@ -100,23 +100,13 @@ export default function HomeMobile({
 	const tHome = useTranslations('home')
 	const theme = useTheme()
 
-	// ——— pinned-header colour, variants A–D ———
-	// A tonal ladder from a hint of blue to the full brand colour. MOBILE.md
-	// reserves hero blue for the tab bar's active tab and one primary action per
-	// zone, so the tinted rungs stay inside that rule while the solid one spends
-	// it on the header. color-mix keeps them opaque — a translucent band would let
-	// the content it is meant to mask show through.
-	const blue = theme.palette.primary.main
-	const mix = (pct: number, over: string) =>
-		`color-mix(in srgb, ${blue} ${pct}%, ${over})`
-	const VARIANTS = {
-		A: { bg: blue, border: 'transparent', onColor: true },
-		B: { bg: mix(8, theme.palette.grey[50]), border: mix(30, theme.palette.grey[200]), onColor: false },
-		C: { bg: mix(18, theme.palette.grey[50]), border: mix(45, theme.palette.grey[200]), onColor: false },
-		D: { bg: mix(35, theme.palette.grey[50]), border: mix(60, theme.palette.grey[200]), onColor: false },
-	}
-	const { bg: PINNED_BG, border: PINNED_BORDER, onColor: PINNED_ON_COLOR } =
-		VARIANTS.C
+	// The header's colour once the bar has pinned: full brand blue. MOBILE.md
+	// reserves that blue for the tab bar's active tab and one primary action per
+	// zone, so a saturated header spends that budget here — a deliberate call
+	// rather than a default. It also separates itself from the content plainly
+	// enough that the hairline the neutral band needed would only muddy the edge.
+	const PINNED_BG = theme.palette.primary.main
+	const PINNED_BORDER = 'transparent'
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -481,7 +471,7 @@ export default function HomeMobile({
 					onActivate={openSearch}
 					onCancel={closeSearch}
 					inputRef={searchInputRef}
-					onColor={PINNED_ON_COLOR}
+					onColor
 				/>
 			</Box>
 
