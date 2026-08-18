@@ -144,9 +144,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				if (gone === 0 && spacerRef.current && headerRef.current) {
 					spacerRef.current.style.height = `${headerRef.current.offsetHeight}px`
 				}
-				// a hero screen's hairline belongs to the moment the hero has gone and
-				// content starts passing under the panel, not to a fixed scroll distance
-				p = heroHeight ? gone / heroHeight : 1
+				// a hero screen's hairline is not a fade: it belongs to the moment the
+				// hero has gone and content starts passing under the panel, and until
+				// then the header is still part of the page rather than a bar over it
+				p = gone >= heroHeight ? 1 : 0
 			}
 
 			if (titleRef.current) {
@@ -247,8 +248,10 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 						: { position: 'relative' }),
 					display: 'flex',
 					flexDirection: 'column',
+					// a hero brings its own top space (and takes it with it when it
+					// folds away), so the header keeps only its even inset
 					paddingTop: `calc(${TOOLBAR_SPACER} + ${
-						hasTitleRow || hero ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
+						hasTitleRow ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
 					}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
@@ -341,9 +344,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				{/* control strip — inside the header block so it shares the header
 				    background (one solid white zone above the bottom divider) */}
 				{controlPanel && (
-					<Box
-						sx={{ paddingX: 2, paddingTop: hasTitleRow || hero ? 1 : 0 }}
-					>
+					<Box sx={{ paddingX: 2, paddingTop: hasTitleRow ? 1 : 0 }}>
 						{controlPanel}
 					</Box>
 				)}
