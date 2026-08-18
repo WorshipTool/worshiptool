@@ -8,8 +8,11 @@ import MobileSearchBody, {
 } from '@/app/components/MobileSearch'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
-import { MobileAppHeader } from '@/common/components/MobileAppHeader'
-import { Box, Clickable, Image, Typography } from '@/common/ui'
+import {
+	MobileAppHeader,
+	TOOLBAR_SPACER,
+} from '@/common/components/MobileAppHeader'
+import { Box, Clickable, Image, Typography, useTheme } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
@@ -34,25 +37,31 @@ const TEXT_DIVIDER_INSET = 1.75
 /** Sheep size in the hero. Sized to the gap between the title and the search
  * bar, so it starts level with the title and its paws land on the bar. */
 const SHEEP_SIZE = 94
-/** Where the sheep starts relative to the title, so it sits level with it and
- * reaches far enough down for the search bar to cover its paws. */
-const SHEEP_TOP = 5
+/** Where the sheep starts relative to the title block, so it sits level with the
+ * title and reaches far enough down for the hero to clip it at the search bar. */
+const SHEEP_TOP = -3
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Hero title size (rem) — the shell's large-title size, since this is one. */
 const TITLE_SIZE = 1.85
-/** Breathing room above the title, past the header's own top inset. */
-const HERO_TOP_SPACE = 3
+/** Breathing room above the title, below the status bar. */
+const HERO_TOP_SPACE = 4
 /** Gap between the hero and the search bar — it also sets how deep the sheep is
  * tucked, since the hero clips it at this edge. Part of the hero, so it folds
  * away with it and leaves the bar sitting evenly in the header. */
-const HERO_BOTTOM_SPACE = 2.5
+const HERO_BOTTOM_SPACE = 1.5
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
 /** How long the hero takes to fold away when search opens, carrying the bar up
  * to the top with it. */
 const HERO_COLLAPSE_MS = 260
+/** The hero's height in px, i.e. how far you scroll before the bar pins itself
+ * to the top. Only the CSS scroll timeline needs it, to know when to draw the
+ * hairline — keep it in step with the paddings and type above. The status-bar
+ * inset is not part of it: the bar sticks below that, so it cancels out. */
+const HERO_TEXT_HEIGHT = 56 // measured: title + slogan
+const HERO_HEIGHT = HERO_TOP_SPACE * 8 + HERO_TEXT_HEIGHT + HERO_BOTTOM_SPACE * 8
 
 type HomeMobileProps = {
 	searchInputValue: string
@@ -77,6 +86,7 @@ export default function HomeMobile({
 	smartSearch,
 }: HomeMobileProps) {
 	const tHome = useTranslations('home')
+	const theme = useTheme()
 
 	const recommended = useRecommendedSongs()
 	const lastAdded = useLastAddedSongs()
@@ -310,7 +320,7 @@ export default function HomeMobile({
 			<Box
 				ref={heroInnerRef}
 				sx={{
-					paddingTop: HERO_TOP_SPACE,
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_SPACE * 8}px)`,
 					paddingBottom: HERO_BOTTOM_SPACE,
 					paddingLeft: TITLE_INSET,
 				}}
@@ -362,12 +372,50 @@ export default function HomeMobile({
 		// to the top, and the body swaps recommendations for results. The tab bar
 		// stays uncovered, so the tabs remain a way out.
 		//
-		// The hero and the bar are the header's — it scrolls the hero away at the
-		// page's speed and keeps the bar, and the background, hairline and
-		// status-bar inset around them are its own.
-		<MobileAppHeader
-			hero={hero}
-			controlPanel={
+		// The hero is ordinary content and the bar below it is `position: sticky`,
+		// so the browser keeps it in step with the page itself — nothing here reads
+		// the scroll position, which is the only way the bar can never lag behind
+		// the content it is pinned over.
+		<MobileAppHeader>
+			{hero}
+
+			<Box
+				sx={{
+					position: 'sticky',
+					// under the status bar, whose scrim the shell draws above it
+					top: TOOLBAR_SPACER,
+					zIndex: 2,
+					// full width, like a header's: the scroller's inset is added back
+					// inside, so content passes under all of the band
+					marginX: -2,
+					paddingX: 2,
+					paddingY: 1,
+					bgcolor: 'grey.50',
+					borderBottom: '1px solid',
+					// The hairline belongs to the moment the bar has arrived at the top
+					// and content starts passing under it. Searching has no hero, so it
+					// is there from the start; otherwise a scroll-driven animation turns
+					// it on — a scroll timeline is the browser's own, so this too stays
+					// in step without anything measuring the scroll. Browsers without
+					// one simply keep the bar undivided.
+					borderColor: searchOpen ? 'grey.200' : 'transparent',
+					...(searchOpen
+						? {}
+						: {
+								'@supports (animation-timeline: scroll())': {
+									'@keyframes homeBarPinned': {
+										from: { borderBottomColor: 'transparent' },
+										to: { borderBottomColor: theme.palette.grey[200] },
+									},
+									animationName: 'homeBarPinned',
+									animationTimeline: 'scroll(nearest block)',
+									animationRange: `${HERO_HEIGHT - 8}px ${HERO_HEIGHT}px`,
+									animationFillMode: 'both',
+									animationTimingFunction: 'linear',
+								},
+						  }),
+				}}
+			>
 				<MobileSearchBar
 					value={searchInputValue}
 					onValueChange={onSearchValueChange}
@@ -376,8 +424,8 @@ export default function HomeMobile({
 					onCancel={closeSearch}
 					inputRef={searchInputRef}
 				/>
-			}
-		>
+			</Box>
+
 			<Box
 				// keyed so the incoming body fades in rather than replacing the other
 				// one between two frames
