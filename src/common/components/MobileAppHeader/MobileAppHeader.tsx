@@ -23,6 +23,13 @@ const HEADER_Z = 100
 const SPACING_UNIT = 8
 /** Resting top padding of the header block, above the safe-area inset. */
 const HEADER_TOP_PAD = 12
+/** The header block's bottom padding in px — mirrors its `paddingBottom: 1`.
+ * A collapsed `collapseTitle` header eases its top padding down to this, so the
+ * control panel left alone in the bar sits evenly between the two edges. */
+const HEADER_BOTTOM_PAD = SPACING_UNIT
+/** Gap between the title block and the control panel — mirrors its `paddingTop:
+ * 1`. Eases away with the title, so it doesn't double the bar's top inset. */
+const CONTROL_PANEL_GAP = SPACING_UNIT
 
 type MobileAppHeaderProps<T extends RoutesKeys> = {
 	/** The page title — large at rest, shrinks to a compact bar on scroll.
@@ -61,8 +68,16 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	decoration?: ReactNode
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
-	/** Optional control strip (segment / chips) pinned under the header. */
+	/** Optional control strip (segment / chips / a search field) inside the
+	 * header block, under the title. It stays put while the header collapses. */
 	controlPanel?: ReactNode
+	/**
+	 * Let the title scroll away completely instead of shrinking into a compact
+	 * bar. For a screen whose `controlPanel` is the thing worth keeping — home's
+	 * search field takes the collapsed bar's place, the way iOS hands the bar
+	 * over to a search field once the large title is gone.
+	 */
+	collapseTitle?: boolean
 	/** Optional panel pinned above the bottom tab bar (e.g. pagination). */
 	bottomPanel?: ReactNode
 	/** When this value changes, the content scrolls back to the top (e.g. on page change). */
@@ -100,6 +115,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	backParams,
 	actions,
 	controlPanel,
+	collapseTitle = false,
 	bottomPanel,
 	scrollResetKey,
 	surface = 'grey.50',
@@ -115,19 +131,30 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const headerRef = useRef<HTMLDivElement>(null)
 	const decorationRef = useRef<HTMLDivElement>(null)
 	const titleBlockRef = useRef<HTMLDivElement>(null)
+	const titleRowRef = useRef<HTMLDivElement>(null)
+	const controlPanelRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
+	/** Resting height of the title row, measured so it can be collapsed to 0. */
+	const titleRowHeight = useRef(0)
 
 	// Continuously shrink the title (and fade the subtitle) as the content
 	// scrolls — imperative so the list underneath never re-renders while scrolling.
 	useEffect(() => {
 		const scroller = scrollRef.current
 		if (!scroller) return
+		// measure the row at its full size before any collapse is painted onto it
+		if (collapseTitle && titleRowRef.current) {
+			titleRowRef.current.style.height = ''
+			titleRowHeight.current = titleRowRef.current.offsetHeight
+		}
 		let raf = 0
 		const paint = () => {
 			raf = 0
 			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
-			if (titleRef.current) {
+			if (titleRef.current && !collapseTitle) {
+				// a title that leaves entirely slides away at full size instead —
+				// shrinking something on its way out just reads as two effects at once
 				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
 			}
 			if (titleBlockRef.current) {
@@ -137,17 +164,36 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					titleInset * SPACING_UNIT * (1 - p)
 				}px`
 			}
+			if (collapseTitle && titleRowRef.current && titleRowHeight.current) {
+				// the whole row leaves rather than shrinking, handing the collapsed
+				// header over to the control panel below it
+				titleRowRef.current.style.height = `${titleRowHeight.current * (1 - p)}px`
+				// gone well before the row is, so the clipped edge is never on show
+				titleRowRef.current.style.opacity = String(Math.max(0, 1 - p * 2))
+			}
 			if (decorationRef.current) {
-				decorationRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
+				// leaves with the title it belongs to, rather than lingering as a
+				// sliver of illustration clipped by the collapsing header
+				decorationRef.current.style.opacity = String(
+					Math.max(0, 1 - p * (collapseTitle ? 2 : 1.6))
+				)
 			}
 			if (subtitleRef.current) {
 				subtitleRef.current.style.opacity = String(Math.max(0, 1 - p * 1.6))
 				subtitleRef.current.style.maxHeight = `${(1 - p) * 24}px`
 			}
+			if (controlPanelRef.current && collapseTitle) {
+				controlPanelRef.current.style.paddingTop = `${CONTROL_PANEL_GAP * (1 - p)}px`
+			}
 			if (headerRef.current) {
-				headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${
-					HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
-				}px)`
+				// with the title gone there is nothing left to sit under, so the top
+				// inset eases down to match the bottom one instead of keeping the
+				// large-title header's roomier top
+				const restingTop = HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT
+				const topPad = collapseTitle
+					? restingTop * (1 - p) + HEADER_BOTTOM_PAD * p
+					: HEADER_TOP_PAD + titleTopSpace * SPACING_UNIT * (1 - p)
+				headerRef.current.style.paddingTop = `calc(${TOOLBAR_SPACER} + ${topPad}px)`
 				// with no persistent divider, fade a hairline in as content scrolls under
 				if (!divider) {
 					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
@@ -165,7 +211,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 			scroller.removeEventListener('scroll', onScroll)
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider, titleInset, titleTopSpace, decoration])
+	}, [divider, titleInset, titleTopSpace, decoration, collapseTitle])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -233,6 +279,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					bgcolor: surface,
 					borderBottom: '1px solid',
 					borderColor: divider ? 'grey.200' : 'transparent',
+					// a decoration is sized to the resting header; clip it so it can't
+					// spill over the content once the header collapses around it
+					...(decoration ? { overflow: 'hidden' } : {}),
 				}}
 			>
 				{decoration && (
@@ -244,7 +293,17 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					</Box>
 				)}
 
-				<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, paddingX: 1.5 }}>
+				<Box
+					ref={titleRowRef}
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: 0.5,
+						paddingX: 1.5,
+						// the row's height is animated to 0 when it collapses away
+						...(collapseTitle ? { overflow: 'hidden' } : {}),
+					}}
+				>
 					{backTo && (
 						<IconButton
 							onClick={goUp}
@@ -310,9 +369,17 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				</Box>
 
 				{/* control strip — inside the header block so it shares the header
-				    background (one solid white zone above the bottom divider) */}
+				    background (one solid white zone above the bottom divider).
+				    Positioned, so it paints over the decoration: an absolutely
+				    positioned illustration would otherwise win on paint order no
+				    matter where it sits in the DOM. */}
 				{controlPanel && (
-					<Box sx={{ paddingX: 2, paddingTop: 1 }}>{controlPanel}</Box>
+					<Box
+						ref={controlPanelRef}
+						sx={{ position: 'relative', zIndex: 1, paddingX: 2, paddingTop: 1 }}
+					>
+						{controlPanel}
+					</Box>
 				)}
 			</Box>
 			)}

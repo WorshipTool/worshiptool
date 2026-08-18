@@ -31,9 +31,6 @@ const SHEEP_SIZE = 94
 /** Where the sheep starts inside the header block, so it sits level with the
  * title and reaches far enough down for the search bar to cover its paws. */
 const SHEEP_TOP = 37
-/** Above the header (100), so the sticky bar covers the sheep hanging into it.
- * The scroller clips it, so it can never ride up over the top bar. */
-const SEARCH_OVER_HEADER_Z = 101
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Extra breathing room above the title at rest, so the hero starts lower. */
@@ -232,68 +229,51 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// Sticky at the top of the content, so it sits below the top bar rather than
-	// inside it and stays reachable down the list. Raised above the header, whose
-	// sheep hangs into this area; the scroller clips it, so it can never ride up
-	// over the top bar itself.
+	// Lives inside the header rather than under it, so once the title has scrolled
+	// away the search bar is what the collapsed header is made of — the phone's
+	// version of the desktop toolbar keeping search at the top of the page.
 	//
 	// Entry point rather than a live field: tapping it opens the same full-screen
 	// search the tab bar's Hledat opens, so there is one search surface and no
 	// input pinned above the keyboard.
 	const searchEntry = (
-		<Box
-			sx={{
-				position: 'sticky',
-				// sticks 4px above the scroller's content edge and pads that back, so
-				// the band's own background covers the scroller's top padding instead
-				// of letting a strip of song text show through above the bar
-				top: '-4px',
-				zIndex: SEARCH_OVER_HEADER_Z,
-				bgcolor: 'grey.50',
-				paddingTop: 0.5,
-				paddingBottom: 1.5,
-			}}
-		>
-			<Clickable onClick={openSearch}>
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: 1.5,
-						bgcolor: 'background.paper',
-						border: '1px solid',
-						borderColor: 'grey.300',
-						borderRadius: 2.5,
-						paddingX: 2,
-						paddingY: 1.5,
-						boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-					}}
-				>
-					<SearchRounded sx={{ color: 'grey.500' }} />
-					<Typography color="grey.500" noWrap>
-						{tSearch('searchByTitleOrText')}
-					</Typography>
-				</Box>
-			</Clickable>
-		</Box>
+		<Clickable onClick={openSearch}>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: 1.5,
+					bgcolor: 'background.paper',
+					border: '1px solid',
+					borderColor: 'grey.300',
+					borderRadius: 2.5,
+					paddingX: 2,
+					paddingY: 1.5,
+					boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+				}}
+			>
+				<SearchRounded sx={{ color: 'grey.500' }} />
+				<Typography color="grey.500" noWrap>
+					{tSearch('searchByTitleOrText')}
+				</Typography>
+			</Box>
+		</Clickable>
 	)
 
 	return (
 		<>
-			{/* The app name lives in the shell header, so it stays put and shrinks
-			    to the compact bar on scroll like every other screen. The slogan and
-			    the sheep are content and scroll away with it. */}
+			{/* The whole hero — name, slogan and sheep — lives in the shell header
+			    and scrolls away together, handing the collapsed header over to the
+			    search bar, which is the one thing worth keeping up there. */}
 			<MobileAppHeader
 				title={tHome('hero.title')}
 				subtitle={tHome('hero.lead')}
 				titleInset={TITLE_INSET}
 				titleTopSpace={TITLE_TOP_SPACE}
 				decoration={sheep}
+				controlPanel={searchEntry}
+				collapseTitle
 			>
-				{searchEntry}
-				{/* margin rather than more padding on the sticky bar: this space is
-				    the hero's, so it scrolls away instead of thickening the band
-				    that stays pinned under the header */}
 				<Box
 					sx={{
 						display: 'flex',
