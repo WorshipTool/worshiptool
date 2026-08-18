@@ -29,10 +29,6 @@ type BarProps = {
 	onActivate: () => void
 	onCancel: () => void
 	inputRef?: React.Ref<HTMLInputElement>
-	/** The bar sits on a saturated surface (home's header once it has pinned), so
-	 * the marks that are normally primary blue — the focus ring, Cancel — would be
-	 * blue on blue. They go white instead. */
-	onColor?: boolean
 }
 
 /**
@@ -51,7 +47,6 @@ export function MobileSearchBar({
 	onActivate,
 	onCancel,
 	inputRef,
-	onColor = false,
 }: BarProps) {
 	const tSearch = useTranslations('search')
 	const tCommon = useTranslations('common')
@@ -79,11 +74,7 @@ export function MobileSearchBar({
 					minWidth: 0,
 					bgcolor: 'background.paper',
 					border: '1px solid',
-					borderColor: active
-						? onColor
-							? 'transparent'
-							: 'primary.main'
-						: 'grey.300',
+					borderColor: active ? 'primary.main' : 'grey.300',
 					borderRadius: 2.5,
 					paddingX: 2,
 					paddingY: 1.5,
@@ -112,12 +103,7 @@ export function MobileSearchBar({
 					transition: `max-width ${ACTIVATE_MS}ms ease, opacity ${ACTIVATE_MS}ms ease`,
 				}}
 			>
-				<Button
-					variant="text"
-					onClick={onCancel}
-					disableUppercase
-					sx={onColor ? { color: 'background.paper' } : undefined}
-				>
+				<Button variant="text" onClick={onCancel} disableUppercase>
 					{tCommon('cancel')}
 				</Button>
 			</Box>
