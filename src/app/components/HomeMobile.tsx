@@ -46,20 +46,27 @@ const TITLE_INSET = 2.5
 const TITLE_SIZE = 1.85
 /** Breathing room above the title, below the status bar. */
 const HERO_TOP_SPACE = 4
-/** Gap between the hero and the search bar — it also sets how deep the sheep is
- * tucked, since the hero clips it at this edge. Part of the hero, so it folds
+/** Gap between the hero and the search field — it also sets how deep the sheep
+ * is tucked, since the hero clips it at this edge. Part of the hero, so it folds
  * away with it and leaves the bar sitting evenly in the header. */
 const HERO_BOTTOM_SPACE = 1.5
+/** The strip the search field sits in, above and below it. That space is the
+ * header's breathing room once the bar pins — it is not a gap over the field
+ * before that, so the hero reaches down through it and the band is pulled back
+ * up by the same amount. Otherwise the sheep is cut this far short of the field
+ * and the strip shows as an empty grey band under her. */
+const BAND_PAD = 1
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
 /** How long the hero takes to fold away when search opens, carrying the bar up
  * to the top with it. */
 const HERO_COLLAPSE_MS = 260
-/** The hero's height in px, i.e. how far you scroll before the bar pins itself
- * to the top. Only the CSS scroll timeline needs it, to know when to draw the
- * hairline — keep it in step with the paddings and type above. The status-bar
- * inset is not part of it: the bar sticks below that, so it cancels out. */
+/** How far you scroll before the bar pins itself to the top, i.e. where the band
+ * sits in the flow — the hero's height less the pull-up. Only the CSS scroll
+ * timeline needs it, to know when to draw the hairline; keep it in step with the
+ * paddings and type above. The status-bar inset is not part of it: the bar
+ * sticks below that, so it cancels out. */
 const HERO_TEXT_HEIGHT = 56 // measured: title + slogan
 const HERO_HEIGHT = HERO_TOP_SPACE * 8 + HERO_TEXT_HEIGHT + HERO_BOTTOM_SPACE * 8
 
@@ -321,7 +328,9 @@ export default function HomeMobile({
 				ref={heroInnerRef}
 				sx={{
 					paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_SPACE * 8}px)`,
-					paddingBottom: HERO_BOTTOM_SPACE,
+					// down to the field itself, not to the strip around it — the band
+					// takes the extra back with a matching negative margin
+					paddingBottom: HERO_BOTTOM_SPACE + BAND_PAD,
 					paddingLeft: TITLE_INSET,
 				}}
 			>
@@ -389,7 +398,13 @@ export default function HomeMobile({
 					// inside, so content passes under all of the band
 					marginX: -2,
 					paddingX: 2,
-					paddingY: 1,
+					paddingY: BAND_PAD,
+					// The strip above the field belongs to the hero until the bar pins,
+					// so the hero can reach the field and tuck the sheep behind it. Sticky
+					// clamps the band at the top either way, so nothing below it moves.
+					// Searching has no hero to reach anything, so there is nothing to
+					// take back.
+					marginTop: searchOpen ? 0 : `-${BAND_PAD * 8}px`,
 					// The band is only a header once it has arrived at the top and content
 					// starts passing under it — that is when it needs to mask what passes,
 					// and to draw the line saying so. Before that it is just the strip the
