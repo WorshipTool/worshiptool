@@ -4,8 +4,7 @@ import useLastAddedSongs from '@/app/components/components/LastAddedSongsList/ho
 import useRecommendedSongs from '@/app/components/components/RecommendedSongsList/hooks/useRecommendedSongs'
 import { MAIN_SEARCH_EVENT_NAME } from '@/app/components/components/MainSearchInput'
 import MobileSearchBody, {
-	MobileSearchEntry,
-	MobileSearchField,
+	MobileSearchBar,
 } from '@/app/components/MobileSearch'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
@@ -27,6 +26,7 @@ import {
 	ReactNode,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useRef,
 	useState,
 } from 'react'
@@ -49,6 +49,9 @@ const HERO_TOP_PAD = 32
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
+/** How long the hero takes to fold away when search opens, carrying the bar up
+ * to the top with it. */
+const HERO_COLLAPSE_MS = 260
 
 type HomeMobileProps = {
 	searchInputValue: string
@@ -83,11 +86,19 @@ export default function HomeMobile({
 	// or reloaded ?hledat= link lands where it says it does.
 	const [searchOpen, setSearchOpen] = useState(() => Boolean(searchString))
 
-	// The tab bar's raised search button links here and fires MAIN_SEARCH_EVENT,
-	// exactly like the desktop toolbar's "Hledat" item does. Only MainSearchInput
-	// listened for it, and that is desktop-only — so on a phone the bar's primary
-	// action used to do nothing visible.
-	const openSearch = useCallback(() => setSearchOpen(true), [])
+	// The tab bar's Hledat links here and fires MAIN_SEARCH_EVENT, exactly like the
+	// desktop toolbar's "Hledat" item does. Only MainSearchInput listened for it,
+	// and that is desktop-only — so on a phone the bar's primary action used to do
+	// nothing visible.
+	//
+	// Focusing the field is what opens search, so the event focuses it rather than
+	// flipping the mode behind its back; a tap has already focused it by the time
+	// this runs, and focusing twice costs nothing.
+	const searchInputRef = useRef<HTMLInputElement>(null)
+	const openSearch = useCallback(() => {
+		setSearchOpen(true)
+		searchInputRef.current?.focus()
+	}, [])
 
 	useEffect(() => {
 		window.addEventListener(MAIN_SEARCH_EVENT_NAME, openSearch)
@@ -140,6 +151,8 @@ export default function HomeMobile({
 	// it is still part of the hero — a divider mid-page would be meaningless.
 	// Painted straight onto the node, so sticking re-renders nothing.
 	const searchBandRef = useRef<HTMLDivElement>(null)
+	const heroRef = useRef<HTMLDivElement>(null)
+	const heroInnerRef = useRef<HTMLDivElement>(null)
 	const theme = useTheme()
 	useEffect(() => {
 		const band = searchBandRef.current
@@ -157,22 +170,29 @@ export default function HomeMobile({
 			band.style.borderBottomColor = next ? theme.palette.grey[200] : 'transparent'
 			band.style.boxShadow = next ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
 		}
-		const onScroll = () => {
+		const schedule = () => {
 			if (!raf) raf = requestAnimationFrame(paint)
 		}
 		// the shell owns the scroller, so listen in the capture phase: scroll events
 		// don't bubble, but they are dispatched down through the document first
-		document.addEventListener('scroll', onScroll, true)
+		document.addEventListener('scroll', schedule, true)
+		// the bar also arrives at the top when the hero collapses under it, which no
+		// scroll event announces — the observer fires for every frame of that
+		const observer = new ResizeObserver(schedule)
+		if (heroRef.current) observer.observe(heroRef.current)
 		paint()
 		return () => {
-			document.removeEventListener('scroll', onScroll, true)
+			document.removeEventListener('scroll', schedule, true)
+			observer.disconnect()
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [theme, searchOpen])
+	}, [theme])
 
 	// Cancel goes back through that entry rather than around it, so the Back
 	// gesture afterwards isn't a step that appears to do nothing.
 	const closeSearch = useCallback(() => {
+		// let go of the field first, or the keyboard stays up over the home screen
+		searchInputRef.current?.blur()
 		if (pushedHistoryRef.current) {
 			window.history.back()
 			return
@@ -180,6 +200,29 @@ export default function HomeMobile({
 		setSearchOpen(false)
 		onSearchValueChange('')
 	}, [onSearchValueChange])
+
+	// The hero collapses instead of disappearing, so the bar below it rides up to
+	// the top instead of jumping there.
+	//
+	// Its height is always an explicit length, never `auto`: a transition has
+	// nothing to interpolate from `auto`, so letting it size itself between
+	// toggles would make the collapse a jump. The natural size comes from the
+	// block inside, which an observer keeps up to date (rotation, text scaling,
+	// a longer slogan in another language).
+	useLayoutEffect(() => {
+		const outer = heroRef.current
+		const inner = heroInnerRef.current
+		if (!outer || !inner) return
+		const apply = () => {
+			// the inner block's own box: the sheep hangs past its bottom edge and
+			// would otherwise count as hero height, pushing the bar down
+			outer.style.height = searchOpen ? '0px' : `${inner.offsetHeight}px`
+		}
+		apply()
+		const observer = new ResizeObserver(apply)
+		observer.observe(inner)
+		return () => observer.disconnect()
+	}, [searchOpen])
 
 	const label = (text: string, action?: ReactNode) => (
 		<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, paddingX: 0.5 }}>
@@ -265,20 +308,31 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- the sheep: drawn in the header so it sits level with the title, reaching
-	// low enough that the search bar below covers its paws — the bar comes later
-	// in the flow, so it simply paints over it, and scrolling slides the sheep
-	// under it until it is gone.
-
-	// ---- hero: plain content, so it scrolls away like everything else ----
+	// ---- hero: plain content, so it scrolls away like everything else. The sheep
+	// sits level with the title and reaches low enough that the search bar covers
+	// its paws — the bar comes later in the flow, so it simply paints over it, and
+	// scrolling slides the sheep under it until it is gone.
 
 	const hero = (
 		<Box
+			ref={heroRef}
+			// height is animated between the inner block's size and zero — see the
+			// layout effect above
 			sx={{
-				paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_PAD}px)`,
-				paddingLeft: TITLE_INSET,
+				overflow: 'hidden',
+				opacity: searchOpen ? 0 : 1,
+				transition: `height ${HERO_COLLAPSE_MS}ms ease, opacity ${
+					HERO_COLLAPSE_MS / 2
+				}ms ease`,
 			}}
 		>
+			<Box
+				ref={heroInnerRef}
+				sx={{
+					paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_PAD}px)`,
+					paddingLeft: TITLE_INSET,
+				}}
+			>
 			<Box sx={{ position: 'relative' }}>
 				<Box
 					sx={{
@@ -314,41 +368,22 @@ export default function HomeMobile({
 						sizes={`${SHEEP_SIZE}px`}
 						style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
 					/>
+					</Box>
 				</Box>
 			</Box>
 		</Box>
 	)
 
-	// Searching is a mode of this screen, not a layer over it: the hero steps
-	// aside, the bar becomes a live field and the body swaps recommendations for
-	// results. Nothing covers the tab bar, so the tabs stay a way out.
-	//
-	// The field goes in the shell header rather than in the scroller. It has to
-	// stay put while typing, and pinned above the scroller that is structural
-	// rather than something the browser could scroll away as results land.
-	if (searchOpen)
-		return (
-			<MobileAppHeader
-				controlPanel={
-					<MobileSearchField
-						value={searchInputValue}
-						onValueChange={onSearchValueChange}
-						onCancel={closeSearch}
-					/>
-				}
-				// no hero to blend into, so the header reads as a bar from the start
-				divider
-				scrollResetKey="search"
-			>
-				<MobileSearchBody searchString={searchString} smartSearch={smartSearch} />
-			</MobileAppHeader>
-		)
-
 	return (
-		// No shell header at rest: the hero is ordinary content that scrolls away at
-		// the speed of the page, and the bar below it is sticky — so it ends up as
-		// the top bar without anything shrinking or fading on the way.
-		<MobileAppHeader scrollResetKey="home">
+		// Searching is a mode of this screen, not a layer over it, and not a
+		// different screen either: the hero collapses, the bar it sat under rides up
+		// to the top, and the body swaps recommendations for results. The tab bar
+		// stays uncovered, so the tabs remain a way out.
+		//
+		// No shell header: the hero is ordinary content that scrolls away at the
+		// speed of the page, and the bar below it is sticky — so it becomes the top
+		// bar on its own, without anything shrinking or fading on the way.
+		<MobileAppHeader>
 			{hero}
 
 			<Box
@@ -368,19 +403,37 @@ export default function HomeMobile({
 					borderColor: 'transparent',
 				}}
 			>
-				<MobileSearchEntry onOpen={openSearch} />
+				<MobileSearchBar
+					value={searchInputValue}
+					onValueChange={onSearchValueChange}
+					active={searchOpen}
+					onActivate={openSearch}
+					onCancel={closeSearch}
+					inputRef={searchInputRef}
+				/>
 			</Box>
 
 			<Box
+				// keyed so the incoming body fades in rather than replacing the other
+				// one between two frames
+				key={searchOpen ? 'search' : 'home'}
 				sx={{
+					'@keyframes bodyIn': { from: { opacity: 0 }, to: { opacity: 1 } },
+					animation: `bodyIn ${HERO_COLLAPSE_MS / 2}ms ease`,
 					display: 'flex',
 					flexDirection: 'column',
 					gap: 3,
 					marginTop: SECTIONS_TOP_SPACE,
 				}}
 			>
-				{picks}
-				{recent}
+				{searchOpen ? (
+					<MobileSearchBody searchString={searchString} smartSearch={smartSearch} />
+				) : (
+					<>
+						{picks}
+						{recent}
+					</>
+				)}
 			</Box>
 		</MobileAppHeader>
 	)

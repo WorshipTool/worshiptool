@@ -2,8 +2,7 @@
 
 import { createStory } from '@/app/(layout)/storybook/createStory'
 import MobileSearchBody, {
-	MobileSearchEntry,
-	MobileSearchField,
+	MobileSearchBar,
 } from '@/app/components/MobileSearch'
 import { Box, Typography } from '@/common/ui'
 import { useState } from 'react'
@@ -20,7 +19,7 @@ const FRAME_WIDTH = 390
  * value + a "debounced" one), so typing here exercises the same code path.
  */
 const MobileSearchStory = () => {
-	const [open, setOpen] = useState(true)
+	const [active, setActive] = useState(false)
 	const [value, setValue] = useState('')
 
 	return (
@@ -29,8 +28,8 @@ const MobileSearchStory = () => {
 			sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
 		>
 			<Typography small color="grey.600">
-				Zrušit vrátí bar do klidového stavu — na úvodce zároveň vrátí hero a
-				doporučené písně.
+				Je to jeden prvek: focus ho aktivuje a Zrušit ho vrátí do klidu — na
+				úvodce se zároveň složí hero a vrátí doporučené písně.
 			</Typography>
 			<Box
 				sx={{
@@ -46,20 +45,18 @@ const MobileSearchStory = () => {
 					gap: 2,
 				}}
 			>
-				{open ? (
-					<MobileSearchField
-						value={value}
-						onValueChange={setValue}
-						onCancel={() => {
-							setValue('')
-							setOpen(false)
-						}}
-					/>
-				) : (
-					<MobileSearchEntry onOpen={() => setOpen(true)} />
-				)}
+				<MobileSearchBar
+					value={value}
+					onValueChange={setValue}
+					active={active}
+					onActivate={() => setActive(true)}
+					onCancel={() => {
+						setValue('')
+						setActive(false)
+					}}
+				/>
 
-				{open && (
+				{active && (
 					<MobileSearchBody
 						searchString={value.trim() ? value : null}
 						smartSearch={false}

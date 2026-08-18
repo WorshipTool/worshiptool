@@ -2,7 +2,7 @@
 
 import { SearchSongDto } from '@/api/dtos/song/song.search.dto'
 import { Analytics } from '@/app/components/components/analytics/analytics.tech'
-import { Box, Button, Clickable, Typography } from '@/common/ui'
+import { Box, Button, Typography } from '@/common/ui'
 import { GroupRowsSkeleton, ListStateView, SongGroup } from '@/common/ui/GroupList'
 import { TextField } from '@/common/ui/TextField'
 import useSongSearch from '@/hooks/song/useSongSearch'
@@ -15,60 +15,48 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const PREVIEW_LINES = 2
 
-/**
- * The bar itself, shared by the resting entry and the live field so tapping it
- * doesn't resize the header. Only the border colour tells the two apart.
- */
-const BAR_SX = {
-	display: 'flex',
-	alignItems: 'center',
-	gap: 1.5,
-	bgcolor: 'background.paper',
-	border: '1px solid',
-	borderRadius: 2.5,
-	paddingX: 2,
-	paddingY: 1.5,
-	boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-	minWidth: 0,
-}
+/** Room Cancel is given as it slides in; anything ≥ its own width will do. */
+const CANCEL_MAX_WIDTH = 120
+const ACTIVATE_MS = 220
 
-/**
- * Home's search bar at rest: a button dressed as a field. Tapping it starts
- * searching — there is no input to focus until then, so the keyboard never
- * opens by surprise on a screen you only meant to browse.
- */
-export function MobileSearchEntry({ onOpen }: { onOpen: () => void }) {
-	const tSearch = useTranslations('search')
-	return (
-		<Clickable onClick={onOpen}>
-			<Box sx={{ ...BAR_SX, borderColor: 'grey.300' }}>
-				<SearchRounded sx={{ color: 'grey.500' }} />
-				<Typography color="grey.500" noWrap>
-					{tSearch('searchByTitleOrText')}
-				</Typography>
-			</Box>
-		</Clickable>
-	)
-}
-
-type FieldProps = {
+type BarProps = {
 	/** Raw field value (undebounced), owned by the home page like on desktop. */
 	value: string
 	onValueChange: (value: string) => void
+	/** Whether the screen is in search mode. */
+	active: boolean
+	/** Focusing the field is what starts searching. */
+	onActivate: () => void
 	onCancel: () => void
+	inputRef?: React.Ref<HTMLInputElement>
 }
 
 /**
- * The same bar while searching: a live field with Cancel beside it, the way iOS
- * hands a search bar its dismiss control. Cancel is the visible way back — the
- * tabs and the Back gesture also work, but neither is on the screen.
+ * Home's search bar — one element in both states, never swapped for another, so
+ * activating it is a transition rather than a cut. It is a real field
+ * throughout: focusing it is what starts searching, the way an iOS search bar
+ * works, and Cancel slides in beside it as its dismiss control.
+ *
+ * Cancel is the visible way back; the tabs and the Back gesture work too, but
+ * neither is on the screen.
  */
-export function MobileSearchField({ value, onValueChange, onCancel }: FieldProps) {
+export function MobileSearchBar({
+	value,
+	onValueChange,
+	active,
+	onActivate,
+	onCancel,
+	inputRef,
+}: BarProps) {
 	const tSearch = useTranslations('search')
 	const tCommon = useTranslations('common')
 
 	return (
-		<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, minWidth: 0 }}>
+		<Box
+			sx={{ display: 'flex', alignItems: 'center', minWidth: 0 }}
+			// focus bubbles, so the field doesn't need a handler of its own
+			onFocus={onActivate}
+		>
 			<Box
 				component="form"
 				onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
@@ -78,24 +66,47 @@ export function MobileSearchField({ value, onValueChange, onCancel }: FieldProps
 						e.currentTarget.querySelector('input') as HTMLInputElement | null
 					)?.blur()
 				}}
-				sx={{ ...BAR_SX, borderColor: 'primary.main', flex: 1 }}
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: 1.5,
+					flex: 1,
+					minWidth: 0,
+					bgcolor: 'background.paper',
+					border: '1px solid',
+					borderColor: active ? 'primary.main' : 'grey.300',
+					borderRadius: 2.5,
+					paddingX: 2,
+					paddingY: 1.5,
+					boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+					transition: `border-color ${ACTIVATE_MS}ms ease`,
+				}}
 			>
 				<SearchRounded sx={{ color: 'grey.500' }} />
 				<TextField
-					autoFocus
 					value={value}
 					onChange={onValueChange}
-					// the short placeholder: Cancel takes the room the resting bar's
-					// longer one needs, and an input has no ellipsis to cut it politely
+					// the short one: Cancel takes the room a longer placeholder would
+					// need, and an input has no ellipsis to cut it politely
 					placeholder={tSearch('searchSongs')}
-					// match the resting bar's text box exactly, so the header doesn't
-					// change height the moment you tap it
+					inputRef={inputRef}
 					sx={{ '& input': { padding: 0 } }}
 				/>
 			</Box>
-			<Button variant="text" onClick={onCancel} disableUppercase>
-				{tCommon('cancel')}
-			</Button>
+			<Box
+				sx={{
+					display: 'flex',
+					overflow: 'hidden',
+					flexShrink: 0,
+					maxWidth: active ? `${CANCEL_MAX_WIDTH}px` : 0,
+					opacity: active ? 1 : 0,
+					transition: `max-width ${ACTIVATE_MS}ms ease, opacity ${ACTIVATE_MS}ms ease`,
+				}}
+			>
+				<Button variant="text" onClick={onCancel} disableUppercase>
+					{tCommon('cancel')}
+				</Button>
+			</Box>
 		</Box>
 	)
 }
