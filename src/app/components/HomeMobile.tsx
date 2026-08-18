@@ -34,21 +34,17 @@ import {
 const PREVIEW_LINES = 2 // lyric preview lines shown on the song cards
 
 const TEXT_DIVIDER_INSET = 1.75
-/** Sheep size in the hero. Sized to the gap between the title and the search
- * bar, so it starts level with the title and its paws land on the bar. */
-const SHEEP_SIZE = 94
-/** Where the sheep starts relative to the title block, so it sits level with the
- * title and reaches far enough down for the hero to clip it at the search bar. */
-const SHEEP_TOP = -3
+/** Sheep size in the hero. She stands on the hero's bottom edge, so this is also
+ * how far up she reaches — the hero is what clips her, and it must not. */
+const SHEEP_SIZE = 76
 /** Extra left inset for the title/slogan, past the app's normal content edge. */
 const TITLE_INSET = 2.5
 /** Hero title size (rem) — the shell's large-title size, since this is one. */
 const TITLE_SIZE = 1.85
 /** Breathing room above the title, below the status bar. */
 const HERO_TOP_SPACE = 4
-/** Gap between the hero and the search bar — it also sets how deep the sheep is
- * tucked, since the hero clips it at this edge. Part of the hero, so it folds
- * away with it and leaves the bar sitting evenly in the header. */
+/** Gap between the hero and the search bar. Part of the hero, so it folds away
+ * with it and leaves the bar sitting evenly in the header. */
 const HERO_BOTTOM_SPACE = 1.5
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
@@ -205,8 +201,6 @@ export default function HomeMobile({
 		const inner = heroInnerRef.current
 		if (!outer || !inner) return
 		const apply = () => {
-			// the inner block's own box: the sheep hangs past its bottom edge and
-			// would otherwise count as hero height, pushing the bar down
 			outer.style.height = searchOpen ? '0px' : `${inner.offsetHeight}px`
 		}
 		apply()
@@ -299,10 +293,10 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- hero: handed to the shell, which scrolls it away at the page's speed
-	// and keeps the search bar below it once it is gone. The sheep sits level with
-	// the title and reaches low enough that the bar covers its paws — the bar comes
-	// later in the header's flow, so it simply paints over it.
+	// ---- hero: ordinary content, so it scrolls away at the page's own speed and
+	// leaves the search bar behind at the top. The sheep stands on its bottom edge:
+	// the hero is a clipping box (it folds away by shrinking to nothing), so
+	// anything hanging past that edge is simply cut off.
 
 	const hero = (
 		<Box
@@ -320,47 +314,48 @@ export default function HomeMobile({
 			<Box
 				ref={heroInnerRef}
 				sx={{
+					position: 'relative',
 					paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_SPACE * 8}px)`,
 					paddingBottom: HERO_BOTTOM_SPACE,
 					paddingLeft: TITLE_INSET,
 				}}
 			>
-				<Box sx={{ position: 'relative' }}>
-					<Box
-						sx={{
-							fontSize: `${TITLE_SIZE}rem`,
-							fontWeight: 800,
-							letterSpacing: '-0.4px',
-							lineHeight: 1.15,
-							color: 'grey.900',
-						}}
-					>
-						{tHome('hero.title')}
-					</Box>
-					<Box sx={{ marginTop: 0.25 }}>
-						<Typography small strong={500} color="grey.600">
-							{tHome('hero.lead')}
-						</Typography>
-					</Box>
+				<Box
+					sx={{
+						fontSize: `${TITLE_SIZE}rem`,
+						fontWeight: 800,
+						letterSpacing: '-0.4px',
+						lineHeight: 1.15,
+						color: 'grey.900',
+					}}
+				>
+					{tHome('hero.title')}
+				</Box>
+				<Box sx={{ marginTop: 0.25 }}>
+					<Typography small strong={500} color="grey.600">
+						{tHome('hero.lead')}
+					</Typography>
+				</Box>
 
-					<Box
-						sx={{
-							position: 'absolute',
-							// the header's own inset already holds it off the screen edge
-							right: 0,
-							top: SHEEP_TOP,
-							width: SHEEP_SIZE,
-							height: SHEEP_SIZE,
-						}}
-					>
-						<Image
-							src={getAssetUrl('/sheeps/ovce3.svg')}
-							alt={tHome('hero.title')}
-							fill
-							sizes={`${SHEEP_SIZE}px`}
-							style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
-						/>
-					</Box>
+				<Box
+					sx={{
+						position: 'absolute',
+						// the header's own inset already holds her off the screen edge
+						right: 0,
+						// stood on the hero's bottom edge rather than hung from the title,
+						// so however tall she is she stays inside the block that folds away
+						bottom: 0,
+						width: SHEEP_SIZE,
+						height: SHEEP_SIZE,
+					}}
+				>
+					<Image
+						src={getAssetUrl('/sheeps/ovce3.svg')}
+						alt={tHome('hero.title')}
+						fill
+						sizes={`${SHEEP_SIZE}px`}
+						style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
+					/>
 				</Box>
 			</Box>
 		</Box>
@@ -390,22 +385,35 @@ export default function HomeMobile({
 					marginX: -2,
 					paddingX: 2,
 					paddingY: 1,
+					// The band is only a header once it has arrived at the top and content
+					// starts passing under it — that is when it needs to mask what passes,
+					// and to draw the line saying so. Before that it is just the strip the
+					// field sits in, and it stays out of the way: an opaque full-width
+					// plate on the canvas is a rectangle in front of everything, over the
+					// sheep and over the scrollbar's lane.
+					//
+					// Searching has no hero, so the bar is pinned from the start and both
+					// are simply on. Otherwise a scroll-driven animation turns them on — a
+					// scroll timeline is the browser's own, so this too stays in step
+					// without anything measuring the scroll. The plain values below are
+					// what a browser without one falls back to: solid throughout, the way
+					// it looked before.
 					bgcolor: 'grey.50',
 					borderBottom: '1px solid',
-					// The hairline belongs to the moment the bar has arrived at the top
-					// and content starts passing under it. Searching has no hero, so it
-					// is there from the start; otherwise a scroll-driven animation turns
-					// it on — a scroll timeline is the browser's own, so this too stays
-					// in step without anything measuring the scroll. Browsers without
-					// one simply keep the bar undivided.
 					borderColor: searchOpen ? 'grey.200' : 'transparent',
 					...(searchOpen
 						? {}
 						: {
 								'@supports (animation-timeline: scroll())': {
 									'@keyframes homeBarPinned': {
-										from: { borderBottomColor: 'transparent' },
-										to: { borderBottomColor: theme.palette.grey[200] },
+										from: {
+											backgroundColor: 'transparent',
+											borderBottomColor: 'transparent',
+										},
+										to: {
+											backgroundColor: theme.palette.grey[50],
+											borderBottomColor: theme.palette.grey[200],
+										},
 									},
 									animationName: 'homeBarPinned',
 									animationTimeline: 'scroll(nearest block)',
