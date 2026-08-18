@@ -47,6 +47,17 @@ type MobileAppHeaderProps<T extends RoutesKeys> = {
 	backParams?: SmartAllParams<T>
 	/** Up to 2 icon actions shown to the right of the title. Extras are ignored. */
 	actions?: ReactNode[]
+	/**
+	 * A hero that scrolls away: drawn inside the header, above the control panel,
+	 * and moving at exactly the content's speed — so it reads as part of the page
+	 * rather than as chrome animating on its own. Once it has gone the header is
+	 * just its control panel, which stays.
+	 *
+	 * It lives in the header rather than in the content so the background, the
+	 * hairline and the status-bar inset are the header's, full width, and the
+	 * scrollbar stays clear of them.
+	 */
+	hero?: ReactNode
 	/** Optional control strip (segment / chips / a search field) inside the header
 	 * block, under the title. Pass it without a title and the header is only the
 	 * strip — pinned above the scroller, so it cannot be scrolled away. */
@@ -84,6 +95,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	backTo,
 	backParams,
 	actions,
+	hero,
 	controlPanel,
 	bottomPanel,
 	scrollResetKey,
@@ -100,6 +112,9 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 	const headerRef = useRef<HTMLDivElement>(null)
 	const titleRef = useRef<HTMLDivElement>(null)
 	const subtitleRef = useRef<HTMLDivElement>(null)
+	const heroWrapRef = useRef<HTMLDivElement>(null)
+	const heroInnerRef = useRef<HTMLDivElement>(null)
+	const spacerRef = useRef<HTMLDivElement>(null)
 
 	const shownActions = actions?.slice(0, 2) ?? []
 
@@ -111,7 +126,29 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 		let raf = 0
 		const paint = () => {
 			raf = 0
-			const p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
+			let p = Math.min(1, Math.max(0, scroller.scrollTop / SHRINK_DISTANCE))
+
+			const heroWrap = heroWrapRef.current
+			const heroInner = heroInnerRef.current
+			if (heroWrap && heroInner) {
+				// The hero moves up by exactly what has been scrolled, and gives back
+				// the same amount of height — so the control panel below it rides up at
+				// the content's speed and stops the moment the hero is gone. One
+				// number, no curves: nothing here can drift out of step with the page.
+				const heroHeight = heroInner.offsetHeight
+				const gone = Math.min(scroller.scrollTop, heroHeight)
+				heroWrap.style.height = `${heroHeight - gone}px`
+				heroInner.style.transform = `translateY(${-gone}px)`
+				// the header is an overlay, so the content reserves its resting height
+				// itself — measurable only while nothing is scrolled away
+				if (gone === 0 && spacerRef.current && headerRef.current) {
+					spacerRef.current.style.height = `${headerRef.current.offsetHeight}px`
+				}
+				// a hero screen's hairline belongs to the moment the hero has gone and
+				// content starts passing under the panel, not to a fixed scroll distance
+				p = heroHeight ? gone / heroHeight : 1
+			}
+
 			if (titleRef.current) {
 				titleRef.current.style.fontSize = `${TITLE_MAX - (TITLE_MAX - TITLE_MIN) * p}rem`
 			}
@@ -128,16 +165,21 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					p > 0.9 ? `0 2px 8px rgba(0, 0, 0, 0.05)` : 'none'
 			}
 		}
-		const onScroll = () => {
+		const schedule = () => {
 			if (!raf) raf = requestAnimationFrame(paint)
 		}
-		scroller.addEventListener('scroll', onScroll, { passive: true })
+		scroller.addEventListener('scroll', schedule, { passive: true })
+		// a hero can also change size on its own (a screen folding it away, text
+		// scaling, rotation), which no scroll event announces
+		const observer = new ResizeObserver(schedule)
+		if (heroInnerRef.current) observer.observe(heroInnerRef.current)
 		paint()
 		return () => {
-			scroller.removeEventListener('scroll', onScroll)
+			scroller.removeEventListener('scroll', schedule)
+			observer.disconnect()
 			if (raf) cancelAnimationFrame(raf)
 		}
-	}, [divider])
+	}, [divider, hero])
 
 	// scroll back to the top when the reset key changes (e.g. paginator page change)
 	useEffect(() => {
@@ -159,7 +201,7 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 
 	const hasTitleRow = Boolean(title || backTo || shownActions.length > 0)
 	// nothing to put in the header block — the screen draws its own top instead
-	const hasHeaderRow = Boolean(hasTitleRow || controlPanel)
+	const hasHeaderRow = Boolean(hasTitleRow || hero || controlPanel)
 
 	return (
 		<Box
@@ -195,11 +237,18 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				sx={{
 					flexShrink: 0,
 					zIndex: HEADER_Z,
-					position: 'relative',
+					// A hero shrinks the header as it scrolls away. In the flex column
+					// that would hand the freed height to the scroller, which shortens
+					// the distance left to scroll while you are scrolling it — so with a
+					// hero the header overlays the content instead and the content
+					// reserves its resting height with a spacer of its own.
+					...(hero
+						? { position: 'absolute', top: 0, left: 0, right: 0, overflow: 'hidden' }
+						: { position: 'relative' }),
 					display: 'flex',
 					flexDirection: 'column',
 					paddingTop: `calc(${TOOLBAR_SPACER} + ${
-						hasTitleRow ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
+						hasTitleRow || hero ? HEADER_TOP_PAD : HEADER_BOTTOM_PAD
 					}px)`,
 					paddingBottom: 1,
 					bgcolor: surface,
@@ -280,32 +329,25 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 				</Box>
 				)}
 
+				{/* the hero — its height and offset are painted from the scroll position
+				    (see the effect above); clipped, so it slides under the status bar
+				    rather than over it */}
+				{hero && (
+					<Box ref={heroWrapRef} sx={{ overflow: 'hidden', paddingX: 2 }}>
+						<Box ref={heroInnerRef}>{hero}</Box>
+					</Box>
+				)}
+
 				{/* control strip — inside the header block so it shares the header
 				    background (one solid white zone above the bottom divider) */}
 				{controlPanel && (
-					<Box sx={{ paddingX: 2, paddingTop: hasTitleRow ? 1 : 0 }}>
+					<Box
+						sx={{ paddingX: 2, paddingTop: hasTitleRow || hero ? 1 : 0 }}
+					>
 						{controlPanel}
 					</Box>
 				)}
 			</Box>
-			)}
-
-			{/* Status-bar scrim for a screen with no header row: its content starts at
-			    the very top, so without this it would show through the status bar as
-			    it scrolls past. */}
-			{!hasHeaderRow && (
-				<Box
-					sx={{
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						right: 0,
-						height: TOOLBAR_SPACER,
-						bgcolor: surface,
-						zIndex: HEADER_Z,
-						pointerEvents: 'none',
-					}}
-				/>
 			)}
 
 			{/* the only scroller — scrollbar confined between the header/panels */}
@@ -317,12 +359,13 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					overflowY: 'auto',
 					overflowX: 'hidden',
 					paddingX: 2,
-					// with no header row the screen owns its own top inset, so it can
-					// stick something (home's search bar) right under the status bar
-					paddingTop: hasHeaderRow ? 0.5 : 0,
+					paddingTop: hasHeaderRow && !hero ? 0.5 : 0,
 					paddingBottom: 2,
 				}}
 			>
+				{/* the room the overlaid header takes at rest. It scrolls away with the
+				    hero it stands in for, so the list still ends where it should. */}
+				{hero && <Box ref={spacerRef} sx={{ flexShrink: 0 }} />}
 				{children}
 			</Box>
 

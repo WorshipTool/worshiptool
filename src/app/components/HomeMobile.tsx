@@ -8,11 +8,8 @@ import MobileSearchBody, {
 } from '@/app/components/MobileSearch'
 import { setMobileSearchOpen } from '@/common/components/MobileAppTabBar/mobileSearchState'
 import { GROUP_CARD_SX, SongGroup } from '@/common/ui/GroupList'
-import {
-	MobileAppHeader,
-	TOOLBAR_SPACER,
-} from '@/common/components/MobileAppHeader'
-import { Box, Clickable, Image, Typography, useTheme } from '@/common/ui'
+import { MobileAppHeader } from '@/common/components/MobileAppHeader'
+import { Box, Clickable, Image, Typography } from '@/common/ui'
 import { Link } from '@/common/ui/Link/Link'
 import { Skeleton } from '@/common/ui/mui/Skeleton'
 import { getSmartDateAgoString } from '@/tech/date/date.tech'
@@ -44,8 +41,8 @@ const SHEEP_TOP = 5
 const TITLE_INSET = 2.5
 /** Hero title size (rem) — the shell's large-title size, since this is one. */
 const TITLE_SIZE = 1.85
-/** Space above the title, below the status bar. */
-const HERO_TOP_PAD = 32
+/** Breathing room above the title, past the header's own top inset. */
+const HERO_TOP_SPACE = 2.5
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
@@ -165,45 +162,8 @@ export default function HomeMobile({
 		return () => window.removeEventListener('popstate', onPop)
 	}, [searchOpen, onSearchValueChange])
 
-	// The bar carries a hairline once it has become the top bar, and none while
-	// it is still part of the hero — a divider mid-page would be meaningless.
-	// Painted straight onto the node, so sticking re-renders nothing.
-	const searchBandRef = useRef<HTMLDivElement>(null)
 	const heroRef = useRef<HTMLDivElement>(null)
 	const heroInnerRef = useRef<HTMLDivElement>(null)
-	const theme = useTheme()
-	useEffect(() => {
-		const band = searchBandRef.current
-		if (!band) return
-		// env() resolves to pixels in computed style, so the sticky offset is
-		// readable without repeating the safe-area inset here
-		const stickyTop = parseFloat(window.getComputedStyle(band).top) || 0
-		let raf = 0
-		let stuck: boolean | null = null
-		const paint = () => {
-			raf = 0
-			const next = band.getBoundingClientRect().top <= stickyTop + 0.5
-			if (next === stuck) return
-			stuck = next
-			band.style.borderBottomColor = next ? theme.palette.grey[200] : 'transparent'
-		}
-		const schedule = () => {
-			if (!raf) raf = requestAnimationFrame(paint)
-		}
-		// the shell owns the scroller, so listen in the capture phase: scroll events
-		// don't bubble, but they are dispatched down through the document first
-		document.addEventListener('scroll', schedule, true)
-		// the bar also arrives at the top when the hero collapses under it, which no
-		// scroll event announces — the observer fires for every frame of that
-		const observer = new ResizeObserver(schedule)
-		if (heroRef.current) observer.observe(heroRef.current)
-		paint()
-		return () => {
-			document.removeEventListener('scroll', schedule, true)
-			observer.disconnect()
-			if (raf) cancelAnimationFrame(raf)
-		}
-	}, [theme])
 
 	// Cancel goes back through that entry rather than around it, so the Back
 	// gesture afterwards isn't a step that appears to do nothing.
@@ -325,10 +285,10 @@ export default function HomeMobile({
 		</Box>
 	)
 
-	// ---- hero: plain content, so it scrolls away like everything else. The sheep
-	// sits level with the title and reaches low enough that the search bar covers
-	// its paws — the bar comes later in the flow, so it simply paints over it, and
-	// scrolling slides the sheep under it until it is gone.
+	// ---- hero: handed to the shell, which scrolls it away at the page's speed
+	// and keeps the search bar below it once it is gone. The sheep sits level with
+	// the title and reaches low enough that the bar covers its paws — the bar comes
+	// later in the header's flow, so it simply paints over it.
 
 	const hero = (
 		<Box
@@ -345,46 +305,43 @@ export default function HomeMobile({
 		>
 			<Box
 				ref={heroInnerRef}
-				sx={{
-					paddingTop: `calc(${TOOLBAR_SPACER} + ${HERO_TOP_PAD}px)`,
-					paddingLeft: TITLE_INSET,
-				}}
+				sx={{ paddingTop: HERO_TOP_SPACE, paddingLeft: TITLE_INSET }}
 			>
-			<Box sx={{ position: 'relative' }}>
-				<Box
-					sx={{
-						fontSize: `${TITLE_SIZE}rem`,
-						fontWeight: 800,
-						letterSpacing: '-0.4px',
-						lineHeight: 1.15,
-						color: 'grey.900',
-					}}
-				>
-					{tHome('hero.title')}
-				</Box>
-				<Box sx={{ marginTop: 0.25 }}>
-					<Typography small strong={500} color="grey.600">
-						{tHome('hero.lead')}
-					</Typography>
-				</Box>
+				<Box sx={{ position: 'relative' }}>
+					<Box
+						sx={{
+							fontSize: `${TITLE_SIZE}rem`,
+							fontWeight: 800,
+							letterSpacing: '-0.4px',
+							lineHeight: 1.15,
+							color: 'grey.900',
+						}}
+					>
+						{tHome('hero.title')}
+					</Box>
+					<Box sx={{ marginTop: 0.25 }}>
+						<Typography small strong={500} color="grey.600">
+							{tHome('hero.lead')}
+						</Typography>
+					</Box>
 
-				<Box
-					sx={{
-						position: 'absolute',
-						// the scroller's own inset already holds it off the screen edge
-						right: 0,
-						top: SHEEP_TOP,
-						width: SHEEP_SIZE,
-						height: SHEEP_SIZE,
-					}}
-				>
-					<Image
-						src={getAssetUrl('/sheeps/ovce3.svg')}
-						alt={tHome('hero.title')}
-						fill
-						sizes={`${SHEEP_SIZE}px`}
-						style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
-					/>
+					<Box
+						sx={{
+							position: 'absolute',
+							// the header's own inset already holds it off the screen edge
+							right: 0,
+							top: SHEEP_TOP,
+							width: SHEEP_SIZE,
+							height: SHEEP_SIZE,
+						}}
+					>
+						<Image
+							src={getAssetUrl('/sheeps/ovce3.svg')}
+							alt={tHome('hero.title')}
+							fill
+							sizes={`${SHEEP_SIZE}px`}
+							style={{ objectFit: 'contain', objectPosition: 'bottom center' }}
+						/>
 					</Box>
 				</Box>
 			</Box>
@@ -393,33 +350,16 @@ export default function HomeMobile({
 
 	return (
 		// Searching is a mode of this screen, not a layer over it, and not a
-		// different screen either: the hero collapses, the bar it sat under rides up
+		// different screen either: the hero folds away, the bar it sat under rides up
 		// to the top, and the body swaps recommendations for results. The tab bar
 		// stays uncovered, so the tabs remain a way out.
 		//
-		// No shell header: the hero is ordinary content that scrolls away at the
-		// speed of the page, and the bar below it is sticky — so it becomes the top
-		// bar on its own, without anything shrinking or fading on the way.
-		<MobileAppHeader>
-			{hero}
-
-			<Box
-				ref={searchBandRef}
-				sx={{
-					position: 'sticky',
-					// under the status bar, whose scrim the shell draws above it
-					top: TOOLBAR_SPACER,
-					zIndex: 2,
-					// the canvas colour, so content scrolling under the pinned bar is
-					// hidden rather than showing through its padding. Only as wide as
-					// the content column — bleeding it to the scroller's edges put it
-					// over the scrollbar too.
-					bgcolor: 'grey.50',
-					paddingY: 1,
-					borderBottom: '1px solid',
-					borderColor: 'transparent',
-				}}
-			>
+		// The hero and the bar are the header's — it scrolls the hero away at the
+		// page's speed and keeps the bar, and the background, hairline and
+		// status-bar inset around them are its own.
+		<MobileAppHeader
+			hero={hero}
+			controlPanel={
 				<MobileSearchBar
 					value={searchInputValue}
 					onValueChange={onSearchValueChange}
@@ -428,8 +368,8 @@ export default function HomeMobile({
 					onCancel={closeSearch}
 					inputRef={searchInputRef}
 				/>
-			</Box>
-
+			}
+		>
 			<Box
 				// keyed so the incoming body fades in rather than replacing the other
 				// one between two frames
