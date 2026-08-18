@@ -207,10 +207,12 @@ export default function MobileAppHeader<T extends RoutesKeys>({
 					// use for a header that is only its control panel
 					headerRef.current.style.paddingTop = ''
 				}
-				// with no persistent divider, fade a hairline in as content scrolls under
-				if (!divider) {
-					headerRef.current.style.borderBottomColor = `rgba(0, 0, 0, ${0.08 * p})`
-				}
+				// with no persistent divider, fade a hairline in as content scrolls
+				// under; with one, hand the colour back to the stylesheet (an alpha
+				// painted before the divider was switched on would outlive it)
+				headerRef.current.style.borderBottomColor = divider
+					? ''
+					: `rgba(0, 0, 0, ${0.08 * p})`
 				headerRef.current.style.boxShadow =
 					p > 0.9 ? `0 2px 8px rgba(0, 0, 0, 0.05)` : 'none'
 			}

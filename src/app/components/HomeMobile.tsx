@@ -279,6 +279,9 @@ export default function HomeMobile({
 			decoration={searchOpen ? undefined : sheep}
 			controlPanel={searchBar}
 			collapseTitle
+			// searching has no hero to blend into, so the header reads as a bar from
+			// the start rather than only once something scrolls under it
+			divider={searchOpen}
 			// entering or leaving search starts its body at the top
 			scrollResetKey={searchOpen ? 'search' : 'home'}
 		>
