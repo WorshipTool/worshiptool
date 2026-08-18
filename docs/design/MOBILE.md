@@ -1,0 +1,191 @@
+# MOBILE.md — mobile app-shell rules (phones, < 700px)
+
+The phone experience is a **native-feeling app shell**, distinct from the
+desktop layout. These rules keep it consistent and calm. They apply below
+`MOBILE_NAV_BREAKPOINT` (700px); desktop is unaffected.
+
+Read this alongside `DESIGN-SYSTEM.md`, `COMPONENTS.md` and `PATTERNS.md`.
+When a mobile screen looks busier or louder than its neighbours, it's wrong
+even if it looks fine in isolation.
+
+## The shell
+
+Every app-shell screen is built from `@/common/ui`'s **`MobileAppHeader`**
+(`common/components/MobileAppHeader`). It owns the whole viewport minus the
+bottom tab bar and **only the middle content scrolls** — the header, an
+optional top control strip, an optional bottom panel and the tab bar all stay
+pinned. So the scrollbar belongs to the content, never the full height.
+
+```
+┌──────────────────────────────────────────────┐
+│ ←  Title                     [ 0–2 icons ]    │  header (large → shrinks on scroll)
+│    subtitle (ReactNode)                        │
+├──────────────────────────────────────────────┤
+│ [ controlPanel: segment / chips ]  (optional)  │  pinned under the header
+├──────────────────────────────────────────────┤
+│                 content scrolls                │
+├──────────────────────────────────────────────┤
+│ [ bottomPanel: pagination … ]      (optional)  │  pinned above the tab bar, QUIET
+└──────────────────────────────────────────────┘
+                (global nav — tab bar)              rendered globally, not by the page
+```
+
+Slots: `title`, `subtitle` (any node), `backTo`/`backParams` (hierarchical Up,
+hidden on tab-roots), `actions` (≤ 2 icons, right of the title), `controlPanel`
+(top strip), `bottomPanel` (above the tab bar), `scrollResetKey`, `surface`,
+`divider`, `overlay`.
+
+**Same header height everywhere.** The header row keeps a fixed minimum height
+(matching the back-arrow / action buttons) so a title-only header (Seznam,
+Účet) collapses to exactly the same height as one with controls (Moje písně,
+Oblíbené). The back arrow appears only when `backTo` is set — tab-roots (Domů /
+Písně=Seznam / Účet) have none by design; you switch to them via the tab bar.
+
+## The shell is fixed — never in flow
+
+`MobileAppHeader` is `position: fixed` (top 0 → `MOBILE_NAV_CLEARANCE`), and
+that is not negotiable: **an app-shell screen must never contribute height to
+the document.**
+
+If it does, the page itself becomes scrollable *underneath* the shell and you
+get two stacked scrollers. Anything the inner one doesn't consume — a drag on
+the header, or on the content once it hits its end — falls through to the
+document and carries the whole shell, header included, off the top of the
+screen. This shipped once (the shell had an in-flow mode used by every screen
+except the song page) and is exactly what it looks like on a real device.
+
+So: don't give the shell a height, a `minHeight`, or an in-flow wrapper, and
+don't reintroduce a "reclaim the space above" negative margin — the Toolbar
+deliberately contributes no spacer on these routes. A screen that builds its
+own shell instead of using `MobileAppHeader` (today only the playlist detail)
+must use the same fixed frame.
+
+The invariant to check on any shell route: scrolling the *window* moves it 0px.
+
+
+
+Ask **`useIsPhone()`** (`common/hooks/useIsPhone`) — never spell out
+`useMediaQuery(theme.breakpoints.down(…))` and never write `700` by hand.
+Several pages had drifted to a literal `700` while the shell used the constant,
+so moving the breakpoint would have moved the tab bar but not the page bodies
+inside it.
+
+**Prefer no branch at all.** `useIsPhone()` is a JS media query: it returns
+`false` during SSR and the first hydration render, so a JS branch flashes the
+desktop layout for a frame. When the two layouts hold the *same* content in a
+different arrangement, express it in CSS instead — mobile-first base styles plus
+a `theme.breakpoints.up(MOBILE_NAV_BREAKPOINT)` block (see `CreateOptionItem`,
+which is a row on phones and a card on desktop with no JS branch at all).
+
+Reach for `useIsPhone()` only where the two are genuinely different trees — in
+practice that means choosing the *shell wrapper* (`MobileAppHeader` vs the
+desktop page chrome), which `MobileAppHeader` requires anyway since it hides
+itself above the breakpoint in CSS. Aim for **one branch per page**, around the
+shell, with the content shared beneath it.
+
+## Which routes are in the shell
+
+`MobileAppTabBar/nav.constants.ts` is the single source of truth: it decides the
+active tab, whether the tab bar renders, and whether the top bar hides. It is
+keyed by **`routesPaths` keys**, not path strings, so renaming a route is a
+compile error rather than a silently broken shell. Add a route to `TAB_BY_ROUTE`
+to bring it into the shell. It has tests — keep them passing.
+
+Feed it `useClientPathname()`, not `usePathname()`: only the former re-applies
+subdomain prefixes, and the raw one misclassifies every route on a subdomain.
+
+## Screens that hold unsaved work
+
+A screen keeping user work in local state (a song being written, a playlist
+being reordered, an upload being parsed) must declare it:
+
+```tsx
+useBlockAppReload(sheetData !== '', 'writing a song')
+```
+
+`AppUpdater` reloads the page when a new build ships; without this it would
+silently throw that work away. The update is applied as soon as the last blocker
+clears.
+
+## Attention & layout rules
+
+1. **Thumb zone = navigation + at most one primary.** The bottom tab bar owns
+   navigation. The app's single bottom-primary is the tab bar's raised
+   **search** action. **Pages never add a competing bottom FAB.**
+2. **One hero blue per zone.** Primary blue is the attention colour — spend it
+   on the current-tab indicator + one primary action per zone. Everything else
+   (pagination, sort, secondary actions) is **neutral** (grey / tonal).
+   → paginators and control strips are never blue.
+3. **Placement by frequency.** Frequent / primary → bottom (thumb reach).
+   Occasional / contextual (create, sort, filter, in-list search, pagination)
+   → top (header / controlPanel), or a quiet bottom panel.
+4. **The bottom panel is quiet.** A `bottomPanel` (e.g. pagination) is
+   low-contrast and neutral so it never competes with the tab bar's primary,
+   and sits **below** the tab bar's raised action in z-order.
+5. **Don't stack shouters.** If two attention elements want the same spot,
+   promote one and relocate / soften the other. Never stack several loud
+   elements on top of each other.
+6. **Consistent homes for actions.** Navigation → tab bar. Primary action →
+   exactly one place (the tab bar's search); a page's own create action → the
+   header (a "+ Add" pill), **not** a FAB. Contextual controls → `controlPanel`
+   at the top. Content navigation (pagination) → a quiet `bottomPanel`.
+7. **Never a blank screen.** A data-backed screen always renders one of four
+   states — **loading** (skeletons), **empty** (icon + message), **error**
+   (icon + message + a "Zkusit znovu" retry), or the **content**. A page that
+   shows only its header while data is missing is a bug: the user can't tell
+   loading from broken. Match the states shown by `MobileSongListView` /
+   `SeznamMobile`.
+
+## Applied (the standard)
+
+- **Create actions** (Moje písně "Přidat", Playlisty "Nový") live in the
+  header as a compact primary pill in `actions` — no FAB.
+- **Pagination** uses the neutral (standard) MUI colour, pinned in a quiet
+  `bottomPanel`.
+- **Sort / filter** live in the `controlPanel` (segment) at the top.
+  ⚠️ **Not wired yet.** `MobileAppHeader` accepts `controlPanel` but no account
+  screen passes one, so the sort/filter columns in the table below describe the
+  intended shape rather than what ships today. The desktop `*OrderSelect`
+  components are already props-driven — pass them as `controlPanel` to close it.
+- **Global search** stays the tab bar's raised centre action — the one loud
+  element in the thumb zone.
+
+Per-page shape:
+
+| Screen | back | subtitle | header actions | controlPanel | bottomPanel |
+|---|---|---|---|---|---|
+| Účet | – | – | – | – | – |
+| Oblíbené | → Účet | count | (in-list search) | sort | – |
+| Moje písně | → Účet | count | **+ Přidat** | sort/filter | pagination |
+| Playlisty | → Účet | count | **+ Nový** | sort | – |
+| Písně (Seznam) | – | – | – | – | pagination |
+| Playlist detail | → back | Playlist · count | Tisknout (+ prezentace/share/rename/edit → ⋮) | (mode switch) | – |
+
+**Collapsing hero condenses its actions — it doesn't hide them.** The
+playlist detail page has its own collapsing header (not `MobileAppHeader`).
+At rest the tall hero shows the full action row side by side — the blue
+*Tisknout* primary plus prezentace / share / edit as inline circles. On scroll
+(and in Detail mode, which opens already-slim) it condenses to the standard
+app-bar form: **one primary + one `⋮`**, where the `⋮` overflow
+(`common/components/Menu`) holds prezentace / share / rename / edit. So the ≤2-actions cap
+applies to the *slim* bar; the expanded hero may show more. In edit mode the
+slim `⋮` becomes a `✓` for a clear way out.
+
+**Collapse = a scroll-driven morph over a fixed-overlay header, never a
+height-animating flex header.** The header is built with the reusable
+`common/components/CollapsingHeader` (`CollapsingHeader` + `MorphItem`):
+elements present in both states travel/scale continuously to their target
+(the title shrinks and moves into the bar; the *Tisknout* pill slides and
+shrinks into its circle, its label collapsing via the `--collapse-p` CSS
+variable), and elements that exist in only one state just fade
+(cover/subtitle/share/print/edit out, `⋮` in). Declare each with `from`/`to`
+style specs; the component interpolates them by scroll progress.
+
+Why an overlay + a top spacer rather than a header that shrinks in the flex
+column: shrinking a real header hands its height back to the scroller, which
+shrinks the remaining scroll distance and makes short/medium lists stick
+part-way collapsed (only very long lists have the slack to finish). Here the
+header is an absolute overlay (the scroller's height never changes → no
+feedback loop) and the room it gives back is a `expandedHeight`-tall spacer at
+the top of the scroll content that scrolls away under the header — so it
+condenses reliably for any list length and leaves no dead space at the end.

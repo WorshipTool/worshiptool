@@ -23,6 +23,7 @@ declare const messages: {
 		"discard": "Zahodit",
 		"open": "Otevřít",
 		"tryAgain": "Zkusit znovu",
+		"updatingVersion": "Aktualizuji na novou verzi…",
 		"or": "Nebo",
 		"backgroundAlt": "Pozadí",
 		"cancelCurrentEdits": "Zrušit aktuální úpravy",
@@ -44,6 +45,7 @@ declare const messages: {
 	"navigation": {
 		"home": "Domů",
 		"songs": "Písně",
+		"tools": "Nástroje",
 		"playlists": "Playlisty",
 		"teams": "Týmy",
 		"about": "O aplikaci",
@@ -109,7 +111,7 @@ declare const messages: {
 			"subtitleLower": "na worship.cz"
 		},
 		"recommended": {
-			"idea": "Nějaký nápad:",
+			"idea": "Nějaký nápad",
 			"error": "Při načítání se vyskytla chyba..."
 		},
 		"allList": {
@@ -123,7 +125,7 @@ declare const messages: {
 			"label": "Vytvořit"
 		},
 		"search": {
-			"resultsTitle": "Výsledky vyhledávání:",
+			"resultsTitle": "Výsledky vyhledávání",
 			"loadMore": "Načíst další",
 			"noResults": "Nic jsme nenašli..."
 		}
@@ -235,6 +237,7 @@ declare const messages: {
 			"password": "Heslo",
 			"enterPassword": "Zadejte heslo",
 			"loginButton": "Přihlásit se",
+			"continueWithEmail": "Pokračovat e-mailem",
 			"forgotPassword": "Zapomněli jste heslo?",
 			"noAccount": "Nemáte ještě účet?",
 			"createAccount": "Vytvořte si ho",
@@ -279,6 +282,13 @@ declare const messages: {
 		"share": "Sdílet",
 		"linkCopiedToClipboard": "Odkaz zkopírován do schránky",
 		"presentation": "Prezentace",
+		"songsCount": "{count, plural, one {# píseň} few {# písně} other {# písní}}",
+		"typeLabel": "Playlist",
+		"shareTitle": "{title} – Playlist",
+		"tabSongs": "Seznam písní",
+		"tabDetail": "Detail písní",
+		"prevSong": "Předchozí píseň",
+		"nextSong": "Další píseň",
 		"rename": "Přejmenovat",
 		"playlistNamePlaceholder": "Název playlistu",
 		"print": "Tisknout",
@@ -338,6 +348,11 @@ declare const messages: {
 	},
 	"songPage": {
 		"topPanel": {
+			"addToPlaylist": "Přidat do playlistu",
+			"presentationItem": {
+				"title": "Prezentace",
+				"subtitle": "Otevřít jako prezentaci"
+			},
 			"cannotEditPublished": "Nelze upravit veřejnou píseň.",
 			"updateSuccess": {
 				"withTitle": "Píseň {title} byla upravena.",
@@ -393,6 +408,7 @@ declare const messages: {
 		},
 		"transpose": {
 			"title": "Transpozice",
+			"keyWithNote": "Tónina {note}",
 			"increase": "Zvýšit o půltón",
 			"decrease": "Snížit o půltón"
 		},
@@ -801,27 +817,45 @@ declare const messages: {
 				"dateAdded": "Data přidání",
 				"title": "Názvu"
 			}
+		},
+		"songs": {
+			"title": "Moje písně",
+			"totalSongs": "Celkem {count} písní",
+			"empty": "Zatím nemáš žádné vlastní písně."
+		},
+		"playlists": {
+			"untitled": "Bez názvu",
+			"playlistsCount": "{count, plural, one {# playlist} few {# playlisty} other {# playlistů}}",
+			"empty": "Zatím nemáš žádný playlist. Vytvoř si první tlačítkem nahoře."
 		}
 	},
 	"upload": {
 		"title": "Nahrát",
+		"addTitle": "Vytvořit píseň",
 		"uploadFile": "Nahrát soubor",
 		"uploadFileSubtitle": "Automaticky převeďte píseň z obrázku",
+		"photoTitle": "Přidejte píseň z fotky",
+		"photoSubtitle": "Vyfoťte zpěvník nebo vyberte obrázek a my z něj vytvoříme píseň.",
+		"photoAction": "Vyfotit nebo vybrat",
 		"writeManually": "Sepsat ručně",
+		"writeManuallySubtitle": "Napište text a akordy v editoru",
 		"createTooltip": "Přidat",
+		"create": "Vytvořit",
 		"createPrivately": "Vytvořit (neveřejně)",
 		"uploadSong": "Nahrát píseň",
 		"songTitle": "Název písně",
 		"songContent": "Obsah písně",
 		"dragAndDrop": "Přetáhněte soubory sem",
+		"dropFilesHere": "Pusťte soubory zde",
 		"selectFiles": "Vybrat soubory",
-		"supportedFormats": "Podporované formáty",
+		"supportedFormats": "Podporované formáty: {formats}",
 		"songDataCopied": "Data písně zkopírovány.",
 		"uploading": "Nahrávání",
 		"queueing": "Čekání ve frontě",
 		"processing": "Zpracovávání souborů",
 		"processed": "Zpracováno",
 		"errorOccurred": "Nastala chyba",
+		"loginRequired": "Pro nahrání souboru se musíte přihlásit.",
 		"pleaseWait": "Počkejte prosím",
 		"withAI": "S pomocí AI",
 		"copy": "Zkopírovat",
@@ -832,7 +866,9 @@ declare const messages: {
 		}
 	},
 	"songsList": {
-		"title": "Seznam všech písní"
+		"title": "Seznam všech písní",
+		"empty": "Zatím tu nejsou žádné písně.",
+		"error": "Písně se nepodařilo načíst."
 	},
 	"loadingScreen": {
 		"message": "Načítání aplikace..."
@@ -924,6 +960,9 @@ declare const messages: {
 		"markChorus": "Označit refrén",
 		"markBridge": "Označit bridge",
 		"insertChord": "Vložit akord",
+		"chord": "Akord",
+		"chordMajor": "dur",
+		"done": "Hotovo",
 		"titlePlaceholder": "Zadejte název písně",
 		"contentPlaceholder": "Zde je místo pro obsah písně"
 	},

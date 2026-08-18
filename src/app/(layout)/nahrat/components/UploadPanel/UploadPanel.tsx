@@ -2,9 +2,9 @@ import { Box, Button, Typography } from '@/common/ui'
 import { Paper } from '@/common/ui/mui'
 import { CloudUpload } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
-import React, { useRef } from 'react'
+import React from 'react'
 import { Gap } from '../../../../../common/ui/Gap'
-import UploadFileInput from '../UploadFileInput'
+import { useFilePicker } from '../useFilePicker'
 import DragAndDrop from './components/DragAndDrop'
 
 interface UploadPanelProps {
@@ -12,8 +12,6 @@ interface UploadPanelProps {
 }
 
 export default function UploadPanel(props: UploadPanelProps) {
-	const inputRef = useRef(null)
-
 	const [draggingOver, setDraggingOver] = React.useState(false)
 
 	const t = useTranslations('upload')
@@ -22,10 +20,7 @@ export default function UploadPanel(props: UploadPanelProps) {
 		if (props.onUpload) props.onUpload(files)
 	}
 
-	const openFilePicker = () => {
-		//@ts-ignore
-		inputRef.current.click()
-	}
+	const picker = useFilePicker(uploadFiles)
 
 	return (
 		<DragAndDrop
@@ -106,7 +101,7 @@ export default function UploadPanel(props: UploadPanelProps) {
 									alignItems: 'center',
 								}}
 							>
-								<Typography>Pusťte soubory zde</Typography>
+								<Typography>{t('dropFilesHere')}</Typography>
 							</Box>
 						</Box>
 					)}
@@ -114,7 +109,7 @@ export default function UploadPanel(props: UploadPanelProps) {
 					<Gap value={4} />
 					<Button
 						variant="contained"
-						onClick={openFilePicker}
+						onClick={picker.open}
 						sx={{
 							display: draggingOver ? 'none' : 'block',
 						}}
@@ -135,13 +130,12 @@ export default function UploadPanel(props: UploadPanelProps) {
 					}}
 					width={200}
 				>
-					<Typography color={'grey'}>{t('supportedFormats')}: png, jpg, jpeg, pdf</Typography>
+					<Typography color={'grey'}>
+						{t('supportedFormats', { formats: 'png, jpg, jpeg, pdf' })}
+					</Typography>
 				</Box>
 			</Paper>
-			<UploadFileInput
-				inputRef={inputRef}
-				onUpload={(files) => uploadFiles(files)}
-			/>
+			{picker.input}
 		</DragAndDrop>
 	)
 }

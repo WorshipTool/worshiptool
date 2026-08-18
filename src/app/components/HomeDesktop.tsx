@@ -1,5 +1,6 @@
 'use client'
 
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import ParseAdminOption from '@/app/(layout)/vytvorit/components/ParseAdminOption'
 import MainSearchInput from '@/app/components/components/MainSearchInput'
 import RecommendedSongsList from '@/app/components/components/RecommendedSongsList/RecommendedSongsList'
@@ -8,7 +9,6 @@ import { useFooter } from '@/common/components/Footer/hooks/useFooter'
 import { useToolbar } from '@/common/components/Toolbar/hooks/useToolbar'
 import { useScrollHandler } from '@/common/providers/OnScrollComponent/useScrollHandler'
 import { Box, Image, Typography, useTheme } from '@/common/ui'
-import { useMediaQuery } from '@/common/ui/mui'
 import { useChangeDelayer } from '@/hooks/changedelay/useChangeDelayer'
 import { useUrlState } from '@/hooks/urlstate/useUrlState'
 import useWorshipCzVersion from '@/hooks/worshipcz/useWorshipCzVersion'
@@ -20,6 +20,7 @@ import ContainerGrid, {
 	containerMaxWidth,
 } from '../../common/components/ContainerGrid'
 import FloatingAddButton from './components/FloatingAddButton'
+import HomeMobile from './HomeMobile'
 import SearchedSongsList from './components/SearchedSongsList'
 
 export const RESET_HOME_SCREEN_EVENT_NAME = 'reset_home_screen_jh1a94'
@@ -28,8 +29,7 @@ const ANIMATION_DURATION = 0.2
 
 export default function HomeDesktop() {
 	const theme = useTheme()
-	const phoneVersion = useMediaQuery(theme.breakpoints.down(700))
-	const isMobile = phoneVersion
+	const phoneVersion = useIsPhone()
 	const tHome = useTranslations('home')
 
 	const scrollPointRef = useRef(null)
@@ -50,9 +50,9 @@ export default function HomeDesktop() {
 	useChangeDelayer(
 		searchInputValue,
 		(value) => {
-			if (value !== '') {
-				setSearchString(value)
-			}
+			// sync empties too — skipping them left the previous query in the URL, so
+			// clearing the box and typing again briefly showed the old results
+			setSearchString(value)
 		},
 		[]
 	)
@@ -78,9 +78,16 @@ export default function HomeDesktop() {
 	}, [])
 
 	useEffect(() => {
+		// Desktop only. The phone runs a fixed app shell with its own scroller, so
+		// there is nothing here for the window to scroll — except that with the
+		// keyboard open the layout viewport is taller than the visible one, and
+		// scrolling it drags the whole fixed shell (search field included) out of
+		// view. That fired on every debounced query, which is what made typing
+		// look like it jumped to the first result.
+		if (phoneVersion) return
 		if (searchString === null) return
 		scrollToTop()
-	}, [searchString])
+	}, [searchString, phoneVersion, scrollToTop])
 
 	// Manage toolbar and footer
 	const { isTop } = useScrollHandler({
@@ -91,6 +98,12 @@ export default function HomeDesktop() {
 	const footer = useFooter()
 
 	useEffect(() => {
+		// mobile home runs its own shell (bottom tab bar + docked search), so the
+		// top toolbar is hidden here and restored when leaving the mobile home
+		if (phoneVersion) {
+			toolbar.setHidden(true)
+			return () => toolbar.setHidden(false)
+		}
 		toolbar.setTransparent(isTop)
 		toolbar.setHideMiddleNavigation(!isTop)
 		toolbar.setShowTitle(!isTop)
@@ -122,128 +135,119 @@ export default function HomeDesktop() {
 	const paddingX = 32
 	const gapString = `calc(max(${paddingX}px, (100vw - ${containerMaxWidth}px) / 2) )`
 
-	const shapeSizeString = `calc(max(50vw, 50vh) * 1.35)`
+	const shapeSizeString = phoneVersion
+		? `calc(max(70vw, 40vh))`
+		: `calc(max(50vw, 50vh) * 1.35)`
 	const heroLead = tHome('hero.lead')
 	const heroTitle = tHome('hero.title')
 	const heroSubtitle = tHome('hero.subtitle')
-	const heroSubtitleLower = tHome('hero.subtitleLower')
 	return (
 		<>
-			<Box
-				sx={{
-					position: 'fixed',
-					top: isTop ? '38vh' : '-100%',
-					right: isTop ? 0 : '-100%',
-					transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
-					zIndex: -1,
-					opacity: isMobile ? 0 : 1,
-					transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
-					width: shapeSizeString,
-					height: shapeSizeString,
-				}}
-			>
-				<Image
-					src={getAssetUrl('/gradient-shapes/shape1.svg')}
-					alt={tHome('backgroundShape')}
-					fill
-					priority
-					sizes="(max-width: 700px) 0px, calc(max(50vw, 50vh) * 1.35)"
-					style={{
-						filter: 'brightness(1)',
-					}}
-				/>
-				<Image
-					src={getAssetUrl('/gradient-shapes/shape2.svg')}
-					alt={tHome('backgroundShape')}
-					fill
-					priority
-					sizes="(max-width: 700px) 0px, calc(max(50vw, 50vh) * 1.35)"
-					style={{
-						filter: 'brightness(1.1)',
-					}}
-				/>
-			</Box>
-
-			<Box
-				sx={{
-					flex: 1,
-					justifyContent: 'center',
-					alignItems: 'start',
-					display: 'flex',
-					flexDirection: 'column',
-					position: 'relative',
-				}}
-			>
-				<motion.div
-					style={{
+			{!phoneVersion && (
+				<Box
+					sx={{
 						position: 'fixed',
-						display: 'flex',
-						flexDirection: 'column',
-						zIndex: phoneVersion ? 1 : 10,
-						alignItems: 'center',
+						top: isTop ? '38vh' : '-100%',
+						right: isTop ? 0 : '-100%',
+						transform: 'translateX(50%) translateY(-50%) rotate(175deg)',
+						zIndex: -1,
 						pointerEvents: 'none',
-					}}
-					initial={{
-						top: !phoneVersion
-							? isTop
-								? `32%`
-								: 'calc(-7rem + 22px)'
-							: isTop
-							? '64px'
-							: 'calc( 64px - 64px)',
-
-						left: !phoneVersion ? paddingX : theme.spacing(1),
-						right: !phoneVersion ? paddingX : theme.spacing(1),
-					}}
-					animate={{
-						// position: phoneVersion ? 'sticky' : 'fixed',
-						top: !phoneVersion
-							? isTop
-								? `32%`
-								: 'calc(-7rem + 22px - 24px)'
-							: isTop
-							? '64px'
-							: 'calc( 64px - 64px)',
-
-						left: !phoneVersion
-							? isTop
-								? paddingX
-								: `calc( ${paddingX}px + ${gapString} )`
-							: theme.spacing(1),
-						right: !phoneVersion ? paddingX : theme.spacing(1),
-					}}
-					transition={{
-						type: 'keyframes',
-						duration: ANIMATION_DURATION,
+						transition: 'top 0.2s ease, right 0.2s ease, opacity 0.2s ease',
+						width: shapeSizeString,
+						height: shapeSizeString,
 					}}
 				>
-					<ContainerGrid>
-						<Box
-							sx={{
-								display: 'flex',
-								justifyContent: ' space-between',
-								width: '100%',
-								gap: gapString,
-							}}
-						>
+					<Image
+						src={getAssetUrl('/gradient-shapes/shape1.svg')}
+						alt={tHome('backgroundShape')}
+						fill
+						priority
+						sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
+						style={{
+							filter: 'brightness(1)',
+						}}
+					/>
+					<Image
+						src={getAssetUrl('/gradient-shapes/shape2.svg')}
+						alt={tHome('backgroundShape')}
+						fill
+						priority
+						sizes="(max-width: 700px) 88vw, calc(max(50vw, 50vh) * 1.35)"
+						style={{
+							filter: 'brightness(1.1)',
+						}}
+					/>
+				</Box>
+			)}
+
+			{phoneVersion ? (
+				<HomeMobile
+					searchInputValue={searchInputValue}
+					onSearchValueChange={onSearchValueChange}
+					searchString={searchString}
+					smartSearch={smartSearch ?? false}
+				/>
+			) : (
+				<Box
+					sx={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'start',
+						display: 'flex',
+						flexDirection: 'column',
+						position: 'relative',
+					}}
+				>
+					<motion.div
+						style={{
+							position: 'fixed',
+							display: 'flex',
+							flexDirection: 'column',
+							zIndex: 10,
+							alignItems: 'center',
+							pointerEvents: 'none',
+						}}
+						initial={{
+							top: isTop ? `32%` : 'calc(-7rem + 22px)',
+							left: paddingX,
+							right: paddingX,
+						}}
+						animate={{
+							top: isTop ? `32%` : 'calc(-7rem + 22px - 24px)',
+							left: isTop ? paddingX : `calc( ${paddingX}px + ${gapString} )`,
+							right: paddingX,
+						}}
+						transition={{
+							type: 'keyframes',
+							duration: ANIMATION_DURATION,
+						}}
+					>
+						<ContainerGrid>
 							<Box
-								flex={1}
 								sx={{
 									display: 'flex',
-									justifyContent: 'center',
+									justifyContent: ' space-between',
+									width: '100%',
+									gap: gapString,
 								}}
 							>
 								<Box
-									maxWidth={isMobile ? '100vw' : `min(550px, 50vw)`}
 									flex={1}
 									sx={{
 										display: 'flex',
-										flexDirection: 'column',
-										gap: isMobile ? 1 : 3,
+										justifyContent: 'center',
 									}}
 								>
-									<AnimatePresence>
-										{!phoneVersion ? (
+									<Box
+										maxWidth={`min(550px, 50vw)`}
+										flex={1}
+										sx={{
+											display: 'flex',
+											flexDirection: 'column',
+											gap: 3,
+										}}
+									>
+										<AnimatePresence>
 											<motion.div
 												initial={{
 													height: '7rem',
@@ -304,42 +308,18 @@ export default function HomeDesktop() {
 													</>
 												)}
 											</motion.div>
-										) : (
-											<Box
-												sx={{
-													display: 'flex',
-													flexDirection: 'column',
-												}}
-											>
-												<Typography variant="h4" strong={200}>
-													{heroLead}
-												</Typography>
-												<Typography variant="h3" strong={900} noWrap>
-													{heroTitle}
-												</Typography>
+										</AnimatePresence>
 
-												{useWorshipVersion && (
-													<>
-														<Typography variant="h4" strong={200} noWrap>
-															{heroSubtitleLower}
-														</Typography>
-													</>
-												)}
-											</Box>
-										)}
-									</AnimatePresence>
-
-									<MainSearchInput
-										gradientBorder={isTop && !phoneVersion}
-										value={searchInputValue}
-										onChange={onSearchValueChange}
-										smartSearch={smartSearch ?? false}
-										onSmartSearchChange={setSmartSearch}
-									/>
+										<MainSearchInput
+											gradientBorder={isTop}
+											value={searchInputValue}
+											onChange={onSearchValueChange}
+											smartSearch={smartSearch ?? false}
+											onSmartSearchChange={setSmartSearch}
+										/>
+									</Box>
 								</Box>
-							</Box>
 
-							{!isMobile && (
 								<Box
 									sx={{
 										maxWidth: isTop ? 500 : 0,
@@ -354,52 +334,41 @@ export default function HomeDesktop() {
 										pointerEvents: 'auto',
 									}}
 								>
-									<RightSheepPanel mobileVersion={isMobile} />
+									<RightSheepPanel mobileVersion={false} />
 								</Box>
-							)}
-						</Box>
-					</ContainerGrid>
-				</motion.div>
-				<Box sx={{ height: 65 }}></Box>
-				<div ref={scrollPointRef}></div>
-				<Box sx={{ height: !phoneVersion ? '100vh' : 0 }}></Box>
-				<div
-					style={{
-						left: 0,
-						right: 0,
-						position: 'absolute',
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						padding: 0,
-						top: !phoneVersion ? 'calc(100% - 275px)' : '155px',
-						// TODO: fix height jumping on one column preview
-						transform:
-							isTop || phoneVersion
+							</Box>
+						</ContainerGrid>
+					</motion.div>
+					<Box sx={{ height: 65 }}></Box>
+					<div ref={scrollPointRef}></div>
+					<Box sx={{ height: '100vh' }}></Box>
+					<div
+						style={{
+							left: 0,
+							right: 0,
+							position: 'absolute',
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							padding: 0,
+							top: 'calc(100% - 275px)',
+							// TODO: fix height jumping on one column preview
+							transform: isTop
 								? 'translateY(0)'
 								: `translateY(calc(-${innerHeight}*0.8px + 170px))`,
-						transition: `all ${ANIMATION_DURATION}s ease`,
-					}}
-				>
-					{searchString && (
-						<SearchedSongsList
-							searchString={searchString}
-							useSmartSearch={smartSearch ?? false}
-						/>
-					)}
-					<RecommendedSongsList />
-					{isMobile && (
-						<Box
-							sx={{
-								paddingTop: 16,
-								paddingBottom: 4,
-							}}
-						>
-							<RightSheepPanel mobileVersion={isMobile} />
-						</Box>
-					)}
-				</div>
-			</Box>
+							transition: `all ${ANIMATION_DURATION}s ease`,
+						}}
+					>
+						{searchString && (
+							<SearchedSongsList
+								searchString={searchString}
+								useSmartSearch={smartSearch ?? false}
+							/>
+						)}
+						<RecommendedSongsList />
+					</div>
+				</Box>
+			)}
 
 			{!phoneVersion ? (
 				<FloatingAddButton extended={!isTop} />

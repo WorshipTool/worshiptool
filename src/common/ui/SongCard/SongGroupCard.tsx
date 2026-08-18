@@ -13,11 +13,13 @@ type SongGroupCardProps = {
 	packs: BasicVariantPack[]
 	original?: BasicVariantPack
 	flexibleHeight?: boolean
+	dense?: boolean
 	toLinkProps?: ToLinkProps
 }
 
 export default function SongGroupCard({
 	flexibleHeight = true,
+	dense = false,
 	packs,
 	original,
 	...props
@@ -82,7 +84,11 @@ export default function SongGroupCard({
 									transition: 'bottom 0.2s, transform 0.2s',
 								}}
 							>
-								<SongVariantCard data={d} flexibleHeight={flexibleHeight} />
+								<SongVariantCard
+									data={d}
+									flexibleHeight={flexibleHeight}
+									dense={dense}
+								/>
 							</Box>
 						)
 					})}
@@ -91,6 +97,7 @@ export default function SongGroupCard({
 				<SongVariantCard
 					data={first}
 					flexibleHeight={flexibleHeight}
+					dense={dense}
 					sx={{
 						...(original
 							? {

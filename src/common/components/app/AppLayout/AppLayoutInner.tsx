@@ -1,7 +1,13 @@
 'use client'
 import { RIGHT_SIDE_BAR_CLASSNAME } from '@/common/components/app/SmartPage/SmartPageInner'
+import MobileAppTabBar from '@/common/components/MobileAppTabBar/MobileAppTabBar'
+import {
+	isMobileTabBarRoute,
+	MOBILE_NAV_BREAKPOINT,
+} from '@/common/components/MobileAppTabBar/nav.constants'
 import { Toolbar } from '@/common/components/Toolbar'
-import { Box } from '@/common/ui'
+import { Box, useTheme } from '@/common/ui'
+import { useClientPathname } from '@/hooks/pathname/useClientPathname'
 import React from 'react'
 import { useSmartMatch } from '../../../../routes/useSmartMatch'
 import Footer from '../../Footer/Footer'
@@ -13,6 +19,9 @@ interface AppContainerProps {
 
 export default function Inner({ children }: AppContainerProps) {
 	const hidden = useSmartMatch('playlistCards')
+	const theme = useTheme()
+	// on the app-shell routes the tab bar replaces the marketing footer on phones
+	const appRoute = isMobileTabBarRoute(useClientPathname())
 
 	return hidden ? (
 		children
@@ -23,8 +32,13 @@ export default function Inner({ children }: AppContainerProps) {
 				{children}
 				<Box className={RIGHT_SIDE_BAR_CLASSNAME}></Box>
 			</Box>
+			{/* tab bar (with its in-flow bottom spacer) before the flex fill, so a
+			    short page doesn't get extra empty scroll below the fold */}
+			<MobileAppTabBar />
 			<Box flex={1} />
-			<Footer />
+			<Box sx={appRoute ? { [theme.breakpoints.down(MOBILE_NAV_BREAKPOINT)]: { display: 'none' } } : undefined}>
+				<Footer />
+			</Box>
 		</Box>
 	)
 }

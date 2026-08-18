@@ -7,11 +7,15 @@ chwalmy / hallelujahhub via `content/*.json`).
 
 ## ⚠️ Before ANY UI / design / styling work
 
-Read these three docs first — they are the contract for visual consistency:
+Read these docs first — they are the contract for visual consistency:
 
 1. `docs/design/DESIGN-SYSTEM.md` — tokens: colors, typography, spacing, breakpoints, z-index
 2. `docs/design/COMPONENTS.md` — the house component catalog + decision table (what to use instead of raw MUI)
 3. `docs/design/PATTERNS.md` — how to build pages, styling rules, i18n, responsiveness, verification checklist
+4. `docs/design/MOBILE.md` — the phone app-shell (`MobileAppHeader`) + mobile attention/layout rules; read before ANY mobile UI work
+
+Keep `docs/design/MOBILE.md` up to date: whenever a mobile design rule is
+decided, record it there so future work stays consistent.
 
 The golden rule: **imitate existing screens, don't invent new visual
 language.** If your change looks different from neighboring screens, it's

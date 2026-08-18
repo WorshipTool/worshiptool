@@ -1,5 +1,7 @@
 'use client'
+import { useIsPhone } from '@/common/hooks/useIsPhone'
 import AllSongItem from '@/app/(layout)/seznam/AllSongItem'
+import SeznamMobile from '@/app/(layout)/seznam/SeznamMobile'
 import Pager from '@/common/components/Pager/Pager'
 import { SmartPage } from '@/common/components/app/SmartPage/SmartPage'
 import { useDownSize } from '@/common/hooks/useDownSize'
@@ -15,6 +17,7 @@ import { useTranslations } from 'next-intl'
 export default SmartPage(List)
 function List() {
 	const t = useTranslations('songsList')
+	const phoneVersion = useIsPhone()
 	const [page, setPage] = useSmartUrlState('songsList', 's', {
 		parse: (v) => parseInt(v),
 		stringify: (v) => (v as number).toString(),
@@ -28,11 +31,25 @@ function List() {
 
 	const isSmall = useDownSize('md')
 	const isMiddle = useDownSize('lg')
-	const countPerPage = isSmall ? 8 : isMiddle ? 16 : 21
+	// One source of truth for the page size across every width, phones included —
+	// the phone list used to carry its own constant while sharing the same `?s=`
+	// URL key, so the two disagreed about which songs a given page number meant.
+	const countPerPage = phoneVersion ? 12 : isSmall ? 8 : isMiddle ? 16 : 21
 	const getPageData = async (page: number) => {
 		const r = await songGettingApi.getList(page, countPerPage + 1)
 
 		return r.slice(0, countPerPage)
+	}
+
+	if (phoneVersion) {
+		return (
+			<SeznamMobile
+				page={page ?? 1}
+				onPageChange={setPage}
+				count={count ?? 0}
+				perPage={countPerPage}
+			/>
+		)
 	}
 
 	return (

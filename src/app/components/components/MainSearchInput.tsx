@@ -33,6 +33,7 @@ type MainSearchInputProps = {
 	onChange: (value: string) => void
 	smartSearch?: boolean
 	onSmartSearchChange?: (value: boolean) => void
+	autoFocus?: boolean
 }
 
 export const MAIN_SEARCH_EVENT_NAME = 'search_event_5jh14'
@@ -41,6 +42,16 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 	const theme = useTheme()
 	const t = useTranslations('search')
 	const inputRef = useRef<HTMLInputElement>()
+
+	// Focus via effect instead of the DOM autofocus attribute: the first
+	// hydration render always mounts the desktop layout, so on phones the
+	// attribute would briefly grab focus (and pop the keyboard) before the
+	// phone layout replaces it. 700px = the phone breakpoint in HomeDesktop.
+	useEffect(() => {
+		if (!(props.autoFocus ?? true)) return
+		if (!window.matchMedia('(min-width: 700px)').matches) return
+		inputRef.current?.focus()
+	}, [])
 
 	const [earlyFocused, setEarlyFocused] = useState(false)
 	useChangeDelayer(
@@ -91,7 +102,6 @@ export default function MainSearchInput(props: MainSearchInputProps) {
 				<SearchInput
 					placeholder={t('searchByTitleOrText')}
 					onChange={(e) => props.onChange(e.target.value)}
-					autoFocus
 					value={props.value}
 					inputRef={inputRef}
 					inputProps={{ 'data-testid': 'main-search-input' }}

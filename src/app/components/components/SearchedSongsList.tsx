@@ -19,12 +19,14 @@ import { SearchKey } from '@/types/song/search.types'
 interface SearchedSongsListProps {
 	searchString: string
 	useSmartSearch?: boolean
+	dense?: boolean
 }
 const controller = new AbortController()
 
 const SearchedSongsList = memo(function S({
 	searchString,
 	useSmartSearch,
+	dense,
 }: SearchedSongsListProps) {
 	const loadNextLevelRef = useRef(null)
 	const lastTrackedSearchRef = useRef('')
@@ -113,14 +115,15 @@ const SearchedSongsList = memo(function S({
 	return (
 		<ContainerGrid direction="column">
 			<>
-				<Typography strong key={'results'}>
-					{tHome('search.resultsTitle')}
+				<Typography strong variant={dense ? 'h6' : 'normal'} key={'results'}>
+					{tHome('search.resultsTitle')}:
 				</Typography>
 
 				{!loading && songs.length > 0 && (
 					<SmartSongListCards
 						data={songs}
 						key={'songlistcards'}
+						dense={dense}
 						properties={['SHOW_ADDED_BY_LOADER', 'SHOW_PRIVATE_LABEL']}
 					></SmartSongListCards>
 				)}
