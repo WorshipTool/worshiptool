@@ -43,9 +43,10 @@ const TITLE_INSET = 2.5
 const TITLE_SIZE = 1.85
 /** Breathing room above the title, past the header's own top inset. */
 const HERO_TOP_SPACE = 3
-/** Gap between the hero and the search bar. Part of the hero, so it folds away
- * with it and leaves the bar sitting evenly in the header. */
-const HERO_BOTTOM_SPACE = 1
+/** Gap between the hero and the search bar — it also sets how deep the sheep is
+ * tucked, since the hero clips it at this edge. Part of the hero, so it folds
+ * away with it and leaves the bar sitting evenly in the header. */
+const HERO_BOTTOM_SPACE = 2
 /** Gap between the search bar and the first section, so the hero reads as its
  * own block rather than running straight into the lists. */
 const SECTIONS_TOP_SPACE = 2
